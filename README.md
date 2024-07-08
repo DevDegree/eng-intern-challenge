@@ -23,8 +23,9 @@ Braille (*/breɪl/ **BRAYL***) is a tactile writing system used by people who ar
 - Launching your application:
   - `ruby translator.rb "Hello world"`
   - `ruby translator.rb ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."`
-
+---
 - Input: `Hello world`
 - Output: `.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..`
+---
 - Input: `42`
 - Output: `.O.OOOOO.O..O.O...`
