@@ -46,6 +46,19 @@ Braille (*/breɪl/ **BRAYL***) is a tactile writing system used by people who ar
 - Input: `.....OO.....O.O...OO...........O.OOOO.O...OO....OO.O..`
 - Output: `Abc 123`
 
+## Instructions
+1. Fork this repo to your personal Github Account
+1. Clone your forked repo to begin working on the challenge locally.
+2. Create a new Branch in your repo where you will be pushing your code to.
+3. Choose which programming language you wish to complete the challenge with.
+    - Navigate to the folder of that programming language and complete your work in the `translator` file found inside. ie: `ruby/translator.rb`
+    - **Do not** edit the test file in the folder. Tests will only work as intended after you have submitted a PR.
+    - You'll find a separate `README.md` in that folder with language specific instructions.
+4. Ensure your application is executable from the command-line by running your `translator` file.
+5. Feel free to run the test found in your language folder to ensure your code is correct
+6. Your application must output ***only*** the Braille/English string.
+    - ie: `O.....` ***not*** `The Braille text is: O.....`
+
 ## Submission
 Upon completion of the challenge, create a PR of your work and compare it against the original Assessment Repo's main branch. Submit a link to your PR with your internship application in the "Notes" field.
 
