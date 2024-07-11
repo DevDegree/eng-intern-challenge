@@ -22,4 +22,4 @@ jobs:
           bundler-cache: true
 
       - run: cd ruby && bundle install
-      - run: cd ruby && rspec solution.test.rb
+      - run: cd ruby && rspec translator.test.rb

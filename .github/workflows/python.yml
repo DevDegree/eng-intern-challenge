@@ -25,4 +25,4 @@ jobs:
       - name: Run Python Tests
         run: |
           cd python
-          python3 solution.test.py
+          python3 translator.test.py

@@ -2,7 +2,7 @@
   "name": "typescript",
   "version": "1.0.0",
   "description": "",
-  "main": "solution.js",
+  "main": "translator.ts",
   "scripts": {
     "test": "jest"
   },
