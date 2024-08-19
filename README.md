@@ -1,4 +1,4 @@
-# Eng Intern Challenge Fall 24
+# Eng Intern Challenge Fall - Winter 2025
 
 ## Braille Translator
 In this coding challenge you will create a terminal / command-line application that can translate Braille to English and vice versa. 
@@ -60,6 +60,6 @@ Braille (*/breɪl/ **BRAYL***) is a tactile writing system used by people who ar
     - ie: `O.....` ***not*** `The Braille text is: O.....`
 
 ## Submission
-Upon completion of the challenge, create a PR of your work and compare it against the original Assessment Repo's main branch. Submit a link to your PR with your internship application in the "Notes" field.
+Upon completion of the challenge, create a PR of your work and compare it against the original Assessment Repo's main branch. Submit a link to your PR in the "Take Home Submission Link" which was included in the Technical Challenge email instructions. 
 
 This repo is designed to run a unit test against your work to ensure the correct string is outputted to the console when executing your code. 
