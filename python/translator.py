@@ -22,7 +22,7 @@ special_chars = {
 
 def main():
     input_string = ' '.join(sys.argv[1:])
-    if set(input_string).issubset({'O', '.'}):
+    if '.' in input_string:
         print(braille_to_english(input_string))
     else:
         print(english_to_braille(input_string))
