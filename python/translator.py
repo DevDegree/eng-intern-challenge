@@ -66,11 +66,21 @@ NUMBER = '.O.OOO'
 
 BRAILLE = {'O', '.'}
 
-def braille_to_english():
+def braille_to_english(text: str) -> str:
     pass
 
-def english_to_braille():
+def english_to_braille(text: str) -> str:
     pass
 
 if __name__ == 'main':
-    pass
+    import sys
+
+    args = sys.argv
+    args.pop(0)
+
+    text = ' '.join(args)
+    chars = set(text)
+
+    res = braille_to_english(text) if chars == BRAILLE else english_to_braille(text)
+
+    print(res)
