@@ -68,13 +68,16 @@ BRAILLE = {'O', '.'}
 
 def braille_to_english(text: str) -> str:
     res = ''
+    number = False
+    upper = False
 
     for i in range(0, len(text), 6):
         braille = text[i: i+6]
-        number = False
 
         if braille == NUMBER:
             number = True
+        elif braille == UPPERCASE:
+            upper = True
         elif number:
             if braille == PUNCTUATION[' ']:
                 number = False
@@ -85,8 +88,11 @@ def braille_to_english(text: str) -> str:
                 res += '.'
             else:
                 res += BRAILLE_NUMBERS[braille]
-        else:
-            res += BRAILLE_ALPHABET[braille] if braille in BRAILLE_ALPHABET else BRAILLE_PUNCTUATION[braille]
+        elif braille in BRAILLE_ALPHABET:
+            res += BRAILLE_ALPHABET[braille].upper() if upper else BRAILLE_ALPHABET[braille]
+            upper = False
+        elif braille in BRAILLE_PUNCTUATION:
+            res += BRAILLE_PUNCTUATION[braille]
 
     return res
 
@@ -115,9 +121,8 @@ def english_to_braille(text: str) -> str:
 
     return res
 
-if __name__ == 'main':
+if __name__ == '__main__':
     import sys
-
     args = sys.argv
     args.pop(0)
 
