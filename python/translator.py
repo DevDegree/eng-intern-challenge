@@ -67,7 +67,28 @@ NUMBER = '.O.OOO'
 BRAILLE = {'O', '.'}
 
 def braille_to_english(text: str) -> str:
-    pass
+    res = ''
+
+    for i in range(0, len(text), 6):
+        braille = text[i: i+6]
+        number = False
+
+        if braille == NUMBER:
+            number = True
+        elif number:
+            if braille == PUNCTUATION[' ']:
+                number = False
+                res += ' '
+            elif braille == DECIMAL:
+                continue
+            elif braille == PUNCTUATION['.']:
+                res += '.'
+            else:
+                res += BRAILLE_NUMBERS[braille]
+        else:
+            res += BRAILLE_ALPHABET[braille] if braille in BRAILLE_ALPHABET else BRAILLE_PUNCTUATION[braille]
+
+    return res
 
 def english_to_braille(text: str) -> str:
     res = ''
