@@ -70,7 +70,29 @@ def braille_to_english(text: str) -> str:
     pass
 
 def english_to_braille(text: str) -> str:
-    pass
+    res = ''
+    number = False
+
+    for char in text:
+        if char.isalpha():
+            if char.isupper():
+                res += UPPERCASE
+            res += ALPHABET[char.lower()]
+        elif char in NUMBERS:
+            if not number:
+                number = True
+                res += NUMBER
+
+            res += NUMBERS[char]
+        elif char in PUNCTUATION:
+            if char == ' ' and number:
+                number = False
+            if char == '.' and number:
+                res += DECIMAL
+
+            res += PUNCTUATION[char]
+
+    return res
 
 if __name__ == 'main':
     import sys
