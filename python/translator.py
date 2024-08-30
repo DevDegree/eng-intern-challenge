@@ -1,4 +1,6 @@
 import sys
+from language_classes.language_converter import LanguageConverter
+from language_classes.language_detector import LanguageDetector
 
 class BrailleTranslator:
     """
@@ -7,15 +9,26 @@ class BrailleTranslator:
 
     def __init__(self):
         """
-        Initialize the MainClass with a name.
-        :param name: The name for this instance.
+        Initialize the translator, with classes for language detection and translating.
         """
+        self.languageDetector = LanguageDetector()
+        self.languageConverter = LanguageConverter()
 
-    def greet(self):
+
+    def translate(self, text):
         """
-        Greet with the name provided.
+        Detect the given language, and convert it either from Braille -> English or English -> Braille.
         """
-        print(f"Hello, {self.name}!")
+        try: 
+            language = self.languageDetector.detect(text)
+            if language == 'english':
+                return self.languageConverter.convert(text, 'english', 'braille', )
+            elif language == 'braille':
+                return self.languageConverter.convert(text, 'braille', 'english')
+        except ValueError as e:
+            raise Exception(f"ERROR: Error parsing input '{text}': {str(e)}")
+        except Exception as e:
+            raise Exception(f"ERROR: Unexpected Error occurred: {str(e)}")
 
 def main():
 
@@ -24,6 +37,9 @@ def main():
         sys.exit(1)
     
     translator = BrailleTranslator()
+    user_input = sys.argv[1]
+    translated_text = translator.translate(user_input)
+    print(f"{translated_text}")
     
     
 
