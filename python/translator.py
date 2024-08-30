@@ -36,7 +36,6 @@ instructions_to_braille = {
     '[C]': '.....O',
     '[N]': '.O.OOO'
 }
-braille_to_instructions = {val: key for key, val in instructions_to_braille.items()}
 
 num_to_braille = {
     '1': 'O.....',
@@ -54,6 +53,10 @@ num_to_braille = {
 braille_to_num = {val: key for key, val in num_to_braille.items()}
 
 def sentence_to_braille(sentence, char_mapping=char_to_braille, num_map=num_to_braille, instruct_map=instructions_to_braille):
+    '''
+    Function that would turn an English sentence into Braille
+    return string
+    '''
     output = ''
     numeric = False
     for char in sentence:
@@ -81,7 +84,11 @@ def sentence_to_braille(sentence, char_mapping=char_to_braille, num_map=num_to_b
 
 
 
-def braille_to_sentece(braille, char_map=braille_to_char, num_map=braille_to_num, instruct_map=braille_to_instructions):
+def braille_to_sentece(braille, char_map=braille_to_char, num_map=braille_to_num, instruct_map=instructions_to_braille):
+    '''
+    Function to turn Braille into English Sentence
+    return string
+    '''
     ## convert input to group of 6
     groups = [braille[i:i+6] for i in range(0, len(braille), 6)]
 
@@ -89,20 +96,24 @@ def braille_to_sentece(braille, char_map=braille_to_char, num_map=braille_to_num
     numeric = False
     capital = False
     for sub_group in groups:
-        if sub_group == '.....O': # Braille for capital follows
+        if sub_group == instruct_map['[C]']: # Braille for capital follows
             capital = True #next group would be capital
 
-        elif sub_group == ".O.OOO": # Braille for numeric comes next:
+        elif sub_group == instruct_map['[N]']: # Braille for numeric comes next:
             numeric = True # next group would be numeric
 
+        # Going through each case of having a character
         elif sub_group in char_map and capital and not numeric:
             output += char_map[sub_group].upper()
             capital = False
         elif sub_group in char_map and not numeric:
             output += char_map[sub_group]
+
+        ## In case we are dealing with space the following chracters are no longer numeric
         elif sub_group == "......":
             numeric = False
             output += char_map[sub_group]
+        # in case dealing with number
         elif sub_group in num_map and numeric:
             output += num_map[sub_group]
 
@@ -130,7 +141,7 @@ if __name__ == "__main__":
     for i in range(1, len(sys.argv)):
         argument += sys.argv[i]
         argument += " "
-    argument = argument[:-1]
+    argument = argument[:-1] # removing last as it would be a space
 
     if is_braille(argument): #should be translated to English
         print(braille_to_sentece(argument))
