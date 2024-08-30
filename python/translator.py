@@ -93,7 +93,7 @@ def braille_to_alphabet_translator(braille_message):
                 character_as_alphabet = character_as_alphabet.upper()
                 capitalize_next = False
             if number_next:
-                character_as_alphabet = 0 if character_as_alphabet == 'j' else ord(character_as_alphabet) - ord('a') + 1
+                character_as_alphabet = 0 if character_as_alphabet == 'j' else ord(character_as_alphabet.lower()) - ord('a') + 1
 
             translated_text += str(character_as_alphabet)
 
