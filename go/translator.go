@@ -1,3 +1,14 @@
+/*
+This package will handle the translation of braille string to
+English and vice versa.
+
+There are certain assumptions for the logic
+Assumptions
+    1. ONLY braille inputs start with "."
+    2. If input braille, it will ONLY be one input
+
+*/
+
 package main
 
 import (
@@ -240,6 +251,13 @@ func translateToBraille(concatedWords string) string {
 			}
 		}
 
+		// If this is the case, we're still writing numbers and "."
+		// does not represent period rather a decimcal point
+		if !writeNumberFollow && string(engRune) == "." {
+			sb.WriteString(DecimalFollowsBraille)
+			continue
+		}
+
 		// existence of space means the end of numbers
 		// sequence. Setting the flag to true to write the
 		// braille string for the next number seq occurrence
@@ -263,15 +281,10 @@ func main() {
 		panic("must provide arguments to cli")
 	}
 
-	/*
-		Assumptions
-		    1. ONLY braille inputs start with "."
-		    2. If input braille, it will ONLY be one input
-	*/
 	if len(os.Args) >= 3 || (len(os.Args) == 2 && !strings.HasPrefix(os.Args[1], ".")) {
 		concatedWords := concatString(os.Args[1:])
 		fmt.Println(translateToBraille(concatedWords))
-        return
+		return
 	}
 
 	fmt.Println(translateToEnglish(os.Args[1]))
