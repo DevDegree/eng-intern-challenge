@@ -37,7 +37,6 @@ class BrailleMapping:
         " ": "......",
     }
 
-    # TODO: check if other characters need to be included
     BRAILLE_TO_ENGLISH_CHARS: dict[str, str] = {
         v: k for k, v in ENGLISH_TO_BRAILLE_CHARS.items()
     }
@@ -61,6 +60,15 @@ class BrailleMapping:
 
     @staticmethod
     def get_braille(char: str, is_number: bool = False) -> str:
+        """Convert an English character to its corresponding Braille encoding.
+
+        Args:
+            char (str): The English character to convert.
+            is_number (bool, optional): Flag indicating if the character is a number. Defaults to False.
+
+        Returns:
+            str: The Braille representation of the given character.
+        """
         if is_number:
             return BrailleMapping.ENGLISH_TO_BRAILLE_NUMBERS[char]
         elif char.isupper():
@@ -73,6 +81,16 @@ class BrailleMapping:
 
     @staticmethod
     def get_english(braille: str, is_number: bool = False, is_caps=False) -> str:
+        """Convert a Braille encoding to its corresponding English character.
+
+        Args:
+            braille (str): The Braille encoding to convert.
+            is_number (bool, optional): Flag indicating if the Braille encoding represents a number. Defaults to False.
+            is_caps (bool, optional): Flag indicating if the character is uppercase. Defaults to False.
+
+        Returns:
+            str: The English character corresponding to the Braille encoding.
+        """
         if is_number:
             return BrailleMapping.BRAILLE_TO_ENGLISH_NUMBERS[braille]
         elif is_caps:
@@ -86,10 +104,13 @@ class Translator:
 
     @staticmethod
     def english_to_braille(text: str) -> str:
-        """Return the translation of the English text to Braille.
+        """Translate English text to Braille.
 
-        args:
-            - text: the English text to be translated
+        Args:
+            text (str): The English text to translate.
+
+        Returns:
+            str: The Braille translation of the given text.
         """
         # no set way to handle 1212HDHBH
         words = text.split(" ")
@@ -108,12 +129,13 @@ class Translator:
 
     @staticmethod
     def braille_to_english(text: str) -> str:
-        """Return the translation of the Braille text to English.
+        """Translate Braille text to English.
 
-        text must be a valid Braille encoding.
+        Args:
+            text (str): The Braille text to translate.
 
-        args:
-            - text: the Braille text to be translated
+        Returns:
+            str: The English translation of the given Braille text.
         """
         BRAILLE_LENGTH = 6
         english_characters = []
@@ -141,17 +163,34 @@ class Translator:
 
 
 class InputTypeClassifier:
-    """Identifies whether a string is Braille or English."""
+    """Identifies whether a string is Braille or English.
+    
+    Assumes inputs are of correct format (no invalid Braille or invalid English is inputted),     
+    """
 
     @staticmethod
     def is_braille(text: str) -> bool:
+        """Check if the given text is Braille according to the requirements.
+        
+        A string of text is Braille if and only if it contains '.'. 
+        This follows because all in-scope Braille characters contain at least one '.'.
+
+        Args:
+            text (str): The text to check.
+
+        Returns:
+            bool: True if the text is Braille, False if it is English.
+        """
         return "." in text
 
 
 def main():
+    """Main function for translating input text between English and Braille.
+
+    Reads input from command line arguments and prints the translation.
+    """
     input = " ".join(sys.argv[1:])
 
-    print(sys.argv[1:])
     if InputTypeClassifier.is_braille(input):
         translated = Translator.braille_to_english(input)
     else:
