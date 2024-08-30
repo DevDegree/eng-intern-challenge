@@ -1,7 +1,16 @@
 import sys
-from typing import Dict
+from typing import Dict, List
 
 class BrailleTranslator:
+    # Constants for special indicators
+    CAPITAL = 'capital'
+    NUMBER = 'number'
+    DECIMAL = 'decimal'
+    SPACE = 'space'
+    DOT = '.'
+    RAISED_DOT = 'O'
+
+    # English characters
     ALPHA_TO_BRALLIE: Dict[str, str] = {
         # English characters
         'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 
@@ -23,19 +32,18 @@ class BrailleTranslator:
     # Special Characters
     SPECIAL_TO_BRALLIE: Dict[str, str] = {
         # Follows
-        'capital': '.....O', 'decimal': '.O...O', 'number': '.O.OOO',
+        CAPITAL: '.....O', DECIMAL: '.O...O', NUMBER: '.O.OOO',
         # Special Characters
         '.': '..OO.O', ',':'..O...', '?': '..O.OO', '!': '..OOO.', 
         ':' : '..OO..', ';': '..O.O.', '-': '....OO', '/': '.O..O.',
         # '<': '.OO..O', '>': 'O..OO.', '(': 'O.O..O', ')': '.O.OO.',
-        'space': '......',
+        SPACE: '......',
     }
 
-    # Constants for special indicators
-    CAPITAL = 'capital'
-    NUMBER = 'number'
-    DECIMAL = 'decimal'
-    SPACE = 'space'
+    # English to braille alphabet
+    BRAILLE_TO_ALPHA: Dict[str, str] = {}
+    BRAILLE_TO_NUM: Dict[str, str] = {}
+    BRAILLE_TO_SPECIAL: Dict[str, str] = {}
     
 
     def translate(self, input: str) -> str:
@@ -43,49 +51,58 @@ class BrailleTranslator:
         else: return self.english_to_braille(input)
 
     def is_braille(self, input: str) -> bool:
-        return len(input) % 6 == 0 and set(input).issubset({'O', '.'})
+        return len(input) % 6 == 0 and set(input).issubset({self.RAISED_DOT, self.DOT})
+    
+    def build_braille_to_english_table(self):
+        self.BRAILLE_TO_ALPHA = { v: k for k, v in self.ALPHA_TO_BRALLIE.items() }
+        self.BRAILLE_TO_NUM = { v: k for k, v in self.NUM_TO_BRALLIE.items() }
+        self.BRAILLE_TO_SPECIAL = { v: k for k, v in self.SPECIAL_TO_BRALLIE.items() }
     
     def braille_to_english(self, input: str) -> str:
-        # TODO: change to build when needed
-        braille_to_num = { v: k for k, v in self.NUM_TO_BRALLIE.items() }
-        braille_to_alpha = { v: k for k, v in self.ALPHA_TO_BRALLIE.items() }
-        braille_to_special = { v: k for k, v in self.SPECIAL_TO_BRALLIE.items() }
+        # Initialize braille to english table if needed
+        if not self.BRAILLE_TO_ALPHA:
+            self.build_braille_to_english_table()
 
-        brailles = [ input[i : i+6] for i in range(0, len(input), 6) ]
+        def parse(input: str) -> List[str]:
+            tokens = []
+            is_number = False
+            brailles = [ input[i : i+6] for i in range(0, len(input), 6) ]
 
-        tokens = []
+            for braille in brailles:
+                if braille in self.BRAILLE_TO_SPECIAL:
+                    token = self.BRAILLE_TO_SPECIAL[braille]
+                    tokens.append(token)
+                    if token == self.NUMBER: is_number = True
+                    if token == self.SPACE: is_number = False
+                else:
+                    if is_number: tokens.append(self.BRAILLE_TO_NUM[braille])
+                    else: tokens.append(self.BRAILLE_TO_ALPHA[braille])
+            return tokens
 
-        is_number = False
+        def generate(tokens: List[str]) -> str:
+            output = ''
+            next_is_capital = False
 
-        # parse
-        for braille in brailles:
-            if braille in braille_to_special:
-                token = braille_to_special[braille]
-                tokens.append(token)
-                if token == self.NUMBER: is_number = True
-                if token == 'space': is_number = False
-
-            else:
-                if is_number: tokens.append(braille_to_num[braille])
-                else: tokens.append(braille_to_alpha[braille])
+            for token in tokens:
+                if token == self.CAPITAL: next_is_capital = True
+                elif token == self.NUMBER: continue
+                elif token == self.SPACE:
+                    output += ' '
+                elif next_is_capital:
+                    output += token.upper()
+                    next_is_capital = False
+                else: output += token
+            return output
         
-        # generate
-        output = ''
-        next_is_capital = False
-        for token in tokens:
-            if token == self.CAPITAL: next_is_capital = True
-            elif token == self.NUMBER: continue
-            elif token == self.SPACE:
-                output += ' '
-            elif next_is_capital:
-                output += token.upper()
-                next_is_capital = False
-            else: output += token
+        # parse braille to tokens
+        tokens = parse(input)
 
+        # generate english from tokens
+        output = generate(tokens)
         return output
     
     def english_to_braille(self, input: str) -> str:
-        def decode_english(input: str):
+        def parse(input: str) -> List[str]:
             tokens = []
             is_number = False
             for char in input:
@@ -97,7 +114,6 @@ class BrailleTranslator:
                     tokens.append(char)
 
                 # space
-                # TODO: check if there is any characters missed
                 elif char == ' ':
                     tokens.append(self.SPACE)
                     is_number = False
@@ -107,30 +123,31 @@ class BrailleTranslator:
                     if char.isupper(): tokens.append(self.CAPITAL)
                     tokens.append(char.lower())
                 
-                # special character
+                # other special character
                 else: tokens.append(char)
             
             return tokens
         
-        # parse english to tokens
-        tokens = decode_english(input)
-
-        # translate tokens to braille
-        output = self.translate_tokens(tokens, self.ALPHA_TO_BRALLIE, self.NUM_TO_BRALLIE, self.SPECIAL_TO_BRALLIE)
-
-        return output
-
-    def translate_tokens(self, tokens, alphabet1, alphabet2, alphabet3) -> str:
-        output = ''
-    
-        for token in tokens:
-            if token in alphabet1: output += alphabet1[token]
-            elif token in alphabet2: output += alphabet2[token]
-            else: output += alphabet3[token]
+        def generate(tokens: List[str]) -> str:
+            output = ''
         
+            for token in tokens:
+                if token in self.ALPHA_TO_BRALLIE: output += self.ALPHA_TO_BRALLIE[token]
+                elif token in self.NUM_TO_BRALLIE: output += self.NUM_TO_BRALLIE[token]
+                else: output += self.SPECIAL_TO_BRALLIE[token]
+        
+            return output
+        
+        # parse english to tokens
+        tokens = parse(input)
+
+        # generate braille from tokens
+        output = generate(tokens)
         return output
+        
 
 def main():
+    # read input
     input = " ".join(sys.argv[1:])
     translator = BrailleTranslator()
     output = translator.translate(input)
@@ -142,8 +159,8 @@ def main():
     print("test case3: alphabets", translator.translate(translator.translate("a1 b")) == "a1 b")
     print("test case4: alphabets and numbers", translator.translate(translator.translate("dfkladfasd1234567890 cpkldfsaj")) == "dfkladfasd1234567890 cpkldfsaj")
     print("test case5: alphabets and numbers", translator.translate("Abc 123 xYz") == ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO")
+    print("test case6: alphabets and numbers and other characters", translator.translate(translator.translate("dfkladfasd1234567890 cpkldfsJj;")) == "dfkladfasd1234567890 cpkldfsJj;")
 
-# TODO: no need to run in infinite loop
 if __name__ == "__main__":
     main()
 
