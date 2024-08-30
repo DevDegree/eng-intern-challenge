@@ -40,98 +40,98 @@ var brailleToNumbers = map[string]string{
 
 // Translate function
 func translateText(input string) string {
-	var result strings.Builder
+    var result strings.Builder
 
-	if !strings.ContainsAny(input, "O.") {
-		// Translate English to Braille
-		isNumber := false
+    if !strings.ContainsAny(input, "O.") {
+        // Translate English to Braille
+        isNumber := false
 
-		for _, ch := range input {
-			charStr := string(ch)
-			if ch >= 'A' && ch <= 'Z' {
-				result.WriteString(englishToBraille["cap"])
-				result.WriteString(englishToBraille[strings.ToLower(charStr)])
-				isNumber = false
-			} else if ch >= 'a' && ch <= 'z' {
-				result.WriteString(englishToBraille[charStr])
-				isNumber = false
-			} else if ch >= '0' && ch <= '9' {
-				if !isNumber {
-					result.WriteString(".O.OOO") // Number indicator
-					isNumber = true
-				}
-				result.WriteString(numberToBraille[charStr])
-			} else {
-				// Handle other characters (punctuation)
-				result.WriteString(englishToBraille[" "])
-				isNumber = false
-			}
-		}
-		return result.String()
-	}
+        for _, ch := range input {
+            charStr := string(ch)
+            if ch >= 'A' && ch <= 'Z' {
+                result.WriteString(englishToBraille["cap"])
+                result.WriteString(englishToBraille[strings.ToLower(charStr)])
+                isNumber = false
+            } else if ch >= 'a' && ch <= 'z' {
+                result.WriteString(englishToBraille[charStr])
+                isNumber = false
+            } else if ch >= '0' && ch <= '9' {
+                if !isNumber {
+                    result.WriteString(".O.OOO") // Number indicator
+                    isNumber = true
+                }
+                result.WriteString(numberToBraille[charStr])
+            } else {
+                // Handle other characters (punctuation)
+                result.WriteString(englishToBraille[" "])
+                isNumber = false
+            }
+        }
+        return result.String()
+    }
 
-	// Translate Braille to English
-	i := 0
-	isCap := false
-	isNumber := false
+    // Translate Braille to English
+    i := 0
+    isCap := false
+    isNumber := false
 
-	for i < len(input) {
-		if i+6 <= len(input) {
-			brailleChar := input[i : i+6]
+    for i < len(input) {
+        if i+6 <= len(input) {
+            brailleChar := input[i : i+6]
 
-			if brailleChar == ".....O" {
-				// Capitalization indicator
-				isCap = true
-				i += 6
-				continue
-			} else if brailleChar == ".O.OOO" {
-				// Numbers indicator
-				isNumber = true
-				i += 6
-				continue
-			}
+            if brailleChar == ".....O" {
+                // Capitalization indicator
+                isCap = true
+                i += 6
+                continue
+            } else if brailleChar == ".O.OOO" {
+                // Numbers indicator
+                isNumber = true
+                i += 6
+                continue
+            }
 
-			var englishChar string
-			if isNumber {
-				englishChar = brailleToNumbers[brailleChar]
-			} else {
-				englishChar = brailleToEnglish[brailleChar]
-			}
+            var englishChar string
+            if isNumber {
+                englishChar = brailleToNumbers[brailleChar]
+            } else {
+                englishChar = brailleToEnglish[brailleChar]
+            }
 
-			if englishChar != "" {
-				if isCap {
-					englishChar = strings.ToUpper(englishChar)
-					isCap = false
-				}
-				result.WriteString(englishChar)
-			} else {
-				// Handle invalid or unknown Braille sequences
-				result.WriteString(" ")
-			}
+            if englishChar != "" {
+                if isCap {
+                    englishChar = strings.ToUpper(englishChar)
+                    isCap = false
+                }
+                result.WriteString(englishChar)
+            } else {
+                // Handle invalid or unknown Braille sequences
+                result.WriteString(" ")
+            }
 
-			// Reset number after a space
-			if brailleChar == "......" {
-				isNumber = false
-			}
+            // Reset number after a space
+            if brailleChar == "......" {
+                isNumber = false
+            }
 
-			i += 6
-		} else {
-			// Handle cases where there isn't a full 6-character Braille sequence
-			result.WriteString(" ")
-			i += 6
-		}
-	}
+            i += 6
+        } else {
+            // Handle cases where there isn't a full 6-character Braille sequence
+            result.WriteString(" ")
+            i += 6
+        }
+    }
 
-	return result.String()
+    return result.String()
 }
 
 func main() {
-	if len(os.Args) < 2 {
-		fmt.Println("Please provide input text.")
-		return
-	}
+    if len(os.Args) < 2 {
+        fmt.Println("Please provide input text.")
+        return
+    }
 
-	input := os.Args[1]
-	output := translateText(input)
-	fmt.Println(output)
+    input := strings.Join(os.Args[1:], " ")
+    output := translateText(input)
+    fmt.Println(output)
 }
