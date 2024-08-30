@@ -19,10 +19,11 @@ braille_mapping = {
 def braille_to_english(braille):
     out = []
     i = 0
-    number = False
+    number_mode = False
     
     while i < len(braille):
         symbol = braille[i:i+6]
+        
         if symbol == braille_mapping['capital']:
             i += 6 
             next_symbol = braille[i:i+6]
@@ -31,17 +32,22 @@ def braille_to_english(braille):
                     char = key.upper() 
                     out.append(char)
                     break
+        
         elif symbol == braille_mapping['number']:
-            number = True 
+            number_mode = True 
+        
         elif symbol in braille_mapping.values():
             for key, value in braille_mapping.items():
                 if value == symbol:
                     char = key
-                    if number:
-                        out.append(char)
-                        number = False if char == ' ' else number
+                    if number_mode and char in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']:
+                        number_conversion = {'a': '1', 'b': '2', 'c': '3', 'd': '4', 'e': '5',
+                                             'f': '6', 'g': '7', 'h': '8', 'i': '9', 'j': '0'}
+                        out.append(number_conversion[char])
                     else:
                         out.append(char)
+                    if char == ' ':
+                        number_mode = False
                     break
         
         i += 6
