@@ -1,25 +1,6 @@
 import sys
 import re
 
-"""
-Could be used in the future but is not yet implemented 
-decimalTable = {
-    ".": "..OO.O",  
-    ",": "..O...",  
-    "?": "..O.OO",  
-    "!": "..OOO.",  
-    ":": "..OO..",  
-    ";": "..O.O.", 
-    "-": "....OO",
-    "/": ".O..O.",  
-    "<": ".OO..O",  
-    ">": "O..OO.",
-    "(": "O.O..O",  
-    ")": ".O.OO.", 
-    "decimal": ".O...O",
-}
-"""
-
 letters_table = {
     "a": "O.....", "b": "O.O...", "c": "OO....", "d": "OO.O..", "e": "O..O..", "f": "OOO...", "g": "OOOO..",   
     "h": "O.OO..", "i": ".OO...", "j": ".OOO..", "k": "O...O.", "l": "O.O.O.", "m": "OO..O.", "n": "OO.OO.", 

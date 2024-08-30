@@ -15,3 +15,7 @@
    python3 translator.test.py
    ```
    This will execute all the tests defined in the `translator.test.py` file.
+
+## Future Development
+
+The decimals `.,()!:;-/<>decimal` arent handled yet, this could be added in a future version
