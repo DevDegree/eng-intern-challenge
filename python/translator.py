@@ -3,6 +3,12 @@
 #       -> if character is not 'O' or '.' string is in braille
 #       -> else string is in english
 
+def is_braille(string):
+    for c in string:
+        if c != 'O' and c != '.':
+            return True
+    return False
+
 # 2. If string is in braille
 #       -> create dict variable 'BRAILLE-ENGLISH-LETTER-MAP' that has the braille character letters as the keys, and english characters as the values
 #       -> create dict variable 'BRAILLE-ENGLISH-NUMBER-MAP' that has the braille numbers as the keys, and english numbers as the values
@@ -35,3 +41,7 @@
     #       -> search for item in 'ENGLISH-BRAILLE-MAP' keys, add corresponding value to 'braille-str'
 #       -> return 'braille-str'
 
+
+
+if __name__ == "__main__":
+    
