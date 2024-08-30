@@ -44,19 +44,27 @@ func translateText(input string) string {
 
 	if !strings.ContainsAny(input, "O.") {
 		// Translate English to Braille
+		isNumber := false
+
 		for _, ch := range input {
 			charStr := string(ch)
 			if ch >= 'A' && ch <= 'Z' {
 				result.WriteString(englishToBraille["cap"])
 				result.WriteString(englishToBraille[strings.ToLower(charStr)])
+				isNumber = false
 			} else if ch >= 'a' && ch <= 'z' {
 				result.WriteString(englishToBraille[charStr])
+				isNumber = false
 			} else if ch >= '0' && ch <= '9' {
-				result.WriteString(".O.OOO") // Number indicator
+				if !isNumber {
+					result.WriteString(".O.OOO") // Number indicator
+					isNumber = true
+				}
 				result.WriteString(numberToBraille[charStr])
 			} else {
 				// Handle other characters (punctuation)
 				result.WriteString(englishToBraille[" "])
+				isNumber = false
 			}
 		}
 		return result.String()
@@ -96,12 +104,14 @@ func translateText(input string) string {
 					isCap = false
 				}
 				result.WriteString(englishChar)
-			} else if brailleChar == "......" {
-				result.WriteString(" ")
-				isNumber = false
 			} else {
-				// Ignore invalid or unknown Braille sequences
+				// Handle invalid or unknown Braille sequences
 				result.WriteString(" ")
+			}
+
+			// Reset number after a space
+			if brailleChar == "......" {
+				isNumber = false
 			}
 
 			i += 6
