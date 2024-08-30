@@ -15,7 +15,9 @@ def language_output(input)
 end
 
 def braille_to_english(input)
-  result, capitalize_next, number_follows = "", false, false
+  result = ''
+  capitalize_next = false
+  number_follows = false
 
   input.scan(/.{6}/).each do |char|
     case BRAILLE_TO_ENGLISH[char]
@@ -23,8 +25,6 @@ def braille_to_english(input)
       capitalize_next = true
     when 'number_follows'
       number_follows = true
-    when ' '
-      result << ' '
     else
       letter = number_follows ? NUMBERS.key(BRAILLE_TO_ENGLISH[char]) : BRAILLE_TO_ENGLISH[char]
       result << (capitalize_next ? letter.upcase : letter)
@@ -36,7 +36,8 @@ def braille_to_english(input)
 end
 
 def english_to_braille(input)
-  result, number_mode = "", false
+  result = ''
+  number_mode = false
 
   input.each_char do |char|
     case char
@@ -46,24 +47,15 @@ def english_to_braille(input)
       result << ENGLISH_TO_BRAILLE['number_follows'] unless number_mode
       result << ENGLISH_TO_BRAILLE[NUMBERS.key(char)]
       number_mode = true
-    when ' '
-      result << ENGLISH_TO_BRAILLE[' ']
-      number_mode = false
     else
-      result << ENGLISH_TO_BRAILLE[char]
+      result << ENGLISH_TO_BRAILLE[char] << (char == ' ' ? '' : '')
+      number_mode = false if char == ' '
     end
   end
 
   result
 end
 
-def validate_input(input)
-  raise ArgumentError, "Input contains invalid characters." unless input.match?(/^[A-Za-z0-9\sO.]+$/)
-end
-
-if __FILE__ == $0
-  input = ARGV.join(' ')
-  validate_input(input)
-  puts language_output(input)
-end
+input = ARGV.join(' ')
+puts language_output(input)
 
