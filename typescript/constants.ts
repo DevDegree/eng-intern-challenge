@@ -46,67 +46,17 @@ const ENGLISH_TO_BRAILLE: Record<string, string> = {
     ";": "..O.O.",
     "-": "....OO",
     "/": ".O..O.",
-    "<": ".OO..O",
-    ">": "O..OO.",
     "(": "O.O..O",
     ")": ".O.OO.",
     " ": "......",
 };
 
-const BRAILLE_TO_ENGLISH: Record<string, string> = {
-    "O.....": "a",
-    "O.O...": "b",
-    "OO....": "c",
-    "OO.O..": "d",
-    "O..O..": "e",
-    "OOO...": "f",
-    "OOOO..": "g",
-    "O.OO..": "h",
-    ".OO...": "i",
-    ".OOO..": "j",
-    "O...O.": "k",
-    "O.O.O.": "l",
-    "OO..O.": "m",
-    "OO.OO.": "n",
-    "O..OO.": "o",
-    "OOO.O.": "p",
-    "OOOOO.": "q",
-    "O.OOO.": "r",
-    ".OO.O.": "s",
-    ".OOOO.": "t",
-    "O...OO": "u",
-    "O.O.OO": "v",
-    ".OOO.O": "w",
-    "OO..OO": "x",
-    "OO.OOO": "y",
-    "O..OOO": "z",
-    ".....O": "capital",
-    ".O...O": "decimal",
-    ".O.OOO": "number",
-    "..OO.O": ".",
-    "..O...": ",",
-    "..O.OO": "?",
-    "..OOO.": "!",
-    "..OO..": ":",
-    "..O.O.": ";",
-    "....OO": "-",
-    ".O..O.": "/",
-    "O.O..O": "(",
-    ".O.OO.": ")",
-    "......": " ",
-};
+const BRAILLE_TO_ENGLISH: Record<string, string> = Object.fromEntries(
+    Object.entries(ENGLISH_TO_BRAILLE).map(([key, value]) => [value, key])
+);
 
-const BRAILLE_TO_ENGLISH_NUMBERS: Record<string, string> = {
-    "O.....": "1",
-    "O.O...": "2",
-    "OO....": "3",
-    "OO.O..": "4",
-    "O..O..": "5",
-    "OOO...": "6",
-    "OOOO..": "7",
-    "O.OO..": "8",
-    ".OO...": "9",
-    ".OOO..": "0",
-};
+const BRAILLE_TO_NUMBERS: Record<string, string> = Object.fromEntries(
+    Object.entries(ENGLISH_TO_BRAILLE).slice(0, 10).map(([key, value]) => [value, key])
+);
 
-module.exports = { ENGLISH_TO_BRAILLE, BRAILLE_TO_ENGLISH, BRAILLE_TO_ENGLISH_NUMBERS };
+module.exports = { ENGLISH_TO_BRAILLE, BRAILLE_TO_ENGLISH, BRAILLE_TO_NUMBERS };

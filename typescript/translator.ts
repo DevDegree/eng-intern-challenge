@@ -1,4 +1,4 @@
-const { ENGLISH_TO_BRAILLE, BRAILLE_TO_ENGLISH, BRAILLE_TO_ENGLISH_NUMBERS } = require("./constants");
+const { ENGLISH_TO_BRAILLE, BRAILLE_TO_ENGLISH, BRAILLE_TO_NUMBERS } = require("./constants");
 
 const chunkString = (str: string): string[] => {
     // The match function returns an array of chunks , each containing 6 symbols
@@ -36,7 +36,7 @@ const translateBrlToEng = (braille: string) => {
                 // For all other cases, add the current symbol to the result
                 // If the flag is set, treat the current symbol as a number
                 result += isNextNumber
-                    ? BRAILLE_TO_ENGLISH_NUMBERS[brailleChunks[i]]
+                    ? BRAILLE_TO_NUMBERS[brailleChunks[i]]
                     : currentSymbol;
         }
     }
