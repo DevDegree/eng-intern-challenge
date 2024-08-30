@@ -1,5 +1,6 @@
 import sys
 from abc import abstractmethod, ABC
+from typing import List
 
 BRAILLE_ALPHABET = {
     'a': 'O.....',
@@ -45,7 +46,7 @@ NUMBER_FOLLOWS = '.O.OOO'
 BRAILLE_SPACE = '......'
 
 
-def is_braille(input_strs: list[str]) -> bool:
+def is_braille(input_strs: List[str]) -> bool:
     """Check if all strings in the input list are valid Braille."""
     for input_str in input_strs:
         if len(input_str) % 6 != 0:  # Valid Braille will be divisible by 6 because each 'letter' is 6 chars
@@ -62,7 +63,7 @@ class TranslationStrategy(ABC):
     """
 
     @abstractmethod
-    def translate(self, input_str: list[str]) -> str:
+    def translate(self, input_str: List[str]) -> str:
         pass
 
 
@@ -89,7 +90,7 @@ class EnglishToBrailleStrategy(TranslationStrategy):
                 translated.append(BRAILLE_ALPHABET[char])
         return ''.join(translated)
 
-    def translate(self, input_strs: list[str]) -> str:
+    def translate(self, input_strs: List[str]) -> str:
         """Translate a list of English strings to Braille."""
         translated_all = []
         for input_str in input_strs:
@@ -130,7 +131,7 @@ class BrailleToEnglishStrategy(TranslationStrategy):
 
         return ''.join(translated)
 
-    def translate(self, input_strs: list[str]) -> str:
+    def translate(self, input_strs: List[str]) -> str:
         """Translate a list of Braille strings to English."""
         translated_all = []
         for input_str in input_strs:
@@ -144,7 +145,7 @@ class Translator:
     def __init__(self, strategy: TranslationStrategy):
         self._strategy = strategy
 
-    def translate(self, input_strs: list[str]) -> str:
+    def translate(self, input_strs: List[str]) -> str:
         return self._strategy.translate(input_strs)
 
 
@@ -161,7 +162,8 @@ def main():
         strategy = EnglishToBrailleStrategy()
 
     translator = Translator(strategy)
-    print(translator.translate(input_text))
+    translation = translator.translate(input_text)
+    print(translation)
 
 
 if __name__ == '__main__':
