@@ -144,20 +144,20 @@ def main() -> None:
     # parser.add_argument('input_text', nargs='+', help='Text to translate', type=str)
     # input_text = parser.parse_args().input_text  # Retreives input text
 
-    # if isinstance(input_text, (list, tuple)):  # Change format of input, if needed
-    #     input_text = ''.join(input_text)
-    #     input_text = str(input_text)
-    # if isinstance(input_text, int):
-    #     input_text = str(input_text)
-    # elif not isinstance(input_text, str):
-    #     raise ValueError('Invalid input')
-    input_text = ' '.join(sys.argv[1:])
+
+    input_text = ''.join(sys.argv[1:])
+
+    if isinstance(input_text, (list, tuple)):  # Change format of input, if needed
+        input_text = ''.join(input_text)
+        input_text = str(input_text)
+    if isinstance(input_text, int):
+        input_text = str(input_text)
+
 
     if translate_language(input_text):  # Translation
         print(translate_text_to_english(input_text))
     else:
         print(translate_text_to_braille(input_text))
-
 
 if __name__ == '__main__':
     main()
