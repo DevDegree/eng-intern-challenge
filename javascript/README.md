@@ -57,7 +57,7 @@ A simple Braille translator that converts English text to Braille and vice versa
 
 ### Notes on Testing
 
-- **Numbers Test Error**: During testing, it was observed that there was an inconsistency in the handling of numbers according to the test requirements. The implementation was adjusted to align with the visual representation provided in the picture, ensuring consistency in number handling between English and Braille translations.
+- **Numbers Test Error**: During testing, it was observed that there was an inconsistency in the handling of numbers according to the test requirements. The implementation was adjusted to align with the visual representation provided in the picture, ensuring consistency in number handling between English and Braille translations. This issue has now been resolved.
 
 ### Project Structure
 
