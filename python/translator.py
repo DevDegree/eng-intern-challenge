@@ -1,103 +1,98 @@
 import sys
 
 # Map for converting braille to characters
-BRAILLE_TO_CHAR = {
-    'O.....': 'a',
-    'O.O...': 'b',
-    'OO....': 'c',
-    'OO.O..': 'd',
-    'O..O..': 'e',
-    'OOO...': 'f',
-    'OOOO..': 'g',
-    'O.OO..': 'h',
-    '.OO...': 'i',
-    '.OOO..': 'j',
-    'O...O.': 'k',
-    'O.O.O.': 'l',
-    'OO..O.': 'm',
-    'OO.OO.': 'n',
-    'O..OO.': 'o',
-    'OOO.O.': 'p',
-    'OOOOO.': 'q',
-    'O.OOO.': 'r',
-    '.OO.O.': 's',
-    '.OOOO.': 't',
-    'O...OO': 'u',
-    'O.O.OO': 'v',
-    '.OOO.O': 'w',
-    'OO..OO': 'x',
-    'OO.OOO': 'y',
-    'O..OOO': 'z',
-    'O.....': '1',
-    'O.O...': '2',
-    'OO....': '3',
-    'OO.O..': '4',
-    'O..O..': '5',
-    'OOO...': '6',
-    'OOOO..': '7',
-    'O.OO..': '8',
-    '.OO...': '9',
-    '.OOO..': '0',
-    '......': ' ',
-    '.....O': 'capital_follows',
-    '.O.OOO': 'number_follows',
+alphabet_to_braille = {
+    'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
+    'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..',
+    'k': 'O...O.', 'l': 'O.O.O.', 'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.',
+    'p': 'OOO.O.', 'q': 'OOOOO.', 'r': 'O.OOO.', 's': '.OO.O.', 't': '.OOOO.',
+    'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO',
+    'z': 'O..OOO', ' ': '......', 'capitalize': '.....O', 'number': '.O.OOO'
 }
 
-# Reversed maps
-CHAR_TO_BRAILLE = {char: braille for braille, char in BRAILLE_TO_CHAR.items()}
+number_to_braille = {
+    '0': '.OOO..', '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..',
+    '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...'
+}
+
+CAPITALIZE = '.....O'
+NUMBER = '.O.OOO'
+SPACE = '......'
+
+
+braille_to_alphabet = {v: k for k, v in alphabet_to_braille.items()}
+braille_to_number = {v: k for k, v in number_to_braille.items()}
+
+def is_braille(message):
+    return all(char in 'O.' for char in message)
+
+def english_to_braille(message):
+    result = []
+    number_mode = False
+
+    for char in message:
+        if char.isalpha():
+            if char.isupper():
+                result.append(CAPITALIZE)
+                char = char.lower()
+            result.append(alphabet_to_braille[char])
+            number_mode = False
+        elif char.isdigit():
+            if not number_mode:
+                result.append(NUMBER)
+                number_mode = True
+            result.append(number_to_braille[char])
+        elif char.isspace():
+            result.append(alphabet_to_braille[char])
+            number_mode = False
+
+    return ''.join(result)
 
 def braille_to_english(message):
-    output = []
+    result = []
+    number_mode = False
     i = 0
-    numbered = False
 
     while i < len(message):
         symbol = message[i:i+6]
 
-        if symbol == CHAR_TO_BRAILLE["capital_follows"]:
-            output.append(BRAILLE_TO_CHAR[message[i+6:i+12]].upper())
-            i += 12
+        if symbol == SPACE:
+            number_mode = False
         
-        elif symbol == CHAR_TO_BRAILLE["number_follows"]:
-            numbered = True
+        if symbol == CAPITALIZE:
             i += 6
+
+            symbol = message[i:i+6]
+
+            result.append(braille_to_alphabet[symbol].upper())
+        
+        elif symbol == NUMBER:
+            number_mode = True
+            i += 6
+            continue
+
+        elif symbol in braille_to_alphabet and number_mode is False:
+            result.append(braille_to_alphabet[symbol])
+            number_mode = False
+        
+        elif symbol in braille_to_number:
+            result.append(braille_to_number[symbol])
         
         else:
-            char = BRAILLE_TO_CHAR[symbol]
-            if numbered and char.isalpha():
-                numbered = False
+            result.append(' ')
 
-            output.append(char)
-            i += 6
-    
-    return "".join(output)
+        i += 6
 
-def english_to_braille(message):
+    return ' '.join(result)
 
-    output = []
-    numbered = False
-
-    for char in message:
-        if char.isupper():
-            output.append(CHAR_TO_BRAILLE['capital_follows'])
-            char = char.lower()
-
-        elif char.isdigit() and not numbered:
-            numbered = True
-            output.append(CHAR_TO_BRAILLE['number_follows'])
-        
-        elif not char.isdigit():
-            if char.isspace():
-                numbered = False
-            output.append(CHAR_TO_BRAILLE[char])
-    
-    return ''.join(output)
-
-if __name__ == "__main__":
+def main():
     if len(sys.argv) > 1:
         message = ' '.join(sys.argv[1:])
-        if all(char in "O." for char in message) and len(message) % 6 == 0:
+
+        if is_braille(message):
             print(braille_to_english(message))
         else:
             print(english_to_braille(message))
-
+    
+if __name__ == "__main__":
+    main()
