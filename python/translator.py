@@ -57,35 +57,35 @@ def english_to_braille(input_str):
     braille_output = ""
     # boolean to check if number prefix needs to be added
     num_mode = False
-    # looping through characters in input string
+
     for char in input_str:
-        # checks if character is in upper case and adds the according upper case prefix
+
         if char.isupper():
             braille_output += braille_map["cap"]
             char = char.lower()
-        # checks if character is a number and adds the number prefix
+
         if char.isdigit() and num_mode == False:
             braille_output += braille_map["num"]
             num_mode = True
-        # adds number to output string
+
         if num_mode and char.isdigit():
             braille_output += braille_num_map[char]
-        # if a space is found turn num mode off
+
         elif char == " ":
             num_mode = False
             braille_output += braille_map[char]
-        # adds the character to output string
+
         else:
             braille_output += braille_map[char]
-    # prints the output
+
     print(braille_output)
 
 
 # converts braille string to english
 def braille_to_english(input_str):
-    # initializes empty string
+
     english_output = ""
-    # flags to check if the next character needs to be handled differently
+
     capitalize_next = False
     number_mode = False
     # splits string into groups of 6
@@ -95,7 +95,7 @@ def braille_to_english(input_str):
         # Checks if the character group matches the capitalization flag
         if braille_char == braille_map["cap"]:
             capitalize_next = True
-        # checks if the character matches the number or decimal flags
+
         elif braille_char == braille_map["num"] or braille_char == braille_map["dec"]:
             number_mode = True
         # Adds the appropriate character to the string
@@ -110,7 +110,7 @@ def braille_to_english(input_str):
                 number_mode = False
             else:
                 english_output += reverse_braille_map[braille_char]
-    # prints the final string
+
     print(english_output)
 
 
