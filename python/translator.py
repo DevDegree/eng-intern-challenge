@@ -1,4 +1,5 @@
 import sys
+from abc import abstractmethod, ABC
 
 BRAILLE_ALPHABET = {
     'a': 'O.....',
@@ -44,72 +45,114 @@ NUMBER_FOLLOWS = '.O.OOO'
 BRAILLE_SPACE = '......'
 
 
-def is_braille(input_str: str):
-    """ Determines if an input string is valid Braille.
+def is_braille(input_strs: list[str]) -> bool:
+    """Determines if the input list of strings are all valid Braille.
 
-    :param input_str: a string of either Braille or English
-    :return: True if Braille. False Otherwise
+    :param input_strs: A list of strings to check.
+    :return: True if all strings are valid Braille, False otherwise.
     """
-    if len(input_str) % 6 != 0:  # valid braille will be divisible by 6 because each 'letter' is 6 chars
-        return False
-    return all(char in '.O' for char in input_str)
+    for input_str in input_strs:
+        if len(input_str) % 6 != 0:  # Valid Braille will be divisible by 6 because each 'letter' is 6 chars
+            return False
+        if not all(char in '.O' for char in input_str):
+            return False
+    return True
 
 
-def english_to_braille(input_str: str):
-    num_code_prepended = False
-    translated = []
-    for char in input_str:
-        if char.isupper():
-            translated.append(CAPITAL_FOLLOWS + BRAILLE_ALPHABET[char.lower()])
-        elif char.isnumeric():
-            if not num_code_prepended:
-                translated.append(NUMBER_FOLLOWS)
-                num_code_prepended = True
-            translated.append(BRAILLE_NUMBERS[char])
-        elif char == ' ':
-            translated.append(BRAILLE_SPACE)
-            num_code_prepended = False  # 'number mode' should be reset after a space
-        else:
-            translated.append(BRAILLE_ALPHABET[char])
-    return ''.join(translated)
+# Strategy Interface
+class TranslationStrategy(ABC):
+    @abstractmethod
+    def translate(self, input_str: list[str]) -> str:
+        pass
 
 
-def braille_to_english(input_str: str):
-    num_mode = False
-    is_capital = False
-    translated = []
+class EnglishToBrailleStrategy(TranslationStrategy):
+    @staticmethod
+    def translate_element(input_str: str):
+        num_code_prepended = False
+        translated = []
+        for char in input_str:
+            if char.isupper():
+                translated.append(CAPITAL_FOLLOWS + BRAILLE_ALPHABET[char.lower()])
+            elif char.isnumeric():
+                if not num_code_prepended:
+                    translated.append(NUMBER_FOLLOWS)
+                    num_code_prepended = True
+                translated.append(BRAILLE_NUMBERS[char])
+            elif char == ' ':
+                translated.append(BRAILLE_SPACE)
+                num_code_prepended = False  # 'number mode' should be reset after a space
+            else:
+                translated.append(BRAILLE_ALPHABET[char])
+        return ''.join(translated)
 
-    # swap keys and values in original Braille Alphabet for simplification
-    braille_english_letters = {v: k for k, v in BRAILLE_ALPHABET.items()}
-    braille_english_nums = {v: k for k, v in BRAILLE_NUMBERS.items()}
+    def translate(self, input_strs: list[str]) -> str:
+        translated_all = []
+        for input_str in input_strs:
+            translated_all.append(self.translate_element(input_str))
+        return BRAILLE_SPACE.join(translated_all)
 
-    for i in range(0, len(input_str), 6):
-        char = input_str[i: i + 6]
-        if char == BRAILLE_SPACE:
-            translated.append(' ')
-            num_mode = False  # 'number mode' should be reset after a space
-        elif is_capital:
-            translated.append(braille_english_letters[char].upper())
-            is_capital = False
-        elif char == CAPITAL_FOLLOWS:
-            is_capital = True
-        elif num_mode:
-            translated.append(braille_english_nums[char])
-        elif char == NUMBER_FOLLOWS:
-            num_mode = True
-        else:
-            translated.append(braille_english_letters[char])
 
-    return ''.join(translated)
+# Concrete Strategy for Braille to English
+class BrailleToEnglishStrategy(TranslationStrategy):
+    def __init__(self):
+        self.braille_english_letters = {v: k for k, v in BRAILLE_ALPHABET.items()}
+        self.braille_english_nums = {v: k for k, v in BRAILLE_NUMBERS.items()}
+
+    def translate_element(self, input_str: str):
+        num_mode = False
+        is_capital = False
+        translated = []
+
+        for i in range(0, len(input_str), 6):
+            char = input_str[i: i + 6]
+            if char == BRAILLE_SPACE:
+                translated.append(' ')
+                num_mode = False  # Reset number mode after a space
+            elif is_capital:
+                translated.append(self.braille_english_letters[char].upper())
+                is_capital = False
+            elif char == CAPITAL_FOLLOWS:
+                is_capital = True
+            elif num_mode:
+                translated.append(self.braille_english_nums[char])
+            elif char == NUMBER_FOLLOWS:
+                num_mode = True
+            else:
+                translated.append(self.braille_english_letters[char])
+
+        return ''.join(translated)
+
+    def translate(self, input_strs: list[str]) -> str:
+        translated_all = []
+        for input_str in input_strs:
+            translated_all.append(self.translate_element(input_str))
+        return ' '.join(translated_all)
+
+
+# Translator class that accepts a translation strategy
+class Translator:
+    def __init__(self, strategy: TranslationStrategy):
+        self._strategy = strategy
+
+    def translate(self, input_strs: list[str]) -> str:
+        return self._strategy.translate(input_strs)
 
 
 def main():
     if len(sys.argv) < 2:
         print("Usage: translator.py <text_to_translate>")
 
-    args = sys.argv[1:]  # Skip the first argument (script name)
-    # print('......'.join(english_to_braille(arg) for arg in args))
-    print(' '.join(braille_to_english(arg) for arg in args))
+    input_text = sys.argv[1:]  # Skip the first argument (script name)
+
+    # Assign translation strategy based on input text
+    if is_braille(input_text):
+        strategy = BrailleToEnglishStrategy()
+    else:
+        strategy = EnglishToBrailleStrategy()
+
+    translator = Translator(strategy)
+    print(translator.translate(input_text))
 
 
 if __name__ == '__main__':
