@@ -82,6 +82,24 @@ class Translator
     end.join
   end
 
+  # Method to translate text to braille
+  def text_to_braille
+    # variable to store the result of the translation
+    result = []
+
+    # go through the input array and translate each char to respective sequence
+    input.each_with_index do |char, index|
+      # if char is a uppercase letter, add the uppercase rule to the result array
+      if (char.match?((/[A-NP-Z]/)))
+        result.insert(index, BRAILLE_RULES.key('uppercase'))
+      end
+      # continue translation of the char to the respective sequence
+      index += 1
+      result.insert(index, BRAILLE_ALPHABET.key(char.downcase))
+    end
+      result.join
+  end
+
   public
   def initialize(input)
     @format = check_format(input)
@@ -95,5 +113,6 @@ end
 
  # translator = Translator.new('.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..')
  # translator = Translator.new('.O.OOOOO.O..O.O...')
-  translator = Translator.new('.....OO.....O.O...OO...........O.OOOO.....O.O...OO....')
+ # translator = Translator.new('.....OO.....O.O...OO...........O.OOOO.....O.O...OO....')
+ # translator = Translator.new('Hello world')
 puts translator.translate
