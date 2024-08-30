@@ -69,8 +69,7 @@ class Translator
           result << BRAILLE_ALPHABET[next_sequence].upcase
         when 'number'
           is_number = true
-          next_sequence = input[index += 1]
-          result << BRAILLE_DIGITS[next_sequence]
+          result << BRAILLE_DIGITS[input[index]]
         when 'space'
           is_number = false
           result << BRAILLE_ALPHABET[input[index]]
@@ -99,5 +98,6 @@ class Translator
 end
 
  # translator = Translator.new('.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..')
- translator = Translator.new('.O.OOOOO.O..O.O...')
- puts translator.translate
+ # translator = Translator.new('.O.OOOOO.O..O.O...')
+ translator = Translator.new('.....OO.....O.O...OO...........O.OOOO.....O.O...OO....')
+puts translator.translate
