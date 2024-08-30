@@ -60,11 +60,23 @@ braille_capital_sign = ".....O"
 braille_number_sign = ".O.OOO"
 
 def is_braille(input):
+    """
+    Checks if the given input string is a valid Braille pattern.
+    
+    :param input: A string representing potential Braille characters.
+    :return: True if the input is a valid Braille pattern, False otherwise.
+    """
     if len(input) % 6 != 0:
         return False
     return all(char in ('O', '.') for char in input)
 
 def translate_braille_to_alphabet(input):
+    """
+    Translates a Braille string into its corresponding alphabetic representation.
+    
+    :param input: A string of Braille characters.
+    :return: A translated string in the alphabet.
+    """
     is_capital = False
     is_number = False
     result = []
@@ -101,7 +113,12 @@ def translate_braille_to_alphabet(input):
     return ''.join(result)
 
 def translate_alphabet_to_braille(input):
-
+    """
+    Translates an alphabetic string into its corresponding Braille representation.
+    
+    :param input: A string of alphabetic characters.
+    :return: A translated string in Braille.
+    """
     result = []
     is_number = False
 
@@ -127,6 +144,9 @@ def translate_alphabet_to_braille(input):
     return ''.join(result)
 
 def main():
+    """
+    The main function to determine the type of input (Braille or alphabet) and translate accordingly.
+    """
     # Check for Braille or alphabet
     is_alpha = False
     n = len(sys.argv)
