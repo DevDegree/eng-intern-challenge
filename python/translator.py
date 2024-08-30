@@ -21,7 +21,7 @@ ENGLISH_BRAILLE_TRANSLATIONS = {
     "z": "O..OOO", "capital follows": ".....O", "decimal follows": ".O...O",
     "number follows": ".O.OOO", ".": "..OO.O", ",": "..O...", "?": "..O.OO", 
     "!": "..OOO.", ":": "..OO..", ";": "..O.O.", "-": "....OO", "/": ".O..O.",
-    "<": ".OO..O", ">": "O..OO.", "(": "O.O..O", ")": ".O.OO.", " ": "......",
+    "<": ".OO..O", "(": "O.O..O", ")": ".O.OO.", " ": "......",
     # Reverse mappings for Braille to English
     "O.....": "a", "O.O...": "b", "OO....": "c", "OO.O..": "d", "O..O..": "e",
     "OOO...": "f", "OOOO..": "g", "O.OO..": "h", ".OO...": "i", ".OOO..": "j",
@@ -31,7 +31,7 @@ ENGLISH_BRAILLE_TRANSLATIONS = {
     "O..OOO": "z", ".....O": "capital follows", ".O...O": "decimal follows",
     ".O.OOO": "number follows", "..OO.O": ".", "..O...": ",", "..O.OO": "?",
     "..OOO.": "!", "..OO..": ":", "..O.O.": ";", "....OO": "-", ".O..O.": "/",
-    ".OO..O": "<", "O..OO.": ">", "O.O..O": "(", ".O.OO.": ")", "......": " "
+    ".OO..O": "<", "O.O..O": "(", ".O.OO.": ")", "......": " "
 }
 
 # Dictionary for mapping numbers to Braille representations and vice versa
@@ -140,17 +140,6 @@ def translate_braille_to_english(resulting_elements):
         elif ENGLISH_BRAILLE_TRANSLATIONS[resulting_elements[i]] == "decimal follows":
             continue  # Skip decimal follow marker
 
-        elif ENGLISH_BRAILLE_TRANSLATIONS[resulting_elements[i]] == ">":
-            if i == (len(resulting_elements) - 1) or i == 0:
-                english += "O" if is_capital else "o"
-                is_capital = False
-            elif ENGLISH_BRAILLE_TRANSLATIONS[resulting_elements[i - 1]] != " " or \
-                    ENGLISH_BRAILLE_TRANSLATIONS[resulting_elements[i + 1]] != " ":
-                english += "O" if is_capital else "o"
-                is_capital = False
-            else:
-                english += ">"
-
         else:
             if is_capital:
                 english += ENGLISH_BRAILLE_TRANSLATIONS[resulting_elements[i]].upper()
@@ -180,3 +169,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
