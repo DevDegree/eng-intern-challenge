@@ -48,17 +48,32 @@ english_to_braille_numeric = {
 braille_to_english_character = {v: k for k, v in english_to_braille_non_numeric.items()}
 braille_to_english_number = {v: k for k, v in english_to_braille_numeric.items()}
 
+braille_size = 6
+
 
 def is_braille(string):
-    return string.count(".") + string.count("O") == len(string) and len(string) % 6 == 0
+    # check that the string is only '.' or 'O'
+    only_braille_characters = (
+        string.count(".") + string.count("O") == len(string) and len(string) % 6 == 0
+    )
+    if not only_braille_characters:
+        return False
+
+    # check that we can parse all the braille
+    can_parse = True
+    for start in range(0, len(input), braille_size):
+        chunk = input[start : start + braille_size]
+        can_parse = (
+            chunk in braille_to_english_character or chunk in braille_to_english_number
+        ) and can_parse
+
+    return can_parse
 
 
 def braille_to_english(input):
-    braille_size = 6
+    result = []
 
     flag = None  # can be 'capital_follows' or 'number_follows'
-
-    result = []
     for start in range(0, len(input), braille_size):
         chunk = input[start : start + braille_size]
 
