@@ -31,12 +31,12 @@ def braille_to_english(text):
     english_text = ""
     i = 0
     while i < len(text):
-        if text[i:i+3] == 'O.O...':  # Capital indicator
+        if text[i:i+6] == 'O.O...O...O.....':  # Capital indicator
             i += 6
             if i + 6 <= len(text):
                 braille_char = text[i:i+6]
                 english_text += reverse_braille_dict.get(braille_char, '?').upper()
-            i += 6
+                i += 6
         else:
             braille_char = text[i:i+6]
             english_text += reverse_braille_dict.get(braille_char, '?')
@@ -49,7 +49,8 @@ def main():
         sys.exit(1)
     
     input_string = sys.argv[1]
-    
+    print(f"Debug: Input string = '{input_string}'")  # Debug print
+
     if all(c in 'O.' for c in input_string):
         # Input is Braille
         output = braille_to_english(input_string)
@@ -57,6 +58,7 @@ def main():
         # Input is English
         output = english_to_braille(input_string)
     
+    print(f"Debug: Output = '{output}'")  # Debug print
     print(output)
 
 if __name__ == '__main__':
