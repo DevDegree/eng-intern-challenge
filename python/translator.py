@@ -84,6 +84,7 @@ def translate_to_braille(text):
                 braille_text += caps
                 caps_flag = True
             braille_text += alphabet[char.lower()]
+            caps_flag = False
         elif char.isdigit():
             if not num_flag:
                 braille_text += num
