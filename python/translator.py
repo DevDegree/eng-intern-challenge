@@ -115,6 +115,29 @@ class Translator:
         args:
             - text: the Braille text to be translated
         """
+        BRAILLE_LENGTH = 6
+        english_characters = []
+        is_number = False
+        is_caps = False
+
+        for i in range(0, len(text), BRAILLE_LENGTH):
+            braille = text[i : i + BRAILLE_LENGTH]
+            if braille == BrailleMapping.NUMBER_FOLLOWS:
+                is_number = True
+                continue
+            if braille == BrailleMapping.CAPITAL_FOLLOWS:
+                is_caps = True
+                continue
+            if braille == BrailleMapping.get_braille(" "):
+                is_number = False
+
+            character = BrailleMapping.get_english(
+                braille, is_number=is_number, is_caps=is_caps
+            )
+            english_characters.append(character)
+            is_caps = False
+
+        return "".join(english_characters)
 
 
 class InputTypeClassifier:
