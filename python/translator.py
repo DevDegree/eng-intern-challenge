@@ -18,7 +18,7 @@ english_to_braille_map = {
     '>': 'O..OO.',          # Greater than
     '(': 'O.O..O',          # Open parenthesis
     ')': '.O.OO.',          # Close parenthesis
-    ' ': '......',           # Space
+    ' ': '......',          # Space
 
     # Letters
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
@@ -71,7 +71,7 @@ def braille_to_english(text):
     braille_chars = [text[i:i+6] for i in range(0, len(text), 6)]
     english_output = []
 
-    # possible contexts: letter, capital, number
+    # Possible contexts: letter (default), capital, number
     context = 'letter'
 
     for char in braille_chars:
