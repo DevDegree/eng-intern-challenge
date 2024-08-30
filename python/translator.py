@@ -81,7 +81,10 @@ def text_to_braille(text):
     is_capital = False
     is_number = False
 
-    for char in text:
+    i = 0
+    while i < len(text):
+        char = text[i]
+
         if char.isdigit():
             if not is_number:
                 result.append(
@@ -89,7 +92,16 @@ def text_to_braille(text):
                 )  # Prefix number indicator only once per number sequence
                 is_number = True
             result.append(braille_dict["digits"][char])
+
+        elif char == "." and is_number:
+            result.append(
+                braille_dict["special_chars"]["dec"]
+            )  # Decimal point in a number
+            # No need to reset is_number here because we're still in a number sequence
+
         elif char.isalpha():
+            if is_number:
+                is_number = False  # End of number sequence
             if char.isupper():
                 if not is_capital:
                     result.append(
@@ -98,11 +110,14 @@ def text_to_braille(text):
                     is_capital = True
             result.append(braille_dict["alphabet"][char.lower()])
             is_capital = False  # Reset capital indicator after adding a capital letter
+
         else:
-            # Use a fallback for unhandled characters, also check in special_chars before using a fallback
+            # Handle non-alphabetical, non-digit characters
+            if is_number:
+                is_number = False  # End of number sequence
             result.append(braille_dict["special_chars"].get(char, "......"))
-            is_capital = False  # Reset on non-letter characters
-            is_number = False  # Reset on spaces or non-digit characters
+
+        i += 1
 
     return "".join(result)
 
@@ -122,6 +137,10 @@ def braille_to_text(braille):
             continue
         if symbol == braille_dict["special_chars"]["num"]:
             is_number = True
+            i += 6
+            continue
+        if symbol == braille_dict["special_chars"]["dec"] and is_number:
+            result.append(".")
             i += 6
             continue
 
