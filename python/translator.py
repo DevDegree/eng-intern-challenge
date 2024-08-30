@@ -135,31 +135,8 @@ def handle_braille(input):
     lexer = Braille_Lexer(input)
 
     out = ""
-    is_number = False
     while lexer.has_next():
-        is_capital = False
-        char = ""
-
         lexer.next()
-
-        # if lexer.curr == ENG_TO_BRAILLE["number"]:
-        #     is_number = True
-        #     continue
-        # elif lexer.curr == ENG_TO_BRAILLE[" "]:
-        #     is_number = False
-        # elif lexer.curr == ENG_TO_BRAILLE["capital"]:
-        #     is_capital = True
-        #     lexer.next()
-
-        # if is_number:
-        #     char = BRAILLE_TO_NUMBER[lexer.curr]
-        # elif is_capital:
-        #     char = BRAILLE_TO_ENG[lexer.curr].upper()
-        # else:
-        #     char = BRAILLE_TO_ENG[lexer.curr]
-
-        # out += char
-
         out += lexer.get_char()
 
     return out
