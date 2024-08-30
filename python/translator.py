@@ -45,8 +45,6 @@ Parameters:
 Returns:
     boolean: True if message is in braille, else False.
 """
-
-
 def is_braille(message):
     # Braille messages must be a multiple of 6
     if len(message) % 6 != 0:
@@ -70,14 +68,12 @@ Parameters:
 Returns:
     translated_text (str): The translated alphanumeric message.
 """
-
-
 def braille_to_alphabet_translator(braille_message):
     # Partition the braille string every 6 characters
     braille_characters = [braille_message[i:i + 6] for i in range(0, len(braille_message), 6)]
     translated_text = ''
 
-    # Technical indicators needed for special cases
+    # Technical flags needed for special cases
     capitalize_next = False
     number_next = False
 
@@ -97,10 +93,7 @@ def braille_to_alphabet_translator(braille_message):
                 character_as_alphabet = character_as_alphabet.upper()
                 capitalize_next = False
             if number_next:
-                if character_as_alphabet == 'j':
-                    character_as_alphabet = 0  # Special case for 0
-                else:
-                    character_as_alphabet = ord(character_as_alphabet) - ord('a') + 1
+                character_as_alphabet = 0 if character_as_alphabet == 'j' else ord(character_as_alphabet) - ord('a') + 1
 
             translated_text += str(character_as_alphabet)
 
@@ -116,12 +109,10 @@ Parameters:
 Returns:
     translated_text (str): The translated braille string.
 """
-
-
 def alphabet_to_braille_translator(alphanumeric_message):
     translated_text = ''
 
-    # Technical indicators needed for special cases
+    # Technical flags needed for special cases
     is_prev_numerical = False
 
     # Loop through each alphanumeric character and perform the translation necessary
@@ -138,11 +129,7 @@ def alphabet_to_braille_translator(alphanumeric_message):
                 translated_text += number_next_braille
 
             is_prev_numerical = True
-            if character == '0':
-                number_as_character = 'j'
-            else:
-                number_as_character = chr(int(character) + ord('a') - 1)
-
+            number_as_character = 'j' if character == '0' else chr(int(character) + ord('a') - 1)
             translated_text += str(ALPHABET_TO_BRAILLE.get(number_as_character))
         else:
             is_prev_numerical = False
