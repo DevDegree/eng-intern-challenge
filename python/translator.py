@@ -43,8 +43,10 @@ BRAILLE_TO_NUMBER_DICT = {
     ".OOO..": "0",
 }
 
-ENGLISH_TO_BRAILLE_DICT = {value: key for key, value in BRAILLE_TO_ENGLISH_DICT.items()}
-NUMBER_TO_BRAILLE_DICT = {value: key for key, value in BRAILLE_TO_NUMBER_DICT.items()}
+ENGLISH_TO_BRAILLE_DICT = {value: key for key,
+                           value in BRAILLE_TO_ENGLISH_DICT.items()}
+NUMBER_TO_BRAILLE_DICT = {value: key for key,
+                          value in BRAILLE_TO_NUMBER_DICT.items()}
 
 CAPITALIZE_BRAILL = ".....O"
 NUMBER_BRAILL = ".O.OOO"
@@ -66,7 +68,7 @@ def braille_to_english(input_str: str) -> str:
         return "Error, braille sequence invalid"
 
     # break braille down into 6 segments
-    segments = [input_str[i : i + 6] for i in range(0, len(input_str), 6)]
+    segments = [input_str[i: i + 6] for i in range(0, len(input_str), 6)]
 
     results: list[str] = []
     capitalize_flag: bool = False
