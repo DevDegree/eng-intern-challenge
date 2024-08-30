@@ -98,6 +98,49 @@ def english_to_braille(text):
     return braille_text
 
 
+"""
+    Convert a Braille text to English
+        param text: Braille text to convert
+        returns: English representation of the text
+"""
+def braille_to_english(text):
+    
+    english_text = ''
+    is_uppercase = False
+    is_number = False
+
+    for i in range(0, len(text), 6):
+        braille = text[i: i+6]
+
+        if braille == uppercase_follows:
+            is_uppercase = True
+
+        elif braille == number_follows:
+            is_number = True
+        
+        elif is_number:
+            if braille == punctuation_to_braille['.']:
+                english_text += '.'
+            elif braille == punctuation_to_braille[' ']:
+                is_number = False
+                english_text += ' '
+            elif braille == decimal_follows:
+                continue
+            else:
+                english_text += braille_to_digit[braille]
+
+        elif braille in braille_to_character:
+            if is_uppercase:
+                english_text += braille_to_character[braille].upper()
+                is_uppercase = False
+            else:
+                english_text += braille_to_character[braille]
+        else:
+            english_text += braille_to_punctuation[braille]
+    
+    return english_text
+
+
 
 if __name__ == '__main__':
     import sys
