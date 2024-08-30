@@ -41,11 +41,12 @@ func main() {
 // Determine if input is english or braille
 func classify_input(input string) InputType{
 	for _, char := range input {
-		if _, ok := EnglishToBraille[string(char)]; ok {
-			return ENGLISH
-		} else if _, ok := NumberToBraille[string(char)]; ok {
+		if string(char) != "O" && string(char) != "." {
 			return ENGLISH
 		}
+	}
+	if strings.Contains(input, " ") || len(input) % 6 != 0 {
+		return ENGLISH
 	}
 	return BRAILLE
 }
