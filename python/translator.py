@@ -42,97 +42,71 @@ ENG_TO_BRAILLE = {
     "number": ".O.OOO",
 }
 
-BRAILLE_TO_ENG = {
-    "O.....": "a",
-    "O.O...": "b",
-    "OO....": "c",
-    "OO.O..": "d",
-    "O..O..": "e",
-    "OOO...": "f",
-    "OOOO..": "g",
-    "O.OO..": "h",
-    ".OO...": "i",
-    ".OOO..": "j",
-    "O...O.": "k",
-    "O.O.O.": "l",
-    "OO..O.": "m",
-    "OO.OO.": "n",
-    "O..OO.": "o",
-    "OOO.O.": "p",
-    "OOOOO.": "q",
-    "O.OOO.": "r",
-    ".OO.O.": "s",
-    ".OOOO.": "t",
-    "O...OO": "u",
-    "O.O.OO": "v",
-    ".OOO.O": "w",
-    "OO..OO": "x",
-    "OO.OOO": "y",
-    "O..OOO": "z",
-    "......": " ",
-    ".....0": "capital",
-    ".O.OOO": "number",
-}
+BRAILLE_TO_LETTER = {v: k for k, v in ENG_TO_BRAILLE.items() if not k.isnumeric()}
 
-BRAILLE_TO_NUMBER = {
-    "O.....": "1",
-    "O.O...": "2",
-    "OO....": "3",
-    "OO.O..": "4",
-    "O..O..": "5",
-    "OOO...": "6",
-    "OOOO..": "7",
-    "O.OO..": "8",
-    ".OO...": "9",
-    ".OOO..": "0",
-}
+BRAILLE_TO_NUMBER = {v: k for k, v in ENG_TO_BRAILLE.items() if k.isnumeric()}
 
 
 class Braille_Lexer:
     def __init__(self, input) -> None:
+        # input to scan
         self.input = input
+
+        # pointer to next char to scan
         self.i = 0
+
+        # flags for scanning
         self.is_number = False
         self.is_capital = False
 
     def next(self):
+        # don't scan if at end
         if not self.has_next():
             return
 
+        # scan next token
         self.curr = ""
 
         for _ in range(6):
             self.curr += self.input[self.i]
             self.i += 1
 
+        # update flags
         self.set_flags()
 
     def set_flags(self):
+        # reset is capital on each scan
         self.is_capital = False
+
+        # handle special tokens
         if self.curr == ENG_TO_BRAILLE["number"]:
             self.is_number = True
             self.next()
-        elif self.curr == ENG_TO_BRAILLE[" "]:
+        elif self.curr == ENG_TO_BRAILLE[" "] and self.is_number:
             self.is_number = False
         elif self.curr == ENG_TO_BRAILLE["capital"]:
             self.next()
             self.is_capital = True
 
     def get_char(self):
+        # return english translation of current token
         if self.is_number:
             return BRAILLE_TO_NUMBER[self.curr]
         elif self.is_capital:
-            return BRAILLE_TO_ENG[self.curr].upper()
+            return BRAILLE_TO_LETTER[self.curr].upper()
         else:
-            return BRAILLE_TO_ENG[self.curr]
+            return BRAILLE_TO_LETTER[self.curr]
 
     def has_next(self):
+        # determine if scan is at end
         return self.i < len(self.input)
 
 
 def handle_braille(input):
+    # lexer to scan braille
     lexer = Braille_Lexer(input)
 
+    # start braille scan
     out = ""
     while lexer.has_next():
         lexer.next()
@@ -145,6 +119,7 @@ def handle_eng(input: str):
     out = ""
     is_number = False
     for c in input:
+        # handle and mark special tokens
         if c.isnumeric():
             if not is_number:
                 is_number = True
@@ -154,25 +129,30 @@ def handle_eng(input: str):
         elif c.isupper():
             out += ENG_TO_BRAILLE["capital"]
 
+        # add char to output
         out += ENG_TO_BRAILLE[c.lower()]
 
     return out
 
 
 def is_braille(text: str):
-    if len(text) < 6 or text.startswith("OOOOOO"):
-        # assume "OOOOOO" is not braille as it's not in given legend
+    # ASSUMPTION: "OOOOOO" is an english string since no braille matches in legend
+    # ASSUMPTION: If a string starts with a valid braille token, the rest of the string is assumed to be braille (no mixing)
+
+    # a valid braille string must have a length as a multiple of 6
+    if len(text) < 6 or len(text) % 6 != 0 or text.startswith("OOOOOO"):
         return False
 
     # check if text starts with a valid braille token
     for i in range(6):
-        if not (text[i] == "O" or text[i] == "."):
+        if text[i] != "O" and text[i] != ".":
             return False
 
     return True
 
 
 def main():
+    # ASSUMPTION: only valid braille or english strings are passed in
     text = " ".join(argv[1:])
 
     if is_braille(text):
