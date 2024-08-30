@@ -1,4 +1,10 @@
 RSpec.describe 'Braille Translator Script' do
+
+  it 'outputs the correct string for "Abc 123 xYz' do
+    output = `ruby translator.rb Abc 123 xYz`
+    expect(output.strip).to eq('.....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO')
+  end
+
   it 'outputs the correct string for "Hello world"' do
     output = `ruby translator.rb Hello world`
     expect(output.strip).to eq('.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..')
