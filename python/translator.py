@@ -5,7 +5,7 @@ def languageType(input):
 		if c != "O" and c != ".":
 			return "English"
 
-	return "Braille"
+	return "Braille" if not len(input) % 6 else "English"
 
 def translateEnglish(input):
 	number = False; 
@@ -143,7 +143,7 @@ def translateBraille(input):
 	
 	return result
 
-if __name__ == "__main__":
+def main():
 	if len(sys.argv) > 1:
 		user_input=" ".join(sys.argv[1:])
 		language = languageType(user_input)
@@ -158,3 +158,6 @@ if __name__ == "__main__":
 
 	else:
 		print("Invalid phrase. Try again.")
+
+if __name__ == "__main__":
+	main();
