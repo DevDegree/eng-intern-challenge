@@ -28,12 +28,12 @@ describe("translator.js script", () => {
     });
   });
 
-  // it("should correctly translate Braille '.....OO.....O.O...OO...........O.OOOO.O...OO....OO.O..' to text 'Abc 123'", (done) => {
-  //   exec("node translator.js .....OO.....O.O...OO...........O.OOOO.O...OO....OO.O..", (error, stdout, stderr) => {
-  //     expect(error).toBeNull();
-  //     expect(stderr).toBe("");
-  //     expect(stdout.trim()).toBe("Abc 123");
-  //     done();
-  //   });
-  // });
+  it("should correctly translate Braille '.....OO.....O.O...OO...........O.OOOO.O...OO....OO.O..' to text 'Abc 123'", (done) => {
+    exec("node translator.js .....OO.....O.O...OO...........O.OOOO.O...OO....OO.O..", (error, stdout, stderr) => {
+      expect(error).toBeNull();
+      expect(stderr).toBe("");
+      expect(stdout.trim()).toBe("Abc 123");
+      done();
+    });
+  });
 });
