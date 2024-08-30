@@ -52,7 +52,7 @@ def translate_to_braille(text):
             result.append(english_to_braille[char.lower()])  # Add the Braille pattern for the letter
         else:  # For punctuation or spaces
             if number_mode:  # If we were in number mode, exit number mode
-                result.append("......")  # Add a space to exit number mode
+                #result.append("......")  # Add a space to exit number mode
                 number_mode = False  # Set number mode to False
             result.append(english_to_braille[char])  # Add the Braille pattern for the punctuation/space
     return ''.join(result)  # Join the list into a single string and return it
@@ -80,7 +80,7 @@ def translate_to_english(braille):
 
 def main():
     """Main function to run the translator."""
-    input_text = sys.argv[1]  # Get the input text from command-line arguments
+    input_text = ' '.join(sys.argv[1:])  # Join all command-line arguments into a single string
 
     # Determine if the input is Braille or English
     if all(char in 'O.' for char in input_text):
