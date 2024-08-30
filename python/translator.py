@@ -1,3 +1,4 @@
+
 import sys
 
 # Separate dictionaries for alphabets, numbers, and special characters
@@ -127,3 +128,4 @@ if __name__ == "__main__":
     input_string = ' '.join(sys.argv[1:])
     output = detect_and_translate(input_string)
     print(output)
+
