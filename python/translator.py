@@ -1,3 +1,4 @@
+
 import sys
 
 alphabet_to_braille = {
