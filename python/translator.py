@@ -10,7 +10,7 @@ class BrailleMapping:
     ENGLISH_TO_BRAILLE_CHARS: dict[str, str] = {
         "a": "O.....",
         "b": "O.O...",
-        "c": "OO....",
+        "c": "OO....", 
         "d": "OO.O..",
         "e": "O..O..",
         "f": "OOO...",
