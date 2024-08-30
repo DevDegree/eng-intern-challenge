@@ -38,7 +38,23 @@ class Translator:
         :returns: braille translation
         :rtype: str
         """
-        pass
+        braille = []
+        num_flag = False
+
+        for char in english:
+            if char.isdigit():
+                # only add `number follows` for intial number
+                if not num_flag:
+                    num_flag = True
+                    braille.append(self._english_braille_dict["NUM"])
+            else:
+                num_flag = False
+                if char.isupper():
+                    braille.append(self._english_braille_dict["CAP"])
+
+            braille.append(self._english_braille_dict[char.lower()]) # will not throw error even if char is numeric 
+
+        return "".join(braille)
 
     def _get_english(self, braille: str) -> str:
         """ Convert braille to english
