@@ -117,7 +117,6 @@ def english_to_braille(message: str):
         else:
 
             if numbered:
-                output += CHAR_TO_BRAILLE[' ']
                 numbered = False
 
             if char != ' ' and char.isupper():
