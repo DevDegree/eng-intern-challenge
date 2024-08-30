@@ -7,7 +7,7 @@ A command-line application to translate from English to Braille and vice versa.
 '''
 import sys
 
-INPUT_TEXT = sys.argv[1:].join('')
+INPUT_TEXT = (sys.argv[1:]).join('')
 
 ENGLISH_TO_BRAILLE = {
     # This dictionary maps English (+ numbers, commands) characters to their
@@ -48,13 +48,11 @@ ENGLISH_TO_BRAILLE = {
     'X': 'OO..OO',
     'Y': 'OO.OOO',
     'Z': 'O..OOO',
+    ' ': '......'  # Space
 }
 
-CAPITAL_FOLLOWS = '.....O'  # Move to dict?
+CAPITAL_FOLLOWS = '.....O'
 NUMBER_FOLLOWS = '.0.000'
-# DECIMAL_FOLLOWS = '.0...0'
-SPACE = '......'
-
 
 def translate_language(input_text: str) -> bool:
     """Returns 1 to translate to English, 0 to translate to Braille"""
@@ -65,15 +63,19 @@ def translate_language(input_text: str) -> bool:
 
 
 def translate_text_to_braille(input_text: str) -> str:
-    """Returns the translated text"""
+    """Returns the text translated from English to Braille"""
     new_string = ''
     for char in input_text:
+        if char.isupper():
+            new_string += CAPITAL_FOLLOWS
+        elif char.isdigit():
+            new_string += NUMBER_FOLLOWS
         new_string += ENGLISH_TO_BRAILLE[char.upper()]
     return new_string
 
 
 def translate_text_to_english(input_text: str) -> str:
-    """Returns the translated text"""
+    """Returns the text translated from Braille to English"""
     # Call divide_string_into_sections
     # Use the dictionary to translate each section, and append to string
     sections = divide_string_into_sections(input_text)
@@ -92,7 +94,6 @@ def divide_string_into_sections(input_text: str) -> list:
         section = input_text[i:i + 6]
         sections.append(section)
     return sections
-
 
 
 if __name__ == '__main__':
