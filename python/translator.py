@@ -56,7 +56,8 @@ def to_braille(words):
     if c.isupper():
       translation += ".....O"
       c = chr(ord(c) + ord('a') - ord('A'))
-    elif c.isnumeric():
+    
+    if c.isnumeric():
       if not is_num:
         is_num = True
         translation += ".O.OOO"
@@ -66,8 +67,7 @@ def to_braille(words):
         c = 'j'
       else:
         c = chr(ord(c) + ord('a') - ord('1'))
-    
-    if not c.isnumeric():
+    else:
       is_num = False
     
     translation += ENG_TO_BRAILLE[c]
