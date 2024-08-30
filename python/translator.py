@@ -15,6 +15,32 @@ braille_mapping = {
     '(': '.O.OO.', ')': '.O.OOO' 
 }
 
+def text_to_braille(text):
+    braille_output = []
+    number_mode = False
+    
+    for char in text:
+        if char.isdigit():
+            if not number_mode:
+                braille_output.append(braille_mapping['number'])
+                number_mode = True
+            braille_output.append(braille_mapping[char])
+        elif char.isalpha():
+            if number_mode:
+                braille_output.append('......')
+                number_mode = False
+            
+            if char.isupper():
+                braille_output.append(braille_mapping['capital']) 
+                char = char.lower()
+            braille_output.append(braille_mapping[char])
+        elif char in braille_mapping:
+            braille_output.append(braille_mapping[char])
+            number_mode = False
+
+    return ''.join(braille_output)
+
+
 
 def braille_to_english(braille):
     out = []
@@ -55,12 +81,12 @@ def braille_to_english(braille):
 
 
 def main():
-    input_str = sys.argv[1]
+    input_str = ' '.join(sys.argv[1:])
 
     if all(c in 'Oo.' for c in input_str):
         print(braille_to_english(input_str))
     else: 
-        pass
+        print(text_to_braille(input_str))
 
 if __name__ == "__main__":
     main()
