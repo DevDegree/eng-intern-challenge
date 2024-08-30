@@ -157,23 +157,23 @@ func isBraille(text string) bool {
 	return match
 }
 
-func isAlphanumerical(text string) bool {
+func isAlphanumericalOrSpace(text string) bool {
 	match, _ := regexp.MatchString("^[a-zA-Z0-9\\s]*$", text)
 	return match
 }
 
 func main() {
-	if len(os.Args) != 2 {
+	if len(os.Args) < 2 {
 		fmt.Println("Usage: go run translator.go <text>")
 		return
 	}
 
-	text := os.Args[1]
+	text := strings.Join(os.Args[1:], " ")
 	translator := NewBrailleTranslator()
 
 	if isBraille(text) {
 		fmt.Println(translator.brailleToEnglish(text))
-	} else if isAlphanumerical(text) {
+	} else if isAlphanumericalOrSpace(text) {
 		fmt.Println(translator.englishToBraille(text))
 	} else {
 		fmt.Printf("ERROR: text is not Braille or English: %s\n", text)
