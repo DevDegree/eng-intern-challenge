@@ -98,8 +98,8 @@ def english_to_braille(english):
     return output
 
 def is_braille(text):
-    # checks if there are only O and . in the text
-    return all([c in "O." for c in text])
+    # checks if there are only O and . in the text and the length is a multiple of 6
+    return all([c in "O." for c in text]) and len(text) % 6 == 0
 
 if __name__ == "__main__":
     text = ' '.join(sys.argv[1:])
