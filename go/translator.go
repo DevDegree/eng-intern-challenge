@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// englishToBraille maps English characters to their Braille representations
 var englishToBraille = map[string]string{
 	"a": "O.....", "b": "O.O...",
 	"c": "OO....", "d": "OO.O..",
@@ -24,7 +25,10 @@ var englishToBraille = map[string]string{
 	" ":       "......",
 	"capital": ".....O",
 	"number":  ".O.OOO",
+}
 
+// numberToBraille maps numbers to their Braille representations
+var numberToBraille = map[string]string{
 	"0": ".OOO..", "1": "O.....",
 	"2": "O.O...", "3": "OO....",
 	"4": "OO.O..", "5": "O..O..",
@@ -32,50 +36,52 @@ var englishToBraille = map[string]string{
 	"8": "O.OO..", "9": ".OO...",
 }
 
-var brailleToEnglish = make(map[string]string)
-
-func init() {
-	for k, v := range englishToBraille {
-		brailleToEnglish[v] = k
-	}
-}
-
+// isBraille checks if the input string is a valid Braille representation
 func isBraille(input string) bool {
 	return strings.ContainsAny(input, "O.") && len(input)%6 == 0
 }
 
+// translateToBraille converts an English string to Braille
 func translateToBraille(input string) string {
 	var braille string
 	inNumberSequence := false
 	for _, char := range input {
 		c := string(char)
+
+		// Handle capitalization
 		if c >= "A" && c <= "Z" {
 			braille += englishToBraille["capital"]
 			c = strings.ToLower(c)
-			inNumberSequence = false // End number sequence if we encounter a capital letter
+			inNumberSequence = false
 		}
+
+		// Handle numbers
 		if c >= "0" && c <= "9" {
 			if !inNumberSequence {
 				braille += englishToBraille["number"]
 				inNumberSequence = true
 			}
-			// Use the corresponding letter for the number
 			c = string('a' + (c[0] - '0'))
 		} else {
 			inNumberSequence = false
 		}
+
+		// Translate character to Braille
 		if brailleChar, ok := englishToBraille[c]; ok {
 			braille += brailleChar
 		}
 	}
+
 	return braille
 }
 
+// translateToEnglish converts a Braille string to English
 func translateToEnglish(input string) string {
 	var english string
 	isCapital := false
 	isNumber := false
 
+	// Process input in chunks of 6 characters (one Braille cell)
 	for i := 0; i < len(input); i += 6 {
 		brailleChar := input[i : i+6]
 
@@ -84,29 +90,48 @@ func translateToEnglish(input string) string {
 			isCapital = true
 		case englishToBraille["number"]:
 			isNumber = true
+		case englishToBraille[" "]:
+			isNumber = false
+			english += " "
 		default:
-			if engChar, ok := brailleToEnglish[brailleChar]; ok {
-				if isNumber {
-					if engChar >= "a" && engChar <= "j" {
-						engChar = string('0' + (engChar[0] - 'a'))
-					}
-					isNumber = false
-				} else if isCapital {
+			if isNumber {
+				english += brailleToNumber[brailleChar]
+			} else {
+				engChar := brailleToEnglish[brailleChar]
+				if isCapital {
 					engChar = strings.ToUpper(engChar)
 					isCapital = false
 				}
 				english += engChar
 			}
+
 		}
 	}
 	return english
 }
 
+// brailleToEnglish and brailleToNumber are reverse mappings for translation
+var brailleToEnglish = make(map[string]string)
+var brailleToNumber = make(map[string]string)
+
+// init initializes the reverse mappings
+func init() {
+	for k, v := range englishToBraille {
+		brailleToEnglish[v] = k
+	}
+	for k, v := range numberToBraille {
+		brailleToNumber[v] = k
+	}
+}
+
 func main() {
+	// Check if input is provided
 	if len(os.Args) < 2 {
 		fmt.Println("Please provide a string to translate.")
 		return
 	}
+
+	// Join all arguments into a single string
 	input := strings.Join(os.Args[1:], " ")
 
 	var result string
