@@ -88,7 +88,7 @@ def main():
         return
     
     mode = sys.argv[1]
-    input_text = sys.argv[1:]
+    input_text = " ".join(sys.argv[1:])
     
     if mode == "text-to-braille":
         output = text_to_braille(input_text)
