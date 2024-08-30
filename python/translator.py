@@ -2,60 +2,46 @@ import sys
 
 
 class BrailleTranslator:
-    TEXT_TO_BRAILLE: dict[str, str] = {
-        "a": "O.....",
-        "b": "O.O...",
-        "c": "OO....",
-        "d": "OO.O..",
-        "e": "O..O..",
-        "f": "OOO...",
-        "g": "OOOO..",
-        "h": "O.OO..",
-        "i": ".OO...",
-        "j": ".OOO..",
-        "k": "O...O.",
-        "l": "O.O.O.",
-        "m": "OO..O.",
-        "n": "OO.OO.",
-        "o": "O..OO.",
-        "p": "OOO.O.",
-        "q": "OOOOO.",
-        "r": "O.OOO.",
-        "s": ".OO.O.",
-        "t": ".OOOO.",
-        "u": "O...OO",
-        "v": "O.O.OO",
-        "w": ".OOO.O",
-        "x": "OO..OO",
-        "y": "OO.OOO",
-        "z": "O..OOO",
-        " ": "......",
-        "0": ".OOO..",
-        "1": "O.....",
-        "2": "O.O...",
-        "3": "OO....",
-        "4": "OO.O..",
-        "5": "O..O..",
-        "6": "OOO...",
-        "7": "OOOO..",
-        "8": "O.OO..",
-        "9": ".OO...",
-        "capital_follows": ".....O",
+    TEXT_TO_BRAILLE = {
+        "a": "O.....", "b": "O.O...",
+        "c": "OO....", "d": "OO.O..",
+        "e": "O..O..", "f": "OOO...",
+        "g": "OOOO..", "h": "O.OO..",
+        "i": ".OO...", "j": ".OOO..",
+        "k": "O...O.", "l": "O.O.O.",
+        "m": "OO..O.", "n": "OO.OO.",
+        "o": "O..OO.", "p": "OOO.O.",
+        "q": "OOOOO.", "r": "O.OOO.",
+        "s": ".OO.O.", "t": ".OOOO.",
+        "u": "O...OO", "v": "O.O.OO",
+        "w": ".OOO.O", "x": "OO..OO",
+        "y": "OO.OOO", "z": "O..OOO",
+        " ": "......", "0": ".OOO..",
+        "1": "O.....", "2": "O.O...",
+        "3": "OO....", "4": "OO.O..",
+        "5": "O..O..", "6": "OOO...",
+        "7": "OOOO..", "8": "O.OO..",
+        "9": ".OO...", "capital_follows": ".....O",
         "number_follows": ".O.OOO",
     }
 
-    BRAILLE_TO_TEXT: dict[str, str] = {
+    BRAILLE_TO_TEXT = {
+        # Exclude numeric keys to avoid mapping same key to multiple values (e.g "j" and "0")
         v: k for k, v in TEXT_TO_BRAILLE.items() if not k.isnumeric()
     }
 
     @staticmethod
-    def translate(input_list: list[str]) -> str:
-        input_str = " ".join(input_list)
+    def translate(input_list) -> str:
+        '''
+            Translate input text (list of strings) to braille or braille to text
+            accordingly and return converted text (str)
+        '''
+        input_str: str = " ".join(input_list)
 
-        def determine_input_type(input_str) -> str:
+        def determine_input_type(input_str: str) -> str:
             return "braille" if "." in input_str else "text"
 
-        translations: dict[str, callable] = {
+        translations = {
             "braille": BrailleTranslator.braille_to_text,
             "text": BrailleTranslator.text_to_braille,
         }
@@ -93,9 +79,9 @@ class BrailleTranslator:
 
         for i in range(0, len(braille), 6):
             braille_char = braille[i : i + 6]
+            text_char: str = cls.BRAILLE_TO_TEXT.get(braille_char, "*")
 
-            text_char = cls.BRAILLE_TO_TEXT.get(braille_char, "*")
-
+            # Handle special cases (capital_follows and number_follows)
             if text_char == "capital_follows":
                 capital_follows = True
                 continue
