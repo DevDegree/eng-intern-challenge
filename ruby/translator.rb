@@ -106,4 +106,3 @@ end
 input = ARGV.join(' ')
 output = language_output(input)
 puts output
-puts output == ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."
