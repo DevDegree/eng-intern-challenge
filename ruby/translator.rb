@@ -68,6 +68,19 @@ def is_english?(str)
   str.chars.any? { |char| not ['O', '.'].include?(char) }
 end
 
+def translate_to_english(str)
+  "english"
+end
+
+def translate_to_braille(str)
+  "......"
+end
+
 def main
   input_string = ARGV.join(" ")
+
+  translated_string = is_english?(input_string) ? translate_to_braille(input_string) : translate_to_english(input_string)
+  puts(translated_string)
 end
+
+main
