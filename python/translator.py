@@ -15,12 +15,25 @@ english_to_braille = {
     '9': '.OO...', '0': '.OOO..'
 }
 
+braille_to_english_letters = {
+    'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd',
+    'O..O..': 'e', 'OOO...': 'f', 'OOOO..': 'g', 'O.OO..': 'h',
+    '.OO...': 'i', '.OOO..': 'j', 'O...O.': 'k', 'O.O.O.': 'l',
+    'OO..O.': 'm', 'OO.OO.': 'n', 'O..OO.': 'o', 'OOO.O.': 'p',
+    'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't',
+    'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x',
+    'OO.OOO': 'y', 'O..OOO': 'z', '......': ' '
+}
+
+braille_to_english_numbers = {
+    'O.....': '1', 'O.O...': '2', 'OO....': '3', 'OO.O..': '4',
+    'O..O..': '5', 'OOO...': '6', 'OOOO..': '7', 'O.OO..': '8',
+    '.OO...': '9', '.OOO..': '0'
+}
+
 
 def translate_to_braille(english_text: str) -> str:
-    """
-    :param english_text: English text
-    :return: Braille text
-    """
+    """ Translates English text to Braille """
     braille_text = ''
     is_last_char_digit = False
 
@@ -35,32 +48,50 @@ def translate_to_braille(english_text: str) -> str:
 
         if char.isspace():
             is_last_char_digit = False
+
         braille_text += english_to_braille[char.lower()]
 
     return braille_text
 
 
-braille_to_english = {}
-
-
 def translate_to_english(braille_text: str) -> str:
-    """
-    When a Braille capital follows symbol is read,
-        assume only the next symbol should be capitalized.
-    When a Braille number follows symbol is read,
-        assume all following symbols are numbers until the next space symbol
-    :param braille_text: Braille text
-    :return: English text
-    """
-    return 'English text'
+    """ Translates Braille text to English """
+    # Split the Braille text into Braille symbols of length 6
+    # Code adapted from https://stackoverflow.com/questions/13673060/split-string-into-strings-by-length
+    symbol_length, text_length = 6, len(braille_text)
+    symbols = [braille_text[i:i + symbol_length] for i in range(0, text_length, symbol_length)]
+
+    english_text = ''
+    is_capital = False
+    is_number = False
+
+    for symbol in symbols:
+        if symbol == english_to_braille['capital_follows']:
+            is_capital = True
+
+        elif symbol == english_to_braille['number_follows']:
+            is_number = True
+
+        elif symbol == english_to_braille[' ']:
+            english_text += braille_to_english_letters[symbol]
+            is_number = False
+
+        elif is_number:
+            english_text += braille_to_english_numbers[symbol]
+
+        elif is_capital:
+            english_text += braille_to_english_letters[symbol].upper()
+            is_capital = False
+
+        else:
+            english_text += braille_to_english_letters[symbol]
+
+    return english_text
 
 
 def is_braille(text: str) -> bool:
-    """
-    Adapted from https://www.tutorialspoint.com/how-to-check-if-a-string-only-contains-certain-characters-in-python
-    :param text: User input
-    :return: True if text is Braille, False if English
-    """
+    """ Checks if text is Braille """
+    # Adapted from https://www.tutorialspoint.com/how-to-check-if-a-string-only-contains-certain-characters-in-python
     braille_chars = ['O', '.']
     braille_validation = [c in braille_chars for c in text]
     return all(braille_validation)
