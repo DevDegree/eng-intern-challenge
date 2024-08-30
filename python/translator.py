@@ -1,7 +1,6 @@
 import sys
 import string
 
-
 braille = {
     "a": "O.....", "b": "O.O...", "c": "OO....",
     "d": "OO.O..", "e": "O..O..", "f": "OOO...",
@@ -64,7 +63,6 @@ def toBraille():
 
         index+=1
     
-    
     print(result)
     return
 
@@ -112,7 +110,6 @@ def seq(sequence: string):
         firstIndex +=6
 
     return result
-
 
 
 if __name__ == "__main__":

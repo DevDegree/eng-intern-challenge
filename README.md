@@ -1,5 +1,9 @@
 # Eng Intern Challenge Fall - Winter 2025
 
+Assumptions:
+I followed the provided screenshot of the braille symbols and did not touch the failing translator.test.py file as per the requirements. I used python3 to complete the braille translator
+
+
 ## Braille Translator
 In this coding challenge you will create a terminal / command-line application that can translate Braille to English and vice versa. 
 
