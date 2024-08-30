@@ -62,9 +62,11 @@ function brailleToEnglish(str) {
         let currentChar = str.slice(i,i+6);
         if (currentChar === alphaEnglishKeys.get('capitalF') ) {
             capitalActive = true;
-        } else if(currentChar === alphaEnglishKeys.get('numberF')){
+        } else if(currentChar === alphaEnglishKeys.get('numberF'))
+        {
             numberActive = true;
-        } else if(currentChar === alphaEnglishKeys.get(' ') && numberActive){
+        } else if(currentChar === alphaEnglishKeys.get(' ') && numberActive)
+        {
             numberActive = false; 
             final += ' ';
         }
@@ -98,10 +100,12 @@ function englishToBraille(str) {
     let numberActive = false;
     for(let i = 0; i < str.length ; i++){
         let currentEnglishChar = str.charAt(i);
-        if(currentEnglishChar === currentEnglishChar.toUpperCase() && currentEnglishChar !== ' ' && ! (currentEnglishChar >= '0' && currentEnglishChar <= '9')){
+        if(currentEnglishChar === currentEnglishChar.toUpperCase() && currentEnglishChar !== ' ' && ! (currentEnglishChar >= '0' && currentEnglishChar <= '9'))
+        {
             final += alphaEnglishKeys.get('capitalF') + alphaEnglishKeys.get(currentEnglishChar.toLowerCase());
         } else if (currentEnglishChar >= '0' && currentEnglishChar <= '9'){
-            if(!numberActive){
+            if(!numberActive)
+            {
                 numberActive = true;
                 final += alphaEnglishKeys.get('numberF') + numEnglishKeys.get(currentEnglishChar);
                 continue;
