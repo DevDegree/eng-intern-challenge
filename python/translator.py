@@ -117,19 +117,6 @@ class BrailleTranslator:
 
         # translate tokens to braille
         output = self.translate_tokens(tokens, self.ALPHA_TO_BRALLIE, self.NUM_TO_BRALLIE, self.SPECIAL_TO_BRALLIE)
-        # output = ''
-        # is_next_captial = False
-        # is_next_number = False
-        # for token in tokens:
-        #     if token in self.SPECIAL_TO_BRALLIE:
-        #         if self.SPECIAL_TO_BRALLIE[token] == self.CAPITAL: is_next_captial = True
-        #         elif self.SPECIAL_TO_BRALLIE[token] == self.NUMBER: is_next_number = True
-        #         elif self.SPECIAL_TO_BRALLIE[token] == self.SPACE:
-        #             output += ' '
-        #             is_next_number = False
-        #     elif token in self.ALPHA_TO_BRALLIE:
-        #         if is_next_captial: 
-            
 
         return output
 
@@ -154,6 +141,7 @@ def main():
     print("test case2: alphabets", translator.translate(translator.translate("adsFasdf")) == "adsFasdf")
     print("test case3: alphabets", translator.translate(translator.translate("a1 b")) == "a1 b")
     print("test case4: alphabets and numbers", translator.translate(translator.translate("dfkladfasd1234567890 cpkldfsaj")) == "dfkladfasd1234567890 cpkldfsaj")
+    print("test case5: alphabets and numbers", translator.translate("Abc 123 xYz") == ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO")
 
 # TODO: no need to run in infinite loop
 if __name__ == "__main__":
