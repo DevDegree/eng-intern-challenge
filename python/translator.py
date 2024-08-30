@@ -77,7 +77,15 @@ def check_is_braille(text: List[str]) -> bool:
 def parse_braille(text: List[str]) -> None:
     translated = ""
 
+    for element in text:
+        translated += parse_single_braille(element)
+
     print(translated)
+
+
+def parse_single_braille(text: str) -> str:
+    translated = ""
+    return translated
 
 
 def parse_alphabet(text: List[str]) -> None:
