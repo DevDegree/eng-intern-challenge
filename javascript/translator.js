@@ -1,3 +1,14 @@
+// The Main Function for detecting the input type
+function main(input) {
+  let result;
+  if (isBraille(input)) {
+    result = translateToEnglish(input);
+  } else {
+    result = translateToBraille(input);
+  }
+  console.log(result);
+}
+
 // Mappings between English characters and their Braille representations
 
 const brailleMap = {
