@@ -47,7 +47,6 @@ def translate_to_english(braille):
   arr = textwrap.wrap(braille, 6)
   capital_mode, number_mode = False, False
 
-  print(arr)
   for b in arr:
 
     if b == '..OO.O':
