@@ -1,4 +1,4 @@
-import argparse
+import sys
 
 #dictionary to map English characters to Braille equivalents
 e_to_b = {
@@ -145,13 +145,13 @@ def english_to_braille(input):
     return "".join(output)
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('text', type=str, nargs='+')
+    if len(sys.argv) < 2:
+        print("ERROR. Usage: python3 translator.py [str] ... [str]")
+        return
 
-    args = parser.parse_args()
-    translate = ' '.join(args.text)
+    args = " ".join(sys.argv[1:])
+    result = detect(args)
 
-    result = detect(translate)
     print(result)
 
 if __name__ == "__main__":
