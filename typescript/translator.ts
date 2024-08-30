@@ -1,3 +1,8 @@
+/**
+* Dictionary mapping English characters to their Braille representation.
+*
+* @type { [key: string]: string }
+*/
 const englishToBrailleMapping: { [key: string]: string } = {
     "a": "O.....", "b": "O.O...", "c": "OO....",
     "d": "OO.O..", "e": "O..O..", "f": "OOO...",
@@ -20,10 +25,22 @@ const englishToBrailleMapping: { [key: string]: string } = {
 const brailleCapitalIndicator = ".....O";
 const brailleNumberIndicator = ".O.OOO";
 
+/**
+ * Verifies if the input string is in Braille format.
+ *
+ * @param {string} input - The string to verify.
+ * @returns {boolean} - True if the input is in Braille format, false otherwise.
+ */
 function isBrailleFormat(input: string): boolean {
     return /^[O.]+$/g.test(input);
 }
 
+/**
+ * Converts an English string to its Braille representation.
+ *
+ * @param {string} input - The English string to convert.
+ * @returns {string} - The Braille representation of the input.
+ */
 function convertEnglishToBraille(input: string): string {
     let brailleOutput = "";
     let inNumberMode = false;
@@ -47,6 +64,12 @@ function convertEnglishToBraille(input: string): string {
     return brailleOutput;
 }
 
+/**
+ * Translates a Braille string to English.
+ *
+ * @param {string} input - The Braille string to translate.
+ * @returns {string} - The English representation of the input.
+ */
 function translateBrailleToEnglish(input: string): string {
     const brailleToEnglishMapping: { [key: string]: string } = Object.fromEntries(
         Object.entries(englishToBrailleMapping).map(([key, value]) => [value, key])
