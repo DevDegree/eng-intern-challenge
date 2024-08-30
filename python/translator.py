@@ -109,8 +109,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-        
-#Example for Abc 123 in readme for the repo is incorrect
-#Abc 123 = .....OO.....O.O...OO...........O.OOOO.....O.O...OO....
-
-
