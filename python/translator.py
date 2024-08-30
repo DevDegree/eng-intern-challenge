@@ -127,5 +127,5 @@ class Translator:
 
 if __name__ == "__main__":
     translator = Translator()
-    translation = translator.translate(sys.argv[1])
+    translation = translator.translate(" ".join(sys.argv[1:]))
     print(translation)
