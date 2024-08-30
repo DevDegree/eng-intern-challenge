@@ -225,7 +225,7 @@ def main():
     for input_string in input_strings:
         result = braille_func(input_string)
         if braille_func == text_to_braille:
-            print(result, end=braille_dict["special_chars"][" "])
+            print(result, end=" ")
         else:
             print(result, end=" ")
 
