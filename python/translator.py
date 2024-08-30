@@ -80,6 +80,7 @@ braille_to_punctuation = dict((reversed(item) for item in punctuation_to_braille
 def english_to_braille(text):
 
     braille_text = ''
+    is_number = False
 
     for char in text:
 
@@ -89,10 +90,18 @@ def english_to_braille(text):
             braille_text += character_to_braille[char.lower()]
 
         elif char in digit_to_braille:
-            braille_text += number_follows
+            if not is_number:
+                is_number = True
+                braille_text += number_follows
+
             braille_text += digit_to_braille[char]
 
         elif char in punctuation_to_braille:
+            if char == "." and is_number:
+                braille_text += decimal_follows
+            elif char == " " and is_number:
+                is_number = False
+                
             braille_text += punctuation_to_braille[char]
 
     return braille_text
