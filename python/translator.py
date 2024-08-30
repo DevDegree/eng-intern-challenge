@@ -99,12 +99,11 @@ class Braille_Lexer:
         if not self.has_next():
             return
 
-        x = ""
+        self.curr = ""
 
         for _ in range(6):
-            x += self.input[self.i]
+            self.curr += self.input[self.i]
             self.i += 1
-        self.curr = x
 
         self.set_flags()
 
