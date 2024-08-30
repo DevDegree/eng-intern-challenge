@@ -1,5 +1,5 @@
 import sys
-from typing import Dict, List
+from typing import Dict, List, Literal
 
 class BrailleTranslator:
     # Constants for special indicators
@@ -58,6 +58,30 @@ class BrailleTranslator:
         self.BRAILLE_TO_NUM = { v: k for k, v in self.NUM_TO_BRALLIE.items() }
         self.BRAILLE_TO_SPECIAL = { v: k for k, v in self.SPECIAL_TO_BRALLIE.items() }
     
+    def generate_from(self, tokens: List[str], target: Literal['english', 'braille']) -> str:
+        output = ''
+        if target == 'english':
+            next_is_capital = False
+
+            for token in tokens:
+                if token == self.CAPITAL: next_is_capital = True
+                elif token == self.NUMBER: continue
+                elif token == self.SPACE:
+                    output += ' '
+                elif next_is_capital:
+                    output += token.upper()
+                    next_is_capital = False
+                else: output += token
+        else:
+            # target is braille
+            for token in tokens:
+                if token in self.ALPHA_TO_BRALLIE: output += self.ALPHA_TO_BRALLIE[token]
+                elif token in self.NUM_TO_BRALLIE: output += self.NUM_TO_BRALLIE[token]
+                else: output += self.SPECIAL_TO_BRALLIE[token]
+        
+        return output
+
+    
     def braille_to_english(self, input: str) -> str:
         # Initialize braille to english table if needed
         if not self.BRAILLE_TO_ALPHA:
@@ -77,28 +101,13 @@ class BrailleTranslator:
                 else:
                     if is_number: tokens.append(self.BRAILLE_TO_NUM[braille])
                     else: tokens.append(self.BRAILLE_TO_ALPHA[braille])
-            return tokens
-
-        def generate(tokens: List[str]) -> str:
-            output = ''
-            next_is_capital = False
-
-            for token in tokens:
-                if token == self.CAPITAL: next_is_capital = True
-                elif token == self.NUMBER: continue
-                elif token == self.SPACE:
-                    output += ' '
-                elif next_is_capital:
-                    output += token.upper()
-                    next_is_capital = False
-                else: output += token
-            return output
+            return tokens            
         
         # parse braille to tokens
         tokens = parse(input)
 
         # generate english from tokens
-        output = generate(tokens)
+        output = self.generate_from(tokens, target='english')
         return output
     
     def english_to_braille(self, input: str) -> str:
@@ -128,23 +137,14 @@ class BrailleTranslator:
             
             return tokens
         
-        def generate(tokens: List[str]) -> str:
-            output = ''
-        
-            for token in tokens:
-                if token in self.ALPHA_TO_BRALLIE: output += self.ALPHA_TO_BRALLIE[token]
-                elif token in self.NUM_TO_BRALLIE: output += self.NUM_TO_BRALLIE[token]
-                else: output += self.SPECIAL_TO_BRALLIE[token]
-        
-            return output
-        
         # parse english to tokens
         tokens = parse(input)
 
         # generate braille from tokens
-        output = generate(tokens)
+        output = self.generate_from(tokens, target='braille')
         return output
-        
+    
+
 
 def main():
     # read input
@@ -153,13 +153,13 @@ def main():
     output = translator.translate(input)
     print(output)
 
-    # test cases
-    print("test case1: number", translator.translate(translator.translate("2213123")) == "2213123")
-    print("test case2: alphabets", translator.translate(translator.translate("adsFasdf")) == "adsFasdf")
-    print("test case3: alphabets", translator.translate(translator.translate("a1 b")) == "a1 b")
-    print("test case4: alphabets and numbers", translator.translate(translator.translate("dfkladfasd1234567890 cpkldfsaj")) == "dfkladfasd1234567890 cpkldfsaj")
-    print("test case5: alphabets and numbers", translator.translate("Abc 123 xYz") == ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO")
-    print("test case6: alphabets and numbers and other characters", translator.translate(translator.translate("dfkladfasd1234567890 cpkldfsJj;")) == "dfkladfasd1234567890 cpkldfsJj;")
+    # # test cases
+    # print("test case1: number", translator.translate(translator.translate("2213123")) == "2213123")
+    # print("test case2: alphabets", translator.translate(translator.translate("adsFasdf")) == "adsFasdf")
+    # print("test case3: alphabets", translator.translate(translator.translate("a1 b")) == "a1 b")
+    # print("test case4: alphabets and numbers", translator.translate(translator.translate("dfkladfasd1234567890 cpkldfsaj")) == "dfkladfasd1234567890 cpkldfsaj")
+    # print("test case5: alphabets and numbers", translator.translate("Abc 123 xYz") == ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO")
+    # print("test case6: alphabets and numbers and other characters", translator.translate(translator.translate("dfkladfasd1234567890 cpkldfsJj;")) == "dfkladfasd1234567890 cpkldfsJj;")
 
 if __name__ == "__main__":
     main()
