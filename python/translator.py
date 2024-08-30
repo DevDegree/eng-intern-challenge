@@ -112,7 +112,6 @@ class Translator:
         Returns:
             str: The Braille translation of the given text.
         """
-        # no set way to handle 1212HDHBH
         words = text.split(" ")
         braille_words = []
         for word in words:
