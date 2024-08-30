@@ -94,8 +94,8 @@ function translateBrailleToEnglish(input: string): string {
 
         const englishChar = brailleToEnglishMapping[brailleSymbol];
         if (englishChar) {
-            if (inNumberMode) {
-                englishOutput += englishChar;
+            if (inNumberMode && englishChar.match(/[a-j]/)) {
+                englishOutput += String.fromCharCode(englishChar.charCodeAt(0) - 'a'.charCodeAt(0) + '1'.charCodeAt(0));
             } else {
                 englishOutput += capitalizeNext ? englishChar.toUpperCase() : englishChar;
             }
