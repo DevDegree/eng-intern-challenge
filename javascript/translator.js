@@ -50,3 +50,26 @@ const englishMap = Object.fromEntries(
 function isBraille(input) {
   return /^[O.]+$/.test(input);
 }
+
+// Translate English to Braille Function
+function translateToBraille(text) {
+  let braille = "";
+  let isNumber = false;
+
+  for (let char of text) {
+    if (/[A-Z]/.test(char)) {
+      braille += brailleMap["capital"] + brailleMap[char.toLowerCase()];
+    } else if (/[0-9]/.test(char)) {
+      if (!isNumber) {
+        braille += brailleMap["number"];
+        isNumber = true;
+      }
+      braille += brailleMap[char];
+    } else {
+      isNumber = false;
+      braille += brailleMap[char];
+    }
+  }
+
+  return braille;
+}
