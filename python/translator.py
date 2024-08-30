@@ -1,6 +1,5 @@
 import sys
 
-
 class Translator:
     # alpha -> braille
     _english_braille_dict = {
@@ -119,7 +118,6 @@ class Translator:
             else self._get_english(arg) 
             for arg in args
         ])
-
 
 if __name__ == "__main__":
     translator = Translator()
