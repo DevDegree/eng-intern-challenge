@@ -88,8 +88,6 @@ for j in range(len(user_input[1])):
             break
 for i in range(1,len(user_input)):
     curr_input += user_input[i]
-    if i==len(user_input)-1:
-        break
     if is_english:
         curr_input += ' '
     else:
