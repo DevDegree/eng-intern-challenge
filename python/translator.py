@@ -1,4 +1,5 @@
 import sys
+
 NUMBER_FOLLOWS = ".O.OOO"
 CAPITAL_FOLLOWS = ".....O"
 
