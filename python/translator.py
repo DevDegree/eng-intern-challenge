@@ -72,6 +72,32 @@ braille_to_digit = dict((reversed(item) for item in digit_to_braille.items()))
 braille_to_punctuation = dict((reversed(item) for item in punctuation_to_braille.items()))
 
 
+"""
+    Convert an English text to Braille
+        param text: English text to convert
+        returns: Braille representation of the text
+"""
+def english_to_braille(text):
+
+    braille_text = ''
+
+    for char in text:
+
+        if char.isalpha():
+            if char.isupper():
+                braille_text += uppercase_follows
+            braille_text += character_to_braille[char.lower()]
+
+        elif char in digit_to_braille:
+            braille_text += number_follows
+            braille_text += digit_to_braille[char]
+
+        elif char in punctuation_to_braille:
+            braille_text += punctuation_to_braille[char]
+
+    return braille_text
+
+
 
 if __name__ == '__main__':
     import sys
@@ -82,6 +108,7 @@ if __name__ == '__main__':
     text = ' '.join(args)
     # Get the unique characters in the input
     characters = set(text)
+
     
 
 
