@@ -1,7 +1,7 @@
 $lang = "english"    # modular to supporte different languages
 
-require_relative "visual_to_braille"
-require_relative "braille_to_visual"
+require_relative "helpers/visual_to_braille"
+require_relative "helpers/braille_to_visual"
 
 def main()
     input_string = ARGV[0]

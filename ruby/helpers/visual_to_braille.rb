@@ -1,7 +1,7 @@
 def visual_to_braille(string, lang)
 
   if lang == "english"
-    require_relative "data/english"
+    require_relative "../data/english"
   else 
     raise "Unknown language: #{lang}"
   end
