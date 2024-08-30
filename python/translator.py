@@ -63,19 +63,19 @@ def translateBrailleToLetters(text):
     translatedText = ''
     for i in range(0, len(text), 6):
         brailleValue = text[i:i+6]
-        if isNumber:
-            translatedText += brailleToNumbers[brailleValue]
-        elif isCapital:
-            translatedText += brailleToLetters[brailleValue].upper()
+        if brailleValue == space:
+            translatedText += ' '
             isCapital = False
+            isNumber = False
         elif brailleValue == capitalFollows:
             isCapital = True
         elif brailleValue == numbersFollows:
             isNumber = True
-        elif brailleValue == space:
-            translatedText += ' '
+        elif isNumber:
+            translatedText += brailleToNumbers[brailleValue]
+        elif isCapital:
+            translatedText += brailleToLetters[brailleValue].upper()
             isCapital = False
-            isNumber = False
         else:
             translatedText += brailleToLetters[brailleValue]
     return translatedText
