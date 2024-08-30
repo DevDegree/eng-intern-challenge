@@ -45,3 +45,8 @@ const brailleMap = {
 const englishMap = Object.fromEntries(
   Object.entries(brailleMap).map(([k, v]) => [v, k])
 );
+
+// The function for detecting whether the input string is in Braille or English
+function isBraille(input) {
+  return /^[O.]+$/.test(input);
+}
