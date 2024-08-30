@@ -96,20 +96,18 @@ func translateText(input string) string {
 					isCap = false
 				}
 				result.WriteString(englishChar)
-			} else {
-				// Handle invalid or unknown Braille sequences
-				result.WriteString("?")
-			}
-
-			// Reset number after a space
-			if brailleChar == "......" {
+			} else if brailleChar == "......" {
+				result.WriteString(" ")
 				isNumber = false
+			} else {
+				// Ignore invalid or unknown Braille sequences
+				result.WriteString(" ")
 			}
 
 			i += 6
 		} else {
 			// Handle cases where there isn't a full 6-character Braille sequence
-			result.WriteString("?")
+			result.WriteString(" ")
 			i += 6
 		}
 	}
@@ -127,5 +125,3 @@ func main() {
 	output := translateText(input)
 	fmt.Println(output)
 }
-//To test the following in the terminal
-//go run translator.go "test case"    
