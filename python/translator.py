@@ -63,10 +63,6 @@ def translate_input(input_str: str) -> str:
 def braille_to_english(input_str: str) -> str:
     """Converts a Braille string to English."""
 
-    # edge case where input is in braille format, but is not a valid 6 multiple sequence
-    if len(input_str) % 6 != 0:
-        return "Error, braille sequence invalid"
-
     # break braille down into 6 segments
     segments = [input_str[i: i + 6] for i in range(0, len(input_str), 6)]
 
@@ -127,7 +123,7 @@ def validate_braill_str(input_str: str) -> bool:
     """Validates if the input string is a valid Braille string."""
 
     # input is too short to be braill
-    if len(input_str) < 6 or len(input_str) % 6 != 0:
+    if len(input_str) % 6 != 0:
         return False
 
     for char in input_str:
