@@ -48,13 +48,13 @@ class BrailleTranslator:
     
 
     def translate(self, input: str) -> str:
-        if self.is_braille(input): return self.braille_to_english(input)
+        if self._is_braille(input): return self.braille_to_english(input)
         else: return self.english_to_braille(input)
 
-    def is_braille(self, input: str) -> bool:
+    def _is_braille(self, input: str) -> bool:
         return len(input) % 6 == 0 and set(input).issubset({self.RAISED_DOT, self.DOT})
     
-    def build_braille_to_english_table(self):
+    def _build_braille_to_english_table(self):
         self.BRAILLE_TO_ALPHA = { v: k for k, v in self.ALPHA_TO_BRALLIE.items() }
         self.BRAILLE_TO_NUM = { v: k for k, v in self.NUM_TO_BRALLIE.items() }
         self.BRAILLE_TO_SPECIAL = { v: k for k, v in self.SPECIAL_TO_BRALLIE.items() }
@@ -86,7 +86,7 @@ class BrailleTranslator:
     def braille_to_english(self, input: str) -> str:
         # Initialize braille to english table if needed
         if not self.BRAILLE_TO_ALPHA:
-            self.build_braille_to_english_table()
+            self._build_braille_to_english_table()
 
         def parse(input: str) -> List[str]:
             tokens = []
@@ -151,16 +151,26 @@ def main():
     # read input
     input = " ".join(sys.argv[1:])
     translator = BrailleTranslator()
-    output = translator.translate(input)
-    print(output)
+    try:
+        output = translator.translate(input)
+        print(output)
+    except Exception as e:
+        print("An error occured during the translation, please ensure the input is valid")
+        print(e)
 
     # # test cases
-    # print("test case1: number", translator.translate(translator.translate("2213123")) == "2213123")
-    # print("test case2: alphabets", translator.translate(translator.translate("adsFasdf")) == "adsFasdf")
-    # print("test case3: alphabets", translator.translate(translator.translate("a1 b")) == "a1 b")
-    # print("test case4: alphabets and numbers", translator.translate(translator.translate("dfkladfasd1234567890 cpkldfsaj")) == "dfkladfasd1234567890 cpkldfsaj")
-    # print("test case5: alphabets and numbers", translator.translate("Abc 123 xYz") == ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO")
-    # print("test case6: alphabets and numbers and other characters", translator.translate(translator.translate("dfkladfasd1234567890 cpkldfsJj;")) == "dfkladfasd1234567890 cpkldfsJj;")
+    # # test case1: number
+    # assert(translator.translate(translator.translate("2213123")) == "2213123")
+    # # test case2: alphabets
+    # assert(translator.translate(translator.translate("adsFasdf")) == "adsFasdf")
+    # # test case3: alphabets with numbers
+    # assert(translator.translate(translator.translate("a1 b")) == "a1 b")
+    # # test case4: alphabets with numbers complex
+    # assert(translator.translate(translator.translate("dfkladfasdS1234567890 cpkldfsaj")) == "dfkladfasdS1234567890 cpkldfsaj")
+    # # test case5: alphabets with numbers
+    # assert(translator.translate("Abc 123 xYz") == ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO")
+    # # test case6: alphabets and numbers with other characters
+    # assert(translator.translate(translator.translate("dfkladfasd1234567890 cpkldfsJj;")) == "dfkladfasd1234567890 cpkldfsJj;")
 
 if __name__ == "__main__":
     main()
