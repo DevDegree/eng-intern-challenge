@@ -29,7 +29,7 @@ def main():
 
     input_str = ' '.join(sys.argv[1:])
 
-    # check if the input_str is letters or braille. If braille, will return list of brailes.
+    # check if the input_str is letters or braille. If braille, will return list of brailles.
     def is_braille(s):
         if len(s) % 6 == 0:
             brailles = [s[i:i + 6] for i in range(0, len(s), 6)]
