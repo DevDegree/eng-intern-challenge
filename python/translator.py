@@ -1,4 +1,3 @@
-
 import sys
 
 # Defining Braille to English dictionary
