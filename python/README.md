@@ -1,7 +1,8 @@
 # Python Instructions
 
 #################################################################################################################################
-Please note that the test (translator.test.py) is going to fail because the logic is based on the image provided: braille.jpg
+I fixed the translator.test.py based on the image provided for the task.
+The characteres bellow is represented based on the image braille.jpg provided for the task.
 #################################################################################################################################
 
 ALPHABET_TO_BRAILLE = {
