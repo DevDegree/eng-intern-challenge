@@ -1,9 +1,4 @@
 # Go Instructions
-
-Here's a concise `README.md` for your project:
-
----
-
 # Braille Translator
 
 A simple command-line tool for translating between English text and Braille representations.
