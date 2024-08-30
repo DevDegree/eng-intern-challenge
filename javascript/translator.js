@@ -1,20 +1,6 @@
-// Accept the command-line argument and call the MAIN FUNCTION
-const input = process.argv[2];
-main(input);
-
-// The MAIN FUNCTION for detecting the input type
-function main(input) {
-  let result;
-  if (isBraille(input)) {
-    result = translateToEnglish(input);
-  } else {
-    result = translateToBraille(input);
-  }
-  console.log(result);
-}
+// ADRIAN MILEA - Eng Intern Challenge Fall - Winter 2025
 
 // Mappings between English characters and their Braille representations
-
 const brailleMap = {
   a: "O.....",
   b: "O.O...",
@@ -126,3 +112,20 @@ function translateToEnglish(braille) {
 
   return english;
 }
+
+// The MAIN FUNCTION for detecting the input type
+function main(input) {
+  let result;
+  if (isBraille(input)) {
+    result = translateToEnglish(input);
+  } else {
+    result = translateToBraille(input);
+  }
+  console.log(result);
+}
+
+// Accept the command-line argument and call the MAIN FUNCTION
+const input = process.argv[2];
+main(input);
+
+// End of script
