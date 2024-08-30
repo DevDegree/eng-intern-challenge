@@ -17,20 +17,32 @@ english_to_braille = {
     '6': '110100',
     '7': '110110',
     '8': '123124',
-    '9': '4412124,
+    '9': '4412124',
     '10': '123124',
 }
+
+
 
 def translate_language () -> bool:  # Returns 1 to translate to English, 0 to translate to Braille
     for char in input_text:
         if char not in ['.', 'O']:
             return 0
 
-def translate_text_to_english () -> str  # Returns the translated text
-    pass
-
 def translate_text_to_braille () -> str:  # Returns the translated text
     pass
+
+
+def translate_text_to_english () -> str:  # Returns the translated text
+    # Call divide_string_into_sections
+    # Use the dictionary to translate each section, and append to string
+    pass
+
+def divide_string_into_sections(input_text: str) -> list:  # Returns a list of braille charachters
+    sections = []
+    for i in range(0, len(s), 6):
+        section = s[i:i + 6]
+        sections.append(section)
+    return sections
 
 def main():
     pass
