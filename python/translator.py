@@ -224,10 +224,7 @@ def main():
     ]  # Take all command-line arguments except the script name
     for input_string in input_strings:
         result = braille_func(input_string)
-        if braille_func == text_to_braille:
-            print(result, end="")
-        else:
-            print(result, end="")
+        print(result, end="")
 
     print()  # To ensure the final output ends with a newline
 
