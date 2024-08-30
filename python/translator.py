@@ -75,17 +75,18 @@ def bra_to_eng(message):
     for char in braille:
         if char == follows["capi"]:
             capital = True
+            number = False
         elif char == follows["numb"]:
             number = True
         elif char == follows[" "]:
             english.append(" ")
+            number = False
         else:
             if number:
                 for key, value in numbers.items():
                     if value == char:
                         english.append(key)
                         break
-                number = False
             else:
                 for key, value in alphabets.items():
                     if value == char:
@@ -101,6 +102,7 @@ def bra_to_eng(message):
 def eng_to_bra(message):
     english = []
     strr = ""
+    number = False
     for i in range(len(message)):
         if message[i].isupper():
             if strr:
@@ -108,19 +110,24 @@ def eng_to_bra(message):
                 strr = ""
             english.append("*")  # symbol for capital letters
             english.append(message[i].lower())
+            number = False
         elif message[i].isnumeric():
             if strr:
                 english.append(strr)
                 strr = ""
-            english.append("~")  # symbol for numbers
+            if not number:
+                english.append("~")  # symbol for numbers
+                number = True
             english.append(message[i])
         elif message[i] == " ":
             if strr:
                 english.append(strr)
                 strr = ""
             english.append(" ")
+            number = False
         else:
             strr += message[i]
+            number = False
 
     if strr:
         english.append(strr)
@@ -134,18 +141,20 @@ def eng_to_bra(message):
             if english[i][j] == "*":
                 braille.append(follows["capi"])
                 capital = True
+                number = False
             elif english[i][j] == "~":
                 braille.append(follows["numb"])
                 number = True
             elif english[i][j] == " ":
                 braille.append(follows[" "])
+                number = False
             else:
                 if number:
                     for key, value in numbers.items():
                         if key == english[i][j]:
                             braille.append(value)
                             break
-                    number = False
+                    
                 elif capital:
                     for key, value in alphabets.items():
                         if key == english[i][j].lower():
