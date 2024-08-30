@@ -1,101 +1,88 @@
 import sys
 
-# Defining Braille to English dictionary
 braille_to_english = {
-    '.....O': 'a', 'O.....': 'b', 'OO....': 'c', 'OO.O..': 'd', 'O..O..': 'e',
+    'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd', 'O..O..': 'e',
     'OOO...': 'f', 'OOOO..': 'g', 'O.OO..': 'h', '.OO...': 'i', '.OOO..': 'j',
     'O...O.': 'k', 'O.O.O.': 'l', 'OO..O.': 'm', 'OO.OO.': 'n', 'O..OO.': 'o',
     'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't',
     'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y',
     'O..OOO': 'z',
-    '.....O': 'capital', '..OOO.': 'number', '......': ' ', '.....O.O...': '.'
+    '.....O': 'capital',
+    '.O.OOO': 'number',
+    '.O...O': 'decimal',
+    '......': ' ',
 }
+eng_to_br = {x: y for y, x in braille_to_english.items()}
 
-# Defining English to Braille dictionary
-english_to_braille = {
-    'a': '.....O', 'b': 'O.....', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
-    'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..',
-    'k': 'O...O.', 'l': 'O.O.O.', 'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.',
-    'p': 'OOO.O.', 'q': 'OOOOO.', 'r': 'O.OOO.', 's': '.OO.O.', 't': '.OOOO.',
-    'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO',
-    'z': 'O..OOO', ' ': '......', '.': '.....O.O...',
-    '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
-    '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..'
+br_to_num = {
+    'O.....': '1', 'O.O...': '2', 'OO....': '3', 'OO.O..': '4', 'O..O..': '5',
+    'OOO...': '6', 'OOOO..': '7', 'O.OO..': '8', '.OO...': '9', '.OOO..': '0'
 }
+num_to_braille = {x: y for y, x in br_to_num.items()}
 
-# Function to translate Braille to English
-def braille_to_text(braille_input):
-    text_output = ""
+def isBraille(input_str):
+    return all(char in 'O.' for char in input_str)
+
+def translate_braille_to_english(input_str):
+    eng_output = []
+    building_num = False
+    
     i = 0
-    number_mode = False
+    while i < len(input_str):
+        br_char = input_str[i:i + 6]
 
-    while i < len(braille_input):
-        br_char = braille_input[i:i+6]
-
-        if br_char == '.....O':  # Capital symbol
+        if br_char == eng_to_br['capital']:
             i += 6
-            br_char = braille_input[i:i+6]
-            text_output += braille_to_english.get(br_char, '?').upper()
-        elif br_char == '..OOO.':  # Number symbol
-            number_mode = True
-        elif br_char == '......':  # Space
-            number_mode = False
-            text_output += ' '
-        elif br_char == '.....O.O...':  # Period
-            text_output += '.'
+            br_char = input_str[i:i + 6]
+            eng_output.append(braille_to_english[br_char].upper())
+        elif br_char == eng_to_br['number']:
+            building_num = True
+        elif br_char == eng_to_br[' ']:
+            building_num = False
+            eng_output.append(' ')
         else:
-            if number_mode:
-                # Numbers mapping (correct mapping for digits)
-                numbers_mapping = {
-                    'O.....': '1', 'O.O...': '2', 'OO....': '3', 'OO.O..': '4', 'O..O..': '5',
-                    'OOO...': '6', 'OOOO..': '7', 'O.OO..': '8', '.OO...': '9', '.OOO..': '0'
-                }
-                text_output += numbers_mapping.get(br_char, '?')
-                number_mode = False  # End number mode after processing
+            if building_num:
+                eng_output.append(br_to_num[br_char])
             else:
-                text_output += braille_to_english.get(br_char, '?')
-        
+                eng_output.append(braille_to_english[br_char])
+
         i += 6
-        
-    return text_output
 
-# Function to translate English to Braille
-def text_to_braille(text_input):
-    br_output = ""
-    number_mode = False
+    return ''.join(eng_output)
 
-    for char in text_input:
+def translate_english_to_braille(input_str):
+    br_output = []
+    building_num = False
+
+    for char in input_str:
         if char.isupper():
-            br_output += '.....O'  # Capital symbol
-            char = char.lower()
-        elif char.isdigit():
-            if not number_mode:
-                br_output += '..OOO.'  # Number symbol
-                number_mode = True
-            br_output += english_to_braille.get(char, '......')
-        elif char == '.':
-            br_output += english_to_braille['.']
+            br_output.append(eng_to_br['capital'])
+            br_output.append(eng_to_br[char.lower()])
+        elif char.isdigit() and not building_num:
+            building_num = True
+            br_output.append(eng_to_br['number'])
+            br_output.append(num_to_braille[char.lower()])
+        elif char == ' ':
+            building_num = False
+            br_output.append(eng_to_br[' '])
+        elif building_num:
+            br_output.append(num_to_braille[char.lower()])
         else:
-            number_mode = False
-            br_output += english_to_braille.get(char, '......')
-            
-    return br_output
+            br_output.append(eng_to_br[char])
 
-# Main
+    return ''.join(br_output)
+
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python translator.py <string>")
+        print("Usage: python3 translator.py <strings_to_translate>")
         return
-    
-    input_text = sys.argv[1]
 
-    # Check if the input contains only Braille characters
-    if all(c in "O." for c in input_text) and len(input_text) % 6 == 0:
-        output = braille_to_text(input_text)
+    input_str = ' '.join(sys.argv[1:])
+
+    if isBraille(input_str):
+        print(translate_braille_to_english(input_str))
     else:
-        output = text_to_braille(input_text)
-    
-    print(output)
+        print(translate_english_to_braille(input_str))
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
