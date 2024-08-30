@@ -27,7 +27,6 @@ BRAILLE_ALPHABET = {
     'x': 'OO..OO',
     'y': 'OO.OOO',
     'z': 'O..OOO',
-    ' ': '......',
 }
 BRAILLE_NUMBERS = {
     '1': 'O.....',
@@ -42,6 +41,7 @@ BRAILLE_NUMBERS = {
 }
 CAPITAL_FOLLOWS = '.....O'
 NUMBER_FOLLOWS = '.O.OOO'
+BRAILLE_SPACE = '......'
 
 
 def is_braille(input_str: str):
@@ -67,18 +67,49 @@ def english_to_braille(input_str: str):
                 num_code_prepended = True
             translated.append(BRAILLE_NUMBERS[char])
         elif char == ' ':
-            translated.append(BRAILLE_ALPHABET[char])
+            translated.append(BRAILLE_SPACE)
             num_code_prepended = False  # 'number mode' should be reset after a space
         else:
             translated.append(BRAILLE_ALPHABET[char])
     return ''.join(translated)
+
+
+def braille_to_english(input_str: str):
+    num_mode = False
+    is_capital = False
+    translated = []
+
+    # swap keys and values in original Braille Alphabet for simplification
+    braille_english_letters = {v: k for k, v in BRAILLE_ALPHABET.items()}
+    braille_english_nums = {v: k for k, v in BRAILLE_NUMBERS.items()}
+
+    for i in range(0, len(input_str), 6):
+        char = input_str[i: i + 6]
+        if char == BRAILLE_SPACE:
+            translated.append(' ')
+            num_mode = False  # 'number mode' should be reset after a space
+        elif is_capital:
+            translated.append(braille_english_letters[char].upper())
+            is_capital = False
+        elif char == CAPITAL_FOLLOWS:
+            is_capital = True
+        elif num_mode:
+            translated.append(braille_english_nums[char])
+        elif char == NUMBER_FOLLOWS:
+            num_mode = True
+        else:
+            translated.append(braille_english_letters[char])
+
+    return ''.join(translated)
+
 
 def main():
     if len(sys.argv) < 2:
         print("Usage: translator.py <text_to_translate>")
 
     args = sys.argv[1:]  # Skip the first argument (script name)
-    print('......'.join(english_to_braille(arg) for arg in args))
+    # print('......'.join(english_to_braille(arg) for arg in args))
+    print(' '.join(braille_to_english(arg) for arg in args))
 
 
 if __name__ == '__main__':
