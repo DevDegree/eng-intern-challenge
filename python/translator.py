@@ -8,6 +8,8 @@ A command-line application to translate from English to Braille and vice versa.
 This application supports numbers, letters and spaces.
 '''
 import argparse
+import sys
+
 
 ENGLISH_TO_BRAILLE = {
     # This dictionary maps English characters to their
@@ -138,17 +140,18 @@ def divide_string_into_sections(input_text: str) -> list:
 
 def main() -> None:
     """Main function"""
-    parser = argparse.ArgumentParser(description='Translate English to Braille and vice versa')
-    parser.add_argument('input_text', nargs='+', help='Text to translate', type=str)
-    input_text = parser.parse_args().input_text  # Retreives input text
+    # parser = argparse.ArgumentParser(description='Translate English to Braille and vice versa')
+    # parser.add_argument('input_text', nargs='+', help='Text to translate', type=str)
+    # input_text = parser.parse_args().input_text  # Retreives input text
 
-    if isinstance(input_text, (list, tuple)):  # Change format of input, if needed
-        input_text = ''.join(input_text)
-        input_text = str(input_text)
-    if isinstance(input_text, int):
-        input_text = str(input_text)
-    elif not isinstance(input_text, str):
-        raise ValueError('Invalid input')
+    # if isinstance(input_text, (list, tuple)):  # Change format of input, if needed
+    #     input_text = ''.join(input_text)
+    #     input_text = str(input_text)
+    # if isinstance(input_text, int):
+    #     input_text = str(input_text)
+    # elif not isinstance(input_text, str):
+    #     raise ValueError('Invalid input')
+    input_text = ' '.join(sys.argv[1:])
 
     if translate_language(input_text):  # Translation
         print(translate_text_to_english(input_text))
