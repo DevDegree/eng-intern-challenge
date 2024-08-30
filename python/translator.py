@@ -69,6 +69,7 @@ def translate_text_to_braille(input_text: str) -> str:
     new_string = ''
     for char in input_text:
         new_string += ENGLISH_TO_BRAILLE[char.upper()]
+    return new_string
 
 
 def translate_text_to_english(input_text: str) -> str:
@@ -81,6 +82,7 @@ def translate_text_to_english(input_text: str) -> str:
         for key, value in ENGLISH_TO_BRAILLE.items():
             if section == value:
                 new_string += key
+    return new_string
 
 
 def divide_string_into_sections(input_text: str) -> list:
@@ -90,6 +92,7 @@ def divide_string_into_sections(input_text: str) -> list:
         section = input_text[i:i + 6]
         sections.append(section)
     return sections
+
 
 
 if __name__ == '__main__':
