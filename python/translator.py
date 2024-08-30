@@ -117,7 +117,7 @@ def process_english_text(english_text: str) -> str:
         if character.isspace():
             number_mode = False
         if character.isnumeric() and not number_mode:
-            number_mode = False
+            number_mode = True
             answer += NUMBER_FOLLOWS
         answer += process_english_character(character)
     return answer
