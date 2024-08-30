@@ -1,11 +1,34 @@
 SPACE = "......"
-# map from lowercase English letters + space to Braille translation
+CAPITAL_FOLLOWS = ".....O"
+NUMBER_FOLLOWS = ".O.OOO"
+# DEFAULT, CAPITAL, or NUMBER - indicates if we are translating lowercase letters, capital letters, or numbers
+mode = "DEFAULT"
+
+# map from lowercase English letters + space to Braille translation - used when in DEFAULT or CAPITAL mode
 LETTER_TO_BRAILLE = {
     "a": "O.....",
     "b": "O.O...",
     "c": "OO....",
     "d": "OO.O..",
-    # todo: finish this
+    "e": "O..O..",
+    "f": "OOO...",
+    "g": "OOOO..",
+    "h": "O.OO..",
+    "i": ".OO...",
+    "j": ".OOO..",
+    "k": "O...O.",
+    "l": "O.O.O.",
+    "m": "OO..O.",
+    "n": "OO.OO.",
+    "o": "O..OO.",
+    "p": "OOO.O.",
+    "q": "OOOOO.",
+    "r": "O.OOO.",
+    "s": ".OO.O.",
+    "t": ".OOOO.",
+    "u": "O...OO",
+    "v": "O.O.OO",
+    "w": ".OOO.O",
     "x": "OO..OO",
     "y": "OO.OOO",
     "z": "O..OOO",
@@ -14,25 +37,28 @@ LETTER_TO_BRAILLE = {
 # inverse mapping of the above
 BRAILLE_TO_LETTER = {v: k for k, v in LETTER_TO_BRAILLE.items()}
 
-# map from numbers + space to Braille translation
+# map from numbers + space to Braille translation - used when in NUMBER mode
 NUMBER_TO_BRAILLE = {
     "1": "O.....",
     "2": "O.O...",
     "3": "OO....",
     "4": "OO.O..",
-    # todo: finish this
+    "5": "O..O..",
+    "6": "OOO...",
+    "7": "OOOO..",
+    "8": "O.OO..",
+    "9": ".OO...",
+    "0": ".OOO..",
     " ": SPACE
 }
 # inverse mapping of the above
 BRAILLE_TO_NUMBER = {v: k for k, v in NUMBER_TO_BRAILLE.items()}
 
-CAPITAL_FOLLOWS = ".....O"
-NUMBER_FOLLOWS = ".O.OOO"
-# DEFAULT, CAPITAL, or NUMBER - indicates the translation mode, based on capital/number follows characters
-mode = "DEFAULT"
-
-# determines if input string is Braille
-# assumes that any input consisting of only 0's and with at least 1 "." with length divisible by 6 is Braille - no Braille cells consist only of raised dots (O)
+'''
+    determines if input_string is Braille
+    assumes that Braille string is any input consisting only of O's and .'s with length divisible by 6
+    Braille strings must also have at least 1 "." since no given Braille cells consist of only raised dots
+'''
 def is_braille(input_string):
     return all(char in "O." for char in input_string) and len(input_string) % 6 == 0 and "." in input_string
 
@@ -41,7 +67,7 @@ translates a single Braille cell to English - including potentially changing the
 returns the translated English character (empty string if mode-changing)
 '''
 def braille_to_english_single(cell):
-    global mode  # todo: change this
+    global mode
 
     # if capital or number follows, does not add any characters to output - just changes mode
     if cell == CAPITAL_FOLLOWS:
@@ -64,10 +90,11 @@ def braille_to_english_single(cell):
     return english
 
 '''
-translates a single English character to Braille cell - including potentially changing the mode
+translates a single English character to Braille cell - including potentially adding capital/number follows
 '''
 def english_to_braille_single(character):
     global mode
+
     if character == " ":
         mode = "DEFAULT"
         return SPACE
@@ -77,36 +104,33 @@ def english_to_braille_single(character):
             mode = "NUMBER"
             braille += NUMBER_FOLLOWS
         braille += NUMBER_TO_BRAILLE[character]
-    elif character in LETTER_TO_BRAILLE.keys(): # checks for lowercase letter
+    elif character in LETTER_TO_BRAILLE.keys(): # lowercase letter
         braille = LETTER_TO_BRAILLE[character]
     else: # uppercase letter
         braille = CAPITAL_FOLLOWS + LETTER_TO_BRAILLE[character.lower()]
     return braille
 
-def braille_to_english(word):
+def braille_to_english(input_string):
     translations = []
-    cells = [word[i: i + 6] for i in range(0, len(word), 6)]
+    # each Braille cell consists of 6 consecutive characters in input
+    cells = [input_string[i: i + 6] for i in range(0, len(input_string), 6)]
     for cell in cells:
         translations.append(braille_to_english_single(cell))
-    return ''.join(translations)
+    return "".join(translations)
 
-def english_to_braille(word):
+def english_to_braille(input_string):
     translations = []
-    for character in word:
+    for character in input_string:
         translations.append(english_to_braille_single(character))
-    return ''.join(translations)
+    return "".join(translations)
 
 import sys
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         exit(0)
-    word = " ".join(sys.argv[1:])
-    #print(word)
-    if is_braille(word):
-        #print("word is Braille")
-        print(braille_to_english(word))
+    to_translate = " ".join(sys.argv[1:])
+    if is_braille(to_translate):
+        print(braille_to_english(to_translate))
     else:
-        #print("word is English")
-        print(english_to_braille(word))
-    #print(braille_to_english(".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"))
+        print(english_to_braille(to_translate))
