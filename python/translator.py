@@ -42,7 +42,7 @@ ENG_TO_BRAILLE = {
     "number": ".O.OOO",
 }
 
-BRAILLE_TO_LETTER = {
+BRAILLE_TO_ENG = {
     "O.....": "a",
     "O.O...": "b",
     "OO....": "c",
