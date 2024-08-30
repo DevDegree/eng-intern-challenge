@@ -1,9 +1,8 @@
 # Python Instructions
 
-#################################################################################################################################
 I fixed the translator.test.py based on the image provided for the task.
 The characteres bellow is represented based on the image braille.jpg provided for the task.
-#################################################################################################################################
+
 
 ALPHABET_TO_BRAILLE = {
     "a": "O.....", "b": "O.O...", "c": "OO....", "d": "OO.O..", "e": "O..O..",
