@@ -21,10 +21,10 @@ class Translator
 
   # Braille digits dictionary
   BRAILLE_DIGITS = {
-    '1' => 'O.....', '2' => 'O.O...', '3' => 'OO....',
-    '4' => 'OO.O..', '5' => 'O..O..', '6' => 'OOO...',
-    '7' => 'OOOO..', '8' => 'O.OO..', '9' => '.OO...',
-    '0' => '.OOO..'
+    'O.....' => '1', 'O.O...' => '2', 'OO....' => '3',
+    'OO.O..' => '4', 'O..O..' => '5', 'OOO...' => '6',
+    'OOOO..' => '7', 'O.OO..' => '8', '.OO...' => '9',
+    '.OOO..' => '0'
   }.freeze
 
   # Braille punctuation dictionary
@@ -56,6 +56,7 @@ class Translator
   # Method to translate braille to text
   def braille_to_text
     has_uppercase = false
+    is_number = false
 
     # go through the input array and translate each sequence to respective character
     # input.map {|sequence| BRAILLE_ALPHABET[sequence]}.join
@@ -67,9 +68,18 @@ class Translator
       when 'uppercase'
         has_uppercase = true
         BRAILLE_ALPHABET[input[index + 1]].upcase
+      when 'number'
+        is_number = true
+        BRAILLE_DIGITS[input[index + 1]]
       end
     else
-      has_uppercase ? BRAILLE_ALPHABET[input[index + 1]] : BRAILLE_ALPHABET[input[index]]
+      if (is_number)
+        BRAILLE_DIGITS[input[index + 1]]
+      elsif (has_uppercase)
+        BRAILLE_ALPHABET[input[index + 1]]
+      else
+        BRAILLE_ALPHABET[sequence]
+      end
     end
     }.join
   end
@@ -86,4 +96,5 @@ class Translator
 end
 
 translator = Translator.new('O.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O......OOO.O..')
-translator.translate
+#translator = Translator.new('.O.OOOOO.O..O.O...')
+puts translator.translate
