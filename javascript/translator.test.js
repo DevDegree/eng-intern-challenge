@@ -5,7 +5,7 @@ describe('translator.js script', () => {
         exec("node translator.js Abc 123 xYz", (error, stdout, stderr) => {
             expect(error).toBeNull();
             expect(stderr).toBe("");
-            expect(stdout.trim()).toBe(".....OO.....O.O...OO...........O.OOOO.O...OO....OO.O........OO..OO.....OOO.OOOO..OOO");
+            expect(stdout.trim()).toBe(".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO");
             done();
         });
     });
