@@ -104,6 +104,31 @@ func (t *Translator) isAlphanumeric() bool {
 	return true
 }
 
+func (t *Translator) toBraille() (string, error) {
+	if !t.isBraille() {
+		return "", fmt.Errorf("expected Braille input: %s", ErrArgumentsNotBraille)
+	}
+	// convert to braille
+	return "braille", nil
+}
+
+func (t *Translator) toEnglish() (string, error) {
+	if !t.isAlphanumeric() {
+		return "", fmt.Errorf("expected Alphanumeric input: %s", ErrArgumentsNotAlphanumeric)
+	}
+	// convert to english
+	return "english", nil
+}
+
+func (t *Translator) Translate() (string, error) {
+	if t.isBraille() {
+		return t.toBraille()
+	} else if t.isAlphanumeric() {
+		return t.toEnglish()
+	}
+	return "", fmt.Errorf("expected Alphanumeric or Braille input: %s", ErrArgumentsNotBrailleOrAlphanumeric)
+}
+
 // checks that more than atleast one argument (excluding program) is provided
 func handleArguments() ([]string, error) {
 	if len(os.Args) < 2 {
@@ -121,11 +146,18 @@ func reverseMap(m map[string]string) map[string]string {
 }
 
 func main() {
-	text, err := handleArguments()
+	args, err := handleArguments()
 
 	if err != nil {
 		log.Fatalf("invalid args: %s\n", err)
 	}
 
-	fmt.Println(text)
+	translator := NewTranslator(args)
+
+	convertedText, err := translator.Translate()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Println(convertedText)
 }
