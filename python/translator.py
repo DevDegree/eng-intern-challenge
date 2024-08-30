@@ -33,20 +33,6 @@ ALPHABET_TO_BRAILLE = {
     'z': 'O..OOO',
     'CAPITAL_FOLLOWS': '.....O',
     'NUMBER_FOLLOWS': '.O.OOO',
-    # Following characters are not required in assignment
-    # 'DECIMAL_FOLLOWS': '.O...O',
-    # '.': '..OO.O',
-    # ',': '..O...',
-    # '?': '..O.OO',
-    # '!': '..OOO.',
-    # ':': '..OO..',
-    # ';': '..O.O.',
-    # '-': '....OO',
-    # '/': '.O..O.',
-    # '<': '.OO..O',
-    # '>': 'O..OO.',
-    # '(': 'O.O..O',
-    # ')': '.O.OO.',
 }
 
 BRAILLE_TO_ALPHABET = {braille: alphabet for alphabet, braille in ALPHABET_TO_BRAILLE.items()}
