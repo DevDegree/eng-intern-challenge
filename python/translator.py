@@ -82,7 +82,32 @@ def sentence_to_braille(sentence, char_mapping=char_to_braille, num_map=num_to_b
 
 
 def braille_to_sentece(braille, char_map=braille_to_char, num_map=braille_to_num, instruct_map=braille_to_instructions):
-    pass
+    ## convert input to group of 6
+    groups = [braille[i:i+6] for i in range(0, len(braille), 6)]
+
+    output = ""
+    numeric = False
+    capital = False
+    for sub_group in groups:
+        if sub_group == '.....O': # Braille for capital follows
+            capital = True #next group would be capital
+
+        elif sub_group == ".O.OOO": # Braille for numeric comes next:
+            numeric = True # next group would be numeric
+
+        elif sub_group in char_map and capital and not numeric:
+            output += char_map[sub_group].upper()
+            capital = False
+        elif sub_group in char_map and not numeric:
+            output += char_map[sub_group]
+        elif sub_group == "......":
+            numeric = False
+            output += char_map[sub_group]
+        elif sub_group in num_map and numeric:
+            output += num_map[sub_group]
+
+    return output
+
 
 def is_braille(argument):
     '''
@@ -100,16 +125,17 @@ def is_braille(argument):
 
 
 
-argument = ""
-for i in range(1, len(sys.argv)):
-    argument += sys.argv[i]
-    argument += " "
-argument = argument[:-1]
+if __name__ == "__main__":
+    argument = ""
+    for i in range(1, len(sys.argv)):
+        argument += sys.argv[i]
+        argument += " "
+    argument = argument[:-1]
 
-if is_braille(argument): #should be translated to English
-    print("input is braille")
-else: #should be translated to Braille
-    print(sentence_to_braille(argument))
+    if is_braille(argument): #should be translated to English
+        print(braille_to_sentece(argument))
+    else: #should be translated to Braille
+        print(sentence_to_braille(argument))
 
 
 
