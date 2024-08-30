@@ -27,7 +27,6 @@ english_to_braille = {
     'z': 'O..OOO',
     
     'capital follows': '.....O',
-    'decimal follows': '.O...O',
     'number follows': '.O.OOO',
     
     '1': 'O.....',
@@ -53,7 +52,6 @@ translation = ""
 
 i = 0
 n = 0
-
 
 while n < len(val):
     
@@ -85,13 +83,6 @@ while n < len(val):
                 
             elif translation[i-1].isdigit():
                 found = val_list.index(val[n:n+6], 29, 38)
-                translation+= key_list[found]
-                i+=1
-                n+=6
-            
-            elif val[n:n+6] == english_to_braille['decimal follows']:
-                n+=6
-                found = val_list.index(val[n:n+6])
                 translation+= key_list[found]
                 i+=1
                 n+=6
@@ -128,19 +119,13 @@ while n < len(val):
                 translation += english_to_braille[val[n]]
                 i+=6
                 n+=1
-                
-                
+                  
             else:
                 translation += english_to_braille['number follows']
                 translation += english_to_braille[val[n]]
                 i+=6
                 n+=1
                 
-        
-        elif key_list.index(val[n], 39, 50):
-            translation+= english_to_braille[val[n]]
-            i+=6
-            n+=1
            
 print(translation)
 
