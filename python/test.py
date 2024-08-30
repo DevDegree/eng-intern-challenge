@@ -70,7 +70,7 @@ class TestBrailleTranslator(unittest.TestCase):
         self.assertTrue(translator.is_braille())
 
         translator = BrailleTranslator(
-            ".....OO.....O.O...OO...........O.OOOO.O...OO....OO.O.."
+            ".....OO.....O.O...OO...........O.OOOO.....O.O...OO...."
         )
         self.assertTrue(translator.is_braille())
 
