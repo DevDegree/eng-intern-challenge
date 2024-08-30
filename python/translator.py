@@ -61,9 +61,13 @@ def translate_english_to_braille(input_string):
         elif char.isdigit() and not building_num:
             building_num = True
             braille_output.append(english_to_braille['number'])
-            braille_output.append(english_to_braille[char.lower()])
-        else:
+            braille_output.append(num_to_braille[char.lower()])
+        elif char == ' ':
             building_num = False
+            braille_output.append(english_to_braille[' '])
+        elif building_num:
+            braille_output.append(num_to_braille[char.lower()])
+        else:
             braille_output.append(english_to_braille[char])
 
     return ''.join(braille_output)
@@ -73,13 +77,13 @@ def main():
         print("Usage: python3 translator.py <strings_to_translate>")
         return
 
-    input_string = " ".join(sys.argv[1:])
+    input_string = ' '.join(sys.argv[1:])
 
     if is_braille(input_string):
         print(translate_braille_to_english(input_string))
     else:
         print(translate_english_to_braille(input_string))
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
 
