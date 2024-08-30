@@ -28,7 +28,6 @@ def is_braile(text):
     :return: True if the text is valid braille text, False
         
     """
-    
     # Checks if the first argument is valid braille text
     for letter in text:
         if letter not in ['O', '.']:
@@ -42,8 +41,6 @@ def to_braile(arguments):
     :param arguments: The text to convert, must be an alphanumeric list of strings
     :return: string - The braille representation of the text
     """
-    
-    
     phrase = ' '.join(arguments)
     result = []
     
