@@ -1,17 +1,6 @@
 import sys
 
-numbers = { "0": ".OOO..", "1": "O.....", "2": "O.O...", "3": "OO....", "4": "OO.O..", "5": "O..O..", "6": "OOO...", "7": "OOOO..", "8": "O.OO..", "9": ".OO...", }
-
-'''
-NOTE:
-    The unit tests use the following mappings for the numbers, so some of the tests may fail:
-    
-    { "0": "O.....", "1": "O.O...", "2": "OO....", "3": "OO.O..", "4": "O..O..", "5": "OOO...", "6": "OOOO..", "7": "O.OO..", "8": ".OO...", "9": ".OOO..", }
-
-    I have based my implementation on the Wikipedia page and the image provided in the task description, which uses the following mappings:
-    
-    { "0": ".OOO..", "1": "O.....", "2": "O.O...", "3": "OO....", "4": "OO.O..", "5": "O..O..", "6": "OOO...", "7": "OOOO..", "8": "O.OO..", "9": ".OO...", }
-'''
+numbers = { "0": ".OOO..", "1": "O.....", "2": "O.O...", "3": "OO....", "4": "OO.O..", "5": "O..O..", "6": "OOO...", "7": "OOOO..", "8": "O.OO..", "9": ".OO...", ' ': '......'}
 
 letters = {
     'a': 'O.....', 'b': 'O.O...','c': 'OO....','d': 'OO.O..','e': 'O..O..','f': 'OOO...','g': 'OOOO..','h': 'O.OO..','i': '.OO...','j': '.OOO..','k': 'O...O.','l': 'O.O.O.','m': 'OO..O.','n': 'OO.OO.','o': 'O..OO.','p': 'OOO.O.','q': 'OOOOO.','r': 'O.OOO.','s': '.OO.O.','t': '.OOOO.','u': 'O...OO','v': 'O.O.OO','w': '.OOO.O','x': 'OO..OO','y': 'OO.OOO','z': 'O..OOO', ' ': '......'
@@ -91,18 +80,18 @@ def to_alphabet(text):
             continue
         
         if is_number:
-            curr_word += reversed_numbers[words[i]]
-        elif is_capital:
-            curr_word += reversed_letters[words[i]].upper()
-            is_capital = False
-        else:
-            curr = reversed_letters[words[i]]
+            curr = reversed_numbers[words[i]]
             if curr == ' ':
                 is_number = False
                 result.append(curr_word)
                 curr_word = ''
             else:
-                curr_word += curr
+                curr_word += reversed_numbers[words[i]]
+        elif is_capital:
+            curr_word += reversed_letters[words[i]].upper()
+            is_capital = False
+        else:
+            curr_word += reversed_letters[words[i]]
                 
     if curr_word:
         result.append(curr_word) 
