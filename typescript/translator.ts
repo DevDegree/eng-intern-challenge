@@ -154,7 +154,7 @@ function translateEnglishToBraille(english: string): string {
 }
 
 function main() {
-  const input = process.argv[2];
+  const input = process.argv.slice(2).join(" ");
 
   if (!input) {
     console.error("Your input is empty ");

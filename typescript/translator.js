@@ -143,7 +143,7 @@ function translateEnglishToBraille(english) {
     return result;
 }
 function main() {
-    var input = process.argv[2];
+    var input = process.argv.slice(2).join(" ");
     if (!input) {
         console.error("Your input is empty ");
         return;
