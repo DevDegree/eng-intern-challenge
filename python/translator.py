@@ -79,12 +79,11 @@ def braille_to_english_single(cell):
 
     if mode == "CAPITAL":
         english = BRAILLE_TO_LETTER[cell].capitalize()
-        # capital follows only affects next cell
-        mode = "DEFAULT"
+        mode = "DEFAULT" # capital follows only affects next cell
     elif mode == "NUMBER":
         english = BRAILLE_TO_NUMBER[cell]
-        if cell == SPACE:
-            mode = "DEFAULT"  # number follows takes effect until next space
+        if cell == SPACE: # number follows takes effect until next space
+            mode = "DEFAULT"
     else:
         english = BRAILLE_TO_LETTER[cell]
     return english
@@ -96,11 +95,11 @@ def english_to_braille_single(character):
     global mode
 
     if character == " ":
-        mode = "DEFAULT"
+        mode = "DEFAULT" # number follows takes effect until next space
         return SPACE
     if character in NUMBER_TO_BRAILLE.keys():
         braille = ""
-        if mode != "NUMBER":
+        if mode != "NUMBER": # do not need to add another number follows if one is already in effect
             mode = "NUMBER"
             braille += NUMBER_FOLLOWS
         braille += NUMBER_TO_BRAILLE[character]
