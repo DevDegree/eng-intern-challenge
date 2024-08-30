@@ -66,6 +66,9 @@ NUMBER = '.O.OOO'
 
 BRAILLE = {'O', '.'}
 
+'''
+Converts a given braille string to english
+'''
 def braille_to_english(text: str) -> str:
     res = ''
     number = False
@@ -96,6 +99,9 @@ def braille_to_english(text: str) -> str:
 
     return res
 
+'''
+Converts a given english string to braille
+'''
 def english_to_braille(text: str) -> str:
     res = ''
     number = False
