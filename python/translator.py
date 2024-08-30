@@ -5,6 +5,9 @@ Author: Azaria Kelman
 File Description:
 A command-line application to translate from English to Braille and vice versa.
 '''
+import sys
+
+input_text = sys.argv[1:]
 
 english_to_braille = {  
     # This dictionary maps English (+ numbers) characters to their correspondent 
