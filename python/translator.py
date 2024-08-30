@@ -44,7 +44,7 @@ class EnglishAndBrailleTranslator:
         return ""  # no valid translation
     
     def english_to_braille(self, eng_s: str) -> str:
-        """Helper to translate an english string to braille"""
+        """Translates an english string to braille"""
         if any(not (c.isalnum() or c == " ") for c in eng_s):
             raise ValueError("Unsupported English string")
 
@@ -71,7 +71,7 @@ class EnglishAndBrailleTranslator:
         return "".join(braille_chars)
 
     def braille_to_english(self, braille_s: str) -> str:
-        """Helper to translate a braille string to english"""
+        """Translates a braille string to english"""
         if len(braille_s) % 6 != 0 or not all(c in ".O" for c in braille_s):
             raise ValueError("Invalid Braille string")
 
