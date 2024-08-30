@@ -1,96 +1,91 @@
 import sys
 
-# Constants for Braille indicators
-NUMERIC_PREFIX = '.O.OOO'
-CAPITAL_PREFIX = '.....O'
-
-# Dictionary for Braille to English letter conversion
-braille_to_letter = {
-    'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..', 
-    'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..', 
-    'k': 'O...O.', 'l': 'O.O.O.', 'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.', 
-    'p': 'OOO.O.', 'q': 'OOOOO.', 'r': 'O.OOO.', 's': '.OO.O.', 't': '.OOOO.', 
-    'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO', 
-    'z': 'O..OOO', ' ': '......'
+braille_dict = {
+    "O.....": "a", "O.O...": "b", "OO....": "c", "OO.O..": "d", "O..O..": "e",
+    "OOO...": "f", "OOOO..": "g", "O.OO..": "h", ".OO...": "i", ".OOO..": "j",
+    "O...O.": "k", "O.O.O.": "l", "OO..O.": "m", "OO.OO.": "n", "O..OO.": "o",
+    "OOO.O.": "p", "OOOOO.": "q", "O.OOO.": "r", ".OO.O.": "s", ".OOOO.": "t",
+    "O...OO": "u", "O.O.OO": "v", ".OOO.O": "w", "OO..OO": "x", "OO.OOO": "y",
+    "O..OOO": "z", ".....O": "capital", ".O.OOO": "number", "......": " "
 }
 
-# Dictionary for Braille to English number conversion
-braille_to_number = {
-    '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', 
-    '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..'
+english_dict = {v: k for k, v in braille_dict.items()}
+
+char_to_number = {
+    "a": '1', "b": '2', "c": '3', "d": '4', "e": '5',
+    "f": '6', "g": '7', "h": '8', "i": '9', "j": '0'
 }
 
-def validate_braille_characters(braille_text):
-    """Checks if the given text is in Braille format."""
-    for character in braille_text:
-        if character != 'O' and character != '.':
-            return False
-    return True
+number_to_char = {v: k for k, v in char_to_number.items()}
 
-def translate_braille_to_text(braille_text):
-    """Converts Braille text to English letters and numbers."""
-    text_lookup = {v: k for k, v in braille_to_letter.items()}
-    number_lookup = {v: k for k, v in braille_to_number.items()}
-    translated_text = ""
-    number_mode = False
-    capital_mode = False
+# Translate Braille to English
+def braille_to_english(braille_str):
+    translated_str = ""
+    capitalize_next = False
+    is_number = False
 
-    # Process every 6 characters as one Braille character
-    for index in range(0, len(braille_text), 6):
-        braille_character = braille_text[index:index + 6]
-
-        # Check for special Braille indicators
-        if braille_character == NUMERIC_PREFIX:
-            number_mode = True
-            continue
-        if braille_character == CAPITAL_PREFIX:
-            capital_mode = True
-            continue
-        
-        # Translate Braille characters to English
-        if braille_character in text_lookup:
-            if braille_character == '......':
-                number_mode = False  # Reset after space
-            if number_mode:
-                translated_text += number_lookup[braille_character]
-            elif capital_mode:
-                translated_text += text_lookup[braille_character].upper()
-                capital_mode = False
+    for i in range(0, len(braille_str), 6): 
+        braille_char = braille_str[i:i+6]
+        if braille_char in braille_dict:
+            curr_english_char = braille_dict[braille_char]
+            if curr_english_char == "capital":
+                capitalize_next = True
+            elif curr_english_char == "number":
+                is_number = True 
             else:
-                translated_text += text_lookup[braille_character]
-    return translated_text
+                if curr_english_char == " ":
+                    is_number = False
+                elif capitalize_next:
+                    capitalize_next = False
+                    curr_english_char = curr_english_char.upper()
+                elif is_number:
+                    curr_english_char = char_to_number[curr_english_char]
 
-def convert_text_to_braille(plain_text):
-    """Converts English text to Braille characters."""
-    braille_output = ""
-    numeric_mode = False
+                translated_str += curr_english_char
+        else:
+            return "\nInvalid input:\nInvalid Braille character: " + braille_char
 
-    for char in plain_text:
-        if char.isdigit():
-            if not numeric_mode:
-                braille_output += NUMERIC_PREFIX
-                numeric_mode = True
-            braille_output += braille_to_number[char]
-        elif char == ' ':
-            numeric_mode = False
-            braille_output += braille_to_letter[char]
-        elif char.isalpha():
+    return translated_str
+
+# Translate English to Braille
+def english_to_braille(english_str):
+    translated_str = ""
+    number_encountered = False
+
+    for char in english_str:
+        if char.lower() in english_dict:
+            if char == " ":
+                number_encountered = False # another number char needed for later numbers
             if char.isupper():
-                braille_output += CAPITAL_PREFIX
-            braille_output += braille_to_letter[char.lower()]
-    return braille_output
+                translated_str += english_dict["capital"] # add capital char before every capital letter
+                char = char.lower() # no capital char in the dictionary
+            translated_str += english_dict[char]
+        elif char in number_to_char:
+            if not number_encountered: # if this is the first of a consecutive numbers
+                translated_str += english_dict["number"]
+                number_encountered = True 
+            translated_str += english_dict[number_to_char[char]]
+        else:
+            return "\nInvalid input\nEnglish text can only include numbers, spaces, and English characters"
+
+    return translated_str
+
+# Translate Braille or English
+def translate(input_str):
+    if len(input_str) >= 6 and '.' in input_str[:6]: 
+        return braille_to_english(input_str)
+    else:
+        return english_to_braille(input_str)
 
 def main():
-    if len(sys.argv) < 2:
-        return
+    args = sys.argv
 
-    input_text = ' '.join(sys.argv[1:])
-    
-    # Determine the conversion direction and print the result
-    if validate_braille_characters(input_text[0]):
-        print(translate_braille_to_text(input_text))
+    if len(args) < 2:
+        print("\nNo input was given\nUse: python3 translator.py <input>")
     else:
-        print(convert_text_to_braille(input_text))
+        input_str = " ".join(args[1:]) 
+        output_str = translate(input_str)
+        print(output_str)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
