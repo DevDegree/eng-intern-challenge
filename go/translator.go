@@ -6,7 +6,7 @@ There are certain assumptions for the logic
 Assumptions
     1. ONLY braille inputs start with "."
     2. If input braille, it will ONLY be one input
-
+    3. Symbols `<`, `>`, `)`, and `(` have been ignored
 */
 
 package main
@@ -148,13 +148,6 @@ var brailleToEnglishAlphMap = map[string]string{
 }
 
 func translateToEnglish(brailleStatement string) string {
-	// braille statement chars are ASCII. so if we
-	// iterate over the string, we get the correct rune
-
-	sbRes := strings.Builder{}
-	var makeCap bool
-	var isNumber bool
-
 	// more efficient way for string concatenation
 	// it prevents copying the string over and over
 	// with every iteration, especially her that we know
@@ -163,7 +156,13 @@ func translateToEnglish(brailleStatement string) string {
 	sb := strings.Builder{}
 	sb.Grow(maxBrailleChars)
 
+    sbRes := strings.Builder{}
+	var makeCap bool
+	var isNumber bool
+
 mainLoop:
+	// braille statement chars are ASCII. so if we
+	// iterate over the string, we get the correct rune
 	for i, c := range brailleStatement {
 		sb.WriteRune(c)
 
@@ -302,8 +301,3 @@ func main() {
 		fmt.Println(translateToBraille(concatedWords))
 	}
 }
-
-/*
-.....OO.....O.O...OO...........O.OOOO.O...OO....OO.O........OO..OO.....OOO.OOOO..OOO
-.....OO.....O.O...OO....
-*/
