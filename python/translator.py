@@ -7,10 +7,10 @@ A command-line application to translate from English to Braille and vice versa.
 '''
 import sys
 
-input_text = sys.argv[1:]
+INPUT_TEXT = sys.argv[1:]
 
-english_to_braille = {  
-    # This dictionary maps English (+ numbers) characters to their correspondent 
+ENGLISH_TO_BRAILLE = {
+    # This dictionary maps English (+ numbers) characters to their correspondent
     # Braille characters
     '1': 'O.....',
     '2': 'O.O...',
@@ -51,22 +51,28 @@ english_to_braille = {
 }
 
 
-def translate_language () -> bool:  # Returns 1 to translate to English, 0 to translate to Braille
+def translate_language(input_text: str) -> bool:
+    """Returns 1 to translate to English, 0 to translate to Braille"""
     for char in input_text:
         if char not in ['.', 'O']:
             return 0
+    return 1
 
-def translate_text_to_braille () -> str:  # Returns the translated text
+
+def translate_text_to_braille() -> str:
+    """Returns the translated text"""
     pass
 
 
-def translate_text_to_english () -> str:  # Returns the translated text
+def translate_text_to_english() -> str:
+    """Returns the translated text"""
     # Call divide_string_into_sections
     # Use the dictionary to translate each section, and append to string
     pass
 
 
-def divide_string_into_sections(input_text: str) -> list:  # Returns a list of braille charachters
+def divide_string_into_sections(input_text: str) -> list:
+    """Returns a list of braille charachters"""
     sections = []
     for i in range(0, len(input_text), 6):
         section = input_text[i:i + 6]
@@ -74,9 +80,12 @@ def divide_string_into_sections(input_text: str) -> list:  # Returns a list of b
     return sections
 
 
-def main():
-    pass
-
-
 if __name__ == '__main__':
-    main()
+
+    import python_ta
+    python_ta.check_all(config={'allowed-import-modules': ["sys", "python_ta"]})
+
+    if translate_language(INPUT_TEXT):
+        print(translate_text_to_english())
+    else:
+        print(translate_text_to_braille())
