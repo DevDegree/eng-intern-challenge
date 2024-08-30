@@ -16,7 +16,7 @@ type Translator struct {
 	numberToBrailleMap map[string]string
 }
 
-// creates new translator unit
+// creates a new translator unit
 func NewTranslator(text string) *Translator {
 	var t Translator
 	t.text = text
