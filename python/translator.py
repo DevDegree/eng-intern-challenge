@@ -72,7 +72,11 @@ def to_braille(words):
       if not is_num:
         is_num = True
         translation += ".O.OOO"
-      c = chr(ord(c) + ord('a') - ord('1'))
+      
+      if c == '0':
+        c = 'j'
+      else:
+        c = chr(ord(c) + ord('a') - ord('1'))
     else:
       is_num = False
     
@@ -110,12 +114,4 @@ def to_chars(words):
   return translation
 
 if __name__ == "__main__":
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
   main()
-=======
-  main()
->>>>>>> Stashed changes
-=======
-  main()
->>>>>>> Stashed changes
