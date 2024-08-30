@@ -29,7 +29,6 @@ number_dict = {
     '0': '.OOO..'   
 }
 
-#Note: The provided unit test is incorrect so I left the number_dict in the correct form instead of changing it to meet unit test's output. 
 
 def translate_to_braille(text):
     result = []
