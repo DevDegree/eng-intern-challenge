@@ -55,33 +55,36 @@ class Translator
 
   # Method to translate braille to text
   def braille_to_text
-    has_uppercase = false
     is_number = false
+    index = 0
 
     # go through the input array and translate each sequence to respective character
-    # input.map {|sequence| BRAILLE_ALPHABET[sequence]}.join
-    input.map.with_index {|sequence, index|
-    # if the sequence is a rule, check the rule and translate the next sequence accordingly
-    # otherwise, translate the sequence to a character
-    if (BRAILLE_RULES[sequence])
-      case BRAILLE_RULES[sequence]
-      when 'uppercase'
-        has_uppercase = true
-        BRAILLE_ALPHABET[input[index + 1]].upcase
-      when 'number'
-        is_number = true
-        BRAILLE_DIGITS[input[index + 1]]
-      end
-    else
-      if (is_number)
-        BRAILLE_DIGITS[input[index + 1]]
-      elsif (has_uppercase)
-        BRAILLE_ALPHABET[input[index + 1]]
+    input.reduce([]) do |result, sequence|
+      # if the sequence is a rule, check the rule and translate the next sequence accordingly
+      # otherwise, translate the sequence to a character
+      if (BRAILLE_RULES[sequence])
+        case BRAILLE_RULES[sequence]
+        when 'uppercase'
+          next_sequence = input[index += 1]
+          result << BRAILLE_ALPHABET[next_sequence].upcase
+        when 'number'
+          is_number = true
+          next_sequence = input[index += 1]
+          result << BRAILLE_DIGITS[next_sequence]
+        when 'space'
+          is_number = false
+          result << BRAILLE_ALPHABET[input[index]]
+        end
       else
-        BRAILLE_ALPHABET[sequence]
+        if (is_number)
+          result << BRAILLE_DIGITS[input[index]]
+        else
+          result << BRAILLE_ALPHABET[input[index]]
+        end
       end
-    end
-    }.join
+      index += 1
+      result
+    end.join
   end
 
   public
@@ -95,6 +98,6 @@ class Translator
   end
 end
 
-translator = Translator.new('O.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O......OOO.O..')
-#translator = Translator.new('.O.OOOOO.O..O.O...')
-puts translator.translate
+ # translator = Translator.new('.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..')
+ translator = Translator.new('.O.OOOOO.O..O.O...')
+ puts translator.translate
