@@ -62,8 +62,6 @@ def translate_to_english(braille_string):
     for i in range(0, len(braille_string), 6):
         braille_char = braille_string[i:i+6]
 
-        print(braille_char, )
-
         if braille_char == CAP_SYMBOL:  
             capitalize_next = True
             continue
@@ -129,4 +127,3 @@ if __name__ == "__main__":
         output_string = translate_to_braille(input_string)
 
     print(output_string)
-
