@@ -75,20 +75,25 @@ def translate_language(input_text: str) -> bool:
 def translate_text_to_braille(input_text: str) -> str:
     """Returns the text translated from English to Braille"""
     new_string = ''
+    next_number = False
 
     for char in input_text:
         if char.isupper():
             new_string += CAPITAL_FOLLOWS
             new_string += ENGLISH_TO_BRAILLE[char]
-        elif char.isdigit():
-            new_string += NUMBER_FOLLOWS
+        elif char.isdigit() or next_number:
+            if not next_number:  # If not already in number mode
+                new_string += NUMBER_FOLLOWS
             new_string += NUMBERS_TO_BRAILLE[char]
+            next_number = True
         elif char.islower():
             new_string += ENGLISH_TO_BRAILLE[char.upper()]
         elif char == ' ':
             new_string += ENGLISH_TO_BRAILLE[char]
         else:
             raise ValueError('Invalid English character')  # Just in case
+        if char == ' ':
+            next_number = False
     return new_string
 
 
@@ -106,14 +111,14 @@ def translate_text_to_english(input_text: str) -> str:
             next_capital = True
         elif section == NUMBER_FOLLOWS:
             next_number = True
-        elif section in BRAILLE_TO_ENGLISH:
+        elif section in BRAILLE_TO_ENGLISH or section in BRAILLE_TO_NUMBERS:
             if next_capital:
                 new_string += BRAILLE_TO_ENGLISH[section].upper()
                 next_capital = False
             elif next_number:
                 new_string += BRAILLE_TO_NUMBERS[section]
             else:
-                if BRAILLE_TO_ENGLISH[section] == ' ':  # If next charachter is space
+                if BRAILLE_TO_ENGLISH[section] == ' ':  # If section is space
                     next_number = False
                 new_string += BRAILLE_TO_ENGLISH[section].lower()
         else:
@@ -135,11 +140,15 @@ def main() -> None:
     """Main function"""
     parser = argparse.ArgumentParser()
     parser.add_argument('input_text')
-    # input_text = parser.parse_args().input_text
-    # input_text = ''.join(input_text)
+    input_text = parser.parse_args().input_text
 
-    input_text = ["Abc", "123", "xYz"]
-    input_text = ''.join(input_text)
+    if isinstance(input_text, (list, tuple)):
+        input_text = ''.join(input_text)
+        input_text = str(input_text)
+    if isinstance(input_text, int):
+        input_text = str(input_text)
+    elif not isinstance(input_text, str):
+        raise ValueError('Invalid input')
 
     if translate_language(input_text):
         print(translate_text_to_english(input_text))

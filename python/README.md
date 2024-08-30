@@ -4,10 +4,10 @@ Author: Azaria Kelman
 
 Contact: azaria.kelman@mail.utoronto.ca
 
-### File Description:
+### translator.py Description:
 A command-line application to translate from English to Braille and vice versa. This application supports numbers, letters and spaces.
 
-
+Tests can be found in tests.py
 
 ## Python Instructions
 
