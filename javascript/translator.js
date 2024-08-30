@@ -1,4 +1,8 @@
-// The Main Function for detecting the input type
+// Accept the command-line argument and call the MAIN FUNCTION
+const input = process.argv[2];
+main(input);
+
+// The MAIN FUNCTION for detecting the input type
 function main(input) {
   let result;
   if (isBraille(input)) {
