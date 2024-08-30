@@ -2,7 +2,7 @@ import sys
 from typing import Dict, List, Callable
 from functools import partial
 from itertools import groupby
-from string import ascii_lowercase, digits, punctuation
+from string import ascii_lowercase
 
 class BrailleTranslator:
     ENGLISH_TO_BRAILLE: Dict[str, str] = {
@@ -30,7 +30,8 @@ class BrailleTranslator:
 
     @classmethod
     def initialize(cls):
-        cls.NUMBER_TO_BRAILLE = dict(zip(digits, [cls.ENGLISH_TO_BRAILLE[c] for c in ascii_lowercase[:10]]))
+        number_chars = '123456789' + '0'
+        cls.NUMBER_TO_BRAILLE = dict(zip(number_chars, [cls.ENGLISH_TO_BRAILLE[c] for c in ascii_lowercase[:10]]))
         cls.BRAILLE_TO_ENG = {v: k for k, v in cls.ENGLISH_TO_BRAILLE.items()}
         cls.BRAILLE_TO_NUM = {v: k for k, v in cls.NUMBER_TO_BRAILLE.items()}
         cls.BRAILLE_TO_PUNC = {v: k for k, v in cls.PUNC_TO_BRAILLE.items()}
