@@ -55,22 +55,35 @@ class Translator
 
   # Method to translate braille to text
   def braille_to_text
+    has_uppercase = false
+
     # go through the input array and translate each sequence to respective character
-    input.map {|sequence| BRAILLE_ALPHABET[sequence]}.join
+    # input.map {|sequence| BRAILLE_ALPHABET[sequence]}.join
+    input.map.with_index {|sequence, index|
+    # if the sequence is a rule, check the rule and translate the next sequence accordingly
+    # otherwise, translate the sequence to a character
+    if (BRAILLE_RULES[sequence])
+      case BRAILLE_RULES[sequence]
+      when 'uppercase'
+        has_uppercase = true
+        BRAILLE_ALPHABET[input[index + 1]].upcase
+      end
+    else
+      has_uppercase ? BRAILLE_ALPHABET[input[index + 1]] : BRAILLE_ALPHABET[input[index]]
+    end
+    }.join
   end
 
   public
   def initialize(input)
     @format = check_format(input)
-    # puts @format
     @input = prepare_input(input)
-    # puts @input
   end
 
   def translate
-    puts format == 'braille' ? braille_to_text : text_to_braille
+    format == 'braille' ? braille_to_text : text_to_braille
   end
 end
 
-translator = Translator.new('.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..')
+translator = Translator.new('O.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O......OOO.O..')
 translator.translate
