@@ -71,17 +71,14 @@ def main():
                         output += english_map["number"]
                         number = True
                     output += english_map[char]
+                elif c.upper() == c: #letter is capitalized
+                    output += english_map["capital"]
+                    output += english_map[c.lower()]
                 else:
-                    if number:
-                        output += english_map["space"]
-                        number = False
-                    if c.upper() == c: #letter is capitalized
-                        output += english_map["capital"]
-                        output += english_map[c.lower()]
-                    else:
-                        output += english_map[c]
+                    output += english_map[c]
             if i != len(input)-1:
                 output += english_map["space"]
+            number = False
         print(output)
 
 if __name__ == "__main__":
