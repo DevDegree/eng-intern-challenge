@@ -23,7 +23,6 @@ braille_to_number = {v: k for k, v in number_to_braille.items()}
 
 
 def check_braille(string):
-    # Check if the text contains only 'O' and '.'
     return all(char in 'O.' for char in string)
 
 
@@ -37,21 +36,20 @@ def translate_to_braille(text):
                 result.append(upper_braille)
                 char = char.lower()
             result.append(alphabet_to_braille[char])
-            is_number = False  # Reset number flag when processing letters
+            is_number = False
         elif char.isdigit():
             if not is_number:
                 result.append(number_braille)
-                is_number = True  # Set number flag
+                is_number = True
             result.append(number_to_braille[char])
         elif char == " ":
             result.append(alphabet_to_braille[char])
-            is_number = False  # Reset number flag when processing space
+            is_number = False
 
     return ''.join(result)
 
 
 def braille_to_text(braille_string):
-    """Translate Braille to English text."""
     text = []
     i = 0
     length = len(braille_string)
@@ -64,7 +62,6 @@ def braille_to_text(braille_string):
             is_number = False
 
         if braille_char == upper_braille:
-            # Handle uppercase
             i += 6
             braille_char = braille_string[i:i + 6]
             if braille_char in braille_to_alphabet:
@@ -79,14 +76,9 @@ def braille_to_text(braille_string):
             text.append(braille_to_alphabet[braille_char])
             is_number = False
         elif braille_char in braille_to_number:
-            if is_number:
-                text.append(braille_to_number[braille_char])
-            else:
-                text.append('?')  # Unexpected number Braille
-        elif braille_char == '......':  # Braille space
-            text.append(' ')
+            text.append(braille_to_number[braille_char])
         else:
-            text.append('?')  # Unknown Braille pattern
+            text.append(' ')
 
         i += 6
 
@@ -107,9 +99,7 @@ def main():
         else:
             text_output = translate_to_braille(text)
             if i > 0:
-                results.append('......')  # Add Braille space between words
-
-
+                results.append('......')
 
         results.append(text_output)
 
