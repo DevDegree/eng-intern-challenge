@@ -47,28 +47,44 @@ def main(input_strings: List[str]) -> None:
     """
 
     # Stores tuples of the input_string and its corresponding language (should there be a mix of parameters both in English and Braille).
+    translation_list = build_translation_list(input_strings)
+    translated_output = append_translated_parameters(translation_list)
+    
+    print(translated_output, flush=True)
+
+def build_translation_list(input_strings: List[str]) -> List[Tuple[str, str]]:
+    """
+    Translates all input strings to their corresponding languages.
+    """
     translate_input = []
-    translated_output = ""
-    parameter_count = len(input_strings)
-    index = 0
-    # Flag to check if the input contains Braille characters. If so, a Braille space is added between each string
-    output_contains_braille = False
-    BRAILLE_SPACE = "......"
 
     for input_string in input_strings:
         language = check_input_language(input_string)
         translate_input.append((input_string, language))
-        if language == "English":
-            output_contains_braille = True
 
-    for tupled_input in translate_input:
-        translated_output += translate_input_string(tupled_input)
-        index += 1
-        # We only want braille spaces in between translated strings, not at the end.
-        if output_contains_braille and index < parameter_count:
-            translated_output += BRAILLE_SPACE
-    
-    print(translated_output, flush=True)
+    return translate_input
+
+def append_translated_parameters(input_strings: List[Tuple[str, str]]) -> str:
+    """
+    Appends the translated output from the input strings. If we are translating from English to Braille, a Braille space is added between each string.
+    """
+
+    translated_output = []
+    translate_to_braille = False
+    BRAILLE_SPACE = "......"
+
+    for tupled_input in input_strings:
+        language = tupled_input[1]
+        
+        if language == "English":
+            translate_to_braille = True
+        
+        translated_output.append(translate_input_string(tupled_input))
+
+    if translate_to_braille:
+        return BRAILLE_SPACE.join(translated_output)
+        
+    return "".join(translated_output)
 
 def check_input_language(input_string: str) -> str:
     """
