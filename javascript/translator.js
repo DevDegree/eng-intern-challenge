@@ -54,10 +54,8 @@ const isBraille = (input) => {
 
 const translator = (input) => {
     if (isBraille(input)) {
-        console.log(input);
         return translateToEnglish(input);
     } else {
-        console.log(input);
         return translateToBraille(input);
     }
 }
@@ -78,13 +76,11 @@ const translateToEnglish = (input) => {
         if(currBraille === '.....O'){
             let capBraille = input.slice(i, i + 12);
             if(reverseBrailleMap[capBraille]){
-                console.log(capBraille + " -> " + reverseBrailleMap[capBraille]);
                 res += reverseBrailleMap[capBraille];
                 i += 12;
                 continue;
             }
         }
-        console.log(currBraille + " -> " + currEnglish);
 
         if(currBraille === '......'){
             res += currEnglish;
