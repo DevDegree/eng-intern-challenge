@@ -152,6 +152,12 @@ def is_braille(text: str):
 
 
 def main():
+    if len(argv) < 2:
+        print(
+            "No input recieved to translate, please input an english or braille string"
+        )
+        return
+
     # ASSUMPTION: only valid braille or english strings are passed in
     text = " ".join(argv[1:])
 
