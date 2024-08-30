@@ -1,5 +1,5 @@
 import sys
-from utils import is_decimal, is_braille, is_english
+from utils import is_braille, is_english
 
 english_to_braille_map = {
 	'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
@@ -91,11 +91,6 @@ def english_to_braille(english_input: str) -> str:
 			if char.isupper():
 				braille_output.append(english_to_braille_map['capital_follows'])
 				char = char.lower()
-			elif is_decimal(char):
-				braille_output.append(english_to_braille_map['decimal_follows'])
-			elif char == ' ':
-				braille_output.append(english_to_braille_map[' '])
-
 			braille_output.append(english_to_braille_map[char])
 	
 	return ''.join(braille_output)
