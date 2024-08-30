@@ -16,7 +16,7 @@ class Translator:
     _braille_alpha_dict = {
         val: key for key, val 
         in _english_braille_dict.items() 
-        if key.isalpha()
+        if key.isalpha() or key.isspace()
     }
     
     # braille -> alpha (nums only)
@@ -110,14 +110,9 @@ class Translator:
         :rtype: str
         """
         # adding spaces inbetween arguments
-        args = [item for arg in args for item in (arg, " ")][:-1]
+        args = " ".join(args)
 
-        return "".join([
-            self._get_braille(arg) 
-            if self._is_english(arg) 
-            else self._get_english(arg) 
-            for arg in args
-        ])
+        return self._get_braille(args) if self._is_english(args) else self._get_english(args) 
 
 if __name__ == "__main__":
     translator = Translator()
