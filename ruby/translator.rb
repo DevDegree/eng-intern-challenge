@@ -6,7 +6,6 @@ class Translator
   private
   attr_reader :format, :input
 
-  # Braille alphabet dictionary
   BRAILLE_ALPHABET = {
     'O.....' => 'a', 'O.O...' => 'b', 'OO....' => 'c',
     'OO.O..' => 'd', 'O..O..' => 'e', 'OOO...' => 'f',
@@ -19,7 +18,6 @@ class Translator
     'OO.OOO' => 'y', 'O..OOO' => 'z', '......' => ' '
   }.freeze
 
-  # Braille digits dictionary
   BRAILLE_DIGITS = {
     'O.....' => '1', 'O.O...' => '2', 'OO....' => '3',
     'OO.O..' => '4', 'O..O..' => '5', 'OOO...' => '6',
@@ -27,7 +25,6 @@ class Translator
     '.OOO..' => '0'
   }.freeze
 
-  # Braille punctuation dictionary
   BRAILLE_PUNCTUATION = {
     '.' => '..OO.O', ',' => '..O...', '?' => '..O.OO',
     '!' => '..OOO.', ':' => '..OO..', ';' => '..O.O.',
@@ -55,6 +52,8 @@ class Translator
 
   # Method to translate braille to text
   def braille_to_text
+    # flag used to indicate that the next sequences are numbers or
+    # when set to false, indicate that next sequences are letters
     is_number = false
     index = 0
 
@@ -70,9 +69,6 @@ class Translator
         when 'number'
           is_number = true
           result << BRAILLE_DIGITS[input[index]]
-        when 'space'
-          is_number = false
-          result << BRAILLE_ALPHABET[input[index]]
         end
       else
         if (is_number)
@@ -99,5 +95,5 @@ end
 
  # translator = Translator.new('.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..')
  # translator = Translator.new('.O.OOOOO.O..O.O...')
- translator = Translator.new('.....OO.....O.O...OO...........O.OOOO.....O.O...OO....')
+  translator = Translator.new('.....OO.....O.O...OO...........O.OOOO.....O.O...OO....')
 puts translator.translate
