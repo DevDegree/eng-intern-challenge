@@ -11,17 +11,9 @@ BRAILLE_LETTER_MAP = {
     "z": "O..OOO", " ": "......"
 }
 
-##### CONTRADICTION BETWEEN NUMBERS IN THE BRAILLE ALPHABET AND EXPECTED OUTPUT IN CHALLENGE #####
-
-# The Braille alphabet image provided in the README file indicates the following mappings for numbers:
-# "1": "O.....", "2": "O.O...", "3": "OO....", "4": "OO.O..", "5": "O..O..", "6": "OOO...", "7": "OOOO..", "8": "O.OO..", "9": ".OO...", "0": ".OOO.."
-
-# However, the test cases and example input/output runs in the README suggest a different mapping:
-# "O.O..." = 1, "OO...." = 2, and "OO.O.." = 3. This contradiction is addressed by remapping 
-# the numbers in the following dictionary to match the expected output, ensuring the solution passes the test cases.
-# I mapped 4 to the Braille alphabet value of 1 to bypass the potential data loss when translating Braille to English
+# The dictionary contains mappings for number characters to its corresponding Braille representation, used in the translation process.
 BRAILLE_NUMBER_MAP = {
-    "1": "O.O...", "2": "OO....", "3": "OO.O..", "4": "0.....", "5": "O..O..",
+    "1": "O.....", "2": "O.O...", "3": "OO....", "4": "OO.O..", "5": "O..O..",
     "6": "OOO...", "7": "OOOO..", "8": "O.OO..", "9": ".OO...", "0": ".OOO.."
 }
 
