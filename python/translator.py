@@ -28,13 +28,17 @@ ENGLISH_DICT_NUM = {v: k for k, v in BRAILLE_DICT_NUM.items()}
 def english_to_braille(message):
 
     output = ""
+    prev_is_number = False
 
     # Iterate through each english character and append its corresponding braille sequence to the output
     for char in message:
         if char.isupper():
             output += BRAILLE_DICT_ALPHA["capital"] + BRAILLE_DICT_ALPHA[char.lower()]
         elif char.isdigit():
-            output += BRAILLE_DICT_ALPHA["number"] + BRAILLE_DICT_NUM[char]
+            if prev_is_number == False:
+                output += BRAILLE_DICT_ALPHA["number"]
+                prev_is_number = True
+            output += BRAILLE_DICT_NUM[char]
         elif char == " ":
             output +=  BRAILLE_DICT_ALPHA[" "]
         else:
