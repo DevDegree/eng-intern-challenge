@@ -59,7 +59,25 @@ numbers = {
     "0" => ".OOO..",
 }
 
-# take the input, assuming the full input needs to be translated
-word = ARGV.join(" ")
 
-puts word
+def main
+    # take the input, assuming the full input needs to be translated
+
+    if ARGV.empty?
+        puts "Usage: ruby translator.rb <english or braille to be translated>"
+        return
+    end
+
+    word = ARGV.join(" ")
+
+    puts word
+
+    if word.chars.all? { |char| ['.', 'O'].include?(char) }
+        puts "this is braille"
+    else 
+        puts "this is english"   
+    end
+
+end
+
+main
