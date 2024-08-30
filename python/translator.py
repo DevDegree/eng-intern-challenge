@@ -15,6 +15,20 @@ class Translator:
         " ": "......", "CAP": ".....O", "DEC": ".O...O", "NUM": ".O.OOO",
     }
 
+    # braille -> alpha (alpha/symbols only)
+    _braille_alpha_dict = {
+        val: key for key, val 
+        in _english_braille_dict.items() 
+        if key.isalpha() or key in " .,?!:;-/<>()"
+    }
+    
+    # braille -> alpha (nums only)
+    _braille_num_dict = {
+        val: key for key, val 
+        in _english_braille_dict.items() 
+        if key.isdigit()
+    }
+
     def _is_english(self, arg: str) -> bool:
         """ Checks if `arg` is braille
         
@@ -64,7 +78,31 @@ class Translator:
         :returns: english translation
         :rtype: str
         """
-        pass
+        english = []
+        num_flag = False
+        cap_flag = False
+
+        for idx in range(0, len(braille), 6):
+            chars = braille[idx:idx+6]
+
+            if chars == self._english_braille_dict["NUM"]:
+                num_flag = True
+            elif chars == self._english_braille_dict["CAP"]:
+                cap_flag = True
+            else:
+                # end of sequence of numbers (or just a space)
+                if chars == self._english_braille_dict[" "]:
+                    num_flag = False
+                    english.append(self._braille_alpha_dict[chars])
+                elif num_flag:
+                    english.append(self._braille_num_dict[chars])
+                elif cap_flag:
+                    cap_flag = False
+                    english.append(self._braille_alpha_dict[chars].upper())
+                else:
+                    english.append(self._braille_alpha_dict[chars])
+
+        return "".join(english)
 
     def translate(self, args: str) -> str:
         """ Translate Braille to English or English to Braille
@@ -74,7 +112,15 @@ class Translator:
         :returns: concatenated string of translated english/braille from args
         :rtype: str
         """
-        pass
+        # adding spaces inbetween arguments
+        args = [item for arg in args for item in (arg, " ")][:-1]
+
+        return "".join([
+            self._get_braille(arg) 
+            if self._is_english(arg) 
+            else self._get_english(arg) 
+            for arg in args
+        ])
 
 
 if __name__ == "__main__":
