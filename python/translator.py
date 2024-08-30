@@ -84,7 +84,10 @@ class translator:
         pattern = re.compile(r'^[a-zA-Z0-9 ,.?!><:;/()\-]+$')
         in_number_sequence = False
         for char in text_string:
-            if char.isdigit() or in_number_sequence:
+            if char.isspace():
+                output.append(self.special.get('space', ''))
+                in_number_sequence = False
+            elif char.isdigit() or in_number_sequence:
                 # Add number indicator before the digit
                 if char == ".":
                     output.append(self.special.get('decimal_indicator', ''))
@@ -98,9 +101,6 @@ class translator:
                 if char.isupper():
                     output.append(self.special.get('capital', ''))  # Capitalization indicator
                 output.append(self.alphabet_to_braille.get(char.lower(), ''))
-            elif char.isspace():
-                output.append(self.special.get('space', ''))
-                in_number_sequence = False
             elif not in_number_sequence and bool(pattern.match(char)):
                 output.append(self.special.get(char, ''))
             else:
