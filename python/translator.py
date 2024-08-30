@@ -69,12 +69,12 @@ def braille_to_english(s):
             result+=' '
         else:
             if is_alphabet:
-                result += char_key[curr]
+                result += char_key[curr].lower()
             else:
                 if curr == '.OOO..':
                     result+='0'
                     continue
-                result += chr(ord(char_stack[curr])-16)
+                result += chr(ord(char_key[curr])-16)
     return result
 
 
