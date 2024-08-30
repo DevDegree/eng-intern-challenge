@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"unicode"
 )
 
 var ErrMissingArguments = errors.New("missing required cli arguments")
@@ -68,6 +69,33 @@ func NewTranslator(text string) *Translator {
 	t.brailleToLetterMap = reverseMap(t.letterToBrailleMap)
 	t.brailleToNumberMap = reverseMap(t.numberToBrailleMap)
 	return &t
+}
+
+// checks if the provided arguments are Braille
+func (t *Translator) isBraille() bool {
+	// Braille characters consist of 6 'O' and '.' characters
+	if len(t.text)%6 != 0 {
+		return false
+	}
+	// Check that text consists of valid Braille tokens
+	for i := 0; i < len(t.text); i += 6 {
+		token := t.text[i : i+6]
+		if _, ok := t.brailleToLetterMap[token]; !ok {
+			return false
+		}
+	}
+
+	return true
+}
+
+// checks if the provided arguments are Alphanumeric
+func (t *Translator) isAlphanumeric() bool {
+	for _, c := range t.text {
+		if !unicode.IsLetter(c) && !unicode.IsNumber(c) {
+			return false
+		}
+	}
+	return true
 }
 
 // processes arguments, joins them together, and removes leading/trailing whitespace
