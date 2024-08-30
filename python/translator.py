@@ -2,7 +2,6 @@
 # output for sample test case is wrong
 # Braille alphabet for "o" and ">" are the same
 
-import sys
 
 engToBraille = {"a": "O.....", "b": "O.O...", "c": "OO....", "d": "OO.O..", "e": "O..O..",
                 "f": "OOO...", "g": "OOOO..", "h": "O.OO..", "i": ".OO...", "j": ".OOO..",
@@ -79,7 +78,7 @@ def engToBralieTranslator(word):
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("input error")
-    else:
+
 
 
 
