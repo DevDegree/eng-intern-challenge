@@ -1,4 +1,5 @@
 import sys
+import textwrap
 
 braille_map = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..', 
@@ -29,7 +30,6 @@ def translate_to_braille(text):
   number_mode = False
 
   for char in text:
-    
     if char.isupper():
       result.append(braille_map['capital'])
       char = char.lower()
@@ -43,7 +43,35 @@ def translate_to_braille(text):
   return ''.join(result)
 
 def translate_to_english(braille):
-  pass
+  result = []
+  arr = textwrap.wrap(braille, 6)
+  capital_mode, number_mode = False, False
+
+  print(arr)
+  for b in arr:
+
+    if b == '..OO.O':
+       number_mode = False
+    if reversed_braille_map[b] == 'capital':
+       capital_mode = True
+       continue
+    if capital_mode:
+       letter = reversed_braille_map.get(b, '')[0]
+       result.append(letter.capitalize())
+       capital_mode = False
+       continue
+    if reversed_braille_map[b] == 'number':
+       number_mode = True
+       continue
+    if number_mode:
+       number = reversed_braille_map.get(b, '')[1]
+       result.append(number)
+       continue
+
+    result.append(reversed_braille_map.get(b, '')[0])
+
+  return ''.join(result)
+
 
 
 if __name__ == "__main__":
