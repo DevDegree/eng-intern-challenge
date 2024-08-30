@@ -7,6 +7,7 @@ import sys
 class EnglishAndBrailleTranslator:
     """
     A class to represent a translator that translates a string in Braille to a string in English and vice versa.
+    NOTE: Only supports characters a-z, A-Z, and 0-9 for now.
 
     Constants:
     ----------
@@ -38,12 +39,15 @@ class EnglishAndBrailleTranslator:
         """Takes a string, either english or braille and translates it to the opposite lang"""
         if len(s) % 6 == 0 and not any(c not in ".O" for c in s):
             return self.braille_to_english(s)
-        elif "." not in s:
+        elif all((c.isalnum() or c == " ") for c in s):
             return self.english_to_braille(s)
         return ""  # no valid translation
     
     def english_to_braille(self, eng_s: str) -> str:
         """Helper to translate an english string to braille"""
+        if any(not (c.isalnum() or c == " ") for c in eng_s):
+            raise ValueError("Unsupported English string")
+
         num_follows = False
         braille_chars = []
 
@@ -68,6 +72,9 @@ class EnglishAndBrailleTranslator:
 
     def braille_to_english(self, braille_s: str) -> str:
         """Helper to translate a braille string to english"""
+        if len(braille_s) % 6 != 0 or not all(c in ".O" for c in braille_s):
+            raise ValueError("Invalid Braille string")
+
         num_follows, cap_follows = False, False
         english_str = ""
 
@@ -93,6 +100,9 @@ class EnglishAndBrailleTranslator:
     
     def get_braille_char(self, eng_char: str) -> str:
         """Returns braille representation of an english character"""
+        if not (eng_char.isalnum() or eng_char == " " or eng_char == "capital" or eng_char == "number follows"):
+            raise ValueError("Unsupported English character")
+
         if eng_char == " ":
             return self._SPACE
         if eng_char == "capital":
@@ -111,6 +121,8 @@ class EnglishAndBrailleTranslator:
 
     def get_eng_char(self, braille_char: str, is_num: bool) -> str:
         """Returns english representation of braille character given info if it should be a number or not"""
+        if any(c not in ".O" for c in braille_char):
+            raise ValueError("Invalid Braille character. Must only contain \'.\' and \'O\'")
         if len(braille_char) != 6:
             raise ValueError("Braille character not a valid length.")
         
@@ -120,13 +132,15 @@ class EnglishAndBrailleTranslator:
             return "capital"
         if braille_char == self._NUM_FOLLOWS:
             return "number follows"
-        if braille_char == self._W:
+        if braille_char == self._W and not is_num:
             return "w"
         
         start, end = braille_char[:4], braille_char[4:]
         idx = self._END_PATTERNS.index(end) * 10 + self._START_PATTERNS.index(start)
-        if is_num:
+        if is_num and idx <= 10:
             return str((1 + idx) % 10)
+        elif is_num:
+            raise ValueError("Not a valid number character")
         return self._ALPHABET_NO_W[idx]
     
 
