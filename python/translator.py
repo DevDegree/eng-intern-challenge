@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-
-=======
 import sys
 import re
 
@@ -144,4 +141,3 @@ if isBraille:
 else:
     joined = " ".join(args)
     printBraille(joined)
->>>>>>> b4c66cb... sol
