@@ -92,6 +92,8 @@ class Braille_Lexer:
     def __init__(self, input) -> None:
         self.input = input
         self.i = 0
+        self.is_number = False
+        self.is_capital = False
 
     def next(self):
         if not self.has_next():
@@ -104,20 +106,33 @@ class Braille_Lexer:
             self.i += 1
         self.curr = x
 
-        print(self.curr)
+        self.set_flags()
+
+    def set_flags(self):
+        self.is_capital = False
+        if self.curr == ENG_TO_BRAILLE["number"]:
+            self.is_number = True
+            self.next()
+        elif self.curr == ENG_TO_BRAILLE[" "]:
+            self.is_number = False
+        elif self.curr == ENG_TO_BRAILLE["capital"]:
+            self.next()
+            self.is_capital = True
+
+    def get_char(self):
+        if self.is_number:
+            return BRAILLE_TO_NUMBER[self.curr]
+        elif self.is_capital:
+            return BRAILLE_TO_ENG[self.curr].upper()
+        else:
+            return BRAILLE_TO_ENG[self.curr]
 
     def has_next(self):
         return self.i < len(self.input)
 
 
-def handle_braille():
-    test = ".O.OOOOO.O..O.O..."
-    # test = ".....OO.....O.O...OO...........O.OOOO.O...OO....OO.O.."
-    # ".....O O..... O.O... OO.... ...... .O.OOO O.O... OO.... OO.O.."
-    # ".....O O..... O.O... OO.... ...... .O.OOO O.O... OO.... OO.O.."
-
-    lexer = Braille_Lexer(test)
 def handle_braille(input):
+    lexer = Braille_Lexer(input)
 
     out = ""
     is_number = False
@@ -127,31 +142,44 @@ def handle_braille(input):
 
         lexer.next()
 
-        if lexer.curr == ENG_TO_BRAILLE["number"]:
-            is_number = True
-            continue
-        elif lexer.curr == ENG_TO_BRAILLE[" "]:
+        # if lexer.curr == ENG_TO_BRAILLE["number"]:
+        #     is_number = True
+        #     continue
+        # elif lexer.curr == ENG_TO_BRAILLE[" "]:
+        #     is_number = False
+        # elif lexer.curr == ENG_TO_BRAILLE["capital"]:
+        #     is_capital = True
+        #     lexer.next()
+
+        # if is_number:
+        #     char = BRAILLE_TO_NUMBER[lexer.curr]
+        # elif is_capital:
+        #     char = BRAILLE_TO_ENG[lexer.curr].upper()
+        # else:
+        #     char = BRAILLE_TO_ENG[lexer.curr]
+
+        # out += char
+
+        out += lexer.get_char()
+
     return out
 
 
 def handle_eng(input: str):
     out = ""
+    is_number = False
+    for c in input:
+        if c.isnumeric():
+            if not is_number:
+                is_number = True
+                out += ENG_TO_BRAILLE["number"]
+        elif c == " ":
             is_number = False
-        elif lexer.curr == ENG_TO_BRAILLE["capital"]:
-            is_capital = True
-            lexer.next()
+        elif c.isupper():
+            out += ENG_TO_BRAILLE["capital"]
 
-        if is_number:
-            char = BRAILLE_TO_NUMBER[lexer.curr]
-        elif is_capital:
-            char = BRAILLE_TO_LETTER[lexer.curr].upper()
-        else:
-            char = BRAILLE_TO_LETTER[lexer.curr]
+        out += ENG_TO_BRAILLE[c.lower()]
 
-        out += char
-        print(char)
-
-    print(out)
     return out
 
 
