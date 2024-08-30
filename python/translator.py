@@ -75,7 +75,7 @@ def translate_language(input_text: str) -> bool:
 def translate_text_to_braille(input_text: str) -> str:
     """Returns the text translated from English to Braille"""
     new_string = ''
-    next_number = False
+    next_number = False  # Flag to check if next character is a number
 
     for char in input_text:
         if char.isupper():
@@ -140,9 +140,9 @@ def main() -> None:
     """Main function"""
     parser = argparse.ArgumentParser(description='Translate English to Braille and vice versa')
     parser.add_argument('input_text', nargs='+', help='Text to translate', type=str)
-    input_text = parser.parse_args().input_text
+    input_text = parser.parse_args().input_text  # Retreives input text
 
-    if isinstance(input_text, (list, tuple)):
+    if isinstance(input_text, (list, tuple)):  # Change format of input, if needed
         input_text = ''.join(input_text)
         input_text = str(input_text)
     if isinstance(input_text, int):
@@ -150,7 +150,7 @@ def main() -> None:
     elif not isinstance(input_text, str):
         raise ValueError('Invalid input')
 
-    if translate_language(input_text):
+    if translate_language(input_text):  # Translation
         print(translate_text_to_english(input_text))
     else:
         print(translate_text_to_braille(input_text))
