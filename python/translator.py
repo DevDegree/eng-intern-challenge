@@ -30,22 +30,8 @@ ALPHABET_DICT= {
     " ": "......",
 }
 
-#I used the incorrrect dictionary for the numbers, to make the test pass. The correct one has been added below.
 NUM_DICT= {
-     "0": "O.....",
-    "1": "O.O...",
-    "2": "OO....",
-    "3": "OO.O..",
-    "4": "O..O..",
-    "5": "OOO...",
-    "6": "OOOO..",
-    "7": "O.OO..",
-    "8": ".OO...",
-    "9": ".OOO..",
-}
-
-NUM_Dict_Correct = {
-    "1": "O.....",
+     "1": "O.....",
     "2": "O.O...",
     "3": "OO....",
     "4": "OO.O..",
