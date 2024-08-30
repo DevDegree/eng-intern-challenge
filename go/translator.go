@@ -280,16 +280,30 @@ func translateToBraille(concatedWords string) string {
 	return sb.String()
 }
 
+func isInputBraille(firstArg string) bool {
+	for _, char := range firstArg {
+		if char != 'O' && char != '.' {
+			return false
+		}
+	}
+
+	return true
+}
+
 func main() {
 	if len(os.Args) < 2 {
 		panic("must provide arguments to cli")
 	}
 
-	if len(os.Args) >= 3 || (len(os.Args) == 2 && !strings.HasPrefix(os.Args[1], ".")) {
+	if isInputBraille(os.Args[1]) {
+		fmt.Println(translateToEnglish(os.Args[1]))
+	} else {
 		concatedWords := concatString(os.Args[1:])
 		fmt.Println(translateToBraille(concatedWords))
-		return
 	}
-
-	fmt.Println(translateToEnglish(os.Args[1]))
 }
+
+/*
+.....OO.....O.O...OO...........O.OOOO.O...OO....OO.O........OO..OO.....OOO.OOOO..OOO
+.....OO.....O.O...OO....
+*/
