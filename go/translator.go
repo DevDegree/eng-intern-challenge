@@ -4,9 +4,8 @@ English and vice versa.
 
 There are certain assumptions for the logic
 Assumptions
-    1. ONLY braille inputs start with "."
-    2. If input braille, it will ONLY be one input
-    3. Symbols `<`, `>`, `)`, and `(` have been ignored
+    1. If input braille, it will ONLY be one input
+    2. Symbols `<`, `>`, `)`, and `(` have been ignored
 */
 
 package main
