@@ -1,5 +1,12 @@
 # Eng Intern Challenge Fall - Winter 2025
 
+# **Note: In order for our submission automation to function correctly:**
+1. **Your Github email must match the email you submitted your Application with (if your Github email is different, we recommend creating a new Github profile with the email you created your application with)**
+2. **Have your email set to public on your Github Profile**
+3. **Do not apply any labels on your PR. We will mark your PR as `reviewed` with a label when it has been so. Marking this yourself will cause your PR to be skipped.**
+
+---
+
 ## Braille Translator
 In this coding challenge you will create a terminal / command-line application that can translate Braille to English and vice versa. 
 
@@ -23,13 +30,13 @@ Braille (*/breɪl/ **BRAYL***) is a tactile writing system used by people who ar
 - Translator
   - Given arguments passed into the program at runtime, determine if the given string should be translated to English or Braille.
   - For Braille, each character is stored as a series of `O` (the letter O) or `.` (a period).
-  - Store Braille symbols as a 6 character string reading right to left, line by line, starting at the top left. See examples below.
+  - Store Braille symbols as a 6 character string reading left to right, line by line, starting at the top left. See examples below.
   - When a Braille `capital follows` symbol is read, assume only the next symbol should be capitalized. 
   - When a Braille `number follows` symbol is read, assume all following symbols are numbers until the next `space` symbol.
 - Braille Alphabet
   - Letters `a` through `z`
     - The ability to capitalize letters
-  - Numbers `0` through `1`
+  - Numbers `0` through `9`
   - The ability to include `spaces` ie: multiple words
 
 ## Examples
@@ -43,7 +50,7 @@ Braille (*/breɪl/ **BRAYL***) is a tactile writing system used by people who ar
 - Input: `42`
 - Output: `.O.OOOOO.O..O.O...`
 ---
-- Input: `.....OO.....O.O...OO...........O.OOOO.O...OO....OO.O..`
+- Input: `.....OO.....O.O...OO...........O.OOOO.....O.O...OO....`
 - Output: `Abc 123`
 
 ## Instructions

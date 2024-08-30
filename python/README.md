@@ -19,3 +19,4 @@ python3 translator.test.py
 ```
 
 This command will run all the tests defined in translator.test.py and output the results, indicating whether the tests passed or failed, and any context needed.
+Note that the Python version used is 3.8
