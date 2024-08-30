@@ -3,3 +3,9 @@ node_modules
 yarn.lock
 package-lock.json
 Gemfile.lock
+/.idea/.gitignore
+/.idea/eng-intern-challenge.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/vcs.xml
