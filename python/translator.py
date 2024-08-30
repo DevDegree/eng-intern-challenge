@@ -128,9 +128,9 @@ def main() -> None:
     original_input = sys.argv[1]
     is_braille = all(character in {".", "O"} for character in original_input)
     if is_braille:
-        print(process_braille_text(original_input))
+        sys.stdout.write(process_braille_text(original_input))
     else:
-        print(process_english_text(original_input))
+        sys.stdout.write(process_english_text(original_input))
 
 
 if __name__ == "__main__":
