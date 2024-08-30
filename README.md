@@ -29,7 +29,7 @@ Braille (*/breɪl/ **BRAYL***) is a tactile writing system used by people who ar
 - Braille Alphabet
   - Letters `a` through `z`
     - The ability to capitalize letters
-  - Numbers `0` through `1`
+  - Numbers `0` through `9`
   - The ability to include `spaces` ie: multiple words
 
 ## Examples
