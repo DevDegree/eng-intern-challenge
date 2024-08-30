@@ -73,3 +73,41 @@ function translateToBraille(text) {
 
   return braille;
 }
+
+// Translate Braille to English Function
+function translateToEnglish(braille) {
+  let english = "";
+  let isCapital = false;
+  let isNumber = false;
+
+  for (let i = 0; i < braille.length; i += 6) {
+    let symbol = braille.slice(i, i + 6);
+
+    if (symbol === brailleMap["capital"]) {
+      isCapital = true;
+      continue;
+    } else if (symbol === brailleMap["number"]) {
+      isNumber = true;
+      continue;
+    }
+
+    let char = englishMap[symbol];
+
+    if (isCapital) {
+      char = char.toUpperCase();
+      isCapital = false;
+    }
+
+    if (isNumber) {
+      if (/[a-z]/.test(char)) {
+        char = Object.keys(brailleMap).find(
+          (key) => brailleMap[key] === symbol && /\d/.test(key)
+        );
+      }
+    }
+
+    english += char;
+  }
+
+  return english;
+}
