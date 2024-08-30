@@ -45,31 +45,48 @@ class BrailleTranslator:
         return len(input) % 6 == 0 and set(input).issubset({'O', '.'})
     
     def braille_to_english(self, input: str) -> str:
-        def decode_braille(input: str):
-            tokens = []
-            is_number = False
-            for i in range(0, len(input)-6, 6):
-                braille = input[i : i + 6]
+        # TODO: change to build when needed
+        braille_to_num = { v: k for k, v in self.NUM_TO_BRALLIE }
+        braille_to_alpha = { v: k for k, v in self.ALPHA_TO_BRALLIE }
+        braille_to_special = { v: k for k, v in self.SPECIAL_TO_BRALLIE }
 
+        brailles = [ input[i : i+6] for i in range(0, len(input), 6) ]
 
+        tokens = []
 
-            
-        return
+        is_number = False
+
+        for braille in brailles:
+            if braille in braille_to_special:
+                token = braille_to_special[braille]
+                tokens.append(token)
+                if token == " ": is_number = False
+
+            else:
+                if is_number: tokens.append(braille_to_num[braille])
+                else: tokens.append(braille_to_alpha[braille])
+        
+        return ''.join(tokens)
     
     def english_to_braille(self, input: str) -> str:
+        # TODO: change to build when needed
+        brallie_alphabet = self.ALPHA_TO_BRALLIE + self.NUM_TO_BRALLIE + self.SPECIAL_TO_BRALLIE
         def decode_english(input: str):
             tokens = []
-            # is_number = False
+            has_starting_number = False
             for char in input:
                 # number
                 if char.is_digit():
-                    tokens.append(self.NUMBER)
-                    # is_number = True
+                    if not has_starting_number:
+                        tokens.append(self.NUMBER)
+                        has_starting_number = True
+                    tokens.append(char)
 
                 # space
+                # TODO: check if there is any characters missed
                 elif char == '':
                     tokens.append(self.SPACE)
-                    # is_number = False
+                    has_starting_number = False
 
                 # alphabet
                 elif char.is_alpha():
@@ -83,11 +100,9 @@ class BrailleTranslator:
             return tokens
                         
         tokens = decode_english(input)
-        output = ''.join([self.BRALLIE_ALPHABET[token] for token in tokens])
+        output = ''.join([brallie_alphabet[token] for token in tokens])
 
         return output
-
-
 
 
 def main():
