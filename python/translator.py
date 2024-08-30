@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 '''Shopify Eng Intern Challenge Fall - Winter 2025
 
 Author: Azaria Kelman
@@ -138,6 +137,3 @@ def main() -> None:
 
 if __name__ == '__main__':
     main()
-=======
-
->>>>>>> bbcd75d65b38bdebf6500ade1c16ee8099626eb8
