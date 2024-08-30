@@ -75,13 +75,20 @@ def translate_language(input_text: str) -> bool:
 def translate_text_to_braille(input_text: str) -> str:
     """Returns the text translated from English to Braille"""
     new_string = ''
+
     for char in input_text:
         if char.isupper():
             new_string += CAPITAL_FOLLOWS
+            new_string += ENGLISH_TO_BRAILLE[char]
         elif char.isdigit():
             new_string += NUMBER_FOLLOWS
-        else:
+            new_string += NUMBERS_TO_BRAILLE[char]
+        elif char.islower():
             new_string += ENGLISH_TO_BRAILLE[char.upper()]
+        elif char == ' ':
+            new_string += ENGLISH_TO_BRAILLE[char]
+        else:
+            raise ValueError('Invalid English character')  # Just in case
     return new_string
 
 
@@ -105,8 +112,9 @@ def translate_text_to_english(input_text: str) -> str:
                 next_capital = False
             elif next_number:
                 new_string += BRAILLE_TO_NUMBERS[section]
-                next_number = False
             else:
+                if BRAILLE_TO_ENGLISH[section] == ' ':  # If next charachter is space
+                    next_number = False
                 new_string += BRAILLE_TO_ENGLISH[section].lower()
         else:
             raise ValueError('Invalid Braille character')  # Just in case
@@ -127,7 +135,11 @@ def main() -> None:
     """Main function"""
     parser = argparse.ArgumentParser()
     parser.add_argument('input_text')
-    input_text = parser.parse_args().input_text
+    # input_text = parser.parse_args().input_text
+    # input_text = ''.join(input_text)
+
+    input_text = ["Abc", "123", "xYz"]
+    input_text = ''.join(input_text)
 
     if translate_language(input_text):
         print(translate_text_to_english(input_text))

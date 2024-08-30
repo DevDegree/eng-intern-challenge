@@ -1,0 +1,15 @@
+# CORRECT -> MINE
+
+#Hello world
+print('.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..' == '.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..')
+
+
+# Input: 42
+# Output: .O.OOOOO.O..O.O...
+print('.O.OOOOO.O..O.O...' == '.O.OOOOO.O...O.OOOO.O...')
+
+# Input: .....OO.....O.O...OO...........O.OOOO.O...OO....OO.O..
+# Output: Abc 123
+# print('Abc 123' == )
+
+print(".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO" == ".....OO.....O.O...OO.....O.OOOO......O.OOOO.O....O.OOOOO....OO..OO.....OOO.OOOO..OOO")
