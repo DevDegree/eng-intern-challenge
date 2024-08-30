@@ -49,15 +49,21 @@ def braille_to_english(words: str) -> str:
 
 def english_to_braille(words: str) -> str:
     braille = []
+    digit_mode = False
     for char in words:
         if char.isdigit():
-            braille.append(NUMBER_FOLLOWS)
+            if not digit_mode:
+                braille.append(NUMBER_FOLLOWS)
+                digit_mode = True
             braille.append(number_to_braille[char])
         elif char.isalpha():
+            if digit_mode:
+                digit_mode = False
             if char.isupper():
                 braille.append(CAPITAL_FOLLOWS)
             braille.append(char_to_braille[char.lower()])
         elif char == ' ':
+            digit_mode = False
             braille.append(char_to_braille[char])
     return ''.join(braille)
 
