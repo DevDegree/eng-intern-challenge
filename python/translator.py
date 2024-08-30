@@ -70,7 +70,7 @@ while n < len(val):
             
             elif val[n:n+6] == english_to_braille['number follows']:
                 n+=6
-                found = val_list.index(val[n:n+6], 29, 38)
+                found = val_list.index(val[n:n+6], 28, 37)
                 translation+= key_list[found]
                 i+=1
                 n+=6
@@ -82,7 +82,7 @@ while n < len(val):
                 n+=6
                 
             elif translation[i-1].isdigit():
-                found = val_list.index(val[n:n+6], 29, 38)
+                found = val_list.index(val[n:n+6], 28, 37)
                 translation+= key_list[found]
                 i+=1
                 n+=6
