@@ -36,8 +36,9 @@ class BrailleTranslator:
         # Special Characters
         '.': '..OO.O', ',':'..O...', '?': '..O.OO', '!': '..OOO.', 
         ':' : '..OO..', ';': '..O.O.', '-': '....OO', '/': '.O..O.',
-        # '<': '.OO..O', '>': 'O..OO.', '(': 'O.O..O', ')': '.O.OO.',
         SPACE: '......',
+        # these characters are not required in this challenge, ref: https://github.com/DevDegree/eng-intern-challenge/issues/3#issuecomment-2320788869
+        # '<': '.OO..O', '>': 'O..OO.', '(': 'O.O..O', ')': '.O.OO.',
     }
 
     # English to braille alphabet
