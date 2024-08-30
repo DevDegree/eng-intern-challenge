@@ -184,7 +184,9 @@ mainLoop:
 					continue mainLoop
 
 				case DecimalFollowsAction:
-					// pass
+					sbRes.WriteString(".")
+                    sb.Reset()
+                    continue mainLoop
 				}
 			}
 
