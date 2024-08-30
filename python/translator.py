@@ -46,11 +46,7 @@ BRAILLE_SPACE = '......'
 
 
 def is_braille(input_strs: list[str]) -> bool:
-    """Determines if the input list of strings are all valid Braille.
-
-    :param input_strs: A list of strings to check.
-    :return: True if all strings are valid Braille, False otherwise.
-    """
+    """Check if all strings in the input list are valid Braille."""
     for input_str in input_strs:
         if len(input_str) % 6 != 0:  # Valid Braille will be divisible by 6 because each 'letter' is 6 chars
             return False
@@ -59,16 +55,23 @@ def is_braille(input_strs: list[str]) -> bool:
     return True
 
 
-# Strategy Interface
 class TranslationStrategy(ABC):
+    """Abstract base class for translation strategies.
+
+    This class defines the interface for translating a list of strings.
+    """
+
     @abstractmethod
     def translate(self, input_str: list[str]) -> str:
         pass
 
 
 class EnglishToBrailleStrategy(TranslationStrategy):
+    """Concrete strategy for translating English text to Braille."""
+
     @staticmethod
     def translate_element(input_str: str):
+        """Translate a single English string to Braille."""
         num_code_prepended = False
         translated = []
         for char in input_str:
@@ -87,19 +90,23 @@ class EnglishToBrailleStrategy(TranslationStrategy):
         return ''.join(translated)
 
     def translate(self, input_strs: list[str]) -> str:
+        """Translate a list of English strings to Braille."""
         translated_all = []
         for input_str in input_strs:
             translated_all.append(self.translate_element(input_str))
         return BRAILLE_SPACE.join(translated_all)
 
 
-# Concrete Strategy for Braille to English
 class BrailleToEnglishStrategy(TranslationStrategy):
+    """Concrete strategy for translating Braille text to English."""
+
     def __init__(self):
+        """Initialize the Braille to English strategy with reversed mappings for simplicity."""
         self.braille_english_letters = {v: k for k, v in BRAILLE_ALPHABET.items()}
         self.braille_english_nums = {v: k for k, v in BRAILLE_NUMBERS.items()}
 
     def translate_element(self, input_str: str):
+        """Translate a single Braille string to English."""
         num_mode = False
         is_capital = False
         translated = []
@@ -124,14 +131,16 @@ class BrailleToEnglishStrategy(TranslationStrategy):
         return ''.join(translated)
 
     def translate(self, input_strs: list[str]) -> str:
+        """Translate a list of Braille strings to English."""
         translated_all = []
         for input_str in input_strs:
             translated_all.append(self.translate_element(input_str))
         return ' '.join(translated_all)
 
 
-# Translator class that accepts a translation strategy
 class Translator:
+    """Context class that uses a translation strategy to translate input text."""
+
     def __init__(self, strategy: TranslationStrategy):
         self._strategy = strategy
 
