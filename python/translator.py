@@ -175,7 +175,7 @@ def braille_to_english(input: str) -> str:
             continue
 
         # translate to numbers until the next space
-        if braille == BRAILLE_TO_ENGLISH_MAP[" "]:
+        if braille == ENGLISH_TO_BRAILLE_MAP[" "]:
             is_number = False
 
         english = ""
