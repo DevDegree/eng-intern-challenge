@@ -1,6 +1,6 @@
 import sys
 
-letter_to_braille: dict[str, str] = {
+letter_to_braille = {
     " ": "......",
     "a": "O.....",
     "b": "O.O...",
@@ -31,7 +31,7 @@ letter_to_braille: dict[str, str] = {
 }
 braille_to_letter = {v: k for k, v in letter_to_braille.items()}
 
-num_to_braille: dict[str, str] = {
+num_to_braille = {
     "0": ".OOO..",
     "1": "O.....",
     "2": "O.O...",
@@ -49,7 +49,7 @@ capital_follows = ".....O"
 number_follows = ".O.OOO"
 
 
-def english_to_braille(words: list[str]) -> str:
+def english_to_braille(words):
     res = ""
     is_number = False
     for word in words:
@@ -72,7 +72,7 @@ def english_to_braille(words: list[str]) -> str:
     return res[:-6]
 
 
-def braille_to_english(braille: str) -> str:
+def braille_to_english(braille):
     assert len(braille) % 6 == 0, "Invalid braille"
     is_number, is_capital = False, False
     braille = [braille[i : i + 6] for i in range(0, len(braille), 6)]
