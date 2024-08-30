@@ -9,14 +9,14 @@ def visual_to_braille(string, lang)
   output = ""
   number_mode = false
 
-  string.each_char do |char|
+  string.each_char do |char|                        # iterate through each character
       if LETTERS.has_key?(char)
           if number_mode
               raise "In number mode but attempting to translate letter"
           end
           output.concat(LETTERS[char])
           
-      elsif LETTERS.has_key?(char.downcase)
+      elsif LETTERS.has_key?(char.downcase)         # if input character is upper case
           if number_mode
               raise "In number mode but attempting to translate letter"
           end
@@ -24,7 +24,7 @@ def visual_to_braille(string, lang)
           output.concat(LETTERS[char.downcase])
 
       elsif NUMS.has_key?(char)
-          if !number_mode
+          if !number_mode                           # if not in number mode, need to append special char
               number_mode = true
               output.concat(SPECIAL['number'])
           end
@@ -32,7 +32,7 @@ def visual_to_braille(string, lang)
           output.concat(NUMS[char])
           
       elsif char == ' '
-          number_mode = false
+          number_mode = false                       # reset to letter mode
           output.concat(SPECIAL[char])
       else
           raise "Unexpected character received: '#{char}'"
