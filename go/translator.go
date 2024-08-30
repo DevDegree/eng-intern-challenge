@@ -28,6 +28,16 @@ var englishToBraille = map[string]string{
 }
 
 // numberToBraille maps numbers to their Braille representations
+/*
+	NOTE:- Here the correct braille representaitions for numbers were picked, these dont pass the test!
+	to pass the test case use these
+	"0": "O.....", "1": "O.O...",
+    "2": "OO....", "3": "OO.O..",
+    "4": "O..O..", "5": "OOO...",
+    "6": "OOOO..", "7": "O.OO..",
+    "8": ".OO...", "9": ".OOO..",
+*/
+
 var numberToBraille = map[string]string{
 	"0": ".OOO..", "1": "O.....",
 	"2": "O.O...", "3": "OO....",
@@ -61,7 +71,7 @@ func translateToBraille(input string) string {
 				braille += englishToBraille["number"]
 				inNumberSequence = true
 			}
-			c = string('a' + (c[0] - '0'))
+			braille += numberToBraille[c]
 		} else {
 			inNumberSequence = false
 		}
