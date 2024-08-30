@@ -1,6 +1,7 @@
 import sys
 
-brailAlpha = {
+# braille alphabet
+brailleAlpha = {
     "a": "O.....",
     "b": "O.O...",
     "c": "OO....",
@@ -56,7 +57,8 @@ brailAlpha = {
 
 }
 
-brailDigit= {
+# braille numbers
+brailleDigit= {
     "1": "O.....",
     "2": "O.O...",
     "3": "OO....",
@@ -69,19 +71,20 @@ brailDigit= {
     "0": ".OOO..",
 }
 
+# get key from value for braille alphabet
 def get_key(val):
-    for key, value in brailAlpha.items():
+    for key, value in brailleAlpha.items():
         if val == value:
             return key
 
+# get key from value for braillee digit alphabet
 def get_key_num(val):
-    for key, value in brailDigit.items():
+    for key, value in brailleDigit.items():
         if val == value:
             return key
 
-    return "key doesn't exist"
-
-def isbrail(userIn):
+# check if input is braillele
+def isbraille(userIn):
     alpha = False
     for letter in userIn:
         if letter != "O" and letter != ".":
@@ -91,28 +94,32 @@ def isbrail(userIn):
     else:
         return True
 
-def translate_to_brail(userIn):
+#translate from alphanumeric to braille
+def translate_to_braille(userIn):
     str = ""
     dig = False
     for letter in userIn:
         if letter.isupper():
             str += ".....O"
             lower = letter.lower()
-            str += brailAlpha[lower]
+            str += brailleAlpha[lower]
         elif letter.isdigit():
+            #only put in front of first num
             if dig == False:
                 str += ".O.OOO"
                 dig = True
-            str += brailAlpha[letter]
+            str += brailleAlpha[letter]
         elif letter == ".":
             str += ".O...O"
-            str += brailAlpha[letter]
+            str += brailleAlpha[letter]
         else:
             if letter == " ":
                 dig = False
-            str += brailAlpha[letter]
+            str += brailleAlpha[letter]
     return str
-def translate_from_brail(userIn):
+
+# translate from braille to alphanumeric
+def translate_from_braille(userIn):
     str = ""
     i = 0
     temp = ""
@@ -121,6 +128,7 @@ def translate_from_brail(userIn):
         i += 1
         temp += letter
         if i==6:
+            #check if special condition before char
             if get_key(temp) == "cap":
                 next = "cap"
             elif get_key(temp) == "num":
@@ -128,6 +136,7 @@ def translate_from_brail(userIn):
             elif get_key(temp) == "dec":
                 next = "dec"
             else:
+                #append to str depending on set condition
                 if next == "cap":
                     str += get_key(temp).upper()
                     next = ""
@@ -146,10 +155,10 @@ def main():
     else:
         userIn = input("Enter text or Braille: ").strip()
 
-    if isbrail(userIn):
-        print(translate_from_brail(userIn))
+    if isbraille(userIn):
+        print(translate_from_braille(userIn))
     else:
-        print(translate_to_brail(userIn))
+        print(translate_to_braille(userIn))
 
 if __name__ == "__main__":
     main()
