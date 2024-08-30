@@ -201,5 +201,5 @@ def main():
         is_braille = check_is_braille(sentence[0])
     res = translate_braille(sentence[0]) if is_braille else translate_eng(sentence)
     print(res)
-
-main()
+if __name__ == '__main__':
+    main()
