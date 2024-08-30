@@ -138,8 +138,8 @@ def divide_string_into_sections(input_text: str) -> list:
 
 def main() -> None:
     """Main function"""
-    parser = argparse.ArgumentParser()
-    parser.add_argument('input_text')
+    parser = argparse.ArgumentParser(description='Translate English to Braille and vice versa')
+    parser.add_argument('input_text', nargs='+', help='Text to translate', type=str)
     input_text = parser.parse_args().input_text
 
     if isinstance(input_text, (list, tuple)):
