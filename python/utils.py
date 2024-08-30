@@ -1,10 +1,5 @@
 import re
 
-def is_decimal(text: str) -> bool:
-	# Check to find a dot between digits
-	pattern = r'(?<=\d)\.(?=\d)'
-	return bool(re.search(pattern, text))
-
 def is_braille(text: str) -> bool:
 	# Check if text comprises of only Braille symbols
 	if len(text) % 6 == 0 and all(char in "O." for char in text):
