@@ -107,10 +107,16 @@ def toEnglish (s):
                 elif command == "number":
                     if char in reverse_numbers:
                         word += reverse_numbers[char]
-            
+                       
+                
                 else:
-                    if char in reverse_letters:
+                    if command == "decimal":
                         word += reverse_letters[char]
+                        command = "number"
+                        
+                    elif char in reverse_letters:
+                        word += reverse_letters[char]
+                        
                 
                 if char == "......":
                     command = None
@@ -134,13 +140,17 @@ def toBraille(input, final):
             
         
         else:
-            numberFlag = False
+            
             if char.isupper():
                 braille += commands["capital"]
-            if char == ".":
+            if char == "." and numberFlag:
                 braille += commands["decimal"]
+                numberFlag = True
             braille += letters[char.lower()]
-          
+            if char == "......":
+                numberFlag = False
+            if numberFlag:
+                continue
         if numberFlag:
             braille += numbers[char]
     
@@ -149,8 +159,6 @@ def toBraille(input, final):
     if not final:
         print("......", end="")
         
-
-
 
 if __name__ == "__main__":
     inputs = sys.argv[1:]
