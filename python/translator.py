@@ -28,13 +28,6 @@ BRAILLE_TO_CHAR = {
     'OO..OO': 'x',
     'OO.OOO': 'y',
     'O..OOO': 'z',
-    '......': ' ',
-    '.....O': 'capital_follows',
-    '.O.OOO': 'number_follows',
-}
-
-# Map for converting braille to numbers
-BRAILLE_TO_NUM = {
     'O.....': '1',
     'O.O...': '2',
     'OO....': '3',
@@ -52,84 +45,59 @@ BRAILLE_TO_NUM = {
 
 # Reversed maps
 CHAR_TO_BRAILLE = {char: braille for braille, char in BRAILLE_TO_CHAR.items()}
-NUM_TO_BRAILLE = {num: braille for braille, num in BRAILLE_TO_NUM.items()}
 
-# Constant for length of braille symbols
-BRAILLE_SYMBOL_LENGTH = 6
-
-# Return True if text is in braille, False otherwise
-def is_braille(text: str) -> bool:
-    return len(text) % BRAILLE_SYMBOL_LENGTH == 0 and all(char in "O." for char in text)
-
-# Split a braille message into a list of braille symbols
-def split_braille_message(message: str) -> list[str]:
-    return [str(message[i:i+BRAILLE_SYMBOL_LENGTH]) for i in range(0, len(message), BRAILLE_SYMBOL_LENGTH)]
-
-# Output conversion of braille message in english
-def braille_to_english(message: str):
-
-    output = ''
-
-    capitalize = False
+def braille_to_english(message):
+    output = []
+    i = 0
     numbered = False
 
-    braille_symbols = split_braille_message(message)
+    while i < len(message):
+        symbol = message[i:i+6]
 
-    for symbol in braille_symbols:
-
-        if numbered:
-            text = BRAILLE_TO_NUM[symbol]
-        else:
-            text = BRAILLE_TO_CHAR[symbol]    
-
-        if text == 'capital_follows':
-            capitalize = True
-
-        elif text == 'number_follows':
+        if symbol == CHAR_TO_BRAILLE["capital_follows"]:
+            output.append(BRAILLE_TO_CHAR[message[i+6:i+12]].upper())
+            i += 12
+        
+        elif symbol == CHAR_TO_BRAILLE["number_follows"]:
             numbered = True
-
-        elif text == ' ':
-            if numbered:
-                numbered = False
-            output += text        
+            i += 6
+        
         else:
-            if capitalize:
-                text = text.upper()
-                capitalize = False
-            output += text
+            char = BRAILLE_TO_CHAR[symbol]
+            if numbered and char.isalpha():
+                numbered = False
 
-    return output
+            output.append(char)
+            i += 6
+    
+    return "".join(output)
 
-# Output conversion of English to braille
-def english_to_braille(message: str):
-    output = ''
+def english_to_braille(message):
 
+    output = []
     numbered = False
 
     for char in message:
-        if char.isdigit():
+        if char.isupper():
+            output.append(CHAR_TO_BRAILLE['capital_follows'])
+            char = char.lower()
 
-            if not numbered:
-                output += NUM_TO_BRAILLE['number_follows']
-                numbered = True
-
-            symbol = NUM_TO_BRAILLE[char]
-        else:
-
-            if numbered:
+        elif char.isdigit() and not numbered:
+            numbered = True
+            output.append(CHAR_TO_BRAILLE['number_follows'])
+        
+        elif not char.isdigit():
+            if char.isspace():
                 numbered = False
-
-            if char != ' ' and char.isupper():
-                output += CHAR_TO_BRAILLE['capital_follows']
-
-            symbol = CHAR_TO_BRAILLE[char.lower()]
-            
-        output += symbol
+            output.append(CHAR_TO_BRAILLE[char])
     
-    return output
+    return ''.join(output)
 
-message = ' '.join(sys.argv[1:])
-output = braille_to_english(message) if is_braille(message) else english_to_braille(message)
-
-sys.stdout.write(output)
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        message = ' '.join(sys.argv[1:])
+        if all(char in "O." for char in message) and len(message) % 6 == 0:
+            print(braille_to_english(message))
+        else:
+            print(english_to_braille(message))
 
