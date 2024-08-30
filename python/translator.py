@@ -87,7 +87,7 @@ class Translator():
     def convert_braille_to_english(braille:str)->str:
         if (len(braille) % 6) != 0:
             raise ValueError('The length of the braille must be a mutliple of 6')
-        
+
         res = ''
         i = 0
         is_capital = False
@@ -155,9 +155,11 @@ if __name__ == '__main__':
     
     if (len(sys.argv)) > 1:
         if (translator.is_braille(sys.argv[1])):
-            print(translator.convert_braille_to_english(sys.argv[1]))
+            #print(translator.convert_braille_to_english(sys.argv[1]))
+            print('test')
         else:
-            print(translator.convert_english_to_braille(sys.argv[1:]))
+            #print(translator.convert_english_to_braille(sys.argv[1:]))
+            print('test')
     else:
         print('Usage: python translator.py { <braille_message> | <text> } ')
 
