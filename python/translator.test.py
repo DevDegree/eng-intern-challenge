@@ -4,7 +4,11 @@ import subprocess
 class TestTranslator(unittest.TestCase):
     def test_output(self):
         # Command to run translator.py script
+        # Incorrect Test Case (Github Issue @6) - Unit Test will Fail:
         command = ["python3", "translator.py", "Abc", "123", "xYz"]
+        
+        # Correct Test Case
+        # command = ["python3", "translator.py", "Abc", "234", "xYz"]
         
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
