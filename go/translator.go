@@ -222,11 +222,29 @@ func concatString(words []string) string {
 func translateToBraille(concatedWords string) string {
 	sb := strings.Builder{}
 	sb.Grow(maxBrailleChars) // there will at least one english char
+	writeNumberFollow := true
 
 	for _, engRune := range concatedWords {
 		if unicode.IsUpper(engRune) {
 			sb.WriteString(CapitalFollowsBraille)
 			engRune = unicode.ToLower(engRune)
+		}
+
+		// If it's the first occurrence of a number
+		// FollowNumber prefix must be added before
+		// numbers sequence
+		if unicode.IsNumber(engRune) {
+			if writeNumberFollow {
+				sb.WriteString(NumberFollowsBraille)
+				writeNumberFollow = false
+			}
+		}
+
+		// existence of space means the end of numbers
+		// sequence. Setting the flag to true to write the
+		// braille string for the next number seq occurrence
+		if unicode.IsSpace(engRune) {
+			writeNumberFollow = true
 		}
 
 		brailString, prs := englishToBrailleMap[engRune]
@@ -247,12 +265,13 @@ func main() {
 
 	/*
 		Assumptions
-		    1. ONLY braille inputs start with .
-		    2. It will ONLY be one braille input
+		    1. ONLY braille inputs start with "."
+		    2. If input braille, it will ONLY be one input
 	*/
 	if len(os.Args) >= 3 || (len(os.Args) == 2 && !strings.HasPrefix(os.Args[1], ".")) {
 		concatedWords := concatString(os.Args[1:])
 		fmt.Println(translateToBraille(concatedWords))
+        return
 	}
 
 	fmt.Println(translateToEnglish(os.Args[1]))
