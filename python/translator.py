@@ -213,7 +213,8 @@ def detect_input_type(input_string):
 
 
 def main():
-    if all(detect_input_type(arg) == "braille" for arg in sys.argv[1:]):
+    input_type = all(detect_input_type(arg) == "braille" for arg in sys.argv[1:])
+    if input_type:
         braille_func = braille_to_text
     else:
         braille_func = text_to_braille
@@ -221,9 +222,14 @@ def main():
     input_strings = sys.argv[
         1:
     ]  # Take all command-line arguments except the script name
-    for input_string in input_strings:
+    for index, input_string in enumerate(input_strings):
         result = braille_func(input_string)
         print(result, end="")
+        if index < len(input_strings) - 1:
+            print(
+                (" " if input_type == "text" else braille_dict["special_chars"][" "]),
+                end="",
+            )
 
     print()  # To ensure the final output ends with a newline
 
