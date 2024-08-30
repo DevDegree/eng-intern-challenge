@@ -23,7 +23,12 @@ class Translator:
         :returns: True if arg is english else False
         :rtype: bool
         """
-        pass
+        # cannot be braille if len(arg) % 6 != 0
+        if len(arg) % 6:
+            return True
+
+        # cannot be braille if arg contains any character other than `O` or `.`
+        return bool(set(arg) - {"O", "."})
 
     def _get_braille(self, english: str) -> str:
         """ Convert english to braille
