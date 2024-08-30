@@ -124,6 +124,6 @@ def detect_and_translate(input_string):
 
 if __name__ == "__main__":
     # Combine input arguments without adding spaces
-    input_string = ''.join(sys.argv[1:])
+    input_string = ' '.join(sys.argv[1:])
     output = detect_and_translate(input_string)
     print(output)
