@@ -42,22 +42,9 @@ ENGLISH_TO_BRAILLE_MAP = {
   },
   codes: {
     capital: '.....O', 
-    decimal: '.O...O', 
     number: '.O.OOO'
   },
   special: {
-    '.' => '..OO.O', 
-    ',' => '..O...', 
-    '?' => '..O.OO', 
-    '!' => '..OOO.', 
-    ':' => '..OO..',
-    ';' => '..O.O.', 
-    '-' => '....OO', 
-    '/' => '.O..O.', 
-    '<' => '.OO..O', 
-    '>' => 'O..OO.',
-    '(' => 'O.O..O', 
-    ')' => '.O.OO.', 
     ' ' => '......'
   }
 }
@@ -83,9 +70,6 @@ def english_to_braille(string)
         result += ENGLISH_TO_BRAILLE_MAP[:codes][:number] + ENGLISH_TO_BRAILLE_MAP[:nums][char]
         digit_flag = true
       end
-    elsif char == ' '
-      result += ENGLISH_TO_BRAILLE_MAP[:special][' ']
-      digit_flag = false
     end
   end
 
@@ -101,13 +85,11 @@ def braille_to_english(string)
   # Flags to keep track of capitalization, numbers, and decimals
   digit_flag = false
   capitalize_flag = false
-  decimal_flag = false
 
   braille_chars.each do |braille_char|
     if braille_char == '......'
       digit_flag = false
       capitalize_flag = false
-      decimal_flag = false
       result += BRAILLE_TO_ENGLISH_MAP[:special][braille_char]
     elsif BRAILLE_TO_ENGLISH_MAP[:codes].key?(braille_char)
       case BRAILLE_TO_ENGLISH_MAP[:codes][braille_char]
@@ -115,14 +97,9 @@ def braille_to_english(string)
         capitalize_flag = true
       when :number
         digit_flag = true
-      when :decimal
-        decimal_flag = true
       end
     elsif digit_flag
       result += BRAILLE_TO_ENGLISH_MAP[:nums][braille_char]
-    elsif decimal_flag
-      result += BRAILLE_TO_ENGLISH_MAP[:special][braille_char]
-      decimal_flag = false
     elsif BRAILLE_TO_ENGLISH_MAP[:alpha].key?(braille_char)
       char = BRAILLE_TO_ENGLISH_MAP[:alpha][braille_char]
       result += capitalize_flag ? char.upcase : char

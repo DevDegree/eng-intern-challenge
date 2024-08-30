@@ -16,15 +16,15 @@ ruby braille_converter.rb "Your input text here"
 - **English to Braille**:
 
 ```shell
->> ruby braille_converter.rb "Hello world"
->> .....O.O.....O.O..OOO..O..O....O..O......O...O..OO...O..O......
+>> ruby translator.rb "Hello world"
+>> .....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..
 ```
 
 - **Braille to English**:
 
 ```shell
->> ruby braille_converter.rb ".....O.O.....O.O..OOO..O..O....O..O......O...O..OO...O..O......"
->> Hello, World!
+>> ruby braille_converter.rb ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."
+>> Hello world
 
 ```
 
