@@ -46,7 +46,7 @@ class Translator:
         "....OO": "-",
         ".O..O.": "/",
         ".OO..O": "<",
-        #"O..OO.": ">",
+        #"O..OO.": ">",  # I think this duplicate is an error, shouldn't be the same as 'o'.
         "O.O..O": "(",
         ".O.OO.": ")",
         "......": " "
