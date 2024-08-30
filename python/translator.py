@@ -21,6 +21,7 @@ capital_follows = '.....O'
 number_follows = '.O.OOO'
 
 def is_braile(text):
+    # Checks if the first argument is valid braille text
     for letter in text:
         if letter not in ['O', '.']:
             return False
@@ -35,6 +36,7 @@ def to_braile(arguments):
             result.append(capital_follows)
             result.append(letters[phrase[i].lower()])
         elif phrase[i].isdigit():
+            # Check if we have added an indicator already
             if i > 0 and phrase[i-1] == ' ':
                 result.append(number_follows)
             result.append(numbers[phrase[i]])
@@ -44,9 +46,11 @@ def to_braile(arguments):
     return ''.join(result)
 
 def to_alphabet(text):
+    # Reverse the dictionaries for easier lookup
     reversed_numbers = {v: k for k, v in numbers.items()}
     reversed_letters = {v: k for k, v in letters.items()}
     
+    # Split the braille text into alphanumeric characters
     words = []
     for i in range(0, len(text), 6):
         words.append(text[i:i+6])
@@ -86,12 +90,15 @@ def to_alphabet(text):
 
 
 def main():
+    # Only runs the code if there is an argument
     if len(sys.argv) < 2:
         print("Incorrect usage, please provide an argument")
         sys.exit(1)
     
+    # Get the arguments without the script name
     arguments = sys.argv[1:]
     
+    # Convert to either braille or alphabet based on the input type
     result = to_alphabet(arguments[0]) if is_braile(arguments[0]) else to_braile(arguments)
     
     print(result)
