@@ -7,7 +7,6 @@ File Description:
 A command-line application to translate from English to Braille and vice versa.
 This application supports numbers, letters and spaces.
 '''
-import sys
 import argparse
 
 ENGLISH_TO_BRAILLE = {
@@ -57,8 +56,9 @@ NUMBERS_TO_BRAILLE = {
     '0': '.OOO..',
 }
 
-BRAILLE_TO_ENGLISH = {v: k for k, v in ENGLISH_TO_BRAILLE.items()}  # Reverses dictionary
-BRAILLE_TO_NUMBERS = {v: k for k, v in NUMBERS_TO_BRAILLE.items()}  # Reverses dictionary
+# Reverses dictionaries
+BRAILLE_TO_ENGLISH = {v: k for k, v in ENGLISH_TO_BRAILLE.items()}
+BRAILLE_TO_NUMBERS = {v: k for k, v in NUMBERS_TO_BRAILLE.items()}
 
 CAPITAL_FOLLOWS = '.....O'
 NUMBER_FOLLOWS = '.O.OOO'
@@ -127,15 +127,13 @@ def main() -> None:
     """Main function"""
     parser = argparse.ArgumentParser()
     parser.add_argument('input_text')
-    INPUT_TEXT = parser.parse_args().input_text
+    input_text = parser.parse_args().input_text
 
-    if translate_language(INPUT_TEXT):
-        print(translate_text_to_english(INPUT_TEXT))
+    if translate_language(input_text):
+        print(translate_text_to_english(input_text))
     else:
-        print(translate_text_to_braille(INPUT_TEXT))
+        print(translate_text_to_braille(input_text))
 
 
 if __name__ == '__main__':
-    import python_ta
-    python_ta.check_all(config={'allowed-import-modules': ["sys", "python_ta", 'argparse']})
     main()
