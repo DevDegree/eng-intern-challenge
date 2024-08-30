@@ -83,20 +83,17 @@ def text_to_braille(text_input):
 
 # Main
 def main():
-    if len(sys.argv) < 3:
-        print("Usage: python translator.py <mode> <string>")
+    if len(sys.argv) < 2:
+        print("Usage: python translator.py <string>")
         return
     
-    mode = sys.argv[1]
-    input_text = " ".join(sys.argv[1:])
-    
-    if mode == "text-to-braille":
-        output = text_to_braille(input_text)
-    elif mode == "braille-to-text":
+    input_text = sys.argv[1]
+
+    # Check if the input contains only Braille characters
+    if all(c in "O." for c in input_text) and len(input_text) % 6 == 0:
         output = braille_to_text(input_text)
     else:
-        print("Invalid mode! Use 'text-to-braille' or 'braille-to-text'")
-        return
+        output = text_to_braille(input_text)
     
     print(output)
 
