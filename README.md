@@ -23,7 +23,7 @@ Braille (*/breɪl/ **BRAYL***) is a tactile writing system used by people who ar
 - Translator
   - Given arguments passed into the program at runtime, determine if the given string should be translated to English or Braille.
   - For Braille, each character is stored as a series of `O` (the letter O) or `.` (a period).
-  - Store Braille symbols as a 6 character string reading right to left, line by line, starting at the top left. See examples below.
+  - Store Braille symbols as a 6 character string reading left to right, line by line, starting at the top left. See examples below.
   - When a Braille `capital follows` symbol is read, assume only the next symbol should be capitalized. 
   - When a Braille `number follows` symbol is read, assume all following symbols are numbers until the next `space` symbol.
 - Braille Alphabet
