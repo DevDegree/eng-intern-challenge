@@ -41,8 +41,13 @@ BRAILLE_ENCODINGS: Dict[str, str] = {
     '&': '.....O',  # Capital follows
     '#': '.O.OOO'   # Number follows
 }
-
 def translate_braille_to_english(user_input: str) -> str:
+    """Translates a braille string to English.
+
+    Keyword arguments:
+    user_input -- the user's braille argument
+    """
+
     braille_symbols = []
     english_translation = ''
     numbers_mode = False
@@ -81,9 +86,22 @@ def translate_braille_to_english(user_input: str) -> str:
     return english_translation
 
 def get_duplicate_chars_from_braille(braille_symbol: str) -> List[str]:
+    """Returns all keys  associated with a given braille symbol.
+    
+        Keyword arguments:
+        braille_symbol -- a length-6 braille string
+    """
+
     return [char for char, symbol in BRAILLE_ENCODINGS.items() if symbol == braille_symbol]
 
 def get_letter_from_braille(braille_symbol: str, numbers_mode: bool) -> str:
+    """Returns the english letter associated with the braille symbol.
+    
+        Keyword arguments:
+        braille_symbol -- a length-6 braille string
+        numbers_mode -- a boolean that checks if we are currently in a series of numbers
+    """
+
     duplicate_chars = get_duplicate_chars_from_braille(braille_symbol)    # may contain a letter and a digit
 
     if len(duplicate_chars) == 0:
@@ -93,6 +111,11 @@ def get_letter_from_braille(braille_symbol: str, numbers_mode: bool) -> str:
     return chosen_char
 
 def translate_english_to_braille(user_input: str) -> str:
+    """Translates an English string to braille.
+    
+        Keyword arguments:
+        user_input -- the user's braille argument
+    """
     braille_translation = ''
     numbers_mode = False
 
