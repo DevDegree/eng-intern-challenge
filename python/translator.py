@@ -7,7 +7,7 @@ letter2Braille = {'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e
                'y': 'OO.OOO', 'z': 'O..OOO', }
 
 number2Braille = {'1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..', '6': 'OOO...', 
-                  '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...'}
+                  '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..'}
 
 character2Braille = {'.': '..OO.O', ',': '..O...', '?': '..O.OO', '!': '..OOO.', ':': '..OO..', 
                      ';': '..O.O.', '-': '....OO', '/': '.O..O.', '<': '.OO..O', '>': 'O..OO.', 
@@ -22,8 +22,10 @@ NUM = '.O.OOO'
 SPACE = '......'
 
 def isBraille(txt):
-    s = set(txt)
-    mod = len(txt) % 6
+    s = set(txt)        # get unique elements in string  
+    mod = len(txt) % 6      # string length is a multiple of 6
+
+    # the string only contains O and . and length is a multiple of 6
     return len(s) == 2 and mod == 0 and 'O' in s and '.' in s
 
 def convertToBraille(txt):
@@ -31,52 +33,43 @@ def convertToBraille(txt):
     numFlag = False
     for n in txt:
         if n.isupper():
-            output += CAP
+            output += CAP   # add special capital character
             output += letter2Braille[n.lower()]
         elif n.islower():
             output += letter2Braille[n]
-        
         elif n.isnumeric():
             if not numFlag:
-                output += NUM
+                output += NUM   # add special number character
             numFlag = True
             output += number2Braille[n]
-
         else:
             output += character2Braille[n]
-
     return output
 
 def convertToTxt(braille):
     output = ''
     segments = [braille[i:i + 6] for i in range(0, len(braille), 6)]
-
     capFlag = False
     numFlag = False
+
     for segment in segments:
         if segment == CAP:
-            capFlag = True
-
+            capFlag = True      # special cap flag
         elif segment == NUM:
-            numFlag = True
-
+            numFlag = True      # special num flag
         elif segment in braille2Letter.keys() and not numFlag:
             if capFlag:
                 output += braille2Letter[segment].upper()
                 capFlag = False
             else:
                 output += braille2Letter[segment]
-
         elif segment in braille2Number.keys():
             output += braille2Number[segment]
-        
         elif segment == SPACE:
             numFlag = False
             output += braille2Character[segment]
-
         else:
             output += braille2Character[segment]
-
     return output
 
 def main():
