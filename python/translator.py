@@ -17,22 +17,30 @@ reverse_braille_dict = {v: k for k, v in braille_dict.items()}
 def english_to_braille(text):
     braille_text = ""
     for char in text:
+        if char.isupper():
+            braille_text += 'O.O...O...O.....'  # Capital indicator
         if char.lower() in braille_dict:
             braille_text += braille_dict[char.lower()]
         elif char == ' ':
             braille_text += braille_dict[' ']
         else:
-            braille_text += '......'
+            braille_text += '......'  # For any unexpected characters
     return braille_text
 
 def braille_to_english(text):
     english_text = ""
-    for i in range(0, len(text), 6):
-        braille_char = text[i:i+6]
-        if braille_char in reverse_braille_dict:
-            english_text += reverse_braille_dict[braille_char]
+    i = 0
+    while i < len(text):
+        if text[i:i+3] == 'O.O...':  # Capital indicator
+            i += 6
+            if i + 6 <= len(text):
+                braille_char = text[i:i+6]
+                english_text += reverse_braille_dict.get(braille_char, '?').upper()
+            i += 6
         else:
-            english_text += '?'
+            braille_char = text[i:i+6]
+            english_text += reverse_braille_dict.get(braille_char, '?')
+            i += 6
     return english_text
 
 def main():
