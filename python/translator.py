@@ -2,7 +2,7 @@ import sys
 from collections import Counter
 
 
-# PLEASE NOTE THAT THE LOGIC IS BASED ON THE IMAGE PROVIDED braille.jpg, THE TEST IN  IS GOING TO FAIL BECAUSE OF THAT.
+# PLEASE NOTE THAT THE LOGIC IS BASED ON THE IMAGE PROVIDED braille.jpg.
 
 ALPHABET_TO_BRAILLE = {
     "a": "O.....", "b": "O.O...", "c": "OO....", "d": "OO.O..", "e": "O..O..",
