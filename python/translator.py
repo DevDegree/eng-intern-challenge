@@ -54,6 +54,15 @@ NUMBERS_TO_ALPHABET = {number: alphabet for alphabet, number in ALPHABET_TO_NUMB
 
 
 def check_is_braille(text: List[str]) -> bool:
+    """
+    Checks whether the input text is braille or not.
+
+    Args:
+        text: A list of input arguments.
+
+    Returns:
+        Whether the input text is braille or not.
+    """
     chars_set = set()
     for word in text:
         for char in word:
@@ -64,6 +73,12 @@ def check_is_braille(text: List[str]) -> bool:
 
 
 def parse_braille(text: List[str]) -> None:
+    """
+    Prints the braille input text translated as alphabet characters.
+
+    Args:
+        text: A list of braille input arguments.
+    """
     translated = ''
 
     for element in text:
@@ -73,6 +88,15 @@ def parse_braille(text: List[str]) -> None:
 
 
 def parse_single_braille(text: str) -> str:
+    """
+    Translates a single braille input text.
+
+    Args:
+        text: A string containing braille characters.
+
+    Returns:
+        Alphabet-translated text.
+    """
     translated = ''
     capital_follows = False
     number_follows = False
@@ -101,6 +125,12 @@ def parse_single_braille(text: str) -> str:
 
 
 def parse_alphabet(text: List[str]) -> None:
+    """
+    Prints the alphabet input text translated as braille characters.
+
+    Args:
+        text: A list of alphabet input arguments.
+    """
     translated = ''
 
     for i, word in enumerate(text):
@@ -112,6 +142,15 @@ def parse_alphabet(text: List[str]) -> None:
 
 
 def parse_single_alphabet_word(word: str) -> str:
+    """
+    Translates a single alphabet input word.
+
+    Args:
+        word: A string containing alphabet characters.
+
+    Returns:
+        Braille-translated word.
+    """
     translated = ''
     is_number = False
 
