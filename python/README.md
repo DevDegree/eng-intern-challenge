@@ -1,5 +1,4 @@
 # Python Instructions
-
 ## Overview
 
 The Braille Translator is a Python script that translates text to Braille and Braille to text. The translation uses a configurable mapping, allowing customization for different Braille systems and special symbols. The script can handle standard text, numbers, and special symbols, with support for capital letters and decimal points.
@@ -47,3 +46,4 @@ Here is an example configuration:
     ".": "......"
   }
 }
+Note that the Python version used is 3.8
