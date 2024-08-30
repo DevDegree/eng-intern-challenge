@@ -102,7 +102,7 @@ def translate_to_english(braille):
     return ''.join(result)
 
 if __name__ == "__main__":
-    input_string = sys.argv[1]
+    input_string = ' '.join(sys.argv[1:])
     
     if is_braille(input_string):
         print(translate_to_english(input_string))
