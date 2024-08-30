@@ -14,6 +14,8 @@ type Translator struct {
 	text               string
 	letterToBrailleMap map[string]string
 	numberToBrailleMap map[string]string
+	brailleToLetterMap map[string]string
+	brailleToNumberMap map[string]string
 }
 
 // creates a new translator unit
@@ -63,6 +65,8 @@ func NewTranslator(text string) *Translator {
 		"8": "O.OO..",
 		"9": ".OO...",
 	}
+	t.brailleToLetterMap = reverseMap(t.letterToBrailleMap)
+	t.brailleToNumberMap = reverseMap(t.numberToBrailleMap)
 	return &t
 }
 
@@ -73,6 +77,14 @@ func handleArguments() (string, error) {
 	}
 	args := os.Args[1:]
 	return strings.TrimSpace(strings.Join(args, " ")), nil
+}
+
+func reverseMap(m map[string]string) map[string]string {
+	newMap := make(map[string]string, len(m))
+	for k, v := range m {
+		newMap[v] = k
+	}
+	return newMap
 }
 
 func main() {
