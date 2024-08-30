@@ -26,19 +26,19 @@ def braille_to_text(braille_input):
     i = 0
     number_mode = False
 
-    while i < len(br_input):
-        br_char = br_input[i:i+6]
+    while i < len(braille_input):
+        br_char = braille_input[i:i+6]
 
         if br_char == '.....O':  # Capital symbol
             i += 6
-            br_char = br_input[i:i+6]
+            br_char = braille_input[i:i+6]
             text_output += braille_to_english.get(br_char, '?').upper()
-        elif br_char == '..OOO.':  #Number symbol
+        elif br_char == '..OOO.':  # Number symbol
             number_mode = True
-        elif br_char == '......':  #Space
+        elif br_char == '......':  # Space
             number_mode = False
             text_output += ' '
-        elif br_char == '.....O.O...':  #Period
+        elif br_char == '.....O.O...':  # Period
             text_output += '.'
         else:
             if number_mode:
@@ -48,7 +48,7 @@ def braille_to_text(braille_input):
                     'OOO...': '6', 'OOOO..': '7', 'O.OO..': '8', '.OO...': '9', '.OOO..': '0'
                 }
                 text_output += numbers_mapping.get(br_char, '?')
-                number_mode = False  #End number mode after processing
+                number_mode = False  # End number mode after processing
             else:
                 text_output += braille_to_english.get(br_char, '?')
         
@@ -63,11 +63,11 @@ def text_to_braille(text_input):
 
     for char in text_input:
         if char.isupper():
-            br_output += '.....O'  #Capital
+            br_output += '.....O'  # Capital
             char = char.lower()
         elif char.isdigit():
             if not number_mode:
-                br_output += '..OOO.'  #Number symbol
+                br_output += '..OOO.'  # Number symbol
                 number_mode = True
             br_output += english_to_braille.get(char, '......')
         elif char == '.':
@@ -78,18 +78,24 @@ def text_to_braille(text_input):
             
     return br_output
 
-#Main
-if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python translator.py <mode> <text>")
-        sys.exit(1)
-
+# Main
+def main():
+    if len(sys.argv) < 3:
+        print("Usage: python translator.py <mode> <string>")
+        return
+    
     mode = sys.argv[1]
-    input_text = sys.argv[2]
-
-    if mode == 'braille-to-text':
-        print(braille_to_text(input_text))
-    elif mode == 'text-to-braille':
-        print(text_to_braille(input_text))
+    input_text = " ".join(sys.argv[2:])
+    
+    if mode == "text-to-braille":
+        output = text_to_braille(input_text)
+    elif mode == "braille-to-text":
+        output = braille_to_text(input_text)
     else:
-        print("Invalid mode! Use 'braille-to-text' or 'text-to-braille'")
+        print("Invalid mode! Use 'text-to-braille' or 'braille-to-text'")
+        return
+    
+    print(output)
+
+if __name__ == "__main__":
+    main()
