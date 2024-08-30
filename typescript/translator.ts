@@ -31,16 +31,16 @@ const brailleLetters: { [key: string]: string } = {
 };
 
 const brailleNumbers: { [key: string]: string } = {
-  ".OO...": "1",
-  ".OOO..": "2",
+  "O.....": "1",
+  "O.O...": "2",
   "OO....": "3",
   "OO.O..": "4",
   "O..O..": "5",
   "OOO...": "6",
   "OOOO..": "7",
   "O.OO..": "8",
-  ".OO..O": "9",
-  ".O.O.O": "0",
+  ".OO...": "9",
+  ".OOO..": "0",
 };
 
 const englishToBraille: { [key: string]: string } = {
@@ -70,15 +70,15 @@ const englishToBraille: { [key: string]: string } = {
   x: "OO..OO",
   y: "OO.OOO",
   z: "O..OOO",
-  "1": ".OO...",
-  "2": ".OOO..",
+  "1": "O.....",
+  "2": "O.O...",
   "3": "OO....",
   "4": "OO.O..",
   "5": "O..O..",
   "6": "OOO...",
   "7": "OOOO..",
   "8": "O.OO..",
-  "9": ".OO..O",
+  "9": ".OO...",
   "0": ".OOO..",
   capatilized: ".....O",
   number: ".O.OOO",
