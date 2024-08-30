@@ -81,11 +81,12 @@ def detectlang(text):
 
 def main():
    
-   
+    #Parses argument inputs
     parser = argparse.ArgumentParser(description='Translator Between Braille and English')
-    parser.add_argument('text', type=str, help='Text to translate')
+
+    parser.add_argument('text', nargs='+', help='Text to translate')  # Accept multiple arguments
     
-    textinput = parser.parse_args().text
+    textinput = ' '.join(parser.parse_args().text)  # Join all arguments into a single string
     
 
     if detectlang(textinput) == 'english':
