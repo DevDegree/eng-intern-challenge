@@ -60,7 +60,7 @@ const BRAILLE_CAPITAL_FOLLOW = ".....O";
 // Unicode value of letter a
 const CHARCODE = "a".charCodeAt(0);
 
-function translateBrailleToEng(brailleString, mode2) {
+function translateBrailleToEng(brailleString) {
   if (brailleString.length % 6 != 0) {
     console.log("Invalid braille string.");
     return "";
@@ -68,6 +68,7 @@ function translateBrailleToEng(brailleString, mode2) {
   let result = "";
   let isCapitalized = false;
   let isNumberSeries = false;
+  // Process Braille code in a group of 6 characters
   for (let i = 0; i < brailleString.length; i += 6) {
     let symbol = brailleString.substring(i, i + 6);
     if (symbol == BRAILLE_SPACE) {
@@ -80,8 +81,9 @@ function translateBrailleToEng(brailleString, mode2) {
       // Initialize a flag for next symbol to be capitalized
       isCapitalized = true;
     } else if (isNumberSeries) {
-      // Braille number has the same symbol as from a-j, so get the character based on the matched symbol
       let alpha = BRAILLE_ALPHA[symbol];
+      // Braille number has the same symbol as from a-j, so get the character based on the matched symbol
+      // Adding mod 10 so number 0 is wrapped around at the end
       result += (alpha.charCodeAt(0) - CHARCODE + 1) % 10;
     } else {
       let alpha;
@@ -97,7 +99,7 @@ function translateBrailleToEng(brailleString, mode2) {
   return result;
 }
 
-function translateEngToBraille(engString, mode2) {
+function translateEngToBraille(engString) {
   let result = "";
   let isNumberSeries = false;
   for (let i = 0; i < engString.length; i += 1) {
@@ -113,6 +115,9 @@ function translateEngToBraille(engString, mode2) {
         result += BRAILLE_NUMBER_FOLLOW;
       }
       let digit = parseInt(c);
+      // Similar to before, since number has the same braille code as from a-j, we use the same code of letter for the number respectively
+      // For example, "2" has the same code as "b"
+      // To match "2" and "b", add an amount of 2 to the first letter of alpha "a"
       result +=
         BRAILLE_ALPHA[
           digit == 0
@@ -144,20 +149,12 @@ function isBrailleCode(input) {
 }
 
 let args = process.argv;
-// Mode 2 is to follow the Braille alpha order of Wiki
-let input;
-let mode2 = false;
-if (args[2] == "-mode2") {
-  mode2 = true;
-  // If mode 2 is provided, the input string starts from the third argument
-  input = process.argv.slice(3).join(" ");
-} else {
-  input = process.argv.slice(2).join(" ");
-}
+// String input starts from the second argument
+let input = process.argv.slice(2).join(" ");
 let result = "";
 if (isBrailleCode(input)) {
-  result += translateBrailleToEng(input, mode2);
+  result += translateBrailleToEng(input);
 } else {
-  result += translateEngToBraille(input, mode2);
+  result += translateEngToBraille(input);
 }
 console.log(result);
