@@ -33,7 +33,7 @@ def translate_english(text):
         elif char.isalpha(): #if char is a letter
             if char.isupper(): #if captilized
                 translated_text += char_map_english["capitalize"]  
-                char = char.lower()  #if char is lower
+                char = char.lower()  #to get correct letter braille mapping
             translated_text += char_map_english[char]
             is_number = False  # Reset after a letter
         else:
