@@ -68,7 +68,7 @@ def split_braille_message(message: str) -> list[str]:
 # Output conversion of braille message in english
 def braille_to_english(message: str):
 
-    output = ""
+    output = ''
 
     capitalize = False
     numbered = False
@@ -102,7 +102,7 @@ def braille_to_english(message: str):
 
 # Output conversion of English to braille
 def english_to_braille(message: str):
-    output = ""
+    output = ''
 
     numbered = False
 
@@ -130,9 +130,9 @@ def english_to_braille(message: str):
 
 # Main function
 def main(): 
-    message = " ".join(sys.argv[1:]).strip()
+    message = ' '.join(sys.argv[1:])
     output = braille_to_english(message) if is_braille(message) else english_to_braille(message)
-    print(output)
+    print(output.strip())
 
 if __name__ == "__main__":
     main()
