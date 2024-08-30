@@ -2,7 +2,7 @@ import sys
 
 BRAILLE_CHARS = ['o','.']
 
-ENGLISH_TO_BRAILLE_MAP = {
+ENGLISH_ALPHABET_TO_BRAILLE_MAP = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..', 
     'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..',
     'k': 'O...O.', 'l': 'O.O.O.', 'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.', 
@@ -10,14 +10,18 @@ ENGLISH_TO_BRAILLE_MAP = {
     'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO', 
     'z': 'O..OOO',
     ' ': '......',
-    'capital_follows': '.....O',
-    'decimal_follows': '.O...O',
-    'number_follows': '.O.OOO',
 }
 
 ENGLISH_DIGIT_TO_BRAILLE_MAP = { '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4':'OO.O..', '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..',}
+
+ENGLISH_SPECIAL_CHAR_TO_BRAILLE_MAP = {
+  'capital_follows': '.....O',
+  'decimal_follows': '.O...O',
+  'number_follows': '.O.OOO',
+}
 BRAILLE_TO_ENGLISH_DIGIT_MAP = {v: k for k, v in ENGLISH_DIGIT_TO_BRAILLE_MAP.items()}
-BRAILLE_TO_ENGLISH_MAP = {v: k for k, v in ENGLISH_TO_BRAILLE_MAP.items()}
+BRAILLE_TO_ENGLISH_MAP = {v: k for k, v in ENGLISH_ALPHABET_TO_BRAILLE_MAP.items()}
+BRAILLE_TO_ENGLISH_SPECIAL_CHAR_MAP = {v: k for k, v in ENGLISH_SPECIAL_CHAR_TO_BRAILLE_MAP.items()}
 
 
 def main():
@@ -41,18 +45,18 @@ def translate_to_braille(input_string):
   number_follows = False
   for char in input_string:
     if char.isupper():
-      result += ENGLISH_TO_BRAILLE_MAP["capital_follows"]
-      result += ENGLISH_TO_BRAILLE_MAP[char.lower()]
+      result += ENGLISH_SPECIAL_CHAR_TO_BRAILLE_MAP.get("capital_follows", "")
+      result += ENGLISH_ALPHABET_TO_BRAILLE_MAP.get(char.lower(), "")
     elif char.isdigit():
       if not number_follows:
-        result += ENGLISH_TO_BRAILLE_MAP["number_follows"]
+        result += ENGLISH_SPECIAL_CHAR_TO_BRAILLE_MAP.get("number_follows", "")
         number_follows = True
-      result += ENGLISH_DIGIT_TO_BRAILLE_MAP[char]
+      result += ENGLISH_DIGIT_TO_BRAILLE_MAP.get(char, "")
     elif char == " ":
       number_follows = False
-      result += ENGLISH_TO_BRAILLE_MAP[" "]
+      result += ENGLISH_ALPHABET_TO_BRAILLE_MAP.get(" ")
     else:
-      result += ENGLISH_TO_BRAILLE_MAP[char]
+      result += ENGLISH_ALPHABET_TO_BRAILLE_MAP.get(char, "")
   return result
 
 
@@ -63,20 +67,20 @@ def translate_to_english(input_string):
 
   for i in range(0, len(input_string), 6):
     braille_char = input_string[i:i+6]
-    if  BRAILLE_TO_ENGLISH_MAP[braille_char] == "capital_follows":
+    if  BRAILLE_TO_ENGLISH_SPECIAL_CHAR_MAP.get(braille_char, "") == "capital_follows":
       capital_follows = True
-    elif BRAILLE_TO_ENGLISH_MAP[braille_char] == "number_follows":
+    elif BRAILLE_TO_ENGLISH_SPECIAL_CHAR_MAP.get(braille_char, "") == "number_follows":
       number_follows = True
     elif number_follows:
-      result += BRAILLE_TO_ENGLISH_DIGIT_MAP[braille_char]
-    elif BRAILLE_TO_ENGLISH_MAP[braille_char] == " ":
+      result += BRAILLE_TO_ENGLISH_DIGIT_MAP.get(braille_char, "")
+    elif BRAILLE_TO_ENGLISH_MAP.get(braille_char, "") == " ":
       result += " "
       number_follows = False
     elif capital_follows:
-      result += BRAILLE_TO_ENGLISH_MAP[braille_char].upper()
+      result += BRAILLE_TO_ENGLISH_MAP.get(braille_char, "").upper()
       capital_follows = False
     else:
-      result += BRAILLE_TO_ENGLISH_MAP[braille_char]
+      result += BRAILLE_TO_ENGLISH_MAP.get(braille_char, "")
   return result
 
 
