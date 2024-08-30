@@ -1,3 +1,5 @@
+from sys import argv
+
 ENG_TO_BRAILLE = {
     "a": "O.....",
     "b": "O.O...",
@@ -115,6 +117,7 @@ def handle_braille():
     # ".....O O..... O.O... OO.... ...... .O.OOO O.O... OO.... OO.O.."
 
     lexer = Braille_Lexer(test)
+def handle_braille(input):
 
     out = ""
     is_number = False
@@ -128,6 +131,11 @@ def handle_braille():
             is_number = True
             continue
         elif lexer.curr == ENG_TO_BRAILLE[" "]:
+    return out
+
+
+def handle_eng(input: str):
+    out = ""
             is_number = False
         elif lexer.curr == ENG_TO_BRAILLE["capital"]:
             is_capital = True
@@ -148,7 +156,25 @@ def handle_braille():
 
 
 def main():
-    handle_braille()
+    text = " ".join(argv[1:])
+
+    if is_braille(text):
+        print(handle_braille(text))
+    else:
+        print(handle_eng(text))
+
+
+def is_braille(text):
+    if len(text) < 6:
+        return False
+    if text == "OOOOOO":
+        return True
+
+    for i in range(6):
+        if not (text[i] == "O" or text[i] == "."):
+            return False
+
+    return True
 
 
 if __name__ == "__main__":
