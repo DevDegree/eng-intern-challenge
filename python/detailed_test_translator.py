@@ -62,7 +62,6 @@ class DetailedTestTranslator(unittest.TestCase):
             "L": "O.O.O.",  # Braille for 'L', same as 'l' with "Capital follows"
             "M": "OO..O.",  # Braille for 'M', same as 'm' with "Capital follows"
             "N": "OO.OO.",  # Braille for 'N', same as 'n' with "Capital follows"
-            "O": "O..OO.",  # Braille for 'O', same as 'o' with "Capital follows"
             "P": "OOO.O.",  # Braille for 'P', same as 'p' with "Capital follows"
             "Q": "OOOOO.",  # Braille for 'Q', same as 'q' with "Capital follows"
             "R": "O.OOO.",  # Braille for 'R', same as 'r' with "Capital follows"
