@@ -21,6 +21,14 @@ capital_follows = '.....O'
 number_follows = '.O.OOO'
 
 def is_braile(text):
+    """
+    Checks if the input text is valid braille text
+    
+    :param text: The text to check
+    :return: True if the text is valid braille text, False
+        
+    """
+    
     # Checks if the first argument is valid braille text
     for letter in text:
         if letter not in ['O', '.']:
@@ -28,6 +36,14 @@ def is_braile(text):
     return True
 
 def to_braile(arguments):
+    """
+    Converts the input text to braille
+    
+    :param arguments: The text to convert, must be an alphanumeric list of strings
+    :return: string - The braille representation of the text
+    """
+    
+    
     phrase = ' '.join(arguments)
     result = []
     
@@ -46,6 +62,14 @@ def to_braile(arguments):
     return ''.join(result)
 
 def to_alphabet(text):
+    """
+    Converts the input braille text to alphanumeric text
+    
+    :param text: The braille text to convert, each braille letter must either be an alphanumeric representation
+                 of a single character, an empty space or a capital_follows or number_follows indicator
+    :return: string - The alphanumeric representation of the braille text
+        
+    """
     # Reverse the dictionaries for easier lookup
     reversed_numbers = {v: k for k, v in numbers.items()}
     reversed_letters = {v: k for k, v in letters.items()}
