@@ -9,6 +9,14 @@ import sys
 
 INPUT_TEXT = sys.argv[1:]
 
+CAPITAL_FOLLOWS = '.....O'
+
+NUMBER_FOLLOWS = '.0.000'
+
+# DECIMAL_FOLLOWS = '.0...0'
+
+SPACE = '......'
+
 ENGLISH_TO_BRAILLE = {
     # This dictionary maps English (+ numbers) characters to their correspondent
     # Braille characters
