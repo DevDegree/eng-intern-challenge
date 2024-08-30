@@ -31,9 +31,9 @@ ALPHABET_TO_BRAILLE = {
     'x': 'OO..OO',
     'y': 'OO.OOO',
     'z': 'O..OOO',
-    'CAPITAL': '.....O',
-    'DECIMAL': '.O...O',
-    'NUMBER': '.O.OOO',
+    'CAPITAL_FOLLOWS': '.....O',
+    'DECIMAL_FOLLOWS': '.O...O',
+    'NUMBER_FOLLOWS': '.O.OOO',
     '.': '..OO.O',
     ',': '..O...',
     '?': '..O.OO',
@@ -48,7 +48,9 @@ ALPHABET_TO_BRAILLE = {
     ')': '.O.OO.',
 }
 
-BRAILLE_ALPHABET_TO_NUMBERS = {
+BRAILLE_TO_ALPHABET = {braille: alphabet for alphabet, braille in ALPHABET_TO_BRAILLE.items()}
+
+ALPHABET_TO_NUMBERS = {
     'a': '1',
     'b': '2',
     'c': '3',
@@ -61,8 +63,7 @@ BRAILLE_ALPHABET_TO_NUMBERS = {
     'j': '0',
 }
 
-BRAILLE_TO_ALPHABET = {braille: alphabet for alphabet, braille in ALPHABET_TO_BRAILLE.items()}
-
+NUMBERS_TO_ALPHABET = {number: alphabet for alphabet, number in ALPHABET_TO_NUMBERS.items()}
 
 def check_is_braille(text: List[str]) -> bool:
     chars_set = set()
@@ -75,7 +76,7 @@ def check_is_braille(text: List[str]) -> bool:
 
 
 def parse_braille(text: List[str]) -> None:
-    translated = ""
+    translated = ''
 
     for element in text:
         translated += parse_single_braille(element)
@@ -84,14 +85,44 @@ def parse_braille(text: List[str]) -> None:
 
 
 def parse_single_braille(text: str) -> str:
-    translated = ""
+    translated = ''
     return translated
 
 
 def parse_alphabet(text: List[str]) -> None:
-    translated = ""
+    translated = ''
+
+    for i, word in enumerate(text):
+        translated += parse_single_alphabet_word(word=word)
+        if i < len(text) - 1:
+            translated += ALPHABET_TO_BRAILLE[' ']
 
     print(translated)
+
+
+def parse_single_alphabet_word(word: str) -> str:
+    translated = ''
+    is_number = False
+
+    for char in word:
+        if char.isdigit() and not is_number:
+            translated += ALPHABET_TO_BRAILLE['NUMBER_FOLLOWS']
+            is_number = True
+        if char.isdigit():
+            alphabet = NUMBERS_TO_ALPHABET[char]
+            translated += ALPHABET_TO_BRAILLE[alphabet]
+        else:
+            if char.isupper():
+                translated += ALPHABET_TO_BRAILLE['CAPITAL_FOLLOWS']
+                char = char.lower()
+            translated += ALPHABET_TO_BRAILLE[char]
+
+    return translated
+
+
+# def get_follows(word: str) -> bool:
+#     if word.isdigit():
+#         return ALPHABET_TO_BRAILLE
 
 
 def main():
