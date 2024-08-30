@@ -84,21 +84,21 @@ def english_to_braille(text):
     for char in text:
 
         if char.isalpha():
-            if char.isupper():
+            if char.isupper():  # if the character is uppercase add the uppercase_follows
                 braille_text += uppercase_follows
             braille_text += character_to_braille[char.lower()]
 
         elif char in digit_to_braille:
-            if not is_number:
+            if not is_number:  # if we are starting a number add the number_follows
                 is_number = True
                 braille_text += number_follows
 
             braille_text += digit_to_braille[char]
 
         elif char in punctuation_to_braille:
-            if char == "." and is_number:
+            if char == "." and is_number:  # if we are in a number and we find a decimal add the decimal_follows
                 braille_text += decimal_follows
-            elif char == " " and is_number:
+            elif char == " " and is_number:  # if we are in a number and we find a space, end the number
                 is_number = False
 
             braille_text += punctuation_to_braille[char]
@@ -118,7 +118,7 @@ def braille_to_english(text):
     is_number = False
 
     for i in range(0, len(text), 6):
-        braille = text[i: i+6]
+        braille = text[i: i+6] # get the next braille item (6 characters)
 
         if braille == uppercase_follows:
             is_uppercase = True
@@ -127,9 +127,9 @@ def braille_to_english(text):
             is_number = True
         
         elif is_number:
-            if braille == punctuation_to_braille['.']:
+            if braille == punctuation_to_braille['.']:  # if we find a decimal, add it to the english text
                 english_text += '.'
-            elif braille == punctuation_to_braille[' ']:
+            elif braille == punctuation_to_braille[' ']: # if we find a space, end the number and add the space character
                 is_number = False
                 english_text += ' '
             elif braille == decimal_follows:
@@ -139,7 +139,7 @@ def braille_to_english(text):
 
         elif braille in braille_to_character:
             if is_uppercase:
-                english_text += braille_to_character[braille].upper()
+                english_text += braille_to_character[braille].upper() # if the character is uppercase, convert to uppercase
                 is_uppercase = False
             else:
                 english_text += braille_to_character[braille]
@@ -161,7 +161,9 @@ if __name__ == '__main__':
 
     braille_chars = {"O", "."}
 
-    if characters == braille_chars:
+    # Check if the input is in braille or english and print the appropriate translation
+    # We also handle the case of a string of dots that is a multiple of 6 which represent spaces in braille
+    if characters == braille_chars or (characters == {"."} and len(text) % 6 == 0):
         print(braille_to_english(text))
     else:
         print(english_to_braille(text))
