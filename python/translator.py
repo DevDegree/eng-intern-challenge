@@ -120,11 +120,6 @@ def parse_single_alphabet_word(word: str) -> str:
     return translated
 
 
-# def get_follows(word: str) -> bool:
-#     if word.isdigit():
-#         return ALPHABET_TO_BRAILLE
-
-
 def main():
     if len(sys.argv) < 2:
         print(f'Usage: python translator.py <braille|alphabet>')
