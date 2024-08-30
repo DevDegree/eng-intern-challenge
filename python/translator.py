@@ -152,15 +152,16 @@ class Translator():
 
 if __name__ == '__main__':
     translator = Translator
-    
-    if (len(sys.argv)) > 1:
-        if (translator.is_braille(sys.argv[1])):
-            #print(translator.convert_braille_to_english(sys.argv[1]))
-            print('test')
-        else:
-            #print(translator.convert_english_to_braille(sys.argv[1:]))
-            print('test')
-    else:
-        print('Usage: python translator.py { <braille_message> | <text> } ')
+
+    print('test')
+    # if (len(sys.argv)) > 1:
+    #     if (translator.is_braille(sys.argv[1])):
+    #         #print(translator.convert_braille_to_english(sys.argv[1]))
+    #         print('test')
+    #     else:
+    #         #print(translator.convert_english_to_braille(sys.argv[1:]))
+    #         print('test')
+    # else:
+    #     print('Usage: python translator.py { <braille_message> | <text> } ')
 
 
