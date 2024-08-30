@@ -159,15 +159,6 @@ def handle_eng(input: str):
     return out
 
 
-def main():
-    text = " ".join(argv[1:])
-
-    if is_braille(text):
-        print(handle_braille(text))
-    else:
-        print(handle_eng(text))
-
-
 def is_braille(text):
     if len(text) < 6:
         return False
@@ -179,6 +170,15 @@ def is_braille(text):
             return False
 
     return True
+
+
+def main():
+    text = " ".join(argv[1:])
+
+    if is_braille(text):
+        print(handle_braille(text))
+    else:
+        print(handle_eng(text))
 
 
 if __name__ == "__main__":
