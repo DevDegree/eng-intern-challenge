@@ -22,7 +22,7 @@ capital = '.....O'
 number_follows = '.O.OOO'
 
 def main():
-    code = sys.argv[1]
+    code = ' '.join(sys.argv[1:])
     
     if len(code) < 1:
         sys.exit(1)
