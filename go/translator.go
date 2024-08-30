@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"unicode"
 )
 
 const (
@@ -11,15 +12,21 @@ const (
 )
 
 const (
-	CapitalFollows uint8 = iota
-	DecimalFollows
-	NumberFollows
+	CapitalFollowsBraille string = ".....O"
+	DecimalFollowsBraille string = ".O...O"
+	NumberFollowsBraille  string = ".O.OOO"
+)
+
+const (
+	CapitalFollowsAction uint8 = iota
+	DecimalFollowsAction
+	NumberFollowsAction
 )
 
 var FollowActionsMap = map[string]uint8{
-	".....O": CapitalFollows,
-	".O...O": DecimalFollows,
-	".O.OOO": NumberFollows,
+	CapitalFollowsBraille: CapitalFollowsAction,
+	DecimalFollowsBraille: DecimalFollowsAction,
+	NumberFollowsBraille:  NumberFollowsAction,
 }
 
 var englishToBrailleMap = map[rune]string{
@@ -137,11 +144,11 @@ func translateToEnglish(brailleStatement string) string {
 	var makeCap bool
 	var isNumber bool
 
-    // more efficient way for string concatenation
-    // it prevents copying the string over and over
-    // with every iteration, especially her that we know
-    // the maximum capacity of the underlying slice is 
-    // at most 6
+	// more efficient way for string concatenation
+	// it prevents copying the string over and over
+	// with every iteration, especially her that we know
+	// the maximum capacity of the underlying slice is
+	// at most 6
 	sb := strings.Builder{}
 	sb.Grow(maxBrailleChars)
 
@@ -155,17 +162,17 @@ mainLoop:
 			followAction, prs := FollowActionsMap[singleBraille]
 			if prs {
 				switch followAction {
-				case NumberFollows:
+				case NumberFollowsAction:
 					isNumber = true
 					sb.Reset()
 					continue mainLoop
 
-				case CapitalFollows:
+				case CapitalFollowsAction:
 					makeCap = true
 					sb.Reset()
 					continue mainLoop
 
-				case DecimalFollows:
+				case DecimalFollowsAction:
 					// pass
 				}
 			}
@@ -199,8 +206,38 @@ mainLoop:
 	return sbRes.String()
 }
 
-func translateToBraille(englishWords []string) {
+func concatString(words []string) string {
+	sb := strings.Builder{}
+	for i, word := range words {
+		word = strings.TrimSpace(word)
+		sb.WriteString(word)
 
+		if i != len(words)-1 {
+			sb.WriteString(" ")
+		}
+	}
+	return sb.String()
+}
+
+func translateToBraille(concatedWords string) string {
+	sb := strings.Builder{}
+	sb.Grow(maxBrailleChars) // there will at least one english char
+
+	for _, engRune := range concatedWords {
+		if unicode.IsUpper(engRune) {
+			sb.WriteString(CapitalFollowsBraille)
+			engRune = unicode.ToLower(engRune)
+		}
+
+		brailString, prs := englishToBrailleMap[engRune]
+		if !prs {
+			panic("invalid input to cli")
+		}
+
+		sb.WriteString(brailString)
+	}
+
+	return sb.String()
 }
 
 func main() {
@@ -214,7 +251,8 @@ func main() {
 		    2. It will ONLY be one braille input
 	*/
 	if len(os.Args) >= 3 || (len(os.Args) == 2 && !strings.HasPrefix(os.Args[1], ".")) {
-		translateToBraille(os.Args[1:])
+		concatedWords := concatString(os.Args[1:])
+		fmt.Println(translateToBraille(concatedWords))
 	}
 
 	fmt.Println(translateToEnglish(os.Args[1]))
