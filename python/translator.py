@@ -1,6 +1,6 @@
 import sys
 
-# Correct Braille dictionary based on the provided image
+# Braille dictionary based on the provided image
 braille_alphabet = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
     'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..',
@@ -17,17 +17,19 @@ braille_alphabet = {
 letter_dict = {v: k for k, v in braille_alphabet.items() if k.isalpha()}
 punctuation_dict = {v: k for k, v in braille_alphabet.items() if k in ['.', ',', '!', '?', '-', ':', ';', "'"]}
 number_dict = {
-    '1': 'O.....',  # Corresponds to 'a'
-    '2': 'O.O...',  # Corresponds to 'b'
-    '3': 'OO....',  # Corresponds to 'c'
-    '4': 'OO.O..',  # Corresponds to 'd'
-    '5': 'O..O..',  # Corresponds to 'e'
-    '6': 'OOO...',  # Corresponds to 'f'
-    '7': 'OOOO..',  # Corresponds to 'g'
-    '8': 'O.OO..',  # Corresponds to 'h'
-    '9': '.OO...',  # Corresponds to 'i'
-    '0': '.OOO..'   # Corresponds to 'j'
+    '1': 'O.....',  
+    '2': 'O.O...',  
+    '3': 'OO....',  
+    '4': 'OO.O..',  
+    '5': 'O..O..',  
+    '6': 'OOO...',  
+    '7': 'OOOO..',  
+    '8': 'O.OO..',  
+    '9': '.OO...',  
+    '0': '.OOO..'   
 }
+
+#Note: The provided unit test is incorrect so I left the number_dict in the correct form instead of changing it to meet unit test's output. 
 
 def translate_to_braille(text):
     result = []
@@ -90,7 +92,7 @@ def main():
     # Combine all arguments into a single input string
     input_text = ' '.join(sys.argv[1:])
     
-    # Determine if input is Braille or English by checking for 'O' and '.'
+    # Determine if input is Braille or English
     if all(char in 'O.' for char in input_text.replace(' ', '')):
         print(translate_to_english(input_text))
     else:
