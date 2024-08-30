@@ -32,20 +32,21 @@ ALPHABET_TO_BRAILLE = {
     'y': 'OO.OOO',
     'z': 'O..OOO',
     'CAPITAL_FOLLOWS': '.....O',
-    'DECIMAL_FOLLOWS': '.O...O',
     'NUMBER_FOLLOWS': '.O.OOO',
-    '.': '..OO.O',
-    ',': '..O...',
-    '?': '..O.OO',
-    '!': '..OOO.',
-    ':': '..OO..',
-    ';': '..O.O.',
-    '-': '....OO',
-    '/': '.O..O.',
-    '<': '.OO..O',
-    '>': 'O..OO.',
-    '(': 'O.O..O',
-    ')': '.O.OO.',
+    # Following characters are not required in assignment
+    # 'DECIMAL_FOLLOWS': '.O...O',
+    # '.': '..OO.O',
+    # ',': '..O...',
+    # '?': '..O.OO',
+    # '!': '..OOO.',
+    # ':': '..OO..',
+    # ';': '..O.O.',
+    # '-': '....OO',
+    # '/': '.O..O.',
+    # '<': '.OO..O',
+    # '>': 'O..OO.',
+    # '(': 'O.O..O',
+    # ')': '.O.OO.',
 }
 
 BRAILLE_TO_ALPHABET = {braille: alphabet for alphabet, braille in ALPHABET_TO_BRAILLE.items()}
@@ -64,6 +65,7 @@ ALPHABET_TO_NUMBERS = {
 }
 
 NUMBERS_TO_ALPHABET = {number: alphabet for alphabet, number in ALPHABET_TO_NUMBERS.items()}
+
 
 def check_is_braille(text: List[str]) -> bool:
     chars_set = set()
@@ -86,6 +88,29 @@ def parse_braille(text: List[str]) -> None:
 
 def parse_single_braille(text: str) -> str:
     translated = ''
+    capital_follows = False
+    number_follows = False
+
+    for char_start in range(0, len(text), 6):
+        char_end = char_start + 6
+        braille_char = text[char_start:char_end]
+        alphabet = BRAILLE_TO_ALPHABET[braille_char]
+        if alphabet == 'CAPITAL_FOLLOWS':
+            capital_follows = True
+            continue
+        if alphabet == 'NUMBER_FOLLOWS':
+            number_follows = True
+            continue
+        if alphabet == ' ':
+            number_follows = False
+        if capital_follows:
+            alphabet = alphabet.upper()
+            capital_follows = False
+        if number_follows:
+            number = ALPHABET_TO_NUMBERS[alphabet]
+            alphabet = number
+        translated += alphabet
+
     return translated
 
 
@@ -136,4 +161,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
