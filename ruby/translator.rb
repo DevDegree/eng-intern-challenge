@@ -63,3 +63,11 @@ BRAILLE_TO_ENGLISH_MAPPING = ENGLISH_TO_BRAILLE_MAPPING.transform_values { |v| v
 
 ENGLISH_SPACE = ' '
 BRAILLE_SPACE = ENGLISH_TO_BRAILLE_MAPPING[:special][ENGLISH_SPACE]
+
+def is_english?(str)
+  str.chars.any? { |char| not ['O', '.'].include?(char) }
+end
+
+def main
+  input_string = ARGV.join(" ")
+end
