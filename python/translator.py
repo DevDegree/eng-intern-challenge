@@ -128,10 +128,8 @@ def english_to_braille(message: str):
     
     return output
 
-# Main function
-if __name__ == "__main__":
-    message = ' '.join(sys.argv[1:])
-    output = braille_to_english(message) if is_braille(message) else english_to_braille(message)
-    
-    sys.stdout.write(output)
+message = ' '.join(sys.argv[1:])
+output = braille_to_english(message) if is_braille(message) else english_to_braille(message)
+
+sys.stdout.write(output)
 
