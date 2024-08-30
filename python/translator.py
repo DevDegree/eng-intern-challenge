@@ -27,18 +27,6 @@ BRAILLE_TO_ENG = {
   "OO..OO" : 'x',
   "OO.OOO" : 'y',
   "O..OOO" : 'z',
-  "..OO.O" : 'O',
-  "..O..." : ',',
-  "..O.OO" : 'O',
-  "..OOO." : '!',
-  "..OO.." : ':',
-  "..O.O." : ';',
-  "....OO" : '-',
-  ".O..O." : '/',
-  ".OO..O" : '<',
-  "O..OO." : '>',
-  "O.O..O" : '(',
-  ".O.OO." : ')',
   "......" : ' '
 }
 
@@ -51,6 +39,7 @@ def main():
   print(translate(words))
 
 def translate(words):
+  # English if more than 1 arg or contains chars other than O and .
   if len(words) > 1 or not set(words[0]).issubset(set("O.")):
     translation = to_braille(words)
   else:
@@ -67,17 +56,18 @@ def to_braille(words):
     if c.isupper():
       translation += ".....O"
       c = chr(ord(c) + ord('a') - ord('A'))
-    
-    if c.isnumeric():
+    elif c.isnumeric():
       if not is_num:
         is_num = True
         translation += ".O.OOO"
       
+      # 0 special case: braille differs from ascii
       if c == '0':
         c = 'j'
       else:
         c = chr(ord(c) + ord('a') - ord('1'))
-    else:
+    
+    if not c.isnumeric():
       is_num = False
     
     translation += ENG_TO_BRAILLE[c]
@@ -99,9 +89,7 @@ def to_chars(words):
       is_num = True
       continue
     
-    if sentence[i : i + 6] == ".O...O":
-      continue
-    
+    # 0 special case: braille differs from ascii
     if is_num and BRAILLE_TO_ENG[sentence[i : i + 6]] == 'j':
       translation += '0'
       continue
@@ -110,8 +98,8 @@ def to_chars(words):
       is_num = False
 
     translation += chr(ord(BRAILLE_TO_ENG[sentence[i : i + 6]]) 
-                      + (ord('A') - ord('a')) * is_upper 
-                      + (ord('1') - ord('a')) * is_num)
+                      + (ord('A') - ord('a')) * int(is_upper) 
+                      + (ord('1') - ord('a')) * int(is_num))
     
     is_upper = False
   
