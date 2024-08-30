@@ -64,7 +64,6 @@ uppercase_follows = '.....O'
 decimal_follows = '.O...O'
 number_follows = '.O.OOO'
 
-
 # Dictionaries containing braille to character, digit, punctuation
 # Obtained by swapping key: values from the original dictionaries
 braille_to_character = dict((reversed(item) for item in character_to_braille.items()))
@@ -101,7 +100,7 @@ def english_to_braille(text):
                 braille_text += decimal_follows
             elif char == " " and is_number:
                 is_number = False
-                
+
             braille_text += punctuation_to_braille[char]
 
     return braille_text
@@ -150,7 +149,6 @@ def braille_to_english(text):
     return english_text
 
 
-
 if __name__ == '__main__':
     import sys
     args = sys.argv
@@ -161,6 +159,9 @@ if __name__ == '__main__':
     # Get the unique characters in the input
     characters = set(text)
 
-    
+    braille_chars = {"O", "."}
 
-
+    if characters == braille_chars:
+        print(braille_to_english(text))
+    else:
+        print(english_to_braille(text))
