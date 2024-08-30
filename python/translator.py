@@ -38,10 +38,8 @@ ALPHABET_TO_BRAILLE = {alphabet: braille for braille, alphabet in BRAILLE_TO_ALP
 
 """
 Checks if a given string is written in braille.
-
 Parameters:
     message (str): The given message to be translated.
-
 Returns:
     boolean: True if message is in braille, else False.
 """
@@ -61,10 +59,8 @@ def is_braille(message):
 
 """
 Converts a braille string to its corresponding alphanumeric message.
-
 Parameters:
     braille_message (str): The given braille message to be translated.
-
 Returns:
     translated_text (str): The translated alphanumeric message.
 """
@@ -102,10 +98,8 @@ def braille_to_alphabet_translator(braille_message):
 
 """
 Converts an alphanumeric string to its corresponding braille message.
-
 Parameters:
     alphanumeric_message (str): The given alphanumeric_message message to be translated.
-
 Returns:
     translated_text (str): The translated braille string.
 """
@@ -132,7 +126,8 @@ def alphabet_to_braille_translator(alphanumeric_message):
             number_as_character = 'j' if character == '0' else chr(int(character) + ord('a') - 1)
             translated_text += str(ALPHABET_TO_BRAILLE.get(number_as_character))
         else:
-            is_prev_numerical = False
+            if is_prev_numerical and character == ' ':
+                is_prev_numerical = False
             translated_text += str(ALPHABET_TO_BRAILLE.get(character))
 
     return translated_text
