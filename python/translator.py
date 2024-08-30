@@ -1,3 +1,5 @@
+import sys
+
 # 1. determine if string is in english or braille
 #       -> iterate through each character
 #       -> if character is not 'O' or '.' string is in braille
@@ -6,8 +8,8 @@
 def is_braille(string):
     for c in string:
         if c != 'O' and c != '.':
-            return True
-    return False
+            return to_english(string)
+    return to_braille(string)
 
 # 2. If string is in braille
 #       -> create dict variable 'BRAILLE-ENGLISH-LETTER-MAP' that has the braille character letters as the keys, and english characters as the values
@@ -30,6 +32,8 @@ def is_braille(string):
     #           -> add corresponding value to 'english-str'
 #       -> return 'english-str'
 
+
+
 # 3. If string is in english
 #       -> create dict variable 'ENGLISH-BRAILLE-MAP' that has the english characters as the keys, and braille characters as the values
 #           -> 
@@ -44,4 +48,6 @@ def is_braille(string):
 
 
 if __name__ == "__main__":
-    
+    args = sys.argv[1:]
+    input = ' '.join(args)
+    print(is_braille(input))
