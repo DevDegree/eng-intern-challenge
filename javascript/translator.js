@@ -94,6 +94,7 @@ const translateBraille = (input) => {
       numFlag = true;
     } else if (numFlag && cell == NUMBER_END) {
       numFlag = false;
+      english += brailleToCharacters[cell];
     } else if (capFlag) {
       english += brailleToCharacters[cell].toUpperCase();
       capFlag = false;
@@ -117,7 +118,6 @@ const translateEnglish = (input) => {
     let char = input.charAt(i);
     if (numFlag && !isNumber(char)) {
       numFlag = false;
-      braille += charactersToBraille[' '];
     }
     if (isUpperCase(char)) {
       braille += CAPITAL_FOLLOWS;
