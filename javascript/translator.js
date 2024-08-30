@@ -1,5 +1,5 @@
-// ADRIAN MILEA
-// Eng Intern Challenge Fall - Winter 2025
+// Adrian Milea
+// Braille to English / English to Braille Translator
 
 // Mappings between English characters and their Braille representations
 const brailleMap = {
@@ -44,6 +44,7 @@ const brailleMap = {
   9: ".OO...",
 };
 
+// Create the English to Braille map
 const englishMap = Object.fromEntries(
   Object.entries(brailleMap).map(([k, v]) => [v, k])
 );
@@ -67,9 +68,11 @@ function translateToBraille(text) {
         isNumber = true;
       }
       braille += brailleMap[char];
+    } else if (char === " ") {
+      braille += brailleMap[" "];
     } else {
       isNumber = false;
-      braille += brailleMap[char];
+      braille += brailleMap[char.toLowerCase()] || "......"; // !!!Handle unexpected characters
     }
   }
 
@@ -100,15 +103,13 @@ function translateToEnglish(braille) {
       isCapital = false;
     }
 
-    if (isNumber) {
-      if (/[a-z]/.test(char)) {
-        char = Object.keys(brailleMap).find(
-          (key) => brailleMap[key] === symbol && /\d/.test(key)
-        );
-      }
+    if (isNumber && char && /[a-z]/.test(char)) {
+      char = Object.keys(brailleMap).find(
+        (key) => brailleMap[key] === symbol && /\d/.test(key)
+      );
     }
 
-    english += char;
+    english += char || "?"; // !!!Handle unknown Braille symbols
   }
 
   return english;
@@ -126,7 +127,11 @@ function main(input) {
 }
 
 // Accept the command-line argument and call the MAIN FUNCTION
-const input = process.argv[2];
-main(input);
+const input = process.argv.slice(2).join(" "); // !!!Join arguments with spaces
+if (input) {
+  main(input);
+} else {
+  console.log("No input provided");
+}
 
 // End of script
