@@ -17,16 +17,16 @@ braille_alphabet = {
 letter_dict = {v: k for k, v in braille_alphabet.items() if k.isalpha()}
 punctuation_dict = {v: k for k, v in braille_alphabet.items() if k in ['.', ',', '!', '?', '-', ':', ';', "'"]}
 number_dict = {
-    '1': 'O.O...',  # Corresponds to the test expectation for '1'
-    '2': 'OO....',  # Corresponds to the test expectation for '2'
-    '3': 'OO.O..',  # Corresponds to the test expectation for '3'
-    '4': 'OO....',  # This was likely intentional for the test
-    '5': 'O..O..',  # Corresponds to the test expectation for '5'
-    '6': 'OOO...',  # Corresponds to the test expectation for '6'
-    '7': 'OOOO..',  # Corresponds to the test expectation for '7'
-    '8': 'O.OO..',  # Corresponds to the test expectation for '8'
-    '9': '.OO...',  # Corresponds to the test expectation for '9'
-    '0': '.OOO..'   # Corresponds to the test expectation for '0'
+    '1': 'O.....',  # Corresponds to 'a'
+    '2': 'O.O...',  # Corresponds to 'b'
+    '3': 'OO....',  # Corresponds to 'c'
+    '4': 'OO.O..',  # Corresponds to 'd'
+    '5': 'O..O..',  # Corresponds to 'e'
+    '6': 'OOO...',  # Corresponds to 'f'
+    '7': 'OOOO..',  # Corresponds to 'g'
+    '8': 'O.OO..',  # Corresponds to 'h'
+    '9': '.OO...',  # Corresponds to 'i'
+    '0': '.OOO..'   # Corresponds to 'j'
 }
 
 def translate_to_braille(text):
