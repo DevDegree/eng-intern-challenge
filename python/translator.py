@@ -65,6 +65,13 @@ decimal_follows = '.O...O'
 number_follows = '.O.OOO'
 
 
+# Dictionaries containing braille to character, digit, punctuation
+# Obtained by swapping key: values from the original dictionaries
+braille_to_character = dict((reversed(item) for item in character_to_braille.items()))
+braille_to_digit = dict((reversed(item) for item in digit_to_braille.items()))
+braille_to_punctuation = dict((reversed(item) for item in punctuation_to_braille.items()))
+
+
 
 if __name__ == '__main__':
     import sys
@@ -75,7 +82,6 @@ if __name__ == '__main__':
     text = ' '.join(args)
     # Get the unique characters in the input
     characters = set(text)
-
     
 
 
