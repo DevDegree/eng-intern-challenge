@@ -63,7 +63,7 @@ func NewBrailleTranslator() *BrailleTranslator {
 
 func (bt *BrailleTranslator) brailleToEnglish(initialString string) string {
 	charSize := 6
-	if len(initialString)%6 != 0 {
+	if len(initialString)%charSize != 0 {
 		return "ERROR: Braille text is invalid"
 	}
 
