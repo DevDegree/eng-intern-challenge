@@ -4,13 +4,13 @@ Create hashmaps:
     - letters + spaces + capital follows + number follows
     - numbers + spaces
   English to Braille keys:
-    - letters + numbers + spaces (don't forget to add follows symbols) 
+    - letters + numbers + spaces
 
-Main function to export:
+Main function:
   Determine if string argument is Braille or English
     If length of string < 6, it is English
-    Else, search for string in Braille to English hashmap(s)
-      If string in hashmaps, string is in Braille
+    Else, search for first 6 characters of string in Braille to English hashmap(s)
+      If in hashmaps, string is in Braille
         Pass string to appropriate translator function
       Else, string is in English
         Pass string to appropriate translator function
@@ -42,3 +42,66 @@ English to Braille translator function:
       Add Braille symbol for space to output
   Output translated string
 */
+
+const brailleAlphabet = [
+  { brl: 'O.....', eng: 'a', type: 'letter' },
+  { brl: 'O.O...', eng: 'b', type: 'letter' },
+  { brl: 'OO....', eng: 'c', type: 'letter' },
+  { brl: 'OO.O..', eng: 'd', type: 'letter' },
+  { brl: 'O..O..', eng: 'e', type: 'letter' },
+  { brl: 'OOO...', eng: 'f', type: 'letter' },
+  { brl: 'OOOO..', eng: 'g', type: 'letter' },
+  { brl: 'O.OO..', eng: 'h', type: 'letter' },
+  { brl: '.OO...', eng: 'i', type: 'letter' },
+  { brl: '.OOO..', eng: 'j', type: 'letter' },
+  { brl: 'O...O.', eng: 'k', type: 'letter' },
+  { brl: 'O.O.O.', eng: 'l', type: 'letter' },
+  { brl: 'OO..O.', eng: 'm', type: 'letter' },
+  { brl: 'OO.OO.', eng: 'n', type: 'letter' },
+  { brl: 'O..OO.', eng: 'o', type: 'letter' },
+  { brl: 'OOO.O.', eng: 'p', type: 'letter' },
+  { brl: 'OOOOO.', eng: 'q', type: 'letter' },
+  { brl: 'O.OOO.', eng: 'r', type: 'letter' },
+  { brl: '.OO.O.', eng: 's', type: 'letter' },
+  { brl: '.OOOO.', eng: 't', type: 'letter' },
+  { brl: 'O...OO', eng: 'u', type: 'letter' },
+  { brl: 'O.O.OO', eng: 'v', type: 'letter' },
+  { brl: '.OOO.O', eng: 'w', type: 'letter' },
+  { brl: 'OO..OO', eng: 'x', type: 'letter' },
+  { brl: 'OO.OOO', eng: 'y', type: 'letter' },
+  { brl: 'O..OOO', eng: 'z', type: 'letter' },
+  { brl: 'O.....', eng: '1', type: 'number' },
+  { brl: 'O.O...', eng: '2', type: 'number' },
+  { brl: 'OO....', eng: '3', type: 'number' },
+  { brl: 'OO.O..', eng: '4', type: 'number' },
+  { brl: 'O..O..', eng: '5', type: 'number' },
+  { brl: 'OOO...', eng: '6', type: 'number' },
+  { brl: 'OOOO..', eng: '7', type: 'number' },
+  { brl: 'O.OO..', eng: '8', type: 'number' },
+  { brl: '.OO...', eng: '9', type: 'number' },
+  { brl: '.OOO..', eng: '0', type: 'number' },
+  { brl: '.....O', eng: 'capitalFollows', type: 'follows' },
+  { brl: '.O.OOO', eng: 'numberFollows', type: 'follows' },
+  { brl: '......', eng: ' ', type: 'space' },
+];
+
+const brailleLettersMap = new Map();
+brailleAlphabet.forEach(({ brl, eng, type }) => {
+  if (type === 'letter' || type === 'follows' || type === 'space') {
+    brailleLettersMap.set(brl, eng);
+  }
+});
+
+const brailleNumbersMap = new Map();
+brailleAlphabet.forEach(({ brl, eng, type }) => {
+  if (type === 'number' || type === 'space') {
+    brailleNumbersMap.set(brl, eng);
+  }
+});
+
+const englishMap = new Map();
+brailleAlphabet.forEach(({ brl, eng, type }) => {
+  if (type === 'letter' || type === 'number' || type === 'space') {
+    englishMap.set(eng, brl);
+  }
+});
