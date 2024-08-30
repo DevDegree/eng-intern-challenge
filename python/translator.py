@@ -81,13 +81,48 @@ def detect(input_str):
 
     for char in input_str:
         if char in english_chars:
-            print("Bad Char: ", char)
             return False
     return True
 
 
 def braille_to_english(input_str):
-    pass
+    res = ""
+    # Check if Braille is valid
+    if len(input_str) % 6 != 0:
+        return "Invalid Braille string."
+    char_idx = 0
+
+    while char_idx < len(input_str):
+        curr = input_str[char_idx : char_idx + 6]
+        if curr not in BRAILLE_DICT_BWD:
+            return "Invalid Braille string."
+        mapped_arr = BRAILLE_DICT_BWD[curr]
+        # Check if its a "special char"
+        if mapped_arr[0] == "CAP":
+            # Get next character and add it capitalized
+            char_idx += 6
+            curr = input_str[char_idx : char_idx + 6]
+            mapped_arr = BRAILLE_DICT_BWD[curr]
+            res += mapped_arr[0]
+            char_idx += 6
+        elif mapped_arr[0] == "NUM":
+            char_idx += 6
+            while char_idx < len(input_str):
+                curr = input_str[char_idx : char_idx + 6]
+                mapped_arr = BRAILLE_DICT_BWD[curr]
+                if mapped_arr[0] == "SPACE":
+                    break
+                res += mapped_arr[1]
+                char_idx += 6
+
+        elif mapped_arr[0] == "SPACE":
+            res += " "
+            char_idx += 6
+        else:
+            res += mapped_arr[0].lower()
+            char_idx += 6
+
+    return res
 
 
 def english_to_braille(input_str):
@@ -109,6 +144,7 @@ def english_to_braille(input_str):
                 res += BRAILLE_DICT_FWD[input_str[char_idx].upper()]
             char_idx += 1
         elif input_str[char_idx].isnumeric():
+            # Add 'number follows' then iterate over all numbers and add them
             res += BRAILLE_DICT_FWD["NUM"]
             while char_idx < len(input_str) and input_str[char_idx].isnumeric():
                 res += BRAILLE_DICT_FWD[input_str[char_idx]]
@@ -127,27 +163,20 @@ def main():
     args = parser.parse_args()
 
     input_str = " ".join(args.input_str)
-    print("input_str: ", input_str)
 
     # Check if input is valid and is not empty
     if not input_str:
         return ""
 
     is_braille = detect(input_str)
-    if is_braille:
-        print("Its braille")
-    else:
-        print("Its english")
 
     output = ""
-    # print(output)
 
     if is_braille:
         output = braille_to_english(input_str)
     else:
         output = english_to_braille(input_str)
 
-    print("Out:")
     print(output)
 
 
