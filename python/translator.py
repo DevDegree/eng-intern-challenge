@@ -10,38 +10,38 @@ There are 3 functions within this class
     translate_text_to_braille
     translate_braille_to_text
 
-We also have a dictionary defined at the constructor level which holds the braille (key) and alphanumeric equivalent. There are also
+We also have a dictionary defined at the constructor level which holds the braille (key) and alphanumeric equivalent (values). There are also
 3 other key/value pair which are meant for special circumstances (is it a number? is it a captial letter?, etc.)  
 """
 class Translator:
     def __init__(self) -> None:  
         self.BRAILLE_AND_CHARACTERS_DICTIONARY = {
-        "O....." : ["a", "A", "1"],
-        "O.O..." : ["b", "B", "2"],
-        "OO...." : ["c", "C", "3"],
-        "OO.O.." : ["d", "D", "4"],
-        "O..O.." : ["e", "E", "5"],
-        "OOO..." : ["f", "F", "6"],
-        "OOOO.." : ["g", "G", "7"],
-        "O.OO.." : ["h", "H", "8"],
-        ".OO..." : ["i", "I", "9"],
-        ".OOO.." : ["j", "J", "0"],
-        "O...O." : ["k", "K"],
-        "O.O.O." : ["l", "L"],
-        "OO..O." : ["m", "M"],
-        "OO.OO." : ["n", "N"],
-        "O..OO." : ["o", "O"],
-        "OOO.O." : ["p", "P"],
-        "OOOOO." : ["q", "Q"],
-        "O.OOO." : ["r", "R"],
-        ".OO.O." : ["s", "S"],
-        ".OOOO." : ["t", "T"],
-        "O...OO" : ["u", "U"],
-        "O.O.OO" : ["v", "V"],
-        ".OOO.O" : ["w", "W"],
-        "OO..OO" : ["x", "X"],
-        "OO.OOO" : ["y", "Y"],
-        "O..OOO" : ["z", "Z"],
+            "O....." : ["a", "A", "1"],
+            "O.O..." : ["b", "B", "2"],
+            "OO...." : ["c", "C", "3"],
+            "OO.O.." : ["d", "D", "4"],
+            "O..O.." : ["e", "E", "5"],
+            "OOO..." : ["f", "F", "6"],
+            "OOOO.." : ["g", "G", "7"],
+            "O.OO.." : ["h", "H", "8"],
+            ".OO..." : ["i", "I", "9"],
+            ".OOO.." : ["j", "J", "0"],
+            "O...O." : ["k", "K"],
+            "O.O.O." : ["l", "L"],
+            "OO..O." : ["m", "M"],
+            "OO.OO." : ["n", "N"],
+            "O..OO." : ["o", "O"],
+            "OOO.O." : ["p", "P"],
+            "OOOOO." : ["q", "Q"],
+            "O.OOO." : ["r", "R"],
+            ".OO.O." : ["s", "S"],
+            ".OOOO." : ["t", "T"],
+            "O...OO" : ["u", "U"],
+            "O.O.OO" : ["v", "V"],
+            ".OOO.O" : ["w", "W"],
+            "OO..OO" : ["x", "X"],
+            "OO.OOO" : ["y", "Y"],
+            "O..OOO" : ["z", "Z"],
 
             "captial" : ".....O",
             "number" : ".O.OOO",
@@ -66,6 +66,7 @@ class Translator:
         """
         output_str = ""
         isNumber = False
+        
         for i in range(0, len(input_str)):
             character = input_str[i]
 
@@ -141,7 +142,7 @@ def main():
                 break
 
             if any(not char.isalnum() and char != ' ' for char in input_str): # handles any other input. 
-                msg = "Error, inputted string couldn't be converted to Braille.\nPlease make sure the string only contains the English alphabet (capper and or lower),  numbers(0-9), and spaces."
+                msg = "Error, inputted string couldn't be converted to Braille.\nPlease make sure the string only contains the English alphabet (upper and or lower),  numbers(0-9), and spaces."
                 break
 
             msg += translator.translate_text_to_braille(input_str)
