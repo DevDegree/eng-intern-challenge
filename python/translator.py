@@ -54,10 +54,12 @@ to_num_braille = '.O.OOO'
 
 def main():
     to_trans = " ".join(sys.argv[1:])
-    if(all(c in braille_chars for c in to_trans)):
+    if(all(c in braille_chars for c in to_trans) and len(to_trans) % 6 == 0):
         print(braille_to_eng(to_trans))
-    else:
+    elif(all(c.isalnum() or c.isspace() for c in to_trans)):
         print(eng_to_braille(to_trans))
+    else:
+        print("invalid argument, please provide either Braille string or English string with letters, numbers, and spaces only")
 
 def braille_to_eng(braille):
     eng = ""
