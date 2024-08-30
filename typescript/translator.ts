@@ -1,3 +1,12 @@
+/**
+ * check if a string is or isn't valid Braille such that it only contains O or .
+ *
+ * @example
+ * // returns false
+ * isValidBraille("..O...O...A.")
+ *
+ * @returns {boolean} Returns whether or not it is a braille string
+ */
 const isValidBraille = (str: string): boolean => {
   const allowedSet: string[] = ["O", "."];
 
@@ -9,6 +18,8 @@ const isValidBraille = (str: string): boolean => {
   return true;
 };
 
-console.log(isValidBraille("..O...O...O"));
+const clArgs = process.argv.slice(2).join(" ");
 
-console.log(isValidBraille("......A...."));
+// if true -> translate to braille
+// if false -> translate to english
+console.log(isValidBraille(clArgs));
