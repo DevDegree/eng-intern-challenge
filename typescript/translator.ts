@@ -98,14 +98,15 @@ function translateBrailleToEnglish(input: string): string {
                 englishOutput += String.fromCharCode(englishChar.charCodeAt(0) - 'a'.charCodeAt(0) + '1'.charCodeAt(0));
             } else {
                 englishOutput += capitalizeNext ? englishChar.toUpperCase() : englishChar;
+                inNumberMode = false;
             }
             capitalizeNext = false;
-            inNumberMode = false;
         }
     }
 
     return englishOutput;
 }
+
 
 function main() {
     const inputArgs = process.argv.slice(2);
