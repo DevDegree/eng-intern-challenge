@@ -16,7 +16,7 @@ const (
 	NumberFollows
 )
 
-var FollowsMap = map[string]uint8{
+var FollowActionsMap = map[string]uint8{
 	".....O": CapitalFollows,
 	".O...O": DecimalFollows,
 	".O.OOO": NumberFollows,
@@ -132,38 +132,71 @@ var brailleToEnglishAlphMap = map[string]string{
 func translateToEnglish(brailleStatement string) string {
 	// braille statement chars are ASCII. so if we
 	// iterate over the string, we get the correct rune
-    sbRes := strings.Builder{}
 
+	sbRes := strings.Builder{}
+	var makeCap bool
+	var isNumber bool
+
+    // more efficient way for string concatenation
+    // it prevents copying the string over and over
+    // with every iteration, especially her that we know
+    // the maximum capacity of the underlying slice is 
+    // at most 6
 	sb := strings.Builder{}
 	sb.Grow(maxBrailleChars)
 
+mainLoop:
 	for i, c := range brailleStatement {
 		sb.WriteRune(c)
 
 		if (i+1)%maxBrailleChars == 0 {
 			singleBraille := sb.String()
 
-			// followAction, prs := FollowsMap[singleBraille]
-			// if prs {
-			// 	switch followAction {
-			// 	case NumberFollows:
+			followAction, prs := FollowActionsMap[singleBraille]
+			if prs {
+				switch followAction {
+				case NumberFollows:
+					isNumber = true
+					sb.Reset()
+					continue mainLoop
 
-			// 	}
-			// }
+				case CapitalFollows:
+					makeCap = true
+					sb.Reset()
+					continue mainLoop
 
-			englishString, prs := brailleToEnglishAlphMap[singleBraille]
-			if !prs {
-				fmt.Println("does not exist!")
-				os.Exit(0)
+				case DecimalFollows:
+					// pass
+				}
 			}
 
-            sbRes.WriteString(englishString)
+			var englishString string
+			if isNumber {
+				englishString, prs = brailleToEnglishNumMap[singleBraille]
+				if !prs {
+					// this means that this character is a space
+					englishString = brailleToEnglishAlphMap[singleBraille]
+					isNumber = false
+				}
+
+			} else {
+				englishString, prs = brailleToEnglishAlphMap[singleBraille]
+				if !prs {
+					panic("non existent english string in map")
+				}
+
+				if makeCap {
+					englishString = strings.ToUpper(englishString)
+					makeCap = false
+				}
+			}
+
+			sbRes.WriteString(englishString)
 			sb.Reset()
-			continue
 		}
 	}
 
-    return sbRes.String()
+	return sbRes.String()
 }
 
 func translateToBraille(englishWords []string) {
