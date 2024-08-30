@@ -124,4 +124,5 @@ def main() -> None:
         )
     sys.stdout.write(out)
 
+
 main()
