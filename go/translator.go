@@ -23,21 +23,21 @@ const (
 )
 
 const (
-	CapitalFollowsBraille string = ".....O"
-	DecimalFollowsBraille string = ".O...O"
-	NumberFollowsBraille  string = ".O.OOO"
+	capitalFollowsBraille string = ".....O"
+	decimalFollowsBraille string = ".O...O"
+	numberFollowsBraille  string = ".O.OOO"
 )
 
 const (
-	CapitalFollowsAction uint8 = iota
-	DecimalFollowsAction
-	NumberFollowsAction
+	capitalFollowsAction uint8 = iota
+	decimalFollowsAction
+	numberFollowsAction
 )
 
-var FollowActionsMap = map[string]uint8{
-	CapitalFollowsBraille: CapitalFollowsAction,
-	DecimalFollowsBraille: DecimalFollowsAction,
-	NumberFollowsBraille:  NumberFollowsAction,
+var followActionsMap = map[string]uint8{
+	capitalFollowsBraille: capitalFollowsAction,
+	decimalFollowsBraille: decimalFollowsAction,
+	numberFollowsBraille:  numberFollowsAction,
 }
 
 var englishToBrailleMap = map[rune]string{
@@ -85,8 +85,8 @@ var englishToBrailleMap = map[rune]string{
 	';': "..O.O.",
 	'-': "....OO",
 	'/': ".O..O.",
-	'<': ".OO..O",
-	'>': "O..OO.",
+	// '<': ".OO..O",
+	// '>': "O..OO.",
 	'(': "O.O..O",
 	')': ".O.OO.",
 	' ': "......",
@@ -170,23 +170,23 @@ mainLoop:
 		if (i+1)%maxBrailleChars == 0 {
 			singleBraille := sb.String()
 
-			followAction, prs := FollowActionsMap[singleBraille]
+			followAction, prs := followActionsMap[singleBraille]
 			if prs {
 				switch followAction {
-				case NumberFollowsAction:
+				case numberFollowsAction:
 					isNumber = true
 					sb.Reset()
 					continue mainLoop
 
-				case CapitalFollowsAction:
+				case capitalFollowsAction:
 					makeCap = true
 					sb.Reset()
 					continue mainLoop
 
-				case DecimalFollowsAction:
+				case decimalFollowsAction:
 					sbRes.WriteString(".")
-                    sb.Reset()
-                    continue mainLoop
+					sb.Reset()
+					continue mainLoop
 				}
 			}
 
@@ -219,6 +219,8 @@ mainLoop:
 	return sbRes.String()
 }
 
+// Concatenates all the words together
+// and puts a space between them.
 func concatString(words []string) string {
 	sb := strings.Builder{}
 	for i, word := range words {
@@ -239,7 +241,7 @@ func translateToBraille(concatedWords string) string {
 
 	for _, engRune := range concatedWords {
 		if unicode.IsUpper(engRune) {
-			sb.WriteString(CapitalFollowsBraille)
+			sb.WriteString(capitalFollowsBraille)
 			engRune = unicode.ToLower(engRune)
 		}
 
@@ -248,7 +250,7 @@ func translateToBraille(concatedWords string) string {
 		// numbers sequence
 		if unicode.IsNumber(engRune) {
 			if writeNumberFollow {
-				sb.WriteString(NumberFollowsBraille)
+				sb.WriteString(numberFollowsBraille)
 				writeNumberFollow = false
 			}
 		}
@@ -256,7 +258,7 @@ func translateToBraille(concatedWords string) string {
 		// If this is the case, we're still writing numbers and "."
 		// does not represent period rather a decimcal point
 		if !writeNumberFollow && string(engRune) == "." {
-			sb.WriteString(DecimalFollowsBraille)
+			sb.WriteString(decimalFollowsBraille)
 			continue
 		}
 
