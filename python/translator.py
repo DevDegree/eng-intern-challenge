@@ -181,5 +181,3 @@ if __name__ == '__main__':
     translator = Translator(sentence)
     result = translator.translate()
     print(result)
-
-    
