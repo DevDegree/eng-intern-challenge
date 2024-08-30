@@ -10,6 +10,8 @@
 const isValidBraille = (str: string): boolean => {
   const allowedSet: string[] = ["O", "."];
 
+  if (str.length % 6 != 0) return false;
+
   for (const letter of str) {
     if (!allowedSet.includes(letter)) {
       return false;
