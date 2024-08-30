@@ -13,6 +13,17 @@ braille_map = {
     '(': '..OO..', ')': '..OOO.', 'capital': '.....O', 'number': '.O.OOO'
 }
 
+reversed_braille_map = {
+   'O.....': ['a', '1'], 'O.O...': ['b', '2'], 'OO....': ['c', '3'], 'OO.O..': ['d', '4'], 'O..O..': ['e', '5'], 
+   'OOO...': ['f', '6'], 'OOOO..': ['g', '7'], 'O.OO..': ['h', '8'], '.OO...': ['i', '9'], '.OOO..': ['j', '0'], 
+   'O...O.': 'k', 'O.O.O.': 'l', 'OO..O.': 'm', 'OO.OO.': 'n', 'O..OO.': 'o', 
+   'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't', 
+   'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y', 
+   'O..OOO': 'z', '......': ' ', '..OO.O': '!', '..O...': ',', '..O.OO': '?', 
+   '...OO.': ':', '...O..': ';', '...O.O': '-', '..O..O': '/', '..OO..': '(', 
+   '..OOO.': ')', '.....O': 'capital', '.O.OOO': 'number'
+}
+
 def translate_to_braille(text):
   result = []
   number_mode = False
@@ -36,9 +47,9 @@ def translate_to_english(braille):
 
 
 if __name__ == "__main__":
-    input = sys.argv[1]
+    input = sys.argv[1:]
+    input = ' '.join(input)
     
-    # Determine if input is Braille or English
     if 'O' in input or '.' in input:
         print(translate_to_english(input))
     else:
