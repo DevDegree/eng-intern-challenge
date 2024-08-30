@@ -2,11 +2,11 @@ const { exec } = require("child_process");
 
 describe("translator.js script", () => {
   it("should output correct answer to the console", (done) => {
-    exec("node translator.js Abc 123 xYz", (error, stdout, stderr) => {
+    exec("node translator.js -mode2 Abc 123 xYz", (error, stdout, stderr) => {
       expect(error).toBeNull();
       expect(stderr).toBe("");
       expect(stdout.trim()).toBe(
-        ".....OO.....O.O...OO...........O.OOOO.O...OO....OO.O........OO..OO.....OOO.OOOO..OOO"
+        ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
       );
       done();
     });
@@ -15,7 +15,7 @@ describe("translator.js script", () => {
 
 describe("translator.js script 1", () => {
   it("should output correct answer to the console", (done) => {
-    exec("node translator.js Hello world", (error, stdout, stderr) => {
+    exec("node translator.js -mode2 Hello world", (error, stdout, stderr) => {
       expect(error).toBeNull();
       expect(stderr).toBe("");
       expect(stdout.trim()).toBe(
@@ -28,10 +28,10 @@ describe("translator.js script 1", () => {
 
 describe("translator.js script 2", () => {
   it("should output correct answer to the console", (done) => {
-    exec("node translator.js 42", (error, stdout, stderr) => {
+    exec("node translator.js -mode2 42", (error, stdout, stderr) => {
       expect(error).toBeNull();
       expect(stderr).toBe("");
-      expect(stdout.trim()).toBe(".O.OOOO..O..OO....");
+      expect(stdout.trim()).toBe(".O.OOOOO.O..O.O...");
       done();
     });
   });
@@ -39,11 +39,11 @@ describe("translator.js script 2", () => {
 describe("translator.js script 3", () => {
   it("should output correct answer to the console", (done) => {
     exec(
-      "node translator.js .....OO.....O.O...OO...........O.OOOO.O...OO....OO.O..",
+      "node translator.js -mode2 .....OO.....O.O...OO...........O.OOOO.O...OO....OO.O..",
       (error, stdout, stderr) => {
         expect(error).toBeNull();
         expect(stderr).toBe("");
-        expect(stdout.trim()).toBe("Abc 123");
+        expect(stdout.trim()).toBe("Abc 234");
         done();
       }
     );

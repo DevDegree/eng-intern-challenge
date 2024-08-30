@@ -60,7 +60,7 @@ const BRAILLE_CAPITAL_FOLLOW = ".....O";
 // Unicode value of letter a
 const CHARCODE = "a".charCodeAt(0);
 
-function translateBrailleToEng(brailleString) {
+function translateBrailleToEng(brailleString, mode2) {
   if (brailleString.length % 6 != 0) {
     console.log("Invalid braille string.");
     return "";
@@ -82,7 +82,11 @@ function translateBrailleToEng(brailleString) {
     } else if (isNumberSeries) {
       // Braille number has the same symbol as from a-j, so get the character based on the matched symbol
       let alpha = BRAILLE_ALPHA[symbol];
-      result += alpha.charCodeAt(0) - CHARCODE;
+      if (mode2) {
+        result += (alpha.charCodeAt(0) - CHARCODE + 1) % 10;
+      } else {
+        result += alpha.charCodeAt(0) - CHARCODE;
+      }
     } else {
       let alpha;
       alpha = BRAILLE_ALPHA[symbol];
@@ -97,7 +101,7 @@ function translateBrailleToEng(brailleString) {
   return result;
 }
 
-function translateEngToBraille(engString) {
+function translateEngToBraille(engString, mode2) {
   let result = "";
   let isNumberSeries = false;
   for (let i = 0; i < engString.length; i += 1) {
@@ -113,7 +117,16 @@ function translateEngToBraille(engString) {
         result += BRAILLE_NUMBER_FOLLOW;
       }
       let digit = parseInt(c);
-      result += BRAILLE_ALPHA[String.fromCharCode(digit + CHARCODE)];
+      if (mode2) {
+        result +=
+          BRAILLE_ALPHA[
+            digit == 0
+              ? String.fromCharCode(digit + CHARCODE + 9)
+              : String.fromCharCode(digit + CHARCODE - 1)
+          ];
+      } else {
+        result += BRAILLE_ALPHA[String.fromCharCode(digit + CHARCODE)];
+      }
       isNumberSeries = true;
     } else {
       // If the letter is uppercase
@@ -138,11 +151,21 @@ function isBrailleCode(input) {
   return count == length;
 }
 
-let input = process.argv.slice(2).join(" ");
+let args = process.argv;
+// Mode 2 is to follow the Braille alpha order of Wiki
+let input;
+let mode2 = false;
+if (args[2] == "-mode2") {
+  mode2 = true;
+  // If mode 2 is provided, the input string starts from the third argument
+  input = process.argv.slice(3).join(" ");
+} else {
+  input = process.argv.slice(2).join(" ");
+}
 let result = "";
 if (isBrailleCode(input)) {
-  result += translateBrailleToEng(input);
+  result += translateBrailleToEng(input, mode2);
 } else {
-  result += translateEngToBraille(input);
+  result += translateEngToBraille(input, mode2);
 }
 console.log(result);
