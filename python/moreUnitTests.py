@@ -5,7 +5,7 @@ import subprocess
 
 class TestTranslator(unittest.TestCase):
     def run_translator(self, input_str):
-        command = ["python3", "python/translator.py"] + input_str.split()
+        command = ["python3", "translator.py"] + input_str.split()
         result = subprocess.run(command, capture_output=True, text=True)
         return result.stdout.strip()
 
