@@ -4,6 +4,7 @@
   "description": "",
   "main": "translator.ts",
   "scripts": {
+    "dev": "ts-node translator.ts",
     "test": "jest"
   },
   "keywords": [],
@@ -18,3 +19,4 @@
     "typescript": "^5.4.5"
   }
 }
+
