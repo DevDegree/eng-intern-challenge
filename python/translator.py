@@ -6,18 +6,9 @@ letter2Braille = {'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e
                's': '.OO.O.', 't': '.OOOO.', 'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO',
                'y': 'OO.OOO', 'z': 'O..OOO', }
 
-"""
-I USED THIS MAPPING TO PASS THE TESTS PROVIDED
-"""
-number2Braille = {'0': 'O.....', '1': 'O.O...', '2': 'OO....', '3': 'OO.O..', '4': 'O..O..', '5': 'OOO...', 
-                  '6': 'OOOO..', '7': 'O.OO..', '8': '.OO...', '9': '.OOO..'}
-
-"""
-THIS IS THE MAPPING THAT WOULD SATISFY THE SPECIFICATION ON GITHUB
-
 number2Braille = {'1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..', '6': 'OOO...', 
                   '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..'}
-"""
+
 
 character2Braille = {'.': '..OO.O', ',': '..O...', '?': '..O.OO', '!': '..OOO.', ':': '..OO..', 
                      ';': '..O.O.', '-': '....OO', '/': '.O..O.', '<': '.OO..O', '>': 'O..OO.', 
