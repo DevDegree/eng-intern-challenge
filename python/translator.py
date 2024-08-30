@@ -1,3 +1,5 @@
+
+
 # The dictionary maps each letter and space to its corresponding Braille representation.
 # Braille is represented as a string of six characters, where 'O' denotes a raised dot, and '.' denotes an unraised dot.
 BRAILLE_LETTER_MAP = {
