@@ -163,6 +163,18 @@ def translate_to_english(braille_text):
                 english_key = braille_text[:6]
                 braille_text = braille_text[6:]
                 result.append(braille_to_english[NUMBER_PREFIX + english_key])
+
+        # Handle "O" vs ">" ambiguity
+        elif english_key == "O..OO.":
+            # Assuming "O" is more common in text.
+            if result and result[-1].isalnum():  
+                if result and result[-1].isupper():  
+                    result.append("O")  # Capital 'O'
+                else:
+                    result.append("o")  # Lowercase 'o'
+            else:
+                result.append(">")  # Assume ">" in non-alphanumeric context
+
         # Regular Character
         else:
             result.append(braille_to_english[english_key])

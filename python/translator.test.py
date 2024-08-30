@@ -1,10 +1,13 @@
 import unittest
 import subprocess
 
+# Changed file name from 'translator.test.py' to 'translator_test.py' due to python compatibility.
+
 class TestTranslator(unittest.TestCase):
     def test_output(self):
         # Command to run translator.py script
-        command = ["python", "translator.py", "Abc", "123", "xYz"] # changed to python for my specifc machine
+        # Changed from 'python3' to 'python' due to system compatibility.
+        command = ["python3", "translator.py", "Abc", "123", "xYz"]
         
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
