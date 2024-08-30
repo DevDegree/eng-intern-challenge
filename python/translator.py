@@ -65,3 +65,4 @@ def translate(word):
 if __name__ == "__main__":
     s = ' '.join(sys.argv[1:])
     print(translate(s))
+    
