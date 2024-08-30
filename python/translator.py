@@ -10,16 +10,14 @@ class Translator:
         "s": ".OO.O.", "t": ".OOOO.", "u": "O...OO", "v": "O.O.OO", "w": ".OOO.O", "x": "OO..OO",
         "y": "OO.OOO", "z": "O..OOO", "0": ".OOO..", "1": "O.....", "2": "O.O...", "3": "OO....",
         "4": "OO.O..", "5": "O..O..", "6": "OOO...", "7": "OOOO..", "8": "O.OO..", "9": ".OO...",
-        ".": "..OO.O", ",": "..O...", "?": "..O.OO", "!": "..OOO.", ":": "..OO..", ";": "..O.O.",
-        "-": "....OO", "/": ".O..O.", "<": ".OO..O", ">": "O..OO.", "(": "O.O..O", ")": ".O.OO.",
         " ": "......", "CAP": ".....O", "DEC": ".O...O", "NUM": ".O.OOO",
     }
 
-    # braille -> alpha (alpha/symbols only)
+    # braille -> alpha (alpha only)
     _braille_alpha_dict = {
         val: key for key, val 
         in _english_braille_dict.items() 
-        if key.isalpha() or key in " .,?!:;-/<>()"
+        if key.isalpha()
     }
     
     # braille -> alpha (nums only)
