@@ -1,5 +1,7 @@
 import argparse
 
+# Map for english to braille
+
 char_map_english= {
     "a": "O.....", "b":"O.O...", "c":"OO....", "d":"OO.O..", "e": "O..O..", "f":"OOO...", "g":"OOOO..",
     "h":"O.OO..", "i" : ".OO...", "j":".OOO..", "k":"O...O.","l":"O.O.O.", "m":"OO..O.", "n":"OO.OO.",
@@ -9,12 +11,13 @@ char_map_english= {
      ";":"..O.O.", "-": "....OO", "/":".O..O.", "<": ".OO..O", ">": "O..OO.", "(":"O.O..O",")":".O.OO.",
      " ":"......"
 }
-
+# Seperate map for the numbers.
 numbers_map_english = {
     "1":"O.....", "2":"O.O...", "3":"OO....", "4":"OO.O..", "5":"O..O..", "6":"OOO...", "7":"OOOO..",
      "8":"O.OO..", "9":".OO...", "0": ".OOO.."
 }
 
+#Reversing the key-value pairs to get a braille to english map
 char_map_braille = {i:j for j,i in char_map_english.items()}
 numbers_map_braille = {i:j for j,i in numbers_map_english.items()}
 
@@ -33,7 +36,7 @@ def translate_english(text):
         elif char.isalpha(): #if char is a letter
             if char.isupper(): #if captilized
                 translated_text += char_map_english["capitalize"]  
-                char = char.lower()  #to get correct letter braille mapping
+                char = char.lower()  #to get correct letter for braille mapping
             translated_text += char_map_english[char]
             is_number = False  # Reset after a letter
         else:
