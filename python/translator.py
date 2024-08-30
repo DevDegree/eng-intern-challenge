@@ -166,3 +166,4 @@ if __name__ == "__main__":
         print(braille_to_english(input))
     else:
         print(english_to_braille(input))
+        
