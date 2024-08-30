@@ -25,15 +25,11 @@
  * O.O... 2
  */
 
-const isBraille = (string) => {
-  if (string.length === 0) return false;
-  const normalizedString = string.toUpperCase();
-  const allowableCharacters = ["O", "."];
-  for (let index = 0; index < normalizedString.length; index++) {
-    const element = normalizedString[index];
-    if (!allowableCharacters.includes(element)) return false;
-  }
-  return true;
-};
+console.log("args", process.argv);
+if (process.argv.length === 2) {
+  console.error("Expected at least one argument!");
+  process.exit(1);
+}
+const [_node, _script, ...params] = process.argv;
 
-module.exports = { isBraille };
+console.log("remaining args", params);

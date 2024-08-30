@@ -1,4 +1,4 @@
-const { isBraille } = require("./translator");
+const { isBraille } = require("./helpers");
 describe("isBraille", () => {
   it("should return true for a valid braille string", () => {
     expect(isBraille("O.OO.O.O")).toBe(true);
