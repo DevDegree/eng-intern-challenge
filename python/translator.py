@@ -159,12 +159,12 @@ def handle_eng(input: str):
     return out
 
 
-def is_braille(text):
-    if len(text) < 6:
+def is_braille(text: str):
+    if len(text) < 6 or text.startswith("OOOOOO"):
+        # assume "OOOOOO" is not braille as it's not in given legend
         return False
-    if text == "OOOOOO":
-        return True
 
+    # check if text starts with a valid braille token
     for i in range(6):
         if not (text[i] == "O" or text[i] == "."):
             return False
