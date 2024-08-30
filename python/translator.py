@@ -81,21 +81,23 @@ def translateToBraille (word, last):
             if (char.isupper()):
                 print(info["capital"], end="")
             print(letter[char.lower()], end="")
-        if (char.isdigit()):
+        elif (char.isdigit()):
             if Number == False:
                 print(info["number"], end="")
                 print(nums[char], end="")
                 Number = True
             else: print(nums[char], end="")
-        if (char == "."):
+        elif (char == "."):
             if Number:
                 print(info["decimal"], end="")
-                print(letter[char], end="")
+            print(letter[char], end="")
+        elif (char == " "):
+            print("......", end="")
+            Number = False
 
-        if (not char.isalnum()):
+        else:
             print(letter[char], end="")
                 
-
     if not last:
         print("......", end="")
 
@@ -120,6 +122,11 @@ def translateToEnglish (word, last):
 
             elif info2[split[i]] == "number":
                 Num = True
+
+            elif info2[split[i]] == "decimal":
+                Num = True
+                print(letter2[split[i+1]], end="")
+                i+=1
 
         elif split[i] == "......":
             print (" ", end="")
