@@ -37,7 +37,7 @@ var englishToBraille = map[string]string{
     "6": "OOOO..", "7": "O.OO..",
     "8": ".OO...", "9": ".OOO..",
 
-	UPDATE: Fixed!
+	UPDATE: WORKS WITH NEW TESTCASES
 */
 
 var numberToBraille = map[string]string{
