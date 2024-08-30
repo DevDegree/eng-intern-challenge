@@ -5,14 +5,16 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 	"unicode"
 )
 
 var ErrMissingArguments = errors.New("missing required cli arguments")
+var ErrArgumentsNotBraille = errors.New("the supplied arguments are not Braille")
+var ErrArgumentsNotAlphanumeric = errors.New("the supplied arguments are not Alphanumeric")
+var ErrArgumentsNotBrailleOrAlphanumeric = errors.New("the supplied arguments are not Alphanumeric or Braille")
 
 type Translator struct {
-	text               string
+	args               []string
 	letterToBrailleMap map[string]string
 	numberToBrailleMap map[string]string
 	brailleToLetterMap map[string]string
@@ -20,9 +22,9 @@ type Translator struct {
 }
 
 // creates a new translator unit
-func NewTranslator(text string) *Translator {
+func NewTranslator(args []string) *Translator {
 	var t Translator
-	t.text = text
+	t.args = args
 	t.letterToBrailleMap = map[string]string{
 		"CAPITAL_FOLLOWS": ".....O",
 		"NUMBER_FOLLOWS":  ".O.OOO",
@@ -73,15 +75,17 @@ func NewTranslator(text string) *Translator {
 
 // checks if the provided arguments are Braille
 func (t *Translator) isBraille() bool {
-	// Braille characters consist of 6 'O' and '.' characters
-	if len(t.text)%6 != 0 {
-		return false
-	}
-	// Check that text consists of valid Braille tokens
-	for i := 0; i < len(t.text); i += 6 {
-		token := t.text[i : i+6]
-		if _, ok := t.brailleToLetterMap[token]; !ok {
+	for _, text := range t.args {
+		// Braille characters consist of 6 'O' and '.' characters
+		if len(text)%6 != 0 {
 			return false
+		}
+		// Check that text consists of valid Braille tokens
+		for i := 0; i < len(text); i += 6 {
+			token := text[i : i+6]
+			if _, ok := t.brailleToLetterMap[token]; !ok {
+				return false
+			}
 		}
 	}
 
@@ -90,21 +94,22 @@ func (t *Translator) isBraille() bool {
 
 // checks if the provided arguments are Alphanumeric
 func (t *Translator) isAlphanumeric() bool {
-	for _, c := range t.text {
-		if !unicode.IsLetter(c) && !unicode.IsNumber(c) {
-			return false
+	for _, text := range t.args {
+		for _, c := range text {
+			if !unicode.IsSpace(c) && !unicode.IsLetter(c) && !unicode.IsNumber(c) {
+				return false
+			}
 		}
 	}
 	return true
 }
 
-// processes arguments, joins them together, and removes leading/trailing whitespace
-func handleArguments() (string, error) {
+// checks that more than atleast one argument (excluding program) is provided
+func handleArguments() ([]string, error) {
 	if len(os.Args) < 2 {
-		return "", ErrMissingArguments
+		return nil, ErrMissingArguments
 	}
-	args := os.Args[1:]
-	return strings.TrimSpace(strings.Join(args, " ")), nil
+	return os.Args[1:], nil
 }
 
 func reverseMap(m map[string]string) map[string]string {
