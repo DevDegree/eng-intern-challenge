@@ -35,20 +35,7 @@ class Translator:
         "OO.OOO": "y",
         "O..OOO": "z",
         ".....O": "capital",
-        ".O...O": "decimal",
         ".O.OOO": "number",
-        "..OO.O": ".",
-        "..O...": ",",
-        "..O.OO": "?",
-        "..OOO.": "!",
-        "..OO..": ":",
-        "..O.O.": ";",
-        "....OO": "-",
-        ".O..O.": "/",
-        ".OO..O": "<",
-        #"O..OO.": ">",  # I think this duplicate is an error, shouldn't be the same as 'o'.
-        "O.O..O": "(",
-        ".O.OO.": ")",
         "......": " "
     }
 
@@ -103,10 +90,6 @@ class Translator:
                 if character == "capital":
                     self.capitalFlag = True
                     continue  # Continue loop to avoid adding 'character'.
-                elif character == "decimal":
-                    if self.capitalFlag:
-                        self.capitalFlag = False
-                    continue  # Continue loop to avoid adding 'decimal'.
                 elif character == "number":
                     self.numberFlag = True
                     if self.capitalFlag:
