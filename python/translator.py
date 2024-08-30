@@ -1,7 +1,4 @@
-# problems found:
-# output for sample test case is wrong
-# Braille alphabet for "o" and ">" are the same
-
+import sys
 
 engToBraille = {"a": "O.....", "b": "O.O...", "c": "OO....", "d": "OO.O..", "e": "O..O..",
                 "f": "OOO...", "g": "OOOO..", "h": "O.OO..", "i": ".OO...", "j": ".OOO..",
@@ -10,9 +7,7 @@ engToBraille = {"a": "O.....", "b": "O.O...", "c": "OO....", "d": "OO.O..", "e":
                 "u": "O...OO", "v": "O.O.OO", "w": ".OOO.O", "x": "OO..OO", "y": "OO.OOO",
                 "z": "O..OOO", "1": "O.....", "2": "O.O...", "3": "OO....", "4": "OO.O..",
                 "5": "O..O..", "6": "OOO...", "7": "OOOO..", "8": "O.OO..", "9": ".OO...",
-                "0": ".OOO..", ".": "..OO.O", ",": "..O...", "?": "..O.OO", "!": "..OOO.",
-                ":": "..OO..", ";": "..O.O.", "-": "....OO", "/": ".O..O.", "<": ".OO..O",
-                "(": "O.O..O", ")": ".O.OO."}
+                "0": ".OOO.."}
 brailleToAlph = {}
 brailleToNum = {}
 for key in engToBraille:
@@ -75,24 +70,23 @@ def engToBralieTranslator(word):
             res.append(engToBraille[w.lower()])
     return "".join(res)
 
+def isAlphanumeric(word):
+    for w in word:
+        if not(ord('a') <= ord(w) <= ord('z') or
+               ord('A') <= ord(w) <= ord('Z') or
+               ord('0') <= ord(w) <= ord('9') or
+               w == " "):
+            return False
+    return True
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("input error")
-
-
-
-
-print(brailleToEngTranslator(".....OO.....O.O...OO...........O.OOOO.O...OO....OO.O........OO..OO.....OOO.OOOO..OOO"))
-
-# Abc 12.3 -> .....OO.....O.O...OO...........O.OOOO.....O.O....O...OOO....
-# AaBC     -> .....OO.....O..........OO.O........OOO....
-# 12 Ya.y  -> .O.OOOO.....O.O..............OOO.OOOO.......OO.OOO.OOO
-# 0        -> .O.OOO.OOO..
-# A        -> .....OO.....
-# ./       -> ..OO.O.O..O.
-# ( 09 ) ? -> O.O..O.......O.OOO.OOO...OO..........O.OO.........O.OO
-# ;.234.9 : -> ..O.O...OO.O.O.OOOO.O...OO....OO.O...O...O.OO...........OO..
-# Hello world -> .....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..
-# Abc 123 xYz -> .....O  O.....  O.O...  OO....  ......  .O.OOO  O.....  O.O...  OO....  ......  OO..OO  .....O  OO.OOO  O..OOO
-
-#                .....O  O.....  O.O...  OO....  ......  .O.OOO  O.O...  OO.... OO.O..   ......  OO..OO  .....O  OO.OOO  O..OOO
+        print("Please provide input")
+    else:
+        word = ' '.join(sys.argv[1:])
+        if isAlphanumeric(word):
+            print(engToBralieTranslator(word))
+        elif all(w in "O." for w in word):
+            print(brailleToEngTranslator(word))
+        else:
+            print("Invalid input")
