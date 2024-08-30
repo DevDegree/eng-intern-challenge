@@ -1,4 +1,5 @@
-// ADRIAN MILEA - Eng Intern Challenge Fall - Winter 2025
+// ADRIAN MILEA
+// Eng Intern Challenge Fall - Winter 2025
 
 // Mappings between English characters and their Braille representations
 const brailleMap = {
