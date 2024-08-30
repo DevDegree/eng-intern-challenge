@@ -102,6 +102,10 @@ def to_chars(words):
     if sentence[i : i + 6] == ".O...O":
       continue
     
+    if is_num and BRAILLE_TO_ENG[sentence[i : i + 6]] == 'j':
+      translation += '0'
+      continue
+    
     if sentence[i : i + 6] == "......":
       is_num = False
 
