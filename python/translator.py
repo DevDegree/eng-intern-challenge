@@ -213,11 +213,10 @@ def detect_input_type(input_string):
 
 
 def main():
-    braille_func = (
-        braille_to_text
-        if detect_input_type(sys.argv[1]) == "braille"
-        else text_to_braille
-    )
+    if all(detect_input_type(arg) == "braille" for arg in sys.argv[1:]):
+        braille_func = braille_to_text
+    else:
+        braille_func = text_to_braille
 
     input_strings = sys.argv[
         1:
