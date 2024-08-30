@@ -82,11 +82,7 @@ function translateBrailleToEng(brailleString, mode2) {
     } else if (isNumberSeries) {
       // Braille number has the same symbol as from a-j, so get the character based on the matched symbol
       let alpha = BRAILLE_ALPHA[symbol];
-      if (mode2) {
-        result += (alpha.charCodeAt(0) - CHARCODE + 1) % 10;
-      } else {
-        result += alpha.charCodeAt(0) - CHARCODE;
-      }
+      result += (alpha.charCodeAt(0) - CHARCODE + 1) % 10;
     } else {
       let alpha;
       alpha = BRAILLE_ALPHA[symbol];
@@ -117,16 +113,12 @@ function translateEngToBraille(engString, mode2) {
         result += BRAILLE_NUMBER_FOLLOW;
       }
       let digit = parseInt(c);
-      if (mode2) {
-        result +=
-          BRAILLE_ALPHA[
-            digit == 0
-              ? String.fromCharCode(digit + CHARCODE + 9)
-              : String.fromCharCode(digit + CHARCODE - 1)
-          ];
-      } else {
-        result += BRAILLE_ALPHA[String.fromCharCode(digit + CHARCODE)];
-      }
+      result +=
+        BRAILLE_ALPHA[
+          digit == 0
+            ? String.fromCharCode(digit + CHARCODE + 9)
+            : String.fromCharCode(digit + CHARCODE - 1)
+        ];
       isNumberSeries = true;
     } else {
       // If the letter is uppercase
