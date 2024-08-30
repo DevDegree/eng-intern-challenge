@@ -1,3 +1,4 @@
+# initializing mappings
 ENGLISH_TO_BRAILLE = {
     'a': 'O.....',
     'b': 'O.O...',
