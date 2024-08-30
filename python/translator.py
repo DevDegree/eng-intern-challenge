@@ -63,7 +63,7 @@ def is_braille(text: str) -> bool:
 
 # Split a braille message into a list of braille symbols
 def split_braille_message(message: str) -> list[str]:
-    return [message[i:i+BRAILLE_SYMBOL_LENGTH] for i in range(0, len(message), BRAILLE_SYMBOL_LENGTH)]
+    return [str(message[i:i+BRAILLE_SYMBOL_LENGTH]) for i in range(0, len(message), BRAILLE_SYMBOL_LENGTH)]
 
 # Output conversion of braille message in english
 def braille_to_english(message: str):
@@ -133,5 +133,5 @@ if __name__ == "__main__":
     message = ' '.join(sys.argv[1:])
     output = braille_to_english(message) if is_braille(message) else english_to_braille(message)
     
-    print(output)
+    sys.stdout.write(output)
 
