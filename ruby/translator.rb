@@ -84,20 +84,29 @@ class Translator
 
   # Method to translate text to braille
   def text_to_braille
-    # variable to store the result of the translation
+    is_number = false
     result = []
 
     # go through the input array and translate each char to respective sequence
     input.each_with_index do |char, index|
-      # if char is a uppercase letter, add the uppercase rule to the result array
-      if (char.match?((/[A-NP-Z]/)))
-        result.insert(index, BRAILLE_RULES.key('uppercase'))
+      if (char.match?((/[A-Z]/)))
+        result << BRAILLE_RULES.key('uppercase')
+        result << BRAILLE_ALPHABET.key(char.downcase)
       end
-      # continue translation of the char to the respective sequence
-      index += 1
-      result.insert(index, BRAILLE_ALPHABET.key(char.downcase))
+
+      # !is_number is used to avoid adding the number rule multiple times
+      if (char.match?((/[0-9]/)) && !is_number)
+        is_number = true
+        result << BRAILLE_RULES.key('number')
+      end
+
+      if (char.match?(' '))
+        is_number = false
+      end
+
+      is_number ? result << BRAILLE_DIGITS.key(char) : result << BRAILLE_ALPHABET.key(char)
     end
-      result.join
+    puts result.join
   end
 
   public
@@ -115,4 +124,7 @@ end
  # translator = Translator.new('.O.OOOOO.O..O.O...')
  # translator = Translator.new('.....OO.....O.O...OO...........O.OOOO.....O.O...OO....')
  # translator = Translator.new('Hello world')
-puts translator.translate
+ # translator = Translator.new('Abc 123 xYz')
+ user_input = ARGV.join(' ')
+ output = Translator.new(user_input);
+ puts output.translate
