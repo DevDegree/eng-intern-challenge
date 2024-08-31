@@ -26,18 +26,18 @@ ENGLISH_TO_BRAILLE_MAPPING = {
     'x' => 'OO..OO',
     'y' => 'OO.OOO',
     'z' => 'O..OOO',
-    '.' => '..00.0',
-    ',' => '..0...',
-    '?' => '..0.00',
-    '!' => '..000.',
-    ':' => '..00..',
-    ';' => '..0.0.',
-    '-' => '....00',
-    '/' => '.0..0.',
-    '<' => '.00..0',
-    '>' => '0..00.',
-    '(' => '0.0..0',
-    ')' => '.0.00.',
+    # '.' => '..OO.O',
+    # ',' => '..O...',
+    # '?' => '..O.OO',
+    # '!' => '..OOO.',
+    # ':' => '..OO..',
+    # ';' => '..O.O.',
+    # '-' => '....OO',
+    # '/' => '.O..O.',
+    # '<' => '.OO..O',
+    # '>' => 'O..OO.',
+    # '(' => 'O.O..O',
+    # ')' => '.O.OO.',
   },
   numeric: {
     '1' => 'O.....',
@@ -52,9 +52,9 @@ ENGLISH_TO_BRAILLE_MAPPING = {
     '0' => '.OOO..',
   },
   special: {
-    'capital_follows' => '.....0',
-    'decimal_follows' => '.0...0',
-    'number_follows' => '.0.000',
+    'capital_follows' => '.....O',
+    'decimal_follows' => '.O...O',
+    'number_follows' => '.O.OOO',
     ' ' => '......',
   }
 }
@@ -65,11 +65,42 @@ ENGLISH_SPACE = ' '
 BRAILLE_SPACE = ENGLISH_TO_BRAILLE_MAPPING[:special][ENGLISH_SPACE]
 
 def is_english?(str)
-  str.chars.any? { |char| not ['O', '.'].include?(char) }
+  str.length % 6 != 0 || str.chars.any? { |char| not ['O', '.'].include?(char) }
+end
+
+def is_special_symbol?(symbol)
+  return BRAILLE_TO_ENGLISH_MAPPING[:special].key?(symbol)
 end
 
 def translate_to_english(str)
-  "english"
+  translated_str = ''
+  numeric_mode = false
+  capital_next = false
+  str.chars.each_slice(6) do |symbol_arr|
+    symbol = symbol_arr.join('')
+
+    if is_special_symbol?(symbol)
+      case BRAILLE_TO_ENGLISH_MAPPING[:special][symbol]
+      when 'capital_follows'
+        capital_next = true
+      when 'decimal_follows'
+      when 'number_follows'
+        numeric_mode = true
+      when ENGLISH_SPACE
+        numeric_mode = false
+        capital_next = false
+        translated_str += ENGLISH_SPACE
+      end 
+    elsif numeric_mode
+      translated_str += BRAILLE_TO_ENGLISH_MAPPING[:numeric][symbol]
+    else
+      char = BRAILLE_TO_ENGLISH_MAPPING[:alpha_and_punctuation][symbol]
+      translated_str += capital_next ? char.capitalize : char
+      capital_next = false
+    end
+  end
+  
+  translated_str
 end
 
 def translate_to_braille(str)
@@ -77,7 +108,7 @@ def translate_to_braille(str)
 end
 
 def main
-  input_string = ARGV.join(" ")
+  input_string = ARGV.join(' ')
 
   translated_string = is_english?(input_string) ? translate_to_braille(input_string) : translate_to_english(input_string)
   puts(translated_string)
