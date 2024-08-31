@@ -1,26 +1,16 @@
 require_relative 'constants'
+require_relative 'get_input_type'
 
-def determine_if_input_is_braille_or_english()
-  input_string = ARGV[0]
-
-  if input_string.nil?
-    return puts "Please provide an input string"
-  else
-    if input_string.include?(".")
-      return BRAILLE_TYPE
-    else
-      return ENGLISH_TYPE
-    end
-  end
-end
-
-
-def translate_braille_to_english(braille_string)
+def translate_english_to_braille(english_string)
   result = ""
+
+  # check if capital
+  # check if number
 end
+
 
 def main()
-  input_type = determine_if_input_is_braille_or_english()
+  input_type = get_input_type()
 
   if input_type == BRAILLE_TYPE
     puts "hello"

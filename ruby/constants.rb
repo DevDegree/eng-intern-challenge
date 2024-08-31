@@ -29,8 +29,9 @@ BRAILLE_TO_ENGLISH_DICT = {
   "OO..OO" => "x",
   "OO.OOO" => "y",
   "O..OOO" => "z",
+  "......" => " ",
 }
-BRAILLE_TO_NUMBERS_DICT {
+BRAILLE_TO_NUMBERS_DICT = {
   "O....." => "1",
   "O.O..." => "2",
   "OO...." => "3",
@@ -69,6 +70,7 @@ ENGLISH_TO_BRAILLE_DICT = {
   "x" => "OO..OO",
   "y" => "OO.OOO",
   "z" => "O..OOO",
+  " " => "......",
 }
 NUMBERS_TO_BRAILLE_DICT = {
   "1" => "O.....",
