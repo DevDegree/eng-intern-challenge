@@ -2,6 +2,8 @@
 
 # Braille Translator CLI
 
+Application Email: m4mehra@uwaterloo.ca
+
 ## Overview
 
 The Braille Translator is a command-line tool that translates between English and Braille. It automatically detects the input language and provides the corresponding translation. This tool was developed as part of the Shopify Eng Intern Challenge and supports both English to Braille and Braille to English conversions.
