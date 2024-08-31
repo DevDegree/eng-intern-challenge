@@ -176,7 +176,8 @@ def eng_to_bra(message):
 
 if __name__ == "__main__":
     input = " ".join(sys.argv[1:])
-    if "." in input:
+    #print(f"Received: {input}")
+    if "." in input or "O" in input:
         print(bra_to_eng(input))
     else:
         print(eng_to_bra(input))
