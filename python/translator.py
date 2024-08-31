@@ -23,6 +23,22 @@ class BrailleMappings:
         self.cap = ".....O"
         self.space = "......"
 
+         # Invert dictionaries for English to Braille mappings
+        self.eng_to_braille_alphabets = {v: k for k, v in self.braille_to_eng_alphabets.items()}
+        self.eng_to_braille_numbers = {v: k for k, v in self.braille_to_eng_number.items()}
+
+    def get_alphabet_mapping(self, char):
+        return self.eng_to_braille_alphabets.get(char)
+
+    def get_number_mapping(self, char):
+        return self.eng_to_braille_numbers.get(char)
+
+    def get_braille_alphabet(self, symbol):
+        return self.braille_to_eng_alphabets.get(symbol)
+
+    def get_braille_number(self, symbol):
+        return self.braille_to_eng_number.get(symbol)
+
 
 def main():
     import sys
