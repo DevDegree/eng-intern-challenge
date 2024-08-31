@@ -169,13 +169,29 @@ const isValidBraille = (str: string): boolean => {
   return true;
 };
 
-const clArgs = process.argv.slice(2).join(" ");
+/**
+ * main function to determine braille or english and convert it into its other language.
+ *
+ * @return {string} Translation of a braille or english phrase
+ */
+const runTranslation = (clArgs: string): string => {
+  if (!clArgs) {
+    throw new Error(
+      "Please provide command line arguments (ie. npm run dev Hello World)",
+    );
+  }
 
-// // if true -> translate to braille
-// // if false -> translate to english
-// console.log(isValidBraille(clArgs));
-const str = "If you see this I hope I can get the JOB thank you Justin Zhang17";
-console.log(str);
-console.log(
-  brailleTranslate(englishTranslate(brailleTranslate(englishTranslate(str)))),
-);
+  // try and catch to handle edge cases that can be braille and english (ie. OOOOOO)
+  if (isValidBraille(clArgs)) {
+    try {
+      return brailleTranslate(clArgs);
+    } catch (_) {
+      return englishTranslate(clArgs);
+    }
+  }
+
+  return englishTranslate(clArgs);
+};
+
+const out = runTranslation(process.argv.slice(2).join(" "));
+console.log(out);

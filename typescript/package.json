@@ -1,7 +1,7 @@
 {
   "name": "typescript",
   "version": "1.0.0",
-  "description": "",
+  "description": "A terminal / command-line application that can translate Braille to English and vice versa.",
   "main": "translator.ts",
   "scripts": {
     "dev": "ts-node translator.ts",
