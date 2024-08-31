@@ -25,32 +25,21 @@ const brailleDict = {
   x: "OO..OO",
   y: "OO.OOO",
   z: "O..OOO",
-  A: ".....OO.....",
-  B: ".....OO.O...",
-  C: ".....OOO....",
-  D: ".....OOO.O..",
-  E: ".....OO..O..",
-  F: ".....OOOO...",
-  G: ".....OOOOO..",
-  H: ".....OO.OO..",
-  I: ".....O.OO...",
-  J: ".....O.OOO..",
-  K: ".....OO...O.",
-  L: ".....OO.O.O.",
-  M: ".....OOO..O.",
-  N: ".....OOO.OO.",
-  O: ".....OO..OO.",
-  P: ".....OOOO.O.",
-  Q: ".....OOOOOO.",
-  R: ".....OO.OOO.",
-  S: ".....O.OO.O.",
-  T: ".....O.OOOO.",
-  U: ".....OO...OO",
-  V: ".....OO.O.OO",
-  W: ".....O.OOO.O",
-  X: ".....OOO..OO",
-  Y: ".....OOO.OOO",
-  Z: ".....OO..OOO",
+  " ": "......",
+  ".": "..OO.O",
+  ",": "..O...",
+  ";": "..O.O.",
+  "-": "....OO",
+  "!": "..OOO.",
+  "?": "..O.OO",
+  "(": "O.O..O",
+  ")": ".O.OO.",
+  DECIMAL: ".O...O",
+  NUMBER: ".O.OOO",
+  CAPITAL: ".....O",
+};
+
+const numberBrailleDict = {
   0: ".OOO..",
   1: "O.....",
   2: "O.O...",
@@ -61,77 +50,85 @@ const brailleDict = {
   7: "OOOO..",
   8: "O.OO..",
   9: ".OO...",
-  " ": "......",
-  ".": ".O.O..",
-  ",": ".O....",
-  ";": ".OO...",
-  "-": "..OO..",
-  "!": ".OOO..",
-  "?": ".O..O.",
-  "(": ".OOO.O",
-  ")": ".OOOO.",
-  DECIMAL: ".O...O",
-  NUMBER: ".O.OOO",
 };
 
 const textDict = Object.fromEntries(
   Object.entries(brailleDict).map(([k, v]) => [v, k])
 );
+const numberDict = Object.fromEntries(
+  Object.entries(numberBrailleDict).map(([k, v]) => [v, k])
+);
 
 function textToBraille(text) {
   let result = "";
-  let prevChar = "";
-  let isNumberMode = false;
-
-  for (let i = 0; i < text.length; i++) {
+  let i = 0;
+  while (i < text.length) {
     let char = text[i];
-    let nextChar = text[i + 1] || "";
 
-    if (!char.match(/[0-9\s]/) && nextChar.match(/[0-9]/)) {
+    if (char.match(/[0-9]/)) {
       result += brailleDict["NUMBER"];
-      isNumberMode = true;
-    } else if (char.match(/[0-9]/)) {
-      if (!isNumberMode) {
-        result += brailleDict["NUMBER"];
-        isNumberMode = true;
+      while (i < text.length) {
+        char = text[i];
+        let nextChar = text[i + 1] || "";
+
+        if (char.match(/[0-9]/)) {
+          result += numberBrailleDict[char];
+        } else if (char === "." && nextChar.match(/[0-9]/)) {
+          result += brailleDict["DECIMAL"];
+        } else {
+          break;
+        }
+        i++;
       }
+    } else if (char.match(/[A-Z]/)) {
+      result += brailleDict["CAPITAL"] + brailleDict[char.toLowerCase()];
+      i++;
+    } else if (char in brailleDict) {
       result += brailleDict[char];
+      i++;
     } else {
-      isNumberMode = false;
-      if (char in brailleDict) {
-        result += brailleDict[char];
-      }
+      i++;
     }
-
-    if (char === "." && prevChar.match(/[0-9]/) && nextChar.match(/[0-9]/)) {
-      result += brailleDict["DECIMAL"];
-    }
-
-    prevChar = char;
   }
-
   return result;
 }
 
 function brailleToText(braille) {
   let result = "";
   let i = 0;
-
   while (i < braille.length) {
-    let char = "";
-    if (i + 12 <= braille.length && braille.slice(i, i + 12) in textDict) {
-      char = textDict[braille.slice(i, i + 12)];
-      i += 12;
-    } else if (i + 6 <= braille.length && braille.slice(i, i + 6) in textDict) {
-      char = textDict[braille.slice(i, i + 6)];
+    const chunk = braille.slice(i, i + 6);
+
+    if (chunk === brailleDict.CAPITAL) {
+      const nextChunk = braille.slice(i + 6, i + 12);
+      if (nextChunk in textDict) {
+        result += textDict[nextChunk].toUpperCase();
+        i += 12;
+      } else {
+        i += 6;
+      }
+    } else if (chunk === brailleDict.NUMBER) {
+      i += 6;
+      while (i < braille.length) {
+        const numChunk = braille.slice(i, i + 6);
+        if (numChunk in numberDict) {
+          result += numberDict[numChunk];
+          i += 6;
+        } else if (numChunk === brailleDict.DECIMAL) {
+          result += ".";
+          i += 6;
+        } else {
+          break;
+        }
+      }
+    } else if (chunk in textDict) {
+      result += textDict[chunk];
       i += 6;
     } else {
       i += 6;
     }
-    result += char;
   }
-
-  return result.replace(/DECIMAL/g, ".");
+  return result;
 }
 
 function translate(input) {
