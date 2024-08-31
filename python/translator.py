@@ -125,6 +125,9 @@ class BrailleTranslator:
 def main():
     import sys
 
+    if len(sys.argv) < 2:
+        raise Exception("Arguments missing. Please try again.")
+
     input_string = " ".join(sys.argv[1:])  # Capture input from command-line arguments
     translator = BrailleTranslator()  # Initialize the translator
 
