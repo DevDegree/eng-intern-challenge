@@ -160,7 +160,7 @@ def engToBraille(word):
                 res.append(english_Braille.get(char, ''))
             in_numbers_mode = False
         
-        # Handle digits
+        #handle digits
         elif char.isdigit() or in_numbers_mode:
             if not in_numbers_mode:
                 res.append('.O.OOO')
@@ -190,6 +190,6 @@ def engToBraille(word):
 
 
 if __name__ == "__main__":
-    input_string = sys.argv[1]
+    input_string = ' '.join(sys.argv[1:])
     output_string = translate(input_string)
     print(output_string)
