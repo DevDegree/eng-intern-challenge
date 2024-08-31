@@ -32,14 +32,15 @@ def translate_to_english(braille):
                 letter = BRAILLE_TO_ENGLISH[char]
                 if number_mode and letter in NUMBER_MAP:
                     result.append(NUMBER_MAP[letter])
-                elif letter.isalpha():
-                    if capitalize_next:
-                        letter = letter.upper()
-                        capitalize_next = False
-                    result.append(letter)
                 else:
-                    result.append(letter)
-                    number_mode = False
+                    if letter.isalpha():
+                        if capitalize_next:
+                            letter = letter.upper()
+                            capitalize_next = False
+                        result.append(letter)
+                    else:
+                        result.append(letter)
+                        number_mode = False
         i += 6
     return ''.join(result)
 
