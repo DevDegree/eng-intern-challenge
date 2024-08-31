@@ -29,12 +29,12 @@ braille_to_num_map = {
     'OOOO..': '7', 'O.OO..': '8', '.OO...': '9', '.OOO..': '0'
 }
 
-def eng_to_braille(text: str) -> str:
-    """Converts English text to Braille."""
+def translate_to_braille(english: str) -> str:
+    """Translates English text to Braille."""
     braille = ''
     number_mode = False # Flag to indicate if the current character is a number
 
-    for c in text:
+    for c in english:
         if c.isupper():
             braille += eng_to_braille_map['capital follows']
         if c.isdigit() and not number_mode:
@@ -48,13 +48,13 @@ def eng_to_braille(text: str) -> str:
     return braille
 
 
-def braille_to_eng(text: str) -> str:
-    """Converts Braille text to English."""
+def translate_to_eng(braille: str) -> str:
+    """Translates Braille text to English."""
     english = ''
     state = BrailleState.LOWERCASE
 
-    for i in range(0, len(text), 6):
-        braille_char = text[i:i+6] # Each Braille character is represented by 6 dots/zeros
+    for i in range(0, len(braille), 6):
+        braille_char = braille[i:i+6] # Each Braille character is represented by 6 dots/zeros
 
         # Check if we need to change the state
         if braille_char == eng_to_braille_map['capital follows']:
@@ -92,6 +92,6 @@ if __name__ == '__main__':
 
     # Convert the input to the appropriate format
     if is_braille(text):
-        print(braille_to_eng(text))
+        print(translate_to_eng(text))
     else:
-        print(eng_to_braille(text))
+        print(translate_to_braille(text))
