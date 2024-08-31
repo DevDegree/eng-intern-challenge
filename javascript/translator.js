@@ -12,14 +12,23 @@ const brailleNumbers = {
 };
 
 const brailleSpecial = {
-    space: "......", period: "O.O.OO", comma: "O.....",
-    question: ".OOO.O", exclamation: ".OO.OO", colon: "OO....",
-    semicolon: "O.O...", hyphen: "O....O", slash: "O...OO",
-    lessThan: "OO..OO", greaterThan: ".O.OOO", leftParen: "O.OO..",
-    rightParen: "O.OO..", quotation: "O.O.O.", apostrophe: "O.....",
-    atSymbol: "O.OO.O", ampersand: "O.OO..", capital: ".....O",
-    number: ".O.OOO"
+    " ": "......",    
+    ".": "O.O.OO",    
+    ",": "O.....",    
+    "?": ".OOO.O",    
+    "!": ".OO.OO",   
+    ":": "OO....",    
+    ";": "O.O...",    
+    "-": "O....O",    
+    "/": "O...OO",    
+    "<": "OO..OO",    
+    ">": ".O.OOO",   
+    "(": "O.OO..",    
+    ")": "O.OO..",    
+    "capital": ".....O", 
+    "number": ".O.OOO"   
 };
+
 
 //reverse mapping dictionaries of braille to english
 const englishFromBrailleLetters = {};
@@ -78,12 +87,53 @@ function toEnglish(brailleText) {
     return result;
 }
 
+function toBraille(englishText) {
+    let result = "";
+    let isNumberContext = false; 
+
+    for (let char of englishText) {
+        // handle space and reset number flag
+        if (char === ' ') {
+            result += brailleSpecial[' '];
+            isNumberContext = false; // Reset number context on space
+            continue;
+        }
+
+        //check if the character is a digit and handle number flag
+        if (/[0-9]/.test(char)) {
+            if (!isNumberContext) { 
+                result += brailleSpecial.number; //add number character at the start of a number sequence
+                isNumberContext = true; //set number context
+            }
+            result += brailleNumbers[char]; // Azppend the Braille code for the number
+        } else {
+            isNumberContext = false; // Exit number context when encountering a non-digit
+
+            // Check for capital letters and append capital indicator
+            if (char.toUpperCase() === char && isNaN(char)) {
+                result += brailleSpecial.capital; // Add capital indicator for uppercase letters
+            }
+
+            // Append the Braille code for the letter or special characters
+            result += brailleLetters[char.toLowerCase()] || brailleSpecial[char] || ""; // Use brailleSpecial mapping for special characters
+        }
+    }
+
+    return result;
+}
+
+
+
+
 //main function to determine the type of input and then returns appropriate translated output
 function translate(input) {
     if (isBraille(input)) { 
         return toEnglish(input);
+    }else{
+        return toBraille(input);
     }
 }
+
 
 
 const input = process.argv[2]; //grab input from command line
