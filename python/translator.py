@@ -1,16 +1,51 @@
 import sys
 
-def to_english(braille_string):
-    """
-    Translates a braille string (6 characters) into an english letter and returns it
-    """
-    return ""
+# dictionaries to store eng <-> braille mapping
+eng_to_braille = {
+    "a": "O.....",
+    "b": "O.O...",
+    "c": "OO....",
+    "d": "OO.O..",
+    "e": "O..O..",
+    "f": "OOO...",
+    "g": "OOOO..",
+    "h": "O.OO..",
+    "i": ".OO...",
+    "j": ".OOO..",
+    "k": "O...O.",
+    "l": "O.O.O.",
+    "m": "OO..O.",
+    "n": "OO.OO.",
+    "o": "O..OO.",
+    "p": "OOO.O.",
+    "q": "OOOOO.",
+    "r": "O.OOO.",
+    "s": ".OO.O.",
+    "t": ".OOOO.",
+    "u": "O...OO",
+    "v": "O.O.OO",
+    "w": ".OOO.O",
+    "x": "OO..OO",
+    "y": "OO.OOO",
+    "z": "O..OOO",
+    " ": "......"
+}
 
-def to_braille(english_char):
-    """
-    Translates a english char into a braille string (6 characters and returns it
-    """
-    return ""
+num_to_braille = {
+    "1": "O.....",
+    "2": "O.O...",
+    "3": "OO....",
+    "4": "OO.O..",
+    "5": "O..O..",
+    "6": "OOO...",
+    "7": "OOOO..",
+    "8": "O.OO..",
+    "9": ".OO...",
+    "0": ".OOO.."
+}
+
+braille_to_eng = {v:k for k, v in eng_to_braille.items()}
+braille_to_num = {v:k for k, v in num_to_braille.items()}
 
 def check_if_english(phrase):
     """
