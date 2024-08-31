@@ -76,11 +76,10 @@ def textToBraille(text):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="A script to demonstrate command-line argument parsing.")
-    parser.add_argument("inputs", nargs='+', type=str, help="Multiple pieces of data to be processed")
-
-    # Parse the arguments
+    
+    # Allow for multiple inputs, each of which can include spaces
+    parser.add_argument("inputs", nargs='*', type=str, help="Multiple pieces of data to be processed, which may include spaces.")
     args = parser.parse_args()
-    # Join all inputs into one big string
     inputs = ' '.join(args.inputs)
 
     letterToBraille = {
