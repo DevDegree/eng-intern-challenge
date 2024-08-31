@@ -135,20 +135,21 @@ def translate_to_braille(input_string):
         # if the char is in the numbers dict
         # check if we need to append the numbers follow braille text, toggle switch, append number
         if char in NUMBERS_TO_BRAILLE:
-            print(char)
             if not number_follows:
                 braille_chars.append(NUMBER_FOLLOWS)
                 number_follows = True
             braille_chars.append(NUMBERS_TO_BRAILLE[char])
-            print(NUMBERS_TO_BRAILLE[char])
+        # if alpha toggle off numbers
         elif char.isalpha():
             if number_follows:
                 number_follows = False
+            # if uppercase append capitilzae cell first
             if char.isupper():
                 braille_chars.append(CAPITALIZE)
                 braille_chars.append(ENGLISH_TO_BRAILLE[char.lower()])
             else:
                 braille_chars.append(ENGLISH_TO_BRAILLE[char])
+        # For ' '
         else:
             braille_chars.append(ENGLISH_TO_BRAILLE[char])
 
