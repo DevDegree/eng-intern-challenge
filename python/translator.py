@@ -65,7 +65,11 @@ class Braille:
             if len(field.name) == 1:
                 dict_brailleToAlpha[field.default] = field.name
 
-        # add numbers and punctuation
+        return dict_brailleToAlpha
+    
+    def getBrailleToNumPunc(self) -> dict:
+        dict_brailleToAlpha = {}
+
         dict_brailleToAlpha[self.one] = "1"
         dict_brailleToAlpha[self.two] = "2"
         dict_brailleToAlpha[self.three] = "3"
@@ -76,6 +80,9 @@ class Braille:
         dict_brailleToAlpha[self.eight] = "8"
         dict_brailleToAlpha[self.nine] = "9"
         dict_brailleToAlpha[self.zero] = "0"
+
+        dict_brailleToAlpha[self.capitalFollows] = ""
+        dict_brailleToAlpha[self.numberFollows] = ""
         dict_brailleToAlpha[self.period] = "."
         dict_brailleToAlpha[self.comma] = ","
         dict_brailleToAlpha[self.quesionMark] = "?"
@@ -89,7 +96,7 @@ class Braille:
         dict_brailleToAlpha[self.openParen] = "("
         dict_brailleToAlpha[self.closeParen] = ")"
         dict_brailleToAlpha[self.space] = " "
-
+        
         return dict_brailleToAlpha
         
     def getAlphaToBraille(self) -> dict:
@@ -131,49 +138,86 @@ class Translator:
     braille = Braille()
     dict_alphaToBraille = braille.getAlphaToBraille()
     dict_brailleToAlpha = braille.getBrailleToAlpha()
+    dict_brailleToNumPunc = braille.getBrailleToNumPunc()
 
     def __init__(self) -> None:
-        pass
+        return
 
     def translate(self, words: List[str]) -> str:
         if len(words) == 0:
             return ""
         
-        translation = ""
+        original = " ".join(words)
 
-        # check if the first character is alphabetical
-        if words[0].lower()[0] in self.dict_alphaToBraille:
-            for word in words:
-                translation += self.alphaToBraille(word)
         # check if the first six characters are valid braille strings
-        elif words[0][0:6] in self.dict_brailleToAlpha:
-            for word in words:
-                translation += self.brailleToAlpha(word)
-
-        return translation
+        if len(original) >= 6 and original[0:6] in self.dict_brailleToAlpha or original[0:6] in self.dict_brailleToNumPunc:
+            return self.brailleToAlpha(original)
+        # check if the first character is alphabetical
+        elif original.lower()[0] in self.dict_alphaToBraille:
+            return self.alphaToBraille(original)
+        
+        return ""
 
     def brailleToAlpha(self, word: str) -> str:
-        return ""
+        if len(word) % 6 != 0:
+            return ""
+        
+        translation = ""
+        isCap = False
+        isNum = False
+
+        for i in range(0, len(word), 6):
+            brailleString = word[i: i + 6]
+
+            if brailleString == self.braille.capitalFollows:
+                isCap = True
+            elif brailleString == self.braille.numberFollows:
+                isNum = True
+            elif isCap:
+                translation += self.dict_brailleToAlpha[brailleString].upper()
+                isCap = False
+            elif isNum:
+                if brailleString == self.braille.space:
+                    isNum = False
+                else:
+                    translation += self.dict_brailleToNumPunc[brailleString]
+            else:
+                if brailleString in self.dict_brailleToAlpha:
+                    translation += self.dict_brailleToAlpha[brailleString]
+                elif brailleString in self.dict_brailleToNumPunc:
+                    translation += self.dict_brailleToNumPunc[brailleString]
+        
+        return translation
 
     def alphaToBraille(self, word: str) -> str:
-        return ""
+        translation = ""
+        isNum = False
+
+        for char in word:
+            if char.isdigit():
+                if not isNum:
+                    translation += self.braille.numberFollows
+                    isNum = True
+                translation += self.dict_alphaToBraille[char]
+            else:
+                # assume that the input string will contain a space to separate numbers and letters
+                if isNum:
+                    isNum = False
+                    
+                if char.isupper():
+                    translation += self.braille.capitalFollows
+                    translation += self.dict_alphaToBraille[char.lower()]
+                else:
+                    translation += self.dict_alphaToBraille[char]
+
+        return translation
 
 def main():
     # get the words to be translated
     words = sys.argv[1:]
     translator = Translator()
     translation = translator.translate(words)
-    # print(translator.dict_alphaToBraille)
-    # print(translator.dict_brailleToAlpha)
-    
-    print("ALPHA TO BRAILLE")
-    for key in translator.dict_alphaToBraille:
-        print(key, translator.dict_alphaToBraille[key])
-
-    print("BRAILLE TO ALPHA")
-    for key in translator.dict_brailleToAlpha:
-        print(key, translator.dict_brailleToAlpha[key])
-    # print(translation)
+    print(translation)
 
 if __name__ == "__main__":
     main()
