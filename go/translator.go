@@ -103,5 +103,36 @@ func brailleHelper(input string) string {
 func brailleToEnglish(input string) string { return nil }
 
 func brailleDecoder(input string) {
+	str := ""
+	capitalNext := false
+	numberNext := false
+	decimalNext := false
+	for i := 0; i < len(input); i += 6 {
+		if i+6 > len(input) {
+			break
+		}
+
+		brailleCell := input[i : i+6]
+
+		if brailleCell == ".....0" {
+			capitalNext = true
+			continue
+		}
+		if brailleCell == ".0.000" {
+			numberNext = true
+			continue
+		}
+		if brailleCell == ".0...0" {
+			decimalNext = true
+			continue
+		}
+
+		if capitalNext {
+
+		}
+
+		str += brailleHelper(input[i : i+6])
+
+	}
 
 }
