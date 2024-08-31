@@ -23,7 +23,7 @@ capital_follows = ".....0"
 number_follows = ".0.000"
 
 def translator(input_str):
-    
+    # Braile to english
     if ('0.' in input_str):
         translated = ""
         i = 0
@@ -46,6 +46,7 @@ def translator(input_str):
                 translated += "?" 
             i += 6
     else:
+        # English to braille
         translated = ""
         in_number_mode = False
         for char in input_str:
@@ -66,9 +67,7 @@ def translator(input_str):
     return translated           
 
 if __name__ == "__main__":
-    # if len(sys.argv) < 2:
-    #     print("Error: Expected one argument")
-    #     sys.exit(1)
+    
     input_string = sys.argv[1]
     result = translator(input_string)
     print(result)
