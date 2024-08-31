@@ -7,7 +7,7 @@ type Glyph = `${DotOrO}${DotOrO}${DotOrO}${DotOrO}${DotOrO}${DotOrO}`;
 type Alphabet = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z";
 type HasGlyph = Alphabet | " " | "uppercase" | "number";
 
-const character_to_braille = {
+const character_to_braille: Record<string, Glyph> = {
     // main alphabet
     a: "O.....", b: "O.O...", c: "OO....", d: "OO.O..", e: "O..O..", f: "OOO...", g: "OOOO..",
     h: "O.OO..", i: ".OO...", j: ".OOO..", k: "O...O.", l: "O.O.O.", m: "OO..O.", n: "OO.OO.",
@@ -16,17 +16,17 @@ const character_to_braille = {
     // special characters
     " ": "......", uppercase: ".....O", number: ".O.OOO",
     // validates that all characters are covered, and correspond to a glyph matching braille
-} satisfies Record<HasGlyph, Glyph> as Record<string, Glyph>;
+} satisfies Record<HasGlyph, Glyph>;
 
 // inverse character_to_braille
 const braille_to_character = Object.fromEntries(
     Object.entries(character_to_braille).map(([k, v]) => [v, k])
 );
 
-const number_to_character = {
+const number_to_character: Record<string, Alphabet> = {
     "1": "a", "2": "b", "3": "c", "4": "d", "5": "e",
     "6": "f", "7": "g", "8": "h", "9": "i", "0": "j",
-} as Record<string, Alphabet>;
+} satisfies Record<`${number}`, Alphabet>;
 
 const character_to_number = Object.fromEntries(
     Object.entries(number_to_character).map(([k, v]) => [v, k])
