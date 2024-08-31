@@ -41,7 +41,7 @@ converter = {
     "7": "OOOO..",
     "8": "O.OO..",
     "9": ".OO...",
-    "O": ".OOO..",
+    "0": ".OOO..",
     ".": "..OO.O",
     ",": "..O...",
     "?": "..O.OO",
@@ -90,7 +90,7 @@ converter = {
     "....OO": "-",
     ".O..O.": "/",
     ".OO..O": "<",
-    "O..OO.": ">",
+    # "O..OO.": ">", commented due to conflict with "o"
     "O.O..O": "(",
     ".O.OO.": ")",
     "......": " "
@@ -108,14 +108,19 @@ num_map = {
     "O.OO..": "8",
     ".OO...": "9",
     ".OOO..": "0",
-    ".O...O": ".", # decimal follows
+    ".O...O": ".", # Decimal follows
 }
 
 def convert_braille_to_english(input_string):
+    """
+    Convert a Braille String to English
+
+    input_string (int) -- The Braille String
+    """
     return_string = ""
     # Check if the Braille string is divisible by 6
     if len(input_string) % 6 != 0:
-        print("Braille string must be divisible by 6")
+        # print("Braille string must be divisible by 6")
         sys.exit(1)
     
     # Variables to keep track of current states
@@ -125,19 +130,15 @@ def convert_braille_to_english(input_string):
     for i in range(0, len(input_string), 6):
         curr_character = input_string[i:i+6]
         if curr_character not in converter and curr_character not in num_map and curr_character != ".....O" and curr_character != ".O.OOO":
-            print("The following character does not exist: " + curr_character)
+            # print("The following character does not exist: " + curr_character)
             sys.exit(1)
-        elif curr_character == ".....O":
-            capital_follows = True
-        elif curr_character == ".O.OOO":
-            number_follows = True
         elif capital_follows == True:
             # Need to actually check if the braille is an alphabet character. (cannot capitalize a number or another token)
             if converter[curr_character] in "abcdefghijklmnopqrstuvwxyz":
                 return_string += converter[curr_character].upper()
                 capital_follows = False
             else:
-                print("Cannot capitalize: " + converter[curr_character])
+                # print("Cannot capitalize: " + converter[curr_character])
                 sys.exit(1)
         elif curr_character == "......":
             number_follows = False
@@ -147,19 +148,28 @@ def convert_braille_to_english(input_string):
             if curr_character in num_map:
                 if curr_character == ".O...O":
                     if decimal_follows == True:
-                        print("Cannot have more than 1 decimal in a number")
+                        # print("Cannot have more than 1 decimal in a number")
                         sys.exit(1)
                     else:
                         decimal_follows = True
                 return_string += num_map[curr_character]
             else:
-                print("The following is not a decimal when it should be: " + curr_character)
+                # print("The following is not a decimal when it should be: " + curr_character)
                 sys.exit(1)
+        elif curr_character == ".....O":
+            capital_follows = True
+        elif curr_character == ".O.OOO":
+            number_follows = True
         else:
             return_string += converter[curr_character]
     return return_string
 
 def convert_english_to_braille(input_string):
+    """
+    Convert an English String to Braille
+
+    input_string (int) -- The English String
+    """
     return_string = ""
     number_follows = False
     decimal_follows = False
@@ -176,7 +186,7 @@ def convert_english_to_braille(input_string):
                 return_string += ".O...O"
                 decimal_follows = True
             else:
-                print("Cannot have two decimals in a number")
+                # print("Cannot have two decimals in a number")
                 sys.exit(1)
         elif letter in "0123456789":
             if number_follows == False:
@@ -184,7 +194,7 @@ def convert_english_to_braille(input_string):
                 return_string += ".O.OOO"
             return_string += converter[letter]
         elif letter not in converter:
-            print("The following character: " + letter + ", cannot be converted to Braille")
+            # print("The following character: " + letter + ", cannot be converted to Braille")
             sys.exit(1)
         else:
             return_string += converter[letter]
@@ -192,7 +202,7 @@ def convert_english_to_braille(input_string):
 
 # Validation that the user passed enough input arguments
 if len(sys.argv) < 2:
-    print("Please pass at least 1 argument")
+    # print("Please pass at least 1 argument")
     sys.exit(1)
 
 # Storing arguments in an input String
@@ -222,9 +232,5 @@ if is_braille:
 else:
     return_string = convert_english_to_braille(input_string)
         
-
+# Printing the output
 print(return_string)
-
-# ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
-# ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
-# ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
