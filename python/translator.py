@@ -5,7 +5,7 @@
 
 import sys
 
-english_to_braille = {
+converter = {
     "a": "0.....",
     "b": "0.0...",
     "c": "00....",
@@ -58,20 +58,29 @@ english_to_braille = {
 }
 
 #didn't map capital follows, decimal follows, and number follows
+#what is the difference between decimal follows and number follows?
 
 if len(sys.argv) != 1:
     print("Please pass only 1 argument")
     sys.exit(1)
 
 input_string = sys.argv[0]
-isBrail = True
+is_brail = True
+return_string = ""
 
 for letter in input_string:
     if letter != "0" and letter != ".":
-        isBrail = False
+        is_brail = False
         break
 
-if isBrail:
-    pass
+if is_brail:
+    if len(input_string) % 6 != 0:
+        print("Brail string must be divisible by 6")
+        sys.exit(1)
 else:
-    pass
+    for letter in input_string:
+        if letter.isupper():
+            return_string += ".....0"
+            return_string += converter[letter]
+
+print(return_string)
