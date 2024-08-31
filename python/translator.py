@@ -51,19 +51,46 @@ def braille_to_english(braille):
                     result.append(' ')
                     number_mode = False
                 else:
-                    for num, letter in NUMBERS.items():
-                        if BRAILLE_TO_ENGLISH[char] == letter:
-                            result.append(num)
-                            break
+                    result.append(convert_braille_number(char))
             else:
-                letter = BRAILLE_TO_ENGLISH[char]
-                if capitalize_next and letter != ' ':
-                    letter = letter.upper()
-                    capitalize_next = False
-                result.append(letter)
+                result.append(convert_braille_letter(char, capitalize_next))
+                capitalize_next = False
         i += 6
 
     return ''.join(result)
+
+
+def convert_braille_number(char):
+    """
+    Converts a Braille character to its corresponding number.
+
+    Args:
+        char (str): The Braille character.
+
+    Returns:
+        str: The corresponding number.
+    """
+    for num, letter in NUMBERS.items():
+        if BRAILLE_TO_ENGLISH[char] == letter:
+            return num
+    return ''
+
+
+def convert_braille_letter(char, capitalize_next):
+    """
+    Converts a Braille character to its corresponding letter, with optional capitalization.
+
+    Args:
+        char (str): The Braille character.
+        capitalize_next (bool): Whether to capitalize the letter.
+
+    Returns:
+        str: The corresponding letter.
+    """
+    letter = BRAILLE_TO_ENGLISH[char]
+    if capitalize_next and letter != ' ':
+        return letter.upper()
+    return letter
 
 
 def english_to_braille(text):
@@ -76,21 +103,20 @@ def english_to_braille(text):
     Returns:
         str: The Braille translation of the English text.
     """
-
     result = []
     number_mode = False
 
     for char in text:
         if char.isdigit():
             if not number_mode:
-                result.append(ENGLISH_TO_BRAILLE['number follows'])
+                result.append(NUMBER_FOLLOWS)
                 number_mode = True
             result.append(ENGLISH_TO_BRAILLE[NUMBERS[char]])
         else:
             if number_mode and char != ' ':
                 number_mode = False
             if char.isupper():
-                result.append(ENGLISH_TO_BRAILLE['capital follows'])
+                result.append(CAPITAL_FOLLOWS)
                 result.append(ENGLISH_TO_BRAILLE[char.lower()])
             else:
                 result.append(ENGLISH_TO_BRAILLE[char.lower()])
@@ -104,12 +130,11 @@ def translate(input_string):
     """
     Translates the given input string from English to Braille or from Braille to English.
 
-    Parameters:
-    input_string (str): The string to be translated.
+    Args:
+        input_string (str): The string to be translated.
 
     Returns:
-    str: The translated string.
-
+        str: The translated string.
     """
     if all(c in 'O.' for c in input_string):
         return braille_to_english(input_string)
