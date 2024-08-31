@@ -64,7 +64,9 @@ REVERSE_NUM = {v: k for k, v in NUM_MODE.items()}
 def translate_to_braille(input, mode):
     result = ""
     for c in input:
+        #check if the c is a number
         if c.isdigit():
+            #check if we are at the first digit of the number, if we are, change mode to num 
             if mode == "alpha":
                 mode = "num"
                 result = result + TRANSLATOR["num"]
@@ -93,9 +95,10 @@ def translate_to_eng(input, mode):
             continue
     
         if mode == "num":
-            result = result + REVERSE_NUM[REVERSE_TRANSLATOR[c]]
-            if REVERSE_NUM[REVERSE_TRANSLATOR[c]] == " ":
+            if REVERSE_TRANSLATOR[c] == " ":
                 mode = "alpha"
+                result = result + " "
+            else: result = result + REVERSE_NUM[REVERSE_TRANSLATOR[c]]
         elif mode == "cap":
             result = result + REVERSE_TRANSLATOR[c].upper()
             mode = "alpha"
