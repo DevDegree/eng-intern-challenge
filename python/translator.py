@@ -32,3 +32,6 @@ class BrailleTranslator:
         self.braille_to_letters = {braille: letter for letter, braille in self.letters_to_braille.items()}
         self.braille_to_numbers = {braille: letter for letter, braille in self.numbers_to_braille.items()}
         self.braille_to_punctuation = {braille: letter for letter, braille in self.punctuation_to_braille.items()}
+
+    def is_braille(self, input: str) -> bool:
+            return all(char in 'O.' for char in input) and len(input) % 6 == 0
