@@ -7,11 +7,15 @@ braille_english_map = {
         "O...O.": "k", "O.O.O.": "l", "OO..O.": "m", "OO.OO.": "n", "O..OO.": "o",
         "OOO.O.": "p", "OOOOO.": "q", "O.OOO.": "r", ".OO.O.": "s", ".OOOO.": "t",
         "O...OO": "u", "O.O.OO": "v", ".OOO.O": "w", "OO..OO": "x", "OO.OOO": "y",
-        "O..OOO": "z", "......": " ", ".....O": "capital follows", ".O.OOO": "number follows"
+        "O..OOO": "z", "......": " ", ".....O": "capital follows", ".O.OOO": "number follows",
+        ".O...O":"decimal follows", "..OO.O":".", "..O...": ",", "..O.OO": "?", "..OOO." : "!",
+        "..OO.." : ":", "..O.O." : ";", "....OO" : "-", ".O..O.":"/", "O.O..O": "(", ".O.OO." : ")"
     },
     "numbers": {
         "O.....": "1", "O.O...": "2", "OO....": "3", "OO.O..": "4", "O..O..": "5",
-        "OOO...": "6", "OOOO..": "7", "O.OO..": "8", ".OO...": "9", ".OOO..": "0"
+        "OOO...": "6", "OOOO..": "7", "O.OO..": "8", ".OO...": "9", ".OOO..": "0",
+        "..OO.O":".", "....OO" : "-", ".O..O.": "/", ".OO..O" : "<", "O..OO.": ">",
+        "O.O..O": "(", ".O.OO." : ")"
     }
 }
 
@@ -48,6 +52,9 @@ def translate_braille(input_string: str) -> str:
             elif braille_char == "number follows":
                 numericize = True
                 continue
+            elif braille_char == "decimal follows":
+                translated_string += "."
+
             elif braille_char == " ":
                 translated_string += ' '
                 numericize = False  # Reset numericize after a space
