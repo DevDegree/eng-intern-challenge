@@ -78,7 +78,7 @@ def braille_to_english_single(cell):
         return ""
 
     if mode == "CAPITAL":
-        english = BRAILLE_TO_LETTER[cell].capitalize()
+        english = BRAILLE_TO_LETTER[cell].upper()
         mode = "DEFAULT" # capital follows only affects next cell
     elif mode == "NUMBER":
         english = BRAILLE_TO_NUMBER[cell]
