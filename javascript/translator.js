@@ -1,6 +1,3 @@
-const { error } = require("node:console");
-const process = require("node:process");
-
 function invert(object) {
   var invertedObject = {};
   for (var key in object) {
@@ -144,7 +141,7 @@ function translateEnglishToBraille(english) {
 function main(inputArr) {
   // Throws error if no argument is provided.
   if (!inputArr) {
-    throw error("Please provide a valid input - Braille or English");
+    console.log("Please provide a valid input - Braille or English");
   }
   // Join the array elements into a single string separated by spaces
   let text = inputArr.join(" ");
