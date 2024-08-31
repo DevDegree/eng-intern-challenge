@@ -1,10 +1,7 @@
 import sys
 
-# ==========================
-# Constants
-# ==========================
-
-BRAILLE_ALPHABET = {
+# Braille translation constants
+BRAlPHABET_MAP = {
     'a': 'O.....',
     'b': 'O.O...',
     'c': 'OO....',
@@ -33,7 +30,7 @@ BRAILLE_ALPHABET = {
     'z': 'O..OOO',
 }
 
-BRAILLE_NUMBERS = {
+BR_NUMBER_MAP = {
     '1': 'O.....',
     '2': 'O.O...',
     '3': 'OO....',
@@ -46,7 +43,7 @@ BRAILLE_NUMBERS = {
     '0': '.OOO..',
 }
 
-SPECIAL_CHARACTERS = {
+BR_SPECIAL_MAP = {
     '.': '..OO.O',
     ',': '..O...',
     ';': '..OO..',
@@ -59,62 +56,59 @@ SPECIAL_CHARACTERS = {
     ' ': '......',
 }
 
-CAPITAL_PFX = '.....O'
-NUMBER_PFX = '.O.OOO'
+CAP_PREFIX = '.....O'
+NUM_PREFIX = '.O.OOO'
 
 # Reverse mappings for Braille to English
-BRAILLE_TO_LETTER = {v: k for k, v in BRAILLE_ALPHABET.items()}
-BRAILLE_TO_NUMBER = {v: k for k, v in BRAILLE_NUMBERS.items()}
-BRAILLE_TO_SPECIAL = {v: k for k, v in SPECIAL_CHARACTERS.items()}
+BR_TO_ENG_LETTER = {v: k for k, v in BRAlPHABET_MAP.items()}
+BR_TO_ENG_NUMBER = {v: k for k, v in BR_NUMBER_MAP.items()}
+BR_TO_ENG_SPECIAL = {v: k for k, v in BR_SPECIAL_MAP.items()}
 
 
-# ==========================
-# Functions
-# ==========================
-
-def english_or_braille(text):
+# Translation functions
+def translate_text(input_str):
     # Check if input is in Braille or English
-    if all(char in 'O.' for char in text):
-        return braille_to_english(text)
+    if all(char in 'O.' for char in input_str):
+        return braille_to_english(input_str)
     else:
-        return english_to_braille(text)
+        return english_to_braille(input_str)
 
 
-def braille_to_english(braille):
-    english = ''
+def braille_to_english(braille_str):
+    english_str = ''
     i = 0
     is_capital = False
     is_number = False
 
-    while i < len(braille):
-        char_braille = braille[i:i + 6]
+    while i < len(braille_str):
+        char_braille = braille_str[i:i + 6]
 
         # Check for special characters
-        if char_braille == CAPITAL_PFX:
+        if char_braille == CAP_PREFIX:
             is_capital = True
             i += 6
             continue
         # Check for number prefix
-        elif char_braille == NUMBER_PFX:
+        elif char_braille == NUM_PREFIX:
             is_number = True
             i += 6
             continue
         # Check for special characters
         elif char_braille == '......':
-            english += ' '
+            english_str += ' '
         # Check for letters
-        elif char_braille in BRAILLE_TO_LETTER and not is_number:
-            letter = BRAILLE_TO_LETTER[char_braille]
+        elif char_braille in BR_TO_ENG_LETTER and not is_number:
+            letter = BR_TO_ENG_LETTER[char_braille]
             if is_capital:
                 letter = letter.upper()
                 is_capital = False
-            english += letter
+            english_str += letter
         # Check for numbers
-        elif char_braille in BRAILLE_TO_NUMBER and is_number:
-            english += BRAILLE_TO_NUMBER[char_braille]
+        elif char_braille in BR_TO_ENG_NUMBER and is_number:
+            english_str += BR_TO_ENG_NUMBER[char_braille]
         # Check for special characters
-        elif char_braille in BRAILLE_TO_SPECIAL:
-            english += BRAILLE_TO_SPECIAL[char_braille]
+        elif char_braille in BR_TO_ENG_SPECIAL:
+            english_str += BR_TO_ENG_SPECIAL[char_braille]
 
         i += 6
 
@@ -122,32 +116,32 @@ def braille_to_english(braille):
         if char_braille == '......':
             is_number = False
 
-    return english
+    return english_str
 
 
-def english_to_braille(english):
+def english_to_braille(english_str):
     output = ''
     is_number = False
 
-    for char in english:
+    for char in english_str:
         # Check if character is a letter
         if char.isalpha():
             if char.isupper():
-                output += CAPITAL_PFX
+                output += CAP_PREFIX
                 char = char.lower()
-            output += BRAILLE_ALPHABET[char]
+            output += BRAlPHABET_MAP[char]
         # Check if character is a number
         elif char.isdigit():
             if not is_number:
-                output += NUMBER_PFX
+                output += NUM_PREFIX
                 is_number = True
-            output += BRAILLE_NUMBERS[char]
+            output += BR_NUMBER_MAP[char]
         # Check if character is a special character
-        elif char in SPECIAL_CHARACTERS:
-            output += SPECIAL_CHARACTERS[char]
-        # If character is a space
+        elif char in BR_SPECIAL_MAP:
+            output += BR_SPECIAL_MAP[char]
+                # If character is a space
         else:
-            output += SPECIAL_CHARACTERS['.']
+            output += BR_SPECIAL_MAP[' ']
             is_number = False
 
     return output
@@ -155,11 +149,11 @@ def english_to_braille(english):
 
 def main():
     if len(sys.argv) < 2:
-        print("ERROR: invalid number of arguments")
+        print("ERROR: Invalid number of arguments")
         sys.exit(1)
 
     input_text = ' '.join(sys.argv[1:])
-    print(english_or_braille(input_text))
+    print(translate_text(input_text))
 
 
 if __name__ == '__main__':
