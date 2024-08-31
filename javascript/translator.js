@@ -105,17 +105,17 @@ function toBraille(englishText) {
                 result += brailleSpecial.number; //add number character at the start of a number sequence
                 isNumberContext = true; //set number context
             }
-            result += brailleNumbers[char]; // Azppend the Braille code for the number
+            result += brailleNumbers[char]; //append the Braille code for the number
         } else {
-            isNumberContext = false; // Exit number context when encountering a non-digit
+            isNumberContext = false; //exit number context when encountering a non-digit
 
-            // Check for capital letters and append capital indicator
+            //check for capital letters and append capital indicator
             if (char.toUpperCase() === char && isNaN(char)) {
-                result += brailleSpecial.capital; // Add capital indicator for uppercase letters
+                result += brailleSpecial.capital; //add capital indicator for uppercase letters
             }
 
-            // Append the Braille code for the letter or special characters
-            result += brailleLetters[char.toLowerCase()] || brailleSpecial[char] || ""; // Use brailleSpecial mapping for special characters
+            //append the Braille code for the letter or special characters
+            result += brailleLetters[char.toLowerCase()] || brailleSpecial[char] || ""; //use brailleSpecial mapping for special characters
         }
     }
 
