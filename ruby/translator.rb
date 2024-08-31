@@ -115,22 +115,25 @@ class Translator
     0.step(str.length - 6, 6).each do |i|
       braille_char = str[i...i + 6]
 
-      if braille_char == '.....O'
+      case braille_char
+      when BRAILLE_CAP_FOLLOWS
         is_upcase = true
-      elsif braille_char == '.O.OOO'
+      when BRAILLE_NUM_FOLLOWS
         is_alpha = false
-      elsif braille_char == '......'
+      when BRAILLE_SPACE
         english += ' '
         is_alpha = true
-      elsif is_alpha
-        char = BRAILLE_TO_ALPHA[braille_char]
-        if is_upcase
-          char = char.upcase
-          is_upcase = false
+      else
+        if is_alpha
+          char = BRAILLE_TO_ALPHA[braille_char]
+          if is_upcase
+            char = char.upcase
+            is_upcase = false
+          end
+        else
+          char = BRAILLE_TO_NUM[braille_char]
         end
         english += char
-      else
-        english += BRAILLE_TO_NUM[braille_char]
       end
     end
 
@@ -143,14 +146,15 @@ class Translator
     is_alpha = true
 
     str.each_char do |c|
-      if c.match?(/[0-9]/)
+      case c
+      when /[0-9]/
         braille += BRAILLE_NUM_FOLLOWS if is_alpha
         braille += NUM_TO_BRAILLE[c]
         is_alpha = false
-      elsif c == ' '
+      when ' '
         braille += BRAILLE_SPACE
         is_alpha = true
-      elsif c == c.upcase
+      when c.upcase
         braille += BRAILLE_CAP_FOLLOWS
         braille += ALPHA_TO_BRAILLE[c.downcase]
       else
