@@ -144,7 +144,8 @@ def eng_to_braille(input)
         res += decimal_follows_braille
       else
         if index + 1 < input.length and number_regex.match(input[index+1, 1])
-          res += "#{$number_follows_braille}#{$number_to_braille_map[char]}"
+          # looks at the next char to see if this is a decimal (example: .5)
+          res += "#{$number_follows_braille}#{$decimal_follows_braille}"
           number_mode = true
         else
           res += $symbol_to_braille[char]
