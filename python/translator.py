@@ -106,7 +106,7 @@ def braille_to_eng(braille):
             if capital:
                 char = char.upper() # Convert to uppercase if capital flag is set
                 capital = False
-            if numlock and char != ' ':
+            if numlock and len(braille_eng[symbol]) > 1 and char != ' ':
                 char = braille_eng[symbol][1] # Use the numeric equivalent in numeric mode
             else: 
                 numlock = False
