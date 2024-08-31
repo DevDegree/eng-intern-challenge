@@ -2,20 +2,26 @@
 
 # Translator
 class Translator
-  ENGLISH = ("a".."z").to_a + ("0".."9").to_a + [" "]
   ENGLISH_NUMS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-
-  BRAILLE = [
-    "O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..",
-    ".OO...", ".OOO..", "O...O.", "O.O.O.", "OO..O.", "OO.OO.", "O..OO.", "OOO.O.",
-    "OOOOO.", "O.OOO.", ".OO.O.", ".OOOO.", "O...OO", "O.O.OO", ".OOO.O", "OO..OO", "OO.OOO", "O..OOO",
-    ".OOO..", "O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..", ".OO...", "......"]
-
   BRAILLE_NUMS = [".OOO..", "O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...",
     "OOOO..", "O.OO..", ".OO..."]
   SPACE = "......"
   CAPITAL_FOLLOWS = ".....O"
   NUMBERS_FOLLOW = ".O.OOO"
+
+  ENGLISH = ('a'..'z').to_a + [" "]
+  BRAILLE = [
+      "O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..",
+      ".OO...", ".OOO..", "O...O.", "O.O.O.", "OO..O.", "OO.OO.", "O..OO.", "OOO.O.",
+      "OOOOO.", "O.OOO.", ".OO.O.", ".OOOO.", "O...OO", "O.O.OO", ".OOO.O", "OO..OO", "OO.OOO", "O..OOO","......"]
+
+  # ALPHABET HASHMAPS + SPACE
+  ENGLISH_TO_BRAILLE_MAP = ENGLISH.zip(BRAILLE).to_h
+  BRAILLE_TO_ENGLISH_MAP = ENGLISH_TO_BRAILLE_MAP.invert
+
+  # NUM HASH MAPS
+  ENG_BRAILLE_NUM = ENGLISH_NUMS.zip(BRAILLE_NUMS).to_h
+  BRAILLE_ENG_NUM = BRAILLE_NUMS.zip(ENGLISH_NUMS).to_h
 
   BRAILLE_COLLECTION = BRAILLE.push(CAPITAL_FOLLOWS, NUMBERS_FOLLOW)
 
@@ -30,7 +36,7 @@ class Translator
     true
   end
 
-  # input: arg array; output: array with items of length 6
+  # input: arg array; output: array with items of length 6 or nil
   def self.arg_to_braille(array)
     return if array.nil?
 
@@ -46,8 +52,8 @@ class Translator
       english_to_braille(arg)
     end
   end
+
   # input arg array; output english string
-  # ["O.....", "O.O..."]
   def self.braille_to_english(data)
     result = []
     symbols = arg_to_braille(data)
@@ -60,18 +66,16 @@ class Translator
       elsif symbol == NUMBERS_FOLLOW
         number = true
       else
-        idx = BRAILLE.find_index(symbol)
-        alphabet = ENGLISH[idx]
         if symbol == SPACE
           number = false
         end
         if capital
-          result.push(alphabet.upcase)
+          result.push(BRAILLE_TO_ENGLISH_MAP[symbol].upcase)
           capital = false
         elsif number
-          result.push(ENGLISH_NUMS[BRAILLE_NUMS.find_index(symbol)])
+          result.push(BRAILLE_ENG_NUM[symbol])
         else
-          result.push(ENGLISH[idx])
+          result.push(BRAILLE_TO_ENGLISH_MAP[symbol])
         end
       end
     end
@@ -86,23 +90,17 @@ class Translator
     number = false
     string.each_char do |char|
       if /[A-Z]/.match(char)
-        english_idx = ENGLISH.find_index(char.downcase)
-        braille_symbol = BRAILLE[english_idx]
         braille << CAPITAL_FOLLOWS
-        braille << braille_symbol
+        braille << ENGLISH_TO_BRAILLE_MAP[char.downcase]
       elsif char == ' '
         braille << SPACE
         number = false
       elsif /[0-9]/.match(char)
         braille << NUMBERS_FOLLOW if number == false
         number = true
-        english_idx = ENGLISH.find_index(char.downcase)
-        braille_symbol = BRAILLE[english_idx]
-        braille << braille_symbol
+        braille << ENG_BRAILLE_NUM[char]
       elsif /[a-z]/.match(char)
-        english_idx = ENGLISH.find_index(char)
-        braille_symbol = BRAILLE[english_idx]
-        braille << braille_symbol
+        braille << ENGLISH_TO_BRAILLE_MAP[char]
       end
     end
     braille
