@@ -1,32 +1,32 @@
 import sys
 
 BrailleToAlphabet = {
-    "O.....": 'A',
-    "O.O...": 'B',
-    "OO....": 'C',
-    "OO.O..": 'D',
-    "O..O..": 'E',
-    "OOO...": 'F',
-    "OOOO..": 'G',
-    "O.OO..": 'H',
-    ".OO...": 'I',
-    ".OOO..": 'J',
-    "O...O.": 'K',
-    "O.O.O.": 'L',
-    "OO..O.": 'M',
-    "OO.OO.": 'N',
-    "O..OO.": 'O',
-    "OOO.O.": 'P',
-    "OOOOO.": 'Q',
-    "O.OOO.": 'R',
-    ".OO.O.": 'S',
-    ".OOOO.": 'T',
-    "O...OO": 'U',
-    "O.O.OO": 'V',
-    ".OOO.O": 'W',
-    "OO..OO": 'X',
-    "OO.OOO": 'Y',
-    "O..OOO": 'Z',
+    "O.....": 'a',
+    "O.O...": 'b',
+    "OO....": 'c',
+    "OO.O..": 'd',
+    "O..O..": 'e',
+    "OOO...": 'f',
+    "OOOO..": 'g',
+    "O.OO..": 'h',
+    ".OO...": 'i',
+    ".OOO..": 'j',
+    "O...O.": 'k',
+    "O.O.O.": 'l',
+    "OO..O.": 'm',
+    "OO.OO.": 'n',
+    "O..OO.": 'o',
+    "OOO.O.": 'p',
+    "OOOOO.": 'q',
+    "O.OOO.": 'r',
+    ".OO.O.": 's',
+    ".OOOO.": 't',
+    "O...OO": 'u',
+    "O.O.OO": 'v',
+    ".OOO.O": 'w',
+    "OO..OO": 'x',
+    "OO.OOO": 'y',
+    "O..OOO": 'z',
 }
 
 BrailleToNumber = {
@@ -64,26 +64,57 @@ BrailleToAction = {
     ".O.OOO": "NF"
 }
 
-AlphaBetToBraille = {value: key for key, value in BrailleToAlphabet.items()}
+CharacterToBraille = {value: key for key, value in BrailleToAlphabet.items()}
 NumberToBraille = {value: key for key, value in BrailleToNumber.items()}
 SymbolToBraille = {value: key for key, value in BrailleToSymbol.items()}
-ActionBetToBraille = {value: key for key, value in BrailleToAction.items()}
+ActionToBraille = {value: key for key, value in BrailleToAction.items()}
+
+
+def isNumber(char: chr) -> bool:
+    return char in NumberToBraille.keys()
+
+def isPunctuation(char: chr) -> bool:
+    return char in SymbolToBraille.keys()
 
 def isEnglish(message: str) -> bool:
     for char in message:
         if (char != 'O' or char != '.'):
-            return False
+            return True
     
-    return True
+    return False
 
 def EnglishToBraille(message: str) -> str:
-    pass
+    output = ""
+    readingNumber = False
+    
+    for char in message:
+        if char.isalpha():
+            if char.isupper():
+                output += ActionToBraille["CF"]
+                char = char.lower()
+                
+            output += CharacterToBraille[char]
+        elif isNumber(char):
+            if readingNumber == False:
+                readingNumber = True
+                output += ActionToBraille["NF"]
+                
+            output += NumberToBraille[char]
+        elif isPunctuation(char):
+            if char == "." and readingNumber:
+                output += ActionToBraille["DF"]
+            elif char == " ":
+                readingNumber = False
+                
+            output += SymbolToBraille[char]
+    
+    return output
 
 def BrailleToEnglish(message: str) -> str:
     pass
     
 if __name__ == "__main__":
-    message = sys.argv[1]
+    message = ' '.join(sys.argv[1:])
     if isEnglish(message):
         output = EnglishToBraille(message)
     else:
