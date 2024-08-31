@@ -4,14 +4,15 @@ const arg = process.argv.slice(2); // the first 2 arguments are reserved for the
 ///////////////// DO SOMETHING IF THE ARGUMENTS ARE NOT PROVIDED?? //////////////////
 
 // Check if any arguments are provided
-if (arg.length === 0) {
+if (arg.length === 0 || arg === null) {
   //   console.log("No arguments provided. Please provide some arguments.");
-  process.exit(1); // Exit with a non-zero status code to indicate an error
+  // process.exit(1); // Exit with a non-zero status code to indicate an error
+  // console.log(error);
 }
 
 ////////////////////////////// LOGIC //////////////
 
-const [message] = arg; // the argument is the message provided in the command line, message is a string
+const message = arg.join(" "); // the argument is the message provided in the command line, message is a string
 
 // English to Braille mapping
 const engToBraille = new Map();
@@ -43,7 +44,8 @@ engToBraille.set("x", "OO..OO");
 engToBraille.set("y", "OO.OOO");
 engToBraille.set("z", "O..OOO");
 engToBraille.set("capitalize", ".....O");
-engToBraille.set("space", "......");
+engToBraille.set(" ", "......");
+engToBraille.set("number follows", ".O.OOO");
 engToBraille.set("0", ".OOO..");
 engToBraille.set("1", "O.....");
 engToBraille.set("2", "O.O...");
@@ -123,7 +125,8 @@ if (message.split("").includes(".")) {
         i += 6;
         // console.log(res);
       }
-      res += " ";
+      if (i !== message.length) res += " ";
+      // res += " ";
       // i += 6;
       // console.log(res);
     } else {
@@ -131,6 +134,70 @@ if (message.split("").includes(".")) {
       // console.log(res);
     }
   }
+} else {
+  // braille to english translation logic
+  for (let i = 0; i < message.length; i++) {
+    // console.log(i);
+    // console.log(res);
+    if (
+      message[i] === message[i].toUpperCase() &&
+      !/[0123456789 ]/.test(message[i])
+    ) {
+      // console.log(message[i]);
+      // console.log(res);
+      res +=
+        engToBraille.get("capitalize") +
+        engToBraille.get(message[i].toLowerCase());
+      i++;
+      // console.log(message[i]);
+      // console.log(res);
+    }
+    if (/[0123456789]/.test(message[i])) {
+      // console.log(message[i]);
+      res += engToBraille.get("number follows");
+      while (i < message.length && message[i] !== " ") {
+        // console.log(message[i]);
+        res += engToBraille.get(message[i]);
+        i++;
+      }
+      // i++;
+      // if (i !== message.length - 1) res += engToBraille.get(" ");
+      if (i !== message.length) res += engToBraille.get(" ");
+    } else {
+      // console.log(message[i]);
+      res += engToBraille.get(message[i]);
+      // console.log(i);
+      // console.log(res);
+    }
+    //   console.log(i);
+    //   console.log(res);
+  }
 }
 
 console.log(res);
+
+////////////////// TESTS ////////////
+
+// console.log([res]);
+
+// HELLO WORLD
+// console.log(
+//   res ===
+//     ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."
+// ); // Hello world
+// console.log(res === "Hello world");
+
+// 42
+// console.log(res === ".O.OOOOO.O..O.O..."); // 42
+// console.log(res === "42");
+
+// ABC 123
+// console.log(res === ".....OO.....O.O...OO...........O.OOOO.....O.O...OO...."); // Abc 123
+// console.log(res === "Abc 123");
+
+// ABC 123 XYZ
+// console.log(
+//   res ===
+//     ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
+// ); // Abc 123 xYz
+// console.log(res === "Abc 123 xYz");
