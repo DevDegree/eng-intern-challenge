@@ -1,8 +1,21 @@
-// TODO: Add docstring + class description
+/**
+ * A class that provides translation between English text and Braille.
+ * The translator handles uppercase, lowercase letters, digits, spaces, and a
+ * set of special characters. It also maintains modes for capitalization and
+ * number sequences to accurately represent the input in Braille.
+ */
 class BrailleTranslator {
   private isCapitalMode: boolean = false;
   private isNumberMode: boolean = false;
 
+  /**
+   * Constructs a BrailleTranslator instance.
+   *
+   * @param brailleAlphabet - A mapping of lowercase English letters to their Braille equivalents.
+   * @param brailleNumbers - A mapping of digits (0-9) to their Braille equivalents.
+   * @param brailleSpecials - A mapping of special characters to their Braille equivalents.
+   * @param brailleCommands - A mapping of special Braille commands (capitalization, number, space) to their symbols.
+   */
   constructor(
     private brailleAlphabet: { [key: string]: string },
     private brailleNumbers: { [key: string]: string },
@@ -10,17 +23,18 @@ class BrailleTranslator {
     private brailleCommands: { [key: string]: string }
   ) {}
 
-  // TODO: Add docstring + function description
+  /**
+   * Translates an English string into Braille.
+   *
+   * @param input - The English string to be translated.
+   * @returns The Braille representation of the input string.
+   */
   public englishToBraille(input: string): string {
-    let braille = "";
-    this.isNumberMode = false;
+    this.resetModes();
 
-    for (const char of input) {
-      braille += this.translateCharToBraille(char);
-    }
-
-    this.isNumberMode = false;
-    return braille;
+    return Array.from(input)
+      .map((char) => this.translateCharToBraille(char))
+      .join("");
   }
 
   private translateCharToBraille(char: string): string {
@@ -74,11 +88,15 @@ class BrailleTranslator {
     return braille;
   }
 
-  // TODO: Add docstring + function description
+  /**
+   * Translates a Braille string into English.
+   *
+   * @param input - The Braille string to be translated.
+   * @returns The English representation of the input string.
+   */
   public brailleToEnglish(input: string): string {
     let english = "";
-    this.isCapitalMode = false;
-    this.isNumberMode = false;
+    this.resetModes();
 
     for (let i = 0; i < input.length; i += 6) {
       let braille = input.slice(i, i + 6);
@@ -128,18 +146,22 @@ class BrailleTranslator {
       return specChar;
     }
 
-    // Char outside of Braille language
+    // Braille outside of Braille language
     throw new Error(
       `Braille "${braille}" is not supported in Braille translation.`
     );
   }
 
-  // TODO: Add docstring + function description
   private getKeyByValue(
     object: { [key: string]: string },
     value: string
   ): string {
     return Object.keys(object).find((key) => object[key] === value) || "";
+  }
+
+  private resetModes() {
+    this.isCapitalMode = false;
+    this.isNumberMode = false;
   }
 }
 
@@ -207,7 +229,13 @@ const brailleSpecials: { [key: string]: string } = {
   ")": ".O.OO.",
 };
 
-// TODO: Add docstring + function description
+/**
+ * Determines whether a string is in Braille format by checking if it only contains
+ * sequences of 6-dot Braille symbols.
+ *
+ * @param input - The string to check.
+ * @returns True if the string is a valid Braille sequence, otherwise false.
+ */
 function isBraille(input: string): boolean {
   return /^[O.]{6}([O.]{6})*$/.test(input);
 }
