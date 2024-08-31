@@ -120,7 +120,8 @@ const englishTranslate = (englishStr: string): string => {
     if (
       eLetter.toUpperCase() == eLetter &&
       !Number(eLetter) &&
-      eLetter != " "
+      eLetter != " " &&
+      !numMode
     ) {
       brailleStr = brailleStr.concat(englishToBraille.get("capital") ?? "");
       eLetter = eLetter.toLowerCase();
