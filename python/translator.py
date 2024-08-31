@@ -1,4 +1,10 @@
 import sys
+
+# numbers -> the number of colored dots 
+# bools -> if there are any occurences of colored dots on the last two dots
+# cf -> caps found 
+# nf -> number found 
+# df -> decmail found 
 bradic = {
     0:{True: {}, False: {" ": "...."}}, 
     1:{True: {"cf":".....O"}, False: {",":"..O.", "a": "O...", "1":"O..."}}, 
@@ -9,6 +15,14 @@ bradic = {
 }
 
 def identify(userSent):   
+    """
+    This function identifies which conversion is needed
+    and checks that the users input is valid, if invalid 
+    it re promts the user for another answer 
+
+    Args:
+        userSent (string): what the user has typed in to the terminal
+    """
     valid = True
     while(valid): 
         if not isinstance(userSent, str):
@@ -23,6 +37,14 @@ def identify(userSent):
         etob(list(userSent))
 
 def btoe(userSent):
+    """
+    loops through each braille letter, checks the num of colored O and if there are 
+    any O in the bottom. Based on that an index is found in the bradic and items are 
+    then checked based on any flagged requirements until the correct letter is found
+
+    Args:
+        userSent (list): a list of strings with a length of 6 containing each braille 
+    """
     num, dec, cap = False , False, False 
     strs = []
     for i in range(0, len(userSent), 6): 
@@ -50,6 +72,16 @@ def btoe(userSent):
     print(''.join(strs))
                 
 def inner(temp, p):
+    """
+    Finds in the temp dictonary the braille character that was needed 
+
+    Args:
+        temp (dictonary): all possible key pairs 
+        p (string): character that we need translation for
+
+    Returns:
+        bool or string: either indacting nothing was found or the braille that was found 
+    """
     if p in temp:
         if len(temp[p]) == 4: 
             final = temp[p]+ '..'
@@ -60,6 +92,14 @@ def inner(temp, p):
         return False
     
 def etob(userSent):
+    """
+    loops through the global table dictonary and stores it as temp as all possible entries.
+    checks if there are any flags that need to be set up in braille, if not calls on the 
+    inner function to find the correct braille letter and stores it as a string to be returned. 
+
+    Args:
+        userSent (string): what the user wants to translte to braille 
+    """
     returns = ""
     temp = {}
     for level in bradic.values():
@@ -76,7 +116,6 @@ def etob(userSent):
             returns += inner(temp, "nf") 
         if numbo and p == " ": 
             numbo = False
-
         if inner(temp, p) == False: 
             pass
         else: 
@@ -87,8 +126,9 @@ def etob(userSent):
 
 def main(): 
     if len(sys.argv) < 2:
-        print("Usage: python script.py, input correct")
+        print("Usage: python script.py <input_string>")
         sys.exit(1) 
+        
     user_input = ' '.join(sys.argv[1:])    
     identify(user_input)    
 
