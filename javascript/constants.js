@@ -1,3 +1,8 @@
+const BRAILLE_SPACE = "......";
+const BRAILLE_CAPITAL = ".....O";
+const BRAILLE_NUMBER = ".O.OOO";
+const BRAILLE_CHAR_LENGTH = 6;
+
 const alphabetToBraille = {
   a: "O.....",
   b: "O.O...",
@@ -36,20 +41,7 @@ const alphabetToBraille = {
   8: "O.OO..",
   9: ".OO...",
   0: ".OOO..",
-  // special characters
-  ". ": "..OO.O",
-  ",": "..O...",
-  "?": "..O.OO",
-  "!": "..OOO.",
-  ":": "..OO..",
-  ";": "..O.O.",
-  "-": "....OO",
-  "/": ".O..O.",
-  "<": ".OO..O",
-  ">": "O..OO.",
-  "(": "O.O..O",
-  ")": ".O.OO.",
-  " ": "......",
+  " ": BRAILLE_SPACE,
 };
 
 const brailleToAlphabet = {
@@ -109,19 +101,6 @@ const brailleToAlphabet = {
   "OO..OO": "x",
   "OO.OOO": "y",
   "O..OOO": "z",
-  // special characters
-  "..OO.O": ".",
-  "..O...": ",",
-  "..O.OO": "?",
-  "..OOO.": "!",
-  "..OO..": ":",
-  "..O.O.": ";",
-  "....OO": "-",
-  ".O..O.": "/",
-  ".OO..O": "<",
-  "O..OO.": ">",
-  "O.O..O": "(",
-  ".O.OO.": ")",
   "......": " ",
   // special instructions
   ".....O": "capitalize",
@@ -129,16 +108,11 @@ const brailleToAlphabet = {
   ".O.OOO": "number",
 };
 
-const BRAILLE_SPACE = "......";
-const BRAILLE_CAPITALIZE = ".....O";
-const BRAILLE_NUMBER = ".O.OOO";
-const BRAILLE_CHAR_LENGTH = 6;
-
 module.exports = {
   alphabetToBraille,
   brailleToAlphabet,
   BRAILLE_SPACE,
-  BRAILLE_CAPITALIZE,
+  BRAILLE_CAPITAL,
   BRAILLE_NUMBER,
   BRAILLE_CHAR_LENGTH,
 };

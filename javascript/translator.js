@@ -1,7 +1,7 @@
 const {
   alphabetToBraille,
   brailleToAlphabet,
-  BRAILLE_CAPITALIZE: BRAILLE_CAPITAL,
+  BRAILLE_CAPITAL,
   BRAILLE_CHAR_LENGTH,
   BRAILLE_SPACE,
   BRAILLE_NUMBER,
