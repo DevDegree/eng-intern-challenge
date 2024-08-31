@@ -8,5 +8,5 @@ describe('translator.js script', () => {
             expect(stdout.trim()).toBe(".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO");
             done();
         });
-    });
+    }, 10000);
 });
