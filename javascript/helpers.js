@@ -34,7 +34,6 @@ const translateBrailleToEnglish = (string) => {
   let shouldCapitalize = false;
   let asNumber = false;
   let output = "";
-  console.log({ brailleToAlphabet, brailleToNumber });
   for (let index = 0; index < string.length; index += brailleLength) {
     const element = string.slice(index, index + brailleLength).toUpperCase();
     // console.log({ element });
@@ -57,7 +56,7 @@ const translateBrailleToEnglish = (string) => {
       ? brailleToOther[element]
       : asNumber
       ? brailleToNumber[element]
-      : brailleToAlphabet[element] || brailleOther[element];
+      : brailleToAlphabet[element];
     console.log({ element, char });
     if (shouldCapitalize) {
       output += char.toUpperCase();
