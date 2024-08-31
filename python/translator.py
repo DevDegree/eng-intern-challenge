@@ -147,6 +147,7 @@ if is_brail:
     
     number_follows = False
     capital_follows = False
+    decimal_follows = False
     for i in range(0, len(input_string), 6):
         curr_character = input_string[i:i+6]
         # print(curr_character)
@@ -168,9 +169,16 @@ if is_brail:
                 sys.exit(1)
         elif curr_character == "......":
             number_follows = False
+            decimal_follows = False
             return_string += converter[curr_character]
         elif number_follows == True:
             if curr_character in num_map:
+                if curr_character == ".O...O":
+                    if decimal_follows == True:
+                        print("Cannot have more than 1 decimal in a number")
+                        sys.exit(1)
+                    else:
+                        decimal_follows = True
                 return_string += num_map[curr_character]
             else:
                 print("The following is not a decimal when it should be: " + curr_character)
