@@ -1,3 +1,4 @@
+// Braille-English Mappings
 const brailleToEnglish = new Map<string, string>([
   ["O.....", "a"],
   ["O.O...", "b"],
@@ -75,9 +76,7 @@ const brailleTranslate = (brailleStr: string): string => {
       ? brailleToNum.get(bLetter)
       : brailleToEnglish.get(bLetter);
 
-    if (!eLetter) {
-      throw new Error(`Invalid braille entry: ${bLetter}`);
-    }
+    if (!eLetter) throw new Error(`Invalid braille entry: ${bLetter}`);
 
     if (eLetter == "capital") {
       capFlag = true;
@@ -113,20 +112,34 @@ const brailleTranslate = (brailleStr: string): string => {
  */
 const englishTranslate = (englishStr: string): string => {
   let brailleStr: string = "";
+  let numMode: boolean = false;
 
   for (let eLetter of englishStr) {
     let bLetter: string | undefined;
 
-    if (eLetter.toUpperCase() == eLetter) {
+    if (
+      eLetter.toUpperCase() == eLetter &&
+      !Number(eLetter) &&
+      eLetter != " "
+    ) {
       brailleStr = brailleStr.concat(englishToBraille.get("capital") ?? "");
       eLetter = eLetter.toLowerCase();
     }
 
-    bLetter = englishToBraille.get(eLetter);
-
-    if (!bLetter) {
-      throw new Error(`Invalid character entry: ${eLetter}`);
+    if (Number(eLetter) && !numMode) {
+      brailleStr = brailleStr.concat(englishToBraille.get("number") ?? "");
+      numMode = true;
     }
+
+    if (eLetter == " ") {
+      numMode = false;
+    }
+
+    bLetter = numMode
+      ? numToBraille.get(eLetter)
+      : englishToBraille.get(eLetter);
+
+    if (!bLetter) throw new Error(`Invalid character entry: ${eLetter}`);
 
     brailleStr = brailleStr.concat(bLetter);
   }
@@ -161,5 +174,8 @@ const clArgs = process.argv.slice(2).join(" ");
 // // if true -> translate to braille
 // // if false -> translate to english
 // console.log(isValidBraille(clArgs));
-
-console.log(brailleTranslate(englishTranslate("Hello World")));
+const str = "If you see this I hope I can get the JOB thank you Justin Zhang17";
+console.log(str);
+console.log(
+  brailleTranslate(englishTranslate(brailleTranslate(englishTranslate(str)))),
+);
