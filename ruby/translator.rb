@@ -114,7 +114,7 @@ def translate_english_to_braille(input)
     output
   end
   
-def translate_braille_to_english(input)
+  def translate_braille_to_english(input)
     output = ""
     capital_on = false
     number_on = false
@@ -131,13 +131,16 @@ def translate_braille_to_english(input)
           capital_on = false  # Reset capital flag
         elsif number_on && BRAILLE_ALPHABET_NUMBERS.value?(braille_char)
           output += BRAILLE_ALPHABET_NUMBERS.key(braille_char)
-          number_on = false  # Reset number flag
+          # Keep the number_on flag true, allowing the next numbers to be processed correctly
         elsif BRAILLE_ALPHABET_LETTERS.value?(braille_char)
           output += BRAILLE_ALPHABET_LETTERS.key(braille_char)
+          number_on = false  # Reset number flag when a letter is encountered
         elsif BRAILLE_ALPHABET_NUMBERS.value?(braille_char)
           output += BRAILLE_ALPHABET_NUMBERS.key(braille_char)
+          number_on = false  # Reset number flag after processing the first number
         elsif BRAILLE_ALPHABET_SPECIAL.value?(braille_char)
           output += BRAILLE_ALPHABET_SPECIAL.key(braille_char)
+          number_on = false  # Reset number flag after processing a special character
         else
           puts "Warning: Unrecognized Braille character: #{braille_char}"
         end
