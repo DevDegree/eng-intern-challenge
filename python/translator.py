@@ -151,7 +151,7 @@ def englishTranslator(text):
 if __name__ == '__main__':
 
     text = ' '.join(sys.argv[1:])
-    text = ".O.OOOOO.O..O.O..."
+    # text = ".O.OOOOO.O..O.O..."
 
     if isBraille(text):
         print(brailleTranslator(text))
