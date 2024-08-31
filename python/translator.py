@@ -85,11 +85,27 @@ def to_english(string):
         ".OO...": '9',
         ".OOO..": '0',
     }
-    braille_characters = []
+    CAPITAL_FOLLOWS = ".....O"
+    DECIMAL_FOLLOWS = ".O...O"
+    NUMBER_FOLLOWS = ".O.OOO"
+    SPACE = "......"
+    # braille_characters = []
     english_str = ''
     number = False
-    
-
+    for i in range(6, len(string), 6):
+        curr_c = string[i - 6: i]
+        if curr_c == CAPITAL_FOLLOWS:
+            english_str += (BRAILLE_ENGLISH_LETTER_MAP[curr_c]).upper()
+        elif number:
+            if curr_c == SPACE:
+                number = False
+                english_str += ' '
+            else: 
+                english_str += BRAILLE_ENGLISH_NUMBER_MAP[curr_c]
+        elif curr_c == NUMBER_FOLLOWS:
+            number = True
+    return english_str
+        
 # 3. If string is in english
 #       -> create dict variable 'ENGLISH-BRAILLE-MAP' that has the english characters as the keys, and braille characters as the values
 #           -> 
@@ -100,6 +116,7 @@ def to_english(string):
         #   -> if previous character is number and current character is '.' add 'decimal follows' and continue to next iteration
     #       -> search for item in 'ENGLISH-BRAILLE-MAP' keys, add corresponding value to 'braille-str'
 #       -> return 'braille-str'
+
 
 
 
