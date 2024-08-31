@@ -106,6 +106,7 @@ def translate_to_english(str)
         capital_next = true
       when 'decimal_follows'
       when 'number_follows'
+        # All further chunks we process will be numbers (until a space)
         numeric_mode = true
       when ENGLISH_SPACE
         # Reset modes and add a space to the translated string
