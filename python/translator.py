@@ -15,23 +15,20 @@ class BrailleConstants:
     # Map for translating numbers to Braille
     BRAILLE_NUMBER_MAP = {
         "0": ".OOO..", "1": "O.....", "2": "O.O...", "3": "OO....", "4": "OO.O..",
-        "5": "O..O..", "6": "OOO...", "7": "OOOO..", "8": "O.OO..", "9": ".OO...",
+        "5": "O..O..", "6": "OOO...", "7": "OOOO..", "8": "O.OO..", "9": ".OO..."
     }
 
-    # Special Braille characters for uppercase letters and numbers
+    # Map for Braille control flags used to modify the interpretation of subsequent characters.
     BRAILLE_CONTROL_FLAG_MAP = {
-        "uppercase": ".....O", "number": ".O.OOO"
+        "uppercase": ".....O",  # Braille representation for the uppercase flag
+        "number": ".O.OOO"  # Braille representation for the number flag
     }
-
 
 # Braille translation class for converting between English and Braille
 class BrailleTranslator:
     # Inverted maps for reverse translation from Braille to English
     INVERTED_BRAILLE_LETTER_MAP = {v: k for k, v in BrailleConstants.BRAILLE_LETTER_MAP.items()}
     INVERTED_BRAILLE_NUMBER_MAP = {v: k for k, v in BrailleConstants.BRAILLE_NUMBER_MAP.items()}
-
-    def init(self):
-        pass
 
     def translate_english_to_braille(self, english):
         """
