@@ -1,48 +1,3 @@
-/* 
-Create hashmaps:
-  Braille to English keys:
-    - letters + spaces + capital follows + number follows
-    - numbers + spaces
-  English to Braille keys:
-    - letters + numbers + spaces
-
-Main function:
-  Determine if string argument is Braille or English
-    If length of string < 6, it is English
-    Else, search for first 6 characters of string in Braille to English hashmap(s)
-      If in hashmaps, string is in Braille
-        Pass string to appropriate translator function
-      Else, string is in English
-        Pass string to appropriate translator function
-
-Braille to English translator function:
-  Create isCapital and isNumber variables
-  Create output variable
-  Iterate over string, taking in 6 characters at a time
-    Translate string.substr(i, i + 5) from Braille to English using hashmap
-    Add translated character to output
-    Continue iterating until end of string is reached
-  Output translated string
-
-English to Braille translator function:
-  Create capitalSymbol and numberSymbol variables
-  Create numberMode variable
-  Create output variable
-  Iterate over string, 1 character at a time
-    If string[i] is a capital letter
-      Add isCapital symbol to output
-      Take lowercase string[i] and add its respective Braille symbol to output
-    Else if string[i] is a number
-      If numberMode === false
-        Set numberMode = true
-        Add isNumber symbol to output
-      Add respective Braille symbol for string[i] to output
-    Else (string[i] === ' ')
-      Set numberMode = false
-      Add Braille symbol for space to output
-  Output translated string
-*/
-
 const brailleAlphabet = [
   { brl: 'O.....', eng: 'a', type: 'letter' },
   { brl: 'O.O...', eng: 'b', type: 'letter' },
@@ -87,7 +42,7 @@ const brailleAlphabet = [
 
 const brailleLettersMap = new Map();
 brailleAlphabet.forEach(({ brl, eng, type }) => {
-  if (type === 'letter' || type === 'follows' || type === 'space') {
+  if (type === 'letter' || type === 'space') {
     brailleLettersMap.set(brl, eng);
   }
 });
@@ -105,3 +60,93 @@ brailleAlphabet.forEach(({ brl, eng, type }) => {
     englishMap.set(eng, brl);
   }
 });
+
+const isCharALetter = (char) => {
+  return char.toLowerCase() !== char.toUpperCase();
+};
+
+const engToBrl = (str) => {
+  const capitalFollows = '.....O';
+  const numberFollows = '.O.OOO';
+  let numberMode = false;
+  let output = '';
+
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] >= '0' && str[i] <= '9') {
+      // str[i] is a number
+      if (!numberMode) {
+        numberMode = true;
+        output += numberFollows;
+      }
+      output += englishMap.get(str[i]);
+    } else if (isCharALetter(str[i])) {
+      if (str[i] === str[i].toUpperCase()) {
+        // str[i] is a capital letter
+        output += capitalFollows;
+        output += englishMap.get(str[i].toLowerCase());
+      } else {
+        output += englishMap.get(str[i]);
+      }
+    } else {
+      // str[i] must be a space
+      numberMode = false;
+      output += englishMap.get(str[i]);
+    }
+  }
+
+  return output;
+};
+
+const brlToEng = (str) => {
+  const capitalFollows = '.....O';
+  const numberFollows = '.O.OOO';
+  const space = '......';
+  let isCapital = false;
+  let isNumber = false;
+  let output = '';
+  for (let i = 0; i < str.length; i += 6) {
+    const currSymbol = str.slice(i, i + 6);
+
+    if (isCapital) {
+      output += brailleLettersMap.get(currSymbol).toUpperCase();
+      isCapital = false;
+      continue;
+    }
+
+    if (isNumber) {
+      output += brailleNumbersMap.get(currSymbol);
+      continue;
+    }
+
+    if (currSymbol === capitalFollows) {
+      isCapital = true;
+    } else if (currSymbol === numberFollows) {
+      isNumber = true;
+    } else if (currSymbol === space) {
+      isNumber = false;
+      output += brailleLettersMap.get(currSymbol);
+    } else {
+      output += brailleLettersMap.get(currSymbol);
+    }
+  }
+
+  return output;
+};
+
+const translator = (str) => {
+  if (str.length < 6) {
+    console.log(engToBrl(str));
+  } else {
+    const firstSixChars = str.slice(0, 6);
+    if (
+      brailleLettersMap.has(firstSixChars) ||
+      brailleNumbersMap.has(firstSixChars)
+    ) {
+      console.log(brlToEng(str));
+    } else {
+      console.log(engToBrl(str));
+    }
+  }
+};
+
+translator(process.argv.slice(2).join(' '));
