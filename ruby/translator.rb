@@ -63,7 +63,7 @@ BRAILLE_INDICATORS = {
 }
 
 def is_braille?(string)
-    # Check if the input is a valid Braille string by verifying it contains only dots (.) and Os
+    # Check if the input is a valid Braille string by verifying it contains only dots (.) and Os 
     # and its length is a multiple of 6
     string.match?(/\A[.O]+\z/) && string.length % 6 == 0
 end
