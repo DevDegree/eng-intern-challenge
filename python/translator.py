@@ -1,3 +1,4 @@
+import sys
 
 #CONSTANTS
 BRAILLLE_SET = {"O", "."}
@@ -20,3 +21,38 @@ def is_baille(sequence_chars):
     if len(sequence_chars) % 6 == 0 and set(sequence_chars) - BRAILLLE_SET == set({}):
         return True
     return False
+
+# Translates the sequence of characters depending on if it is alphanumerical or baille
+def translate(sequence_chars):
+    n = 6
+    text_array = []
+    translated_string = ""
+    is_capital = False
+    if is_baille(sequence_chars):
+        for i in range(0, len(sequence_chars), n):
+            text_array.append(sequence_chars[i:i+n])
+        for el in text_array:
+            if BRAILLE_TO_ALPHANUMERICALS.get(el) == "decimal" or BRAILLE_TO_ALPHANUMERICALS.get(el) == "number":
+                continue
+            elif BRAILLE_TO_ALPHANUMERICALS.get(el) == "capital":
+                is_capital = True
+                continue
+            elif is_capital:
+                translated_string = translated_string + BRAILLE_TO_ALPHANUMERICALS.get(el).upper()
+                is_capital = False
+            else:
+                translated_string = translated_string + BRAILLE_TO_ALPHANUMERICALS.get(el)
+        return translated_string
+    else:
+        translated_string = ""
+        for character in sequence_chars:
+            if character.isupper():
+                translated_string = translated_string + ALPHANUMERICALS_TO_BRAILLE.get("capital")
+                translated_string = translated_string + ALPHANUMERICALS_TO_BRAILLE.get(character.lower())
+            else:
+                translated_string = translated_string + ALPHANUMERICALS_TO_BRAILLE.get(character)
+        return translated_string
+
+
+if __name__ == "__main__":
+    print(translate(' '.join(sys.argv[1:])))
