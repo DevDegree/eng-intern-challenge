@@ -83,15 +83,46 @@ def translate_to_english(input_string):
 
         #if a space is found, reset the number toggle
         if translated_character == ' ':
-            number_follows = false
+            number_follows = False
 
     return ''.join(translated_chars)
             
 
 
-    def translate_to_braille(input_string):
-        print('Its english')
-        pass
+def translate_to_braille(input_string):
+    '''
+    Function that takes in a string of characters and translates it to braille 
+
+    Args:
+    input_string: string to translate to braille
+
+    Returns:
+    output_string: translated string
+    '''
+    braille_chars = []
+    number_follows = False
+
+    #Iterate through the input string
+    for char in input_string:  
+        #if the char is in the numbers dict
+        # check if we need to append the numbers follow braille text, toggle switch, append number
+        if char in NUMBERS_TO_BRAILLE:
+            if not number_follows:
+                braille_chars.append(NUMBER_FOLLOWS)
+                number_follows = True
+            braille_chars.append(NUMBERS_TO_BRAILLE[char])
+        elif char in ENGLISH_TO_BRAILLE:
+            if number_follows:
+                number_follows = False
+            if char.isupper():
+                braille_chars.append(CAPITALIZE)
+                braille_chars.append(ENGLISH_TO_BRAILLE[char.lower()])
+            else:
+                braille_chars.append(ENGLISH_TO_BRAILLE[char])
+        else:
+            braille_chars.append(ENGLISH_TO_BRAILLE[char])
+
+    return ''.join(braille_chars)
 
 
 
@@ -104,7 +135,7 @@ def main():
     if is_braille(input_string):
         print(translate_to_english(input_string))
     else:
-        translate_to_braille(input_string)
+        print(translate_to_braille(input_string))
 
 if __name__ == '__main__':
     main()
