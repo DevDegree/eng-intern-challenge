@@ -69,6 +69,11 @@ user_args = ARGV
 
 # If the inputted string has not spaces and only contains O's and .'s, it will be treated as Braille and translated to English
 if (user_args.length == 1 and !!user_args[0].match(/\A[\.O]*\z/))
+  if user_args[0].length % 6 != 0
+    puts "Error: Invalid Braille"
+    return
+  end
+  
   braille_str = user_args[0]
   str_len = braille_str.length
   cap_follows = false
@@ -89,17 +94,19 @@ if (user_args.length == 1 and !!user_args[0].match(/\A[\.O]*\z/))
         num_follows = false
       end
     elsif braille_to_meta_char.has_key?(braille_str[i, 6])
-      if braille_str[i, 6] == ".....O"
+      if braille_str[i, 6] == meta_chars["capital follows"]
         cap_follows = true
-      elsif braille_str[i, 6] == ".O.OOO"
+      elsif braille_str[i, 6] == meta_chars["number follows"]
         num_follows = true
-      elsif braille_str[i, 6] == ".O...O"
+      elsif braille_str[i, 6] == meta_chars["decimal follows"]
         print "."
       end 
     else
+      # Silently fail on invalid Braille
       print "?"
     end
   end
+
 # Otherwise, it will be treated from English and translated to Braille
 else
   counter = 1
@@ -128,6 +135,7 @@ else
       end
     end
 
+    # Don't print the space after the last word
     if counter != user_args.length
       print special_char_to_braille[" "]
     end
@@ -136,4 +144,6 @@ else
   end 
 end
 
+# Add a new line to the output
 puts ""
+
