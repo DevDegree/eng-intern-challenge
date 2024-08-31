@@ -81,8 +81,6 @@ def translate_english(input_string: str) -> str:
             translated_string += english_braille_map[char]
         elif char in english_braille_map:
             translated_string += english_braille_map[char]
-        else:
-            translated_string += '......'  # Braille for space or unrecognized char
 
     return translated_string
 
