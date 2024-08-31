@@ -71,32 +71,32 @@ const brailleTranslate = (brailleStr: string): string => {
 
   for (let i = 0; i * 6 < brailleStr.length; i++) {
     const bLetter: string = brailleStr.substring(i * 6, (i + 1) * 6);
-    let aLetter: string | undefined = numMode
+    let eLetter: string | undefined = numMode
       ? brailleToNum.get(bLetter)
       : brailleToEnglish.get(bLetter);
 
-    if (!aLetter) {
+    if (!eLetter) {
       throw new Error(`Invalid braille entry: ${bLetter}`);
     }
 
-    if (aLetter == "capital") {
+    if (eLetter == "capital") {
       capFlag = true;
       continue;
     }
 
     if (capFlag) {
-      aLetter = aLetter.toUpperCase();
+      eLetter = eLetter.toUpperCase();
       capFlag = false;
     }
 
-    if (aLetter == "number") {
+    if (eLetter == "number") {
       numMode = true;
       continue;
     }
 
-    if (aLetter == " ") numMode = false;
+    if (eLetter == " ") numMode = false;
 
-    engStr = engStr.concat(aLetter);
+    engStr = engStr.concat(eLetter);
   }
 
   return engStr;
@@ -114,11 +114,18 @@ const brailleTranslate = (brailleStr: string): string => {
 const englishTranslate = (englishStr: string): string => {
   let brailleStr: string = "";
 
-  for (const aLetter of englishStr) {
-    const bLetter: string | undefined = englishToBraille.get(aLetter);
+  for (let eLetter of englishStr) {
+    let bLetter: string | undefined;
+
+    if (eLetter.toUpperCase() == eLetter) {
+      brailleStr = brailleStr.concat(englishToBraille.get("capital") ?? "");
+      eLetter = eLetter.toLowerCase();
+    }
+
+    bLetter = englishToBraille.get(eLetter);
 
     if (!bLetter) {
-      throw new Error(`Invalid character entry: ${aLetter}`);
+      throw new Error(`Invalid character entry: ${eLetter}`);
     }
 
     brailleStr = brailleStr.concat(bLetter);
@@ -155,4 +162,4 @@ const clArgs = process.argv.slice(2).join(" ");
 // // if false -> translate to english
 // console.log(isValidBraille(clArgs));
 
-console.log(englishTranslate("hello world"));
+console.log(brailleTranslate(englishTranslate("Hello World")));
