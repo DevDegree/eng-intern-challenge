@@ -84,7 +84,7 @@ class Translator():
     '.OO...': '9',
     '.OOO..': '0'
     }
-    def convert_braille_to_english(braille:str)->str:
+    def convert_braille_to_english(braille):
         if (len(braille) % 6) != 0:
             raise ValueError('The length of the braille must be a mutliple of 6')
 
@@ -118,7 +118,7 @@ class Translator():
             i +=6
         return res
     
-    def convert_english_to_braille (english_text:list[str])->str:
+    def convert_english_to_braille (english_text):
         res = []
 
         for word in english_text:
@@ -141,7 +141,7 @@ class Translator():
         message = '......'.join(res)
         return(message)
     
-    def is_braille(input_str: str) -> bool:
+    def is_braille(input_str):
         for char in input_str:
             if char == '.' or char == 'O':
                 continue
@@ -153,15 +153,12 @@ class Translator():
 if __name__ == '__main__':
     translator = Translator
 
-    print('test')
-    # if (len(sys.argv)) > 1:
-    #     if (translator.is_braille(sys.argv[1])):
-    #         #print(translator.convert_braille_to_english(sys.argv[1]))
-    #         print('test')
-    #     else:
-    #         #print(translator.convert_english_to_braille(sys.argv[1:]))
-    #         print('test')
-    # else:
-    #     print('Usage: python translator.py { <braille_message> | <text> } ')
+    if (len(sys.argv)) > 1:
+        if (translator.is_braille(sys.argv[1])):
+            print(translator.convert_braille_to_english(sys.argv[1]))
+        else:
+            print(translator.convert_english_to_braille(sys.argv[1:]))
+    else:
+        print('Usage: python translator.py { <braille_message> | <text> } ')
 
 
