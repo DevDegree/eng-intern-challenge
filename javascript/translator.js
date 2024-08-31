@@ -142,26 +142,6 @@ function translate(input) {
   }
 }
 
-function runTest(input, expect) {
-  const output = translate(input);
-  console.log(`Input: ${input}`);
-  console.log(`Output: ${output}`);
-  console.log(`Expect: ${expect}`);
-  console.log(`Test ${output === expect ? "PASSED" : "FAILED"}`);
-  console.log("---");
-}
-
-runTest(
-  "Hello world",
-  ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."
-);
-runTest("42", ".O.OOOOO.O..O.O...");
-runTest("Abc 123", ".....OO.....O.O...OO...........O.OOOO.....O.O...OO....");
-runTest(
-  "Abc 123 xYz",
-  ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
-);
-
 const input = process.argv.slice(2).join(" ");
 if (input) {
   console.log(translate(input));
