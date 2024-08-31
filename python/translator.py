@@ -24,3 +24,27 @@ CAPITALIZE = '.....O'
 
 NUMBER_FOLLOWS = '.O.OOO'
 
+def is_braile(text):
+    pass
+
+def translate_to_english(text):
+    pass
+
+def translate_to_braille(text):
+    pass
+
+
+
+def main():
+    if len(sys.argv) < 2:
+        sys.exit(1)
+
+    input_string = ' '.join(sys.argv[1:]) 
+
+    if is_braille(input_string):
+        translate_to_english(input_string)
+    else:
+        translate_to_braille(input_string)
+
+if __name__ == '__main__':
+    main()
