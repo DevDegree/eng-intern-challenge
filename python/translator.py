@@ -118,7 +118,7 @@ import sys
 
 # Main function to handle input and call appropriate translation function
 def main():
-    input_text = str().join(sys.argv[1:])
+    input_text = ' '.join(sys.argv[1:])
     
     # Check if input is Braille (only 'O' and '.' characters and valid length)
     if all(c in 'O.' for c in input_text) and len(input_text) % 6 == 0:
