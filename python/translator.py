@@ -1,80 +1,87 @@
+
 # Python version 3.8
 import sys
 
-# Braille encoding for English letters and numbers
-braille_alphabet = {
-    'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
-    'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..',
-    'k': 'O...O.', 'l': 'O.O.O.', 'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.',
-    'p': 'OOO.O.', 'q': 'OOOOO.', 'r': 'O.OOO.', 's': '.OO.O.', 't': '.OOOO.',
-    'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO',
-    'z': 'O..OOO', ' ': '......', 'cap': '.....O', 'num': '.O.OOO',
-    '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
-    '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..'
-}
+from utils import *
 
-inverse_braille_alphabet = {
-    v: k for k, v in braille_alphabet.items()
-}
-
-def is_braille(input_str: str):
-    return all(char in 'O.' for char in input_str)
-
-def translate_to_braille(input_str: str):
-    # translate an input string to braille characters wise
+def translate_to_braille(input_str: str) -> str:
     """
-        At worst scenario, time and space complexity should be linear 
-        considering the characters of input string
+    Translate an input string to Braille.
     """
     result = []
     number_mode = False
     for char in input_str:
-        if char.isdigit() and not number_mode:
-            result.append(braille_alphabet['num'])
-            number_mode = True
-        elif char.isalpha() and char.isupper():
-            result.append(braille_alphabet['cap'])
-            char = char.lower()
+        if char.isdigit():
+            if not number_mode:
+                result.append(NUMBER_FOLLOWS)
+                number_mode = True
+            result.append(braille_alphabet.get(char, ''))
+
+        elif char.isalpha():
+            if char.isupper():
+                result.append(CAPITAL_FOLLOWS)
+                char = char.lower()
+            number_mode = False
+            result.append(braille_alphabet.get(char, ''))
+
         elif char == ' ':
+            result.append(SPACE)
             number_mode = False
-        result.append(braille_alphabet.get(char, ''))
     return ''.join(result)
 
 
-def translate_to_english(input_str):
-    # translate the input string to english characters
+
+def translate_to_english(braille_input: str) -> str:
     """
-        At worst scenario, time and space complexity should be linear 
-        considering the characters of input string
+    Translate a Braille string to English.
     """
-    result = []
+    output = []
+    is_capital = False
+    is_number = False
     i = 0
-    number_mode = False
-    while i < len(input_str):
-        braille_char = input_str[i:i+6]
+
+    while i < len(braille_input):
+        braille_char = braille_input[i:i+6]
         i += 6
-        if braille_char == braille_alphabet['cap']:
-            char = inverse_braille_alphabet[input_str[i:i+6]].upper()
-            result.append(char)
-            i += 6
-        elif braille_char == braille_alphabet['num']:
-            number_mode = True
-        elif braille_char == '......':
-            result.append(' ')
-            number_mode = False
+
+        if braille_char == CAPITAL_FOLLOWS:
+            is_capital = True
+            continue
+        
+        if braille_char == NUMBER_FOLLOWS:
+            is_number = True
+            continue
+
+        if braille_char == SPACE:
+            output.append(' ')
+            is_number = False
+            continue
+
+        if is_number:
+            digit = braille_to_number(braille_char)
+            output.append(digit)
+            is_number = False  # End number mode after processing the digit
         else:
-            char = inverse_braille_alphabet[braille_char]
-            if number_mode:
-                char = str('abcdefghij'.index(char) + 1)
-            result.append(char)
-    return ''.join(result)
+            letter = braille_to_letter(braille_char)
+            if letter == '?':
+                output.append('?')  # Handle unrecognized Braille symbols
+            else:
+                if is_capital:
+                    letter = letter.upper()
+                    is_capital = False
+                output.append(letter)
+    
+    return ''.join(output)
 
-
-def braille_translator(input_str):
+def braille_translator(input_str: str) -> str:
     if is_braille(input_str):
         return translate_to_english(input_str)
+
     return translate_to_braille(input_str)
 
 if __name__ == "__main__":
-    input_str = sys.argv[1]
-    print(braille_translator(input_str))
+    if len(sys.argv) > 1:
+        input_str = sys.argv[1]
+        print(braille_translator(input_str))
+    else:
+        print("Please provide an input string.")
