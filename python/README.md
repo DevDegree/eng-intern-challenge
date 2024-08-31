@@ -6,25 +6,23 @@ Note that the Python version used is **3.8**.
 
 To execute the translator script, use the following format:
 
-```bash
-./translator.py <PARAMETERS>
+`    ./translator.py <PARAMETERS>`
 
 ## Example
 
 ### Command Line Input:
-```bash
-./translator.py .....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..
+
+`    ./translator.py .....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..`
 
 ### Output
-```bash
-Hello world
+
+`    Hello world`
 
 
-### Notes
+## Notes
 
 - Ensure that the `translator.py` file has executable permissions. If not, you can set it using the following command:
 
-  ```bash
-  chmod +x translator.py
+ `     chmod +x translator.py`
 
 - This script automatically detects whether the input string is in Braille or English and performs the translation accordingly.
