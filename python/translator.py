@@ -9,6 +9,7 @@ from mapper.english_to_braille_mapper import *
 class SpecialConstant(Enum):
     NUM_FOLLOW = "NUM_FOLLOW"
     CAPITAL_FOLLOW = "CAPITAL_FOLLOW"
+    WHITESPACE = " "
 
 
 def is_braille(input_word: str) -> bool:
@@ -40,7 +41,7 @@ def translate_english_to_braille(input_word: str) -> str:
         if letter.isnumeric() and letter in NUMBERS_TO_BRAILLE_MAPPING:
             if not numeric_flag:
                 numeric_flag = True
-                braille_output += ENGLISH_TO_BRAILLE_MAPPING.get("NUM_FOLLOW")
+                braille_output += ENGLISH_TO_BRAILLE_MAPPING.get(SpecialConstant.NUM_FOLLOW.value)
             braille_output += NUMBERS_TO_BRAILLE_MAPPING.get(letter)
 
         elif letter.isspace():
@@ -50,7 +51,7 @@ def translate_english_to_braille(input_word: str) -> str:
 
         elif letter.lower() in ENGLISH_TO_BRAILLE_MAPPING:
             if letter.isupper():
-                braille_output += ENGLISH_TO_BRAILLE_MAPPING.get("CAPITAL_FOLLOW")
+                braille_output += ENGLISH_TO_BRAILLE_MAPPING.get(SpecialConstant.CAPITAL_FOLLOW.value)
             braille_output += ENGLISH_TO_BRAILLE_MAPPING.get(letter.lower())
 
     return braille_output
@@ -74,13 +75,13 @@ def translate_braille_to_english(input_word: str) -> str:
     for index in range(0, str_length, 6):
         braille_sequence = input_word[index:index + 6]
 
-        if BRAILLE_TO_ENGLISH_MAPPING.get(braille_sequence) == "CAPITAL_FOLLOW":
+        if BRAILLE_TO_ENGLISH_MAPPING.get(braille_sequence) == SpecialConstant.CAPITAL_FOLLOW.value:
             capital_flag = True
 
-        elif BRAILLE_TO_ENGLISH_MAPPING.get(braille_sequence) == "NUM_FOLLOW":
+        elif BRAILLE_TO_ENGLISH_MAPPING.get(braille_sequence) == SpecialConstant.NUM_FOLLOW.value:
             numeric_flag = True
 
-        elif BRAILLE_TO_ENGLISH_MAPPING.get(braille_sequence) == " ":
+        elif BRAILLE_TO_ENGLISH_MAPPING.get(braille_sequence) == SpecialConstant.WHITESPACE.value:
             numeric_flag = False
             english_output += BRAILLE_TO_ENGLISH_MAPPING.get(braille_sequence)
 
