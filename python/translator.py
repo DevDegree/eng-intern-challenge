@@ -85,6 +85,9 @@ def translate_to_eng(input, mode):
     result = ""
     for i in range(0, len(input), 6):
         c = input[i: i+6]
+        if c not in REVERSE_TRANSLATOR:
+            return translate_to_braille(input, "alpha")
+        
         if REVERSE_TRANSLATOR[c] in ["num", "cap", "dec"]:
             mode = REVERSE_TRANSLATOR[c]
             continue
