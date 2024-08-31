@@ -71,9 +71,11 @@ def translate_to_braille(input, mode):
                 mode = "num"
                 result = result + TRANSLATOR["num"]
             result = result + TRANSLATOR[NUM_MODE[c]]
+        #check if where we are in the string is a decimal
         elif c == "." and mode == "num":
             result = result + TRANSLATOR["dec"] + TRANSLATOR["."]
         else:
+            #change the mode to alphabet if no longer numeric (assuming number is followed by a space)
             mode = "alpha"
             if c.isupper():
                 result = result + TRANSLATOR["cap"] + TRANSLATOR[c.lower()]
@@ -87,6 +89,7 @@ def translate_to_eng(input, mode):
     result = ""
     for i in range(0, len(input), 6):
         c = input[i: i+6]
+        #check if the symbol is valid
         if c not in REVERSE_TRANSLATOR:
             return translate_to_braille(input, "alpha")
         
