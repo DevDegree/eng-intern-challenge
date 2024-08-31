@@ -37,20 +37,23 @@ class Translator
         english << ' '
         is_alpha = true
       else
-        if is_alpha
-          char = BrailleEnglishDictionary::BRAILLE_TO_ALPHA[braille_char]
-          if is_upcase
-            char = char.upcase
-            is_upcase = false
-          end
-        else
-          char = BrailleEnglishDictionary::BRAILLE_TO_NUM[braille_char]
-        end
-        english << char
+        english << braille_char_to_eng(braille_char, is_alpha, is_upcase)
+        is_upcase = false
       end
     end
 
     english
+  end
+
+  def self.braille_char_to_eng(braille_char, is_alpha, is_upcase)
+    if is_alpha
+      char = BrailleEnglishDictionary::BRAILLE_TO_ALPHA[braille_char]
+      char = char.upcase if is_upcase
+    else
+      char = BrailleEnglishDictionary::BRAILLE_TO_NUM[braille_char]
+    end
+
+    char
   end
 
   # Convert english string to braille
