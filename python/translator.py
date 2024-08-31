@@ -12,7 +12,7 @@ class SpecialConstant(Enum):
     WHITESPACE = " "
 
 
-def is_braille(input_word: str) -> bool:
+def is_braille(input_word):
     """Check if the input string is a valid Braille representation.
 
     Args:
@@ -24,7 +24,7 @@ def is_braille(input_word: str) -> bool:
     return all(char in "O." for char in input_word)
 
 
-def translate_english_to_braille(input_word: str) -> str:
+def translate_english_to_braille(input_word):
     """Translate an English phrase into Braille.
 
     Args:
@@ -57,7 +57,7 @@ def translate_english_to_braille(input_word: str) -> str:
     return braille_output
 
 
-def translate_braille_to_english(input_word: str) -> str:
+def translate_braille_to_english(input_word):
     """Translate a Braille representation into English.
 
     Args:
@@ -99,7 +99,7 @@ def translate_braille_to_english(input_word: str) -> str:
     return english_output
 
 
-def translate_input(words: list[str]):
+def translate_input(words):
     """Determine if the input is Braille or English and perform the translation.
 
     Args:
