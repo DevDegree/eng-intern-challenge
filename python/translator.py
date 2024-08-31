@@ -11,15 +11,29 @@ BRAILLE_TO_ENGLISH = {
     '.....O': 'capital follows', '.O.OOO': 'number follows'
 }
 
+# Reverse mapping from English to Braille
 ENGLISH_TO_BRAILLE = {v: k for k, v in BRAILLE_TO_ENGLISH.items()}
+
+# Mapping from numbers to Braille
 NUMBERS = {'1': 'a', '2': 'b', '3': 'c', '4': 'd', '5': 'e',
            '6': 'f', '7': 'g', '8': 'h', '9': 'i', '0': 'j'}
+
+# Special Braille characters
 CAPITAL_FOLLOWS = '.....O'
 NUMBER_FOLLOWS = '.O.OOO'
 SPACE = '......'
 
 
 def braille_to_english(braille):
+    """
+    Converts a string of Braille characters to English text.
+
+    Args:
+        braille (str): The input string containing Braille characters.
+
+    Returns:
+        str: The converted English text.
+    """
     result = []
     i = 0
     capitalize_next = False
@@ -53,6 +67,16 @@ def braille_to_english(braille):
 
 
 def english_to_braille(text):
+    """
+    Translates English text to Braille.
+
+    Args:
+        text (str): The English text to be translated.
+
+    Returns:
+        str: The Braille translation of the English text.
+    """
+
     result = []
     number_mode = False
 
@@ -77,6 +101,16 @@ def english_to_braille(text):
 
 
 def translate(input_string):
+    """
+    Translates the given input string from English to Braille or from Braille to English.
+
+    Parameters:
+    input_string (str): The string to be translated.
+
+    Returns:
+    str: The translated string.
+
+    """
     if all(c in 'O.' for c in input_string):
         return braille_to_english(input_string)
     else:
