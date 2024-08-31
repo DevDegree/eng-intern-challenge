@@ -21,7 +21,7 @@ const convertToBraille = (str) => {
             result += braille_dict[' '];
         } else if (s >= '0' && s <= '9') {
             if (!isNumber) {
-                result += braille_dict['0']; // Number indicator (if required)
+                result += braille_dict['0']; // Number indicator
                 isNumber = true;
             }
             result += braille_dict[s];
@@ -50,11 +50,11 @@ const convertToEnglish = (str) => {
         let braille_char = str.substring(i, i + braille_length);
         i += braille_length;
 
-        // Handle number and capital indicators
+        // Handle number and capital indicators (if any)
         if (braille_char === braille_dict['0']) { // Number indicator
-            continue; // Skip as numbers are handled next
+            continue; // Numbers are handled next
         } else if (braille_char === braille_dict[' ']) { // Capital letter indicator
-            continue; // Skip as capital letters are handled next
+            continue; // Capital letters are handled next
         } else {
             const entry = Object.entries(braille_dict).find(([key, val]) => val === braille_char);
             if (entry) {
