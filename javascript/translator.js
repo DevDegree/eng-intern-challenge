@@ -1,75 +1,124 @@
-const braille_dict = {
-    'a': 'O.....', 'b': 'O.O...', 'c': 'OO.....', 'd': 'OOO....',
-    'e': 'OO.O...', 'f': 'OOO....', 'g': 'OOOO....', 'h': 'O.OO...',
-    'i': '.O.O...', 'j': '.O.OO..', 'k': 'O..O...', 'l': 'O.O.O..',
-    'm': 'OO..O..', 'n': 'OOO..O.', 'o': 'OOO.O..', 'p': 'OOOOO..',
-    'q': 'OOOOOO.', 'r': 'OOOOO.O', 's': 'OOOO.O.', 't': 'OOOOO.O',
-    'u': 'O..O..', 'v': 'O.O.O.', 'w': '.O.OOO.', 'x': 'OO..OO.',
-    'y': 'OOO..OO', 'z': 'OO..O.', ' ': '......',
-    '0': '.O.OOO.', '1': '.O....', '2': '.O.O..', '3': '.OO...',
-    '4': '.OOO..', '5': '.O.O..', '6': '.OOOO.', '7': '.OOOOO',
-    '8': '.OOOO.', '9': '.O.O..'
+const engToBraille = {
+    "a": "O.....",
+    "b": "O.O...", 
+    "c": "OO....", 
+    "d": "OO.O..", 
+    "e": "O..O..",
+    "f": "OOO...", 
+    "g": "OOOO..", 
+    "h": "O.OO..", 
+    "i": ".OO...", 
+    "j": ".OOO..",
+    "k": "O...O.", 
+    "l": "O.O.O.", 
+    "m": "OO..O.", 
+    "n": "OO.OO.", 
+    "o": "O..OO.",
+    "p": "OOO.O.", 
+    "q": "OOOOO.", 
+    "r": "O.OOO.", 
+    "s": ".OO.O.", 
+    "t": ".OOOO.",
+    "u": "O...OO", 
+    "v": "O.O.OO", 
+    "w": ".OOO.O", 
+    "x": "OO..OO", 
+    "y": "OO.OOO",
+    "z": "O..OOO",
+    " ": "......"  // space
 };
 
-// Convert English text to Braille
-const convertToBraille = (str) => {
-    let result = '';
-    let isNumber = false;
+const brailleToEng = Object.fromEntries(Object.entries(engToBraille).map(([eng, braille]) => [braille, eng]));
 
-    for (let s of str) {
-        if (s === ' ') {
-            result += braille_dict[' '];
-        } else if (s >= '0' && s <= '9') {
-            if (!isNumber) {
-                result += braille_dict['0']; // Number indicator
-                isNumber = true;
+const numToBraille = {
+    "1": "O.....", 
+    "2": "O.O...", 
+    "3": "OO....", 
+    "4": "OO.O..", 
+    "5": "O..O..",
+    "6": "OOO...",
+    "7": "OOOO..", 
+    "8": "O.OO..", 
+    "9": ".OO...", 
+    "0": ".OOO..",
+};
+
+const brailleToNum = Object.fromEntries(Object.entries(numToBraille).map(([num, braille]) => [braille, num]));
+
+const additionals = {
+    "capital_follows": ".....O",
+    "number_follows": ".O.OOO"
+};
+
+function translateToBraille(text) {
+    let result = [];
+    let numberMode = false;
+
+    for (let char of text) {
+        if (/\d/.test(char)) {  // If it's a number
+            if (!numberMode) {
+                numberMode = true;
+                result.push(additionals.number_follows);
             }
-            result += braille_dict[s];
-        } else if (s >= 'A' && s <= 'Z') {
-            result += braille_dict[' ']; // Capital letter indicator
-            result += braille_dict[s.toLowerCase()];
-            isNumber = false;
-        } else if (s >= 'a' && s <= 'z') {
-            result += braille_dict[s];
-            isNumber = false;
+            result.push(numToBraille[char]);
+        } else if (char === ' ') {  // In case of a space
+            numberMode = false;
+            result.push(engToBraille[char]);
+        } else if (char.toUpperCase() === char && char.toLowerCase() in engToBraille) {  // In case of a capital letter
+            result.push(additionals.capital_follows);
+            result.push(engToBraille[char.toLowerCase()]);
         } else {
-            result += '?'; // Unknown character
+            result.push(engToBraille[char.toLowerCase()]);
         }
     }
 
-    return result;
+    return result.join('');
 }
 
-// Convert Braille to English
-const convertToEnglish = (str) => {
-    let result = '';
-    const braille_length = 6;
+function translateToEnglish(text) {
+    let result = [];
     let i = 0;
+    const length = text.length;
+    let numberMode = false;
 
-    while (i < str.length) {
-        let braille_char = str.substring(i, i + braille_length);
-        i += braille_length;
-
-        // Handle number and capital indicators (if any)
-        if (braille_char === braille_dict['0']) { // Number indicator
-            continue; // Numbers are handled next
-        } else if (braille_char === braille_dict[' ']) { // Capital letter indicator
-            continue; // Capital letters are handled next
+    while (i < length) {
+        let chunk = text.slice(i, i + 6);
+        if (chunk === additionals.capital_follows) {
+            i += 6;
+            chunk = text.slice(i, i + 6);
+            result.push(brailleToEng[chunk].toUpperCase());
+        } else if (chunk === additionals.number_follows) {
+            numberMode = true;
+        } else if (chunk === '......') {  // space
+            numberMode = false;
+            result.push(brailleToEng[chunk]);
         } else {
-            const entry = Object.entries(braille_dict).find(([key, val]) => val === braille_char);
-            if (entry) {
-                result += entry[0];
+            if (numberMode) {
+                result.push(brailleToNum[chunk]);
             } else {
-                result += '?'; // Unknown Braille pattern
+                result.push(brailleToEng[chunk]);
             }
         }
-    }
 
-    return result;
+        i += 6;
+    }
+    return result.join('');
 }
 
-// Main logic
-const input = process.argv.slice(2).join(" ");
-const isBraille = input.includes('O') || input.includes('.');
-const output = isBraille ? convertToEnglish(input) : convertToBraille(input);
-console.log(output);
+function translateLanguage(inputText) {
+    return /^[.O]+$/.test(inputText);
+}
+
+function main() {
+    const inputText = process.argv.slice(2).join(' ');
+
+    if (translateLanguage(inputText)) {
+        console.log(translateToEnglish(inputText));
+    } else {
+        console.log(translateToBraille(inputText));
+    }
+}
+
+if (require.main === module) {
+    main();
+}
