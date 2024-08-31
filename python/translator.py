@@ -5,6 +5,7 @@ import sys
 # ">": "O..OO.", Duplicate braille from o and theres no way to tell even if context
     # For example you can check if there was an opening one "<" than allow but than if you were to make a statement like Apples > Peaches it wouldnt work
 
+# when using reserved characters make sure to include quotation marks ""
 #------------------------------------------------------------------
 
 # Defined Global Variables
