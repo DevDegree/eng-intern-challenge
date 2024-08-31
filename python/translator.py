@@ -68,3 +68,13 @@ def translate_to_english(input_str):
                 char = str('abcdefghij'.index(char) + 1)
             result.append(char)
     return ''.join(result)
+
+
+def braille_translator(input_str):
+    if is_braille(input_str):
+        return translate_to_english(input_str)
+    return translate_to_braille(input_str)
+
+if __name__ == "__main__":
+    input_str = sys.argv[1]
+    print(braille_translator(input_str))
