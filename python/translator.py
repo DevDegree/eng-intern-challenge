@@ -29,3 +29,5 @@ ENGLISH_TO_BRAILLE = {
     '(': 'O.O..O', ')': '.O.OO.', ' ': '......'
 }
 
+BRAILLE_TO_ENGLISH = {val: key for key, val in ENGLISH_TO_BRAILLE.items()}
+
