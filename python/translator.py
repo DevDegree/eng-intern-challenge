@@ -80,7 +80,7 @@ class BrailleTranslator:
         if set(input_string).issubset({'.', 'O'}):
             return self.braille_to_english(input_string)
         else:
-            # is english test
+            # is english text
             return self.english_to_braille(input_string)
 
 if __name__ == "__main__":
