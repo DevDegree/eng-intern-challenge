@@ -4,6 +4,10 @@ BRAILLE_TO_ENGLISH_MAPPING = {
     'O...O.': 'k', 'O.O.O.': 'l', 'OO..O.': 'm', 'OO.OO.': 'n', 'O..OO.': 'o',
     'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't',
     'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y', 'O..OOO': 'z',
+
+    '..OO.O': '.', '..O...': ',', '..O.O': '?', '..OOO.': '!', '..OO..': ':', '..O.O.': ';',
+    '....OO': '-', '.O..O.': '/', '.OO..O': '<', 'O.O..O': '(', '.O.OO.': ')',
+
     '.....O': 'CAPITAL_FOLLOW', '.O.OOO': 'NUM_FOLLOW', '......': ' ',
 
 }
