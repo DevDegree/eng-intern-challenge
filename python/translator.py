@@ -16,7 +16,7 @@ class SpecialBrailleChar(Enum):
 
 special_braille_chars = {char.value for char in SpecialBrailleChar}
 
-# Constants
+# Preprocessed Constants
 english_to_braille = {
     'a': "O.....", 'b': "O.O...", 'c': "OO....", 'd': "OO.O..", 'e': "O..O..",
     'f': "OOO...", 'g': "OOOO..", 'h': "O.OO..", 'i': ".OO...", 'j': ".OOO..",
@@ -30,23 +30,43 @@ english_numbers_to_braille = {
     '1': "O.....", '2': "O.O...", '3': "OO....", '4': "OO.O..", '5': "O..O..",
     '6': "OOO...", '7': "OOOO..", '8': "O.OO..", '9': ".OO...", '0': ".OOO..",
 }
-
 braille_to_english = {value : key for key, value in english_to_braille.items()}
 braille_to_english_numbers = {value : key for key, value in english_numbers_to_braille.items()}
 
 # Helper Functions
-def is_text_supported_in_language(string, supported_language_chars):
-    for letter in string:
+
+
+def is_text_supported_in_language(text, supported_language_chars):
+    """
+    Check if a text contains only digits or characters in the supported languageset.
+
+    Args:
+        text (str): The input text.
+        supported_language_chars (set/dict): Valid characters for the language.
+
+    Returns:
+        bool: True if supported, False otherwise.
+    """
+    for letter in text:
         if not(letter.isdigit() or letter.lower() in supported_language_chars):
             return False
     
     return True
 
-def is_text_braille(string):
-    if not (len(string) % 6 == 0):
+def is_text_braille(text):
+    """
+    Check if a text is valid Braille representation.
+
+    Args:
+        text (str): The input text.
+
+    Returns:
+        bool: True if valid Braille, False otherwise.
+    """
+    if not (len(text) % 6 == 0):
         return False
 
-    letters = Counter(string)
+    letters = Counter(text)
     
     if len(letters) > 2:
         return False
@@ -58,6 +78,20 @@ def is_text_braille(string):
     return True
     
 def parse_braille_string_to_language(braille_text, braille_to_language, braille_to_numbers):
+    """
+    Translate Braille text to a language using provided mappings.
+
+    Args:
+        braille_text (str): The Braille text to translate.
+        braille_to_language (dict): Mapping from Braille patterns to language characters.
+        braille_to_numbers (dict): Mapping from Braille patterns to numbers.
+
+    Returns:
+        str: Translated text in the target language.
+    
+    Raises:
+        TranslationError: If Braille patterns cannot be translated or are used incorrectly.
+    """
     i = 0
     translated_text = ''
     letters = [braille_text[i: i + 6] for i in range(0, len(braille_text), 6)]
@@ -88,6 +122,20 @@ def parse_braille_string_to_language(braille_text, braille_to_language, braille_
     return translated_text
 
 def parse_language_to_braille(text, language_to_braille, number_to_braille):
+    """
+    Convert text to Braille using provided mappings.
+
+    Args:
+        text (str): The input text to convert.
+        language_to_braille (dict): Mapping from language characters to Braille patterns.
+        number_to_braille (dict): Mapping from digits to Braille patterns.
+
+    Returns:
+        str: Braille representation of the text.
+    
+    Raises:
+        TranslationError: If text contains characters that cannot be translated.
+    """
     i = 0
     braille_translation = ""
     while i < len(text):
@@ -113,6 +161,18 @@ def parse_language_to_braille(text, language_to_braille, number_to_braille):
     return braille_translation
          
 def translate_text(text):
+    """
+    Translate text between Braille and English.
+
+    Args:
+        text (str): The input text to translate.
+
+    Returns:
+        str: Translated text in the target language.
+
+    Raises:
+        TranslationError: If the text is not in a supported format for translation.
+    """
     if is_text_braille(text):
         return parse_braille_string_to_language(text, braille_to_english, braille_to_english_numbers)
     elif is_text_supported_in_language(text, english_to_braille):
@@ -141,7 +201,6 @@ def main():
     try:
         translated_text = translate_text(text)
     except TranslationError as e:
-        # Capture and print the error message
         print(f"Error: {e.message}")
         return
     
