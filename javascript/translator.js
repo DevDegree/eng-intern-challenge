@@ -1,4 +1,4 @@
-braille_dict = {
+const braille_dict = {
     'a': 'O.....',
     'b': 'O.O...',
     'c': 'OO....',
