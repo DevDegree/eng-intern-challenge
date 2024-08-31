@@ -64,15 +64,28 @@ brailleToEnglish.forEach((key: string, val: string) => {
  * @returns {string} a translated english phrase
  */
 const brailleTranslate = (brailleStr: string): string => {
+  let capFlag: boolean = false;
   let engStr: string = "";
 
-  for (let i = 0; i * 6 < brailleStr.length; i++) {
-    const bLetter: string = brailleStr.substring(i * 6, (i + 1) * 6);
+  let aLetter: string | undefined = "";
+  let bLetter: string = "";
 
-    const aLetter: string | undefined = brailleToEnglish.get(bLetter);
+  for (let i = 0; i * 6 < brailleStr.length; i++) {
+    bLetter = brailleStr.substring(i * 6, (i + 1) * 6);
+    aLetter = brailleToEnglish.get(bLetter);
 
     if (!aLetter) {
       throw new Error(`Invalid braille entry: ${bLetter}`);
+    }
+
+    if (aLetter == "capital") {
+      capFlag = true;
+      continue;
+    }
+
+    if (capFlag) {
+      aLetter = aLetter.toUpperCase();
+      capFlag = false;
     }
 
     engStr = engStr.concat(aLetter);
