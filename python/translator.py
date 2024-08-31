@@ -1,12 +1,10 @@
-#first step is to determine whether the String is Braille or English
-#can do this by scanning for letters other than . or O
-#also, if it is Braille, then we need to validate that the input is divisible by 6
-#will need to create 2 hashmaps. one will map english to braille, the other will map braille to english.
-
-#later need to create a check if 2 decimal points in a number (this should fail)
-
 import sys
 
+"""
+This script converts Braille to English and English to Braille based on the input String
+"""
+
+# Converter containing the mapping between Braille and English characters (and vice versa)
 converter = {
     "a": "O.....",
     "b": "O.O...",
@@ -83,8 +81,7 @@ converter = {
     "OO..OO": "x",
     "OO.OOO": "y",
     "O..OOO": "z",
-    "..OO.O": ".", #normal period
-    # ".O...O": ".", #decimal follows
+    "..OO.O": ".", # normal period (not decimal follows)
     "..O...": ",",
     "..O.OO": "?",
     "..OOO.": "!",
@@ -99,6 +96,7 @@ converter = {
     "......": " "
 }
 
+# Extra mapping for Braille to english when converting to a number rather than a letter
 num_map = {
     "O.....": "1",
     "O.O...": "2",
@@ -110,48 +108,22 @@ num_map = {
     "O.OO..": "8",
     ".OO...": "9",
     ".OOO..": "0",
-    ".O...O": ".", #decimal follows
+    ".O...O": ".", # decimal follows
 }
 
-#didn't map capital follows, decimal follows, and number follows
-#what is the difference between decimal follows and number follows? decimal is "." which is different from the "." in a normal string
-
-if len(sys.argv) < 2:
-    print("Please pass at least 1 argument")
-    sys.exit(1)
-
-input_string = ""
-for i, word in enumerate(sys.argv):
-    if i == 0:
-        continue
-    input_string += word
-    if i != len(sys.argv) - 1:
-        input_string += " "
-
-is_brail = True
-return_string = ""
-
-for letter in input_string:
-    if letter != "O" and letter != ".":
-        is_brail = False
-        break
-
-if is_brail and len(input_string) %6 != 0 and len(input_string) < 6:
-    is_brail = False
-    #treat as english if only O and . are in the String but it is less than 6 characters
-
-if is_brail:
+def convert_braille_to_english(input_string):
+    return_string = ""
+    # Check if the Braille string is divisible by 6
     if len(input_string) % 6 != 0:
         print("Braille string must be divisible by 6")
         sys.exit(1)
     
+    # Variables to keep track of current states
     number_follows = False
     capital_follows = False
     decimal_follows = False
     for i in range(0, len(input_string), 6):
         curr_character = input_string[i:i+6]
-        # print(curr_character)
-        #need to add a few more conditions for exit below
         if curr_character not in converter and curr_character not in num_map and curr_character != ".....O" and curr_character != ".O.OOO":
             print("The following character does not exist: " + curr_character)
             sys.exit(1)
@@ -160,7 +132,7 @@ if is_brail:
         elif curr_character == ".O.OOO":
             number_follows = True
         elif capital_follows == True:
-            #need to actually check if the braille is an alphabet character. (cannot capitalize a number or other token)
+            # Need to actually check if the braille is an alphabet character. (cannot capitalize a number or another token)
             if converter[curr_character] in "abcdefghijklmnopqrstuvwxyz":
                 return_string += converter[curr_character].upper()
                 capital_follows = False
@@ -185,8 +157,10 @@ if is_brail:
                 sys.exit(1)
         else:
             return_string += converter[curr_character]
+    return return_string
 
-else:
+def convert_english_to_braille(input_string):
+    return_string = ""
     number_follows = False
     decimal_follows = False
     for letter in input_string:
@@ -214,9 +188,43 @@ else:
             sys.exit(1)
         else:
             return_string += converter[letter]
+    return return_string
+
+# Validation that the user passed enough input arguments
+if len(sys.argv) < 2:
+    print("Please pass at least 1 argument")
+    sys.exit(1)
+
+# Storing arguments in an input String
+input_string = ""
+for i, word in enumerate(sys.argv):
+    if i == 0:
+        continue
+    input_string += word
+    if i != len(sys.argv) - 1:
+        input_string += " "
+
+is_braille = True
+
+# Check if the input String is Braille
+for letter in input_string:
+    if letter != "O" and letter != ".":
+        is_braille = False
+        break
+
+# Treat as english if only O and . are in the String but it is less than 6 characters
+if is_braille and len(input_string) %6 != 0 and len(input_string) < 6:
+    is_braille = False
+
+if is_braille:
+    return_string = convert_braille_to_english(input_string)
+
+else:
+    return_string = convert_english_to_braille(input_string)
         
 
 print(return_string)
 
+# ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
 # ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
 # ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
