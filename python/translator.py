@@ -6,11 +6,9 @@ Email: falakrast1@gmail.com
 
 Terminal / command-line application that can translate Braille to English and vice versa.
 """
-
-# Braille dictionary to convert English to Braille
 import sys
 
-
+# Dictionary to convert alphabets to Braille
 eng_to_braille = {
     "a": "O.....",
     "b": "O.O...", 
@@ -38,10 +36,13 @@ eng_to_braille = {
     "x": "OO..OO", 
     "y": "OO.OOO",
     "z": "O..OOO",
-    " ": "......"
+    " ": "......"  # space
 }
 
+# Dictionary to convert Braille to alphabets
+braille_to_eng = {braille: eng for eng, braille in eng_to_braille.items()}
 
+# Dictionary to convert numbers to Braille
 num_to_braille = {
     "1": "O.....", 
     "2": "O.O...", 
@@ -55,17 +56,14 @@ num_to_braille = {
     "0": ".OOO..",
 }
 
+# Dictionary to convert Braille to numbers
+braille_to_num = {braille: eng for eng, braille in num_to_braille.items()}
 
+# Dictionary containing "Capital follows" and "Number follows"
 additionals = {
     "capital_follows": ".....O",
     "number_follows": ".O.OOO"
 }
-
-
-# English dictionary to convert Braille to English
-braille_to_eng = {braille: eng for eng, braille in eng_to_braille.items()}
-braille_to_num = {braille: eng for eng, braille in num_to_braille.items()}
-
 
 # Function to translate English to Braille
 def translate_to_braille(text: str) -> str:
@@ -73,21 +71,21 @@ def translate_to_braille(text: str) -> str:
 
     result = []
     number_mode = False
-    for char in text:
-        if char.isdigit() and not number_mode:
-            number_mode = True
-            result.append(additionals["number_follows"])
-        elif not char.isdigit() and number_mode:
-            number_mode = False
 
-        if char.isupper():
+    for char in text:
+        if char.isdigit():  # If it's a number and we are not already in number mode
+            if not number_mode:
+                number_mode = True
+                result.append(additionals["number_follows"])
+            result.append(num_to_braille[char])
+        elif char == " ":  # In case of a space
+            number_mode = False
+            result.append(eng_to_braille[char])
+        elif char.isupper():  # In case of a capital letter
             result.append(additionals["capital_follows"])
             result.append(eng_to_braille[char.lower()])
         else:
-            if char.isdigit():
-                result.append(num_to_braille[char])
-            else:
-                result.append(eng_to_braille[char.lower()])
+            result.append(eng_to_braille[char.lower()])
 
     return "".join(result)
 
@@ -109,7 +107,7 @@ def translate_to_english(text: str) -> str:
             result.append(braille_to_eng[chunk].upper())
         elif chunk == additionals["number_follows"]:
             number_mode = True
-        elif chunk == '......':
+        elif chunk == '......':  # space
             number_mode = False
             result.append(braille_to_eng[chunk])
         else:
@@ -133,7 +131,7 @@ def translate_language(input_text: str) -> bool:
 def main() -> None:
     input_text = ' '.join(sys.argv[1:])
 
-    if translate_language(input_text):  # Translation
+    if translate_language(input_text):
         print(translate_to_english(input_text))
     else:
         print(translate_to_braille(input_text))
