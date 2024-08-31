@@ -32,12 +32,11 @@ class Translator
 
   # input: arg array; output: array with items of length 6
   def self.arg_to_braille(array)
-    result = []
-    array&.each do |item|
-      result.push(item.chars.each_slice(6).map(&:join))
-    end
-    result.flatten!
-    result
+    return if array.nil?
+
+    return unless (array.join.length % 6).zero?
+
+    array.join.scan(/.{6}/)
   end
 
   def self.translate(arg)
