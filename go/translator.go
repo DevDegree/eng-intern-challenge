@@ -129,7 +129,15 @@ func isEnglish(input string) bool {
 }
 
 func isBraille(input string) bool {
-	return strings.ContainsAny(input, "O.") && len(input)%6 == 0 && input != "OOOOOO"
+	isValidBrailleCharacters := strings.IndexFunc(input, func(r rune) bool {
+		return r != 'O' && r != '.'
+	}) == -1
+
+	isLengthValid := len(input)%6 == 0
+
+	isNotPlaceholder := input != "OOOOOO"
+
+	return isValidBrailleCharacters && isLengthValid && isNotPlaceholder
 }
 
 func main() {
