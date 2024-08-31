@@ -39,6 +39,9 @@ class BrailleMappings:
     def get_braille_number(self, symbol):
         return self.braille_to_eng_number.get(symbol)
 
+class BrailleTranslator:
+    def __init__(self):
+        self.mappings = BrailleMappings()
 
 def main():
     import sys
