@@ -65,9 +65,12 @@ if __name__ == "__main__":
     output = ""  #intializing the output string. 
     inarr = [] 
     
+
+    #populating the input array: 
     for i, arg in enumerate(sys.argv[1:], start=1):
         inarr.append(arg) 
         
+    #converting "english" to braille 
     if not is_braille(inarr[0]): 
         isnumber = False 
         outword = ""
