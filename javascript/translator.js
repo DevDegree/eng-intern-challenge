@@ -35,6 +35,6 @@ const convertToEnglish = (str) => {
 if (require.main === module) {
     const input = process.argv.slice(2).join(" ");
     const isBraille = input.includes('O') || input.includes('.');
-    const output = isBraille ? translateToEnglish(input) : translateToBraille(input);
+    const output = isBraille ? convertToEnglish(input) : convertToBraille(input);
     console.log(output);
 }
