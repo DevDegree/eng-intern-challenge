@@ -21,7 +21,7 @@ ENGLISH_TO_BRAILLE = {
     "Q": "OOOOO.",
     "R": "O.OOO.",
     "S": ".OO.O.",
-    "T": ".OO.O.",
+    "T": ".OOOO.",
     "U": "O...OO",
     "V": "O.O.OO",
     "W": ".OOO.O",
