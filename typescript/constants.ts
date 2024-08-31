@@ -16,15 +16,6 @@ export const CAPITALIZE = '.....O';
 export const NUMBER = '.O.OOO';
 export const SPACE = '......';
 
-const brailleToAlphabet: Record<string, string> = {}
-const brailleToNumber: Record<string, string> = {}
+export const brailleToAlphabet: Record<string, string> = Object.fromEntries(Object.entries(alphabetToBraille).map(([key, value]) => [value, key]));
+export const brailleToNumber: Record<string, string> = Object.fromEntries(Object.entries(numberToBraille).map(([key, value]) => [value, key]));
 
-for (const [key, value] of Object.entries(alphabetToBraille)) {
-    brailleToAlphabet[value] = key;
-}
-
-for (const [key, value] of Object.entries(numberToBraille)) {
-    brailleToNumber[value] = key;
-}
-
-export { brailleToAlphabet, brailleToNumber };
