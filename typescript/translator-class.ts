@@ -14,7 +14,6 @@ export class Translator {
     }
     // tries to translate the string from braille to english, if not possible, then we translate to braille instead
     public translate(words: string[]): string {
-        console.log(words);
         if (words.length === 0) {
             return "";
         }
@@ -32,10 +31,10 @@ export class Translator {
         }
 
         for (let i = 0; i < str.length; i += 6) {
-            const chunk = str.substring(i, i+6);
+            const chunk = str.substring(i, i+6); // each braille character has 6 characters
             const rule = this.brailleToEnglish.get(chunk);
 
-            if (!rule) {
+            if (!rule) { // if rule doesnt exist
                 return this.translateToBraille(words);
             }
             
@@ -44,10 +43,15 @@ export class Translator {
             } else if (rule === NUMBER_FOLLOWS) {
                 numberFlag = true;
             } else {
-                if (rule === SPACE) {
+                if (rule === SPACE) { // we set the flag to false when we encounter a space
                     numberFlag = false;
                 }
                 if (numberFlag) {
+                    // we realize that the braille character for 1 - 9 is same as
+                    // the braille characters for A to I, and the braille character for 
+                    // 0 is the same as for J
+                    // so we just convert the ascii code from 0 - 9 to their respective characters 
+                    // of A - J 
                     let code = rule.charCodeAt(0) - ASCII_a_CODE + 1;
                     if (code === 10) {
                         code = 0;
@@ -75,6 +79,7 @@ export class Translator {
 
             for (const char of word) {
                 if (isnum(char)) {
+                    // here we do the opposite of what we did to convert to english for numbers
                     let code = char.toLowerCase().charCodeAt(0) - ASCII_0_CODE;
                     if (code === 0) {
                         code = 10;
