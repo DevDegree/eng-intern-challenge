@@ -40,8 +40,8 @@
     "9": ".OO..."
   },
   "special_chars": {
-    "capital_follows": ".....0",
-    "number_follows": ".0.000",
+    "capital_follows": ".....O",
+    "number_follows": ".O.OOO",
     "space": "......"
   }
 }
