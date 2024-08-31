@@ -1,12 +1,10 @@
 BRAILLE_TO_ENGLISH_MAPPING = {
-    # Letters
     'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd', 'O..O..': 'e',
     'OOO...': 'f', 'OOOO..': 'g', 'O.OO..': 'h', '.OO...': 'i', '.OOO..': 'j',
     'O...O.': 'k', 'O.O.O.': 'l', 'OO..O.': 'm', 'OO.OO.': 'n', 'O..OO.': 'o',
     'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't',
     'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y', 'O..OOO': 'z',
-    # Special Char
-    '.....O': 'CAPS', '.O.OOO': 'NUM', '......': ' ',
+    '.....O': 'CAPITAL_FOLLOW', '.O.OOO': 'NUM_FOLLOW', '......': ' ',
 
 }
 
