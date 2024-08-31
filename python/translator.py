@@ -1,3 +1,5 @@
+import sys
+
 braille_dict = {
     # Letters
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
@@ -95,3 +97,66 @@ def translate_to_braille(english_text):
     return ''.join(braille_translation)
 
 
+def translate_to_english(braille_text):
+    """
+    Converts Braille text back to English, handling numbers, capitalization, and decimals.
+
+    Args:
+        braille_text (str): The Braille text to convert.
+    Returns:
+        str: The corresponding English translation.
+    """
+    # Invert the braille_dict to map Braille patterns to English characters
+    english_dict = {v: k for k, v in braille_dict.items()}
+
+    english_translation = []
+    i = 0
+    is_number = False
+
+    while i < len(braille_text):
+        symbol = braille_text[i:i + 6]
+
+        if symbol == braille_dict['number']:
+            is_number = True
+            i += 6
+            continue
+        elif symbol == braille_dict['capital']:
+            i += 6
+            next_symbol = braille_text[i:i + 6]
+            english_translation.append(english_dict[next_symbol].upper())
+        elif symbol == braille_dict['decimal']:
+            i += 6
+            while i < len(braille_text) and braille_text[i:i + 6] in english_dict:
+                english_translation.append(english_dict[braille_text[i:i + 6]])
+                i += 6
+            continue
+        else:
+            if is_number:
+                english_translation.append(english_dict[symbol])
+            else:
+                english_translation.append(english_dict.get(symbol, ''))
+
+        i += 6
+
+    return ''.join(english_translation)
+
+def main():
+    """
+    Main function to handle command-line input and perform translation between English and Braille.
+    """
+    if len(sys.argv) != 2:
+        print("Usage: python translator.py <text>")
+        return
+
+    input_text = sys.argv[1]
+
+    if is_braille(input_text):
+        print(translate_to_english(input_text))
+    elif is_english(input_text):
+        print(translate_to_braille(input_text))
+    else:
+        print("Unrecognized input format.")
+
+
+if __name__ == "__main__":
+    main()
