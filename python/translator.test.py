@@ -116,6 +116,72 @@ class TestTranslator(unittest.TestCase):
         # Strip any leading/trailing whitespace from the output and compare
         self.assertEqual(result.stdout.strip(), expected_output)
 
+    def test_double_capital(self):
+        # Command to run translator.py script
+        command = [
+            "python3",
+            "translator.py",
+            "AA",
+        ]
+        # Run the command and capture output
+        result = subprocess.run(command, capture_output=True, text=True)
+
+        # Expected output without the newline at the end
+        expected_output = ".....OO..........OO....."
+
+        # Strip any leading/trailing whitespace from the output and compare
+        self.assertEqual(result.stdout.strip(), expected_output)
+
+    def test_double_capital_braille(self):
+        # Command to run translator.py script
+        command = [
+            "python3",
+            "translator.py",
+            ".....OO..........OO.....",
+        ]
+        # Run the command and capture output
+        result = subprocess.run(command, capture_output=True, text=True)
+
+        # Expected output without the newline at the end
+        expected_output = "AA"
+
+        # Strip any leading/trailing whitespace from the output and compare
+        self.assertEqual(result.stdout.strip(), expected_output)
+
+    def test_multiple_numbers(self):
+        # Command to run translator.py script
+        command = [
+            "python3",
+            "translator.py",
+            "42 42 42",
+        ]
+        # Run the command and capture output
+        result = subprocess.run(command, capture_output=True, text=True)
+
+        # Expected output without the newline at the end
+        expected_output = (
+            ".O.OOOOO.O..O.O..........O.OOOOO.O..O.O..........O.OOOOO.O..O.O..."
+        )
+
+        # Strip any leading/trailing whitespace from the output and compare
+        self.assertEqual(result.stdout.strip(), expected_output)
+
+    def test_multiple_numbers_braille(self):
+        # Command to run translator.py script
+        command = [
+            "python3",
+            "translator.py",
+            ".O.OOOOO.O..O.O..........O.OOOOO.O..O.O..........O.OOOOO.O..O.O...",
+        ]
+        # Run the command and capture output
+        result = subprocess.run(command, capture_output=True, text=True)
+
+        # Expected output without the newline at the end
+        expected_output = "42 42 42"
+
+        # Strip any leading/trailing whitespace from the output and compare
+        self.assertEqual(result.stdout.strip(), expected_output)
+
 
 if __name__ == "__main__":
     unittest.main()
