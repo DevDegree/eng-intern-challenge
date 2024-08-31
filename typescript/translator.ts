@@ -48,11 +48,11 @@ const englishToBraille = new Map<string, string>();
 const numToBraille = new Map<string, string>();
 
 brailleToNum.forEach((key: string, val: string) => {
-  numToBraille.set(val, key);
+  numToBraille.set(key, val);
 });
 
 brailleToEnglish.forEach((key: string, val: string) => {
-  englishToBraille.set(val, key);
+  englishToBraille.set(key, val);
 });
 
 /**
@@ -103,6 +103,31 @@ const brailleTranslate = (brailleStr: string): string => {
 };
 
 /**
+ * translates the english alphabet + numbers (with Capitalization) into braille
+ *
+ * @example
+ * // return '.....OO.OO..O..O..O.O.O.O.O.O.O..OO.'
+ * englishTranslate('Hello')
+ *
+ * @returns {string} a translated braille phrase
+ */
+const englishTranslate = (englishStr: string): string => {
+  let brailleStr: string = "";
+
+  for (const aLetter of englishStr) {
+    const bLetter: string | undefined = englishToBraille.get(aLetter);
+
+    if (!bLetter) {
+      throw new Error(`Invalid character entry: ${aLetter}`);
+    }
+
+    brailleStr = brailleStr.concat(bLetter);
+  }
+
+  return brailleStr;
+};
+
+/**
  * check if a string is or isn't valid Braille such that it only contains O or .
  *
  * @example
@@ -130,4 +155,4 @@ const clArgs = process.argv.slice(2).join(" ");
 // // if false -> translate to english
 // console.log(isValidBraille(clArgs));
 
-console.log(brailleTranslate(clArgs));
+console.log(englishTranslate("hello world"));
