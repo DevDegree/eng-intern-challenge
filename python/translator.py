@@ -3,6 +3,8 @@
 #also, if it is Braille, then we need to validate that the input is divisible by 6
 #will need to create 2 hashmaps. one will map english to braille, the other will map braille to english.
 
+import sys
+
 english_to_braille = {
     "a": "0.....",
     "b": "0.0...",
@@ -56,3 +58,20 @@ english_to_braille = {
 }
 
 #didn't map capital follows, decimal follows, and number follows
+
+if len(sys.argv) != 1:
+    print("Please pass only 1 argument")
+    sys.exit(1)
+
+input_string = sys.argv[0]
+isBrail = True
+
+for letter in input_string:
+    if letter != "0" and letter != ".":
+        isBrail = False
+        break
+
+if isBrail:
+    pass
+else:
+    pass
