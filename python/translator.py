@@ -1,104 +1,88 @@
 import sys
-from typing import Generator, Tuple, Dict
+from braille_mapping import BRAILLE_MAPPING as braille_map, REVERSE_MAPPING as reverse_map
 
-# Define the Braille dictionary
-braille_dict: Dict[Tuple[str, str], str] = {
-    ('letter', 'a'): 'O.....', ('letter', 'b'): 'OO....', ('letter', 'c'): 'O..O..', 
-    ('letter', 'd'): 'O..OO.', ('letter', 'e'): 'O...O.', ('letter', 'f'): 'OO.O..', 
-    ('letter', 'g'): 'OO.OO.', ('letter', 'h'): 'OO..O.', ('letter', 'i'): '.O.O..', 
-    ('letter', 'j'): '.O.OO.', ('letter', 'k'): 'O.O...', ('letter', 'l'): 'OOO...', 
-    ('letter', 'm'): 'O.OO..', ('letter', 'n'): 'O.OOO.', ('letter', 'o'): 'O.O.O.', 
-    ('letter', 'p'): 'OOOO..', ('letter', 'q'): 'OOOOO.', ('letter', 'r'): 'OOO.O.', 
-    ('letter', 's'): '.OOO..', ('letter', 't'): '.OOOO.', ('letter', 'u'): 'O.O..O', 
-    ('letter', 'v'): 'OOO..O', ('letter', 'w'): '.O.OOO', ('letter', 'x'): 'O.OO.O', 
-    ('letter', 'y'): 'O.OOOO', ('letter', 'z'): 'O.O.OO',
+class BrailleTranslator:
+    def __init__(self):
+        self.braille_map = braille_map
+        self.reverse_map = reverse_map
 
-    # Special indicators
-    ('capital', 'CAPITAL'): '.....O',
-    ('number', 'NUMBER'): '..OOOO',
-    ('space', ' '): '......'
-}
+    def handle_capitalization(self, char: str, result: list):
+        """Handle capitalization mode"""
+        result.append(self.braille_map['CAPITAL'])
+        result.append(self.braille_map[char.lower()])
 
-# Reverse dictionary for translating from Braille to English
-reverse_braille_dict: Dict[str, Tuple[str, str]] = {v: k for k, v in braille_dict.items()}
+    def handle_number_mode(self, char: str, result: list, number_mode_active: bool):
+        """Handle number mode"""
+        if not number_mode_active:
+            result.append(self.braille_map['NUMBER'])
+        result.append(self.braille_map[char])
+        return True  # Number mode remains active
 
-class BrailleTranslationError(Exception):
-    """Custom exception for Braille translation errors."""
-    pass
+    def translate_to_braille(self, text: str) -> str:
+        text = text.strip()  # Strip any leading/trailing whitespace
+        result = []
+        number_mode_active = False
 
-def translate_to_braille(text: str) -> Generator[str, None, None]:
-    """Translate English text to Braille using a functional, generator-based approach."""
-    number_mode = False
-    for char in text:
-        if char.isupper():
-            yield braille_dict[('capital', 'CAPITAL')]
-            yield braille_dict[('letter', char.lower())]
-        elif char.isdigit():
-            if not number_mode:
-                yield braille_dict[('number', 'NUMBER')]
-                number_mode = True
-            # Map digits to corresponding letters a-j
-            yield braille_dict[('letter', chr(ord('a') + int(char) - 1))]
-        elif char == ' ':
-            yield braille_dict[('space', ' ')]
-            number_mode = False  # Exit number mode after space
-        else:
-            yield braille_dict[('letter', char.lower())]
-            number_mode = False  # Exit number mode for letters
-
-def translate_to_english(braille: str) -> str:
-    """Translate Braille to English, processing in chunks of 6 characters."""
-    result = []
-    i = 0
-    capitalize_next = False
-    number_mode = False
-    
-    while i < len(braille):
-        symbol = braille[i:i+6]
-        if symbol == braille_dict[('capital', 'CAPITAL')]:
-            capitalize_next = True
-        elif symbol == braille_dict[('number', 'NUMBER')]:
-            number_mode = True
-        elif symbol == braille_dict[('space', ' ')]:
-            result.append(' ')
-            number_mode = False  # Correctly exit number mode after space
-        elif symbol in reverse_braille_dict:
-            char_type, char_value = reverse_braille_dict[symbol]
-            if number_mode:
-                if char_type == 'letter':  # Assuming a-j mapping for numbers
-                    result.append(str(ord(char_value) - ord('a') + 1))
+        for char in text:
+            if char.isupper():
+                self.handle_capitalization(char, result)
+            elif char.isdigit():
+                number_mode_active = self.handle_number_mode(char, result, number_mode_active)
+            elif char == ' ':
+                result.append(self.braille_map['SPACE'])
+                number_mode_active = False  # Reset number mode on space
             else:
-                if capitalize_next:
-                    result.append(char_value.upper())
+                result.append(self.braille_map[char.lower()])
+
+        return ''.join(result)
+
+    def translate_to_english(self, braille: str) -> str:
+        braille = braille.strip()  # Strip any leading/trailing whitespace
+        result = []
+        i = 0
+        capitalize_next = False
+        number_mode_active = False
+
+        while i < len(braille):
+            symbol = braille[i:i+6]
+            i += 6
+
+            if symbol == self.braille_map['CAPITAL']:
+                capitalize_next = True
+            elif symbol == self.braille_map['NUMBER']:
+                number_mode_active = True
+            elif symbol == self.braille_map['SPACE']:
+                result.append(' ')
+                number_mode_active = False  # Reset number mode on space
+            else:
+                char = self.reverse_map.get(symbol)
+                if not char:
+                    raise ValueError(f"Invalid Braille symbol: {symbol}")
+
+                if number_mode_active:
+                    result.append(char)  # Treat as a number
+                elif capitalize_next:
+                    result.append(char.upper())
                     capitalize_next = False
                 else:
-                    result.append(char_value)
-        else:
-            raise BrailleTranslationError(f"Invalid Braille symbol: {symbol}")
-        i += 6
+                    result.append(char)
 
-    return ''.join(result)
+        return ''.join(result)
 
 def main():
-    """Main function to handle command-line input and output."""
-    if len(sys.argv) != 2:
-        raise ValueError("Expected one argument: the text to translate.")
+    translator = BrailleTranslator()
 
-    input_text = sys.argv[1]
+    if len(sys.argv) < 2:
+        sys.exit(0)
+
+    input_text = ' '.join(sys.argv[1:]).strip()  # Strip any leading/trailing whitespace
 
     if all(c in 'O.' for c in input_text):
-        try:
-            output = translate_to_english(input_text)
-        except BrailleTranslationError:
-            raise ValueError("Error: Invalid Braille symbol encountered.")
+        output = translator.translate_to_english(input_text)
     else:
-        try:
-            output = ''.join(translate_to_braille(input_text))
-        except KeyError as e:
-            raise ValueError(f"Translation error: Character '{e.args[0]}' not supported.")
+        output = translator.translate_to_braille(input_text)
 
-    # Output the result without any additional text or newline characters
-    sys.stdout.write(output)
+    sys.stdout.write(output.strip())  # Ensure no trailing newline or spaces in output
 
 if __name__ == "__main__":
     main()
