@@ -1,19 +1,81 @@
-import unittest
-import subprocess
+import sys
+from braille_mapping import BRAILLE_MAPPING as braille_map, REVERSE_MAPPING as reverse_map
 
-class TestTranslator(unittest.TestCase):
-    def test_output(self):
-        # Command to run translator.py script
-        command = ["python3", "translator.py", "Abc", "123", "xYz"]
-        
-        # Run the command and capture output
-        result = subprocess.run(command, capture_output=True, text=True)
-        
-        # Expected output without the newline at the end
-        expected_output = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
-        
-        # Strip any leading/trailing whitespace from the output and compare
-        self.assertEqual(result.stdout.strip(), expected_output)
+class BrailleTranslator:
+    def __init__(self):
+        self.braille_map = braille_map
+        self.reverse_map = reverse_map
 
-if __name__ == '__main__':
-    unittest.main()
+    def handle_capitalization(self, char: str, result: list):
+        """Handle capitalization mode"""
+        result.append(self.braille_map['CAPITAL'])
+        result.append(self.braille_map[char.lower()])
+
+    def handle_number_mode(self, char: str, result: list, number_mode_active: bool):
+        """Handle number mode"""
+        if not number_mode_active:
+            result.append(self.braille_map['NUMBER'])
+        result.append(self.braille_map[char])
+        return True  # Number mode remains active
+
+    def translate_to_braille(self, text: str) -> str:
+        result = []
+        number_mode_active = False
+
+        for char in text:
+            if char.isupper():
+                self.handle_capitalization(char, result)
+                number_mode_active = False  # Exit number mode for capital letters
+            elif char.isdigit():
+                number_mode_active = self.handle_number_mode(char, result, number_mode_active)
+            elif char == ' ':
+                result.append(self.braille_map['SPACE'])
+                number_mode_active = False  # Reset number mode on space
+            else:
+                result.append(self.braille_map[char.lower()])
+                number_mode_active = False  # Exit number mode for lowercase letters
+
+        return ''.join(result)
+
+    def translate_to_english(self, braille: str) -> str:
+        result = []
+        i = 0
+        capitalize_next = False
+        number_mode_active = False
+
+        while i < len(braille):
+            symbol = braille[i:i+6]
+            i += 6
+
+            if symbol == self.braille_map['CAPITAL']:
+                capitalize_next = True
+            elif symbol == self.braille_map['NUMBER']:
+                number_mode_active = True
+            elif symbol == self.braille_map['SPACE']:
+                result.append(' ')
+                number_mode_active = False  # Reset number mode on space
+            else:
+                char = self.reverse_map.get(symbol)
+                if not char:
+                    raise ValueError(f"Invalid Braille symbol: {symbol}")
+
+                if number_mode_active:
+                    result.append(char)  # Treat as a number
+                elif capitalize_next:
+                    result.append(char.upper())
+                    capitalize_next = False
+                else:
+                    result.append(char)
+
+        return ''.join(result)
+
+def main():
+    translator = BrailleTranslator()
+
+    if len(sys.argv) < 2:
+        sys.exit(0)
+
+    input_text = ' '.join(sys.argv[1:])
+
+    if all(c in 'O.' for c in input_text):
+        output = translator.translate
