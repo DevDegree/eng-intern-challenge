@@ -125,7 +125,7 @@ def process_english_text(english_text: str) -> str:
 
 def main() -> None:
     # argv[0] is the name of the program, so we have to use argv[1] here
-    original_input = sys.argv[1]
+    original_input = " ".join(sys.argv[1:])
     is_braille = all(character in {".", "O"} for character in original_input)
     if is_braille:
         sys.stdout.write(process_braille_text(original_input))
