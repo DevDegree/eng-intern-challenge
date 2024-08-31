@@ -1,10 +1,15 @@
 import sys
 
 def is_braille(string):
+    english_char = False
     for c in string:
         if c != 'O' and c != '.':
-            print(to_english(string))
-    print(to_braille(string))
+            english_char = True
+            break
+    if english_char:
+        print(to_braille(string))
+    else:
+        print(to_english(string))
 
 def to_english(string):
     BRAILLE_ENGLISH_LETTER_MAP = {
@@ -42,7 +47,6 @@ def to_english(string):
         "....OO": '-',
         ".O..O.": '/',
         ".OO..O": '<',
-        "O..OO.": '>',
         "O.O..O": '(',
         ".O.OO.": ')',
         "......": ' '
@@ -58,6 +62,17 @@ def to_english(string):
         "O.OO..": '8',
         ".OO...": '9',
         ".OOO..": '0',
+        "..O...": ',',
+        "..O.OO": '?',
+        "..OO..": ':',
+        "..O.O.": ';',
+        "....OO": '-',
+        ".O..O.": '/',
+        ".OO..O": '<',
+        "O..OO.": '>',
+        "O.O..O": '(',
+        ".O.OO.": ')',
+        "......": ' '
     }
     CAPITAL_FOLLOWS = ".....O"
     DECIMAL_FOLLOWS = ".O...O"
@@ -65,10 +80,17 @@ def to_english(string):
     SPACE = "......"
     english_str = ''
     number_mode = False
-    for i in range(6, len(string), 6):
-        curr_c = string[i - 6: i]
+    capital_mode = False
+    for i in range(6, len(string) + 1, 6):
+        if i == len(string):
+            curr_c = string[i - 6:]
+        else:
+            curr_c = string[i - 6: i]
         if curr_c == CAPITAL_FOLLOWS:
+            capital_mode = True
+        elif capital_mode:
             english_str += (BRAILLE_ENGLISH_LETTER_MAP[curr_c]).upper()
+            capital_mode = False
         elif number_mode:
             if curr_c == SPACE:
                 number_mode = False
@@ -79,6 +101,8 @@ def to_english(string):
                 english_str += BRAILLE_ENGLISH_NUMBER_MAP[curr_c]
         elif curr_c == NUMBER_FOLLOWS:
             number_mode = True
+        else:
+            english_str += BRAILLE_ENGLISH_LETTER_MAP[curr_c]
     return english_str
         
 def to_braille(string):
