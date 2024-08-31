@@ -15,7 +15,7 @@ braille_dict = {
     '.': '..OO.O', ',': '..O...', '?': '..O.OO', '!': '..OOO.', 
     ':': '..OO..', ';': '..O.O.', '-': '....OO', '/': '.O..O.', 
     '<': '.OO..O', '>': 'O..OO.', '(': 'O.O..O', ')': '.O.OO.',
-    'capital': '.....O', 'number': '.O.OOO',
+    'capital': '.....O', 'number': '.O.OOO'
 }
 
 # reverse Braille dictionaries to help Braille into English translations
@@ -35,8 +35,7 @@ reverse_braille_chars = {
 # reverse_braille_nums is for numbers
 reverse_braille_nums = {
     'O.....': '1', 'O.O...': '2', 'OO....': '3', 'OO.O..': '4', 'O..O..': '5',
-    'OOO...': '6', 'OOOO..': '7', 'O.OO..': '8', '.OO...': '9', '.OOO..': '0',
-    
+    'OOO...': '6', 'OOOO..': '7', 'O.OO..': '8', '.OO...': '9', '.OOO..': '0'
 }
 
 # list of the braille numbers
