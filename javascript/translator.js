@@ -1,7 +1,5 @@
+const { error } = require("node:console");
 const process = require("node:process");
-
-var args = process.argv.slice(2);
-const input = args[0];
 
 function invert(object) {
   var invertedObject = {};
@@ -38,18 +36,6 @@ const brailleAlphaMapping = {
   x: "OO..OO",
   y: "OO.OOO",
   z: "O..OOO",
-  //   ".": "..OO.O",
-  //   ",": "..O...",
-  //   "?": "..O.OO",
-  //   "!": "..OOO.",
-  //   ":": "..OO..",
-  //   ";": "..O.O.",
-  //   "-": "....OO",
-  //   "/": ".O..O.",
-  //   "<": ".OO..O",
-  //   ">": "O..OO.",
-  //   "(": "O.O..O",
-  //   ")": ".O.OO.",
 };
 const brailleNumMapping = {
   1: "O.....",
@@ -116,7 +102,6 @@ function translateBrailleToEnglish(braille) {
       }
     }
   }
-  console.log(translatedText);
   return translatedText;
 }
 
@@ -153,20 +138,29 @@ function translateEnglishToBraille(english) {
       isNumeric = false; // Reset numeric flag after space
     }
   }
-  console.log(translatedBraille);
   return translatedBraille;
 }
 
-// testing util function below
+function main(inputArr) {
+  // Throws error if no argument is provided.
+  if (!inputArr) {
+    throw error("Please provide a valid input - Braille or English");
+  }
+  // Join the array elements into a single string separated by spaces
+  let text = inputArr.join(" ");
+  let result;
 
-translateBrailleToEnglish(
-  ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."
-); // expect: Hello world
-translateBrailleToEnglish(
-  ".....OO.....O.O...OO...........O.OOOO.....O.O...OO...."
-); // expect: Abc 123
-translateBrailleToEnglish(".O.OOOOO.O..O.O..."); // expect 42
+  // Determine if the input text is Braille or English
+  if (isBraille(text)) {
+    result = translateBrailleToEnglish(text);
+  } else {
+    result = translateEnglishToBraille(text);
+  }
 
-translateEnglishToBraille("42"); // expect: .O.OOOOO.O..O.O...
-translateEnglishToBraille("Abc 123"); //expect: .....OO.....O.O...OO...........O.OOOO.....O.O...OO....
-translateEnglishToBraille("Hello world"); //expect .....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..
+  // Output the result to the console
+  console.log(result);
+}
+
+// Calling the main function with command line arguments
+var args = process.argv.slice(2);
+main(args);
