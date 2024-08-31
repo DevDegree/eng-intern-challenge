@@ -33,15 +33,33 @@ class TestTranslator(unittest.TestCase):
         result = subprocess.run(command, capture_output=True, text=True)
         self.assertEqual(result.stdout.strip(), expected_output)
     
+    def test_reverse_hello_world(self):
+        command = ["python3", "translator.py", "Hello world"]
+        expected_output = ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."
+        result = subprocess.run(command, capture_output=True, text=True)
+        self.assertEqual(result.stdout.strip(), expected_output)
+    
     def test_42(self):
         command = ["python3", "translator.py", ".O.OOOOO.O..O.O..."]
         expected_output = "42"
         result = subprocess.run(command, capture_output=True, text=True)
         self.assertEqual(result.stdout.strip(), expected_output)
     
+    def reverse_42(self):
+        command = ["python3", "translator.py", "42"]
+        expected_output = ".O.OOOOO.O..O.O..."
+        result = subprocess.run(command, capture_output=True, text=True)
+        self.assertEqual(result.stdout.strip(), expected_output)
+    
     def test_braille_translation(self):
         command = ["python3", "translator.py", ".....OO.....O.O...OO...........O.OOOO.....O.O...OO...."]
         expected_output = "Abc 123"
+        result = subprocess.run(command, capture_output=True, text=True)
+        self.assertEqual(result.stdout.strip(), expected_output)
+    
+    def reverse_braille_translation(self):
+        command = ["python3", "translator.py", "Abc 123"]
+        expected_output = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO...."
         result = subprocess.run(command, capture_output=True, text=True)
         self.assertEqual(result.stdout.strip(), expected_output)
     
