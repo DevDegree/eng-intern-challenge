@@ -59,7 +59,11 @@ def translate_english_to_braille(english_input: str) -> str:
     return "".join(result)
 
 def main() -> None:
-    user_input = " ".join(sys.argv[1:])
+    if len(sys.argv) > 1:
+        user_input = " ".join(sys.argv[1:])
+    else:
+        user_input = input().strip()
+    
     result = translate_braille_to_english(user_input) if is_braille_code(user_input) else translate_english_to_braille(user_input)
     print(result)
 
