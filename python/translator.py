@@ -92,3 +92,4 @@ if __name__ == "__main__":
         print(translate_to_english(input_string))
     else:
         print(translate_to_braille(input_string))
+
