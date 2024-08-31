@@ -67,3 +67,49 @@ class BrailleTranslator:
                 raise ValueError(f"Unrecognized character '{char}' in input.")
                 
         return ''.join(result)
+
+    def translate_to_english(self, input: str) -> str:
+            result = []
+            i = 0
+            next_is_cap = False
+            next_is_num = False
+            
+            while i < len(input):
+                symbol = input[i:i+6]
+                
+                if symbol == self.special_symbols['cap_follows']:
+                    # Next character is a capital
+                    next_is_cap = True
+                    i += 6
+                    continue
+                
+                if symbol == self.special_symbols['num_follows']:
+                    # Next character is a number
+                    next_is_num = True
+                    i += 6
+                    continue
+                
+                if symbol == self.special_symbols[' ']:
+                    # Character is a space
+                    result.append(' ')
+                    next_is_num = False
+                    next_is_cap = False
+                    i += 6
+                    continue
+                
+                if next_is_num and symbol in self.braille_to_numbers:
+                    result.append(self.braille_to_numbers[symbol])
+                elif symbol in self.braille_to_letters:
+                    letter = self.braille_to_letters[symbol]
+                    if next_is_cap:
+                        letter = letter.upper()
+                        next_is_cap = False
+                    result.append(letter)
+                elif symbol in self.braille_to_punctuation:
+                    result.append(self.braille_to_punctuation[symbol])
+                else:
+                    raise ValueError(f"Unrecognized Braille symbol '{symbol}' in input.")
+                
+                i += 6
+            
+            return ''.join(result)
