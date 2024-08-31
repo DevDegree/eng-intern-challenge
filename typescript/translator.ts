@@ -41,6 +41,7 @@ const brailleToNum = new Map<string, string>([
   ["O.OO..", "8"],
   [".OO...", "9"],
   [".OOO..", "0"],
+  ["......", " "],
 ]);
 
 const englishToBraille = new Map<string, string>();
@@ -65,14 +66,14 @@ brailleToEnglish.forEach((key: string, val: string) => {
  */
 const brailleTranslate = (brailleStr: string): string => {
   let capFlag: boolean = false;
+  let numMode: boolean = false;
   let engStr: string = "";
 
-  let aLetter: string | undefined = "";
-  let bLetter: string = "";
-
   for (let i = 0; i * 6 < brailleStr.length; i++) {
-    bLetter = brailleStr.substring(i * 6, (i + 1) * 6);
-    aLetter = brailleToEnglish.get(bLetter);
+    const bLetter: string = brailleStr.substring(i * 6, (i + 1) * 6);
+    let aLetter: string | undefined = numMode
+      ? brailleToNum.get(bLetter)
+      : brailleToEnglish.get(bLetter);
 
     if (!aLetter) {
       throw new Error(`Invalid braille entry: ${bLetter}`);
@@ -87,6 +88,13 @@ const brailleTranslate = (brailleStr: string): string => {
       aLetter = aLetter.toUpperCase();
       capFlag = false;
     }
+
+    if (aLetter == "number") {
+      numMode = true;
+      continue;
+    }
+
+    if (aLetter == " ") numMode = false;
 
     engStr = engStr.concat(aLetter);
   }
