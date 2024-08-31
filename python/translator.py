@@ -61,6 +61,63 @@ braille_dict = {
 english_dict = {braille: eng for eng, braille in braille_dict.items()}
 
 
+# .......................
+
+ENGLISH_TO_BRAILLE = {
+    # This dictionary maps English characters to their
+    # corresponding Braille characters
+    'A': 'O.....',
+    'B': 'O.O...',
+    'C': 'OO....',
+    'D': 'OO.O..',
+    'E': 'O..O..',
+    'F': 'OOO...',
+    'G': 'OOOO..',
+    'H': 'O.OO..',
+    'I': '.OO...',
+    'J': '.OOO..',
+    'K': 'O...O.',
+    'L': 'O.O.O.',
+    'M': 'OO..O.',
+    'N': 'OO.OO.',
+    'O': 'O..OO.',
+    'P': 'OOO.O.',
+    'Q': 'OOOOO.',
+    'R': 'O.OOO.',
+    'S': '.OO.O.',
+    'T': '.OOOO.',
+    'U': 'O...OO',
+    'V': 'O.O.OO',
+    'W': '.OOO.O',
+    'X': 'OO..OO',
+    'Y': 'OO.OOO',
+    'Z': 'O..OOO',
+    ' ': '......'  # Space
+}
+
+NUMBERS_TO_BRAILLE = {
+    # This dictionary maps numbers to their
+    # corresponding Braille characters
+    '1': 'O.....',
+    '2': 'O.O...',
+    '3': 'OO....',
+    '4': 'OO.O..',
+    '5': 'O..O..',
+    '6': 'OOO...',
+    '7': 'OOOO..',
+    '8': 'O.OO..',
+    '9': '.OO...',
+    '0': '.OOO..',
+}
+
+# Reverses dictionaries
+BRAILLE_TO_ENGLISH = {v: k for k, v in ENGLISH_TO_BRAILLE.items()}
+BRAILLE_TO_NUMBERS = {v: k for k, v in NUMBERS_TO_BRAILLE.items()}
+
+
+
+# ......................................
+
 # Function to translate English to Braille
 def translate_to_braille(text: str) -> str:
     """Translates English input text to braille and returns a string of braille characters"""
@@ -69,8 +126,8 @@ def translate_to_braille(text: str) -> str:
     number_mode = False
     for char in text:
         if char.isdigit() and not number_mode:
-            result.append(braille_dict["number_follows"])
             number_mode = True
+            result.append(braille_dict["number_follows"])
         elif not char.isdigit() and number_mode:
             number_mode = False
 
@@ -82,6 +139,38 @@ def translate_to_braille(text: str) -> str:
 
     return "".join(result)
 
+
+# Function to translate Braille to English
+def translate_to_english(text: str) -> str:
+    """Translates Braille input to English and returns a string of English characters"""
+
+    result = []
+    i = 0
+    length = len(text)
+    number_mode = False
+
+    while i < length:
+        chunk = text[i:i+6]
+        if chunk == braille_dict["capital_follows"]:
+            i += 6
+            chunk = text[i:i+6]
+            result.append(BRAILLE_TO_ENGLISH[chunk].upper())
+        elif chunk == braille_dict["number_follows"]:
+            number_mode = True
+        elif chunk == '......':
+            number_mode = False
+            result.append(BRAILLE_TO_ENGLISH[chunk])
+        else:
+            if number_mode:
+                result.append(BRAILLE_TO_NUMBERS[chunk])
+            else:
+                result.append(BRAILLE_TO_ENGLISH[chunk].lower())
+
+        i += 6
+    return "".join(result)
+
 if __name__ == '__main__':
-    answer = translate_to_braille("Abc 123")
-    print(answer == ".....OO.....O.O...OO...........O.OOOO.....O.O...OO....")
+    answer1 = translate_to_braille("Abc 123")
+    print(answer1)
+    answer2 = translate_to_english(answer1)
+    print(answer2 == "Abc 123")
