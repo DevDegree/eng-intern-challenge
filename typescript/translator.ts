@@ -113,15 +113,37 @@ function englishToBraille(input: string): string {
   return result;
 }
 
-function translate(input: string): string {
+// prints the braille in a better format
+function prettyPrintBraille(braille: string): string {
+  const chars = braille.match(/.{1,6}/g) || [];
+  let result = "";
+  for (const char of chars) {
+    result += char.slice(0, 2) + "  ";
+  }
+  result += "\n";
+  for (const char of chars) {
+    result += char.slice(2, 4) + "  ";
+  }
+  result += "\n";
+  for (const char of chars) {
+    result += char.slice(4, 6) + "  ";
+  }
+  return result;
+}
+
+function translate(input: string, pretty: boolean = false): string {
   // Check if the input is Braille or English
   if (input.match(/^[O.]+$/)) {
     return brailleToEnglish(input);
   } else {
-    return englishToBraille(input);
+    const braille = englishToBraille(input);
+    return pretty ? prettyPrintBraille(braille) : braille;
   }
 }
 
 const commandLineArgs = process.argv.slice(2);
-const inputString = commandLineArgs.join(" ");
-console.log(translate(inputString));
+const prettyFlag = commandLineArgs.includes("--pretty");
+const inputString = commandLineArgs
+  .filter((arg) => arg !== "--pretty")
+  .join(" ");
+console.log(translate(inputString, prettyFlag));
