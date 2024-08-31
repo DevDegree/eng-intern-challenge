@@ -24,3 +24,4 @@ For English inputs:
 -   valid input includes the characters of the alphabet (both capitalize and non-capitalized), numbers (0-9), and the symbols listed in the instruction README
 -   Capitalization only affect the letter directly following it
 -   negative numbers follows the following format: `{minus symbol braille}{number follow brailles}{number braille}`
+-   unknown letters gets omitted in the output
