@@ -3,6 +3,8 @@
 #also, if it is Braille, then we need to validate that the input is divisible by 6
 #will need to create 2 hashmaps. one will map english to braille, the other will map braille to english.
 
+#later need to create a check if 2 decimal points in a number (this should fail)
+
 import sys
 
 converter = {
@@ -81,7 +83,8 @@ converter = {
     "OO..OO": "x",
     "OO.OOO": "y",
     "O..OOO": "z",
-    "..OO.O": ".",
+    "..OO.O": ".", #normal period
+    # ".0...0": ".", #decimal follows
     "..O...": ",",
     "..O.OO": "?",
     "..OOO.": "!",
@@ -107,6 +110,7 @@ num_map = {
     "O.OO..": "8",
     ".OO...": "9",
     ".OOO..": "0",
+    ".0...0": ".", #decimal follows
 }
 
 #didn't map capital follows, decimal follows, and number follows
@@ -134,26 +138,41 @@ for letter in input_string:
 
 if is_brail:
     if len(input_string) % 6 != 0:
-        print("Brail string must be divisible by 6")
+        print("Braille string must be divisible by 6")
         sys.exit(1)
     
     number_follows = False
     capital_follows = False
     for i in range(0, len(input_string), 6):
-        # print(input_string[i:i+6])
-        if input_string[i:i+6] not in converter and input_string[i:i+6] not in num_map:
-            pass
+        curr_character = input_string[i:i+6]
+        # print(curr_character)
+        #need to add a few more conditions for exit below
+        if curr_character not in converter and curr_character not in num_map and curr_character != ".....0" and curr_character != ".0.000":
+            print("The following character does not exist: " + curr_character)
+            sys.exit(1)
+        elif curr_character == ".....0":
+            capital_follows = True
+        elif curr_character == ".0.000":
+            number_follows = True
         elif capital_follows == True:
             #need to actually check if the braille is an alphabet character. (cannot capitalize a number or other token)
-            if converter[input_string[i:i+6]] in "abcdefghijklmnopqrstuvwxyz":
-                return_string.append(converter[input_string[i:i+6]].lower())
+            if converter[curr_character] in "abcdefghijklmnopqrstuvwxyz":
+                return_string.append(converter[curr_character].lower())
+                capital_follows = False
             else:
-                print("Cannot capitalize: " + converter[input_string[i:i+6]])
+                print("Cannot capitalize: " + converter[curr_character])
                 sys.exit(1)
-        elif input_string[i:i+6] == "......":
+        elif curr_character == "......":
             number_follows = False
-            return_string += converter[input_string[i:i+6]]
-        # elif input_string[i:i+6]
+            return_string += converter[curr_character]
+        elif number_follows == True:
+            if curr_character in num_map:
+                return_string += num_map[curr_character]
+            else:
+                print("The following is not a decimal when it should be: " + curr_character)
+                sys.exit(1)
+        else:
+            return_string += converter[curr_character]
 
 else:
     number_follows = False
