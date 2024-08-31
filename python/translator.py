@@ -1,23 +1,32 @@
 import sys
 
-english_to_braille_alphabet = {
+letters_to_braille = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 
     'e': 'O..O..', 'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 
     'i': '.OO...', 'j': '.OOO..', 'k': 'O...O.', 'l': 'O.O.O.', 
     'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.', 'p': 'OOO.O.',
     'q': 'OOOOO.', 'r': 'O.OOO.', 's': '.OO.O.', 't': '.OOOO.',
     'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 
-    'y': 'OO.OOO', 'z': 'O..OOO', '1': 'O.....', '2': 'O.O...', 
-    '3': 'OO....', '4': 'OO.O..', '5': 'O..O..', '6': 'OOO...', 
-    '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..',
-    'cap_follows': '.....O', 'dec_follows': '.O...O', 'num_follows': '.O.OOO', '.': '.O..OO',
-    ',': '.O....', '?': '.O.OO.', '!': '.OO.O.', ':': 'OO....',
-    ';': 'O.O...', '-': '......', '/': 'O.O...', '<': 'O..OO.',
-    '>': '.OOO.O', '(': 'OO.OO.', ')': '.OO.OO', ' ': '......',
+    'y': 'OO.OOO', 'z': 'O..OOO',
 }
 
-braille_to_english_alphabet = {braille: english for english, braille in english_to_braille_alphabet.items()}
+numbers_to_braille = {
+    '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', 
+    '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', 
+    '9': '.OO...', '0': '.OOO..',
+}
 
+punctuation_to_braille = {
+    '.': '.O..OO', ',': '.O....', '?': '.O.OO.', '!': '.OO.O.', 
+    ':': 'OO....', ';': 'O.O...', '-': '......', '/': 'O.O...', 
+    '<': 'O..OO.', '>': '.OOO.O', '(': 'OO.OO.', ')': '.OO.OO',
+}
 
-    
-print(braille_to_english_alphabet)
+special_symbols = {
+    'cap_follows': '.....O', 'num_follows': '.O.OOO', 'dec_follows': '.O...O', ' ': '......',
+}
+
+# Inverse mappings for braille to english
+braille_to_letters = {braille: letter for letter, braille in letters_to_braille.items()}
+braille_to_numbers = {braille: letter for letter, braille in numbers_to_braille.items()}
+braille_to_punctuation = {braille: letter for letter, braille in punctuation_to_braille.items()}
