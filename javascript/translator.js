@@ -27,32 +27,33 @@ function isBraille(input) {
 
 // Translate from Braille to English
 function translateBrailleToEnglish(braille) {
-  const words = braille.split('......');
+  const words = braille.split(' ');
+  let output = '';
   let isCapital = false;
-  let isNumber = false;
-  return words.map(symbol => {
-    if (symbol === brailleMap.capital) {
+
+  for (let i = 0; i < words.length; i++) {
+    const symbol = words[i];
+
+    if (symbol === brailleMap['capital']) {
       isCapital = true;
-      return '';
-    }
-    if (symbol === brailleMap['#']) {
-      isNumber = true;
-      return '';
-    }
-    const char = reverseBrailleMap[symbol];
-    if (!char) return '';
-
-    if (isNumber) {
-      return char; // Numbers are not affected by capitalization
+      continue;
     }
 
-    if (isCapital) {
-      isCapital = false;
-      return char.toUpperCase();
+    if (reverseBrailleMap[symbol]) {
+      let letter = reverseBrailleMap[symbol];
+      if (isCapital) {
+        letter = letter.toUpperCase();
+        isCapital = false;  // Reset capitalization after use
+      }
+      output += letter;
+    } else if (symbol === brailleMap[' ']) {
+      output += ' ';
+    } else {
+      console.error(`Unrecognized symbol: ${symbol}`);
     }
+  }
 
-    return char;
-  }).join('');
+  return output;
 }
 
 // Translate from English to Braille
