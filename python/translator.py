@@ -110,7 +110,6 @@ def braille_to_english(translation_input: str) -> str:
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print(len(sys.argv))
         print('Usage: Invalid number of arguments')
         sys.exit(1)
 
