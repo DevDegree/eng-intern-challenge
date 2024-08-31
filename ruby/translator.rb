@@ -4,7 +4,7 @@ require_relative "helpers/visual_to_braille"
 require_relative "helpers/braille_to_visual"
 
 def main()
-    input_string = ARGV[0]
+    input_string = ARGV.join(' ')
     # first preference given to braille if valid
     if validate_braille(input_string)
         puts braille_to_visual(input_string, $lang)
