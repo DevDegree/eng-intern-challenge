@@ -119,6 +119,7 @@ def braille_to_english(braille_str):
     return english_str
 
 
+
 def english_to_braille(english_str):
     output = ''
     is_number = False
