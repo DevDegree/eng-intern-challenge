@@ -34,7 +34,7 @@ class BrailleTranslator:
         self.braille_to_punctuation = {braille: letter for letter, braille in self.punctuation_to_braille.items()}
 
     def is_braille(self, input: str) -> bool:
-            return all(char in 'O.' for char in input) and len(input) % 6 == 0
+        return all(char in 'O.' for char in input) and len(input) % 6 == 0
 
     def translate_to_braille(self, input: str) -> str:
         result = []
@@ -69,47 +69,65 @@ class BrailleTranslator:
         return ''.join(result)
 
     def translate_to_english(self, input: str) -> str:
-            result = []
-            i = 0
-            next_is_cap = False
-            next_is_num = False
+        result = []
+        i = 0
+        next_is_cap = False
+        next_is_num = False
+        
+        while i < len(input):
+            symbol = input[i:i+6]
             
-            while i < len(input):
-                symbol = input[i:i+6]
-                
-                if symbol == self.special_symbols['cap_follows']:
-                    # Next character is a capital
-                    next_is_cap = True
-                    i += 6
-                    continue
-                
-                if symbol == self.special_symbols['num_follows']:
-                    # Next character is a number
-                    next_is_num = True
-                    i += 6
-                    continue
-                
-                if symbol == self.special_symbols[' ']:
-                    # Character is a space
-                    result.append(' ')
-                    next_is_num = False
-                    next_is_cap = False
-                    i += 6
-                    continue
-                
-                if next_is_num and symbol in self.braille_to_numbers:
-                    result.append(self.braille_to_numbers[symbol])
-                elif symbol in self.braille_to_letters:
-                    letter = self.braille_to_letters[symbol]
-                    if next_is_cap:
-                        letter = letter.upper()
-                        next_is_cap = False
-                    result.append(letter)
-                elif symbol in self.braille_to_punctuation:
-                    result.append(self.braille_to_punctuation[symbol])
-                else:
-                    raise ValueError(f"Unrecognized Braille symbol '{symbol}' in input.")
-                
+            if symbol == self.special_symbols['cap_follows']:
+                # Next character is a capital
+                next_is_cap = True
                 i += 6
+                continue
             
-            return ''.join(result)
+            if symbol == self.special_symbols['num_follows']:
+                # Next character is a number
+                next_is_num = True
+                i += 6
+                continue
+            
+            if symbol == self.special_symbols[' ']:
+                # Character is a space
+                result.append(' ')
+                next_is_num = False
+                next_is_cap = False
+                i += 6
+                continue
+            
+            if next_is_num and symbol in self.braille_to_numbers:
+                result.append(self.braille_to_numbers[symbol])
+            elif symbol in self.braille_to_letters:
+                letter = self.braille_to_letters[symbol]
+                if next_is_cap:
+                    letter = letter.upper()
+                    next_is_cap = False
+                result.append(letter)
+            elif symbol in self.braille_to_punctuation:
+                result.append(self.braille_to_punctuation[symbol])
+            else:
+                raise ValueError(f"Unrecognized Braille symbol '{symbol}' in input.")
+            
+            i += 6
+        
+        return ''.join(result)
+
+    def translate(self, input):
+        if self.is_braille(input):
+            return self.translate_to_english(input)
+        else:
+            return self.translate_to_braille(input)
+
+def main():
+    input = ' '.join(sys.argv[1:])
+    braille_translator = BrailleTranslator()
+    try:
+        output = braille_translator.translate(input)
+        print(output)
+    except ValueError as e:
+        print(f"An error occured: {e}")
+
+if __name__ == '__main__':
+    main()
