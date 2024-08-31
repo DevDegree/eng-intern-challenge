@@ -1,20 +1,24 @@
 import sys
 
 eng_to_braille_map = {
-    'a': '0.....', 'b': '0.0...', 'c': '00....', 'd': '00.0..', 'e': '0..0..', 'f': '000...',
-    'g': '0000..', 'h': '0.00..', 'i': '.00...', 'j': '.000..', 'k': '0...0.', 'l': '0.0.0.',
-    'm': '00..0.', 'n': '00.00.', 'o': '0..00.', 'p': '000.0.', 'q': '00000.', 'r': '0.000.',
-    's': '.00.0.', 't': '.0000.', 'u': '0...00', 'v': '0.0.00', 'w': '.000.0', 'x': '00..00',
-    'y': '00.000', 'z': '0..000', '1': '0.....', '2': '0.0...', '3': '00....', '4': '00.0..',
-    '5': '0..0..', '6': '000...', '7': '0000..', '8': '0.00..', '9': '.00...', '0': '.000..',
-    'capital follows': '.....0', 'decimal follows': '.0...0', 'number follows': '.0.000',
-    '.': '..00.0', ',': '..0...', '?': '..0.00', '!': '..000.', ':': '..00..', ';': '..0.0.',
-    '-': '....00', '/': '.0..0.', '<': '.0.0.0', '>': '0.0.0.', '(': '0.0..0', ')': '.0.00.',
-    ' ': '......'
+    'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..', 'f': 'OOO...',
+    'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..', 'k': 'O...O.', 'l': 'O.O.O.',
+    'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.', 'p': 'OOO.O.', 'q': 'OOOOO.', 'r': 'O.OOO.',
+    's': '.OO.O.', 't': '.OOOO.', 'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO',
+    'y': 'OO.OOO', 'z': 'O..OOO', '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..',
+    '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..',
+    'capital follows': '.....O', 'number follows': '.O.OOO', ' ': '......'
 }
 
 # Create a reverse mapping
-braille_to_eng_map = {v: k for k, v in eng_to_braille_map.items()}
+braille_to_eng_map = {v: k for k, v in eng_to_braille_map.items() if k not in '1234567890'}
+
+# A separate mapping for numbers is used because the same sequence of Braille characters can
+# map to different characters (e.g. 'O.....' can be '1' or 'a')
+braille_to_num_map = {
+    'O.....': '1', 'O.O...': '2', 'OO....': '3', 'OO.O..': '4', 'O..O..': '5', 'OOO...': '6',
+    'OOOO..': '7', 'O.OO..': '8', '.OO...': '9', '.OOO..': '0'
+}
 
 def braille_to_eng(text: str) -> str:
     pass
