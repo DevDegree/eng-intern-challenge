@@ -1,4 +1,4 @@
-# Eng Intern Challenge Fall - Winter 2025
+# Eng Intern Challenge Fall - Winter 2O25
 
 # **Note: In order for our submission automation to function correctly:**
 1. **Your Github email must match the email you submitted your Application with (if your Github email is different, we recommend creating a new Github profile with the email you created your application with)**
@@ -12,7 +12,7 @@ In this coding challenge you will create a terminal / command-line application t
 
 The string to translate will be passed into your application as an argument at runtime. Your application must be smart enough to determine if the string given to it is either Braille or English and automatically convert it to the appropriate opposite. 
 
-For the purposes of this challenge Braille must be displayed as `O` and `.` where `O` represents a raised dot. You must include the entire English alphabet, the ability to `capitalize` letters, add `spaces`, and the numbers `0` through `9` as well. 
+For the purposes of this challenge Braille must be displayed as `O` and `.` where `O` represents a raised dot. You must include the entire English alphabet, the ability to `capitalize` letters, add `spaces`, and the numbers `O` through `9` as well. 
 
 After conversion, output the translated string--and nothing else--to the terminal. 
 
@@ -36,7 +36,7 @@ Braille (*/breɪl/ **BRAYL***) is a tactile writing system used by people who ar
 - Braille Alphabet
   - Letters `a` through `z`
     - The ability to capitalize letters
-  - Numbers `0` through `9`
+  - Numbers `O` through `9`
   - The ability to include `spaces` ie: multiple words
 
 ## Examples
