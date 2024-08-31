@@ -1,5 +1,9 @@
 import sys
 
+'''
+This functions takes a dictionary 'original' and returns a new dictionary where
+the key-value pairs of the original dictionary are switched.
+'''
 def invert_dictionary(original: dict) -> dict:
     inverted = {}
     for key, value in original.items():
@@ -9,12 +13,19 @@ def invert_dictionary(original: dict) -> dict:
             inverted[value].append(key)
     return inverted
 
+'''
+This function handles the conversion of braille to alpha-numeric text, taking arguments
+arg (the command line arguments), and dictionaries braille_to_alpha and alpha_to_braille
+for conversion.
+'''
 def convert_braille_to_alpha(arg: str, braille_to_alpha: dict, 
                               alpha_to_braille: dict) -> str:
     numeric_flag = 0
     capital_flag = 0
     result = ''
 
+    #takes 6 chars from command line input and interprets its braille into text
+    #handles cases for capital letters, number/decimals, and spaces with flags
     for j in range(6, len(arg) + 1, 6):
         brailles = arg[j-6:j]
 
@@ -95,8 +106,11 @@ def main():
     for i in range(1, length):
         arg = sys.argv[i]
         if '.' in arg:
+            #handles braille to text case
             result = convert_braille_to_alpha(arg, braille_to_alpha, alpha_to_braille)
         else:
+            #handles text to braille case
+            #handles numerical cases with flags
             numeric_flag = 0
             if i > 1:
                 result += alpha_to_braille[' ']
