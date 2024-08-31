@@ -34,3 +34,5 @@ To run the script, use the following command in your terminal:
 ```bash
 python translator.py <text to translate>
 ```
+Note that the Python version used is 3.8
+
