@@ -135,7 +135,7 @@ def translate_to_braille(input_string):
     for char in input_string:
         # if the char is in the numbers dict
         # check if we need to append the numbers follow braille text, toggle switch, append number
-        if char in NUMBERS_TO_BRAILLE:
+        if char.isdigit():
             if not number_follows:
                 braille_chars.append(NUMBER_FOLLOWS)
                 number_follows = True
@@ -151,7 +151,7 @@ def translate_to_braille(input_string):
             else:
                 braille_chars.append(ENGLISH_TO_BRAILLE[char])
         # For ' '
-        else:
+        elif char == " ":
             braille_chars.append(ENGLISH_TO_BRAILLE[char])
 
     return "".join(braille_chars)
