@@ -7,6 +7,16 @@ The string to translate will be passed into your application as an argument at r
 For the purposes of this challenge Braille must be displayed as O and . where O represents a raised dot. You must include the entire English alphabet, the ability to capitalize letters, add spaces, and the numbers 0 through 9 as well.
 
 After conversion, output the translated string--and nothing else--to the terminal.
+Examples
+Launching your application with English or Braille:
+ruby translator.rb Hello world
+ruby translator.rb .....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..
+Input: Hello world
+Output: .....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..
+Input: 42
+Output: .O.OOOOO.O..O.O...
+Input: .....OO.....O.O...OO...........O.OOOO.....O.O...OO....
+Output: Abc 123
 '''
 import sys
 
