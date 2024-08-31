@@ -53,10 +53,9 @@ def check_if_english(phrase):
     Return True if english, return False if braille
     """
     for c in phrase:
-        if c == "O" or c == ".":
-            continue
-        return False
-    return True
+        if c != "O" and c != ".":
+            return True
+    return False
 
 def translate(phrase):
     """
