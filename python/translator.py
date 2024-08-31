@@ -119,23 +119,22 @@ def parse_braille_string_to_language(braille_text, braille_to_language, braille_
     while i < total_letters:
         letter = letters[i]
         logger.debug(f"Translating Letter: {letter}")
-        if letter not in braille_to_language or letter not in special_braille_chars:
+        if letter not in braille_to_language and letter not in special_braille_chars:
             raise TranslationError(f"Unable to translate the following letter {letter}")
         
-        letter_translation = braille_to_language[letter]
-        if letter_translation == SpecialBrailleChar.CAPITAL.value:
+        if letter == SpecialBrailleChar.CAPITAL.value:
             if i + 1 >= total_letters:
                 raise TranslationError(f"Invalid use of captial follows in braille. Requires a letter to follow the use of the capital follows character")
             
             i += 1
             cap_letter = braille_to_language[letters[i]]
             translated_text += cap_letter.upper()
-        elif letter_translation == SpecialBrailleChar.NUMBER.value:
+        elif letter == SpecialBrailleChar.NUMBER.value:
             while i + 1 < total_letters and letters[i + 1] in braille_to_numbers:
                 i += 1
                 translated_text += braille_to_numbers[letters[i]]
         else:
-            translated_text += letter_translation
+            translated_text += braille_to_language[letter]
         logger.debug(f"Updated translation string: {translated_text}")
         i += 1
 
