@@ -24,13 +24,30 @@ CAPITALIZE = '.....O'
 
 NUMBER_FOLLOWS = '.O.OOO'
 
-def is_braile(text):
+def is_braille(input_string):
+    '''
+    Function to check if a string is a valid braille string
+
+    Args:
+    input_string: string to check if it is a valid braille string
+
+    Returns:
+    bool: True if the string is a valid braille string, else false
+    '''
+    #Check if all characters are either 0 or .
+    valid_chars = all(char in "O." for char in input_string)
+    
+    #Check if the braille string is divisible by 6
+    valid_length = len(input_string) % 6 == 0
+    
+    return valid_chars and valid_length    
+
+def translate_to_english(input_string):
+    print('Its braille')
     pass
 
-def translate_to_english(text):
-    pass
-
-def translate_to_braille(text):
+def translate_to_braille(input_string):
+    print('Its english')
     pass
 
 
