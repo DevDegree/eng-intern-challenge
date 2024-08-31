@@ -36,7 +36,6 @@ TRANSLATOR = {
     "-": "....OO",
     "/": ".O..O.",
     "<": ".OO..O",
-    ">": "O..OO.",
     "(": "O.O..O",
     ")": ".O.OO.",
     " ": "......",
@@ -55,7 +54,8 @@ NUM_MODE = {
     "7": "g",
     "8": "h",
     "9": "i",
-    "0": "j"
+    "0": "j",
+    ">": "o"
 }
 
 REVERSE_TRANSLATOR = {v: k for k, v in TRANSLATOR.items()}
@@ -69,21 +69,17 @@ def translate_to_braille(input, mode):
                 mode = "num"
                 result = result + TRANSLATOR["num"]
             result = result + TRANSLATOR[NUM_MODE[c]]
+        elif c == "." and mode == "num":
+            result = result + TRANSLATOR["dec"] + TRANSLATOR["."]
         else:
             mode = "alpha"
             if c.isupper():
                 result = result + TRANSLATOR["cap"] + TRANSLATOR[c.lower()]
-            elif c == ".":
-                result = result + TRANSLATOR["dec"] + TRANSLATOR["."]
             else:
                 result = result + TRANSLATOR[c]
         
     
     return result
-
-def split_into_groups(s, group_size=6):
-    return [s[i:i+group_size] for i in range(0, len(s), group_size)]
-
 
 def translate_to_eng(input, mode): 
     result = ""
