@@ -4,7 +4,9 @@
 
 #Import sys for testing pruposes
 import sys
-
+#text="123a"
+#text= ".O.OOOO.....O.O...OO....O....."
+#text = ".....OO.....O.O...OO...........O.OOOO.O...OO....OO.O........OO..OO.....OOO.OOOO..OOO"
 text = sys.argv[1]
 #text = "Hello world"
 #text = ".....OO.OO..O..O..O.O.O.O.O.O.O..OO."
@@ -132,7 +134,8 @@ def translation_Setting(text):
 
 #Excecution of program
 if __name__ == "__main__":
-    if sys.argv[1].endswith(".py"):
+
+    if len(sys.argv) > 1 and sys.argv[1].endswith(".py"):
         test_File = sys.argv[1]
         loaded_Test = unittest.TestLoader()
         tests = loaded_Test.discover('.', pattern=test_File)

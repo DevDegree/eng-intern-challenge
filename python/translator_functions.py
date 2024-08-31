@@ -49,21 +49,24 @@ def bra_To_Eng(text, dict_Eng_Bra):
     translated_string = ""
     for i, brl_in_Str in enumerate(modified_text):
         for translation in dict_Eng_Bra:
+
             if brl_in_Str == translation[1]:
-                #If statement for when the followoing value is a capital letter
-                #Sets a variable for that the next letter in the sequence to have a capial
-                print(num_mode)
-              
+
+
                 #check to determine first number of a sequence of elements
                 if brl_in_Str == ".O.OOO":
                     num_mode = True
-                    continue
-                    
-                if num_mode:
-                    if translation[0].isdigit():
-                        translated_string += translation[0]
-                    else:
+
+                print(num_mode)
+                if translation[0].isdigit() and num_mode:
+                    print(translation)
+                    translated_string +=  translation[0]
+
+
+                    #This would be an expansion to switch back from numbers to letters, but for the scope of this assessment it is not required                    
+                    if i+1< len(modified_text)and not translation[0].isdigit():
                         num_mode = False
+
 
                 elif not num_mode and not translation[0].isdigit():
                     if capital == True:
@@ -75,6 +78,9 @@ def bra_To_Eng(text, dict_Eng_Bra):
                     else:
                         #Normal letter in the string
                         translated_string += translation[0]
+                else:
+                    continue
+                break
 
 
 
