@@ -8,8 +8,8 @@ import sys
 def is_braille(string):
     for c in string:
         if c != 'O' and c != '.':
-            return to_english(string)
-    return to_braille(string)
+            print(to_english(string))
+    print(to_braille(string))
 
 # 2. If string is in braille
 #       -> create dict variable 'BRAILLE-ENGLISH-LETTER-MAP' that has the braille character letters as the keys, and english characters as the values
@@ -180,7 +180,7 @@ def to_braille(string):
     for i in range(len(string)):
         if string[i] == ' ':
             number_mode = False
-        elif string[i].isnumeric():
+        elif string[i].isnumeric() and not number_mode:
             braille_str += NUMBER_FOLLOWS
             number_mode = True
         elif string[i].isupper():
@@ -188,10 +188,10 @@ def to_braille(string):
         elif number_mode and string[i] == '.':
             braille_str += DECIMAL_FOLLOWS
             continue
-        braille_str += ENGLISH_BRAILLE_MAP[string[i]]
+        braille_str += ENGLISH_BRAILLE_MAP[string[i].lower()]
     return braille_str
 
 if __name__ == "__main__":
     args = sys.argv[1:]
     input = ' '.join(args)
-    print(is_braille(input))
+    is_braille(input)
