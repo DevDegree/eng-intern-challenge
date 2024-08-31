@@ -57,27 +57,25 @@ def input_is_braille(input):
 
     return False
 
+# converts arguments into a string
 args = sys.argv[1:]
-
 inp = ' '.join(args)
 
 if input_is_braille(inp):
-    isCapital = False
-    isNumber = False
-    isDecimal = False
+    is_capital = False
+    is_number = False
 
     for i in range(0, len(inp), 6):
 
         # is currently reading as number
-        if isNumber:
+        if is_number:
             braille_char = inp[i:i+6]
-
             # search for corresponding number
             for key, value in NUMBER_DICT.items():
                 if value == braille_char:
                     # if the char is a space, we reset the number flag
                     if key == " ":
-                        isNumber = False
+                        is_number = False
                     # NUMBER and CAPITAL do nothing in this context
                     elif key == "NUMBER" or key == "CAPITAL":
                         continue
@@ -87,28 +85,26 @@ if input_is_braille(inp):
                     break
 
         # is currently reading as capital letter
-        elif isCapital:
+        elif is_capital:
             braille_char = inp[i:i+6]
-
-            # search for corresponding capital
+            # search for corresponding capital letter
             for key, value in LETTER_DICT.items():
                 if value == braille_char:
                     # CAPITAL does nothing in this context
                     if key == "CAPITAL":
                         continue
                     elif key == "NUMBER":
-                        isNumber = True
-                        isCapital = False
+                        is_number = True
+                        is_capital = False
                     # print the capital otherwise and reset the capital flag
                     else:
                         print(key.upper(), end="")
-                        isCapital = False
+                        is_capital = False
                     break
 
         # is currently reading as a lowercase letter
         else:
             braille_char = inp[i:i+6]
-
             # search for corresponding letter
             for key, value in LETTER_DICT.items():
                 if value == braille_char:
@@ -117,17 +113,17 @@ if input_is_braille(inp):
                         print(" ", end="")
                     # if the char is a capital, we set the capital flag
                     elif key == "CAPITAL":
-                        isCapital = True
+                        is_capital = True
                     # if the char is a number, we set the number flag
                     elif key == "NUMBER":
-                        isNumber = True
+                        is_number = True
                     # print the letter otherwise
                     else:
                         print(key, end="")
                     break
 
 else:
-    number_follower = False
+    number_follower = False # whether we need to write "NUMBER" before a number
     for i in inp:
         if i.isupper():
             print(LETTER_DICT["CAPITAL"], end="")
