@@ -1,4 +1,4 @@
-const { isBraille } = require("./helpers");
+const { isBraille, translateBrailleToEnglish } = require("./helpers");
 describe("isBraille", () => {
   it("should return true for a valid braille string", () => {
     expect(isBraille("O.OO.O.O")).toBe(true);
@@ -26,5 +26,15 @@ describe("isBraille", () => {
 
   it("should return false for a string with special characters", () => {
     expect(isBraille("O.O@O.O")).toBe(false);
+  });
+});
+
+describe("translateBrailleToEnglish", () => {
+  it("returns", () => {
+    expect(
+      translateBrailleToEnglish(
+        ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
+      )
+    ).toBe("Abc 123 xYz");
   });
 });
