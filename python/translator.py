@@ -97,17 +97,27 @@ def translate_braille_to_english(braille_str):
 
 def translate_english_to_braille(english_str):
     translated = []
+    is_number_mode = False
+    
     for char in english_str:
         if char.isdigit():
-            translated.append(number_follows)  
+            if not is_number_mode:
+                translated.append(number_follows)
+                is_number_mode = True
             translated.append(english_to_braille_numbers[char])
         elif char.isupper():
-            translated.append(capital_follows)  
+            if is_number_mode:
+                is_number_mode = False
+            translated.append(capital_follows)
             translated.append(english_to_braille[char.lower()])
         elif char in english_to_braille_punctuation:
-            translated.append(decimal_follows)  
+            if is_number_mode:
+                is_number_mode = False
+            translated.append(decimal_follows)
             translated.append(english_to_braille_punctuation[char])
         else:
+            if is_number_mode:
+                is_number_mode = False
             translated.append(english_to_braille.get(char, '......'))
     
     return ''.join(translated)
