@@ -34,7 +34,7 @@ BRAILLE_TO_ENGLISH = {
 ENGLISH_TO_BRAILLE = {v: k for k, v in BRAILLE_TO_ENGLISH.items()}
 
 BRAILLE_TO_NUMBERS = {
-    ".OO...": "1",
+    "O.....": "1",
     "O.O...": "2",
     "OO....": "3",
     "OO.O..": "4",
@@ -42,8 +42,9 @@ BRAILLE_TO_NUMBERS = {
     "OOO...": "6",
     "OOOO..": "7",
     "O.OO..": "8",
-    ".OOO..": "9",
-    ".OOOO.": "0",
+    ".OO...": "9",
+    ".OOO..": "0",
+    "......": " "
 }
 NUMBERS_TO_BRAILLE = {v: k for k, v in BRAILLE_TO_NUMBERS.items()}
 
