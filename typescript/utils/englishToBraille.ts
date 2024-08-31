@@ -23,7 +23,6 @@ export const englishToBraille = (message: string): string => {
             result.push(alphabetToBraille[char.toLowerCase()]);
             numberMode = false;
         } else if (/\d/.test(char)) {
-            console.log('numberMode', numberMode);
             if (!numberMode) {
                 result.push(NUMBER);
                 numberMode = true;
