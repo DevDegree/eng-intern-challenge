@@ -120,9 +120,45 @@ function translateBrailleToEnglish(braille) {
   return translatedText;
 }
 
-function translateEnglishToBraille(english) {}
+function translateEnglishToBraille(english) {
+  let translatedBraille = "";
+  let isNumeric = false;
 
-// testing util function
+  // Loop through each character in the English input string
+  for (let i = 0; i < english.length; i++) {
+    // Current character
+    const character = english[i];
+    // Check if the character is a letter (case-insensitive)
+    if (brailleAlphaMapping[character.toLowerCase()]) {
+      //check if the letter is uppercase.
+      if (
+        character == character.toUpperCase() &&
+        character !== character.toLowerCase()
+      ) {
+        translatedBraille += brailleSpecialMapping.capital;
+      }
+      // Append the corresponding Braille character for the letter
+      translatedBraille += brailleAlphaMapping[character.toLowerCase()];
+    } else if (brailleNumMapping[character]) {
+      // Handle numeric characters
+      if (!isNumeric) {
+        translatedBraille += brailleSpecialMapping.number;
+        isNumeric = true;
+      }
+      // Append the corresponding Braille character for the number
+      translatedBraille += brailleNumMapping[character];
+    } else if (character === " ") {
+      // Handle spaces
+      translatedBraille += brailleSpecialMapping.space;
+      isNumeric = false; // Reset numeric flag after space
+    }
+  }
+  console.log(translatedBraille);
+  return translatedBraille;
+}
+
+// testing util function below
+
 translateBrailleToEnglish(
   ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."
 ); // expect: Hello world
@@ -130,3 +166,7 @@ translateBrailleToEnglish(
   ".....OO.....O.O...OO...........O.OOOO.....O.O...OO...."
 ); // expect: Abc 123
 translateBrailleToEnglish(".O.OOOOO.O..O.O..."); // expect 42
+
+translateEnglishToBraille("42"); // expect: .O.OOOOO.O..O.O...
+translateEnglishToBraille("Abc 123"); //expect: .....OO.....O.O...OO...........O.OOOO.....O.O...OO....
+translateEnglishToBraille("Hello world"); //expect .....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..
