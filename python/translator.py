@@ -58,16 +58,19 @@ NUM_MODE = {
     "0": "j"
 }
 
+REVERSE_TRANSLATOR = {v: k for k, v in TRANSLATOR.items()}
+REVERSE_NUM = {v: k for k, v in NUM_MODE.items()}
+
 def translate_to_braille(input, mode):
     result = ""
     for c in input:
         if c.isdigit():
-            if mode == "alpha_mode":
-                mode = "num_mode"
+            if mode == "alpha":
+                mode = "num"
                 result = result + TRANSLATOR["num"]
             result = result + TRANSLATOR[NUM_MODE[c]]
         else:
-            mode = "alpha_mode"
+            mode = "alpha"
             if c.isupper():
                 result = result + TRANSLATOR["cap"] + TRANSLATOR[c.lower()]
             elif c == ".":
@@ -78,15 +81,42 @@ def translate_to_braille(input, mode):
     
     return result
 
-def translate_to_eng(input): 
-    return ""
+def split_into_groups(s, group_size=6):
+    return [s[i:i+group_size] for i in range(0, len(s), group_size)]
+
+
+def translate_to_eng(input, mode): 
+    result = ""
+    for i in range(0, len(input), 6):
+        c = input[i: i+6]
+        if REVERSE_TRANSLATOR[c] in ["num", "cap", "dec"]:
+            mode = REVERSE_TRANSLATOR[c]
+            continue
+    
+        if mode == "num":
+            result = result + REVERSE_NUM[REVERSE_TRANSLATOR[c]]
+            if REVERSE_NUM[REVERSE_TRANSLATOR[c]] == " ":
+                mode = "alpha"
+        elif mode == "cap":
+            result = result + REVERSE_TRANSLATOR[c].upper()
+            mode = "alpha"
+        elif mode == "dec":
+            result = result + "."
+            mode = "num"
+        else:
+            result = result + REVERSE_TRANSLATOR[c]
+
+
+    return result
 
 def translate(input): 
     if (re.match(r'^[O.]+$', input) is not None and len(input) % 6 == 0):
-        return translate_to_eng(input)
+        return translate_to_eng(input, "alpha")
     else:
-        return translate_to_braille(input, "alpha_mode")
+        return translate_to_braille(input, "alpha")
     
 while True:    
-    user_input = input()
+    user_input = input("please enter a word or enter q to quit:\n")
+    if (user_input == "q"):
+        break
     print(translate(user_input))
