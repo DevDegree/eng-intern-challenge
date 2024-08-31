@@ -8,6 +8,9 @@ Terminal / command-line application that can translate Braille to English and vi
 """
 
 # Braille dictionary to convert English to Braille
+import sys
+
+
 eng_to_braille = {
     "a": "O.....",
     "b": "O.O...", 
@@ -119,10 +122,22 @@ def translate_to_english(text: str) -> str:
     return "".join(result)
 
 
-    
+def translate_language(input_text: str) -> bool:
+    """Returns True to translate to English, False to translate to Braille"""
+    for char in input_text:
+        if char not in ['.', 'O']:
+            return False
+    return True
+
+
+def main() -> None:
+    input_text = ' '.join(sys.argv[1:])
+
+    if translate_language(input_text):  # Translation
+        print(translate_to_english(input_text))
+    else:
+        print(translate_to_braille(input_text))
+
 
 if __name__ == '__main__':
-    answer1 = translate_to_braille("Abc")
-    answer2 = translate_to_english("123")
-    print(answer1 + answer2)
-
+    main()
