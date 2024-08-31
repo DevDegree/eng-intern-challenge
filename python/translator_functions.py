@@ -1,40 +1,4 @@
-#August 29, 2024
-#Michael Karas 
-#Shopify Submission for 2025 Winter Internships
-
-#Import sys for testing pruposes
-import sys
-
-#text = sys.argv
-#text = "Hello world"
-#text = ".....OO.OO..O..O..O.O.O.O.O.O.O..OO."
-#text = ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."
-#text = "trans.py"
-#text= ".OOOO.O.OOO.O.....OO.OO..OO.O...OO.OOOO.O.OO.OOO"
-#print (f"Input was {text}")
-
-#other dependencies
-import startup
-import unittest
-
-
-#First check to see if string input is braille or English
-
-#If Check says it is braille, create a new list/array where each element is of length 6, which keeps the info we need ex '[.0....],..'
-#Length of new list/array will be equal to input/length of element (6)
-
-#For braille, will need to code to handle cases where it is stating if the next element is a space, number, decimal or capital letter
-#With those cases, theyll be sent to booleans and modifiy the outcome to the if statement properly
-
-#If in English, create a new list/array and have each ellement within it seperated like "[A,b,c,1,...]"
-#Sorta like with braille, create a boolean to handle cases when a capital letter is needed
-#For cases with numbers, we will append the appropriate braille signifier to the first number of the string 
-
-#The following is my dictionary that has 
-dict_Eng_Bra = startup.setupDict()
-
-#English to Braille Translator
-def eng_To_Bra(text):
+def eng_To_Bra(text, dict_Eng_Bra):
     text_Translate= text
     translated_string = ""
     first_num = False
@@ -72,7 +36,7 @@ def eng_To_Bra(text):
 
 
 #Braille to English Translator
-def bra_To_Eng(text):
+def bra_To_Eng(text, dict_Eng_Bra):
     text_to_be_modified = text
     modified_text = []
     capital = False
@@ -88,6 +52,7 @@ def bra_To_Eng(text):
             if brl_in_Str == translation[1]:
                 #If statement for when the followoing value is a capital letter
                 #Sets a variable for that the next letter in the sequence to have a capial
+                print(num_mode)
               
                 #check to determine first number of a sequence of elements
                 if brl_in_Str == ".O.OOO":
@@ -114,33 +79,3 @@ def bra_To_Eng(text):
 
 
     return translated_string
-
-
-
-
-#Each braille term has 'O' present except for space, which has no "O's"
-def translation_Setting(text):
-    if (len(text) % 6 == 0 and ('O' in text or '......' in text)):
-        #Braille
-        output = bra_To_Eng(text)
-    else:
-        #English
-        output = eng_To_Bra(text)
-
-    print (output)
-
-#Excecution of program
-if __name__ == "__main__":
-    if sys.argv[1].endswith(".py"):
-        test_File = sys.argv[1]
-        loaded_Test = unittest.TestLoader()
-        tests = loaded_Test.discover('.', pattern=test_File)
-        run_Test = unittest.TextTestRunner()
-        run_Test.run(tests)
-        
-    else:
-        if len(text) % 6 == 0 and ('O' in text or '......' in text):
-            output = bra_To_Eng(text)
-        else:
-            output = eng_To_Bra(text)
-        print(output)
