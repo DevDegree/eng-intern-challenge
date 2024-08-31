@@ -14,6 +14,7 @@ ENGLISH_TO_BRAILLE_NUMERIC: Dict[str, str] = {
     "7": "OOOO..", "8": "O.OO..", "9": ".OO...", "0": ".OOO.."
 }
 
+
 BRAILLE_TO_ENGLISH_CHAR: Dict[str, str] = {value: key for key, value in ENGLISH_TO_BRAILLE_NON_NUMERIC.items()}
 BRAILLE_TO_ENGLISH_NUM: Dict[str, str] = {value: key for key, value in ENGLISH_TO_BRAILLE_NUMERIC.items()}
 
