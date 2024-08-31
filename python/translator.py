@@ -50,7 +50,7 @@ class BrailleTranslator:
                         result += dec
                     result += translation[s[i]]
                     i += 1
-                if s[i]!=' ':
+                if i < len(s) and s[i]!=' ':
                     result+="......"
                 continue
             
