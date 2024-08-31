@@ -5,6 +5,7 @@ const {
   brailleNumber,
   brailleOther,
 } = require("./constants");
+
 const isBraille = (string) => {
   if (string.length === 0) return false;
   const normalizedString = string.toUpperCase();
@@ -36,10 +37,11 @@ const translateBrailleToEnglish = (string) => {
   let output = "";
   for (let index = 0; index < string.length; index += brailleLength) {
     const element = string.slice(index, index + brailleLength).toUpperCase();
-    // console.log({ element });
+
     const isCapitalFollows = element === brailleOther[CAPITAL_FOLLOWS];
     const isNumberFollows = element === brailleOther[NUMBER_FOLLOWS];
     const isSpace = element === brailleOther[" "];
+
     if (isCapitalFollows) {
       shouldCapitalize = true;
       continue;
@@ -57,17 +59,49 @@ const translateBrailleToEnglish = (string) => {
       : asNumber
       ? brailleToNumber[element]
       : brailleToAlphabet[element];
-    console.log({ element, char });
     if (shouldCapitalize) {
       output += char.toUpperCase();
       shouldCapitalize = false;
-    } else if (asNumber) {
-      output += char;
     } else {
       output += char;
     }
-    console.log({ output });
   }
   return output;
 };
-module.exports = { isBraille, translateBrailleToEnglish, reverseLookup };
+
+const translateEnglishToBraille = (string) => {
+  let output = "";
+  let hasNumberFollows = false;
+  for (let index = 0; index < string.length; index++) {
+    const char = string[index];
+
+    const isSpace = char === " ";
+    const isNumber = !Number.isNaN(Number(char)) && !isSpace;
+    const isAlphabet = !isNumber && !isSpace;
+    const isCapitalized = isAlphabet && char === char.toUpperCase();
+
+    if (isCapitalized) {
+      output +=
+        brailleOther["CAPITAL_FOLLOWS"] + brailleAlphabet[char.toLowerCase()];
+    } else if (isAlphabet) {
+      output += brailleAlphabet[char.toLowerCase()];
+    } else if (isNumber && !hasNumberFollows) {
+      output += brailleOther["NUMBER_FOLLOWS"] + brailleNumber[char];
+      hasNumberFollows = true;
+    } else if (isNumber) {
+      output += brailleNumber[char];
+    } else {
+      // should be a space, which also signifies the end of sequence of numbers
+      output += brailleOther[char];
+      hasNumberFollows = false;
+    }
+  }
+  return output;
+};
+
+module.exports = {
+  isBraille,
+  translateBrailleToEnglish,
+  reverseLookup,
+  translateEnglishToBraille,
+};

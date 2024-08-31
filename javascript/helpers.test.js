@@ -1,4 +1,8 @@
-const { isBraille, translateBrailleToEnglish } = require("./helpers");
+const {
+  isBraille,
+  translateBrailleToEnglish,
+  translateEnglishToBraille,
+} = require("./helpers");
 const { brailleAlphabet, brailleNumber, brailleOther } = require("./constants");
 
 describe("isBraille", () => {
@@ -33,7 +37,7 @@ describe("isBraille", () => {
 
 describe("translateBrailleToEnglish", () => {
   it("should translate a single lowercase letter", () => {
-    const input = brailleAlphabet["a"]; // 'O.....'
+    const input = brailleAlphabet["a"];
     const output = translateBrailleToEnglish(input);
     expect(output).toBe("a");
   });
@@ -51,7 +55,7 @@ describe("translateBrailleToEnglish", () => {
   });
 
   it("should translate a space", () => {
-    const input = brailleOther[" "]; // '......'
+    const input = brailleOther[" "];
     const output = translateBrailleToEnglish(input);
     expect(output).toBe(" ");
   });
@@ -63,7 +67,7 @@ describe("translateBrailleToEnglish", () => {
       brailleAlphabet["e"] +
       brailleAlphabet["l"] +
       brailleAlphabet["l"] +
-      brailleAlphabet["o"]; // '.....O' + 'O.OO..' + 'O..O..' + 'O.O.O.' + 'O.O.O.' + 'O..OO.'
+      brailleAlphabet["o"];
     const output = translateBrailleToEnglish(input);
     expect(output).toBe("Hello");
   });
@@ -78,7 +82,7 @@ describe("translateBrailleToEnglish", () => {
       brailleNumber["2"] +
       brailleOther[" "] +
       brailleAlphabet["a"] +
-      brailleAlphabet["m"]; // '.OO...' + '.OOOO.' + '......' + '.....O' + 'O.....' + 'O.O...' + '......' + 'O.....' + 'OO..O.'
+      brailleAlphabet["m"];
     const output = translateBrailleToEnglish(input);
     expect(output).toBe("it 12 am");
   });
@@ -88,7 +92,7 @@ describe("translateBrailleToEnglish", () => {
       brailleOther["CAPITAL_FOLLOWS"] +
       brailleAlphabet["n"] +
       brailleOther["CAPITAL_FOLLOWS"] +
-      brailleAlphabet["y"]; // '.....O' + 'OO.OO.' + '.....O' + 'OO.OOO'
+      brailleAlphabet["y"];
     const output = translateBrailleToEnglish(input);
     expect(output).toBe("NY");
   });
@@ -112,8 +116,123 @@ describe("translateBrailleToEnglish", () => {
       brailleOther[" "] +
       brailleAlphabet["x"] +
       brailleAlphabet["y"] +
-      brailleAlphabet["z"]; // '.....O' + 'O.OO..' + 'O..O..' + 'O.O.O.' + 'O.O.O.' + 'O..OO.' + '......' + '.....O' + 'O.....' + 'O.O...' + 'OO....' + '......' + 'O.....' + '.OOOO.' + 'O..O..' + '......' + 'OO..OO' + 'OO.OOO' + 'O..OOO'
+      brailleAlphabet["z"];
     const output = translateBrailleToEnglish(input);
     expect(output).toBe("Hello 123 at xyz");
+  });
+});
+
+describe("translateEnglishToBraille", () => {
+  it("should translate a single lowercase letter to braille", () => {
+    const input = "a";
+    const output = translateEnglishToBraille(input);
+    expect(output).toBe(brailleAlphabet["a"]);
+  });
+
+  it("should translate a single capital letter to braille", () => {
+    const input = "A";
+    const output = translateEnglishToBraille(input);
+    expect(output).toBe(brailleOther["CAPITAL_FOLLOWS"] + brailleAlphabet["a"]); // '.....O' + 'O.....'
+  });
+
+  it("should translate a single number to braille", () => {
+    const input = "1";
+    const output = translateEnglishToBraille(input);
+    expect(output).toBe(brailleOther["NUMBER_FOLLOWS"] + brailleNumber["1"]); // '.....O' + 'O.....'
+  });
+
+  it("should translate a space to braille", () => {
+    const input = " ";
+    const output = translateEnglishToBraille(input);
+    expect(output).toBe(brailleOther[" "]);
+  });
+
+  it("should translate a word with mixed case to braille", () => {
+    const input = "Hello";
+    const output = translateEnglishToBraille(input);
+    const expectedOutput =
+      brailleOther["CAPITAL_FOLLOWS"] +
+      brailleAlphabet["h"] +
+      brailleAlphabet["e"] +
+      brailleAlphabet["l"] +
+      brailleAlphabet["l"] +
+      brailleAlphabet["o"];
+    expect(output).toBe(expectedOutput);
+  });
+
+  it("should translate a sentence with numbers and letters to braille", () => {
+    const input = "it 12 am";
+    const output = translateEnglishToBraille(input);
+    const expectedOutput =
+      brailleAlphabet["i"] +
+      brailleAlphabet["t"] +
+      brailleOther[" "] +
+      brailleOther["NUMBER_FOLLOWS"] +
+      brailleNumber["1"] +
+      brailleNumber["2"] +
+      brailleOther[" "] +
+      brailleAlphabet["a"] +
+      brailleAlphabet["m"];
+    expect(output).toBe(expectedOutput);
+  });
+
+  it("should handle consecutive capital letters correctly in braille", () => {
+    const input = "NY";
+    const output = translateEnglishToBraille(input);
+    const expectedOutput =
+      brailleOther["CAPITAL_FOLLOWS"] +
+      brailleAlphabet["n"] +
+      brailleOther["CAPITAL_FOLLOWS"] +
+      brailleAlphabet["y"];
+    expect(output).toBe(expectedOutput);
+  });
+
+  it("should translate a complex sentence with spaces, numbers, and capitalization to braille", () => {
+    const input = "Hello 123 at xyz 456";
+    const output = translateEnglishToBraille(input);
+    const expectedOutput =
+      brailleOther["CAPITAL_FOLLOWS"] +
+      brailleAlphabet["h"] +
+      brailleAlphabet["e"] +
+      brailleAlphabet["l"] +
+      brailleAlphabet["l"] +
+      brailleAlphabet["o"] +
+      brailleOther[" "] +
+      brailleOther["NUMBER_FOLLOWS"] +
+      brailleNumber["1"] +
+      brailleNumber["2"] +
+      brailleNumber["3"] +
+      brailleOther[" "] +
+      brailleAlphabet["a"] +
+      brailleAlphabet["t"] +
+      brailleOther[" "] +
+      brailleAlphabet["x"] +
+      brailleAlphabet["y"] +
+      brailleAlphabet["z"] +
+      brailleOther[" "] +
+      brailleOther["NUMBER_FOLLOWS"] +
+      brailleNumber["4"] +
+      brailleNumber["5"] +
+      brailleNumber["6"];
+    expect(output).toBe(expectedOutput);
+  });
+
+  it("should translate multiple spaces correctly to braille", () => {
+    const input = "hello  world";
+    const output = translateEnglishToBraille(input);
+    const expectedOutput =
+      brailleAlphabet["h"] +
+      brailleAlphabet["e"] +
+      brailleAlphabet["l"] +
+      brailleAlphabet["l"] +
+      brailleAlphabet["o"] +
+      brailleOther[" "] +
+      brailleOther[" "] +
+      brailleAlphabet["w"] +
+      brailleAlphabet["o"] +
+      brailleAlphabet["r"] +
+      brailleAlphabet["l"] +
+      brailleAlphabet["d"];
+    expect(output).toBe(expectedOutput);
   });
 });
