@@ -3,3 +3,6 @@ node_modules
 yarn.lock
 package-lock.json
 Gemfile.lock
+vendor
+*test.rb
+!translator.test.rb
