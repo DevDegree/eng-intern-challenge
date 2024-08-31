@@ -27,7 +27,7 @@ function isBraille(input) {
 
 // Translate from Braille to English
 function translateBrailleToEnglish(braille) {
-  const words = braille.split(' ');
+  const words = braille.split('......');
   let isCapital = false;
   let isNumber = false;
   return words.map(symbol => {
