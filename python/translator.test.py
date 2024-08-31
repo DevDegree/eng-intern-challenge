@@ -8,8 +8,6 @@ class TestTranslator(unittest.TestCase):
         
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
-        print("Command Output:", result.stdout)
-        print("Command Error:", result.stderr)
 
         
         # Expected output without the newline at the end
