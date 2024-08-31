@@ -1,5 +1,7 @@
 import sys
 
+# Note the special characters are not handled in this PR as requirement in README and https://github.com/DevDegree/eng-intern-challenge/issues/196
+
 # Braille dictionary mapping for each letter (lowercase), number, and special symbols
 braille_dict = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..', 'f': 'OOO...', 'g': 'OOOO..',
@@ -23,7 +25,10 @@ number_map = {
 reverse_number_map = {v: k for k, v in number_map.items()}
 
 def is_braille(input_str):
-    # Simple check if input consists only of 'O', '.'
+    # Simple check if input consists only of 'O', '.' and has valid Braille structure
+    if len(input_str) % 6 != 0:
+        return False
+
     return all(char in ['O', '.'] for char in input_str)
 def translate_to_braille(input_str):
     translated = ""
@@ -39,10 +44,11 @@ def translate_to_braille(input_str):
             if char.isupper():
                 translated += braille_dict['cap']
             translated += braille_dict[char.lower()]
-            is_number = False
         elif char == ' ':
             translated += braille_dict[' ']
             is_number = False
+        else:
+            raise ValueError(f"Invalid character '{char}' in input. Only letters, digits, and spaces are allowed for English.")
 
     return translated
 
@@ -61,32 +67,55 @@ def translate_to_english(input_str):
             translated += ' '
             is_number = False
         elif braille_char == braille_dict['cap']:
+            if is_capital:
+                raise ValueError("Repeated capitalization marker detected.")
             is_capital = True
         elif braille_char == braille_dict['num']:
-            is_number = True
-        else:
             if is_number:
+                raise ValueError("Repeated number marker detected.")
+            is_number = True
+        elif braille_char in reverse_braille_dict:
+            if is_number:
+                # make sure a number after number follows symbol
+                if reverse_braille_dict[braille_char] not in 'abcdefghijklmnopqrstuvwxyz':
+                    raise ValueError(f"Expected a number after number marker, but got '{braille_char}'")
                 translated += reverse_number_map[reverse_braille_dict[braille_char]]
             elif is_capital:
+                # make sure a letter after letter follows symbol
+                if reverse_braille_dict[braille_char] not in 'abcdefghijklmnopqrstuvwxyz':
+                    raise ValueError(f"Expected a letter after capitalization marker, but got '{braille_char}'")
                 translated += reverse_braille_dict[braille_char].upper()
                 is_capital = False
             else:
                 translated += reverse_braille_dict[braille_char]
+        else:
+            raise ValueError(f"Invalid Braille pattern '{braille_char}' encountered during translation.")
+
         i += 6
 
     return translated
 
 
 if __name__ == "__main__":
-    # Join the command-line arguments into a single string
-    input_str = ' '.join(sys.argv[1:])
+    try:
+        # Join the command-line arguments into a single string
+        input_str = ' '.join(sys.argv[1:])
 
-    result = ""
+        # if no input then output None
+        if input_str is None or input_str.strip() == "":
+            print(None)
+            sys.exit(0)
 
-    if is_braille(input_str):
-        result = translate_to_english(input_str)
-    else:
-        result = translate_to_braille(input_str)
+        result = ""
 
-    # Output the result
-    print(result)
+        if is_braille(input_str):
+            result = translate_to_english(input_str)
+        else:
+            result = translate_to_braille(input_str)
+
+        # Output the result
+        print(result)
+
+    except ValueError as e:
+        print(f"Error: {e}")
+        sys.exit(1)
