@@ -10,6 +10,7 @@ const brailleToEnglishLetters = {
 
 };
 
+// Braille to English number mappings
 const brailleToEnglishNumbers = {
     'O.....': '1', 'O.O...': '2', 'OO....': '3', 'OO.O..': '4', 'O..O..': '5',
     'OOO...': '6', 'OOOO..': '7', 'O.OO..': '8', '.OO...': '9', '.OOO..': '0',
