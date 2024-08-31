@@ -42,7 +42,7 @@ class BrailleMappings:
 class BrailleTranslator:
     def __init__(self):
         self.mappings = BrailleMappings()
-        
+
     def translate_to_braille(self, text):
         result = []
         number_flag = False
@@ -69,6 +69,38 @@ class BrailleTranslator:
                 number_flag = False
 
         return "".join(result)
+
+    def translate_to_english(self, braille):
+        result = []
+        i = 0
+        capital_flag = False
+        number_flag = False
+
+        while i < len(braille):
+            symbol = braille[i:i+6]
+
+            if symbol == self.mappings.num:
+                number_flag = True
+            elif symbol == self.mappings.cap:
+                capital_flag = True
+            elif symbol == self.mappings.space:
+                result.append(" ")
+                number_flag = False  # Reset number flag after a space
+            else:
+                if number_flag:
+                    char = self.mappings.get_braille_number(symbol)
+                    result.append(char)
+                else:
+                    char = self.mappings.get_braille_alphabet(symbol)
+                    if capital_flag:
+                        char = char.upper()
+                        capital_flag = False
+                    result.append(char)
+
+            i += 6
+
+        return "".join(result)
+
 
 
 def main():
