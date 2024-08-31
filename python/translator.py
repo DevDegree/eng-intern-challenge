@@ -1,7 +1,6 @@
 import logging
 import argparse
 from enum import Enum
-import logging
 from collections import Counter
 
 # Add a handler for output to the console
@@ -229,7 +228,7 @@ def main():
     try:
         translated_text = translate_text(text)
     except TranslationError as e:
-        print(f"Error: {e.message}")
+        print(f"Error: {e.message}") # can be converted to a logger.error if needed
         return
     
     print(f"{translated_text}")
