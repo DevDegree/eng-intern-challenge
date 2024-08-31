@@ -1,5 +1,4 @@
-# Mapping of Braille characters to English letters, numbers, and punctuation
-BRAILLE_ALPHABET = {
+BRAILLE_ALPHABET_LETTERS = {
   'a' => 'O.....',
   'b' => 'O.O...',
   'c' => 'OO....',
@@ -25,7 +24,10 @@ BRAILLE_ALPHABET = {
   'w' => '.OOO.O',
   'x' => 'OO..OO',
   'y' => 'OO.OOO',
-  'z' => 'O..OOO',
+  'z' => 'O..OOO'
+}
+
+BRAILLE_ALPHABET_NUMBERS = {
   '1' => 'O.....',
   '2' => 'O.O...',
   '3' => 'OO....',
@@ -35,10 +37,10 @@ BRAILLE_ALPHABET = {
   '7' => 'OOOO..',
   '8' => 'O.OO..',
   '9' => '.OO...',
-  '0' => '.OOO..',
-  'capital' => '.....O',   # Capital follows
-  'number' => '.O.OOO',    # Number follows
-  'decimal' => '.O.O..',   # Decimal follows (added)
+  '0' => '.OOO..'
+}
+
+BRAILLE_ALPHABET_SPECIAL = {
   '.' => '..OO.O',
   ',' => '..O...',
   '?' => '..O.O.',
@@ -54,10 +56,12 @@ BRAILLE_ALPHABET = {
   ' ' => '......'
 }
 
-# Inverted dictionary for translating Braille back to English
-ENGLISH_ALPHABET = BRAILLE_ALPHABET.invert
+BRAILLE_INDICATORS = {
+  'capital' => '.....O',   # Capital follows
+  'number' => '.O.OOO',    # Number follows
+  'decimal' => '.O.O..'    # Decimal follows (added)
+}
 
-# Function to determine if a given string is Braille
 def is_braille?(string)
     # Check if the input is a valid Braille string by verifying it contains only dots (.) and Os
     # and its length is a multiple of 6
@@ -65,7 +69,6 @@ def is_braille?(string)
 end
 
 
-# Function to determine the direction of translation and perform the translation
 def translate(input)
     if is_braille?(input)
         translate_braille_to_english(input)
@@ -75,37 +78,74 @@ def translate(input)
 end
 
 
-# Function to translate English text to Braille
 def translate_english_to_braille(input)
     output = ""
     number_mode = false  # This flag will indicate if we are in a numeric sequence
-    
+  
     input.chars.each do |char|
-        if char.match(/[A-Z]/)
-            output += BRAILLE_ALPHABET['capital'] + BRAILLE_ALPHABET[char.downcase]
-            number_mode = false  # Capital letters break numeric mode
-        elsif char.match(/[0-9]/)
-            if !number_mode
-                output += BRAILLE_ALPHABET['number']
-                number_mode = true  # We are now in a numeric sequence
-            end
-            output += BRAILLE_ALPHABET[char]
-        elsif char == ' '
-            output += BRAILLE_ALPHABET[char]
-            number_mode = false  # Spaces break numeric mode
-        else
-            output += BRAILLE_ALPHABET[char]
-            number_mode = false  # Any non-number character breaks numeric mode
+      if char.match(/[A-Z]/)
+        # Handle uppercase letters
+        output += BRAILLE_INDICATORS['capital'] + BRAILLE_ALPHABET_LETTERS[char.downcase]
+        number_mode = false  # Capital letters break numeric mode
+      elsif char.match(/[0-9]/)
+        # Handle numbers
+        unless number_mode
+          output += BRAILLE_INDICATORS['number']
+          number_mode = true  # We are now in a numeric sequence
         end
+        output += BRAILLE_ALPHABET_NUMBERS[char]
+      elsif char == ' '
+        # Handle spaces
+        output += BRAILLE_ALPHABET_SPECIAL[char]
+        number_mode = false  # Spaces break numeric mode
+      elsif BRAILLE_ALPHABET_LETTERS.key?(char)
+        # Handle lowercase letters
+        output += BRAILLE_ALPHABET_LETTERS[char]
+        number_mode = false  # Any non-number character breaks numeric mode
+      elsif BRAILLE_ALPHABET_SPECIAL.key?(char)
+        # Handle special characters
+        output += BRAILLE_ALPHABET_SPECIAL[char]
+        number_mode = false  # Special characters break numeric mode
+      else
+        raise "Unexpected character received: '#{char}'"
+      end
     end
+  
     output
-end
-
-# Function to translate Braille text back to English
+  end
+  
 def translate_braille_to_english(input)
-    input.scan(/.{6}/).map { |braille_char| ENGLISH_ALPHABET[braille_char] }.join
-end
-
-
+    output = ""
+    capital_on = false
+    number_on = false
+  
+    # Process each Braille character group (6-dot pattern)
+    input.scan(/.{6}/).each do |braille_char|
+      if braille_char == BRAILLE_INDICATORS['capital']
+        capital_on = true
+      elsif braille_char == BRAILLE_INDICATORS['number']
+        number_on = true
+      else
+        if capital_on && BRAILLE_ALPHABET_LETTERS.value?(braille_char)
+          output += BRAILLE_ALPHABET_LETTERS.key(braille_char).upcase
+          capital_on = false  # Reset capital flag
+        elsif number_on && BRAILLE_ALPHABET_NUMBERS.value?(braille_char)
+          output += BRAILLE_ALPHABET_NUMBERS.key(braille_char)
+          number_on = false  # Reset number flag
+        elsif BRAILLE_ALPHABET_LETTERS.value?(braille_char)
+          output += BRAILLE_ALPHABET_LETTERS.key(braille_char)
+        elsif BRAILLE_ALPHABET_NUMBERS.value?(braille_char)
+          output += BRAILLE_ALPHABET_NUMBERS.key(braille_char)
+        elsif BRAILLE_ALPHABET_SPECIAL.value?(braille_char)
+          output += BRAILLE_ALPHABET_SPECIAL.key(braille_char)
+        else
+          puts "Warning: Unrecognized Braille character: #{braille_char}"
+        end
+      end
+    end
+  
+    output
+  end
+  
 input = ARGV.join(" ")
 puts translate(input)
