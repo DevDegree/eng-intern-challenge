@@ -5,7 +5,7 @@ braille_to_english = {
     "0.....": "a", "0.0...": "b", "00....": "c", "00.0..": "d", "0..0..": "e",
     "000...": "f", "0000..": "g", "0.00..": "h", ".00...": "i", ".000..": "j",
     "0...0.": "k", "0.0.0.": "l", "00..0.": "m", "00.00.": "n", "0..00.": "o",
-    "000.o.": "p", "00000.": "q", "0.000.": "r", ".00.0.": "s", ".0000.": "t",
+    "000.0.": "p", "00000.": "q", "0.000.": "r", ".00.0.": "s", ".0000.": "t",
     "0...00": "u", "0.0.00": "v", ".000.0": "w", "00..00": "x", "00.000": "y",
     "0..000": "z", "......": " "
 }
@@ -66,13 +66,12 @@ def translator(input_str):
     return translated           
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python translator.py <string>")
-        sys.exit(1)
-    else:
-        input_string = sys.argv[1]
-        result = translator(input_string)
-        print(result)
+    # if len(sys.argv) < 2:
+    #     print("Error: Expected one argument")
+    #     sys.exit(1)
+    input_string = sys.argv[1]
+    result = translator(input_string)
+    print(result)
         
 # For Input: 'Anandsagar 123'
 # Output:  .....00.....00.00.0.....00.00.00.0...00.0.0.....0000..0.....0.000........0.0000.....0.0...00....
