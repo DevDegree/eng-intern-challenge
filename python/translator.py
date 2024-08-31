@@ -14,7 +14,7 @@ import sys
 
 
 
-## create a braille_dict, we are given this configuration from the setup
+## create a brailledict, we are given this configuration from the setup
 ## note maybe there is a way we can manually create this configuration? such that it is extensible for future character additions
 ## im thinking something along the line of using the matrix representation of the braille itself, ie. an actual 3x2 matrix
 ## potentially deriving some formula from the ASCII value to generating that matrix, but unsure about the specifics
@@ -43,7 +43,7 @@ englishToBrailleDict = {
 
 ## do this as it ensures changes are reflected between both dicts, rather than editing one and then the other
 brailleToEnglishDict = {v: k for k, v in englishToBrailleDict.items()}
-## I don't believe this would be significantly different from manually defining the reverse_braille_dict considering
+## I don't believe this would be significantly different from manually defining the brailleToEnglish considering
 ## the time complexity is the same (we also have constant elements in dictionary so effectively O(1))
 
 ## In case our boolean numberChar = True, we must have a way to translate the number to the appropriate braille
@@ -77,7 +77,7 @@ def englishToBraille(text):
     return ''.join(braille)
 
 
-def braille_to_english(brailleText):
+def brailleToEnglish(brailleText):
     english = []
     i = 0
     numberChar = False
@@ -133,7 +133,7 @@ def main():
     
 
     if isBraille(text):
-        print(braille_to_english(text))
+        print(brailleToEnglish(text))
     else:
         print(englishToBraille(text))
 
