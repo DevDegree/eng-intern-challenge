@@ -75,8 +75,19 @@ def isEnglish(message: str) -> bool:
             return False
     
     return True
+
+def EnglishToBraille(message: str) -> str:
+    pass
+
+def BrailleToEnglish(message: str) -> str:
+    pass
     
 if __name__ == "__main__":
     message = sys.argv[1]
-    print(message)
+    if isEnglish(message):
+        output = EnglishToBraille(message)
+    else:
+        output = BrailleToEnglish(message)
+    
+    print(output)
     
