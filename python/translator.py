@@ -20,4 +20,17 @@ inverse_braille_alphabet = {
 def is_braille(input_str: str):
     return all(char in 'O.' for char in input_str)
 
-
+def translate_to_braille(input_str: str):
+    result = []
+    number_mode = False
+    for char in input_str:
+        if char.isdigit() and not number_mode:
+            result.append(braille_alphabet['num'])
+            number_mode = True
+        elif char.isalpha() and char.isupper():
+            result.append(braille_alphabet['cap'])
+            char = char.lower()
+        elif char == ' ':
+            number_mode = False
+        result.append(braille_alphabet.get(char, ''))
+    return ''.join(result)
