@@ -106,9 +106,6 @@ def translate_to_english(braille_text):
     Returns:
         str: The corresponding English translation.
     """
-    # Invert the braille_dict to map Braille patterns to English characters
-    english_dict = {v: k for k, v in braille_dict.items()}
-
     english_translation = []
     i = 0
     is_number = False
@@ -123,32 +120,41 @@ def translate_to_english(braille_text):
         elif symbol == braille_dict['capital']:
             i += 6
             next_symbol = braille_text[i:i + 6]
-            english_translation.append(english_dict[next_symbol].upper())
+            if next_symbol in braille_dict.values():
+                letter = [k for k, v in braille_dict.items() if v == next_symbol][0]
+                english_translation.append(letter.upper())
+            i += 6
+            continue
         elif symbol == braille_dict['decimal']:
             i += 6
-            while i < len(braille_text) and braille_text[i:i + 6] in english_dict:
-                english_translation.append(english_dict[braille_text[i:i + 6]])
+            while i < len(braille_text) and braille_text[i:i + 6] in braille_dict.values():
+                digit = [k for k, v in braille_dict.items() if v == braille_text[i:i + 6] and k.isdigit()][0]
+                english_translation.append(digit)
                 i += 6
             continue
+        elif symbol == braille_dict[' ']:
+            english_translation.append(' ')
+            i += 6
+            continue
         else:
-            if is_number:
-                english_translation.append(english_dict[symbol])
-            else:
-                english_translation.append(english_dict.get(symbol, ''))
-
-        i += 6
+            if symbol in braille_dict.values():
+                if is_number:
+                    digit = [k for k, v in braille_dict.items() if v == symbol and k.isdigit()][0]
+                    english_translation.append(digit)
+                else:
+                    letter = [k for k, v in braille_dict.items() if v == symbol and k.isalpha()][0]
+                    english_translation.append(letter)
+            i += 6
 
     return ''.join(english_translation)
 
 def main():
-    """
-    Main function to handle command-line input and perform translation between English and Braille.
-    """
-    if len(sys.argv) != 2:
+
+    if len(sys.argv) < 2:
         print("Usage: python translator.py <text>")
         return
 
-    input_text = sys.argv[1]
+    input_text = ' '.join(sys.argv[1:])
 
     if is_braille(input_text):
         print(translate_to_english(input_text))
