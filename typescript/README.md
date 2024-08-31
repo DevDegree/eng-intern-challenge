@@ -20,6 +20,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 Node 20.12.2
+npm 10.5.0
 
 ### Installing
 
@@ -39,6 +40,12 @@ npm run dev [a phrase of Braille or English]
 // Examples
 npm run dev Hello world
 npm run dev .....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..
+```
+
+You can also use this command instead of npm
+
+```
+node-ts translator.ts [a phrase of Braille or English]
 ```
 
 ## Running tests
@@ -62,4 +69,10 @@ If you see an issue or would like to contribute, please do & open a pull request
 ## Authors
 
 - **Justin Zhang** - _Initial work_ - [JustinZhang17](https://github.com/JustinZhang17)
+
+## Restrictions
+
+- This program requires a sequence of numbers to end with a space character otherwise, it will not recognize its following english alphabet characters
+- No special characters were considered as it was not defined in the technical program specifications
+- The english alphabet refers to the 26 latin characters from A to Z (upper or lower case) and the program doesn't check if a string of latin characters is a valid english word.
 
