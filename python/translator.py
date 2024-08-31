@@ -16,8 +16,6 @@ BRAILLE_TO_ENGLISH = {
     'O...OO': 'u', 'O.O.OO': 'v',
     '.OOO.O': 'w', 'OO..OO': 'x',
     'OO.OOO': 'y', 'O..OOO': 'z',
-    '.....O': 'capital_follows',
-    '.O.OOO': 'number_follows',
     '......': ' ',
 }
 
@@ -28,6 +26,7 @@ BRAILLE_TO_NUMBERS = {
     'OOOO..': '7', 'O.OO..': '8',
     '.OO...': '9', '.OOO..': '0',
 }
+
 
 ENGLISH_TO_BRAILLE = {v: k for k, v in BRAILLE_TO_ENGLISH.items()}
 NUMBERS_TO_BRAILLE = {v: k for k, v in BRAILLE_TO_NUMBERS.items()}
@@ -44,7 +43,7 @@ def check_input_type(query):
 def convert_braille_to_english(query):
     result = ''
     capitalize_next = False
-    number_mode = False
+    number_follows = False
     
     for i in range(0, len(query), 6):
         braille_char = query[i:i+6]
@@ -53,15 +52,17 @@ def convert_braille_to_english(query):
             capitalize_next = True
             continue
         elif braille_char == '.O.OOO':
-            number_mode = True
+            number_follows = True
             continue
         
-        if number_mode:
-            result += BRAILLE_TO_NUMBERS.get(braille_char)
+        if number_follows:
             if braille_char == '......':
-                number_mode = False
+                number_follows = False
+                result += ' '
+            else:
+                result += BRAILLE_TO_NUMBERS.get(braille_char, "?")
         else:
-            char = BRAILLE_TO_ENGLISH.get(braille_char)
+            char = BRAILLE_TO_ENGLISH.get(braille_char,"?")
             if capitalize_next:
                 result += char.upper()
                 capitalize_next = False
@@ -72,19 +73,27 @@ def convert_braille_to_english(query):
 
 def convert_english_to_braille(query):
     result = ''
+    number_follows = False
     
     for char in query:
         if char.isdigit():
-            result += '.O.OOO'
+            if not number_follows: 
+                result += '.O.OOO'
+                number_follows = True
             result += NUMBERS_TO_BRAILLE.get(char, '')
         elif char.isalpha():
+            if number_follows:  
+                number_follows = False
             if char.isupper():
-                result += '.....O'
+                result += '.....O' 
             result += ENGLISH_TO_BRAILLE.get(char.lower(), '')
         else:
+            if number_follows: 
+                number_follows = False
             result += ENGLISH_TO_BRAILLE.get(char, '')
     
     return result
+
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
