@@ -87,7 +87,10 @@ braille_to_digit = {
 def main():
     
     #get message from command line
+    num_args = len(sys.argv) - 1
     message = sys.argv[1]
+    for i in range(2, num_args+1):
+        message = message + " " + sys.argv[i]
 
     #first, check for braille vs english. all braille comes in sets of 6, so check the length of the message mod 6
     #additionally, check that only braille characters exist, that is, only '.' and 'O' are in the string
@@ -122,7 +125,7 @@ def english_to_braille(message):
             #if there is a space, reset the "status" which represents whether or not we are set to print numbers
             translated = translated + "......"
             status = "nothing"
-        elif character.isDigit():
+        elif character.isdigit():
             #if we have a digit, set status to number if it was not already and start printing numbers
             if status == "nothing":
                 translated = translated + ".O.OOO"
@@ -135,7 +138,7 @@ def english_to_braille(message):
                 #must be a capital letter
                 translated = translated + ".....O"
             #regardless, print the lower case letter
-            translated = translated + get_braille_letter(character)
+            translated = translated + get_braille_letter(character.lower())
     
     return translated
 
