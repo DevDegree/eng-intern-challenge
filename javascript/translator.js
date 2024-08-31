@@ -1,4 +1,3 @@
-const { assert } = require("node:console");
 const { translateToEnglish } = require("./translateToEnglish");
 const { translateToBraille } = require("./translateToBraille");
 
