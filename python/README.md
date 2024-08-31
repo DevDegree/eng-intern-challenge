@@ -18,7 +18,6 @@ Run the tool directly using the Python interpreter:
     python translator.py Text to translate
     ```
 
-
 ### Basic Usage
 
 To translate text, pass the text as an argument:
@@ -50,5 +49,9 @@ python translator.py -d Hello World
 ## Error Handling
 
 The tool will raise a `TranslationError` if the input text contains unsupported characters or if there is an error in the Braille format.
+
+# Future Improvements:
+- Break project down into seperate modules/classes and add testing for each component ie Logger, Translator, Languages etc
+- Create a script to take csvs or images like braille.jpg of langauge symbols to braille mappings and convert them into dictionaries to simplify support of new languages/chars
 
 ---
