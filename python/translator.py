@@ -13,9 +13,6 @@ bte_letters = {
 bte_numbers = {
     "O.....": "1", "O.O...": "2", "OO....": "3", "OO.O..": "4", "O..O..": "5", 
     "OOO...": "6", "OOOO..": "7", "O.OO..": "8", ".OO...": "9", ".OOO..": "0",
-}
-
-bte_symbols = {
     "..OO.O": ".", "..O...": ",", "..O.OO": "?", "..OOO.": "!", "..OO..": ":",
     "..O.O.": ";", "....OO": "-", ".O..O.": "/", ".OO..O": "<", "O..OO.": ">",
     "O.O..O": "(", ".O.OO.": ")", "......": " ", 
@@ -27,15 +24,12 @@ english_to_braille = {val:key for key, val in bte_letters.items()}
 
 english_to_braille.update({val:key for key, val in bte_numbers.items()})
 
-english_to_braille.update({val:key for key, val in bte_symbols.items() if val not in ['capital', 'decimal', 'number']})
-
 # Function to translate Braille to English
 def translate_braille_to_english(braille_input):
     result = []
     i = 0
     capitalize = False
     number_mode = False
-    decimal_mode = False
     
     while i < len(braille_input):
         braille_char = braille_input[i:i+6]  # Consider 6 characters at a time
@@ -46,11 +40,8 @@ def translate_braille_to_english(braille_input):
             number_mode = True
         elif braille_char == ".O...O":  # Decimal point indicator
             result.append('.')
-            # decimal_mode = True
         elif number_mode and (braille_char in bte_numbers):
             result.append(bte_numbers[braille_char])
-        elif number_mode and (braille_char in bte_symbols):
-            result.append(bte_symbols[braille_char])
         elif braille_char in bte_letters:
             char = bte_letters[braille_char]
             if capitalize:
@@ -58,10 +49,8 @@ def translate_braille_to_english(braille_input):
                 capitalize = False
             else:
                 result.append(char)
-            number_mode = False
-            decimal_mode = False  # Reset decimal mode after a letter
-        elif braille_char in bte_symbols:
-            result.append(bte_symbols[braille_char])
+        elif braille_char in bte_numbers:
+            result.append(bte_numbers[braille_char])
         elif braille_char == "......":
             # Reset number mode after a space
             number_mode = False
