@@ -54,17 +54,76 @@ converter = {
     ">": "O..OO.",
     "(": "O.O..O",
     ")": ".O.OO.",
-    " ": "......"
+    " ": "......",
+    "O.....": "a",
+    "O.O...": "b",
+    "OO....": "c",
+    "OO.O..": "d",
+    "O..O..": "e",
+    "OOO...": "f",
+    "OOOO..": "g",
+    "O.OO..": "h",
+    ".OO...": "i",
+    ".OOO..": "j",
+    "O...O.": "k",
+    "O.O.O.": "l",
+    "OO..O.": "m",
+    "OO.OO.": "n",
+    "O..OO.": "o",
+    "OOO.O.": "p",
+    "OOOOO.": "q",
+    "O.OOO.": "r",
+    ".OO.O.": "s",
+    ".OOOO.": "t",
+    "O...OO": "u",
+    "O.O.OO": "v",
+    ".OOO.O": "w",
+    "OO..OO": "x",
+    "OO.OOO": "y",
+    "O..OOO": "z",
+    "..OO.O": ".",
+    "..O...": ",",
+    "..O.OO": "?",
+    "..OOO.": "!",
+    "..OO..": ":",
+    "..O.O.": ";",
+    "....OO": "-",
+    ".O..O.": "/",
+    ".OO..O": "<",
+    "O..OO.": ">",
+    "O.O..O": "(",
+    ".O.OO.": ")",
+    "......": " "
+}
+
+num_map = {
+    "O.....": "1",
+    "O.O...": "2",
+    "OO....": "3",
+    "OO.O..": "4",
+    "O..O..": "5",
+    "OOO...": "6",
+    "OOOO..": "7",
+    "O.OO..": "8",
+    ".OO...": "9",
+    ".OOO..": "0",
 }
 
 #didn't map capital follows, decimal follows, and number follows
 #what is the difference between decimal follows and number follows? decimal is "." which is different from the "." in a normal string
 
-if len(sys.argv) != 1:
-    print("Please pass only 1 argument")
+if len(sys.argv) < 2:
+    print("Please pass at least 1 argument")
     sys.exit(1)
 
-input_string = sys.argv[0]
+input_string = ""
+for i, word in enumerate(sys.argv):
+    if i == 0:
+        continue
+    input_string += word
+    if i != len(sys.argv) - 1:
+        input_string += " "
+
 is_brail = True
 return_string = ""
 
@@ -77,12 +136,16 @@ if is_brail:
     if len(input_string) % 6 != 0:
         print("Brail string must be divisible by 6")
         sys.exit(1)
+    
+    for i in range(0, len(input_string), 6):
+        pass
+
 else:
     number_sequence = False
     for letter in input_string:
         if letter.isupper():
             return_string += ".....O"
-            return_string += converter[letter]
+            return_string += converter[letter.lower()]
         elif letter == " ":
             number_sequence = False
             return_string += converter[letter]
@@ -101,3 +164,6 @@ else:
         
 
 print(return_string)
+
+# ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
+# ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
