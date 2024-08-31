@@ -2,7 +2,7 @@ import sys
 from brailleToEnglish import *
 from englishToBraille import *
 
-# # get all arguments into one string
+# get all arguments into one string
 input = ' '.join(sys.argv[1:])
 isBraille = False
 
