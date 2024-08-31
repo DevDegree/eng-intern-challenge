@@ -1,6 +1,6 @@
 import sys
 
-braille_to_eng_map = {
+eng_to_braille_map = {
     'a': '0.....', 'b': '0.0...', 'c': '00....', 'd': '00.0..', 'e': '0..0..', 'f': '000...',
     'g': '0000..', 'h': '0.00..', 'i': '.00...', 'j': '.000..', 'k': '0...0.', 'l': '0.0.0.',
     'm': '00..0.', 'n': '00.00.', 'o': '0..00.', 'p': '000.0.', 'q': '00000.', 'r': '0.000.',
@@ -14,7 +14,7 @@ braille_to_eng_map = {
 }
 
 # Create a reverse mapping
-eng_to_braille_map = {v: k for k, v in braille_to_eng_map.items()}
+braille_to_eng_map = {v: k for k, v in eng_to_braille_map.items()}
 
 def braille_to_eng(text: str) -> str:
     pass
