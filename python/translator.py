@@ -5,7 +5,7 @@
 #Import sys for testing pruposes
 import sys
 
-#text = sys.argv
+text = sys.argv[1]
 #text = "Hello world"
 #text = ".....OO.OO..O..O..O.O.O.O.O.O.O..OO."
 #text = ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."
@@ -15,6 +15,7 @@ import sys
 
 #other dependencies
 import startup
+import translator_functions
 import unittest
 
 
@@ -33,87 +34,87 @@ import unittest
 #The following is my dictionary that has 
 dict_Eng_Bra = startup.setupDict()
 
-#English to Braille Translator
-def eng_To_Bra(text):
-    text_Translate= text
-    translated_string = ""
-    first_num = False
+# #English to Braille Translator
+# def eng_To_Bra(text):
+#     text_Translate= text
+#     translated_string = ""
+#     first_num = False
 
-    for i, char_in_Str in enumerate(text_Translate):
-        for translation in dict_Eng_Bra:
+#     for i, char_in_Str in enumerate(text_Translate):
+#         for translation in dict_Eng_Bra:
 
-            if char_in_Str.lower() == translation[0].lower():
-                #Check if value is an uppercase letter 
-                if char_in_Str.isupper():
-                    translated_string += ".....O" + translation[1]
+#             if char_in_Str.lower() == translation[0].lower():
+#                 #Check if value is an uppercase letter 
+#                 if char_in_Str.isupper():
+#                     translated_string += ".....O" + translation[1]
 
-                #Check if value is a number
-                elif char_in_Str.isdigit():
-                        #Check if value is the first number or not
-                        if not first_num:
-                            translated_string += ".O.OOO" + translation[1]
-                            first_num = True
+#                 #Check if value is a number
+#                 elif char_in_Str.isdigit():
+#                         #Check if value is the first number or not
+#                         if not first_num:
+#                             translated_string += ".O.OOO" + translation[1]
+#                             first_num = True
 
-                        #Values that are not the first number in the string
-                        else:
-                            translated_string +=  translation[1]
+#                         #Values that are not the first number in the string
+#                         else:
+#                             translated_string +=  translation[1]
 
-                        #Check if the next value is a number or not
-                        if i+1< len(text_Translate) and not text_Translate[i+1].isdigit():
+#                         #Check if the next value is a number or not
+#                         if i+1< len(text_Translate) and not text_Translate[i+1].isdigit():
                             
-                            first_num = False
-                else:
-                     translated_string +=  translation[1]
-                break
+#                             first_num = False
+#                 else:
+#                      translated_string +=  translation[1]
+#                 break
 
-                #translated_string += capitalized + dict_Eng_Bra[j][1]
+#                 #translated_string += capitalized + dict_Eng_Bra[j][1]
 
-    return  translated_string
+#     return  translated_string
 
 
-#Braille to English Translator
-def bra_To_Eng(text):
-    text_to_be_modified = text
-    modified_text = []
-    capital = False
-    num_mode = False
+# #Braille to English Translator
+# def bra_To_Eng(text):
+#     text_to_be_modified = text
+#     modified_text = []
+#     capital = False
+#     num_mode = False
    
-   #This for loop modifies the input and breaks up the braille into 6 characters per element
-    for i in range(0, len(text_to_be_modified),6):
-        modified_text.append(text_to_be_modified[i:i+6])
+#    #This for loop modifies the input and breaks up the braille into 6 characters per element
+#     for i in range(0, len(text_to_be_modified),6):
+#         modified_text.append(text_to_be_modified[i:i+6])
 
-    translated_string = ""
-    for i, brl_in_Str in enumerate(modified_text):
-        for translation in dict_Eng_Bra:
-            if brl_in_Str == translation[1]:
-                #If statement for when the followoing value is a capital letter
-                #Sets a variable for that the next letter in the sequence to have a capial
+#     translated_string = ""
+#     for i, brl_in_Str in enumerate(modified_text):
+#         for translation in dict_Eng_Bra:
+#             if brl_in_Str == translation[1]:
+#                 #If statement for when the followoing value is a capital letter
+#                 #Sets a variable for that the next letter in the sequence to have a capial
               
-                #check to determine first number of a sequence of elements
-                if brl_in_Str == ".O.OOO":
-                    num_mode = True
-                    continue
+#                 #check to determine first number of a sequence of elements
+#                 if brl_in_Str == ".O.OOO":
+#                     num_mode = True
+#                     continue
                     
-                if num_mode:
-                    if translation[0].isdigit():
-                        translated_string += translation[0]
-                    else:
-                        num_mode = False
+#                 if num_mode:
+#                     if translation[0].isdigit():
+#                         translated_string += translation[0]
+#                     else:
+#                         num_mode = False
 
-                elif not num_mode and not translation[0].isdigit():
-                    if capital == True:
-                        #Making a capital letter
-                        translated_string += translation[0].upper() 
-                        capital = False
-                    elif i+1< len (modified_text) and brl_in_Str == ".....O" :
-                        capital = True
-                    else:
-                        #Normal letter in the string
-                        translated_string += translation[0]
+#                 elif not num_mode and not translation[0].isdigit():
+#                     if capital == True:
+#                         #Making a capital letter
+#                         translated_string += translation[0].upper() 
+#                         capital = False
+#                     elif i+1< len (modified_text) and brl_in_Str == ".....O" :
+#                         capital = True
+#                     else:
+#                         #Normal letter in the string
+#                         translated_string += translation[0]
 
 
 
-    return translated_string
+#     return translated_string
 
 
 
@@ -122,10 +123,10 @@ def bra_To_Eng(text):
 def translation_Setting(text):
     if (len(text) % 6 == 0 and ('O' in text or '......' in text)):
         #Braille
-        output = bra_To_Eng(text)
+        output = translator_functions.bra_To_Eng(text,dict_Eng_Bra)
     else:
         #English
-        output = eng_To_Bra(text)
+        output = translator_functions.eng_To_Bra(text, dict_Eng_Bra)
 
     print (output)
 
@@ -139,8 +140,11 @@ if __name__ == "__main__":
         run_Test.run(tests)
         
     else:
-        if len(text) % 6 == 0 and ('O' in text or '......' in text):
-            output = bra_To_Eng(text)
+        if (len(text) % 6 == 0 and ('O' in text or '......' in text)):
+        #Braille
+            output = translator_functions.bra_To_Eng(text,dict_Eng_Bra)
         else:
-            output = eng_To_Bra(text)
-        print(output)
+        #English
+            output = translator_functions.eng_To_Bra(text, dict_Eng_Bra)
+
+    print (output)
