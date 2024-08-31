@@ -87,7 +87,7 @@ def etob(userSent):
 
 def main(): 
     if len(sys.argv) < 2:
-        print("Usage: python script.py <input_string>")
+        print("Usage: python script.py, input correct")
         sys.exit(1) 
     user_input = ' '.join(sys.argv[1:])    
     identify(user_input)    
