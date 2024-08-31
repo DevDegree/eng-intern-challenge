@@ -137,23 +137,38 @@ if is_brail:
         print("Brail string must be divisible by 6")
         sys.exit(1)
     
+    number_follows = False
+    capital_follows = False
     for i in range(0, len(input_string), 6):
-        pass
+        # print(input_string[i:i+6])
+        if input_string[i:i+6] not in converter and input_string[i:i+6] not in num_map:
+            pass
+        elif capital_follows == True:
+            #need to actually check if the braille is an alphabet character. (cannot capitalize a number or other token)
+            if converter[input_string[i:i+6]] in "abcdefghijklmnopqrstuvwxyz":
+                return_string.append(converter[input_string[i:i+6]].lower())
+            else:
+                print("Cannot capitalize: " + converter[input_string[i:i+6]])
+                sys.exit(1)
+        elif input_string[i:i+6] == "......":
+            number_follows = False
+            return_string += converter[input_string[i:i+6]]
+        # elif input_string[i:i+6]
 
 else:
-    number_sequence = False
+    number_follows = False
     for letter in input_string:
         if letter.isupper():
             return_string += ".....O"
             return_string += converter[letter.lower()]
         elif letter == " ":
-            number_sequence = False
+            number_follows = False
             return_string += converter[letter]
-        elif letter == "." and number_sequence == True:
+        elif letter == "." and number_follows == True:
             return_string += ".O...O"
         elif letter in "0123456789":
-            if number_sequence == False:
-                number_sequence = True
+            if number_follows == False:
+                number_follows = True
                 return_string += ".O.OOO"
             return_string += converter[letter]
         elif letter not in converter:
