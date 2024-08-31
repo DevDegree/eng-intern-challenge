@@ -1,35 +1,36 @@
 # frozen_string_literal: false
 
-# Translator:
+# Translator
 class Translator
-  @english = ["a", "b", "c", "d", "e", "f", "g", "h", "i",
-                     "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v",
-                     "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", " "]
-  @english_nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-  @braille = ["O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..",
-  ".OO...", ".OOO..", "O...O.", "O.O.O.", "OO..O.", "OO.OO.", "O..OO.", "OOO.O.",
-  "OOOOO.", "O.OOO.", ".OO.O.", ".OOOO.", "O...OO", "O.O.OO", ".OOO.O", "OO..OO", "OO.OOO", "O..OOO",
-  ".OOO..", "O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..", ".OO...", "......"]
+  ENGLISH = ("a".."z").to_a + ("0".."9").to_a + [" "]
+  ENGLISH_NUMS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
-  @braille_nums = [".OOO..", "O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..", ".OO..."]
-  @capital_follows = ".....O"
-  @space = "......"
-  @number_follows = ".O.OOO"
+  BRAILLE = [
+    "O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..",
+    ".OO...", ".OOO..", "O...O.", "O.O.O.", "OO..O.", "OO.OO.", "O..OO.", "OOO.O.",
+    "OOOOO.", "O.OOO.", ".OO.O.", ".OOOO.", "O...OO", "O.O.OO", ".OOO.O", "OO..OO", "OO.OOO", "O..OOO",
+    ".OOO..", "O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..", ".OO...", "......"]
 
-  @braille_collection = @braille.push(@capital_follows, @number_follows)
-  # attr_reader :@english, :@braille, :@capital_follows, :@number_follows
+  BRAILLE_NUMS = [".OOO..", "O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...",
+    "OOOO..", "O.OO..", ".OO..."]
+  SPACE = "......"
+  CAPITAL_FOLLOWS = ".....O"
+  NUMBERS_FOLLOW = ".O.OOO"
+
+  BRAILLE_COLLECTION = BRAILLE.push(CAPITAL_FOLLOWS, NUMBERS_FOLLOW)
 
   # input: arg array; output: bool
   def self.braille?(arg)
     result = arg_to_braille(arg)
     result&.each do |item|
-      return false unless @braille_collection.include?(item)
+      return false unless BRAILLE_COLLECTION.include?(item)
     end
     return false if result.nil? || result == []
 
     true
   end
 
+  # input: arg array; output: array with items of length 6
   def self.arg_to_braille(array)
     result = []
     array&.each do |item|
@@ -50,33 +51,32 @@ class Translator
   # ["O.....", "O.O..."]
   def self.braille_to_english(data)
     result = []
+    symbols = arg_to_braille(data)
     capital = false
     number = false
 
-    symbols = arg_to_braille(data)
     symbols.each do |symbol|
-      if symbol == @capital_follows
+      if symbol == CAPITAL_FOLLOWS
         capital = true
-      elsif symbol == @number_follows
+      elsif symbol == NUMBERS_FOLLOW
         number = true
       else
-        idx = @braille.find_index(symbol)
-        alphabet = @english[idx]
-        if symbol == @space
+        idx = BRAILLE.find_index(symbol)
+        alphabet = ENGLISH[idx]
+        if symbol == SPACE
           number = false
         end
         if capital
           result.push(alphabet.upcase)
           capital = false
         elsif number
-          result.push(@english_nums[@braille_nums.find_index(symbol)])
+          result.push(ENGLISH_NUMS[BRAILLE_NUMS.find_index(symbol)])
         else
-          result.push(@english[idx])
+          result.push(ENGLISH[idx])
         end
-
       end
     end
-    result.join('')
+    result.join
   end
 
   # input arg array; output braille string
@@ -87,22 +87,22 @@ class Translator
     number = false
     string.each_char do |char|
       if /[A-Z]/.match(char)
-        english_idx = @english.find_index(char.downcase)
-        braille_symbol = @braille[english_idx]
-        braille << @capital_follows
+        english_idx = ENGLISH.find_index(char.downcase)
+        braille_symbol = BRAILLE[english_idx]
+        braille << CAPITAL_FOLLOWS
         braille << braille_symbol
       elsif char == ' '
-        braille << @space
+        braille << SPACE
         number = false
       elsif /[0-9]/.match(char)
-        braille << @number_follows if number == false
+        braille << NUMBERS_FOLLOW if number == false
         number = true
-        english_idx = @english.find_index(char.downcase)
-        braille_symbol = @braille[english_idx]
+        english_idx = ENGLISH.find_index(char.downcase)
+        braille_symbol = BRAILLE[english_idx]
         braille << braille_symbol
       elsif /[a-z]/.match(char)
-        english_idx = @english.find_index(char)
-        braille_symbol = @braille[english_idx]
+        english_idx = ENGLISH.find_index(char)
+        braille_symbol = BRAILLE[english_idx]
         braille << braille_symbol
       end
     end
