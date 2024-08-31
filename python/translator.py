@@ -2,12 +2,14 @@
 # For getting command line args
 import sys
 
+from typing import Dict
+
 # Special Characters
 SPACE_CHARACTER = "......"
 NUMBER_FOLLOWS = ".O.OOO"
 CAPITAL_FOLLOWS = ".....O"
 
-LETTERS_TO_BRAILLE: dict[str, str] = {
+LETTERS_TO_BRAILLE: Dict[str, str] = {
     'a': 'O.....',
     'b': 'O.O...',
     'c': 'OO....',
@@ -36,7 +38,7 @@ LETTERS_TO_BRAILLE: dict[str, str] = {
     'z': 'O..OOO'
 }
 
-NUMBERS_TO_BRAILLE: dict[str, str] = {
+NUMBERS_TO_BRAILLE: Dict[str, str] = {
     '1': 'O.....',
     '2': 'O.O...',
     '3': 'OO....',
@@ -50,7 +52,7 @@ NUMBERS_TO_BRAILLE: dict[str, str] = {
 }
 
 
-def reverse_dict(dict_to_reverse: dict[str, str]) -> dict[str, str]:
+def reverse_dict(dict_to_reverse: Dict[str, str]) -> Dict[str, str]:
     return {value: key for key, value in dict_to_reverse.items()}
 
 
