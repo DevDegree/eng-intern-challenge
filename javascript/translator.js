@@ -1,35 +1,19 @@
-// braille -> alphabet
-// alphabet -> braille
+const {
+  translateBrailleToEnglish,
+  isBraille,
+  translateEnglishToBraille,
+} = require("./helpers");
 
-// Input: .....OO.....O.O...OO...........O.OOOO.O...OO....OO.O..
-// Output: Abc 123
+const [_node, _script, ...args] = process.argv;
 
-/**
- * .....O cap
- * O..... a
- * O.O... b
- * OO.... c
- * ...... space
- * .O.OOO number
- * O.O... 2
- * OO.... 3
- * OO.O.. 4
- */
+const argsAsString = args.join(" ");
+const processedArgs = argsAsString.trim();
 
-// Input: 42
-// Output: .O.OOOOO.O..O.O...
-
-/**
- * .O.OOO number
- * OO.O.. 4
- * O.O... 2
- */
-
-console.log("args", process.argv);
-if (process.argv.length === 2) {
-  console.error("Expected at least one argument!");
-  process.exit(1);
+let output = "";
+if (isBraille(processedArgs)) {
+  output = translateBrailleToEnglish(processedArgs);
+} else {
+  output = translateEnglishToBraille(processedArgs);
 }
-const [_node, _script, ...params] = process.argv;
 
-console.log("remaining args", params);
+console.log(output);
