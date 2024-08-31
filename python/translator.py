@@ -91,19 +91,21 @@ def to_english(string):
     SPACE = "......"
     # braille_characters = []
     english_str = ''
-    number = False
+    number_mode = False
     for i in range(6, len(string), 6):
         curr_c = string[i - 6: i]
         if curr_c == CAPITAL_FOLLOWS:
             english_str += (BRAILLE_ENGLISH_LETTER_MAP[curr_c]).upper()
-        elif number:
+        elif number_mode:
             if curr_c == SPACE:
-                number = False
+                number_mode = False
                 english_str += ' '
+            elif curr_c == DECIMAL_FOLLOWS:
+                english_str += '.'
             else: 
                 english_str += BRAILLE_ENGLISH_NUMBER_MAP[curr_c]
         elif curr_c == NUMBER_FOLLOWS:
-            number = True
+            number_mode = True
     return english_str
         
 # 3. If string is in english
@@ -117,8 +119,77 @@ def to_english(string):
     #       -> search for item in 'ENGLISH-BRAILLE-MAP' keys, add corresponding value to 'braille-str'
 #       -> return 'braille-str'
 
+def to_braille(string):
+    ENGLISH_BRAILLE_MAP = {
+        'a': 'O.....',
+        'b': 'O.O...',
+        'c': 'OO....',
+        'd': 'OO.O..',
+        'e': 'O..O..',
+        'f': 'OOO...',
+        'g': 'OOOO..',
+        'h': 'O.OO..',
+        'i': '.OO...',
+        'j': '.OOO..',
+        'k': 'O...O.',
+        'l': 'O.O.O.',
+        'm': 'OO..O.',
+        'n': 'OO.OO.',
+        'o': 'O..OO.',
+        'p': 'OOO.O.',
+        'q': 'OOOOO.',
+        'r': 'O.OOO.',
+        's': '.OO.O.',
+        't': '.OOOO.',
+        'u': 'O...OO',
+        'v': 'O.O.OO',
+        'w': '.OOO.O',
+        'x': 'OO..OO',
+        'y': 'OO.OOO',
+        'z': 'O..OOO',
+        '.': '..OO.O',
+        ',': '..O...',
+        '?': '..O.OO',
+        ':': '..OO..',
+        ';': '..O.O.',
+        '-': '....OO',
+        '/': '.O..O.',
+        '<': '.OO..O',
+        '>': 'O..OO.',
+        '(': 'O.O..O',
+        ')': '.O.OO.',
+        ' ': '......',
+        '1': 'O.....',
+        '2': 'O.O...',
+        '3': 'OO....',
+        '4': 'OO.O..',
+        '5': 'O..O..',
+        '6': 'OOO...',
+        '7': 'OOOO..',
+        '8': 'O.OO..',
+        '9': '.OO...',
+        '0': '.OOO..'
+}
+    CAPITAL_FOLLOWS = ".....O"
+    DECIMAL_FOLLOWS = ".O...O"
+    NUMBER_FOLLOWS = ".O.OOO"
+    SPACE = "......"
+    braille_str = ''
+    number_mode = False
 
-
+    for i in range(len(string)):
+        if string[i] == ' ':
+            number_mode = False
+        elif string[i].isnumeric():
+            braille_str += NUMBER_FOLLOWS
+            number_mode = True
+        elif string[i].isupper():
+            braille_str += CAPITAL_FOLLOWS
+        elif number_mode and string[i] == '.':
+            braille_str += DECIMAL_FOLLOWS
+            continue
+        braille_str += ENGLISH_BRAILLE_MAP[string[i]]
+    return braille_str
 
 if __name__ == "__main__":
     args = sys.argv[1:]
