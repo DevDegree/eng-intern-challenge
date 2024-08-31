@@ -31,3 +31,23 @@ ENGLISH_TO_BRAILLE = {
 
 BRAILLE_TO_ENGLISH = {val: key for key, val in ENGLISH_TO_BRAILLE.items()}
 
+def determine_braille(text):
+    '''
+        Determine if the input text is braille or not
+    '''
+    braille_characters = ('.', 'O')
+    if len(text) % 6:
+        return False
+    for c in text:
+        if c not in braille_characters:
+            return False
+    return True
+
+
+
+
+if __name__ == '__main__':
+    text = 'hello world'
+    text1 = '.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..'
+    print(determine_braille(text))
+    print(determine_braille(text1))
