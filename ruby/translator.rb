@@ -38,6 +38,12 @@ class Translator
     '.....O' => 'uppercase', '.O...O' => 'decimal', '.O.OOO' => 'number'
   }.freeze
 
+  # Method to perform basic
+  def input_validation(input)
+    return false if input.empty?
+    input.match?(/[A-Z0-9]/i) ? true : false
+  end
+
   # Method to check if it is a braille or text input
   def check_format(input)
     input.match?(/[A-NP-Z0-9]/i) ? 'text' : 'braille'
@@ -111,6 +117,8 @@ class Translator
 
   public
   def initialize(input)
+    (raise ArgumentError, 'Please, provide a valid input!') if !input_validation(input)
+
     @format = check_format(input)
     @input = prepare_input(input)
   end
@@ -120,11 +128,7 @@ class Translator
   end
 end
 
- # translator = Translator.new('.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..')
- # translator = Translator.new('.O.OOOOO.O..O.O...')
- # translator = Translator.new('.....OO.....O.O...OO...........O.OOOO.....O.O...OO....')
- # translator = Translator.new('Hello world')
- # translator = Translator.new('Abc 123 xYz')
+  # Get user input from command line
  user_input = ARGV.join(' ')
  output = Translator.new(user_input);
  puts output.translate
