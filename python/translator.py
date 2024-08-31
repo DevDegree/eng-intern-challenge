@@ -1,7 +1,27 @@
 import logging
 import argparse
 from enum import Enum
+import logging
 from collections import Counter
+
+# Add a handler for output to the console
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.DEBUG)  # Set handler level to DEBUG
+
+# Create a formatter and set it for the handler
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%H:%M:%S')
+console_handler.setFormatter(formatter)
+
+# Configure logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)  # Default level is INFO
+
+# Add the handler to the logger
+logger.addHandler(console_handler)
+
+def configure_logging(debug):
+    if debug:
+        logger.setLevel(logging.DEBUG)
 
 # Exceptions
 class TranslationError(Exception):
@@ -34,8 +54,6 @@ braille_to_english = {value : key for key, value in english_to_braille.items()}
 braille_to_english_numbers = {value : key for key, value in english_numbers_to_braille.items()}
 
 # Helper Functions
-
-
 def is_text_supported_in_language(text, supported_language_chars):
     """
     Check if a text contains only digits or characters in the supported languageset.
@@ -96,9 +114,11 @@ def parse_braille_string_to_language(braille_text, braille_to_language, braille_
     translated_text = ''
     letters = [braille_text[i: i + 6] for i in range(0, len(braille_text), 6)]
     total_letters = len(letters)
+    logger.debug("Began parsing braille to desired language.")
     
     while i < total_letters:
         letter = letters[i]
+        logger.debug(f"Translating Letter: {letter}")
         if letter not in braille_to_language or letter not in special_braille_chars:
             raise TranslationError(f"Unable to translate the following letter {letter}")
         
@@ -116,7 +136,7 @@ def parse_braille_string_to_language(braille_text, braille_to_language, braille_
                 translated_text += braille_to_numbers[letters[i]]
         else:
             translated_text += letter_translation
-        
+        logger.debug(f"Updated translation string: {translated_text}")
         i += 1
 
     return translated_text
@@ -138,9 +158,10 @@ def parse_language_to_braille(text, language_to_braille, number_to_braille):
     """
     i = 0
     braille_translation = ""
+    logger.debug("Began parsing language to braille.")
     while i < len(text):
         letter = text[i]
-        
+        logger.debug(f"Translating Letter: {letter}")
         if letter not in number_to_braille and letter.lower() not in language_to_braille :
             raise TranslationError(f"Unable to translate the following letter {letter}")
         
@@ -156,6 +177,7 @@ def parse_language_to_braille(text, language_to_braille, number_to_braille):
         else:
             braille_translation += language_to_braille[letter]
         
+        logger.debug(f"Updated braille translation string: {braille_translation}")
         i += 1
     
     return braille_translation
@@ -174,8 +196,10 @@ def translate_text(text):
         TranslationError: If the text is not in a supported format for translation.
     """
     if is_text_braille(text):
+        logger.debug("Text is valid Braille.")
         return parse_braille_string_to_language(text, braille_to_english, braille_to_english_numbers)
     elif is_text_supported_in_language(text, english_to_braille):
+        logger.debug("Text is valid English.")
         return parse_language_to_braille(text, english_to_braille, english_numbers_to_braille)
     else:
         raise TranslationError(f"Unable to translate input text. Note that only basic Braille/English are supported.")
@@ -191,12 +215,17 @@ def main():
     parser.add_argument("-d", "--debug", action="store_true", help="Enable debug logging")
     
     arguments = parser.parse_args()
+    configure_logging(arguments.debug)
+    
+    logger.debug(f"Captured Arguments: {arguments}")
     
     # added below but note that argparse enforces that an argument is passed in. 
     if not arguments.input_text_to_translate:    
         return
     
     text = ' '.join(arguments.input_text_to_translate).strip()
+    
+    logger.debug(f"Translating input: {text}")
     
     try:
         translated_text = translate_text(text)
