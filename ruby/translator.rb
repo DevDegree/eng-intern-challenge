@@ -67,13 +67,8 @@ braille_to_meta_char = meta_chars.invert
 
 user_args = ARGV
 
-# If the inputted string has not spaces and only contains O's and .'s, it will be treated as Braille and translated to English
-if (user_args.length == 1 and !!user_args[0].match(/\A[\.O]*\z/))
-  if user_args[0].length % 6 != 0
-    puts "Error: Invalid Braille"
-    return
-  end
-  
+# If the inputted string has no spaces and only contains O's and .'s, it will be treated as Braille and translated to English
+if (user_args.length == 1 and !!user_args[0].match(/\A[\.O]*\z/) and user_args[0].length % 6 == 0)  
   braille_str = user_args[0]
   str_len = braille_str.length
   cap_follows = false
