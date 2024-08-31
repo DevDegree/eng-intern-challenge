@@ -55,7 +55,7 @@ function toBrailleWord(word: string): string {
 }
 
 function toBraille(words: string): string {
-    return words.split(" ").map(toBrailleWord).join("......");
+    return words.split(" ").map(toBrailleWord).join(character_to_braille[" "]);
 }
 
 function fromBraille(braille: string): string {
