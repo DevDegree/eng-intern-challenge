@@ -69,16 +69,9 @@ NumberToBraille = {value: key for key, value in BrailleToNumber.items()}
 SymbolToBraille = {value: key for key, value in BrailleToSymbol.items()}
 ActionToBraille = {value: key for key, value in BrailleToAction.items()}
 
-
-def isNumber(char: chr) -> bool:
-    return char in NumberToBraille.keys()
-
-def isPunctuation(char: chr) -> bool:
-    return char in SymbolToBraille.keys()
-
 def isEnglish(message: str) -> bool:
     for char in message:
-        if (char != 'O' or char != '.'):
+        if (char != 'O' and char != '.'):
             return True
     
     return False
@@ -94,12 +87,14 @@ def EnglishToBraille(message: str) -> str:
                 char = char.lower()
                 
             output += CharacterToBraille[char]
+            
         elif isNumber(char):
             if readingNumber == False:
                 readingNumber = True
                 output += ActionToBraille["NF"]
                 
             output += NumberToBraille[char]
+            
         elif isPunctuation(char):
             if char == "." and readingNumber:
                 output += ActionToBraille["DF"]
@@ -110,11 +105,55 @@ def EnglishToBraille(message: str) -> str:
     
     return output
 
+def isNumber(char: chr) -> bool:
+    return char in NumberToBraille.keys()
+
+def isPunctuation(char: chr) -> bool:
+    return char in SymbolToBraille.keys()
+
 def BrailleToEnglish(message: str) -> str:
-    pass
+    count = 0
+    buffer = ""
+    output = ""
+    
+    numberNext = False
+    upperNext = False
+    
+    for char in message:
+        buffer += char
+        count += 1
+        
+        if count == 6:
+            if buffer in BrailleToAction.keys():
+                if BrailleToAction[buffer] == "CF":
+                    upperNext = True
+                elif BrailleToAction[buffer] == "NF":
+                    numberNext = True
+                    
+            elif buffer in BrailleToAlphabet.keys() and numberNext == False:
+                if upperNext:
+                    output += BrailleToAlphabet[buffer].upper()
+                    upperNext = False
+                else:
+                    output += BrailleToAlphabet[buffer]
+                    
+            elif buffer in BrailleToNumber.keys():
+                output += BrailleToNumber[buffer]
+                
+            else:
+                if buffer == "......":
+                    numberNext = False
+                    
+                output += BrailleToSymbol[buffer]
+            
+            count = 0
+            buffer = ""
+    
+    return output
     
 if __name__ == "__main__":
     message = ' '.join(sys.argv[1:])
+    
     if isEnglish(message):
         output = EnglishToBraille(message)
     else:
