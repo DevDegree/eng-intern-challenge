@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Translator class to convert english to braille and vice versa
 class Translator
   # Constants used for translation
@@ -121,7 +119,7 @@ class Translator
       when BRAILLE_NUM_FOLLOWS
         is_alpha = false
       when BRAILLE_SPACE
-        english += ' '
+        english << ' '
         is_alpha = true
       else
         if is_alpha
@@ -133,7 +131,7 @@ class Translator
         else
           char = BRAILLE_TO_NUM[braille_char]
         end
-        english += char
+        english << char
       end
     end
 
@@ -148,17 +146,17 @@ class Translator
     str.each_char do |c|
       case c
       when /[0-9]/
-        braille += BRAILLE_NUM_FOLLOWS if is_alpha
-        braille += NUM_TO_BRAILLE[c]
+        braille << BRAILLE_NUM_FOLLOWS if is_alpha
+        braille << NUM_TO_BRAILLE[c]
         is_alpha = false
       when ' '
-        braille += BRAILLE_SPACE
+        braille << BRAILLE_SPACE
         is_alpha = true
       when c.upcase
-        braille += BRAILLE_CAP_FOLLOWS
-        braille += ALPHA_TO_BRAILLE[c.downcase]
+        braille << BRAILLE_CAP_FOLLOWS
+        braille << ALPHA_TO_BRAILLE[c.downcase]
       else
-        braille += ALPHA_TO_BRAILLE[c]
+        braille << ALPHA_TO_BRAILLE[c]
       end
     end
 
