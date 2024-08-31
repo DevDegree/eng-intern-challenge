@@ -14,6 +14,7 @@ def translate_braille_to_english(braille_string)
     braille_symbol = braille_string[index, 6]
 
     if !BRAILLE_TO_ENGLISH_DICT.key?(braille_symbol) &&
+      !BRAILLE_TO_NUMBERS_DICT.key?(braille_symbol) &&
       braille_symbol != BRAILLE_CAPITAL_FOLLOWS &&
       braille_symbol != BRAILLE_NUMBER_FOLLOWS
       puts "#{braille_symbol} is not valid braille"
@@ -37,5 +38,5 @@ def translate_braille_to_english(braille_string)
     index += 6
   end
 
-  return result
+  result
 end
