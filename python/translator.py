@@ -67,7 +67,8 @@ def isBraille(text):
     
     Output: returns true if text is Braille and false if it's English
     '''
-
+    if (len(text) % 6 != 0): return False
+    
     for c in text:
         if c != "O" and c != ".":
             return False
