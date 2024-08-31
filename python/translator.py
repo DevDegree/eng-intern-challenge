@@ -1,3 +1,5 @@
+import sys
+
 alphabet = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
     'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..',
@@ -109,7 +111,5 @@ def convert_string(string):
 
 
 if __name__ == '__main__':
-    import sys
-    if len(sys.argv) > 1:
-        string = " ".join(sys.argv[1:])
-        print(convert_string(string))
+        s = " ".join(sys.argv[1:])
+        print(convert_string(s))
