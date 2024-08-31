@@ -29,43 +29,40 @@ function brailleToEnglish(brailleInput) {
     let isNum = false;
   
     for (let i = 0; i < brailleInput.length; i += patternLength) {
-      const brailleCode = brailleInput.substring(i, i + patternLength);
+        const brailleCode = brailleInput.substring(i, i + patternLength);
   
-      if (brailleCode === capitalIndicator) {
-      
-        isCap = true;
-        continue; 
-      } else if (brailleCode === numberIndicator) {
-        
-        isNum = true;
-        continue; 
-      } else if (brailleCode === "......") {
-       
-        isNum = false; 
-        result += " ";
-        continue;
-      }
-  
-      let decodedChar = reverseBrailleDict[brailleCode] || "?";
-  
-      if (isNum) {
-        if (decodedChar >= 'a' && decodedChar <= 'i') {
-          decodedChar = String.fromCharCode(decodedChar.charCodeAt(0) - 'a'.charCodeAt(0) + '1'.charCodeAt(0));
-        } else if (decodedChar === 'j') {
-          decodedChar = '0';
+        if (brailleCode === capitalIndicator) {
+            isCap = true;
+            continue; 
+        } else if (brailleCode === numberIndicator) {
+            isNum = true;
+            continue; 
+        } else if (brailleCode === "......") {
+            isNum = false;
+            result += " ";
+            continue;
         }
-        result += decodedChar; 
-      } else if (isCap && decodedChar !== ' ') {
-        decodedChar = decodedChar.toUpperCase(); 
-        isCap = false; 
-        result += decodedChar;
-      } else {
-        result += decodedChar;
-      }
+  
+        let decodedChar = reverseBrailleDict[brailleCode] || "?";
+  
+        if (isNum) {
+            if (decodedChar >= 'a' && decodedChar <= 'i') {
+                decodedChar = String.fromCharCode(decodedChar.charCodeAt(0) - 'a'.charCodeAt(0) + '1'.charCodeAt(0));
+            } else if (decodedChar === 'j') {
+                decodedChar = '0';
+            }
+            result += decodedChar; 
+        } else if (isCap && decodedChar !== ' ') {
+            decodedChar = decodedChar.toUpperCase(); 
+            isCap = false; 
+            result += decodedChar;
+        } else {
+            result += decodedChar;
+        }
     }
   
     return result;
-  }
+}
 
 function englishToBraille(englishInput) {
     let result = "";
@@ -95,17 +92,18 @@ function englishToBraille(englishInput) {
 }
 
 function main() {
-    if (process.argv.length !== 3) {
+    
+    const inputText = process.argv.slice(2).join(" ").trim();
+
+    if (!inputText) {
         console.error("Usage: node translator.js <text>");
         return;
     }
 
-    const inputText = process.argv[2].trim();
-
     if (isBraille(inputText)) {
-        console.log(brailleToEnglish(inputText));
+        process.stdout.write(brailleToEnglish(inputText).trim() + '\n');
     } else {
-        console.log(englishToBraille(inputText));
+        process.stdout.write(englishToBraille(inputText).trim() + '\n');
     }
 }
 
