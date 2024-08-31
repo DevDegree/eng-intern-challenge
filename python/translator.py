@@ -35,3 +35,35 @@ class BrailleTranslator:
 
     def is_braille(self, input: str) -> bool:
             return all(char in 'O.' for char in input) and len(input) % 6 == 0
+
+    def translate_to_braille(self, input: str) -> str:
+        result = []
+        next_is_num = False
+        
+        for char in input:
+            # Number is found, add braille for number follows
+            if char.isdigit() and not next_is_num:
+                result.append(self.special_symbols['num_follows'])
+                next_is_num = True
+            # Space is found, add space
+            if char == ' ':
+                result.append(self.special_symbols[' '])
+                next_is_num = False
+            # Uppercase letter
+            elif char.isupper():
+                result.append(self.special_symbols['cap_follows'])
+                result.append(self.letters_to_braille[char.lower()])
+            # Number
+            elif char.isdigit():
+                result.append(self.numbers_to_braille[char])
+            # Lowercase letter
+            elif char in self.letters_to_braille:
+                result.append(self.letters_to_braille[char])
+            # Punctuation
+            elif char in self.punctuation_to_braille:
+                result.append(self.punctuation_to_braille[char])
+            # Raising error for unrecognized characters
+            else:
+                raise ValueError(f"Unrecognized character '{char}' in input.")
+                
+        return ''.join(result)
