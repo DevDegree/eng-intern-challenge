@@ -42,6 +42,34 @@ class BrailleMappings:
 class BrailleTranslator:
     def __init__(self):
         self.mappings = BrailleMappings()
+        
+    def translate_to_braille(self, text):
+        result = []
+        number_flag = False
+
+        for char in text:
+            if char.isupper():
+                result.append(self.mappings.cap)
+                char = char.lower()
+
+            if char.isdigit():
+                if not number_flag:
+                    result.append(self.mappings.num)
+                    number_flag = True
+                result.append(self.mappings.get_number_mapping(char))
+            elif char == " ":
+                result.append(self.mappings.space)
+                number_flag = False  # Reset number flag after a space
+            else:
+                braille_char = self.mappings.get_alphabet_mapping(char)
+                if braille_char:
+                    result.append(braille_char)
+                else:
+                    print(f"Warning: Character '{char}' not found in Braille mapping.")
+                number_flag = False
+
+        return "".join(result)
+
 
 def main():
     import sys
