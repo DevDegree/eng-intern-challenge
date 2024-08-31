@@ -6,6 +6,12 @@ const {
   brailleOther,
 } = require("./constants");
 
+/**
+ * Checks if a given string is a valid Braille string.
+ *
+ * @param {string} string - The input string to validate.
+ * @returns {boolean} True if the string is valid Braille, false otherwise.
+ */
 const isBraille = (string) => {
   if (string.length === 0) return false;
   const normalizedString = string.toUpperCase();
@@ -17,6 +23,12 @@ const isBraille = (string) => {
   return true;
 };
 
+/**
+ * Reverses the key-value pairs in an object.
+ *
+ * @param {Object} lookup - The object to reverse.
+ * @returns {Object} The reversed object.
+ */
 const reverseLookup = (lookup) => {
   return Object.entries(lookup).reduce((acc, curr) => {
     const key = curr[0];
@@ -30,6 +42,12 @@ const brailleToAlphabet = reverseLookup(brailleAlphabet);
 const brailleToNumber = reverseLookup(brailleNumber);
 const brailleToOther = reverseLookup(brailleOther);
 
+/**
+ * Translates a Braille string into its English equivalent.
+ *
+ * @param {string} string - The Braille string to translate.
+ * @returns {string} The translated English string.
+ */
 const translateBrailleToEnglish = (string) => {
   const brailleLength = 6;
   let shouldCapitalize = false;
@@ -69,6 +87,12 @@ const translateBrailleToEnglish = (string) => {
   return output;
 };
 
+/**
+ * Translates an English string into its Braille equivalent.
+ *
+ * @param {string} string - The English string to translate.
+ * @returns {string} The translated Braille string.
+ */
 const translateEnglishToBraille = (string) => {
   let output = "";
   let hasNumberFollows = false;
