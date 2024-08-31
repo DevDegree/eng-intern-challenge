@@ -84,7 +84,7 @@ converter = {
     "OO.OOO": "y",
     "O..OOO": "z",
     "..OO.O": ".", #normal period
-    # ".0...0": ".", #decimal follows
+    # ".O...O": ".", #decimal follows
     "..O...": ",",
     "..O.OO": "?",
     "..OOO.": "!",
@@ -110,7 +110,7 @@ num_map = {
     "O.OO..": "8",
     ".OO...": "9",
     ".OOO..": "0",
-    ".0...0": ".", #decimal follows
+    ".O...O": ".", #decimal follows
 }
 
 #didn't map capital follows, decimal follows, and number follows
@@ -136,6 +136,10 @@ for letter in input_string:
         is_brail = False
         break
 
+if is_brail and len(input_string) %6 != 0 and len(input_string) < 6:
+    is_brail = False
+    #treat as english if only O and . are in the String but it is less than 6 characters
+
 if is_brail:
     if len(input_string) % 6 != 0:
         print("Braille string must be divisible by 6")
@@ -147,17 +151,17 @@ if is_brail:
         curr_character = input_string[i:i+6]
         # print(curr_character)
         #need to add a few more conditions for exit below
-        if curr_character not in converter and curr_character not in num_map and curr_character != ".....0" and curr_character != ".0.000":
+        if curr_character not in converter and curr_character not in num_map and curr_character != ".....O" and curr_character != ".O.OOO":
             print("The following character does not exist: " + curr_character)
             sys.exit(1)
-        elif curr_character == ".....0":
+        elif curr_character == ".....O":
             capital_follows = True
-        elif curr_character == ".0.000":
+        elif curr_character == ".O.OOO":
             number_follows = True
         elif capital_follows == True:
             #need to actually check if the braille is an alphabet character. (cannot capitalize a number or other token)
             if converter[curr_character] in "abcdefghijklmnopqrstuvwxyz":
-                return_string.append(converter[curr_character].lower())
+                return_string += converter[curr_character].upper()
                 capital_follows = False
             else:
                 print("Cannot capitalize: " + converter[curr_character])
@@ -176,15 +180,22 @@ if is_brail:
 
 else:
     number_follows = False
+    decimal_follows = False
     for letter in input_string:
         if letter.isupper():
             return_string += ".....O"
             return_string += converter[letter.lower()]
         elif letter == " ":
             number_follows = False
+            decimal_follows = False
             return_string += converter[letter]
         elif letter == "." and number_follows == True:
-            return_string += ".O...O"
+            if decimal_follows == False:
+                return_string += ".O...O"
+                decimal_follows = True
+            else:
+                print("Cannot have two decimals in a number")
+                sys.exit(1)
         elif letter in "0123456789":
             if number_follows == False:
                 number_follows = True
