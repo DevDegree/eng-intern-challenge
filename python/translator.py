@@ -56,14 +56,19 @@ def is_braille(input):
 
 def english_to_braille(text):
     result = []
+    is_number_mode = False
     for char in text:
         if char.isupper():
             result.append(braille_rules['capital_follows'])
             char = char.lower()
         if char.isdigit():
-            result.append(braille_rules['number_follows'])
+            if not is_number_mode:
+                result.append(braille_rules['num'])
+                is_number_mode = True
             result.append(braille_nums[char])
         else:
+            if is_number_mode:
+                is_number_mode = False
             result.append(braille_chars[char])
     return ''.join(result)
 
