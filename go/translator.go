@@ -147,7 +147,6 @@ func englishToBraile(text string) string {
 
 		if isNumber && !unicode.IsDigit(char) {
 			isNumber = false
-			translatedString += SPACE
 		}
 
 		translatedString += value
@@ -183,8 +182,7 @@ func braileToEnglish(text string) (string, error) {
 			if value != ' ' {
 				value = braileToEnglishNum[currString[:6]]
 			} else {
-				currString = currString[6:]
-				continue
+                isNum = false
 			}
 		}
 
