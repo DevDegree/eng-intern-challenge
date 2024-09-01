@@ -53,7 +53,7 @@ def translate_braille(input_string: str) -> str:
                 numericize = True
                 continue
             elif braille_char == "decimal follows":
-                translated_string += "."
+                numericize = True
 
             elif braille_char == " ":
                 translated_string += ' '
