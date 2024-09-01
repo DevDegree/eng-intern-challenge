@@ -63,11 +63,11 @@ def english_to_braille(text):
             char = char.lower()
         if char.isdigit():
             if not is_number_mode:
-                result.append(braille_rules['num'])
+                result.append(braille_rules['number_follows'])
                 is_number_mode = True
             result.append(braille_nums[char])
         else:
-            if is_number_mode:
+            if is_number_mode and char != ' ':
                 is_number_mode = False
             result.append(braille_chars[char])
     return ''.join(result)
@@ -76,19 +76,25 @@ def braille_to_english(braille):
     result = []
     i = 0
     while i < len(braille):
-        
         six_chars = braille[i:i+6]
         if six_chars == braille_rules['capital_follows']:
-            i += 6 
+            i += 6
             six_chars = braille[i:i+6]
             result.append(find_letter(six_chars).upper())
         elif six_chars == braille_rules['number_follows']:
             i += 6
-            six_chars = braille[i:i+6]
-            result.append(find_number(six_chars))
+            while i < len(braille):
+                six_chars = braille[i:i+6]
+                if six_chars == braille_chars[' ']:
+                    result.append(' ')
+                    break  
+                result.append(find_number(six_chars))
+                i += 6
+            continue 
         else:
             result.append(find_letter(six_chars))
-        i += 6
+        
+        i += 6  
     return ''.join(result)
 
 def find_letter(str):
@@ -101,13 +107,18 @@ def find_number(str):
         if str == v:
             return k
 
-def detect_and_translate(input):
-    if is_braille(input):
-        return braille_to_english(input)
-    else:
-        return english_to_braille(input)
 
-if __name__ == "__main__":
-    input = " ".join(sys.argv[1:])
-    output = detect_and_translate(input)
-    print(output)
+def main():
+    if len(sys.argv) < 2:
+        print("No input provided.")
+        return
+
+    input_string = ' '.join(sys.argv[1:])
+    
+    if is_braille(input_string):
+        print(braille_to_english(input_string))
+    else:
+        print(english_to_braille(input_string))
+
+if __name__ == '__main__':
+    main()
