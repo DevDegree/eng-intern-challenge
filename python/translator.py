@@ -148,7 +148,6 @@ def braille_to_eng(w):
 
 
 inp = ' '.join(sys.argv[1:])
-
 inpset = set(inp)
 if inpset == {'O', '.'} or inpset == {'.'} or inpset == {'O'}:
     print(braille_to_eng(inp))
