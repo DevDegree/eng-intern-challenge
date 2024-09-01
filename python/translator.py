@@ -2,7 +2,8 @@ import sys
 from bidirectional_dict import BidirectionalDict
 
 # Constants
-CAPITAL_PREFIX = "O.OOOO"
+BRALLIE_SIZE = 6
+CAPITAL_PREFIX = ".....O"
 NUMBER_PREFIX = ".O.OOO"
 SPACE = "......" # ' '
 
@@ -62,9 +63,9 @@ This means if '.' is found in a string it is a braille and not a vaild braille a
 '''
 def is_braille(text):
     for c in text:
-        if c == '.':
-            return True
-    return False
+        if (c != '.') and (c != 'O'):
+            return False
+    return True
 
 def vaild_braille(text):
     return len(text) % 6 == 0
@@ -78,21 +79,49 @@ def get_system_arguments(args):
 
     return text
 
-# def convert_brallie_to_english(text):
+def convert_brallie_to_english(text, braille_alphabet_bidict, braille_numerical_bidict):
+    english = ""
+    capital_letter = False
+    number_next = False
+    for i in range(0,len(text),BRALLIE_SIZE):
+        brallie = text[i:i + BRALLIE_SIZE]
+        if brallie == CAPITAL_PREFIX:
+            capital_letter = True
+        elif brallie == NUMBER_PREFIX:
+            number_next = True
+        elif brallie == SPACE:
+            number_next = False
+            english += " "
+        else:
+            if number_next:
+                english += braille_numerical_bidict.get_by_value(brallie)
+            elif capital_letter:
+                english += braille_alphabet_bidict.get_by_value(brallie).upper()
+                capital_letter = False
+            else:
+                english += braille_alphabet_bidict.get_by_value(brallie)
+                
+    return english
+
 
 
 
 # Runs the Translator
 def main():
-    # text = get_system_arguments(sys.argv)
-    # print(text)
-    # if is_braille(text) and vaild_braille(text):
-    #     print(convert_brallie_to_english(text))
-    # print("RAN")
+    text = get_system_arguments(sys.argv)
     braille_alphabet_bidict = create_braille_alphabet_bidict()
     braille_numerical_bidict = create_braille_numerical_bidict()
-    print(braille_alphabet_bidict.get('a'))
-    print(braille_alphabet_bidict.get_by_value('O.O...'))
+    if is_braille(text) and vaild_braille(text):
+        print(convert_brallie_to_english(text, braille_alphabet_bidict, braille_numerical_bidict))
+
+    print("RAN")
+
+
+
+    # braille_alphabet_bidict = create_braille_alphabet_bidict()
+    # braille_numerical_bidict = create_braille_numerical_bidict()
+    # print(braille_alphabet_bidict.get('a'))
+    # print(braille_alphabet_bidict.get_by_value('O.O...'))
 
 if __name__ == "__main__":
     main() 
