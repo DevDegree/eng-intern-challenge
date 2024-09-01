@@ -280,5 +280,5 @@ def translate(input_string: str) -> str:
         translator = EnglishToBrailleTranslator(input_string)
     sys.stdout.write(translator.translate())
 
-
+print("foo")
 translate(" ".join(sys.argv[1:]))
