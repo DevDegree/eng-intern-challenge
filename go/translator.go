@@ -19,10 +19,13 @@ I am to assume
 - no double spaces such as "123 123  123" as one of the spaces would be included in the numbers
 - braille and english cannot be mixed
 	* input will either be all english or all braille
-
+- I should not assume braille is put in quotes (to stop '.' as being interpreted differently)
 */
 
 func main() {
+	// assuming an argument will always be provided
+	// as no information was given on what to do in such a case
+	// panic is good since this is undefined behavior
 	argsWithoutProg := os.Args[1:]
 	var words []string
 	for _, word := range argsWithoutProg {
