@@ -1,3 +1,10 @@
+
+UPPER_CASE_BRAILLE = ".....O"
+NUMBER_BRAILLE = ".O.OOO"
+
+def change_case(bool):
+    return not bool
+
 def eng_To_Bra(text, dict_Eng_Bra):
     text_Translate= text
     translated_string = ""
@@ -9,14 +16,14 @@ def eng_To_Bra(text, dict_Eng_Bra):
             if char_in_Str.lower() == translation[0].lower():
                 #Check if value is an uppercase letter 
                 if char_in_Str.isupper():
-                    translated_string += ".....O" + translation[1]
+                    translated_string += UPPER_CASE_BRAILLE  + translation[1]
 
                 #Check if value is a number
                 elif char_in_Str.isdigit():
                         #Check if value is the first number or not
                         if not first_num:
-                            translated_string += ".O.OOO" + translation[1]
-                            first_num = True
+                            translated_string += NUMBER_BRAILLE + translation[1]
+                            first_num = change_case(first_num)
 
                         #Values that are not the first number in the string
                         else:
@@ -25,7 +32,7 @@ def eng_To_Bra(text, dict_Eng_Bra):
                         #Check if the next value is a number or not
                         if i+1< len(text_Translate) and not text_Translate[i+1].isdigit():
                             
-                            first_num = False
+                            first_num = change_case(first_num)
                 else:
                      translated_string +=  translation[1]
                 break
@@ -53,8 +60,8 @@ def bra_To_Eng(text, dict_Eng_Bra):
 
 
                 #check to determine first number of a sequence of elements
-                if brl_in_Str == ".O.OOO":
-                    num_mode = True
+                if brl_in_Str == NUMBER_BRAILLE:
+                    num_mode = change_case(num_mode)
 
                 print(num_mode)
                 if translation[0].isdigit() and num_mode:
@@ -64,16 +71,16 @@ def bra_To_Eng(text, dict_Eng_Bra):
 
                     #This would be an expansion to switch back from numbers to letters, but for the scope of this assessment it is not required                    
                     if i+1< len(modified_text)and not translation[0].isdigit():
-                        num_mode = False
+                        num_mode = change_case(num_mode)
 
 
                 elif not num_mode and not translation[0].isdigit():
                     if capital == True:
                         #Making a capital letter
                         translated_string += translation[0].upper() 
-                        capital = False
-                    elif i+1< len (modified_text) and brl_in_Str == ".....O" :
-                        capital = True
+                        capital = change_case(capital)
+                    elif i+1< len (modified_text) and brl_in_Str == UPPER_CASE_BRAILLE:
+                        capital = change_case(capital)
                     else:
                         #Normal letter in the string
                         translated_string += translation[0]
