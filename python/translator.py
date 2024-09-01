@@ -114,8 +114,8 @@ def convert_braille_to_text(input_text):
   
   return ''.join(text)
 
-
-def main():
+    
+if __name__ == '__main__':
   if len(sys.argv) < 2:
     sys.exit(1)
   
@@ -126,7 +126,3 @@ def main():
 
   else:
     print(convert_text_to_braille(input_text))
-    
-
-if __name__ == '__main__':
-  main()
