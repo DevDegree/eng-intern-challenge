@@ -86,6 +86,16 @@ def translate_to_english(braille_text):
     # Join the list into a single string
     return ''.join(english_translation)
 
+def validate_input(input_str, dictionary, input_type):
+    # Validate input based on dictionary keys
+    valid_keys = set(dictionary.keys())
+    if input_type == "english":
+        # Check if each character is in the dictionary (including lowercase check)
+        return all(char.lower() in valid_keys for char in input_str)
+    # For Braille, split into 6-char segments and check each against the dictionary
+    braille_chars = [input_str[i:i+6] for i in range(0, len(input_str), 6)]
+    return all(char in valid_keys for char in braille_chars)
+
 def main():
     # Check if an input string is provided
     if len(sys.argv) < 2:
@@ -99,9 +109,17 @@ def main():
     input_type = detect_input_type(input_str)
 
     if input_type == "english":
-        print(translate_to_braille(input_str))
+        dictionary = ENGLISH_TO_BRAILLE
+        answer = translate_to_braille(input_str)
     else:
-        print(translate_to_english(input_str))
+        dictionary = BRAILLE_TO_ENGLISH
+        answer = translate_to_english(input_str)
 
+    if not validate_input(input_str, dictionary, input_type):
+        print("Invalid input: Only letters, numbers, and spaces are allowed.")
+        return
+    else:
+        print(answer)
+        
 if __name__ == "__main__":
     main()

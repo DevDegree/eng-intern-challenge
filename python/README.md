@@ -55,6 +55,15 @@ We implemented a comprehensive set of tests in the `test_translator.py` file to 
 
 Each test was chosen to demonstrate the translator's ability to handle edge cases and complex scenarios, ensuring robust performance under various conditions.
 
+## Assumptions
+
+- **Input Validity**: The program assumes that inputs will only include lowercase and uppercase letters, numbers, and spaces. Special characters, punctuation, and other symbols are not considered valid inputs and will trigger an error message.
+  
+- **Number Handling**: It is assumed that once a number symbol is detected in Braille, all subsequent symbols are numbers until a space is encountered, as per the project guidelines.
+
+- **Input Validation**: Both English and Braille inputs are validated by checking against their respective dictionaries (`ENGLISH_TO_BRAILLE` for English inputs and `BRAILLE_TO_ENGLISH` for Braille inputs), ensuring that only allowed characters are processed.
+
+These assumptions align the translator's functionality with the project requirements, ensuring consistent and expected behavior.
 
 ## Limitation
 
