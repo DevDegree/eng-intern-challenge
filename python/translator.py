@@ -140,18 +140,20 @@ def braille_to_english(braille_input):
         if braille_char not in BRAILLE_TO_ENGLISH:
             continue  # Skip any invalid characters
 
-        if number_mode:
+        # Default to regular. If we're in a number, and we're not about to end the number, use numeric.
+        english_char = BRAILLE_TO_ENGLISH[braille_char]
+        if number_mode and braille_char in BRAILLE_TO_NUMERIC:
             english_char = BRAILLE_TO_NUMERIC[braille_char]
-        else:
-            english_char = BRAILLE_TO_ENGLISH[braille_char]
         
-        # Handle control characters
-        if english_char == 'capital follows':
-           capital_next = True
-           continue
-    
+        # Handle control characters.
         if english_char == 'number follows':
            number_mode = True
+           continue
+
+        # If a capital is next, it can't be a number. Disambiguate stuff like A1B2.
+        if english_char == 'capital follows':
+           capital_next = True
+           number_mode = False
            continue
 
         if english_char == 'decimal follows':

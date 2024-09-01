@@ -17,4 +17,4 @@ TODO - Enforce english-only.
 
 TODO - Add verbose logging.
 TODO - Stronger help message
-TODO - Logging for when a key-error occurs on conversions (invalid character inputs)
+TODO - Logging for when a key-error occurs on conversions (invalid character inputs such as ' or @)

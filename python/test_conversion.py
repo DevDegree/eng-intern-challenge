@@ -93,6 +93,19 @@ class TestBrailleTranslator(unittest.TestCase):
     def test_long_num2(self):
         self.assertEqual(braille_to_english(".O.OOOO.....O.O...OO....OO.O..O..O..OOO...OOOO..O.OO...OO....OOO.."), "1234567890")
 
+    def test_ambiguous_o_braille(self):
+        self.assertEqual(english_to_braille("12>34 eod"), ".O.OOOO.....O.O...O..OO..O.OOOOO....OO.O........O..O..O..OO.OO.O..")
+
+    def test_ambiguous_o_english(self):
+        self.assertEqual(braille_to_english(".O.OOOO.....O.O...O..OO..O.OOOOO....OO.O........O..O..O..OO.OO.O.."), "12>34 eod")
+
+    # Conversions made simpler by going 2 depth.
+    def test_multi_depth(self):
+        strings_list = ["Hello World", "1234567890", "A quick brown fox jumps over 13 lazy dogs.", "What?! Thats amazing; truly outstanding.", "Welcome to the year 2024!", "Happy New Year!", "CIBC at 9:00 A.M. - Important Meeting.", "1.23 or 0.5? Which is larger?", "N.Y.C., L.A., and S.F.", "U.S.A. number 1 in medals.", "Python3.8 vs. JavaScript", "Good morning, Dr. Smith.", "The cost is 20.00 dollars (incl. taxes).", "(123) 456-7890", "Hello-world123", "Hello", "A", "123", "Abc 123", "42", "Abc 123 xYz", "A1B2;", ",!?.", "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL"]
+
+        for string in strings_list:
+            self.assertEqual(braille_to_english(english_to_braille(string)), string)
+
 
 if __name__ == '__main__':
     unittest.main()
