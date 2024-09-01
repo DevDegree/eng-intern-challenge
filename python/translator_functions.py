@@ -30,7 +30,6 @@ def eng_To_Bra(text, dict_Eng_Bra):
                      translated_string +=  translation[1]
                 break
 
-                #translated_string += capitalized + dict_Eng_Bra[j][1]
 
     return  translated_string
 
