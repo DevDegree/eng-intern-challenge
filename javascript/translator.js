@@ -102,7 +102,7 @@ function translateToBraille(english) {
 }
 
 function main() {
-    const input = process.argv[2];
+    const input = process.argv.slice(2).join(' ');
 
     if (!input) {
         console.log("Please provide a string to translate.");
