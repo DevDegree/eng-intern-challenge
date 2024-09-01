@@ -27,19 +27,19 @@ func main() {
 	// as no information was given on what to do in such a case
 	// panic is good since this is undefined behavior
 	argsWithoutProg := os.Args[1:]
-	var words []string
+	var translatedWords []string
 	for _, word := range argsWithoutProg {
 		translation, err := lib.Translate(word)
 		if err != nil {
 			log.Printf("[ERROR] Could not translate %s, got %v", word, err)
 		}
-		words = append(words, translation)
+		translatedWords = append(translatedWords, translation)
 	}
 	space := " "
-	if helpers.IsBraille(words[0]) {
+	if helpers.IsBraille(translatedWords[0]) {
 		space = mappers.BRAILLE_SPACE
 	}
-	final_translation := strings.Join(words, space)
-	fmt.Printf("%s", final_translation)
+	finalTranslation := strings.Join(translatedWords, space)
+	fmt.Printf("%s", finalTranslation)
 
 }

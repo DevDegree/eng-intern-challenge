@@ -14,16 +14,16 @@ func Translate(word string) (string, error) {
 		return "", nil
 	}
 	if helpers.IsLatin(word) {
-		return translate_from_latin_to_braille(word)
+		return translateFromLatinToBraille(word)
 	}
 	if helpers.IsBraille(word) {
 		// word is packed and not already split by spaces
 		// hence, split on braille space character,
 		// translate each word and return result
-		braille_words := strings.Split(word, mappers.BRAILLE_SPACE)
+		brailleWords := strings.Split(word, mappers.BRAILLE_SPACE)
 		var translation []string
-		for _, braille_word := range braille_words {
-			res, err := translate_from_braille_to_latin(braille_word)
+		for _, braille_word := range brailleWords {
+			res, err := translateFromBrailleToLatin(braille_word)
 			if err != nil {
 				return "", err
 			}
@@ -35,7 +35,7 @@ func Translate(word string) (string, error) {
 	return "", errors.New("unable to classify text")
 }
 
-func translate_from_latin_to_braille(word string) (string, error) {
+func translateFromLatinToBraille(word string) (string, error) {
 	var translation []string
 	numericMode := false
 	for position, character := range word {
@@ -80,35 +80,35 @@ func translate_from_latin_to_braille(word string) (string, error) {
 
 }
 
-func translate_from_braille_to_latin(word string) (string, error) {
+func translateFromBrailleToLatin(word string) (string, error) {
 	var translation []rune
-	chunk_pointer := 0
-	chunk_size := 6
-	var capitalize_next_char_mode = false
-	var numeric_mode = false
+	chunkPointer := 0
+	chunkSize := 6
+	var capitalizeNextCharMode = false
+	var numericMode = false
 
-	for chunk_pointer < len(word) {
-		chunk := word[chunk_pointer : chunk_pointer+chunk_size]
+	for chunkPointer < len(word) {
+		chunk := word[chunkPointer : chunkPointer+chunkSize]
 		if chunk == mappers.BRAILLE_CAPITAL_FOLLOWS {
-			capitalize_next_char_mode = true
-			chunk_pointer += chunk_size
+			capitalizeNextCharMode = true
+			chunkPointer += chunkSize
 			continue
 		}
 		if chunk == mappers.BRAILLE_NUMBER_FOLLOWS {
-			numeric_mode = true
-			chunk_pointer += chunk_size
+			numericMode = true
+			chunkPointer += chunkSize
 			continue
 		}
 
-		if capitalize_next_char_mode {
-			next_char, ok := mappers.BRAILLE_TO_LETTERS[chunk]
+		if capitalizeNextCharMode {
+			nextChar, ok := mappers.BRAILLE_TO_LETTERS[chunk]
 			if !ok {
 				return "", errors.New("capital did NOT follow")
 			}
-			capitalized_char := unicode.ToUpper(next_char)
-			translation = append(translation, capitalized_char)
-			capitalize_next_char_mode = false
-		} else if numeric_mode {
+			capitalizedChar := unicode.ToUpper(nextChar)
+			translation = append(translation, capitalizedChar)
+			capitalizeNextCharMode = false
+		} else if numericMode {
 			number, ok := mappers.BRAILLE_TO_NUMBERS[chunk]
 			if !ok {
 				return "", errors.New("braille of number ill-formatted")
@@ -116,18 +116,18 @@ func translate_from_braille_to_latin(word string) (string, error) {
 			translation = append(translation, number)
 
 		} else {
-			letter, is_letter := mappers.BRAILLE_TO_LETTERS[chunk]
-			punctuation, is_punctuation := mappers.BRAILLE_TO_PUNCTUATION[chunk]
+			letter, isLetter := mappers.BRAILLE_TO_LETTERS[chunk]
+			punctuation, isPunctuation := mappers.BRAILLE_TO_PUNCTUATION[chunk]
 
-			if is_letter {
+			if isLetter {
 				translation = append(translation, letter)
-			} else if is_punctuation {
+			} else if isPunctuation {
 				translation = append(translation, punctuation)
 			} else {
 				return "", errors.New("invalid braille provided")
 			}
 		}
-		chunk_pointer += chunk_size
+		chunkPointer += chunkSize
 	}
 	return string(translation), nil
 }
