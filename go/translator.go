@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -20,4 +21,9 @@ func main() {
 	// } else {
 	// 	fmt.Println(translateToBraille(input))
 	// }
+}
+
+// isBraille checks if the input string is in Braille format
+func isBraille(input string) bool {
+	return strings.ContainsAny(input, "O.")
 }
