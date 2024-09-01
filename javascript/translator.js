@@ -72,3 +72,25 @@ const isBraille = (text) => {
 
     return true;
 };
+
+// CLI
+const main = () => {
+    const args = process.argv.slice(2);
+    if (args.length < 1) {
+        console.log("ERROR: Missing arguments | Usage: node translator.js <str>");
+        return;
+    }
+
+    const inputText = args.join(' ');
+    console.log('inputText is: ', inputText);
+
+    if (isBraille(inputText)) {
+        console.log('Translating Braille to English.');
+    } else {
+        console.log('Translating English to Braille.');
+    }
+}
+
+if (require.main === module) {
+    main();
+}
