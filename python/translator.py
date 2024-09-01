@@ -14,6 +14,24 @@ BASE_BRAILLE = {
 CAPITAL_PREFIX = "O.OOOO"
 NUMBER_PREFIX = ".O.OOO"
 
+'''
+In Braille Alphabet in the technical tequirements it does not state that '.' is a vaild braille alahabet
+
+Vaild Braille Alphabet are:
+    1. Letters a through z(lowercase and uppercase)
+    2. Numbers 0 through 9
+    3. Spaces
+
+Every braille contains a '.' thus if a string(text) contains '.' it means it has to be a braille
+'''
+def is_braille(text):
+    for c in text:
+        if c == '.':
+            return True
+    return False
+
+def vaild_braille(text):
+    return len(text) % 6 == 0
 
 # Created to run my own tests
 def main():
