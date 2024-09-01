@@ -17,9 +17,6 @@ var englishToBraille = map[rune]string{
 	'1': "O.....", '2': "O.O...", '3': "OO....", '4': "OO.O..", '5': "O..O..",
 	'6': "OOO...", '7': "OOOO..", '8': "O.OO..", '9': ".OO...", '0': ".OOO..",
 	' ': "......",
-	'.': "..OO.O", ',': ".O....", '?': "..O.OO", '!': "..OOO.", ':': "..OO..",
-	';': "..0.0.", '-': "....00", '/': ".0..0.", '<': ".00..0", '>': "0..00.",
-	'(': "0.0..0", ')': ".0.00.",
 }
 
 var brailleToEnglish = map[string]rune{
@@ -38,25 +35,16 @@ var brailleToNumbers = map[string]rune{
 	"OOO...": '6', "OOOO..": '7', "O.OO..": '8', ".OO...": '9', ".OOO..": '0',
 }
 
-// Mapping for decimals, also using the first ten letters a-j but in decimal mode
-var brailleToDecimals = map[string]rune{
-	"..OO.O": '.', ".O....": ',', "..O.OO": '?', "..OOO.": '!', "..OO..": ':',
-	"..0.0.": ';', "....00": '-', ".0..0.": '/', ".00..0": '<', "0..00.": '>',
-	"0.0..0": '(', ".0.00.": ')',
-}
-
 // Special characters for capitalization, numbers, and decimals
 var brailleSpecialCharacters = map[string]string{
 	".....O": "capital follows", // Capital follows
 	".O.OOO": "number follows",  // Number follows
-	".O...O": "decimal follows", // Decimal follows
 }
 
 // translateToBraille converts an English string to Braille
 func translateToBraille(input string) string {
 	var result strings.Builder
 	numberMode := false
-	decimalMode := false
 
 	for i := 0; i < len(input); i++ {
 		char := rune(input[i])
@@ -80,18 +68,6 @@ func translateToBraille(input string) string {
 			numberMode = false
 		}
 
-		// Handle decimals
-		if char == '.' {
-			if !decimalMode {
-				// Add Braille code for decimal follows
-				result.WriteString(".O...O")
-				decimalMode = true
-			}
-		} else {
-			// Reset decimal mode on non-decimal characters
-			decimalMode = false
-		}
-
 		// Translate the current character to Braille
 		if braille, ok := englishToBraille[char]; ok {
 			result.WriteString(braille)
@@ -108,7 +84,6 @@ func translateToEnglish(input string) string {
 	var result strings.Builder
 	capitalMode := false
 	numberMode := false
-	decimalMode := false
 
 	for i := 0; i < len(input); i += 6 {
 		brailleChar := input[i : i+6]
@@ -119,8 +94,6 @@ func translateToEnglish(input string) string {
 				capitalMode = true
 			case "number follows":
 				numberMode = true
-			case "decimal follows":
-				decimalMode = true
 			}
 			continue
 		}
@@ -134,12 +107,6 @@ func translateToEnglish(input string) string {
 				numberMode = false
 				i -= 6 // Re-process this character in non-number mode
 			}
-		} else if decimalMode {
-			// Translate as decimal
-			if decimal, ok := brailleToDecimals[brailleChar]; ok {
-				result.WriteRune(decimal)
-			}
-			decimalMode = false // Reset decimal mode after one character
 		} else {
 			// Translate as letter
 			if english, ok := brailleToEnglish[brailleChar]; ok {
@@ -160,7 +127,7 @@ func translateToEnglish(input string) string {
 
 // isBraille checks if the input string is in Braille format
 func isBraille(input string) bool {
-	return strings.ContainsAny(input, "O.")
+	return strings.ContainsAny(input, ".")
 }
 
 func main() {
