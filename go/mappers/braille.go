@@ -1,5 +1,13 @@
 package mappers
 
+const (
+	BRAILLE_SPACE           = "......"
+	BRAILLE_FULLSTOP        = "..OO.O"
+	BRAILLE_CAPITAL_FOLLOWS = ".....O"
+	BRAILLE_DECIMAL_FOLLOWS = ".O...O"
+	BRAILLE_NUMBER_FOLLOWS  = ".O.OOO"
+)
+
 var (
 	BRAILLE_TO_LETTERS = map[string]rune{
 		"O.....": 'a',

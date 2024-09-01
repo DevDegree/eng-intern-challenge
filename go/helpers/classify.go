@@ -2,8 +2,6 @@ package helpers
 
 import (
 	"slices"
-
-	"unicode"
 )
 
 var (
@@ -11,7 +9,7 @@ var (
 )
 
 func IsAlphabet(ch rune) bool {
-	return ch >= 'a' && ch <= 'z'
+	return ch >= 'a' && ch <= 'z' || (ch >= 'A' && ch <= 'Z')
 }
 func IsNumeric(ch rune) bool {
 	return ch >= '0' && ch <= '9'
@@ -21,8 +19,7 @@ func IsPunctuation(ch rune) bool {
 }
 func IsLatin(word string) bool {
 	for _, character := range word {
-		lowered := unicode.ToLower(character)
-		if !IsAlphabet(lowered) && !IsNumeric(character) && !IsPunctuation(character) {
+		if !IsAlphabet(character) && !IsNumeric(character) && !IsPunctuation(character) {
 			return false
 		}
 	}
