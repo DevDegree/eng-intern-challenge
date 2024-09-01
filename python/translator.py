@@ -33,11 +33,8 @@ def main(val):
 
 def lang_detect(string):
 
-    base_set = set('0','.')
-    unique_vars = len(set(string))
-
-    if base_set == unique_vars: # This means it is in braille
-        print(base_set + " and " + unique_vars)
+    if set('0','.') == set(string): # This means it is in braille
+        print(set('0','.') + " and " + set(string))
         return 1 
 
     else: # This means it is in english
@@ -58,7 +55,7 @@ def lang_converter(convertee, val): # receives 0 or 1 and terminal value
                 mode = 0
                 if snippet == '.....0':
                     mode = 1
-                    if (char_end + 7) != 0:
+                    if (char_end + 7) <= len(val):
                         char_end += 6 
                         char_start += 6
                         snippet = val[char_start:char_end]
@@ -66,6 +63,11 @@ def lang_converter(convertee, val): # receives 0 or 1 and terminal value
 
                 elif snippet == '.0.0000':
                     mode = 2
+                    if (char_end + 7) <= len(val):
+                        char_end += 6 
+                        char_start += 6
+                        snippet = val[char_start:char_end]
+                        message += char_retrieval(snippet, mode)
 
 
 def char_retrieval(snippet, mode):
