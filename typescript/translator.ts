@@ -1,12 +1,17 @@
-import { BRAILE_SPECIAL_CHARS_MAP, BRAILLE_MAP, BRAILLE_TO_NUMBERS_MAP, ENGLISH_TO_BRAILLE_MAP } from "./constants";
+import {
+  BRAILE_SPECIAL_CHARS_MAP,
+  BRAILLE_MAP,
+  BRAILLE_TO_NUMBERS_MAP,
+  ENGLISH_TO_BRAILLE_MAP,
+} from "./constants";
 
-const CAPFOLLOWS = '.....O';
-const DECIMALFOLLOWS = '.O...O';
-const NUMFOLLOWS = '.O.OOO';
-const SPACE = '......';
+const CAP_FOLLOWS = ".....O";
+const DECIMAL_FOLLOWS = ".O...O";
+const NUM_FOLLOWS = ".O.OOO";
+const SPACE = "......";
 
 const translateBrailleToEnglish = (braille: string): string => {
-  let translated = '';
+  let translated = "";
   let capitalFollows = false;
   let numberFollows = false;
 
@@ -14,14 +19,14 @@ const translateBrailleToEnglish = (braille: string): string => {
     const char = braille.substring(i, i + 6);
 
     // Check for follow characters
-    if (char === CAPFOLLOWS) {
+    if (char === CAP_FOLLOWS) {
       capitalFollows = true;
       continue;
-    } else if (char === NUMFOLLOWS) {
+    } else if (char === NUM_FOLLOWS) {
       numberFollows = true;
       continue;
-    } else if (char === DECIMALFOLLOWS) {
-      translated += '.';
+    } else if (char === DECIMAL_FOLLOWS) {
+      translated += ".";
       continue;
     }
 
@@ -35,9 +40,8 @@ const translateBrailleToEnglish = (braille: string): string => {
     // Number follow case
     if (numberFollows) {
       if (char === SPACE) {
-        translated += ' ';
+        translated += " ";
         numberFollows = false;
-        continue;
       } else if (char in BRAILE_SPECIAL_CHARS_MAP) {
         translated += BRAILE_SPECIAL_CHARS_MAP[char];
       } else {
@@ -48,7 +52,7 @@ const translateBrailleToEnglish = (braille: string): string => {
 
     // Normal case
     if (char === SPACE) {
-      translated += ' ';
+      translated += " ";
     } else if (char in BRAILE_SPECIAL_CHARS_MAP) {
       translated += BRAILE_SPECIAL_CHARS_MAP[char];
     } else {
@@ -60,33 +64,33 @@ const translateBrailleToEnglish = (braille: string): string => {
 };
 
 const translateEnglishToBraille = (english: string): string => {
-  let translated = '';
+  let translated = "";
   let numberFollows = false;
 
   for (let i = 0; i < english.length; i++) {
     const char = english[i];
-    
-    if (char >= '0' && char <= '9') {
+
+    if (char >= "0" && char <= "9") {
       if (!numberFollows) {
-        translated += NUMFOLLOWS;
+        translated += NUM_FOLLOWS;
         numberFollows = true;
       }
       translated += ENGLISH_TO_BRAILLE_MAP[char];
-    } else if (char.trim() === '') {
+    } else if (char.trim() === "") {
       translated += SPACE;
-      numberFollows = false; 
-    } else if (char === '.') {
-      translated += DECIMALFOLLOWS;
-    } else if (char.match(/[A-Z]/)) { 
+      numberFollows = false;
+    } else if (char === ".") {
+      translated += DECIMAL_FOLLOWS;
+    } else if (char.match(/[A-Z]/)) {
       if (numberFollows) {
         translated += SPACE;
-        numberFollows = false; 
+        numberFollows = false;
       }
-      translated += CAPFOLLOWS + ENGLISH_TO_BRAILLE_MAP[char.toLowerCase()];
-    } else { 
+      translated += CAP_FOLLOWS + ENGLISH_TO_BRAILLE_MAP[char.toLowerCase()];
+    } else {
       if (numberFollows) {
         translated += SPACE;
-        numberFollows = false; 
+        numberFollows = false;
       }
       translated += ENGLISH_TO_BRAILLE_MAP[char];
     }
@@ -96,20 +100,19 @@ const translateEnglishToBraille = (english: string): string => {
 };
 
 const isInputBraille = (input: string): boolean => {
-  return input.split('').every(char => char === 'O' || char === '.') && input.length % 6 === 0;
-}
+  return input.split("").every((char) => char === "O" || char === ".") && input.length % 6 === 0;
+};
 
 const args = process.argv.slice(2);
 
-if (isInputBraille(args[0])){
+if (isInputBraille(args[0])) {
   const translation = translateBrailleToEnglish(args[0]);
   console.log(translation);
-}
-else {
-  let translation = '';
+} else {
+  let translation = "";
   for (let i = 0; i < args.length; i++) {
     translation += translateEnglishToBraille(args[i]);
-    if(i !== args.length - 1) translation += SPACE;
+    if (i !== args.length - 1) translation += SPACE;
   }
   console.log(translation);
 }
