@@ -113,7 +113,7 @@ def eng_to_braille(w):
             hold_status = False
 
         string_builder += braille_char(letter.lower())
-    print(string_builder)
+    print(string_builder, end="")
 
 
 def braille_to_eng(w):
@@ -144,13 +144,14 @@ def braille_to_eng(w):
         else:
             string_builder += eng_char(braille)[0]
 
-    print(string_builder)
+    print(string_builder, end="")
 
+while True:
+    inp = input()
 
-inp = input()
+    inpset = set(inp)
 
-inpset = set(inp)
-if inpset == {'O', '.'} or inpset == {'.'} or inpset == {'O'}:
-    braille_to_eng(inp)
-else:
-    eng_to_braille(inp)
+    if inpset == {'O', '.'} or inpset == {'.'} or inpset == {'O'}:
+        braille_to_eng(inp)
+    else:
+        eng_to_braille(inp)
