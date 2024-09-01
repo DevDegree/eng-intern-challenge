@@ -1,3 +1,5 @@
+import sys
+
 
 def braille_char(letter):
     braille_dict = {
@@ -97,9 +99,6 @@ def eng_char(letter):
     }
     return eng_dict[letter]
 
-
-#  =  o  +
-
 def eng_to_braille(w):
     hold_status = False
     string_builder = ""
@@ -113,7 +112,7 @@ def eng_to_braille(w):
             hold_status = False
 
         string_builder += braille_char(letter.lower())
-    print(string_builder, end="")
+    return string_builder
 
 
 def braille_to_eng(w):
@@ -122,7 +121,7 @@ def braille_to_eng(w):
     hold_status = False
 
     for chunk in range(0, len(w), 6):
-        braille = (w[chunk:chunk+6])
+        braille = (w[chunk:chunk + 6])
         if braille == ".....O":
             next_cap = True
             continue
@@ -144,13 +143,14 @@ def braille_to_eng(w):
         else:
             string_builder += eng_char(braille)[0]
 
-    print(string_builder, end="")
+    return string_builder
 
-inp = input()
+
+
+inp = ' '.join(sys.argv[1:])
 
 inpset = set(inp)
-
 if inpset == {'O', '.'} or inpset == {'.'} or inpset == {'O'}:
-    braille_to_eng(inp)
+    print(braille_to_eng(inp))
 else:
-    eng_to_braille(inp)
+    print(eng_to_braille(inp))
