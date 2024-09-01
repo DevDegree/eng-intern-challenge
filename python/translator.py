@@ -66,27 +66,27 @@ def braille_to_english(text):
     read_uppercase = False
     english_result = ""
     for i in range(0, len(text), size):
-        braille_word = text[i: i + size]
+        char = BRAILLE_TO_ENGLISH[text[i: i + size]]
         # next braille word should be a uppercase english letter
-        if BRAILLE_TO_ENGLISH[braille_word] == 'capital_follows':
+        if char == 'capital_follows':
             read_uppercase = True
             continue
         # the following braille words should all be numbers
         # until the next space symbol
-        elif BRAILLE_TO_ENGLISH[braille_word] == 'number_follows':
+        elif char == 'number_follows':
             read_numbers = True
             continue
-        
+    
+        # turn off 'read numbers' mode
+        elif char == ' ':
+            read_numbers = False
+
         # read numbers
         if read_numbers:
-            english_result += BRAILLE_TO_ENGLISH[braille_word]
+            english_result += char
 
         # read other characters
         else:
-            char = BRAILLE_TO_ENGLISH[braille_word]
-            # turn off 'read numbers' mode
-            if char == ' ':
-                read_numbers = False
             # if not in 'read numbers' mode
             # we should convert [1-0] to [a-j] correspondingly
             if char >= '0' and char <= '9':
@@ -137,7 +137,6 @@ def main():
         print('Please provide the string to translate!')
 
     text = ' '.join(sys.argv[1:])
-    print(text)
     # if the given string is braille 
     if determine_braille(text):
         print(braille_to_english(text))
@@ -146,3 +145,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
