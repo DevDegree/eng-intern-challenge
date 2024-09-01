@@ -20,15 +20,17 @@ ENGLISH_TO_BRAILLE = {
     '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
     '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..',
 
-    'capital_follows': '....O', 
+    'capital_follows': '.....O', 
     'decimal_follows': '.O...O', 
     'number_follows': '.O.OOO',
 
-    '.': '..OO.O', ',': '..O...', '?': '..O.OO', '!': '..OOO.', ':': '..OO..',
-    ';': '..O.O.', '-': '....OO', '/': '.O..O.', '<': '.OO..O', '>': 'O..OO.',
-    '(': 'O.O..O', ')': '.O.OO.', ' ': '......'
+    ' ': '......'
+    # '.': '..OO.O', ',': '..O...', '?': '..O.OO', '!': '..OOO.', ':': '..OO..',
+    # ';': '..O.O.', '-': '....OO', '/': '.O..O.', '<': '.OO..O', '>': 'O..OO.',
+    # '(': 'O.O..O', ')': '.O.OO.', 
 }
 
+# letter 'a' - 'j' are overwritten by number '1' to '0' 
 BRAILLE_TO_ENGLISH = {val: key for key, val in ENGLISH_TO_BRAILLE.items()}
 
 def determine_braille(text):
@@ -44,10 +46,65 @@ def determine_braille(text):
     return True
 
 
+def convert_to_letter(num_str):
+    '''
+        Convert number string [1-0] to letter [a-j] correspondingly
+    '''
+    if num_str == '0':
+        return 'j'
+    return chr(ord(num_str) - ord('1') + ord('a'))
+
+def braille_to_english(text):
+    '''
+        Convert Braille to English
+    '''
+    size = 6
+
+    # flag to determine if it is reading numbers 
+    read_numbers = False
+    # flag to determine if it is reading capital letter
+    read_uppercase = False
+    english_result = ""
+    for i in range(0, len(text), size):
+        braille_word = text[i: i + size]
+        # next braille word should be a uppercase english letter
+        if BRAILLE_TO_ENGLISH[braille_word] == 'capital_follows':
+            read_uppercase = True
+            continue
+        # the following braille words should all be numbers
+        # until the next space symbol
+        elif BRAILLE_TO_ENGLISH[braille_word] == 'number_follows':
+            read_numbers = True
+            continue
+        
+        # read numbers
+        if read_numbers:
+            english_result += BRAILLE_TO_ENGLISH[braille_word]
+
+        # read other characters
+        else:
+            char = BRAILLE_TO_ENGLISH[braille_word]
+            # turn off 'read numbers' mode
+            if char == ' ':
+                read_numbers = False
+            # if not in 'read numbers' mode
+            # we should convert [1-0] to [a-j] correspondingly
+            if char >= '0' and char <= '9':
+                char = convert_to_letter(char)
+            
+            # capitalize
+            if read_uppercase:
+                char = char.upper()
+                read_uppercase = False
+            
+            english_result += char
+
+    return english_result
 
 
 if __name__ == '__main__':
     text = 'hello world'
     text1 = '.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..'
-    print(determine_braille(text))
-    print(determine_braille(text1))
+    text2 = '.....OO.....O.O...OO...........O.OOOO.....O.O...OO....'
+    print(braille_to_english(text1))
+    print(braille_to_english(text2))
