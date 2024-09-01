@@ -127,7 +127,28 @@ func translateToEnglish(input string) string {
 
 // isBraille checks if the input string is in Braille format
 func isBraille(input string) bool {
-	return strings.ContainsAny(input, ".")
+	// Check if the length of the input is a multiple of 6
+	if len(input)%6 != 0 {
+		return false
+	}
+
+	// Check that every 6-character chunk only contains valid Braille patterns or special characters
+	for i := 0; i < len(input); i += 6 {
+		brailleChar := input[i : i+6]
+		if _, ok := brailleToEnglish[brailleChar]; !ok {
+			// Also check if it's a valid special character
+			if _, ok := brailleSpecialCharacters[brailleChar]; !ok {
+				// Also check if it's a number
+				if _, ok := brailleToNumbers[brailleChar]; !ok {
+					// If it's neither a valid English character/number nor a special character, return false
+					return false
+				}
+			}
+		}
+	}
+
+	// Invalid Braille handled as English
+	return true
 }
 
 func main() {
