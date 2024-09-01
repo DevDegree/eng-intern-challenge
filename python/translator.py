@@ -146,12 +146,11 @@ def braille_to_eng(w):
 
     print(string_builder, end="")
 
-while True:
-    inp = input()
+inp = input()
 
-    inpset = set(inp)
+inpset = set(inp)
 
-    if inpset == {'O', '.'} or inpset == {'.'} or inpset == {'O'}:
-        braille_to_eng(inp)
-    else:
-        eng_to_braille(inp)
+if inpset == {'O', '.'} or inpset == {'.'} or inpset == {'O'}:
+    braille_to_eng(inp)
+else:
+    eng_to_braille(inp)
