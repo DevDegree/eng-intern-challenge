@@ -53,7 +53,7 @@ def is_braile(text):
     Checks if the input text is valid braille text.
 
     :param text: The text to check
-    :return: True if the text is valid braille text, False otherwise     
+    :return: True if the text is valid braille text, False otherwise
     """
     # Checks if the first argument is valid braille text
     for letter in text:
@@ -110,7 +110,7 @@ def to_braile(arguments):
 #     for i in range(len(phrase)):
 #         if phrase[i].isupper():
 #             if is_number_mode:
-#                 is_number_mode = False 
+#                 is_number_mode = False
 #             result.append(capital_follows)
 #             result.append(letters[phrase[i].lower()])
 #         elif phrase[i].isdigit():
@@ -134,19 +134,19 @@ def to_alphabet(text):
 
     :param text: The braille text to convert, each braille letter must either be an alphanumeric representation
                  of a single character, an empty space or a capital_follows or number_follows indicator
-    :return: string - The alphanumeric representation of the braille text  
+    :return: string - The alphanumeric representation of the braille text
     """
     # Reverse the dictionaries for easier lookup
     reversed_numbers = {v: k for k, v in numbers.items()}
     reversed_letters = {v: k for k, v in letters.items()}
-    
+
     # Ensure the length of the braille text is a multiple of 6
     if len(text) % 6 != 0:
         print("Invalid braille text length.")
         return None
 
     # Split the braille text into alphanumeric characters
-    words = [text[i:i + 6] for i in range(0, len(text), 6)]
+    words = [text[i : i + 6] for i in range(0, len(text), 6)]
 
     is_capital = False
     is_number = False
