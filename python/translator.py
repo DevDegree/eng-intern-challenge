@@ -61,6 +61,11 @@ def convertEnglishToBraille(str):
 
   return output
 
+# Check if input string is actually provided
+if len(sys.argv) <= 1:
+  print("Please provide an input string to be translated.")
+  sys.exit()
+
 string = " ".join(sys.argv[1:])
 
 if isBraille(string):
