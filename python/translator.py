@@ -9,17 +9,20 @@ import sys
 import startup
 import translator_functions
 
-#First check to see if string input is braille or English
+#The following set of comments are my thoughts when first encountering the problem
 
-#If Check says it is braille, create a new list/array where each element is of length 6, which keeps the info we need ex '[.0....],..'
-#Length of new list/array will be equal to input/length of element (6)
+# #First check to see if string input is braille or English
 
-#For braille, will need to code to handle cases where it is stating if the next element is a space, number, decimal or capital letter
-#With those cases, theyll be sent to booleans and modifiy the outcome to the if statement properly
+# #If Check says it is braille, create a new list/array where each element is of length 6, which keeps the info we need ex '[.0....],..'
+# #Length of new list/array will be equal to input/length of element (6)
 
-#If in English, create a new list/array and have each ellement within it seperated like "[A,b,c,1,...]"
-#Sorta like with braille, create a boolean to handle cases when a capital letter is needed
-#For cases with numbers, we will append the appropriate braille signifier to the first number of the string 
+# #For braille, will need to code to handle cases where it is stating if the next element is a space, number, decimal or capital letter
+# #With those cases, theyll be sent to booleans and modifiy the outcome to the if statement properly
+
+# #If in English, create a new list/array and have each ellement within it seperated like "[A,b,c,1,...]"
+# #Sorta like with braille, create a boolean to handle cases when a capital letter is needed
+# #For cases with numbers, we will append the appropriate braille signifier to the first number of the string 
+
 
 def translation_Setting(text):
     dict_english_braille = startup.setup_dictionary()
@@ -31,9 +34,7 @@ def translation_Setting(text):
         output = translator_functions.eng_To_Bra(text, dict_english_braille)
 
     print (output)
-
 def main():
-
     translation_Setting(text = ' '.join(sys.argv[1:]).strip())
     
 #Excecution of program

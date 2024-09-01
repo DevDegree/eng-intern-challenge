@@ -1,3 +1,5 @@
+#this file holds the code that does the translation from English to Braille or Braille to English
+#Bulk of the code is here
 
 UPPER_CASE_BRAILLE = ".....O"
 NUMBER_BRAILLE = ".O.OOO"
