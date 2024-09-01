@@ -54,21 +54,24 @@ def create_braille_numerical_bidict():
 '''
 In Braille Alphabet in the technical requirements it does not state that '.' can be a vaild alphabet input in this program
 
-Vaild Braille Alphabet are:
+Valid Braille Alphabet are:
     1. Letters a through z(lowercase and uppercase)
     2. Numbers 0 through 9
     3. Spaces
 
 This means if '.' is found in a string it is a braille and not a vaild braille alphabet
 '''
-def is_braille(text):
+def vaild_braille(text):
     for c in text:
         if (c != '.') and (c != 'O'):
             return False
-    return True
-
-def vaild_braille(text):
     return len(text) % 6 == 0
+
+def vaild_english(text):
+    for c in text:
+        if not (c.isalpha() or c.isdigit() or c == " "):
+            return False
+    return True
 
 # Gets input from terminal
 def get_system_arguments(args):
@@ -104,24 +107,20 @@ def convert_brallie_to_english(text, braille_alphabet_bidict, braille_numerical_
     return english
 
 
-
-
 # Runs the Translator
 def main():
     text = get_system_arguments(sys.argv)
     braille_alphabet_bidict = create_braille_alphabet_bidict()
     braille_numerical_bidict = create_braille_numerical_bidict()
-    if is_braille(text) and vaild_braille(text):
+    if vaild_braille(text):
         print(convert_brallie_to_english(text, braille_alphabet_bidict, braille_numerical_bidict))
+    elif vaild_english(text):
+        print("Ben")
+    else:
+        print("Invaild Input in terminal")
 
     print("RAN")
 
-
-
-    # braille_alphabet_bidict = create_braille_alphabet_bidict()
-    # braille_numerical_bidict = create_braille_numerical_bidict()
-    # print(braille_alphabet_bidict.get('a'))
-    # print(braille_alphabet_bidict.get_by_value('O.O...'))
 
 if __name__ == "__main__":
     main() 
