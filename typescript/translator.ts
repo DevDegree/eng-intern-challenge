@@ -121,13 +121,6 @@ const translate = (input: string): string =>
 
 const main = () => {
   const input = process.argv.slice(2).join(" ");
-  if (!input) {
-    console.error(
-      "Please provide either an English or Braille string to translate"
-    );
-    process.exit(1);
-  }
-
   console.log(translate(input));
 };
 
