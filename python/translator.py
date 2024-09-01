@@ -9,9 +9,9 @@ class BrailleTranslator:
     symbols
     """
     # Braille symbols
-    CAPITAL_BRAILLE = '.....O'
-    NUMBER_BRAILLE  = '.O.OOO'
-    SPACE_BRAILLE   = '......'
+    CAPITAL_SYMBOL = '.....O'
+    NUMBER_SYMBOL  = '.O.OOO'
+    SPACE_SYMBOL   = '......'
     
     # Character translation dictionaries
     ENGLISH_TO_BRAILLE = {
@@ -50,7 +50,28 @@ class BrailleTranslator:
         """
         Translates an English string to Braille
         """
-        pass
+        # Using a list because it is more efficient than concatenating strings
+        result = []
+        translating_numbers = False
+        
+        for char in english_str:
+            if char.isdigit():
+                if not translating_numbers:
+                    result.append(self.NUMBER_SYMBOL)
+                    translating_numbers = True
+                result.append(self.NUMBER_TO_BRAILLE[char])
+            elif char.isupper():
+                result.append(self.CAPITAL_SYMBOL)
+                result.append(self.ENGLISH_TO_BRAILLE[char.lower()])
+            elif char.lower() in self.ENGLISH_TO_BRAILLE:
+                result.append(self.ENGLISH_TO_BRAILLE[char.lower()])
+            elif char == ' ':
+                result.append(self.SPACE_SYMBOL)
+                translating_numbers = False
+            else:
+                raise ValueError(f"Invalid character in English input: {char}")
+        
+        return ''.join(result)
 
     def translate(self, input_str: str) -> str:
         """
