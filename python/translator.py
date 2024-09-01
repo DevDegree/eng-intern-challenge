@@ -135,19 +135,12 @@ def translation_Setting(text):
 #Excecution of program
 if __name__ == "__main__":
 
-    if len(sys.argv) > 1 and sys.argv[1].endswith(".py"):
-        test_File = sys.argv[1]
-        loaded_Test = unittest.TestLoader()
-        tests = loaded_Test.discover('.', pattern=test_File)
-        run_Test = unittest.TextTestRunner()
-        run_Test.run(tests)
-        
+    text = ' '.join(sys.argv[1:])
+    if (len(text) % 6 == 0 and ('O' in text or '......' in text)):
+    #Braille
+        output = translator_functions.bra_To_Eng(text,dict_Eng_Bra)
     else:
-        if (len(text) % 6 == 0 and ('O' in text or '......' in text)):
-        #Braille
-            output = translator_functions.bra_To_Eng(text,dict_Eng_Bra)
-        else:
-        #English
-            output = translator_functions.eng_To_Bra(text, dict_Eng_Bra)
+    #English
+        output = translator_functions.eng_To_Bra(text, dict_Eng_Bra)
 
     print (output)
