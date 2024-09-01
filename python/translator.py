@@ -70,9 +70,15 @@ def main():
     braille_pattern = r'^[.O]*$'
 
     if(re.search(braille_pattern, input_text)):
-        print(translate_to_english(input_text))
+        try:
+            print(translate_to_english(input_text))
+        except (KeyError):
+            print("Braille letter not found")
     else:
-        print(translate_to_braille(input_text))
+        try:
+            print(translate_to_braille(input_text))
+        except:
+            print("Please enter a valid string")
 
 if __name__ == "__main__":
     main()
