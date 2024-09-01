@@ -79,21 +79,17 @@ def to_braille(english_phrase):
     for char in english_phrase:
         if is_number > 0 and char == '.':
             braille_phrase = braille_phrase + alphabet['decimal_follows']
-            #print(f"decimal_follows: {alphabet['decimal_follows']}")
         else:
             if char.isupper():
                 braille_phrase = braille_phrase + alphabet['capital_follows']
-                #print(f"capital_follows: {alphabet['capital_follows']}")
             if char.isdigit() and is_number == 0:
                 braille_phrase = braille_phrase + alphabet['number_follows']
-                #print(f"number_follows: {alphabet['number_follows']}")
                 is_number = 1
 
             if char == ' ':
                 is_number = 0
 
             braille_phrase = braille_phrase + alphabet[char.lower()]
-            #print(f"{char}: {alphabet[char.lower()]}")
 
     return braille_phrase
 
