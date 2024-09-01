@@ -5,21 +5,22 @@ NUMBER_BRAILLE = ".O.OOO"
 def change_case(bool):
     return not bool
 
-def eng_To_Bra(text, dict_Eng_Bra):
+
+def eng_to_braille(text, dict_english_braille):
     text_Translate= text
     translated_string = ""
     first_num = False
 
-    for i, char_in_Str in enumerate(text_Translate):
-        for translation in dict_Eng_Bra:
+    for i, char_in_string in enumerate(text_Translate):
+        for translation in dict_english_braille:
 
-            if char_in_Str.lower() == translation[0].lower():
+            if char_in_string.lower() == translation[0].lower():
                 #Check if value is an uppercase letter 
-                if char_in_Str.isupper():
+                if char_in_string.isupper():
                     translated_string += UPPER_CASE_BRAILLE  + translation[1]
 
                 #Check if value is a number
-                elif char_in_Str.isdigit():
+                elif char_in_string.isdigit():
                         #Check if value is the first number or not
                         if not first_num:
                             translated_string += NUMBER_BRAILLE + translation[1]
@@ -42,7 +43,7 @@ def eng_To_Bra(text, dict_Eng_Bra):
 
 
 #Braille to English Translator
-def bra_To_Eng(text, dict_Eng_Bra):
+def bra_To_Eng(text, dict_english_braille):
     text_to_be_modified = text
     modified_text = []
     capital = False
@@ -53,14 +54,14 @@ def bra_To_Eng(text, dict_Eng_Bra):
         modified_text.append(text_to_be_modified[i:i+6])
 
     translated_string = ""
-    for i, brl_in_Str in enumerate(modified_text):
-        for translation in dict_Eng_Bra:
+    for i, braille_in_string in enumerate(modified_text):
+        for translation in dict_english_braille:
 
-            if brl_in_Str == translation[1]:
+            if braille_in_string == translation[1]:
 
 
                 #check to determine first number of a sequence of elements
-                if brl_in_Str == NUMBER_BRAILLE:
+                if braille_in_string == NUMBER_BRAILLE:
                     num_mode = change_case(num_mode)
 
                 print(num_mode)
