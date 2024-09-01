@@ -43,3 +43,17 @@ const numberToBraille = {
     8: "O.OO..",
     9: ".OO...",
 };
+
+// Reverse mappings
+const brailleToEnglish = {};
+for (const [key, value] of Object.entries(englishToBraille)) {
+    if (key !== "CAPITAL" && key !== "NUMBER") {
+        brailleToEnglish[value] = key;
+    }
+}
+
+const brailleToNumber = {};
+for (const [key, value] of Object.entries(numberToBraille)) {
+    brailleToNumber[value] = key;
+}
+
