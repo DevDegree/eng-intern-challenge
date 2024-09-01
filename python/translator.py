@@ -24,7 +24,7 @@ class BrailleTranslator:
     }
 
     NUMBER_TO_BRAILLE = {
-        '1': '.OO...', '2': '.OOO..', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
+        '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
         '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..'
     }
 
@@ -34,19 +34,50 @@ class BrailleTranslator:
     def __init__(self):
         pass
 
-    def is_braille(self, input_str: str) -> bool:
+    def is_braille(self, input: str) -> bool:
         """
         Checks if the input string is in Braille
         """
-        return all(char in 'O.' for char in input_str)
+        return all(char in 'O.' for char in input)
 
-    def translate_to_english(self, braille_str: str) -> str:
+    def translate_to_english(self, input: str) -> str:
         """
         Translates a Braille string to English
         """
-        pass
 
-    def translate_to_braille(self, english_str: str) -> str:
+        # Using a list because it is more efficient than concatenating strings
+        result = []
+        i = 0
+        capitalize_next = False
+        translating_numbers = False
+        
+        while i < len(input):
+            braille_char = input[i:i+6]
+            
+            if braille_char == self.CAPITAL_SYMBOL:
+                capitalize_next = True
+            elif braille_char == self.NUMBER_SYMBOL:
+                translating_numbers = True
+            elif braille_char == self.SPACE_SYMBOL:
+                translating_numbers = False
+                result.append(' ')
+            elif translating_numbers and braille_char in self.BRAILLE_TO_NUMBER:
+                result.append(self.BRAILLE_TO_NUMBER[braille_char])
+            elif braille_char in self.BRAILLE_TO_ENGLISH and not translating_numbers:
+                char = self.BRAILLE_TO_ENGLISH[braille_char]
+                if capitalize_next:
+                    char = char.upper()
+                    capitalize_next = False
+                result.append(char)
+            else:
+                raise ValueError(f"Invalid Braille character: {braille_char}")
+            
+            # Move to index of the next Braille character
+            i += 6
+        
+        return ''.join(result)
+
+    def translate_to_braille(self, input: str) -> str:
         """
         Translates an English string to Braille
         """
@@ -54,7 +85,7 @@ class BrailleTranslator:
         result = []
         translating_numbers = False
         
-        for char in english_str:
+        for char in input:
             if char.isdigit():
                 if not translating_numbers:
                     result.append(self.NUMBER_SYMBOL)
@@ -69,18 +100,18 @@ class BrailleTranslator:
                 result.append(self.SPACE_SYMBOL)
                 translating_numbers = False
             else:
-                raise ValueError(f"Invalid character in English input: {char}")
+                raise ValueError(f"Invalid English character: {char}")
         
         return ''.join(result)
 
-    def translate(self, input_str: str) -> str:
+    def translate(self, input: str) -> str:
         """
         Translates input to the appropriate output, based on input type
         """
-        if self.is_braille(input_str):
-            return self.translate_to_english(input_str)
+        if self.is_braille(input):
+            return self.translate_to_english(input)
         else:
-            return self.translate_to_braille(input_str)
+            return self.translate_to_braille(input)
 
 
 def main():
