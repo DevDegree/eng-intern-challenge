@@ -96,38 +96,6 @@ def to_braile(arguments):
     return "".join(result)
 
 
-# def to_braile(arguments):
-#     """
-#     Converts the input text to braille.
-
-#     :param arguments: The text to convert, must be an alphanumeric list of strings
-#     :return: string - The braille representation of the text
-#     """
-#     phrase = " ".join(arguments)
-#     result = []
-#     is_number_mode = False
-
-#     for i in range(len(phrase)):
-#         if phrase[i].isupper():
-#             if is_number_mode:
-#                 is_number_mode = False
-#             result.append(capital_follows)
-#             result.append(letters[phrase[i].lower()])
-#         elif phrase[i].isdigit():
-#             # Check if we have added an indicator already
-#             if (i > 0 and phrase[i - 1] == " ") or i == 0:
-#                 result.append(number_follows)
-#             result.append(numbers[phrase[i]])
-#         else:
-#             try:
-#                 result.append(letters[phrase[i]])
-#             except KeyError:
-#                 print(f"Invalid character '{phrase[i]}' encountered.")
-#                 return None
-
-#     return "".join(result)
-
-
 def to_alphabet(text):
     """
     Converts the input braille text to alphanumeric text.
