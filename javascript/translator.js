@@ -85,6 +85,7 @@ function translateBtoE(braille) {
       result.push(translated);
       i += 6;
     }
+    
   
     return result.join('');
   }
