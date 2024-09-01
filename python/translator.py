@@ -15,7 +15,7 @@ braille_english_map = {
         "O.....": "1", "O.O...": "2", "OO....": "3", "OO.O..": "4", "O..O..": "5",
         "OOO...": "6", "OOOO..": "7", "O.OO..": "8", ".OO...": "9", ".OOO..": "0",
         "..OO.O":".", "....OO" : "-", ".O..O.": "/", ".OO..O" : "<", "O..OO.": ">",
-        "O.O..O": "(", ".O.OO." : ")", "......": " ", ".O...O":"decimal follows",
+        "O.O..O": "(", ".O.OO." : ")", ".O...O":"decimal follows",
     }
 }
 
@@ -52,22 +52,24 @@ def translate_braille(input_string: str) -> str:
             elif braille_char == "number follows":
                 numericize = True
                 continue
-        # Handle numbers and other symbols when numericize is active
-        if numericize:
-            if char in braille_english_map["numbers"]:
-                braille_char = braille_english_map["numbers"][char]
-                if braille_char == "decimal follows":
-                    translated_string += "."
-                else:
-                    translated_string += braille_char
-            continue  # Ensures numericize doesn't get turned off prematurely
 
-        # Handle regular characters and capitalization
-        if capitalize:
-            translated_string += braille_char.upper()
-            capitalize = False  # Reset capitalize after one character
-        else:
-            translated_string += braille_char
+            # Handle regular characters and capitalization
+            if capitalize:
+                translated_string += braille_char.upper()
+                capitalize = False  # Reset capitalize after one character
+            else:
+                translated_string += braille_char
+
+            # Handle space and reset numericize
+            if braille_char == " ":
+                numericize = False  # Reset numericize after a space
+
+        elif numericize and char in braille_english_map["numbers"]:
+            braille_char = braille_english_map["numbers"][char]
+            if braille_char == "decimal follows":
+                translated_string += "."
+            else:
+                translated_string += braille_char
 
     return translated_string
 
