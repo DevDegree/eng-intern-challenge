@@ -1,7 +1,11 @@
 import sys
 
 
-def braille_char(letter):
+def braille_char(letter:str) -> str:
+    """
+    Returns the braille equivalent of the passed alphanumeric char (in string format)
+    param: letter the alphanumeric char in question
+    """
     braille_dict = {
         'a': 'O.....',
         'b': 'O.O...',
@@ -57,6 +61,10 @@ def braille_char(letter):
 
 
 def eng_char(letter):
+    """
+        Returns the alphanumeric equivalent of the passed braille string (in string format)
+        param: the braille string in question
+    """
     eng_dict = {
         'O.....': ['a', 1],
         'O.O...': ['b', 2],
@@ -99,7 +107,11 @@ def eng_char(letter):
     }
     return eng_dict[letter]
 
-def eng_to_braille(w):
+def eng_to_braille(w:str)-> str:
+    """
+    Returns a complete braille translation of the passed alphanumeric string (in string format)
+    param:  alphanumeric string to be translated
+    """
     hold_status = False
     string_builder = ""
     for letter in w:
@@ -115,7 +127,11 @@ def eng_to_braille(w):
     return string_builder
 
 
-def braille_to_eng(w):
+def braille_to_eng(w:str)->str:
+    """
+        Returns a complete english translation of the passed braille string (in string format)
+        param:  braille string to be translated in its entireity
+        """
     string_builder = ""
     next_cap = False
     hold_status = False
@@ -146,10 +162,11 @@ def braille_to_eng(w):
     return string_builder
 
 
-
+# The main function of the program calls the appropropriate translation function
 inp = ' '.join(sys.argv[1:])
 inpset = set(inp)
-if inpset == {'O', '.'} or inpset == {'.'} or inpset == {'O'}:
+
+if inpset == {'O', '.'} or inpset == {'.'} or inpset == {'O'}: #A  braille string could only have these 3 set signitures
     print(braille_to_eng(inp))
 else:
     print(eng_to_braille(inp))
