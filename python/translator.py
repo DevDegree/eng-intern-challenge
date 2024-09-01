@@ -99,20 +99,17 @@ def translate_english(input_string: str) -> str:
 
     return translated_string
 
-
 def main():
     # Get the input string from the command line arguments
     arguments = sys.argv[1:]
-    input_string = "".join(arguments)
+    input_string = " ".join(arguments)  # Join arguments with spaces to preserve input format
 
-    # Determine if string is English or braille
+    # Determine if the string is English or Braille
     if is_braille(input_string):
-        #If the string is braille translate to braille
         translation = translate_braille(input_string)
     else:
         translation = translate_english(input_string)
     print(translation)
-
 
 if __name__ == "__main__":
     main()
