@@ -2,23 +2,23 @@ import sys
 
 # Mapping Braille to English
 braille_2_english = {
-    'O.....' : 'a', 'OO....' : 'b', 'O..O..' : 'c', 'O..OO.' : 'd',
-    'O...O.' : 'e', 'OO.O..' : 'f', 'OO.OO.' : 'g', 'OO..O.' : 'h',
-    '.O.O..' : 'i', '.O.OO.' : 'j', 'O.O...' : 'k', 'OOO...' : 'l',
-    'O.OO..' : 'm', 'O.OOO.' : 'n', 'O.O.O.' : 'o', 'OOOO..' : 'p',
-    'OOOOO.' : 'q', 'OOO.O.' : 'r', '.OOO..' : 's', '.OOOO.' : 't',
-    'O.O..O' : 'u', 'OOO..O' : 'v', '.O.OOO' : 'w', 'O.OO.O' : 'x',
-    'O.OOOO' : 'y', 'O.O.OO' : 'z', 
+    'O.....' : 'a', 'O.O...' : 'b', 'OO....' : 'c', 'OO.O..' : 'd',
+    'O..O..' : 'e', 'OOO...' : 'f', 'OOOO..' : 'g', 'O.OO..' : 'h',
+    '.OO...' : 'i', '.OOO..' : 'j', 'O...O.' : 'k', 'O.O.O.' : 'l',
+    'OO..O.' : 'm', 'OO.OO.' : 'n', 'O..OO.' : 'o', 'OOO.O.' : 'p',
+    'OOOOO.' : 'q', 'O.OOO.' : 'r', '.OO.O.' : 's', '.OOOO.' : 't',
+    'O...OO' : 'u', 'O.O.OO' : 'v', '.OOO.O' : 'w', 'OO..OO' : 'x',
+    'OO.OOO' : 'y', 'O..OOO' : 'z', 
     '......' : ' ', #space
     '.....O' : '^', #capital letter follows
-    '..OOOO' : '#', #number follows
+    '.O.OOO' : '#', #number follows
 }
 
 #Number dictionary for Braille
 braille_numbers = {
-    'O.....' : '1', 'OO....' : '2', 'O..O..' : '3', 'O..OO.' : '4',
-    'O...O.' : '5', 'OO.O..' : '6', 'OO.OO.' : '7', 'OO..O.' : '8',
-    '.O.O..' : '9', '.O.OO.' : '0'
+    'O.....' : '1', 'O.O...' : '2', 'OO....' : '3', 'OO.O..' : '4',
+    'O..O..' : '5', 'OOO...' : '6', 'OOOO..' : '7', 'O.OO..' : '8',
+    '.OO...' : '9', '.OOO..' : '0'
 }
 
 #Mapping English and Number to Braille
@@ -26,7 +26,7 @@ english_2_braille = {english: braille for braille, english in braille_2_english.
 english_2_braille.update({number: braille for braille, number in braille_numbers.items()})
 
 def is_braille(input):
-    return all(t in 'O. ' for t in input)
+    return all(c in 'O. ' for c in input)
 
 def braille_2_english_translator(braille):
     translation = []
@@ -35,7 +35,7 @@ def braille_2_english_translator(braille):
     words = [braille[i:i+6] for i in range(0, len(braille), 6)]
 
     for word in words:
-        if word == '..OOOO': #number follows
+        if word == '.O.OOO': #number follows
             number_follow = True
         elif word == '.....O': #capital letter follows
             capital_follow = True
@@ -68,7 +68,6 @@ def english_2_braille_translator(english):
         else:
             if number_follow:
                 number_follow = False
-                translation.append(english_2_braille[' '])
             
             if char.isupper():
                 translation.append(english_2_braille['^'])
@@ -76,7 +75,7 @@ def english_2_braille_translator(english):
 
             translation.append(english_2_braille.get(char, '??????'))
     
-    return ' '.join(translation)
+    return ''.join(translation)
 
 def main():
     if len(sys.argv) < 2:
