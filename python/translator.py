@@ -21,6 +21,9 @@ NUM_MAPPING = {
     'f': '6', 'g': '7', 'h': '8', 'i': '9', 'j': '0'
 }
 
+# Reverse number mapping
+NUM_TO_BRAILLE = {v: ENG_TO_BRAILLE[k] for k, v in NUM_MAPPING.items()}
+
 def braille_to_eng_translate(braille):
     """
     Convert braille string to English text.
@@ -28,12 +31,11 @@ def braille_to_eng_translate(braille):
     :param braille: str
     :rtype: str
     """
-    i = 0
     result = []
     cap_next_char = False
     in_num_mode = False
 
-    while i < len(braille):
+    for i in range(0, len(braille), 6):
         cur_char = braille[i:i+6]
 
         if cur_char == ENG_TO_BRAILLE["capital next"]: # capital next
@@ -51,12 +53,10 @@ def braille_to_eng_translate(braille):
                 result.append(letter)
                 if letter == ' ':
                     in_num_mode = False
-        i += 6
 
     return ''.join(result)
 
 def eng_to_braille_translate(english):
-
     """
     Convert English text to braille string.
     
@@ -77,12 +77,11 @@ def eng_to_braille_translate(english):
                 # If the character is a digit and not currently in number mode, add the 'number next' character
                 result.append(ENG_TO_BRAILLE['number next'])
                 in_number_mode = True
-            char = list(NUM_MAPPING.keys())[list(NUM_MAPPING.values()).index(char)]
-        elif in_number_mode:
+            result.append(NUM_TO_BRAILLE[char])
+        else:
             # If the character is not a digit and currently in number mode, add the 'number next' character
             in_number_mode = False
-
-        result.append(ENG_TO_BRAILLE[char])
+            result.append(ENG_TO_BRAILLE[char])
 
     return ''.join(result)
 
