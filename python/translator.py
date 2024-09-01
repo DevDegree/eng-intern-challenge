@@ -1,5 +1,4 @@
 import sys
-from abc import ABC, abstractmethod
 from enum import Enum
 
 class TokenType(Enum):
@@ -12,11 +11,10 @@ class Token:
         self.type: TokenType = type
         self.value: str = value
 
-class Translator(ABC):
+class Translator:
     def __init__(self, input_string: str) -> None:
         self.input_string = input_string
 
-    @abstractmethod
     def parse_token(self, token: Token) -> str:
         """
         Translate the given token.
@@ -29,7 +27,6 @@ class Translator(ABC):
         """
         pass
 
-    @abstractmethod
     def get_next_token(self, input_str: str) -> tuple[Token, str]:
         """
         Extracts the next token from the input string.
