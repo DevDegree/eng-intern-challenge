@@ -78,6 +78,9 @@ def to_braile(arguments):
             result.append(numbers[phrase[i]])
             is_number_mode = False
         elif phrase[i].isupper():
+            if is_number_mode:
+                print(f"Invalid: uppercase character '{phrase[i]}' encountered in number mode.")
+                return None
             result.append(capital_follows)
             result.append(letters[phrase[i].lower()])
         elif phrase[i].isdigit():
@@ -87,6 +90,9 @@ def to_braile(arguments):
                 is_number_mode = True
             result.append(numbers[phrase[i]])
         else:
+            if is_number_mode:
+                print(f"Invalid: lowercase character '{phrase[i]}' encountered in number mode.")
+                return None
             try:
                 result.append(letters[phrase[i]])
             except KeyError:
