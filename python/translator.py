@@ -93,10 +93,7 @@ def main():
     else:
         # Likely English input
         output = to_braille(input_text)
-
     print(output)
-
-    return output
 
 
 main()
