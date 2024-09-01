@@ -132,19 +132,17 @@ def english_to_braille(text):
     return braille_result
 
 
+def main():
+    if len(sys.argv) < 2:
+        print('Please provide the string to translate!')
+
+    text = ' '.join(sys.argv[1:])
+    print(text)
+    # if the given string is braille 
+    if determine_braille(text):
+        print(braille_to_english(text))
+    else:
+        print(english_to_braille(text))
 
 if __name__ == '__main__':
-    pass
-    # text = 'hello world'
-    # text1 = '.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..'
-    # text2 = '.....OO.....O.O...OO...........O.OOOO.....O.O...OO....'
-    # print(braille_to_english(text1))
-    # print(braille_to_english(text2))
-    # print(english_to_braille('Abc 123'))
-    # print(english_to_braille('Abc 123') == text2)
-    # print(braille_to_english(text1) == 'Hello world')
-
-    # text3 = '.O.OOOOO.O..O.O...'
-    # print(braille_to_english(text3))
-    # print(english_to_braille('42'))
-    # print(english_to_braille('42') == text3)
+    main()
