@@ -92,7 +92,10 @@ def main():
         print("Usage: python translator.py <input_string>")
         return
 
-    input_str = sys.argv[1]
+    # Combine all arguments into a single input string to ensure that the script 
+    # behaves consistently whether run directly or via the test file.
+    input_str = " ".join(sys.argv[1:])
+
     input_type = detect_input_type(input_str)
 
     if input_type == "english":

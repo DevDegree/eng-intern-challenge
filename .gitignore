@@ -3,3 +3,10 @@ node_modules
 yarn.lock
 package-lock.json
 Gemfile.lock
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+.idea/
+.vscode/
