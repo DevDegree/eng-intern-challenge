@@ -3,6 +3,7 @@
 # Purpose: To create a Python converter, that will convert English text to Braille or Braille text to English text that is passed in as a command-line argument into the script
 # Assumptions:
 ## - If there is a number that is followed by a capital letter, with the same braille conversion, that there will always will be the "follows" indicator
+## - It is possible that in a string, that there are both Braille and English words and that we have to be able to convert on the fly
 
 ## Importing the sys library to be able to access cmd-line arguments in Python 3.8
 import sys
@@ -134,14 +135,14 @@ reverseNumberLetterMapping = {
 Input: A string that is in the Braille language
 Output: The input string but translated to the English language
 """
-def convertFromBrailleToEnglish(input):
-  res = ''
-  isCapital = False
-  isNum = False
+def convertFromBrailleToEnglish(input: str) -> str:
+  res: str = ''
+  isCapital: bool = False
+  isNum: bool = False
 
   # Now that we know that the string given to us is in braille, we want to parse the braille, 6 characters at a time
   while input:
-      currentBrailleString = input[:6]
+      currentBrailleString: str = input[:6]
       input: str = input[6:]
 
       # Check if the current braille string converts to a normal alpha numeric/special character
@@ -176,13 +177,13 @@ def convertFromBrailleToEnglish(input):
 Input: A string that is in the English language
 Output: The input string but translated to the Braille language
 """
-def convertFromEnglishToBraille(input):
-  res = ''
-  isNumber = False
+def convertFromEnglishToBraille(input: str) -> str:
+  res: str = ''
+  isNumber: bool = False
 
   # Now that we know that the string given to us is in English, we want to parse the string, one character at a time
   while input:
-      currentCharacter = input[0]
+      currentCharacter: str = input[0]
       input = input[1:]
 
       # We now have to handle all the non-alpha numeric characters and their corresponding braille translations
@@ -216,16 +217,21 @@ def convertFromEnglishToBraille(input):
 
   return res + '......'
 
-def main():
+""" 
+Input: Nothing since it's the main function
+Output: Nothing since it's the main function
+"""
+def main() -> None:
+  # Check if we even can convert any text by checking the number of arguments passed into the function, if we are missing a string, then just print a default error messag and exit the program
   if len(sys.argv) < 2:
     print("Cannot translate empty text. The program will now exit.")
     sys.exit(1)
   
   # This is the variable we will print to the terminal, containing the translation output
-  res = ''
+  res: str = ''
 
-  # Language given
-  isBraille = False
+  # Check if we are translating from braille to English or English to braille
+  isBraille: bool = False
 
   # Capture all arguments except the script name
   allArguments = sys.argv[1:]
@@ -246,5 +252,6 @@ def main():
   else:
     print(res[:-6].strip(), file=sys.stdout)
 
+# Calling the main function here
 if __name__ == "__main__":
-   main()
+  main()
