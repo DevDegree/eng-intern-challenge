@@ -52,6 +52,57 @@ var brailleSpecialCharacters = map[string]string{
 	".O...O": "decimal follows", // Decimal follows
 }
 
+// translateToBraille converts an English string to Braille
+func translateToBraille(input string) string {
+	var result strings.Builder
+	numberMode := false
+	decimalMode := false
+
+	for i := 0; i < len(input); i++ {
+		char := rune(input[i])
+
+		// Handle capital letters
+		if char >= 'A' && char <= 'Z' {
+			// Add Braille code for capital follows
+			result.WriteString(".....O")
+			char = char + 32 // Convert to lowercase
+		}
+
+		// Handle numbers
+		if char >= '0' && char <= '9' {
+			if !numberMode {
+				// Add Braille code for number follows
+				result.WriteString(".O.OOO")
+				numberMode = true
+			}
+		} else {
+			// Reset number mode on non-number characters
+			numberMode = false
+		}
+
+		// Handle decimals
+		if char == '.' {
+			if !decimalMode {
+				// Add Braille code for decimal follows
+				result.WriteString(".O...O")
+				decimalMode = true
+			}
+		} else {
+			// Reset decimal mode on non-decimal characters
+			decimalMode = false
+		}
+
+		// Translate the current character to Braille
+		if braille, ok := englishToBraille[char]; ok {
+			result.WriteString(braille)
+		} else {
+			result.WriteString("......") // Default to space for unknown characters
+		}
+	}
+
+	return result.String()
+}
+
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println("Please provide a string to translate.")
