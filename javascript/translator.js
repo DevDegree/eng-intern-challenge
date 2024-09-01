@@ -146,14 +146,7 @@ const translateToEnglish = (braille) => {
 // CLI
 const main = () => {
     const args = process.argv.slice(2);
-    if (args.length < 1) {
-        console.log("ERROR: Missing arguments | Usage: node translator.js <str>");
-        return;
-    }
-
     const inputText = args.join(' ');
-    console.log('inputText is: ', inputText);
-    console.log('language of inputText is: ', isBraille(inputText));
 
     if (isBraille(inputText)) {
         console.log(translateToEnglish(inputText));
