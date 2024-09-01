@@ -1,5 +1,6 @@
 import sys
 # import re
+import argparse
 
 english_to_braille = {
     'a': "O.....",
@@ -90,27 +91,26 @@ capital_follows = ".....O"
 number_follows = ".O.OOO"
 space_braille = "......"
 
-# apparently using .join is more efficient as it "doesn’t create new intermediate strings in each iteration"
 def convert_english_to_braille(input_string):
     output = []
     is_digit_start = True
     for c in input_string:
-        # check if number
+        # if the character is a digit, appends the number follows braille symbol
         if c.isdigit() and is_digit_start:
             is_digit_start = False
             output.append(number_follows)
-        # check if capital
+        # if the character is capital, appends the capital follows braille symbol
         elif c.isupper():
             output.append(capital_follows)
             c = c.lower()
-        # if space, following digits no longer number
+        # if the character is whitespace, the characters following are no longer numbers
         elif c == ' ':
             is_digit_start = True
+
         output.append(english_to_braille[c])
     return ''.join(output)
 
-# this seems pretty slow
-# should probably do some error checking
+# Assumes all inputs are valid
 def convert_braille_to_english(input_string):
     index = 0
     output = []
@@ -131,15 +131,14 @@ def convert_braille_to_english(input_string):
 
         elif sub_braille == capital_follows:
             index += 6
+            if index >= len(input_string): continue
             sub_braille = input_string[index:index+6]
-            # maybe error check here
             output.append(braille_to_english_alpha[sub_braille].upper())
 
         elif sub_braille == space_braille:
             output.append(' ')
 
         else:
-            # error check if not in list
             output.append(braille_to_english_alpha[sub_braille])
 
         index += 6
@@ -155,12 +154,16 @@ def is_braille(input_string):
     return (len(input_string) % 6 == 0 and set(input_string) <= set('.O'))
 
 def main():
-    # change this to args parse and number of inputs can be greater than 2
-    if len(sys.argv) != 2:
-        print("Usage: python3 translator.py <input_string>")
+    if len(sys.argv) < 2:
+        print("Usage: python3 translator.py <input_string> <input-string> ...")
         sys.exit(1)
 
-    input_string = sys.argv[1]
+    # concatenate all input into a single string separated by whitespace 
+    args = []
+    for i in range(1, len(sys.argv)):
+        args.append(sys.argv[i])
+    input_string = ' '.join(args)
+
     output_string = ''
     if (is_braille(input_string)):
         output_string = convert_braille_to_english(input_string)
