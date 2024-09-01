@@ -11,48 +11,48 @@ class Token:
         self.type: str = type
         self.value: str = value
 
-class Translator:
-    def __init__(self, input_string: str) -> None:
-        self.input_string = input_string
+# class Translator:
+#     def __init__(self, input_string: str) -> None:
+#         self.input_string = input_string
 
-    def parse_token(self, token: Token) -> str:
-        """
-        Translate the given token.
+#     def parse_token(self, token: Token) -> str:
+#         """
+#         Translate the given token.
 
-        Args:
-            token (Token): The token to translate.
+#         Args:
+#             token (Token): The token to translate.
 
-        Returns:
-            str: The translated string.
-        """
-        pass
+#         Returns:
+#             str: The translated string.
+#         """
+#         pass
 
-    def get_next_token(self, input_str: str) -> list[Token, str]:
-        """
-        Extracts the next token from the input string.
+#     def get_next_token(self, input_str: str) -> list[Token, str]:
+#         """
+#         Extracts the next token from the input string.
 
-        Args:
-            input_str (str): The input string to tokenize.
+#         Args:
+#             input_str (str): The input string to tokenize.
 
-        Returns:
-            tuple[Token, str]: A tuple containing the next token and the remaining input string.
-        """
-        pass
+#         Returns:
+#             tuple[Token, str]: A tuple containing the next token and the remaining input string.
+#         """
+#         pass
 
-    def translate(self) -> str:
-        """The key method for translating the input string
+#     def translate(self) -> str:
+#         """The key method for translating the input string
 
-        Returns:
-            str: Translated string
-        """
-        input_str = self.input_string
-        output = ""
-        while input_str:
-            token, remaining_input = self.get_next_token(input_str)
-            translated = self.parse_token(token)
-            output += translated
-            input_str = remaining_input
-        return output
+#         Returns:
+#             str: Translated string
+#         """
+#         input_str = self.input_string
+#         output = ""
+#         while input_str:
+#             token, remaining_input = self.get_next_token(input_str)
+#             translated = self.parse_token(token)
+#             output += translated
+#             input_str = remaining_input
+#         return output
 # class EnglishToBrailleTranslator(Translator):
 #     def __init__(self, input_string: str) -> None:
 #         super().__init__(input_string)
