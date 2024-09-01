@@ -103,6 +103,61 @@ func translateToBraille(input string) string {
 	return result.String()
 }
 
+// translateToEnglish converts a Braille string to English
+func translateToEnglish(input string) string {
+	var result strings.Builder
+	capitalMode := false
+	numberMode := false
+	decimalMode := false
+
+	for i := 0; i < len(input); i += 6 {
+		brailleChar := input[i : i+6]
+
+		if mode, ok := brailleSpecialCharacters[brailleChar]; ok {
+			switch mode {
+			case "capital follows":
+				capitalMode = true
+			case "number follows":
+				numberMode = true
+			case "decimal follows":
+				decimalMode = true
+			}
+			continue
+		}
+
+		if numberMode {
+			// Translate as number
+			if number, ok := brailleToNumbers[brailleChar]; ok {
+				result.WriteRune(number)
+			} else {
+				// If a non-number character is encountered, reset number mode
+				numberMode = false
+				i -= 6 // Re-process this character in non-number mode
+			}
+		} else if decimalMode {
+			// Translate as decimal
+			if decimal, ok := brailleToDecimals[brailleChar]; ok {
+				result.WriteRune(decimal)
+			}
+			decimalMode = false // Reset decimal mode after one character
+		} else {
+			// Translate as letter
+			if english, ok := brailleToEnglish[brailleChar]; ok {
+				if capitalMode {
+					result.WriteRune(english - 32) // Convert to uppercase
+					capitalMode = false
+				} else {
+					result.WriteRune(english)
+				}
+			} else {
+				result.WriteRune(' ') // Default to space for unknown Braille patterns
+			}
+		}
+	}
+
+	return result.String()
+}
+
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println("Please provide a string to translate.")
