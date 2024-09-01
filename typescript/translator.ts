@@ -190,6 +190,7 @@ const translateToBraille = (inputStr: string) => {
 };
 
 const translate = (inputStr: string) => {
+  //Unauthentic Braille has not been included in the tests - for example -> strings like "OOOOOO". Since they are neither English nor Braille, the tool must show the user a prompt stating possible unauthentic Braille use 
   let isBraille = !/[^.O]+/.test(inputStr) && inputStr.length % 6 === 0;
 
   const translation = isBraille
