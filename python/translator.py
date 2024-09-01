@@ -45,12 +45,23 @@ def translate(sequence_chars):
         return translated_string
     else:
         translated_string = ""
+        previous_char = ""
         for character in sequence_chars:
             if character.isupper():
                 translated_string = translated_string + ALPHANUMERICALS_TO_BRAILLE.get("capital")
                 translated_string = translated_string + ALPHANUMERICALS_TO_BRAILLE.get(character.lower())
+                previous_char = character
+            elif character.isnumeric():
+                translated_string = translated_string + ALPHANUMERICALS_TO_BRAILLE.get("number")
+                translated_string = translated_string + ALPHANUMERICALS_TO_BRAILLE.get(character)
+                previous_char = character
+            elif character == '.' and previous_char.isnumeric():
+                translated_string = translated_string + ALPHANUMERICALS_TO_BRAILLE.get("decimal")
+                translated_string = translated_string + ALPHANUMERICALS_TO_BRAILLE.get(character)
+                previous_char = character
             else:
                 translated_string = translated_string + ALPHANUMERICALS_TO_BRAILLE.get(character)
+                previous_char = character
         return translated_string
 
 
