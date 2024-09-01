@@ -71,15 +71,20 @@ def to_braile(arguments):
     """
     phrase = " ".join(arguments)
     result = []
+    is_number_mode = False
 
     for i in range(len(phrase)):
-        if phrase[i].isupper():
+        if phrase[i] == " ":
+            result.append(numbers[phrase[i]])
+            is_number_mode = False
+        elif phrase[i].isupper():
             result.append(capital_follows)
             result.append(letters[phrase[i].lower()])
         elif phrase[i].isdigit():
             # Check if we have added an indicator already
-            if i > 0 and phrase[i - 1] == " ":
+            if not is_number_mode:
                 result.append(number_follows)
+                is_number_mode = True
             result.append(numbers[phrase[i]])
         else:
             try:
@@ -89,6 +94,38 @@ def to_braile(arguments):
                 return None
 
     return "".join(result)
+
+
+# def to_braile(arguments):
+#     """
+#     Converts the input text to braille.
+
+#     :param arguments: The text to convert, must be an alphanumeric list of strings
+#     :return: string - The braille representation of the text
+#     """
+#     phrase = " ".join(arguments)
+#     result = []
+#     is_number_mode = False
+
+#     for i in range(len(phrase)):
+#         if phrase[i].isupper():
+#             if is_number_mode:
+#                 is_number_mode = False 
+#             result.append(capital_follows)
+#             result.append(letters[phrase[i].lower()])
+#         elif phrase[i].isdigit():
+#             # Check if we have added an indicator already
+#             if (i > 0 and phrase[i - 1] == " ") or i == 0:
+#                 result.append(number_follows)
+#             result.append(numbers[phrase[i]])
+#         else:
+#             try:
+#                 result.append(letters[phrase[i]])
+#             except KeyError:
+#                 print(f"Invalid character '{phrase[i]}' encountered.")
+#                 return None
+
+#     return "".join(result)
 
 
 def to_alphabet(text):
@@ -102,11 +139,14 @@ def to_alphabet(text):
     # Reverse the dictionaries for easier lookup
     reversed_numbers = {v: k for k, v in numbers.items()}
     reversed_letters = {v: k for k, v in letters.items()}
+    
+    # Ensure the length of the braille text is a multiple of 6
+    if len(text) % 6 != 0:
+        print("Invalid braille text length.")
+        return None
 
     # Split the braille text into alphanumeric characters
-    words = []
-    for i in range(0, len(text), 6):
-        words.append(text[i : i + 6])
+    words = [text[i:i + 6] for i in range(0, len(text), 6)]
 
     is_capital = False
     is_number = False
@@ -122,17 +162,17 @@ def to_alphabet(text):
             is_number = True
             continue
         try:
-            if is_number:
+            if is_capital:
+                curr_word += reversed_letters[words[i]].upper()
+                is_capital = False
+            elif is_number:
                 curr = reversed_numbers[words[i]]
                 if curr == " ":
                     is_number = False
                     result.append(curr_word)
                     curr_word = ""
                 else:
-                    curr_word += reversed_numbers[words[i]]
-            elif is_capital:
-                curr_word += reversed_letters[words[i]].upper()
-                is_capital = False
+                    curr_word += curr
             else:
                 curr_word += reversed_letters[words[i]]
         except KeyError:
