@@ -94,4 +94,26 @@ func TestTranslateBrailleToLatin(t *testing.T) {
 		assert.Equal(t, "wowWow!", res)
 
 	})
+	t.Run("numbers work too", func(t *testing.T) {
+		word := ".O.OOOOO.O..O.O..."
+		res, err := translate_from_braille_to_latin(word)
+		assert.Nil(t, err)
+		assert.Equal(t, "42", res)
+	})
+}
+
+func TestTranslate(t *testing.T) {
+	t.Run("chooses the right translation", func(t *testing.T) {
+		word1 := "O.OO..O..O..O.O.O.O.O.O.O..OO."
+		word2 := "hello"
+		res1, err1 := Translate(word1)
+		res2, err2 := Translate(word2)
+
+		assert.Nil(t, err1)
+		assert.Nil(t, err2)
+
+		assert.Equal(t, "hello", res1)
+		assert.Equal(t, "O.OO..O..O..O.O.O.O.O.O.O..OO.", res2)
+
+	})
 }

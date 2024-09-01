@@ -2,7 +2,6 @@ package lib
 
 import (
 	"errors"
-	"log"
 	"solution/helpers"
 	"solution/mappers"
 	"strings"
@@ -78,7 +77,6 @@ func translate_from_braille_to_latin(word string) (string, error) {
 
 	for chunk_pointer < len(word) {
 		chunk := word[chunk_pointer : chunk_pointer+chunk_size]
-		log.Printf("%s", chunk)
 		if chunk == mappers.BRAILLE_CAPITAL_FOLLOWS {
 			capitalize_next_char_mode = true
 			chunk_pointer += chunk_size
@@ -93,7 +91,6 @@ func translate_from_braille_to_latin(word string) (string, error) {
 		if capitalize_next_char_mode {
 			next_char, ok := mappers.BRAILLE_TO_LETTERS[chunk]
 			if !ok {
-				log.Printf("bad chunk: %s", chunk)
 				return "", errors.New("capital did NOT follow")
 			}
 			capitalized_char := unicode.ToUpper(next_char)
@@ -120,6 +117,5 @@ func translate_from_braille_to_latin(word string) (string, error) {
 		}
 		chunk_pointer += chunk_size
 	}
-	log.Printf("%v", translation)
 	return string(translation), nil
 }
