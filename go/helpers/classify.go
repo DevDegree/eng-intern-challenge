@@ -1,20 +1,28 @@
 package helpers
 
-import "slices"
+import (
+	"slices"
+
+	"unicode"
+)
 
 var (
 	punctuations = []rune{'.', ',', '?', '!', ':', ';', '-', '/', '<', '>', '(', ')', ' '}
 )
 
-func isAlphabet(ch rune) bool {
+func IsAlphabet(ch rune) bool {
 	return ch >= 'a' && ch <= 'z'
 }
-func isNumeric(ch rune) bool {
+func IsNumeric(ch rune) bool {
 	return ch >= '0' && ch <= '9'
 }
+func IsPunctuation(ch rune) bool {
+	return slices.Contains(punctuations, ch)
+}
 func IsLatin(word string) bool {
-	for _, c := range word {
-		if !isAlphabet(c) && !isNumeric(c) && !slices.Contains(punctuations, c) {
+	for _, character := range word {
+		lowered := unicode.ToLower(character)
+		if !IsAlphabet(lowered) && !IsNumeric(character) && !IsPunctuation(character) {
 			return false
 		}
 	}

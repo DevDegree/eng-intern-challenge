@@ -6,6 +6,9 @@ import (
 )
 
 func Translate(word string) (string, error) {
+	if word == "" {
+		return "", nil
+	}
 	if helpers.IsLatin(word) {
 		return translate_from_latin_to_braille(word)
 	}
@@ -17,6 +20,18 @@ func Translate(word string) (string, error) {
 }
 
 func translate_from_latin_to_braille(word string) (string, error) {
+	for _, character := range word {
+		if helpers.IsAlphabet(character) {
+
+		} else if helpers.IsNumeric(character) {
+
+		} else if helpers.IsPunctuation(character) {
+
+		} else {
+			return "", errors.New("unknown character")
+		}
+
+	}
 
 	return "", errors.New("error translating")
 

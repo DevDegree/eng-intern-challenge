@@ -15,7 +15,7 @@ func TestIsLatin(t *testing.T) {
 		}
 	})
 	t.Run("latin looks right", func(t *testing.T) {
-		validCases := []string{"abc", "ced", "lmao", "hello! how are. you, :????", "aha ;3"}
+		validCases := []string{"abc", "ced", "lmao", "hello! how are. you, :????", "aha ;3", "Wow"}
 		for _, validCase := range validCases {
 			assert.True(t, IsLatin(validCase))
 		}
