@@ -1,4 +1,3 @@
-
 import sys
 
 b_to_e_special_chars = {'.....O':"cap", '......':" ", '.O.OOO':'num'}
