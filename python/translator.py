@@ -25,7 +25,10 @@ def translate_to_braille(english):
     number_state = False
 
     for char in english:
-        if char.isupper():
+        if char.lower() not in english_to_braille and char not in number_to_braille:
+            continue
+
+        elif char.isupper():
             output.append(english_to_braille["Capital follows"])
             output.append(english_to_braille[char.lower()])
             number_state = False
@@ -40,8 +43,6 @@ def translate_to_braille(english):
         else:
             output.append(english_to_braille[char])
 
-        print(char)
-
     return ''.join(output)
 
 def translate_to_english(braille):
@@ -49,11 +50,16 @@ def translate_to_english(braille):
     number_state = False
     capital_next = False
     
+    if (len(braille) % 6) != 0:
+        return ""
+    
     for i in range(0, len(braille), 6):
         braille_unit = braille[i:i+6]
-        print(braille_to_english[braille_unit])
 
-        if braille_to_english[braille_unit] == "Capital follows":
+        if braille_unit not in braille_to_english and braille_unit not in braille_to_number:
+            continue
+
+        elif braille_to_english[braille_unit] == "Capital follows":
             capital_next = True
         elif braille_to_english[braille_unit] == "Number follows":
             number_state = True
@@ -73,6 +79,10 @@ def translate_to_english(braille):
     return ''.join(output)
 
 def main():
+    if len(sys.argv) < 2:
+        print("No input detected")
+        return
+    
     input_string = sys.argv[1]
 
     if all(char in 'O.' for char in input_string):

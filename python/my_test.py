@@ -13,15 +13,15 @@ class TestBrailleTranslator(unittest.TestCase):
             ".....OO.....O.O...OO...........O.OOOO.....O.O...OO...."
         )
         self.assertEqual(
-            translate_to_braille("Hello world"),
-            ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."
+            translate_to_braille("Hello world !"),
+            ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..........OOO."
         )
         self.assertEqual(
             translate_to_braille(".,?!:;"),
             "..OO.O..O.....O.OO..OOO...OO....O.O."
         )
     
-    def test_english_to_braille(self):
+    def test_braille_to_english(self):
         self.assertEqual(
             translate_to_english(
                 ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."),
@@ -42,6 +42,5 @@ class TestBrailleTranslator(unittest.TestCase):
             ".,?!:;"
         )
         
-
 if __name__ == "__main__":
     unittest.main()
