@@ -184,5 +184,3 @@ let brailInput = [
 
 
 processInput(input);
-processInput(input2);
-processInput(brailInput);
