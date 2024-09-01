@@ -37,7 +37,12 @@ def main():
         sys.exit(1)
     input_text = ' '.join(sys.argv[1:])
 
-    print(translate_to_braille(input_text))
+    braille_pattern = r'^[.O]*$'
+
+    if(re.search(braille_pattern, input_text)):
+        print(translate_to_english(input_text))
+    else:
+        print(translate_to_braille(input_text))
 
 if __name__ == "__main__":
     main()
