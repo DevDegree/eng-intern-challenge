@@ -41,32 +41,6 @@ class BrailleConverter:
         brailleValues = ['O', '.']
         return all(char in brailleValues for char in code) and len(code) % 6 == 0
 
-    def _encode_to_braille(self, text):
-        encoded = []
-        num_mode = False
-
-        for ch in text:
-            if ch.isdigit() and not num_mode:
-                encoded.append(self._maps['special_symbols']['num'])
-                num_mode = True
-
-            if ch == ' ':
-                encoded.append(self._maps['special_symbols']['space'])
-                num_mode = False
-            elif ch.isupper():
-                encoded.append(self._maps['special_symbols']['cap'])
-                encoded.append(self._maps['letters'][ch.lower()])
-            elif ch.isdigit():
-                encoded.append(self._maps['numbers'][ch])
-            elif ch in self._maps['letters']:
-                encoded.append(self._maps['letters'][ch])
-            elif ch in self._maps['punctuation']:
-                encoded.append(self._maps['punctuation'][ch])
-            else:
-                raise ValueError(f"Character '{ch}' cannot be translated.")
-
-        return ''.join(encoded)
-
     def _decode_from_braille(self, code):
         decoded = []
         idx = 0
@@ -98,11 +72,35 @@ class BrailleConverter:
 
         return ''.join(decoded)
 
+
+    def _encode_to_braille(self, text):
+        encoded = []
+        num_mode = False
+
+        for ch in text:
+            if ch.isdigit() and not num_mode:
+                encoded.append(self._maps['special_symbols']['num'])
+                num_mode = True
+
+            if ch == ' ':
+                encoded.append(self._maps['special_symbols']['space'])
+                num_mode = False
+            elif ch.isupper():
+                encoded.append(self._maps['special_symbols']['cap'])
+                encoded.append(self._maps['letters'][ch.lower()])
+            elif ch.isdigit():
+                encoded.append(self._maps['numbers'][ch])
+            elif ch in self._maps['letters']:
+                encoded.append(self._maps['letters'][ch])
+            elif ch in self._maps['punctuation']:
+                encoded.append(self._maps['punctuation'][ch])
+            else:
+                raise ValueError(f"Character '{ch}' cannot be translated.")
+
+        return ''.join(encoded)
+
     def convert(self, text):
-        if self._is_braille_code(text):
-            return self._decode_from_braille(text)
-        else:
-            return self._encode_to_braille(text)
+      return self._decode_from_braille(text) if self._is_braille_code(text) else self._encode_to_braille(text)
 
 def main():
     input_text = ' '.join(sys.argv[1:])
