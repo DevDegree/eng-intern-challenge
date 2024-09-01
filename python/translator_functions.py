@@ -8,11 +8,8 @@ def change_case(bool):
     return not bool
 
 def text_modification(text_to_be_modified):
-    text = []
-    for i in range(0, len(text_to_be_modified),6): 
-        text.append(text_to_be_modified[i:i+6])
 
-    return text
+    return [text_to_be_modified[i:i+6] for i in range(0, len(text_to_be_modified), 6)]
 
 def eng_to_braille(text, dict_english_braille):
     text_Translate= text
@@ -52,12 +49,11 @@ def eng_to_braille(text, dict_english_braille):
 
 #Braille to English Translator
 def braille_to_eng(text, dict_english_braille):
-    text_to_be_modified = text
     modified_text = text_modification(text)
     capital = False
     num_mode = False
-
     translated_string = ""
+    
     for i, braille_in_string in enumerate(modified_text):
         for translation in dict_english_braille:
 
@@ -82,7 +78,7 @@ def braille_to_eng(text, dict_english_braille):
                         #Making a capital letter
                         translated_string += translation[0].upper() 
                         capital = change_case(capital)
-                    elif i+1< len (modified_text) and brl_in_Str == UPPER_CASE_BRAILLE:
+                    elif i+1< len (modified_text) and braille_in_string == UPPER_CASE_BRAILLE:
                         capital = change_case(capital)
                     else:
                         #Normal letter in the string
