@@ -1,6 +1,10 @@
 import sys
 
-char_to_braille = {
+CAPITAL = '.....O'
+NUMBER = '.O.OOO'
+SPACE = '......'
+
+CHAR_TO_BRAILLE = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..',
     'e': 'O..O..', 'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..',
     'i': '.OO...', 'j': '.OOO..', 'k': 'O...O.', 'l': 'O.O.O.',
@@ -16,13 +20,13 @@ char_to_braille = {
     'capital': '.....O', 'number': '.O.OOO', ' ': '......'
 }
 
-braille_to_number = {
+BRAILLE_TO_NUMBER = {
     'O.....': '1', 'O.O...': '2', 'OO....': '3', 'OO.O..': '4',
     'O..O..': '5', 'OOO...': '6', 'OOOO..': '7', 'O.OO..': '8',
     '.OO...': '9', '.OOO..': 'O',
 }
 
-braille_to_letter = {
+BRAILLE_TO_LETTER = {
     'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd',
     'O..O..': 'e', 'OOO...': 'f', 'OOOO..': 'g', 'O.OO..': 'h',
     '.OO...': 'i', '.OOO..': 'j', 'O...O.': 'k', 'O.O.O.': 'l',
@@ -37,51 +41,56 @@ def translate_to_braille(text: str) -> str:
     number_mode = False
     for char in text:
         if char.isupper():
-            output += char_to_braille['capital']
-            output += char_to_braille[char.lower()]
-        elif char.islower() or number_mode:
-            output += char_to_braille[char]
-        elif char.isdigit() and not number_mode:
-            number_mode = True
-            output += char_to_braille['number']
-            output += char_to_braille[char]
+            output += CAPITAL
+            output += CHAR_TO_BRAILLE[char.lower()]
+        elif char.isdigit():
+            if not number_mode:
+                number_mode = True
+                output += NUMBER
+            output += CHAR_TO_BRAILLE[char]
+        elif char.islower():
+            output += CHAR_TO_BRAILLE[char]
         else: 
             number_mode = False
-            output += char_to_braille[' ']
+            output += SPACE
     
     return output
 
 def translate_to_english(braille: str) -> str:
     output = ""
     number_mode = False
-    capitalize_next = True
+    capitalize_next = False
     for i in range(0, len(braille), 6):
         b_char = braille[i:i+6]
 
-        if b_char == char_to_braille['number']:
+        if b_char == CAPITAL:
+            capitalize_next = True
+        elif b_char == NUMBER:
             number_mode = True
-        elif b_char == char_to_braille[' ']:
+        elif b_char == SPACE:
             number_mode = False
             output += ' '
-        elif b_char == char_to_braille['capital']:
-            capitalize_next = True
-        elif number_mode:
-            output += braille_to_number[b_char]
-        elif capitalize_next:
-            output += braille_to_letter[b_char].upper()
-            capitalize_next = False
         else:
-            output += braille_to_letter[b_char]
-
+            if number_mode:
+                output += BRAILLE_TO_NUMBER[b_char]
+            elif capitalize_next:
+                output += BRAILLE_TO_LETTER[b_char].upper()
+                capitalize_next = False
+            else:
+                output += BRAILLE_TO_LETTER[b_char]
+                
     return output
+
+def is_braille(string: str) -> bool:
+    all_chars_valid = all(char in 'O.' for char in string)
+    length_is_valid = len(string) % 6 == 0
+    return all_chars_valid and length_is_valid
 
 def process_input():
     arguments = sys.argv[1:]
     string = (" ".join(arguments))
 
-    is_braille = all(char in 'O.' for char in string) and len(string) % 6 == 0
-
-    if is_braille:
+    if is_braille(string):
         print(translate_to_english(string))
     else:
         print(translate_to_braille(string))
