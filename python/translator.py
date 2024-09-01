@@ -28,10 +28,10 @@ def translation_Setting(text):
     dict_english_braille = startup.setup_dictionary()
     if (len(text) % 6 == 0 and ('O' in text or '......' in text)):
         #Braille
-        output = translator_functions.bra_To_Eng(text,dict_english_braille)
+        output = translator_functions.braille_to_eng(text,dict_english_braille)
     else:
         #English
-        output = translator_functions.eng_To_Bra(text, dict_english_braille)
+        output = translator_functions.eng_to_braille(text, dict_english_braille)
 
     print (output)
 def main():
