@@ -21,19 +21,6 @@ const isBrailleCharacter = (text: string): text is BrailleCharacter =>
   text.length === BRAILLE_CHUNK_SIZE && isBraille(text)
 
 /**
- * Asserts that a string is a BrailleCharacter
- *
- * @param {string} str - The string to assert
- * @returns {BrailleCharacter} The BrailleCharacter
- */
-export const toBrailleCharacter = (str: string): BrailleCharacter =>
-  str.length == BRAILLE_CHUNK_SIZE
-    ? (str as BrailleCharacter)
-    : (() => {
-        throw new Error(`Invalid BrailleCharacter length: ${str.length}`)
-      })()
-
-/**
  * Splits a Braille string into braille characters
  *
  * @param {BrailleString} text  - The braille string to be chunked
