@@ -8,9 +8,10 @@ def translate(input_string: str) -> str:
         # Case 1: We are working with braille data
         translator = BrailleToEnglishTranslator(input_string)
     else:
+        # Case 1: We are working with english data
         translator = EnglishToBrailleTranslator(input_string)
-    return translator.translate()
+    print(translator.translate())
 
 
 if __name__ == "__main__":
-    print(translate(" ".join(sys.argv[1:])))
+    translate(" ".join(sys.argv[1:]))
