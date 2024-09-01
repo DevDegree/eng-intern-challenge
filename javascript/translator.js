@@ -1,18 +1,29 @@
-// Access the command-line arguments
-const arg = process.argv.slice(2); // the first 2 arguments are reserved for the path to the executable & script file
+/**
+ * ----------------------------------------------------------------------------
+ * Title: Braille Translator
+ * Description: This script is a command line Javascript application that can
+ * translate English to Braille and vice versa. The string to translate can
+ * be passed into the application as an argument at runtime.
+ *
+ * Author: Yvette de Sereville
+ * Date: September 1, 2024
+ *
+ * Usage: Run this script with Node.js. Pass input data as a command line argument.
+ *
+ * ----------------------------------------------------------------------------
+ */
 
-///////////////// DO SOMETHING IF THE ARGUMENTS ARE NOT PROVIDED?? //////////////////
+// Configure access to command line arguments
+const args = process.argv.slice(2); // First 2 arguments are reserved for the path to the executable & script file
 
-// Check if any arguments are provided
-if (arg.length === 0 || arg === null) {
-  //   console.log("No arguments provided. Please provide some arguments.");
-  // process.exit(1); // Exit with a non-zero status code to indicate an error
-  // console.log(error);
+// Check if any arguments are provided or empty string
+if (args.length === 0 || args === null || args[0] === "") {
+  process.exit(1); // Exit with a non-zero status code to indicate an error
 }
 
-////////////////////////////// LOGIC //////////////
-
-const message = arg.join(" "); // the argument is the message provided in the command line, message is a string
+// The message is the array of arguments joined together with spaces between "strings/words"
+// Message is a string
+const message = args.join(" ");
 
 // English to Braille mapping
 const engToBraille = new Map();
@@ -89,113 +100,92 @@ brailleToEng.set("O..OOO", ["z"]);
 brailleToEng.set(".....O", ["capitalize"]);
 brailleToEng.set("......", [" "]);
 brailleToEng.set(".O.OOO", ["number follows"]);
-// brailleToEng.set(".OOO..", "0");
-// brailleToEng.set("O.....", "1");
-// brailleToEng.set("O.O...", "2");
-// brailleToEng.set("OO....", "3");
-// brailleToEng.set("OO.O..", "4");
-// brailleToEng.set("O..O..", "5");
-// brailleToEng.set("OOO...", "6");
-// brailleToEng.set("OOOO..", "7");
-// brailleToEng.set("O.OO..", "8");
-// brailleToEng.set(".OO...", "9");
 
-// console.log(typeof message);
-// console.log(message.slice(6, 12));
-// console.log(brailleToEng.get(message.slice(6, 12))[0].toUpperCase());
+const translate = (message) => {
+  let res = ""; // This is the resulting string (translated message)
 
-let res = "";
-
-if (message.split("").includes(".")) {
-  // 1. check if converting from braille to english or vice versa
-  // braille to english
-  for (let i = 0; i < message.length; i += 6) {
-    // 6 chars = 1 braille char
-    if (brailleToEng.get(message.slice(i, i + 6))[0] === "capitalize") {
-      res += brailleToEng.get(message.slice(i + 6, i + 12))[0].toUpperCase();
-      i += 12;
-      // console.log(res);
-    }
-    if (brailleToEng.get(message.slice(i, i + 6))[0] === "number follows") {
-      while (
-        i < message.length &&
-        brailleToEng.get(message.slice(i, i + 6))[0] !== " "
-      ) {
-        res += brailleToEng.get(message.slice(i, i + 6))[1] || "";
-        i += 6;
-        // console.log(res);
+  // Check if converting from braille to english or vice versa
+  if (message.split("").includes(".")) {
+    // Braille to english translation
+    for (let i = 0; i < message.length; i += 6) {
+      // 6 chars = 1 braille char
+      if (brailleToEng.get(message.slice(i, i + 6))[0] === "capitalize") {
+        res += brailleToEng.get(message.slice(i + 6, i + 12))[0].toUpperCase();
+        i += 12;
       }
-      if (i !== message.length) res += " ";
-      // res += " ";
-      // i += 6;
-      // console.log(res);
-    } else {
-      res += brailleToEng.get(message.slice(i, i + 6))[0];
-      // console.log(res);
+      if (brailleToEng.get(message.slice(i, i + 6))[0] === "number follows") {
+        while (
+          i < message.length &&
+          brailleToEng.get(message.slice(i, i + 6))[0] !== " "
+        ) {
+          res += brailleToEng.get(message.slice(i, i + 6))[1] || "";
+          i += 6;
+        }
+        if (i !== message.length) res += " ";
+      } else {
+        res += brailleToEng.get(message.slice(i, i + 6))[0];
+      }
     }
-  }
-} else {
-  // braille to english translation logic
-  for (let i = 0; i < message.length; i++) {
-    // console.log(i);
-    // console.log(res);
-    if (
-      message[i] === message[i].toUpperCase() &&
-      !/[0123456789 ]/.test(message[i])
-    ) {
-      // console.log(message[i]);
-      // console.log(res);
-      res +=
-        engToBraille.get("capitalize") +
-        engToBraille.get(message[i].toLowerCase());
-      i++;
-      // console.log(message[i]);
-      // console.log(res);
-    }
-    if (/[0123456789]/.test(message[i])) {
-      // console.log(message[i]);
-      res += engToBraille.get("number follows");
-      while (i < message.length && message[i] !== " ") {
-        // console.log(message[i]);
-        res += engToBraille.get(message[i]);
+  } else {
+    // Braille to english translation
+    for (let i = 0; i < message.length; i++) {
+      if (
+        message[i] === message[i].toUpperCase() &&
+        !/[0123456789 ]/.test(message[i])
+      ) {
+        res +=
+          engToBraille.get("capitalize") +
+          engToBraille.get(message[i].toLowerCase());
         i++;
       }
-      // i++;
-      // if (i !== message.length - 1) res += engToBraille.get(" ");
-      if (i !== message.length) res += engToBraille.get(" ");
-    } else {
-      // console.log(message[i]);
-      res += engToBraille.get(message[i]);
-      // console.log(i);
-      // console.log(res);
+      if (/[0123456789]/.test(message[i])) {
+        res += engToBraille.get("number follows");
+        while (i < message.length && message[i] !== " ") {
+          res += engToBraille.get(message[i]);
+          i++;
+        }
+        if (i !== message.length) res += engToBraille.get(" ");
+      } else {
+        res += engToBraille.get(message[i]);
+      }
     }
-    //   console.log(i);
-    //   console.log(res);
   }
-}
+  return res;
+};
 
-console.log(res);
+// Output the translated string to the console
+console.log(translate(message));
 
-////////////////// TESTS ////////////
+/**
+ * ----------------------------------------------------------------------------
+ * TESTS
+ *
+ * Description: Rudimentary, in-file tests, since test.js file was not meant to
+ * be edited.
+ *
+ * All tests pass, including the test.js file test.
+ *
+ * ----------------------------------------------------------------------------
+ */
 
-// console.log([res]);
+// const res = translate(message);
 
-// HELLO WORLD
+// TEST: HELLO WORLD
 // console.log(
 //   res ===
 //     ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."
 // ); // Hello world
 // console.log(res === "Hello world");
 
-// 42
+// TEST: 42
 // console.log(res === ".O.OOOOO.O..O.O..."); // 42
 // console.log(res === "42");
 
-// ABC 123
+// TEST: ABC 123
 // console.log(res === ".....OO.....O.O...OO...........O.OOOO.....O.O...OO...."); // Abc 123
 // console.log(res === "Abc 123");
 
-// ABC 123 XYZ
+// TEST: ABC 123 XYZ
 // console.log(
 //   res ===
 //     ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
