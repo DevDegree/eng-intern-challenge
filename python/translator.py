@@ -16,3 +16,76 @@ class BrailleTranslator:
 
     def __init__(self, text):
         self.text = text
+
+    def is_braille(self):
+        args = self.text.replace(" ", "")
+        for char in args:
+            if char not in "O.":
+                return False
+        return True
+
+    def translate_to_braille(self):
+        braille_text = ""
+        number_mode = False 
+
+        for char in self.text:
+            if char.isupper():
+                braille_text += self.BRAILLE['cap']
+                braille_text += self.BRAILLE[char.lower()]
+                number_mode = False 
+            elif char.isdigit():
+                if not number_mode:
+                    braille_text += self.BRAILLE['num']
+                    number_mode = True
+                braille_text += self.BRAILLE[char]
+            elif char in self.BRAILLE:
+                braille_text += self.BRAILLE[char]
+                number_mode = False 
+            else:
+                braille_text += "......" 
+                number_mode = False 
+        return braille_text
+
+    def translate_to_english(self):
+        english_text = ""
+        i = 0
+        capital_mode = False
+        number_mode = False 
+
+        while i < len(self.text):
+            braille_char = self.text[i:i+6]
+
+            if braille_char == self.BRAILLE['cap']:
+                capital_mode = True
+                number_mode = False
+            elif braille_char == self.BRAILLE['num']:
+                number_mode = True
+            elif braille_char == '......': 
+                english_text += ' '
+                number_mode = False
+                capital_mode = False
+            else:
+                if number_mode:
+                    english_text += self.NUMBERS[braille_char]
+                else:
+                    letter = self.ENGLISH[braille_char]
+                    if capital_mode:
+                        english_text += letter.upper()
+                    else:
+                        english_text += letter
+                capital_mode = False
+            i += 6
+        return english_text
+
+    def translate(self):
+        if self.is_braille():
+            return self.translate_to_english()
+        else:
+            return self.translate_to_braille()
+
+if __name__ == "__main__":
+    import sys
+    input_text = ' '.join(sys.argv[1:])
+    translator = BrailleTranslator(input_text)
+    print(translator.translate())
+
