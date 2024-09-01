@@ -102,9 +102,49 @@ def braille_to_english(text):
     return english_result
 
 
+def english_to_braille(text):
+    '''
+        Convert English to Braille
+    '''
+    braille_result = ""
+    # flag to determine if it is reading numbers 
+    read_numbers = False
+    for char in text:
+
+        if char.isdigit():
+            # if it just starts to read number
+            if not read_numbers:
+                braille_result += ENGLISH_TO_BRAILLE['number_follows']
+                read_numbers = True
+        
+        # if it is reading a uppercase letter
+        elif char.isupper():
+            braille_result += ENGLISH_TO_BRAILLE['capital_follows']
+            char = char.lower()
+            read_numbers = False
+        
+        # other characters
+        else:
+            read_numbers = False
+            
+        braille_result += ENGLISH_TO_BRAILLE[char]
+        
+    return braille_result
+
+
+
 if __name__ == '__main__':
-    text = 'hello world'
-    text1 = '.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..'
-    text2 = '.....OO.....O.O...OO...........O.OOOO.....O.O...OO....'
-    print(braille_to_english(text1))
-    print(braille_to_english(text2))
+    pass
+    # text = 'hello world'
+    # text1 = '.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..'
+    # text2 = '.....OO.....O.O...OO...........O.OOOO.....O.O...OO....'
+    # print(braille_to_english(text1))
+    # print(braille_to_english(text2))
+    # print(english_to_braille('Abc 123'))
+    # print(english_to_braille('Abc 123') == text2)
+    # print(braille_to_english(text1) == 'Hello world')
+
+    # text3 = '.O.OOOOO.O..O.O...'
+    # print(braille_to_english(text3))
+    # print(english_to_braille('42'))
+    # print(english_to_braille('42') == text3)
