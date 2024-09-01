@@ -1,4 +1,5 @@
 from translators.translation_class_base import *
+from typing import Tuple
 
 class EnglishToBrailleTranslator(Translator):
     def __init__(self, input_string: str) -> None:
@@ -50,6 +51,7 @@ class EnglishToBrailleTranslator(Translator):
         self.number_follows_braille = ".O.OOO"
 
     def parse_token(self, token: Token) -> str:
+        """Translate a given token"""
         braille = ""
         if token.type == TokenType.SPECIAL:
             braille = self.special_translation[token.value]
@@ -65,21 +67,36 @@ class EnglishToBrailleTranslator(Translator):
                 braille += self.number_translation[c.lower()]
         return braille
 
-    def read_word(self, input_str: str) -> tuple[str, str]:
+    def read_word(self, input_str: str) -> Tuple[str, str]:
+        """Given that input_str stores a word in it's prefix, extract it
+
+        Returns:
+            Tuple[str, str]: First entry is the read word and second is remaining string
+        """
         for i in range(len(input_str)):
             if not input_str[i].isalpha():
                 break
         if input_str[i].isalpha(): i += 1
         return [input_str[:i], input_str[i:]]
 
-    def read_number(self, input_str: str) -> str:
+    def read_number(self, input_str: str) -> Tuple[Token, str]:
+        """Given that input_str stores a number in it's prefix, extract it
+
+        Returns:
+            Tuple[str, str]: First entry is the read number and second is remaining string
+        """
         for i in range(len(input_str)):
             if not input_str[i].isdigit():
                 break
         if input_str[i].isdigit(): i += 1
         return [input_str[:i], input_str[i:]]
 
-    def get_next_token(self, input_str: str) -> tuple[Token, str]:
+    def get_next_token(self, input_str: str) -> Tuple[Token, str]:
+        """Used to get the next token to translate/parse
+
+        Returns:
+            Tuple[str, str]: First entry is the read token and second is remaining string
+        """
         c = input_str[0]
         special_chars = [" "]
         if c.isdigit():

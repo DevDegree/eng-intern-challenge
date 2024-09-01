@@ -1,4 +1,5 @@
 from translators.translation_class_base import *
+from typing import Tuple
 
 class BrailleToEnglishTranslator(Translator):
     def __init__(self, input_string: str) -> None:
@@ -74,8 +75,12 @@ class BrailleToEnglishTranslator(Translator):
                     braille += self.number_translation[segment]
         return braille
 
-    def read_word(self, input_str: str) -> tuple[str, str]:
-        """Given that input_str stores a word in it's prefix, extract it"""
+    def read_word(self, input_str: str) -> Tuple[str, str]:
+        """Given that input_str stores a word in it's prefix, extract it
+
+        Returns:
+            Tuple[str, str]: First entry is the read word and second is remaining string
+        """
         word = ""
         while input_str:
             segment, input_str = self.get_next_braille_segment(input_str)
@@ -86,7 +91,11 @@ class BrailleToEnglishTranslator(Translator):
         return [word, input_str]
 
     def read_number(self, input_str: str) -> str:
-        """Given that input_str stores a number in it's prefix, extract it"""
+        """Given that input_str stores a number in it's prefix, extract it
+
+        Returns:
+            Tuple[str, str]: First entry is the read number and second is remaining string
+        """
         # Ignore the first segment since it'll be number_follows_braille
         _, input_str = self.get_next_braille_segment(input_str)
         number = ""
@@ -99,12 +108,16 @@ class BrailleToEnglishTranslator(Translator):
             number += segment
         return [number, input_str]
 
-    def get_next_braille_segment(self, input_str) -> tuple[str, str]:
+    def get_next_braille_segment(self, input_str) -> Tuple[str, str]:
         """Helper for getting the next 6 characters forming a braille term"""
         return [input_str[:6], input_str[6:]]
 
-    def get_next_token(self, input_str: str) -> tuple[Token, str]:
-        """Used to get the next token to translate/parse"""
+    def get_next_token(self, input_str: str) -> Tuple[Token, str]:
+        """Used to get the next token to translate/parse
+
+        Returns:
+            Tuple[str, str]: First entry is the read token and second is remaining string
+        """
         segment, remaining_str = self.get_next_braille_segment(input_str)
         token = None
         if segment in self.special_translation:

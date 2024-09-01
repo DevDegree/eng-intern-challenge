@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-
+from typing import Tuple
 
 class TokenType(Enum):
     SPECIAL = 0  # Space or special characters
@@ -30,7 +30,7 @@ class Translator(ABC):
         pass
 
     @abstractmethod
-    def get_next_token(self, input_str: str) -> tuple[Token, str]:
+    def get_next_token(self, input_str: str) -> Tuple[Token, str]:
         """
         Extracts the next token from the input string.
 
@@ -38,7 +38,7 @@ class Translator(ABC):
             input_str (str): The input string to tokenize.
 
         Returns:
-            tuple[Token, str]: A tuple containing the next token and the remaining input string.
+            Tuple[Token, str]: A tuple containing the next token and the remaining input string.
         """
         pass
 
@@ -46,7 +46,7 @@ class Translator(ABC):
         """The key method for translating the input string
 
         Returns:
-            str: translated string
+            str: Translated string
         """
         input_str = self.input_string
         output = ""
