@@ -27,7 +27,7 @@ class Translator:
         """
         pass
 
-    def get_next_token(self, input_str: str):
+    def get_next_token(self, input_str: str) -> tuple[Token, str]:
         """
         Extracts the next token from the input string.
 
