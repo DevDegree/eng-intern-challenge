@@ -1,4 +1,4 @@
-const engToBrailleLookUp:Record<string,string> = {
+const englishToBrailleLookUp: Record<string, string> = {
   a: "O.....",
   b: "O.O...",
   c: "OO....",
@@ -50,7 +50,7 @@ const engToBrailleLookUp:Record<string,string> = {
   " ": "......",
 };
 
-const brailleToEnglishLookUp:Record<string,string> = {
+const brailleToAlphabetLookUp: Record<string, string> = {
   "O.....": "a",
   "O.O...": "b",
   "OO....": "c",
@@ -87,7 +87,7 @@ const brailleToEnglishLookUp:Record<string,string> = {
   ".O..O.": "/",
   "O.O..O": "(",
   ".O.OO.": ")",
-  "......":" "
+  "......": " ",
 };
 
 const NUMBER_FOLLOWS = ".O.OOO";
@@ -95,7 +95,7 @@ const CAPITAL_FOLLOWS = ".....O";
 const DECIMAL_FOLLOWS = ".O...O";
 const SPACE = "......";
 
-const brailleToNumbersLookUp: Record<string,string> = {
+const brailleToNumbersLookUp: Record<string, string> = {
   "O.....": "1",
   "O.O...": "2",
   "OO....": "3",
@@ -106,15 +106,13 @@ const brailleToNumbersLookUp: Record<string,string> = {
   "O.OO..": "8",
   ".OO...": "9",
   ".OOO..": "0",
-  
 };
 
 const translateToEnglish = (inputStr: string) => {
-    
   const chunks: string[] = inputStr.match(/.{1,6}/g) || [];
 
   let numberFlag = false;
-  
+
   const englishCharacters: string[] = [];
   for (let i = 0; i < chunks.length; i++) {
     const chunk = chunks[i];
@@ -122,95 +120,78 @@ const translateToEnglish = (inputStr: string) => {
       englishCharacters.push(".");
       continue;
     }
-    //if it's a "number follows" then it will be all numbers until you get a space, remember to put the numberFlag to false
+
     if (chunk === NUMBER_FOLLOWS) {
       numberFlag = true;
       continue;
     }
-    if(chunk === SPACE){
-        numberFlag=false
-        englishCharacters.push(" ");
-        continue;
+    if (chunk === SPACE) {
+      numberFlag = false;
+      englishCharacters.push(" ");
+      continue;
     }
-    //if it's a "capital follows" then just the next one is a capital
+
     if (chunk === CAPITAL_FOLLOWS) {
-      //get the next letter and capitalize it
       const nextChunk: string = chunks[i + 1];
-      const englishChar: string = brailleToEnglishLookUp[nextChunk].toUpperCase();
+      const englishChar: string =
+        brailleToAlphabetLookUp[nextChunk].toUpperCase();
       englishCharacters.push(englishChar);
-      //next letter has already been considered, move on to the one after
       i = i + 1;
       continue;
     }
 
-    const englishChar: string = numberFlag ? brailleToNumbersLookUp[chunk]:  brailleToEnglishLookUp[chunk]
+    const englishChar: string = numberFlag
+      ? brailleToNumbersLookUp[chunk]
+      : brailleToAlphabetLookUp[chunk];
     englishCharacters.push(englishChar);
-    
   }
-  
+
   const translatedString = englishCharacters.join("");
 
   return translatedString;
 };
 
 const translateToBraille = (inputStr: string) => {
-    //for each character just get the right braille string
-    let numberFlag = false
-    let brailleCharacters:string[] = []
-    
-    
+  let numberFlag = false;
+  let brailleCharacters: string[] = [];
 
-    for (let i = 0; i < inputStr.length; i++){
-        let char = inputStr[i];
-    
-        //now this can either be a character or one of the flags
-        //consider Abc 123
-        let flagString = ""
-        //so if it's not a number and it's uppercase matches a letter it should work.
-        if(isNaN(parseInt(char)) && char.toUpperCase()===char && char!== " "){
-            //this character is uppercase so you have to add a flag
-            flagString = CAPITAL_FOLLOWS
-            char = char.toLowerCase();
-        }
-        if(!isNaN(parseInt(char)) && !numberFlag){
-            //it's a number and numberFlag is false
-            flagString = NUMBER_FOLLOWS
-            numberFlag = true
-        }
-        
-        if(char==="."){
-            //gotta check the next thing to be a number
-            const nextChar = inputStr[i+1];
-            if(!isNaN(parseInt(nextChar))){
-                //this means this is a .75 case and not a full stop
-                flagString = DECIMAL_FOLLOWS
-            }
-        }
+  for (let i = 0; i < inputStr.length; i++) {
+    let char = inputStr[i];
 
-        if(char===" "){
-            numberFlag=false
-        }
+    let flagString = "";
 
-        
-        const brailleString = engToBrailleLookUp[char]
-        
-
-        brailleCharacters.push(flagString)
-        brailleCharacters.push(brailleString)
+    if (isNaN(parseInt(char)) && char.toUpperCase() === char && char !== " ") {
+      flagString = CAPITAL_FOLLOWS;
+      char = char.toLowerCase();
+    }
+    if (!isNaN(parseInt(char)) && !numberFlag) {
+      flagString = NUMBER_FOLLOWS;
+      numberFlag = true;
     }
 
-    return brailleCharacters.join('')
+    if (char === ".") {
+      const nextChar = inputStr[i + 1];
+      if (!isNaN(parseInt(nextChar))) {
+        flagString = DECIMAL_FOLLOWS;
+      }
+    }
+
+    if (char === " ") {
+      numberFlag = false;
+    }
+
+    const brailleString = englishToBrailleLookUp[char];
+
+    brailleCharacters.push(flagString);
+    brailleCharacters.push(brailleString);
+  }
+
+  return brailleCharacters.join("");
 };
 
 const translate = (inputStr: string) => {
-  //1. figure out if the inputStr is braille
-  //is a braille string if it is a multiple of 6 and it has just . and O
-  //to add condition that all those chunks should have a value when you look up the dictionary
-  let isBraille =  !/[^.O]+/.test(inputStr) 
-                && inputStr.length % 6 === 0
+  let isBraille = !/[^.O]+/.test(inputStr) && inputStr.length % 6 === 0;
 
-  //2. look up the right dictionary
-  
   const translation = isBraille
     ? translateToEnglish(inputStr)
     : translateToBraille(inputStr);
@@ -221,7 +202,6 @@ const main = () => {
   const args = process.argv.slice(2);
   const inputStr = args.join(" ");
 
-  
   const translation = translate(inputStr);
   console.log(translation);
 };
