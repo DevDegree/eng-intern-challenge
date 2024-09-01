@@ -104,7 +104,6 @@ def english_to_braille(text):
             char = char.lower()
         is_numbers_follows = False
 
-        print("lah", char)
         braille_res += ENGLISH_TO_BRAILLE[char]
 
     return braille_res
