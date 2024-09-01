@@ -83,10 +83,12 @@ cmdInput = " ".join(sys.argv[1:])
 CAPITAL_FOLLOWS = ".....O"
 NUMBER_FOLLOWS = ".O.OOO"
 
+
 def isBraille(input):
     brailleTest = input.replace(".", "").replace("O", "")
 
     return len(brailleTest) == 0 and len(input) % 6 == 0
+
 
 def brailleToEnglish(input):
     output = ""
@@ -138,6 +140,7 @@ def englishToBraille(input):
         output += ENGLISH_TO_BRAILLE[char]
 
     return output
+
 
 if isBraille(cmdInput):
     print(brailleToEnglish(cmdInput), end="")
