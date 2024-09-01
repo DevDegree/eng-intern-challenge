@@ -228,6 +228,7 @@ def is_braille(braille_text: str) -> bool:
     """
 
     braille_chars = ".O"
+
     return all(char in braille_chars for char in braille_text)
 
 
