@@ -1,3 +1,4 @@
+#! python3
 # Author: Nguyen-Hanh Nong
 # File: translator.py
 # Purpose: To create a Python converter, that will convert English text to Braille or Braille text to English text that is passed in as a command-line argument into the script
@@ -238,6 +239,6 @@ if __name__ == "__main__":
 
   # Removing the padded spacing depending on whether the conversion was into Braille or English before printing the string
   if isBraille is True:
-    print(res[:-1].strip())
+    print(res[:-1].strip(), file=sys.stdout)
   else:
-    print(res[:-6].strip())
+    print(res[:-6].strip(), file=sys.stdout)
