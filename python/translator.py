@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """
 Author: Shidrath Rahman Haider
 email: shidrathrahman365@gmail.com
@@ -173,3 +174,6 @@ if __name__ == "__main__":
         print(translation)
     except Exception as e:
         print(f"Error in main execution: {e}")
+=======
+
+>>>>>>> upstream/main
