@@ -60,7 +60,7 @@ def translate_braille(input_string: str) -> str:
                     translated_string += "."
                 else:
                     translated_string += braille_char
-                continue
+            continue  # Ensures numericize doesn't get turned off prematurely
 
         # Handle regular characters and capitalization
         if capitalize:
