@@ -66,7 +66,7 @@ mapping_braille_to_num = {v: k for k, v in mapping_num_to_braille.items()}
 
 # Merge mappings for english and numbers, because this translation does not have
 # overlapping keys
-mapping_eng_to_braille = mapping_eng_to_braille | mapping_num_to_braille
+mapping_eng_to_braille = {**mapping_eng_to_braille, **mapping_num_to_braille}
 
 # Special braille characters
 CAPITAL_FOLLOWS = ".....O"
