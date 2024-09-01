@@ -79,20 +79,31 @@ def translate_braille(input_string: str) -> str:
 def translate_english(input_string: str) -> str:
     '''Translates an English string to Braille.'''
     translated_string = ''
+    numericize = False
+    
     for char in input_string:
+        # Check for uppercase letters
         if char.isupper():
             translated_string += english_braille_map["capital follows"]
-            char = char.lower()
-            #check if we added the char too
+            translated_string += english_braille_map[char.lower()]
+            continue
 
-        if char.isdigit():
-            if not translated_string.endswith(english_braille_map["number follows"]):
+        # Check for numbers
+        if char in english_braille_map and char in '0123456789':
+            if not numericize:
                 translated_string += english_braille_map["number follows"]
+                numericize = True
             translated_string += english_braille_map[char]
-        elif char in english_braille_map:
+        elif char == ' ':
+            numericize = False  # Reset numericize after a space
+            translated_string += english_braille_map[char]
+        else:
             translated_string += english_braille_map[char]
 
     return translated_string
+
+
+
 
 
 def main():
