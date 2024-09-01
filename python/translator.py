@@ -87,18 +87,6 @@ class BrailleTranslator:
             "num": ".O.OOO",
 
             # special characters
-            ".": "..OO.O",
-            ",": "..O...",
-            "?": "..O.OO",
-            "!": "..OOO.",
-            ":": "..OO..",
-            ";": "..O.O.",
-            "-": "....OO",
-            "/": ".O..O.",
-            "<": ".OO..O",
-            ">": "O..OO.",
-            "(": "O.O..O",
-            ")": ".O.OO.",
             " ": "......"
         }
     
@@ -123,7 +111,7 @@ class BrailleTranslator:
             for br in parsed_braille:
                 char = self.BRAILLE_TO_ENGLISH_MAP.get(br, None)
                 if not char:
-                    print("Invalid braille.")
+                    print("Invalid braille:", br)
                     return
 
                 if is_cap:
@@ -151,6 +139,9 @@ class BrailleTranslator:
         else:
             is_num = False
             for c in string:
+                if c.lower() not in self.ENGLISH_TO_BRAILLE_MAP:
+                    print("Invalid alphabet:", c)
+                    return
                 if 'A' <= c <= 'Z':
                     translated_string += self.ENGLISH_TO_BRAILLE_MAP["cap"]
                 elif not is_num and '0' <= c <= '9':
