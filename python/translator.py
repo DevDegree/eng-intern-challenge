@@ -1,50 +1,72 @@
 
 import sys 
-from translationDict import lettersToBraille, numbersToBraille, specialSymbols
+from translationDict import LETTERS_TO_BRAILLE, NUMBERS_TO_BRAILLE, SPECIAL_SYMBOLS
 
-args = sys.argv
-output = ""
+BRAILLE_TO_LETTERS = {v: k for k, v in LETTERS_TO_BRAILLE.items()}
+BRAILLE_TO_NUMBERS = {v: k for k, v in NUMBERS_TO_BRAILLE.items()}
 
-if '.' in args[1]:
+# If braille, the string length will be multiple of 6 and only contain '.' and 'O'
+def isBraille(str):
+  if len(str) % 6 != 0: 
+    return False
+
+  for char in str:
+    if char != '.' and char != 'O':
+      return False
+    
+  return True
+
+def convertBrailleToEnglish(str):
+  output = ""
   capital = False
   numbers = False
-  brailleToLetters = {v: k for k, v in lettersToBraille.items()}
-  brailleToNumbers = {v: k for k, v in numbersToBraille.items()}
 
-  for i in range(0, len(args[1]), 6):
-    char = args[1][i:i+6]
+  for i in range(0, len(str), 6):
+    char = str[i:i+6]
 
-    if char == specialSymbols['capital']:
+    if char == SPECIAL_SYMBOLS['capital']:
       capital = True
-    elif char == specialSymbols['number']:
+    elif char == SPECIAL_SYMBOLS['number']:
       numbers = True
-    elif char == specialSymbols['space']: 
+    elif char == SPECIAL_SYMBOLS['space']: 
       numbers = False
       output += " "
     else: 
       if numbers:
-        output += brailleToNumbers[char]
+        output += BRAILLE_TO_NUMBERS[char]
       elif capital: 
-        output += brailleToLetters[char].upper()
+        output += BRAILLE_TO_LETTERS[char].upper()
         capital = False
       else:
-        output += brailleToLetters[char]
-else:
-  string = " ".join(args[1:])
+        output += BRAILLE_TO_LETTERS[char]
+  
+  return output
+
+def convertEnglishToBraille(str):
+  output = ""
   numbers = False
   
-  for char in string: 
+  for char in str: 
     if char == " ": 
       numbers = False
-      output += specialSymbols['space']
+      output += SPECIAL_SYMBOLS['space']
     elif char.isnumeric():
       if not numbers:
         numbers = True
-        output += specialSymbols['number'] 
-      output += numbersToBraille[char]
+        output += SPECIAL_SYMBOLS['number'] 
+      output += NUMBERS_TO_BRAILLE[char]
     else: 
       if char.isupper():
-        output += specialSymbols['capital']
-      output += lettersToBraille[char.lower()]
+        output += SPECIAL_SYMBOLS['capital']
+      output += LETTERS_TO_BRAILLE[char.lower()]
+
+  return output
+
+string = " ".join(sys.argv[1:])
+
+if isBraille(string):
+  translation = convertBrailleToEnglish(string)
+else:
+  translation = convertEnglishToBraille(string)
   
-print(output)
+print(translation)

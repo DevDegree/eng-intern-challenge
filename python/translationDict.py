@@ -1,4 +1,4 @@
-lettersToBraille = {
+LETTERS_TO_BRAILLE = {
   'a': "O.....",
   'b': 'O.O...',
   'c': 'OO....',
@@ -27,7 +27,7 @@ lettersToBraille = {
   'z': 'O..OOO',
 }
 
-numbersToBraille = {
+NUMBERS_TO_BRAILLE = {
   '1': "O.....",
   '2': 'O.O...',
   '3': 'OO....',
@@ -40,7 +40,7 @@ numbersToBraille = {
   '0': '.OOO..',
 }
 
-specialSymbols = {
+SPECIAL_SYMBOLS = {
   'space': '......',
   'capital': '.....O',
   'number': '.O.OOO',
