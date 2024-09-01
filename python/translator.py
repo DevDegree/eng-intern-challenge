@@ -30,7 +30,7 @@ def english_to_braille(user_input):
     response = ''
     # Numeric Flag to indicate if number
     number_value = False
-
+    # Loop through every letter and translate it accordingly
     for i in user_input:
         # Letter
         if i.isalpha():
