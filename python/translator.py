@@ -83,7 +83,7 @@ def main():
         print("No input detected")
         return
     
-    input_string = sys.argv[1]
+    input_string = ' '.join(sys.argv[1:])
 
     if all(char in 'O.' for char in input_string):
         print(translate_to_english(input_string))
