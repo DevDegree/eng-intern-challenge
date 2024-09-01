@@ -8,14 +8,14 @@ braille_english_map = {
         "OOO.O.": "p", "OOOOO.": "q", "O.OOO.": "r", ".OO.O.": "s", ".OOOO.": "t",
         "O...OO": "u", "O.O.OO": "v", ".OOO.O": "w", "OO..OO": "x", "OO.OOO": "y",
         "O..OOO": "z", "......": " ", ".....O": "capital follows", ".O.OOO": "number follows",
-        ".O...O":"decimal follows", "..OO.O":".", "..O...": ",", "..O.OO": "?", "..OOO." : "!",
+        "..OO.O":".", "..O...": ",", "..O.OO": "?", "..OOO." : "!",
         "..OO.." : ":", "..O.O." : ";", "....OO" : "-", ".O..O.":"/", "O.O..O": "(", ".O.OO." : ")"
     },
     "numbers": {
         "O.....": "1", "O.O...": "2", "OO....": "3", "OO.O..": "4", "O..O..": "5",
         "OOO...": "6", "OOOO..": "7", "O.OO..": "8", ".OO...": "9", ".OOO..": "0",
         "..OO.O":".", "....OO" : "-", ".O..O.": "/", ".OO..O" : "<", "O..OO.": ">",
-        "O.O..O": "(", ".O.OO." : ")", "......": " ",
+        "O.O..O": "(", ".O.OO." : ")", "......": " ", ".O...O":"decimal follows",
     }
 }
 
@@ -52,27 +52,22 @@ def translate_braille(input_string: str) -> str:
             elif braille_char == "number follows":
                 numericize = True
                 continue
-            elif braille_char == "decimal follows":
-                numericize = True
-
-            elif braille_char == " ":
-                translated_string += ' '
-                numericize = False  # Reset numericize after a space
-                continue
-            
-        # Process the character based on the instruction flags
+        # Handle numbers and other symbols when numericize is active
         if numericize:
             if char in braille_english_map["numbers"]:
                 braille_char = braille_english_map["numbers"][char]
-                translated_string += braille_char
-                if braille_char == ' ':
-                    numericize = False
+                if braille_char == "decimal follows":
+                    translated_string += "."
+                else:
+                    translated_string += braille_char
+                continue
+
+        # Handle regular characters and capitalization
+        if capitalize:
+            translated_string += braille_char.upper()
+            capitalize = False  # Reset capitalize after one character
         else:
-            if capitalize:
-                translated_string += braille_char.upper()
-                capitalize = False  # Reset capitalize after one character
-            else:
-                translated_string += braille_char
+            translated_string += braille_char
 
     return translated_string
 
@@ -101,9 +96,6 @@ def translate_english(input_string: str) -> str:
             translated_string += english_braille_map[char]
 
     return translated_string
-
-
-
 
 
 def main():
