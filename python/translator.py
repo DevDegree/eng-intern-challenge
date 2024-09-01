@@ -1,3 +1,4 @@
+import sys
 # Constants
 
 BASE_BRAILLE = {
@@ -15,14 +16,14 @@ CAPITAL_PREFIX = "O.OOOO"
 NUMBER_PREFIX = ".O.OOO"
 
 '''
-In Braille Alphabet in the technical tequirements it does not state that '.' is a vaild braille alahabet
+In Braille Alphabet in the technical requirements it does not state that '.' can be a vaild alphabet input in this program
 
 Vaild Braille Alphabet are:
     1. Letters a through z(lowercase and uppercase)
     2. Numbers 0 through 9
     3. Spaces
 
-Every braille contains a '.' thus if a string(text) contains '.' it means it has to be a braille
+This means if '.' is found in a string it is a braille and not a vaild braille alphabet
 '''
 def is_braille(text):
     for c in text:
@@ -33,9 +34,22 @@ def is_braille(text):
 def vaild_braille(text):
     return len(text) % 6 == 0
 
-# Created to run my own tests
+# Gets input from terminal
+def get_system_arguments(args):
+    text = ""
+    for i in range(1,len(args) - 1):
+        text += args[i] + " "
+    text += args[len(args) - 1]
+
+    return text
+
+# Runs the Translator
 def main():
-    print("Hello World :) ")
+    text = get_system_arguments(sys.argv)
+    print(text)
+    if is_braille(text) and vaild_braille(text):
+        print(True)
+    print("RAN")
 
 if __name__ == "__main__":
     main() 
