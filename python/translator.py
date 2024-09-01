@@ -49,15 +49,14 @@ NUMBER_TO_BRAILLE = {
 BRAILLE_TO_ENGLISH = dict(zip(ENGLISH_TO_BRAILLE.values(), ENGLISH_TO_BRAILLE.keys()))
 BRAILLE_TO_NUMBER = dict(zip(NUMBER_TO_BRAILLE.values(), NUMBER_TO_BRAILLE.keys()))
 
-# Braille if char is multiple of 6 and only contains . or 0
+# Braille if char is multiple of 6 and only contains . or O
 def is_braille(str):
     if len(str) % 6:
         return False
 
     for c in str:
-        if c != '.' or c != '0':
+        if c != '.' and c != 'O':
             return False
-
     return True
 
 def braille_to_english(text):
@@ -105,6 +104,7 @@ def english_to_braille(text):
             char = char.lower()
         is_numbers_follows = False
 
+        print("lah", char)
         braille_res += ENGLISH_TO_BRAILLE[char]
 
     return braille_res
