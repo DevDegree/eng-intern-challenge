@@ -1,8 +1,10 @@
-#! python3
-# translator.py - translates braille to english and vice versa
-
+<<<<<<< HEAD
 import sys
 
+=======
+import sys
+
+>>>>>>> 8216fce (Optimize translator implementation and update tests)
 alphabet = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..', 'f': 'OOO...', 'g': 'OOOO..', 
     'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..', 'k': 'O...O.', 'l': 'O.O.O.', 'm': 'OO..O.', 'n': 'OO.OO.',
