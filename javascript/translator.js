@@ -143,4 +143,4 @@ if (isBrailleInput) {
     output = translateTextToBraille(userInput);
 }
 
-console.log(output); // Log output
+console.log(output); 
