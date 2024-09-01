@@ -151,8 +151,8 @@ def english_to_braille (input_string, translation_map)
     else
       # throw an exception to handle some illegal input cases
       raise ArgumentError, "Illegal Input" if !translation_map.has_key?(character)
-      if !number_flag and character.match?(/\d/)
-        translated_text << translation_map[:number]
+      if character.match?(/\d/)
+        translated_text << translation_map[:number] unless number_flag
         number_flag = true
       end
       symbol = character
