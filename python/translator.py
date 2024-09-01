@@ -87,11 +87,15 @@ def convertToBraille(english) :
 
         # add number braille letter to result
         elif letter.isnumeric():
-            result += BRAILLE_COMMANDS['number']
+            result += BRAILLE_COMMANDS['number'] + BRAILLE_NUMS[int(letter)]
+            pos += 1
+            letter = english[pos]
             while letter != ' ' and pos < len(english):
-                letter = english[pos]
                 result += BRAILLE_NUMS[int(letter)]
                 pos +=1
+                letter = english[pos]
+            if letter == ' ':
+                result += BRAILLE_ALPHABET[' ']
 
         else:
             result += BRAILLE_ALPHABET[letter]
