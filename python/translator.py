@@ -10,7 +10,7 @@ def translate(input_string: str) -> str:
     else:
         # Case 1: We are working with english data
         translator = EnglishToBrailleTranslator(input_string)
-    print(translator.translate())
+    sys.stdout.write(translator.translate())
 
 
 if __name__ == "__main__":
