@@ -2,6 +2,7 @@
 #Aug 31 2024
 #SHOP ENG CHALLENGE
 
+import sys
 
 #Creating a braille to english dictonary, assuming there are special rule for the other 
 # special charcters hence they are not included in this. Only Numbers letters and periods 
@@ -103,6 +104,6 @@ def translate(inp):
                 translated.append(braille_lang.get(eng_char.lower(), '$'))
         return ''.join(translated)
 
-
-
-print(translate('abs'))
+if __name__ == "__main__":
+    import sys
+    print(translate(*sys.argv[1:]))
