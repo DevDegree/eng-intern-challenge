@@ -139,10 +139,19 @@ def isBraille(args: list[str]) -> bool:
 
 def translateFromEnglish(inputStr: str, conversionDict: dict[str, str]) -> str: 
     result = ""
-    for char in inputStr: 
-        if char.isalpha() and char.isupper(): 
+    for i in range(len(inputStr)): 
+        char = inputStr[i]
+        if char.isalpha() and char.isupper(): # for uppercase lettercase
             result += BRAILLE_CAPITAL_FOLLOWS
-            result += conversionDict[char.lower()]    
+            result += conversionDict[char.lower()]
+        elif (char.isnumeric() or char == ".") and (i == 0 or not(inputStr[i-1].isnumeric() or inputStr[i-1] == ".")): 
+            result += BRAILLE_NUMBER_FOLLOWS
+            if char == ".": 
+                result += BRAILLE_DECIMAL_FOLLOWS
+            else: 
+                result += conversionDict[char]
+        elif char == "." and char != inputStr[-1] and inputStr[i+1].isnumeric():
+            result += BRAILLE_DECIMAL_FOLLOWS
         else: 
             result += conversionDict[char]
     return result 
