@@ -1,4 +1,3 @@
-#! python3
 # Author: Nguyen-Hanh Nong
 # File: translator.py
 # Purpose: To create a Python converter, that will convert English text to Braille or Braille text to English text that is passed in as a command-line argument into the script
@@ -9,7 +8,7 @@
 import sys
 
 # Creating 3 separate dictionaries, to hold all the various mappings between all the possible inputs from English to Braille conversion
-defaultCharacterDictionary: dict = {
+defaultCharacterDictionary = {
   'a':'O.....',
   'b':'O.O...',
   'c':'OO....',
@@ -51,13 +50,13 @@ defaultCharacterDictionary: dict = {
   ')':'.O.OO.',
 }
 
-specialCharactersDictionary: dict = {
+specialCharactersDictionary = {
   'capital':'.....O',
   'decimal':'.O...O',
   'number':'.O.OOO'
 }
 
-numberLetterMapping: dict = {
+numberLetterMapping = {
   '1':'a',
   '2':'b',
   '3':'c',
@@ -71,7 +70,7 @@ numberLetterMapping: dict = {
 }
 
 # Creating three dictionaries, that do the reverse of the conversion (which we need when converting from braille to english)
-reverseDefaultCharacterDictionary: dict = {
+reverseDefaultCharacterDictionary = {
   'O.....':'a',
   'O.O...':'b',
   'OO....':'c',
@@ -112,13 +111,13 @@ reverseDefaultCharacterDictionary: dict = {
   '.O.OO.':')',
 }
 
-reverseSpecialCharactersDictionary: dict = {
+reverseSpecialCharactersDictionary = {
   '.....O':'capital',
   '.O...O':'decimal',
   '.O.OOO':'number',
 }
 
-reverseNumberLetterMapping: dict = {
+reverseNumberLetterMapping = {
   'a':'1',
   'b':'2',
   'c':'3',
@@ -135,14 +134,14 @@ reverseNumberLetterMapping: dict = {
 Input: A string that is in the Braille language
 Output: The input string but translated to the English language
 """
-def convertFromBrailleToEnglish(input: str) -> str:
-  res: str = ''
-  isCapital: bool = False
-  isNum: bool = False
+def convertFromBrailleToEnglish(input):
+  res = ''
+  isCapital = False
+  isNum = False
 
   # Now that we know that the string given to us is in braille, we want to parse the braille, 6 characters at a time
   while input:
-      currentBrailleString: str = input[:6]
+      currentBrailleString = input[:6]
       input: str = input[6:]
 
       # Check if the current braille string converts to a normal alpha numeric/special character
@@ -177,13 +176,13 @@ def convertFromBrailleToEnglish(input: str) -> str:
 Input: A string that is in the English language
 Output: The input string but translated to the Braille language
 """
-def convertFromEnglishToBraille(input: str) -> str:
-  res: str = ''
-  isNumber: bool = False
+def convertFromEnglishToBraille(input):
+  res = ''
+  isNumber = False
 
   # Now that we know that the string given to us is in English, we want to parse the string, one character at a time
   while input:
-      currentCharacter: str = input[0]
+      currentCharacter = input[0]
       input = input[1:]
 
       # We now have to handle all the non-alpha numeric characters and their corresponding braille translations
@@ -217,15 +216,19 @@ def convertFromEnglishToBraille(input: str) -> str:
 
   return res + '......'
 
-if __name__ == "__main__":
+def main():
+  if len(sys.argv) < 2:
+    print("Cannot translate empty text. The program will now exit.")
+    sys.exit(1)
+  
   # This is the variable we will print to the terminal, containing the translation output
-  res: str = ''
+  res = ''
 
   # Language given
-  isBraille: bool = False
+  isBraille = False
 
   # Capture all arguments except the script name
-  allArguments: list[str] = sys.argv[1:]
+  allArguments = sys.argv[1:]
 
   # For cases with multiple arguments
   for word in allArguments:
@@ -242,3 +245,6 @@ if __name__ == "__main__":
     print(res[:-1].strip(), file=sys.stdout)
   else:
     print(res[:-6].strip(), file=sys.stdout)
+
+if __name__ == "__main__":
+   main()
