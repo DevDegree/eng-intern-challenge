@@ -17,7 +17,19 @@ func Translate(word string) (string, error) {
 		return translate_from_latin_to_braille(word)
 	}
 	if helpers.IsBraille(word) {
-		return translate_from_braille_to_latin(word)
+		// word is packed and not already split by spaces
+		// hence, split on braille space character,
+		// translate each word and return result
+		braille_words := strings.Split(word, mappers.BRAILLE_SPACE)
+		var translation []string
+		for _, braille_word := range braille_words {
+			res, err := translate_from_braille_to_latin(braille_word)
+			if err != nil {
+				return "", err
+			}
+			translation = append(translation, res)
+		}
+		return strings.Join(translation, " "), nil
 	}
 	// unreachable (given the underlying logic)
 	return "", errors.New("unable to classify text")

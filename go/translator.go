@@ -2,7 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"solution/helpers"
+	"solution/lib"
+	"solution/mappers"
+	"strings"
 )
 
 /*
@@ -12,11 +17,26 @@ When a Braille number follows symbol is read, assume all following symbols are n
 I am to assume
 - numbers will only ever be in the format 123 or 123.123
 - no double spaces such as "123 123  123" as one of the spaces would be included in the numbers
-
+- braille and english cannot be mixed
+	* input will either be all english or all braille
 
 */
 
 func main() {
 	argsWithoutProg := os.Args[1:]
-	fmt.Printf("%v\n", argsWithoutProg)
+	var words []string
+	for _, word := range argsWithoutProg {
+		translation, err := lib.Translate(word)
+		if err != nil {
+			log.Printf("[ERROR] Could not translate %s, got %v", word, err)
+		}
+		words = append(words, translation)
+	}
+	space := " "
+	if helpers.IsBraille(words[0]) {
+		space = mappers.BRAILLE_SPACE
+	}
+	final_translation := strings.Join(words, space)
+	fmt.Printf("%s", final_translation)
+
 }
