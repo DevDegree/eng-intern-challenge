@@ -7,7 +7,7 @@ describe('translator.ts output', () => {
   it('should print the correct output to the console', async () => {
     const { stdout } = await execAsync('ts-node translator.ts Abc 123 xYz');
 
-    const expected = '.....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO';
+    const expected = '.....OO.....O..O...O...O..0000.....O.....OO..........';
     expect(stdout.trim()).toBe(expected);
   });
 });
