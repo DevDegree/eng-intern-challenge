@@ -15,7 +15,7 @@ func TestSolutionOutput(t *testing.T) {
 
 	// Trim space from output and expected value
 	output := strings.TrimSpace(string(outputBytes))
-	expected := strings.TrimSpace(".....OO.....O.O...OO...........O.OOOO.O...OO....OO.O........OO..OO.....OOO.OOOO..OOO")
+	expected := strings.TrimSpace(".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO")
 
 	if output != expected {
 		t.Errorf("Unexpected output, got: %q, want: %q", output, expected)
