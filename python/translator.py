@@ -11,6 +11,7 @@ Description:
 '''
 
 from sys import argv
+from sys import stdout
 
 # global constants
 RAISED_DOT: str = 'O'
@@ -221,7 +222,7 @@ class translator :
 # main function
 if len(argv) > 1:  
     # if input is provided attempt to translate the text
-
     INPUT_ARR: list[str] = argv[1:] 
     translator = translator();
-    print(translator.translate(INPUT_ARR));
+    print(translator.translate(INPUT_ARR), file=stdout);
+
