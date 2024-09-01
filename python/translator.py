@@ -278,7 +278,7 @@ def translate(input_string: str) -> str:
     else:
         # Case 2: We are working with english data
         translator = EnglishToBrailleTranslator(input_string)
-    sys.stdout.write(translator.translate())
+    sys.stdout.write("bar")
 
 print("foo")
 translate(" ".join(sys.argv[1:]))
