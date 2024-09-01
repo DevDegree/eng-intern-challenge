@@ -277,7 +277,7 @@ def translate(input_string: str) -> str:
     #     translator = BrailleToEnglishTranslator(input_string)
     # else:
     #     # Case 2: We are working with english data
-    translator = EnglishToBrailleTranslator(input_string)
+    # translator = EnglishToBrailleTranslator(input_string)
     print("bar")
 
 print("foo")
