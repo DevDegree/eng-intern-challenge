@@ -1,5 +1,6 @@
 import sys
 
+
 class Translator:
     def __init__(self):
         self.en_to_braille = {
@@ -57,8 +58,23 @@ class Translator:
         return ''
     
     def _translate_en2braille(self, sentence):
-        # TODO
-        return ''
+        res = []
+        reading_number = False
+        for ch in sentence:
+            if ch.isdigit():
+                if not reading_number:
+                    res.append(self.en_to_braille['Number'])
+                    reading_number = True
+                ch = 'j' if ch == '0' else chr(ord('a') + ord(ch) - ord('1'))
+            else:
+                reading_number = False
+            
+            if ch.isupper():
+                res.append(self.en_to_braille['Capital'])
+                ch = ch.lower()
+            
+            res.append(self.en_to_braille[ch])
+        return ''.join(res)
 
     def translate(self, sentence):
         is_braille = self.check_braille(sentence)
@@ -70,7 +86,7 @@ class Translator:
 def main():
     sentence = ' '.join(sys.argv[1:])
     translator = Translator()
-    return translator.translate(sentence)
+    print(translator.translate(sentence))
 
 if __name__ == "__main__":
     main()
