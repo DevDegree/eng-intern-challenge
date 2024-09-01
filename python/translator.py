@@ -92,15 +92,7 @@ def translator():
     """
 
     args = sys.argv[1:]
-    input = []
-    string = ""
-
-    if len(args) > 1:
-        for arg in args:
-            input.append(arg)
-        string = " ".join(input)
-    else:
-        string = args[0]
+    string = " ".join(args)
 
     if is_braille(string):
         translation = translate_to_english(string)
@@ -226,6 +218,8 @@ def is_braille(braille_text: str) -> bool:
     Returns:
         bool: True if all characters are valid Braille characters, False otherwise.
     """
+    if len(braille_text) % 6 != 0:
+        return False
 
     braille_chars = ".O"
 
