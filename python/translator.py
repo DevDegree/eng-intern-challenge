@@ -90,7 +90,6 @@ def translate_braille_to_engl(text):
                 
     return ''.join(ans)
         
-
 def translate_engl_to_braille(text):
     ans = []
     curr_nums = False
@@ -99,9 +98,7 @@ def translate_engl_to_braille(text):
         if i == " ":
             if curr_nums == True:
                 curr_nums = False
-            else:
-                ans.append(e_to_b_special_chars['space'])
-                continue
+            ans.append(e_to_b_special_chars['space'])
 
         if i.lower() in engl_to_braille_dict:
             if i.isupper():
@@ -121,7 +118,8 @@ def translate_engl_to_braille(text):
 
 def main():
     # if len(sys.argv[1:]) > 1:
-    text = "xYz"   #' '.join(sys.argv[1:])
+    #     text = ' '.join(sys.argv[1:])
+    text = "Abc 123 xYz"
     if check_for_braille(text):
         print(translate_braille_to_engl(text))
     else:
@@ -129,5 +127,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
