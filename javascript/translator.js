@@ -1,39 +1,82 @@
-const query = process.argv.slice(2).join(" ").split("");
+const query = process.argv.slice(2).join(" ").trim().split("");
 
-const dictionary = {};
+const dictionaryEnglish = {};
+const dictionaryBraille = {};
 
-const braille = ["0.....", "0.0...", "00....", "00.0..", "0..0..", "000...", "0000..", "0.00..", ".00...", ".000..", "0...0.", "0.0.0.", "00..0.", "00.00.", "0..00.", "000.0.", "00000.", "0.000.", ".00.0.", ".0000.", "0...00", "0.0.00", ".000.0", "00..00", "00.000", "0..000", "0.....", "0.0...", "00....", "00.0..", "0..0..", "000...", "0000..", "0.00..", ".00...", ".000..", "..00.0", "..0...", "..0.00", "..000.", "..00..", "..0.0.", "....00", ".0..0.", ".00..0", "0..00.", "0.0..0", ".0.00.", "......"];
+const braille = ["O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..", ".OO...", ".OOO..", "O...O.", "O.O.O.", "OO..O.", "OO.OO.", "O..OO.", "OOO.O.", "OOOOO.", "O.OOO.", ".OO.O.", ".OOOO.", "O...OO", "O.O.OO", ".OOO.O", "OO..OO", "OO.OOO", "O..OOO", "O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..", ".OO...", ".OOO..", "......"];
 
-const english = [..."abcdefghijklmnopqrstuvwxyz1234567890.,?!:;-/<>() "].forEach((l, i) => dictionary[l] = braille[i]);
+[..."abcdefghijklmnopqrstuvwxyz1234567890 "].forEach((l, i) => {
+    dictionaryEnglish[l] = braille[i];
+    dictionaryBraille[braille[i]] ? dictionaryBraille[braille[i]] += l : dictionaryBraille[braille[i]] = l;
+});
 
 const options = {
-    capital: ".....0",
-    number: ".0.000",
-    decimal: ".0...0"
+    capital: ".....O",
+    number: ".O.OOO",
 };
 
-const determinator = query.every(l => l === "." || l === "0") ? "Braille" : "English"
+const determinator = query.every(l => l === "." || l === "O") ? "Braille" : "English"
 
 if (determinator === "English") {
 
-    return query.map((l, i) => {
+    const englishToBraille = query.map((l, i) => {
 
-        if ((i === 0 && l === l.toUpperCase()) || (l === l.toUpperCase() && query[i - 1] !== query[i - 1].toUpperCase() && i > 0)) {
-            return options.capital + dictionary[l]
+        if (l === " ") {
+            return "......"
         }
 
-        if (typeof(+l) === "number" && !isNaN(+l) && typeof(+query[i - 1]) !== "number") {
-            return options.number + dictionary[l]
+        if ( l === l.toUpperCase() && (i === 0 || query[i - 1] !== query[i - 1].toUpperCase()) ) {
+            return options.capital + dictionaryEnglish[l.toLowerCase()]
         }
 
-        if (l === "." && typeof(+query[i - 1]) === "number" && !isNaN(+query[i - 1]) && typeof(+query[i + 1]) === "number" && !isNaN(+query[i + 1])) {
-            return options.decimal
+        if (!isNaN(+l) && (isNaN(+query[i - 1]) || query[i - 1] === " " )) {
+            return options.number + dictionaryEnglish[l]
         }
 
-        return dictionary[l.toLowerCase()]
+        return dictionaryEnglish[l.toLowerCase()]
 
     }).join("")
 
+    console.log(englishToBraille)
+
 } else {
+
+    const brailleSegments = query.reduce((cT, cV) => {
+        cT[cT.length - 1].length === 6 ? cT.push(cV) : cT[cT.length - 1] += cV
+        return cT
+    }, [""])
+
+    let capital = false
+    let number = false
+
+    const brailleToEnglish = brailleSegments.map(segment => {
+
+        if (segment === options.capital || capital) { 
+            if (capital) {
+                capital = false
+                return dictionaryBraille[segment][0].toUpperCase()
+            } else {
+                capital = true
+                return "SKIP" 
+            }
+        }
+
+        if (segment === options.number || number) {
+            if (number && segment === "......") {
+                number = false
+                return " "
+            } else if (number) {
+                return dictionaryBraille[segment][1]
+            } else {
+                number = true
+                return "SKIP"
+            }
+        }
+
+        return dictionaryBraille[segment][0]
+
+    }).filter(char => char !== "SKIP").join("")
+
+    console.log(brailleToEnglish)
 
 }
