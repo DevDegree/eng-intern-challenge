@@ -32,7 +32,7 @@ const translateBrailleToEnglish = (braille: string): string => {
 
     // Capital letter case
     if (capitalFollows) {
-      translated += ENGLISH_TO_BRAILLE_MAP[char].toUpperCase();
+      translated += BRAILLE_MAP[char].toUpperCase();
       capitalFollows = false;
       continue;
     }
