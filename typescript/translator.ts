@@ -1,54 +1,97 @@
-const brailleMap: { [key: string]: string } = {
-    "a": "O.....", "b": "O.O...", "c": "OO....", "d": "OO.O..", "e": "O..O..",
-    "f": "OOO...", "g": "OOOO..", "h": "O.OO..", "i": ".OO...", "j": ".OOO..",
-    "k": "O...O.", "l": "O.O.O.", "m": "OO..O.", "n": "OO.OO.", "o": "O..OO.",
-    "p": "OOO.O.", "q": "OOOOO.", "r": "O.OOO.", "s": ".OO.O.", "t": ".OOOO.",
-    "u": "O...OO", "v": "O.O.OO", "w": ".OOO.O", "x": "OO..OO", "y": "OO.OOO",
-    "z": "O..OOO", " ": "......", 
-    "A": ".....O.....O.....", "B": ".....O.O...O.....", "C": ".....OO....O.....", "D": ".....OO.O..O.....", "E": ".....O..O..O.....",
-    "F": ".....OOO...O.....", "G": ".....OOOO..O.....", "H": ".....O.OO..O.....", "I": ".....OO...O.....", "J": ".....OOO..O.....",
-    "K": ".....O...O...O...", "L": ".....O.O.O...O...", "M": ".....OO..O...O...", "N": ".....OO.OO...O...", "O": ".....O..OO...O...",
-    "P": ".....OOO.O...O...", "Q": ".....OOOOO...O...", "R": ".....O.OOO...O...", "S": ".....OO.O...O...", "T": ".....OOOO...O...",
-    "U": ".....O...OO...O...", "V": ".....O.O.OO...O...", "W": ".....OOO.OO...O...", "X": ".....OO..OO...O...", "Y": ".....OO.OOO...O...",
-    "Z": ".....O..OOO...O...",
-    "0": ".O.OOO", "1": "O.....", "2": "O.O...", "3": "OO....", "4": "OO.O..", "5": "O..O..",
-    "6": "OOO...", "7": "OOOO..", "8": "O.OO..", "9": ".OO...",
+const BRAILLE_MAP: { [key: string]: string } = {
+    'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..',
+    'e': 'O..O..', 'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..',
+    'i': '.OO...', 'j': '.OOO..', 'k': 'O...O.', 'l': 'O.O.O.',
+    'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.', 'p': 'OOO.O.',
+    'q': 'OOOOO.', 'r': 'O.OOO.', 's': '.OO.O.', 't': '.OOOO.',
+    'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO',
+    'y': 'OO.OOO', 'z': 'O..OOO', ' ': '......',
+    '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..',
+    '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..',
+    '9': '.OO...', '0': '.OOO..'
 };
 
-const brailleReverseMap: { [key: string]: string } = {};
-for (let key in brailleMap) {
-    brailleReverseMap[brailleMap[key]] = key;
+const BRAILLESPS: { [key: string]: string } = {
+    'capital': '.....O',
+    'number': '.O.OOO'
+};
+
+function textBraille(text: string): boolean {
+    return /^[O.]+$/.test(text);
 }
 
-function isBraille(input: string): boolean {
-    return /^[O.]+$/.test(input);
-}
+function translateEtoB(text: string): string {
+    let result: string[] = [];
+    let numberMode = false;
 
-function translateToBraille(input: string): string {
-    return input.split('').map(char => brailleMap[char] || '').join('');
-}
+    for (let char of text) {
+        if (/\d/.test(char) && !numberMode) {
+            result.push(BRAILLESPS['number']);
+            numberMode = true;
+        } else if (/[A-Z]/.test(char)) {
+            result.push(BRAILLESPS['capital']);
+        } else if (char === ' ') {
+            numberMode = false;
+        }
 
-function translateToEnglish(input: string): string {
-    let result = '';
-    for (let i = 0; i < input.length; i += 6) {
-        const brailleChar = input.substr(i, 6);
-        result += brailleReverseMap[brailleChar] || '';
+        result.push(BRAILLE_MAP[char.toLowerCase()]);
     }
-    return result;
+
+    return result.join('');
 }
 
-function translate(input: string): string {
-    if (isBraille(input)) {
-        return translateToEnglish(input);
+function translateBtoE(braille: string): string | void {
+    const reverseMap = Object.fromEntries(Object.entries(BRAILLE_MAP).map(([k, v]) => [v, k]));
+    let result: string[] = [];
+    let i = 0;
+    let numberMode = false;
+    let capitalMode = false;
+
+    while (i < braille.length) {
+        let char = braille.substring(i, i + 6);
+
+        if (char === BRAILLESPS['capital']) {
+            capitalMode = true;
+            i += 6;
+            continue;
+        } else if (char === BRAILLESPS['number']) {
+            numberMode = true;
+            i += 6;
+            continue;
+        }
+
+        let translated = reverseMap[char];
+
+        if (!translated) {
+            console.error(`Error: Unrecognized Braille pattern '${char}' at position ${i}`);
+            return;
+        }
+
+        if (numberMode) {
+            const numberMap: { [key: string]: string } = {'a': '1', 'b': '2', 'c': '3', 'd': '4', 'e': '5', 'f': '6', 'g': '7', 'h': '8', 'i': '9', 'j': '0'};
+            translated = numberMap[translated];
+        }
+
+        if (capitalMode) {
+            translated = translated.toUpperCase();
+            capitalMode = false;
+        }
+
+        result.push(translated);
+        i += 6;
+    }
+
+    return result.join('');
+}
+
+function main() {
+    const inputText = process.argv[2];
+
+    if (textBraille(inputText)) {
+        console.log(translateBtoE(inputText));
     } else {
-        return translateToBraille(input);
+        console.log(translateEtoB(inputText));
     }
 }
 
-const input = process.argv.slice(2).join(' ');
-if (!input) {
-    console.error('Please provide a string to translate.');
-    process.exit(1);
-}
-
-console.log(translate(input));
+main();
