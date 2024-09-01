@@ -281,4 +281,4 @@ def translate(input_string: str) -> str:
     print("bar")
 
 print("foo")
-translate(" ".join(sys.argv[1:]))
+translate("")
