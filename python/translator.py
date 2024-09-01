@@ -1,4 +1,3 @@
-
 import sys 
 from translationDict import LETTERS_TO_BRAILLE, NUMBERS_TO_BRAILLE, SPECIAL_SYMBOLS
 
@@ -68,5 +67,5 @@ if isBraille(string):
   translation = convertBrailleToEnglish(string)
 else:
   translation = convertEnglishToBraille(string)
-  
+
 print(translation)
