@@ -73,6 +73,76 @@ const isBraille = (text) => {
     return true;
 };
 
+// Function to translate English to Braille
+const translateToBraille = (text) => {
+    // store the translation as an array, and join at the end
+    let result = [];
+    let isNumber = false;
+
+    for (let char of text) {
+        // check for special inputs first
+        if (char === " ") {
+            result.push(englishToBraille[" "]);
+            continue;
+        }
+
+        if (char.toUpperCase() === char && isNaN(parseInt(char))) {
+            result.push(englishToBraille["CAPITAL"]);
+            char = char.toLowerCase();
+            isNumber = false;
+        }
+
+        if (!isNaN(parseInt(char))) {
+            if (!isNumber) {
+                result.push(englishToBraille["NUMBER"]);
+                isNumber = true;
+            }
+            result.push(numberToBraille[char]);
+        } else {
+            isNumber = false;
+            result.push(englishToBraille[char] || "");
+        }
+    }
+
+    return result.join("");
+};
+
+// Function to translate Braille to English
+const translateToEnglish = (braille) => {
+    // store the translation as an array, and join at the end
+    let result = [];
+    let isCapital = false;
+    let isNumber = false;
+    const brailleSymbolLength = 6;
+
+    for (let i = 0; i < braille.length; i += brailleSymbolLength) {
+        const symbol = braille.slice(i, i + brailleSymbolLength);
+
+        // check for special inputs first
+        if (symbol === englishToBraille["CAPITAL"]) {
+            isCapital = true;
+        } else if (symbol === englishToBraille["NUMBER"]) {
+            isNumber = true;
+        } else if (symbol === englishToBraille[" "]) {
+            result.push(" ");
+            isNumber = false;
+        } else {
+            if (isNumber) {
+                result.push(brailleToNumber[symbol] || "");
+            } else {
+                let letter = brailleToEnglish[symbol] || "";
+                if (isCapital) {
+                    letter = letter.toUpperCase();
+                    isCapital = false;
+                }
+                result.push(letter);
+            }
+        }
+    }
+
+    return result.join("");
+};
+
 // CLI
 const main = () => {
     const args = process.argv.slice(2);
@@ -83,11 +153,12 @@ const main = () => {
 
     const inputText = args.join(' ');
     console.log('inputText is: ', inputText);
+    console.log('language of inputText is: ', isBraille(inputText));
 
     if (isBraille(inputText)) {
-        console.log('Translating Braille to English.');
+        console.log(translateToEnglish(inputText));
     } else {
-        console.log('Translating English to Braille.');
+        console.log(translateToBraille(inputText));
     }
 }
 
