@@ -57,3 +57,18 @@ for (const [key, value] of Object.entries(numberToBraille)) {
     brailleToNumber[value] = key;
 }
 
+// Check if the input is Braille (or English)
+const isBraille = (text) => {
+    if (text.length % 6 !== 0) {
+        return false;
+    }
+
+    for (let char of text) {
+        // only '0' and '.' are valid Braille characters
+        if (char !== "O" && char !== ".") {
+            return false;
+        }
+    }
+
+    return true;
+};
