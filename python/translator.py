@@ -76,6 +76,20 @@ BRAILLE_DICT_BWD = {
 
 
 def detect(input_str):
+    """
+    Detects if the given string is written in Braille or English.
+
+    This function checks the input string to determine if it is written
+    in English or Braille. If the string contains any character other
+    than '.' and 'O', it is considered to be English. Otherwise, it is
+    considered Braille.
+
+    Args:
+        input_str (str): The input string to be checked.
+
+    Returns:
+        bool: True if the input string is in Braille, False if it is in English.
+    """
     # The logic should be: if the string has anything other than '.' and 'O' then it is English. Else, it is Braille.
     english_chars = "ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890 "
 
@@ -86,6 +100,20 @@ def detect(input_str):
 
 
 def braille_to_english(input_str):
+    """
+    Converts a Braille string to its corresponding English text.
+
+    This function takes a Braille-encoded string and converts it to
+    the equivalent English text. It validates the Braille input
+    for correctness based on its length and character content.
+
+    Args:
+        input_str (str): The Braille string to be converted to English.
+
+    Returns:
+        str: The translated English text or an error message if the Braille
+             string is invalid.
+    """
     res = ""
     # Check if Braille is valid
     if len(input_str) % 6 != 0:
@@ -126,6 +154,19 @@ def braille_to_english(input_str):
 
 
 def english_to_braille(input_str):
+    """
+    Converts an English string to its corresponding Braille representation.
+
+    This function takes an English text string and converts it into
+    Braille code. It handles alphabetic characters, numbers, and spaces,
+    and uses special indicators for capital letters and numbers.
+
+    Args:
+        input_str (str): The English string to be converted to Braille.
+
+    Returns:
+        str: The Braille representation of the English input string.
+    """
     res = ""
     char_idx = 0
     while char_idx < len(input_str):
