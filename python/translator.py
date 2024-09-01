@@ -97,7 +97,8 @@ def translate_english(input_string: str) -> str:
 
 def main():
     # Get the input string from the command line arguments
-    input_string = sys.argv[1]
+    arguments = sys.argv[1:]
+    input_string = "".join(arguments)
 
     # Determine if string is English or braille
     if is_braille(input_string):
