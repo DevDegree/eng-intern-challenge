@@ -36,8 +36,8 @@ def is_braille(inp):
     return all(c in 'O.' for c in inp)
 
 #Creating a function 
-def translate(inp):
-
+def translate():
+    inp = ' '.join(sys.argv[1:])
     if is_braille(inp):
         translated = []
         i = 0
@@ -105,5 +105,4 @@ def translate(inp):
         return ''.join(translated)
 
 if __name__ == "__main__":
-    import sys
-    print(translate(*sys.argv[1:]))
+        print(translate())
