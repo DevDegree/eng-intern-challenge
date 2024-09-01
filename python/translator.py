@@ -16,8 +16,6 @@ CHAR_TO_BRAILLE = {
     '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..',
     '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..',
     '9': '.OO...', 'O': '.OOO..',
-
-    'capital': '.....O', 'number': '.O.OOO', ' ': '......'
 }
 
 BRAILLE_TO_NUMBER = {
@@ -86,13 +84,19 @@ def is_braille(string: str) -> bool:
     length_is_valid = len(string) % 6 == 0
     return all_chars_valid and length_is_valid
 
+def is_english(string: str) -> bool:
+    valid_chars = set('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ')
+    return all(char in valid_chars for char in string)
+
 def process_input():
     arguments = sys.argv[1:]
     string = (" ".join(arguments))
 
     if is_braille(string):
         print(translate_to_english(string))
-    else:
+    elif is_english(string):
         print(translate_to_braille(string))
+    else:
+        print("Error: Input contains invalid characters. Only letters, numbers, and spaces are allowed.")
 
 process_input()
