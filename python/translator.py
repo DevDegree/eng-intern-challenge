@@ -84,19 +84,30 @@ def braille_to_english(verified_text):
     print(english_text)
 
 
-
+# Fixed bug in my function where due to not a check for number_follows, the function would not translate number properly
 # 3 - English to Braille
 def english_to_braille(verified_text):
   braille_text = ""
+  number_follows = False
   for char in verified_text:
+    
     if char.isupper():
       braille_text += CAPITAL_FOLLOWS + BRAILLE_ALPHABET.get(char.lower(), "")
+      
     elif char.isdigit():
-      braille_text += NUMBER_FOLLOWS + BRAILLE_NUMS.get(char, "")
+      if not number_follows:
+        braille_text += NUMBER_FOLLOWS 
+        number_follows = True
+      braille_text += BRAILLE_NUMS.get(char, "")
+      
     elif char.isspace():
       braille_text += SPACE
+      number_follows = False
+      
     elif char in BRAILLE_DECIMALS:
       braille_text += BRAILLE_DECIMALS.get(char, "")
+      number_follows = False
+      
     else:
       braille_text += BRAILLE_ALPHABET.get(char, "")
   
@@ -104,14 +115,17 @@ def english_to_braille(verified_text):
   
   """
   Was testing bug towards the end with the english to braille function...leaving it cuz why not :))
-  """
-  # Hello World
-  # .....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..
-  # .....OO.OO.............O.OOO.O
+
+   Abc 123
+   Hello World
+   .....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..
+   .....OO.OO.............O.OOO.O
   
-  # ....[30 chars]OOO......O.OOOO.O....O.OOOOO..........OO..OO.....OOO.OOOO..OOO
+   ....[30 chars]OOO......O.OOOO.O....O.OOOOO..........OO..OO.....OOO.OOOO..OOO
  
-  # ....[30 chars]OOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO 
+   ....[30 chars]OOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO 
+  
+    """
 def main():
   
   if len(sys.argv) < 2:
