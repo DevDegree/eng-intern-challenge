@@ -53,10 +53,10 @@ class Translator
 
     def braille_char_to_eng(braille_char, is_alpha, is_upcase)
       char = if is_alpha
-              BrailleEnglishDictionary::BRAILLE_TO_ALPHA[braille_char]
-            else
-              BrailleEnglishDictionary::BRAILLE_TO_NUM[braille_char]
-            end
+               BrailleEnglishDictionary::BRAILLE_TO_ALPHA[braille_char]
+             else
+               BrailleEnglishDictionary::BRAILLE_TO_NUM[braille_char]
+             end
 
       raise ArgumentError, "Invalid braille character '#{braille_char}'" if char.nil?
 
