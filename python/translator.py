@@ -1,5 +1,7 @@
 import sys
 
+# *** The following code only implements the functionality mentioned in the technical requirements (no support for symbols) ***
+
 # Braille to English letter mappings
 b2e_letters = {
     "O.....": "a",
