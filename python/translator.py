@@ -38,7 +38,7 @@ class BrailleTranslator:
         """
         Checks if the input string is in Braille
         """
-        pass
+        return all(char in 'O.' for char in input_str)
 
     def translate_to_english(self, braille_str: str) -> str:
         """
@@ -56,7 +56,10 @@ class BrailleTranslator:
         """
         Translates input to the appropriate output, based on input type
         """
-        pass
+        if self.is_braille(input_str):
+            return self.translate_to_english(input_str)
+        else:
+            return self.translate_to_braille(input_str)
 
 
 def main():
