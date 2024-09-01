@@ -64,6 +64,65 @@ ENGLISH_TO_BRAILLE = {
     ' ': "......"
 }
 
+BRAILLE_TO_ENGLISH = {
+    "O.....": 'a',
+    "O.O...": 'b',
+    "OO....": 'c',
+    "OO.O..": 'd',
+    "O..O..": 'e',
+    "OOO...": 'f',
+    "OOOO..": 'g',
+    "O.OO..": 'h',
+    ".OO...": 'i',
+    ".OOO..": 'j',
+    "O...O.": 'k',
+    "O.O.O.": 'l',
+    "OO..O.": 'm',
+    "OO.OO.": 'n',
+    "O..OO.": 'o',
+    "OOO.O.": 'p',
+    "OOOOO.": 'q',
+    "O.OOO.": 'r',
+    ".OO.O.": 's',
+    ".OOOO.": 't',
+    "O...OO": 'u',
+    "O.O.OO": 'v',
+    ".OOO.O": 'w',
+    "OO..OO": 'x',
+    "OO.OOO": 'y',
+    "O..OOO": 'z',
+    '..OO.O': '.',
+    '..O...': ',',
+    '..O.OO': '?',
+    '..OOO.': '!',
+    '..OO..': ':',
+    '..O.O.': ';',
+    '....OO': '-',
+    '.O..O.': '/',
+    '.OO..O': '<',
+    'O..OO.': '>',
+    'O.O..O': '(',
+    '.O.OO.': ')',
+    '......': ' '
+}
+
+BRAILLE_TO_DIGITS = {
+    "O.....": '1',
+    "O.O...": '2',
+    "OO....": '3',
+    "OO.O..": '4',
+    "O..O..": '5',
+    "OOO...": '6',
+    "OOOO..": '7',
+    "O.OO..": '8',
+    ".OO...": '9',
+    ".OOO..": '0',
+}
+
+BRAILLE_CAPITAL_FOLLOWS = ".....O"
+BRAILLE_DECIMAL_FOLLOWS = ".O...O"
+BRAILLE_NUMBER_FOLLOWS = ".O.OOO"
+
 # Helpers
 
 # Returns true if the list of strings should be parsed as a Braille string
@@ -78,13 +137,24 @@ def isBraille(args: list[str]) -> bool:
             numOfDot +=1
     return numOfO + numOfDot == len(rawString) and len(rawString)%6==0 
 
-    
+def translateFromEnglish(inputStr: str, conversionDict: dict[str, str]) -> str: 
+    result = ""
+    for char in inputStr: 
+        if char.isalpha() and char.isupper(): 
+            result += BRAILLE_CAPITAL_FOLLOWS
+            result += conversionDict[char.lower()]    
+        else: 
+            result += conversionDict[char]
+    return result 
         
 
 # main
 def main(): 
     args = sys.argv[1:]
-    print(isBraille(args)) 
+    if isBraille(args): 
+        pass
+    else: 
+        print(translateFromEnglish(" ".join(args), ENGLISH_TO_BRAILLE))
 
 # Entry
 if __name__ == '__main__':
