@@ -1,6 +1,6 @@
 import sys, re
 
-# English to braille
+# English to braille dict
 braille_map = {
     '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
     '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..',
@@ -15,6 +15,7 @@ braille_map = {
     ')': '.O.OO.', ' ': '......'
 }
 
+# braille to English dict
 english_map = {n: i for i, n in braille_map.items()}
 
 def translate_to_braille(text):
@@ -62,13 +63,18 @@ def translate_to_english(text):
 
 
 def main():
+    # Checks if a string has been passed to the CLI
     if len(sys.argv) < 2:
         print("Translator requires at least one argument")
         sys.exit(1)
+
+    # Takes all arguments passed in, and joins them with a space in between
     input_text = ' '.join(sys.argv[1:])
 
+    # regex for "." and "O"
     braille_pattern = r'^[.O]*$'
 
+    # If text is braille convert to English, otherwise do the opposite
     if(re.search(braille_pattern, input_text)):
         try:
             print(translate_to_english(input_text))
