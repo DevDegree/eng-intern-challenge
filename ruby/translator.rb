@@ -12,3 +12,34 @@ Brailie_Mapping = {'a' => 'O.....',  'b' => 'O.O...', 'c' => 'OO....', 'd' => 'O
 }
 Capital_Prefix = '.....O'
 Number_Prefix = '.O.OOO'
+
+def brailie_to_english(brailie)
+    result = ''
+    number_mode = false
+    capitalize_next = false
+    validate_brailie_input(brailie)
+    brailie.tr('^O.', '').scan(/.{6}/).each do |symbol|
+        if symbol == Capital_Prefix
+            capitalize_next = true
+        elsif symbol = Number_Prefix
+            number_mode = true
+        else
+            char = Brailie_Mapping.key(symbol)
+            if char
+                if number_mode && ('a'..'j').include?(char)
+                    num = (char.ord - 'a'.ord + 1) % 10
+                    result = result + num.to_s
+                elsif capitalize_next
+                    result = result + char.upcase
+                    capitalize_next = false
+                else
+                    result  = result + char
+                end
+                number_mode = false if !('a..j').include?(char)
+            else
+                result = result + '?'
+            end
+        end
+    end
+    result
+end
