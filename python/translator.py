@@ -104,12 +104,12 @@ def translate_text_to_english(input_text: str) -> str:
     # Use the dictionary to translate each section, and append to string
     sections = divide_string_into_sections(input_text)
     new_string = ''
-    next_capital = False
+    next_capital = False  # Flag to check if next char is capital
     next_number = False
 
     for section in sections:
         if section == CAPITAL_FOLLOWS:
-            next_capital = True
+            next_capital = True  # Update flags
         elif section == NUMBER_FOLLOWS:
             next_number = True
         elif section in BRAILLE_TO_ENGLISH or section in BRAILLE_TO_NUMBERS:
