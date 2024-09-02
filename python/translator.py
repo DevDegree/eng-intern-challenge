@@ -211,3 +211,22 @@ if __name__ == "__main__":
     else:
         print(translate_alphabet(string))
 
+
+# Additional test cases
+def test():
+    # Capital follows erroneously put at the end. Check for error handling.
+    if translate_morse("O..........O") != "a":
+        raise "Error translating when capital follows morse token is present at the end"
+
+    # Number follows erroneously put at the end. Check for error handling.
+    if translate_morse("O..........O") != "a":
+        raise "Error translating when number follows morse token is present at the end"
+
+    # Only numbers
+    if translate_alphabet("12345") != ".O.OOOO.....O.O...OO....OO.O..O..O..":
+        raise "Only numbers are not translated to morse correctly"
+
+    # Only numbers
+    if translate_morse(".O.OOOO.....O.O...OO....OO.O..O..O..") != "12345":
+        raise "Only numbers are not translated from morse correctly"
+    
