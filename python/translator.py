@@ -1,4 +1,6 @@
-# Dict that translates letters to braille
+import sys
+
+# Braille dictionaries for letters, numbers, and control symbols
 braille_dict_mutex = {
     'CAPFLW': '.....O', 'DECFLW': '.O...O', 
     'NUMFLW': '.O.OOO', 'SPC': '......'
@@ -21,100 +23,75 @@ braille_dict_numbers= {
     '9': '.OO...', '0': '.OOO..',
 }
 
-def isBraille(input_string):
-    # Split the braille_sequence into chunks of 6 characters each
-    n = 6
-    segment = [(input_string[i:i+n]) for i in range(0, len(input_string), n)]
+# Helper function to split strings into Braille-size segments
+def split_into_segments(text, n=6):
+    return [text[i:i + n] for i in range(0, len(text), n)]
 
-    #Characters that make a Braille symbol
-    brailChar = {'O','.'}
+# Check if a string is valid Braille based on allowed characters
+def is_braille(input_string):
+    allowed_chars = {'O', '.'}
+    segments = split_into_segments(input_string)
+    return all(len(seg) == 6 and all(c in allowed_chars for c in seg) for seg in segments)
 
-    # Check each segment to ensure it matches the Braille pattern
-    for x in segment:
-        if any(char not in brailChar for char in x) or len(x)!=6:
-            return False  # Not Braille if any segment doesn't match
-    
-    return True if x else False  
-    
+# Convert text to Braille
 def text_to_braille(text):
-    braille_text_simple = ""
-    usingNumbers = False  
-    uppercaseIndicator= ".....O"
-    numberIndicator= ".O.OOO" 
+    braille_text = ""
+    using_numbers = False
     
     for char in text:
-        # Check if we need to switch to number mode for digits
         if char.isdigit():
-            if not usingNumbers:
-              # Add number indicator before the Braille character
-                braille_text_simple += numberIndicator 
-                usingNumbers = True
+            if not using_numbers:
+                braille_text += '.O.OOO'  # Number indicator
+                using_numbers = True
         else:
-            if usingNumbers:
-                usingNumbers = False  # Switch back to letter mode after numbers
+            using_numbers = False
 
-        # Determine if the character is uppercase
         if char.isupper():
-            # Add uppercase indicator before the Braille character
-            braille_text_simple += uppercaseIndicator
+            braille_text += '.....O'  # Uppercase indicator
+            char = char.lower()  # Normalize to lowercase
 
-        # Normalize the character to lowercase for dictionary lookup
-        normalized_char = char.lower()
+        dictionary = braille_dict_numbers if using_numbers else braille_dict_letters
+        braille_text += dictionary.get(char, '......')  # Get Braille or default to unknown pattern
 
-        # Choose the correct dictionary based on the current mode
-        current_dict = braille_dict_numbers if usingNumbers else braille_dict_letters
-        
-        # Get the braille representation for the current character
-        if normalized_char in current_dict:
-            braille_char = current_dict[normalized_char]
-        else:
-            braille_char = "......"  # Default to unknown pattern for chars not in the dictionary
-        
-        braille_text_simple += braille_char
+    return braille_text
 
-    return braille_text_simple
-
+# Convert Braille to text
 def braille_to_text(braille_sequence):
-    nextIsUpper=False
-    usingNumbers=False
-    # Initialize the output text
     text_output = ""
+    using_numbers = False
+    next_is_upper = False
     
-    # Split the braille_sequence into chunks of 6 characters each
-    n=6
-    segments = [braille_sequence[i:i+n] for i in range(0, len(braille_sequence), n)]
+    segments = split_into_segments(braille_sequence)
     
-    # Iterate over each segment and find corresponding text character
     for segment in segments:
-        if segment == braille_dict_mutex["CAPFLW"]:
-                   nextIsUpper = True
-                   continue
-        elif segment == braille_dict_mutex["NUMFLW"]:
-                   usingNumbers = True
-                   continue
-       
-       # Choose the correct dictionary based on the current mode
-        current_dict = braille_dict_numbers if usingNumbers else braille_dict_letters
-
-        for key, value in current_dict.items():
-              if value == segment:
-                     if nextIsUpper:
-                          text_output += key.upper()
-                          nextIsUpper = False
-                     else:
-                          text_output += key
-                     break
-            
+        if segment == braille_dict_mutex['CAPFLW']:
+            next_is_upper = True
+            continue
+        elif segment == braille_dict_mutex['NUMFLW']:
+            using_numbers = True
+            continue
+        
+        dictionary = braille_dict_numbers if using_numbers else braille_dict_letters
+        for key, value in dictionary.items():
+            if value == segment:
+                text_output += key.upper() if next_is_upper else key
+                next_is_upper = False
+                break
+    
     return text_output
 
-val = input()
+def main():
+    input_text = " ".join(sys.argv[1:])
 
-if isBraille(val):
-    print(braille_to_text(val))
-else:
-    print(text_to_braille(val))
+    if not input_text:
+        print("No text provided. Usage: python3 translator.py <text>")
+        return
 
+    if is_braille(input_text):
+        print(braille_to_text(input_text))
+    else:
+        print(text_to_braille(input_text))
 
-
-
+if __name__ == "__main__":
+    main()
 
