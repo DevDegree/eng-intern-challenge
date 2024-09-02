@@ -11,7 +11,14 @@ braille_dict = {
     '0': '.OOO..', ' ': '......', 'cap': '.....O', 'num': '.O.OOO', 'dec':'.O...O'
 }
 
-reverse_braille_dict = {v: k for k, v in braille_dict.items()}
+reverse_braille_dict_letters = {v: k for k, v in braille_dict.items() if k.isalpha()}
+reverse_braille_dict_numbers = {v: k for k, v in braille_dict.items() if k.isdigit()}
+
+
+def getCharFromBraille(braille,number_mode):
+    if number_mode:
+        return reverse_braille_dict_numbers[braille]
+    return reverse_braille_dict_letters[braille]
 
 def translate_to_braille(text):
     result = []
@@ -50,12 +57,7 @@ def translate_to_english(braille_text):
             result.append(' ')
             number_mode = False
         else:
-            char = reverse_braille_dict[braille_char]
-            if number_mode:
-                if char.isdigit():
-                    result.append(char)
-                else:
-                    number_mode = False
+            char = getCharFromBraille(braille_char, number_mode)
             if capital_mode:
                 result.append(char.upper())
                 capital_mode = False
@@ -74,8 +76,8 @@ def main():
         else:
             ans += translate_to_braille(input_text)
 
-        if i<len(sys.argv[1:])-1:
-            ans += "......"
+            if i<len(sys.argv[1:])-1:
+                ans += "......"
     print(ans)
 
 if __name__ == "__main__":
