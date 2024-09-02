@@ -152,7 +152,7 @@ def engToBraille(s):
                 brailleString += braille_dict[' ']
         print(brailleString)
     except Exception as e:
-        print(f"Input string incorrect {e} was used")
+        print(f"Input string incorrect: {e} was used")
 
 def stringToBraille(string):
     # Converts a given string into its Braille equivalent
@@ -173,8 +173,6 @@ def numberToBraille(number):
     return s
 
 
-
-
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         # Create input_string, by taking input from user through standard input
@@ -184,4 +182,6 @@ if __name__ == '__main__':
             brailleToEnglish(input_string)
         else:
             engToBraille(input_string)
+    else:
+        print("Please run the code as follows: python translator.py <String to covert>")
         
