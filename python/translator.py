@@ -7,7 +7,7 @@ Comments:
 Bidirectional Dictionary
 I decided to use 2 bidirectional dictionary one for the alphabet to braille and other for numbers to braille. Both these dicstionaries are one-to-one correspondence
 Meaning for every input there is only one output and vice versa
-I am using bidirectional dictionary to quikly(O(1) time) find the keys value or the values key. ex ("a" -> "o.....") and ("o....." -> "a")
+I am using bidirectional dictionary to quickly(O(1) time) find the keys value or the values key. ex ("a" -> "o.....") and ("o....." -> "a")
 I could have used 4 dictionaries to replicate what the bidirectional dictionary is doing but, doing so would have been more complicated for the task at hand.
 '''
 # Constants
