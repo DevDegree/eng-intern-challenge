@@ -76,7 +76,8 @@ const englishToBraille = {
   '7': 'OOOO..', 
   '8': 'O.OO..', 
   '9': '.OO...', 
-  '0': '.OOO..'
+  '0': '.OOO..',
+  ' ': '......'
 };
 
 /**
@@ -93,18 +94,14 @@ function TranslateToBraille(english) {
   // Translate English->Braille one char at a time -> O(n) runtime
   for (let i = 0; i < len; i++) {
     const char = english.charAt(i);
-    if (INTEGER_REGEX.test(char)) { // Char is a 0-9 number
-      if (!inNumberMode) {
-        inNumberMode = true;
-        translation += NUMBER_FOLLOWS;
-      }
-      translation += englishToBraille[char];
+    if (!inNumberMode && INTEGER_REGEX.test(char)) { // Char is a 0-9 number
+      inNumberMode = true;
+      translation += NUMBER_FOLLOWS;
     } else if (char === " ") { // Char is a space
       inNumberMode = false;
-      translation += SPACE;
-    } else { // Char is an English letter
-      translation += englishToBraille[char];
     }
+
+    translation += englishToBraille[char];
   }
 
   // Output
