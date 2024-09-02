@@ -99,6 +99,6 @@ const translateToBraille = (text) => {
   return result;
 };
 
-const input = process.argv[2];
+const input = process.argv.slice(2).join(' ');
 const output = isBraille(input) ? translateToEnglish(input) : translateToBraille(input);
 console.log(output);
