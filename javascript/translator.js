@@ -112,18 +112,18 @@ const brailleConverter = (input) => {
 
        let translatedCharacter;
 
-       if(capitalize) {
-        translatedCharacter = translatedCharacter.toUpperCase();
-        capitalize = false;
-       } 
-
        if (number) {
         translatedCharacter = Object.keys(englishToBraille).find(key => englishToBraille[key] === substring && key.match(/[0-9]/)) || ''; //find the number keys from dictionary
         //number = false;
     } else {
-        translatedCharacter = brailleToEnglish[substring] || ''
+        translatedCharacter = brailleToEnglish[substring] || '';
     }
-       newString += translatedCharacter;
+
+    if(capitalize && translatedCharacter) {
+        translatedCharacter = translatedCharacter.toUpperCase();
+        capitalize = false;
+       } 
+       newString += translatedCharacter || '';
     }
     return newString;
     //return brailleCharacters.map(x => brailleToEnglish[x] || '').join(''); 
