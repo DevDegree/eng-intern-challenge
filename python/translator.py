@@ -49,18 +49,6 @@ ENGLISH_TO_BRAILLE = {
     '8': "O.OO..",
     '9': ".OO...",
     '0': ".OOO..",
-    '.': "..OO.O", 
-    ',': "..O...", 
-    '?': "..O.OO", 
-    '!': "..OOO.", 
-    ':': "..OO..", 
-    ';': "..O.O.", 
-    '-': "....OO",
-    '/': ".O..O.", 
-    '<': ".OO..O", 
-    '>': "O..OO.", 
-    '(': "O.O..O", 
-    ')': ".O.OO.", 
     ' ': "......"
 }
 
@@ -91,18 +79,6 @@ BRAILLE_TO_ENGLISH = {
     "OO..OO": 'x',
     "OO.OOO": 'y',
     "O..OOO": 'z',
-    '..OO.O': '.',
-    '..O...': ',',
-    '..O.OO': '?',
-    '..OOO.': '!',
-    '..OO..': ':',
-    '..O.O.': ';',
-    '....OO': '-',
-    '.O..O.': '/',
-    '.OO..O': '<',
-    'O..OO.': '>',
-    'O.O..O': '(',
-    '.O.OO.': ')',
     '......': ' ',
 }
 
@@ -117,7 +93,6 @@ BRAILLE_TO_DIGITS = {
     "O.OO..": '8',
     ".OO...": '9',
     ".OOO..": '0',
-    ".O...O": '.' #decimal follows symbol
 }
 
 BRAILLE_CAPITAL_FOLLOWS = ".....O"
@@ -147,14 +122,9 @@ def translateFromEnglish(inputStr: str, conversionDict: dict[str, str]) -> str:
         if char.isalpha() and char.isupper(): # for uppercase lettercase
             result += BRAILLE_CAPITAL_FOLLOWS
             result += conversionDict[char.lower()]
-        elif (char.isnumeric() or char == ".") and (i == 0 or not(inputStr[i-1].isnumeric() or inputStr[i-1] == ".")): 
+        elif char.isnumeric() and (i==0 or not(inputStr[i-1].isnumeric())):
             result += BRAILLE_NUMBER_FOLLOWS
-            if char == ".": 
-                result += BRAILLE_DECIMAL_FOLLOWS #if it's a decimal point, don't lookup
-            else: 
-                result += conversionDict[char]
-        elif char == "." and char != inputStr[-1] and inputStr[i+1].isnumeric():
-            result += BRAILLE_DECIMAL_FOLLOWS
+            result += conversionDict[char]
         else: 
             result += conversionDict[char]
     return result 
