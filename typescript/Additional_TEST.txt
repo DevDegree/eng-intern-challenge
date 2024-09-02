@@ -1,4 +1,4 @@
- // -----------------------Eng to braille---------------------------
+// -----------------------Eng to braille---------------------------
 
   it("should print: Eng to braille: A", async () => {
     const { stdout } = await execAsync("ts-node translator.ts A");
@@ -216,6 +216,13 @@
     const { stdout } = await execAsync('ts-node translator.ts "  . "');
 
     const expected = "..............OO.O......";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: ..", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts ..");
+
+    const expected = "..OO.O..OO.O";
     expect(stdout.trim()).toBe(expected);
   });
 
@@ -515,5 +522,12 @@
     const { stdout } = await execAsync("ts-node translator.ts ..OO.O");
 
     const expected = ".";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: ..", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts ..OO.O..OO.O");
+
+    const expected = "..";
     expect(stdout.trim()).toBe(expected);
   });
