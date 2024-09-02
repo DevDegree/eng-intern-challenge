@@ -1,3 +1,4 @@
+import sys
 class Translator: 
     #hash table of braille to english translation 
     translation = {
@@ -29,15 +30,25 @@ class Translator:
         'z' : "O..OOO",
         'captial' : ".....O",
         'number' : ".O.OOO",
-        "space" : "......",
+        " " : "......",
     }
+
+    # def evaluate_arg(self, input : []) -> str:
 
     def value_to_key(self, value: str) -> str:
         for key, val in self.translation.items():
             if val == value:
                 return key
             
-    def translator(self, input : str) -> str: 
+    def translator(self) -> str:
+        input = ""
+        for arg in sys.argv[1:]:
+            #concatenate arguments into one string
+            if arg == (sys.argv[len(sys.argv) -1]): 
+                input += arg
+            else: 
+                input += arg + " "
+          
         if "." in input: 
             #braille input recieved
             translated_string = ""
@@ -55,7 +66,7 @@ class Translator:
                     to_num = True; 
                     continue
 
-                if key =='space':                  
+                if key ==' ':                  
                     #append space
                     translated_string += " "
                     continue
@@ -74,7 +85,7 @@ class Translator:
 
                 else:
                     #append lowercase letter
-                    translated_string += key 
+                    translated_string += str(key)
 
             return translated_string   
              
@@ -83,11 +94,10 @@ class Translator:
             translated_string = ""
             is_num = False
             for char in input: 
-
                 if char.isnumeric() == True:
                     if is_num == False :
                         translated_string += self.translation['number']
-                        is_num == True
+                        is_num = True
                     #translate number to correct letter equivalent
                     key = chr(int(char) + 96)
                     translated_string += self.translation[key]
@@ -101,3 +111,7 @@ class Translator:
                         translated_string += self.translation[char] 
 
             return translated_string
+
+
+obj = Translator()
+print (obj.translator())
