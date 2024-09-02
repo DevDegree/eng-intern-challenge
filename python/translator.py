@@ -106,6 +106,29 @@ def convert_brallie_to_english(text, braille_alphabet_bidict, braille_numerical_
                 
     return english
 
+def convert_english_to_brallie(text, braille_alphabet_bidict, braille_numerical_bidict):
+    full_brallie = ""
+    number_switch = False
+    for c in text:
+        if c == " ":
+            full_brallie += SPACE
+            number_switch = False
+        elif c.isdigit():
+            if not number_switch:
+                full_brallie += NUMBER_PREFIX
+                full_brallie += braille_numerical_bidict.get(c)
+                number_switch = True
+            else:
+                full_brallie += braille_numerical_bidict.get(c)
+        else:
+            if c.isupper():
+                full_brallie += CAPITAL_PREFIX
+                full_brallie += braille_alphabet_bidict.get(c.lower())
+            else:
+                full_brallie += braille_alphabet_bidict.get(c)
+    
+    return full_brallie
+
 
 # Runs the Translator
 def main():
@@ -115,11 +138,9 @@ def main():
     if vaild_braille(text):
         print(convert_brallie_to_english(text, braille_alphabet_bidict, braille_numerical_bidict))
     elif vaild_english(text):
-        print("Ben")
+        print(convert_english_to_brallie(text, braille_alphabet_bidict, braille_numerical_bidict))
     else:
-        print("Invaild Input in terminal")
-
-    print("RAN")
+        print("Invaild input in terminal")
 
 
 if __name__ == "__main__":
