@@ -154,7 +154,7 @@ class Translator:
                     result += english
         return result
 
-def main() -> None:
+if __name__ == "__main__":
     """
     The main function to execute the translation between English and Braille.
     Determines the input type (English or Braille) and prints the translation.
@@ -167,7 +167,5 @@ def main() -> None:
         sys.stdout.write(translator.braille_to_english(string))
     else:
         sys.stdout.write(translator.english_to_braille(string))
-
-if __name__ == "__main__":
-    main()
+    #sys.stdout.flush()
 
