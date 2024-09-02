@@ -179,8 +179,10 @@ Braille to English:
 6. ".O.OOOO..........."                                                       -> "1 "           -> Correct
 7. "......"                                                                   -> " "            -> Correct
 
-Invaild Inputs:
-1. "Hello .....OO"   -> "Invaild input in terminal" -> Correct NOTE: Both english and Braille were inputed
-2. "23/ 97g"         -> "Invaild input in terminal" -> Correct NOTE: Invaild charaters("/")
-3. ""                -> "Invaild input in terminal" -> Correct NOTE: Works regardless if input is like "python3 translator.py  " or 'python3 translator.py ""'
+Invaild Inputs:                                                | Why is it invaild?
+1. "Hello .....OO"   -> "Invaild input in terminal" -> Correct | Both english and Braille were inputed
+2. "23/ 97g"         -> "Invaild input in terminal" -> Correct | Invaild charaters("/")
+3. ""                -> "Invaild input in terminal" -> Correct | Empty input(I am assuming that is invaild) NOTE: Works regardless if input is like "python3 translator.py  " or 'python3 translator.py ""'
+4. ".....O....."     -> "Invaild input in terminal" -> Correct | Had 11 characters which is not divisible by 6. It is not a vaild braille
+5. "O.O. .."         -> "Invaild input in terminal" -> Correct | Should not be a vaild braille becuase of the space
 '''
