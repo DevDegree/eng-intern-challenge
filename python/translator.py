@@ -115,8 +115,7 @@ def english_converter(message):
         
 
     print(english)
-# .....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO
-# .....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO
+
 
 def main():
     if len(sys.argv) < 2:
