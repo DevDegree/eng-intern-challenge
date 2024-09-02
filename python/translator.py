@@ -120,12 +120,12 @@ def main():
     It determines whether the input is Braille or English and performs the
     appropriate conversion, printing the result to the console.
     """
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2:
         print("Usage: python braille_translator.py 'text to translate '")
         return
     
-    input_text = sys.argv[1]
-    
+    input_text = " ".join(sys.argv[1:])  # Combine all command-line arguments (starting from index 1) into a single string with spaces between them.
+
     # Determine if the input is Braille or English, and translate accordingly
     if is_braille(input_text):
         translated_text = braille_to_english(input_text)
