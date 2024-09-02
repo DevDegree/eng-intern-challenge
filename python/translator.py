@@ -5,9 +5,9 @@ from alphabets import english_alphabet, braille_alphabet
 def detect_language(input_list):
     ''' 
     Assumptions:
-    Each word in an input English phrase (e.g., "hello world") is a separate item in input_list.
+    English input that consists of multiple words (e.g., "hello world") is always represented as separate entries in input_list.
 
-    Arguments:
+    Parameters:
     input_list -- list of strings
 
     Returns:
@@ -27,7 +27,36 @@ def detect_language(input_list):
     return 1
 
 
+def merge_english_words(english_words):
+    '''
+    Combine separate English words into a single string
+
+    Parameters:
+    english_words -- a list of english words
+
+    Returns:
+    A string
+    '''
+    result = ""
+    for i in range(len(english_words)):
+        result += english_words[i]
+
+        if (i != (len(english_words) - 1)):
+            result += " "
+
+    return result
+
+
 def english_to_braille(sentence):
+    '''
+    Transform text in English to Braille
+
+    Parameters:
+    sentence -- a string representing any number of english words
+
+    Returns
+    A string
+    '''
     num_added = False
     result = ""
     for character in sentence:
@@ -43,20 +72,16 @@ def english_to_braille(sentence):
     return result
 
 
-def merge_english_words(english_words):
-    '''
-    '''
-    result = ""
-    for i in range(len(english_words)):
-        result += english_words[i]
-
-        if (i != (len(english_words) - 1)):
-            result += " "
-
-    return result
-
-
 def braille_to_english(sentence):
+    '''
+    Transform text in Braille to English
+
+    Parameters:
+    sentence -- a string representing a sequence of Braille characters
+
+    Returns
+    A string    
+    '''
     digit_flag = False
     capital_flag = False
     result = ""
