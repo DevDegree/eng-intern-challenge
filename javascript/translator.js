@@ -106,10 +106,11 @@ const brailleConverter = (input) => {
 
        if (substring === '......') { //check for space
         newString += ' '; 
+        number = false; //exit number follows mode when there is a space
         continue; 
        }
 
-       let translatedCharacter = brailleToEnglish[substring] || '';
+       let translatedCharacter;
 
        if(capitalize) {
         translatedCharacter = translatedCharacter.toUpperCase();
@@ -118,7 +119,9 @@ const brailleConverter = (input) => {
 
        if (number) {
         translatedCharacter = Object.keys(englishToBraille).find(key => englishToBraille[key] === substring && key.match(/[0-9]/)) || ''; //find the number keys from dictionary
-        number = false;
+        //number = false;
+    } else {
+        translatedCharacter = brailleToEnglish[substring] || ''
     }
        newString += translatedCharacter;
     }
