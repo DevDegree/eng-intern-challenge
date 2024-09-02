@@ -1,8 +1,12 @@
+#
 # Imports
+#
 import sys
 
+#
 # Constants 
-ENGLISH_TO_BRAILLE = {
+#
+ENGLISH_TO_BRAILLE = { #English alphabet and numbers to Braille
     'a': "O.....",
     'b': "O.O...",
     'c': "OO....",
@@ -42,7 +46,7 @@ ENGLISH_TO_BRAILLE = {
     ' ': "......"
 }
 
-BRAILLE_TO_ENGLISH = {
+BRAILLE_TO_ENGLISH = { #Braille to english alphabet
     "O.....": 'a',
     "O.O...": 'b',
     "OO....": 'c',
@@ -72,7 +76,7 @@ BRAILLE_TO_ENGLISH = {
     '......': ' ',
 }
 
-BRAILLE_TO_DIGITS = {
+BRAILLE_TO_DIGITS = { #Braille to digits 0-9
     "O.....": '1',
     "O.O...": '2',
     "OO....": '3',
@@ -85,12 +89,16 @@ BRAILLE_TO_DIGITS = {
     ".OOO..": '0',
 }
 
+#Additional Braille constants
 BRAILLE_CAPITAL_FOLLOWS = ".....O"
 BRAILLE_NUMBER_FOLLOWS = ".O.OOO"
 BRAILLE_SPACE = "......"
 BRAILLE_INVALID_STRING = "Invalid braille string"
 
-# Helpers
+#
+# HELPERS
+#
+
 
 # Returns true if the list of strings should be parsed as a Braille string
 def isBraille(args: list[str]) -> bool: 
@@ -107,7 +115,8 @@ def isBraille(args: list[str]) -> bool:
 # Returns the Braille translation of inputStr
 def translateFromEnglish(inputStr: str, conversionDict: dict[str, str]) -> str: 
     result = ""
-    for i in range(len(inputStr)): 
+    length = len(inputStr)
+    for i in range(length): 
         char = inputStr[i]
         if char.isalpha() and char.isupper(): # for uppercase lettercase
             result += BRAILLE_CAPITAL_FOLLOWS
