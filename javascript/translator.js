@@ -40,7 +40,7 @@ const brailleMap = {
 	8: 'O.OO..',
 	9: '.OO...',
 	0: '.OOO..',
-
+	
 	// ...Follows
 	CAPITAL: '.....O',
 	DECIMAL: '.O...O',
@@ -77,16 +77,17 @@ function englishToBraille(englishInput) {
 				result += brailleMap.NUMBER;
 				isPreviousCharNumber = true;
 			}
-			result += brailleMap[char]; 
+			result += brailleMap[char]; // No need to convert to lowercase for numbers
 		} else {
 			if (char === char.toUpperCase() && char !== ' ') {
 				result += brailleMap.CAPITAL;
 			}
-			result += brailleMap[char.toLowerCase()] || '';
+			result += brailleMap[char.toLowerCase()] || ''; // Convert to lowercase for letters
 			isPreviousCharNumber = false;
 		}
 	}
 
+	console.log("English to Braille Result:", result); // Debugging output
 	return result;
 }
 
@@ -122,19 +123,22 @@ function brailleToEnglish(brailleInput) {
 			isNumber = false; // Reset after using the number follows symbol
 		}
 
-		result += englishChar || ''; 
+		result += englishChar || ''; // Fallback in case of unmatched Braille pattern
 	}
+
+	console.log("Braille to English Result:", result); // Debugging output
 	return result;
 }
 
 // Function to check if input is Braille or English
 function detectInputType(input) {
-	return input.match(/^[01.O\s]*$/) ? 'braille' : 'english';
+	return input.match(/^[.O\s]*$/) ? 'braille' : 'english';
 }
 
 // Main function to translate input based on detected type
 function translate(input) {
 	const inputType = detectInputType(input);
+	console.log("Detected Input Type:", inputType); // Debugging output
 	return inputType === 'braille'
 		? brailleToEnglish(input)
 		: englishToBraille(input);
@@ -142,5 +146,6 @@ function translate(input) {
 
 if (require.main === module) {
 	const input = process.argv.slice(2).join(' '); // Capture command line arguments as a single string
+	console.log("Input:", input); // Debugging output
 	console.log(translate(input)); // Run the translation and print the result
 }
