@@ -1,3 +1,6 @@
+#iImport Libraries
+import sys  #import for cmd-line interface
+
 #use a hash map to map letters/char to 
 
 #toBraille
@@ -99,7 +102,7 @@ brailleToEng = {
     ".O.OO." : [")"],
     "......" :  [" "]
 }
-
+#translate to lists because multiple characters use same braille char
 
 class transl:
     
@@ -202,7 +205,7 @@ class transl:
  
 def main():
     
-    word = input()
+    word = "".join(sys.argv[1:])
     t = transl(word)
     x = ""
     #check if braille or eng
