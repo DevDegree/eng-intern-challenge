@@ -70,9 +70,10 @@ def convert_text_to_braille(text_input: str) -> str:
     return ''.join(result)
 
 def translate(input_str: str) -> str:
-    if input_str[0] in 'O.':
-        return convert_braille_to_text(input_str)
-    return convert_text_to_braille(input_str)
+    if all(c in 'O.' for c in input_str):
+         return convert_braille_to_text(input_str)
+    else:
+        return convert_text_to_braille(input_str)
 
 def main() -> None:
     input_data: str = ' '.join(sys.argv[1:])
