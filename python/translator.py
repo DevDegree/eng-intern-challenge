@@ -147,3 +147,4 @@ def translate(string_to_translate):
 if __name__ == "__main__":
     inp = " ".join(sys.argv[1:])
     translate(inp)
+
