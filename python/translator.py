@@ -119,7 +119,6 @@ def text_to_braille(words):
     output = ""
     setNumber = False
     for w in words:
-
         if w.isupper():
             output += following["capital"]
             w = w.lower()
