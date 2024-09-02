@@ -64,9 +64,7 @@ def braille_to_eng(text, dict_english_braille):
                 if braille_in_string == NUMBER_BRAILLE:
                     num_mode = change_case(num_mode)
 
-                print(num_mode)
                 if translation[0].isdigit() and num_mode:
-                    print(translation)
                     translated_string +=  translation[0]
 
                     #This would be an expansion to switch back from numbers to letters, but for the scope of this assessment it is not required                    
