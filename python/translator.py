@@ -18,12 +18,13 @@ space_to_braille = {
 special_symbols_to_braille = {
     'capital': '.....O',  # Capitalization marker
     'number': '.O.OOO',   # Number follows marker
+    'decimal': '.O...O',  # Decimal follows marker
 }
 
 numbers_to_braille = {
 # Numbers 0-9 (Braille numbers follow the letters a-j)
     '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
-    '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..'
+    '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..',
 }
 
 punctuation_to_braille = {
@@ -72,6 +73,8 @@ def translate_to_braille(text):
                 # Add the number marker before the first digit
                 result.append(special_symbols_to_braille['number'])
                 number_mode = True
+            if char == '.':
+                result.append(special_symbols_to_braille['decimal'])
             result.append(numbers_to_braille[char])
         else:
             number_mode = False  # Reset number mode when encountering a non-digit
@@ -141,13 +144,14 @@ def main():
     
     # Assuming translate_to_braille and translate_to_english functions are defined
     # For example, if you want to translate to Braille:
-    braille_translation = translate_to_braille(input_str)
-    print(braille_translation)
     
-    # Or if you want to translate from Braille to English:
-    english_translation = translate_to_english(input_str)
-    print(english_translation)
+    if detect_input_type(input_str) == 'english':
+        braille_translation = translate_to_braille(input_str)
+        print(braille_translation)
+    else:
+        # Or if you want to translate from Braille to English:
+        english_translation = translate_to_english(input_str)
+        print(english_translation)
 
 if __name__ == "__main__":
     main()
-
