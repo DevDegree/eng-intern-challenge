@@ -114,14 +114,20 @@ def determine_mode(input_text):
     else:
         return "english"
 
-# Read input text from command-line arguments
-input_text = ' '.join(sys.argv[1:])
+# Main function to handle input and call the translation functions
+def main():
+    # Read input text from command-line arguments
+    input_text = ' '.join(sys.argv[1:])
+    
+    # Determine the mode based on the input text
+    mode = determine_mode(input_text)
+    
+    # Convert and print the result based on the determined mode
+    if mode == "english":
+        print(english_to_braille(input_text))
+    elif mode == "braille":
+        print(braille_to_english(input_text))
 
-# Determine the mode based on the input text
-mode = determine_mode(input_text)
-
-# Convert and print the result based on the determined mode
-if mode == "english":
-    print(english_to_braille(input_text))
-elif mode == "braille":
-    print(braille_to_english(input_text))
+# Ensure the main function is called when the script is executed
+if __name__ == "__main__":
+    main()
