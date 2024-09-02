@@ -30,6 +30,56 @@ def is_braille(input_string : str) -> bool:
             return False
     return True
 
+def braille_to_english(braille_string):
+    english_output = []
+    capitalize_next = False
+    number_mode = False
+    i = 0
+    
+    while i < len(braille_string):
+        braille_char = braille_string[i:i+6]
+        i += 6
+        
+        # Handle special cases and update the state
+        handled, capitalize_next, number_mode = handle_special_braille(braille_char, english_output, capitalize_next, number_mode)
+        if handled:
+            continue
+        
+        # Convert braille to the appropriate character (number or letter)
+        char = convert_braille_to_char(braille_char, number_mode)
+        
+        # If character was detected, check for capitalization and append to output
+        if char:
+            if capitalize_next:
+                char = char.upper()
+                capitalize_next = False
+            english_output.append(char)
+    
+    return ''.join(english_output)
+
+def handle_special_braille(braille_char, english_output, capitalize_next, number_mode):
+    if braille_char == braille_dict['cap']:
+        return True, True, number_mode  # Set capitalize_next to True
+    elif braille_char == braille_dict['num']:
+        return True, capitalize_next, True  # Set number_mode to True
+    elif braille_char == braille_dict[' ']:
+        english_output.append(' ')
+        return True, capitalize_next, False  # Set number_mode to False after space
+    return False, capitalize_next, number_mode
+
+def convert_braille_to_char(braille_char, number_mode):
+    if number_mode:
+        char = number_braille_dict.get(braille_char, '')
+        if not char:
+            number_mode = False  # Exit number mode if invalid number character
+        return char
+    else:
+        return english_dict.get(braille_char, '')
+
+
+
+
+
 
 def translate(input_string : str) -> str:
     # TODO: Implement this function
