@@ -179,4 +179,3 @@ def main():
 
 main()
 
-#CF a b c space NF 1 2 3 space x CF y z
