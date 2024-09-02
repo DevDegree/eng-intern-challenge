@@ -1,5 +1,6 @@
 import sys
 
+# Braille translation dictionaries
 ENGLISH_TO_BRAILLE_CODES = {
   'a': "O.....", 'b': "O.O...", 'c': "OO....",
   'd': "OO.O..", 'e': "O..O..", 'f': "OOO...",
@@ -21,86 +22,91 @@ NUMBER_BRAILLE = ".O.OOO"
 
 
 def swap_keys_and_values(dictionary: dict) -> dict:
-  return {value: key for key, value in dictionary.items()}
+    return {value: key for key, value in dictionary.items()}
 
 
 def check_is_braille(value: str) -> bool:
-  if '.' in value:
-    return True
-  return False
+    # Check if input only contains Braille characters (O or . or space)
+    return all(c in 'O. ' for c in value)
 
 
 def translate_braille_to_eng(value: str) -> str:
-  BRAILLE_TO_ENG_CHARS = swap_keys_and_values(ENGLISH_TO_BRAILLE_CODES)
-  BRAILLE_TO_ENG_NUMS = swap_keys_and_values(ENGLISH_TO_BRAILLE_NUMERALS)
-  NUM_CHARS_IN_SYMBOL = 6
+    BRAILLE_TO_ENG_CHARS = swap_keys_and_values(ENGLISH_TO_BRAILLE_CODES)
+    BRAILLE_TO_ENG_NUMS = swap_keys_and_values(ENGLISH_TO_BRAILLE_NUMERALS)
+    NUM_CHARS_IN_SYMBOL = 6
 
-  curr_symbol = ""
-  translated_str = ""
-  is_next_capital = False
-  is_next_number = False
+    curr_symbol = ""
+    translated_str = ""
+    is_next_capital = False
+    is_next_number = False
 
-  if len(value) % NUM_CHARS_IN_SYMBOL != 0:
-    raise ValueError
+    if len(value) % NUM_CHARS_IN_SYMBOL != 0:
+        raise ValueError("Invalid Braille length.")
 
-  for i in range(len(value)):
-    curr_symbol += value[i]
+    for i in range(len(value)):
+        curr_symbol += value[i]
 
-    if len(curr_symbol) == NUM_CHARS_IN_SYMBOL:
-      if curr_symbol == CAP_BRAILLE:
-        is_next_capital = True
-      elif curr_symbol == NUMBER_BRAILLE:
-        is_next_number = True
-      elif is_next_capital and curr_symbol in BRAILLE_TO_ENG_CHARS:
-        translated_str += BRAILLE_TO_ENG_CHARS[curr_symbol].upper()
-        is_next_capital = False
-      elif is_next_number and curr_symbol in BRAILLE_TO_ENG_NUMS:
-        translated_str += BRAILLE_TO_ENG_NUMS[curr_symbol]
-      elif (curr_symbol in BRAILLE_TO_ENG_CHARS and not is_next_number) or (is_next_number and curr_symbol == ENGLISH_TO_BRAILLE_CODES[' ']):
-        translated_str += BRAILLE_TO_ENG_CHARS[curr_symbol]
-        is_next_number = False
-      else:
-        raise ValueError
+        if len(curr_symbol) == NUM_CHARS_IN_SYMBOL:
+            if curr_symbol == CAP_BRAILLE:
+                is_next_capital = True
+            elif curr_symbol == NUMBER_BRAILLE:
+                is_next_number = True
+            elif is_next_capital and curr_symbol in BRAILLE_TO_ENG_CHARS:
+                translated_str += BRAILLE_TO_ENG_CHARS[curr_symbol].upper()
+                is_next_capital = False
+            elif is_next_number and curr_symbol in BRAILLE_TO_ENG_NUMS:
+                translated_str += BRAILLE_TO_ENG_NUMS[curr_symbol]
+            elif (curr_symbol in BRAILLE_TO_ENG_CHARS and not is_next_number) or (is_next_number and curr_symbol == ENGLISH_TO_BRAILLE_CODES[' ']):
+                translated_str += BRAILLE_TO_ENG_CHARS[curr_symbol]
+                is_next_number = False
+            else:
+                raise ValueError("Invalid Braille symbol.")
 
-      curr_symbol = ""
+            curr_symbol = ""
 
-  return translated_str
+    return translated_str
 
 
 def translate_eng_to_braille(value: str) -> str:
-  translated_str = ""
+    translated_str = ""
+    number_mode = False
 
-  for i in range(len(value)):
-    if value[i] in ENGLISH_TO_BRAILLE_CODES:
-      translated_str += ENGLISH_TO_BRAILLE_CODES[value[i]]
-    elif value[i].lower() in ENGLISH_TO_BRAILLE_CODES:
-      translated_str += CAP_BRAILLE + ENGLISH_TO_BRAILLE_CODES[value[i].lower()]
-    elif value[i] in ENGLISH_TO_BRAILLE_NUMERALS:
-      if i > 0 and value[i-1] not in ENGLISH_TO_BRAILLE_NUMERALS:
-          translated_str += NUMBER_BRAILLE
-      translated_str += ENGLISH_TO_BRAILLE_NUMERALS[value[i]]
-    else:
-      raise ValueError
+    for i in range(len(value)):
+        char = value[i]
 
-  return translated_str
+        if char in ENGLISH_TO_BRAILLE_CODES:
+            translated_str += ENGLISH_TO_BRAILLE_CODES[char]
+            number_mode = False
+        elif char.isupper():
+            translated_str += CAP_BRAILLE + ENGLISH_TO_BRAILLE_CODES[char.lower()]
+            number_mode = False
+        elif char in ENGLISH_TO_BRAILLE_NUMERALS:
+            if not number_mode:
+                translated_str += NUMBER_BRAILLE
+                number_mode = True
+            translated_str += ENGLISH_TO_BRAILLE_NUMERALS[char]
+        else:
+            raise ValueError(f"Invalid character: {char}")
+
+    return translated_str
 
 
 def main():
-  if len(sys.argv) < 2:
-    sys.exit("Need to provide at least one argument. ")
+    if len(sys.argv) < 2:
+        sys.exit("Need to provide at least one argument.")
 
-  input_value = ' '.join(sys.argv[1:])
+    input_value = ' '.join(sys.argv[1:])
 
-  try:
-    if check_is_braille(input_value):
-      print(translate_braille_to_eng(input_value))
-    else:
-      print(translate_eng_to_braille(input_value))
-  except ValueError:
-    sys.exit("Input is invalid!")
-  except:
-    sys.exit("System went wrong.")
+    try:
+        if check_is_braille(input_value):
+            print(translate_braille_to_eng(input_value))
+        else:
+            print(translate_eng_to_braille(input_value))
+    except ValueError as e:
+        sys.exit(f"Input is invalid! {e}")
+    except Exception as e:
+        sys.exit(f"An unexpected error occurred: {e}")
 
 
 if __name__ == "__main__":
-  main()
+    main()
