@@ -1,3 +1,5 @@
+# translator.rb
+
 braille_alphabet = {
   "a" => "O.....", "b" => "O.O...", "c" => "OO....", "d" => "OO.O..",
   "e" => "O..O..", "f" => "OOO...", "g" => "OOOO..", "h" => "O.OO..",
@@ -37,23 +39,30 @@ def braille_to_english(braille, braille_alphabet)
   english = ""
   i = 0
   capitalize_next = false
+  in_number_mode = false
+
   while i < braille.length
     current_symbol = braille[i, 6]
+
     if current_symbol == braille_alphabet["capital"]
       capitalize_next = true
-    elsif current_symbol == braille_alphabet["number"]
       i += 6
-      while i < braille.length && braille[i, 6] != braille_alphabet[" "]
-        english << reversed_alphabet[braille[i, 6]] || ''
-        i += 6
-      end
-      i -= 6
+      next
+    elsif current_symbol == braille_alphabet["number"]
+      in_number_mode = true
+      i += 6
+      next
+    elsif current_symbol == braille_alphabet[" "]
+      english += " "
+      in_number_mode = false
     else
       if capitalize_next
         english << (reversed_alphabet[current_symbol] || '').upcase
         capitalize_next = false
+      elsif in_number_mode
+        english << (reversed_alphabet[current_symbol] || '')
       else
-        english << reversed_alphabet[current_symbol] || ''
+        english << (reversed_alphabet[current_symbol] || '')
       end
     end
     i += 6
