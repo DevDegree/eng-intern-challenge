@@ -155,7 +155,7 @@ def main():
         print("Usage: python braille.py Enter text")
         sys.exit(1)
     
-    input_str = sys.argv[1]
+    input_str = ''.join(sys.argv[1:]) # Concatenates all arguments into a single string
     
     if detect_input_type(input_str) == 'english':
         braille_translation = translate_to_braille(input_str)
@@ -166,4 +166,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
