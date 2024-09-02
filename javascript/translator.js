@@ -96,6 +96,7 @@ function brailleToEnglish(brailleInput) {
 	const brailleChars = brailleInput.match(/.{6}/g) || []; // Ensures each Braille character is exactly 6 dots long
 	let isCapital = false;
 	let isNumber = false;
+	let isSpace = false;
 
 	for (let brailleChar of brailleChars) {
 		console.log(`Processing Braille Character: ${brailleChar}`); // Debugging output
@@ -106,6 +107,11 @@ function brailleToEnglish(brailleInput) {
 		}
 		if (brailleChar === brailleMap.NUMBER) {
 			isNumber = true;
+			continue;
+		}
+		if (brailleChar === brailleMap[' ']) {
+			result += ' ';
+			isNumber = false;
 			continue;
 		}
 
@@ -120,7 +126,6 @@ function brailleToEnglish(brailleInput) {
 				Object.entries(brailleMap).find(
 					([key, value]) => value === brailleChar && !isNaN(key)
 				)?.[0] || '';
-			//isNumber = false; // Reset after using the number follows symbol
 		}
 
 		console.log(`Detected English Character: ${englishChar}`); // Debugging output
