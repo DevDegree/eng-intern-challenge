@@ -14,7 +14,7 @@ global_dict = {'a':"0.....", 'b':'0.0...', 'c':'00....', 'd':'00.0..', 'e':'0..0
                '7':'g', '8':'h', '9':'i', '0':'j', 'CAP':'.....0', ' ':'......', 'NUM':'.0.000'}
 
 test_str_e = "XOXOXO" ## --> 00..00 0..00. 00..00 0..00. 00..00 0..00. 
-test_str_b = "0.....0.0....0.0000....." ## --> ab1
+test_str_b = "......00..0.0.....0.0....0.0000....." ## --> ' mab1'
 
 keys = list(global_dict.keys())
 values = list(global_dict.values()) # use this string to index the translation of the characters. Example: '0.....' indexes 0, thrown into keys[0] gives 'a'. 
@@ -32,7 +32,7 @@ def main(val):
 
 
 def lang_detect(string):
-
+    print(set(string))
     if set(['0','.']) == set(string): # This means it is in braille
 #        print(str(set(['0','.'])) + " and " + str(set(string)))
         return 1 
