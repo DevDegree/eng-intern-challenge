@@ -247,4 +247,3 @@ def test():
     # Only numbers
     if translate_morse(".O.OOOO.....O.O...OO....OO.O..O..O..") != "12345":
         raise "Only numbers are not translated from morse correctly"
-    
