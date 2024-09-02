@@ -99,11 +99,8 @@ def eng_to_braille(english_string):
     return ''.join(translated)
 
 def main():
-    if len(sys.argv) != 2:
-        print("Please use the format of: translator.py argument")
-        sys.exit(1)
 
-    input_string = sys.argv[1]
+    input_string = ' '.join(sys.argv[1:])
     if verify_braille(input_string):
         print(braille_to_eng(input_string))
     else:
