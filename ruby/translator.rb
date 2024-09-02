@@ -155,19 +155,7 @@ class Translator
   end
 end  
 
-
-
-
-
-
-
-#translate_to_braille("Hello World")
-
-
-
-
 #input = "O.OO..O..O..O.O.O.O.O.O.O..OO..OOO.OO..OO.O.OOO.O.O.O.OO.O.." #hello world
-#input = "O.OOO."
 #input = ".....OO.....O.O...OO....OOOOOO.O.OOOO.....O.O...OO...." #Abc 123
 #input = ".OOOO.O..O...OO.O..OOOO..O.O..OO.OO.OOOO...O.OOOO......O.O..O....." #testing191
 
