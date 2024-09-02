@@ -39,7 +39,6 @@ engToBraille = {
     "9" : ".OO...",
     "0" : ".OOO..  ",
     "cap" : ".....O",
-    "dec" : ".O...O",
     "num" : ".O.OOO",
     "." : "..OO.O",
     "," : "..O...",
@@ -155,7 +154,7 @@ class transl:
                     
                 check = ""
                     
-        print(engWord)
+        return engWord
 
 
     def toBr(self):
@@ -195,7 +194,8 @@ class transl:
             else:
                 brWord += engToBraille[test]
 
-        print(brWord)
+        return brWord
+
 
 
 
