@@ -6,6 +6,8 @@ def detect_language(input_list):
     ''' 
     Assumptions:
     English input that consists of multiple words (e.g., "hello world") is always represented as separate entries in input_list.
+    Braille input that consists of multiple words (e.g., ".....OO.....O.O...OO...........O.OOOO.....O.O...OO...." -> "Abc" "123) is always a single entry in input_list
+    Strings like "O.", which are invalid English and Braille, will be inputed.
 
     Parameters:
     input_list -- list of strings
@@ -20,11 +22,11 @@ def detect_language(input_list):
     if (len(input_list[0]) <= 6):
         return 0
     
-    characters = set()
+    unique_characters = set()
     for character in input_list[0]:
-        characters.add(character)
+        unique_characters.add(character)
     
-    if (len(characters) > 2):
+    if (len(unique_characters) > 2):
         return 0
     
     return 1
