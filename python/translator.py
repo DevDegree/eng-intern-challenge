@@ -1,3 +1,4 @@
+
 import sys
 
 # Braille mappings for alphabet, numbers, and special characters
