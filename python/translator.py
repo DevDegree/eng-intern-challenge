@@ -70,7 +70,8 @@ capitalBraille = '.....O'
 numberBraille = '.O.OOO'
 decimalBraille = '.O...O'
 
-user_input = input()
+
+user_input = ' '.join(sys.argv[1:])
 
 isEnglish = False
 isBraille = False
