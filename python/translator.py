@@ -46,7 +46,7 @@ braille_english_specials={
     "decimal":".O...O",
     "number":".O.OOO",
     " ":"......",
-     ".":"..OO.O",
+    ".":"..OO.O",
     ",":"..O...",
     "?":"..O.OO",
     "!":"..OOO.",
