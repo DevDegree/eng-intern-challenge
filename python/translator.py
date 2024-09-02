@@ -75,7 +75,7 @@ def braille_to_english(braille_string):
                 char = str(ord(char) - ord('a') + 1)  # Convert a-j to 1-0
                 if char == '10':
                     char = '0'
-            elif char == ' ':
+            elif char == '':
                 is_number = False
             output.append(char)
             i += 6
