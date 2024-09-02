@@ -13,7 +13,7 @@ braille_map = {
 braille_number_map = {
     '0': '.OOO..', '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..',
     '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...',
-    'number': '.O...O'
+    'number': '.O.OOO'
 }
 
 # Reverse map for Braille to English
@@ -33,23 +33,23 @@ def english_to_braille(text):
     is_number = False
     
     for char in text:
-        if char.isdigit() and not is_number:
-            result.append(braille_number_map['number'])
-            is_number = True
-        
-        if char.isdigit() and is_number:
-            result.append(braille_number_map.get(char))
-            is_number = True
-
-        if char.isalpha() and is_number:
-            result.append('......')  # add a space to exit number mode
-            is_number = False
-            
         if char.isupper():
             result.append(braille_map['capital'])
             char = char.lower()
+
+        if char.isdigit() and not is_number:
+            result.append(braille_map['number'])
+            is_number = True
         
-        result.append(braille_map.get(char, ''))
+        if char == " ":
+            result.append(braille_map[" "])
+            is_number = False
+
+        elif char in braille_map:
+             result.append(braille_map[char])
+
+        elif char in braille_number_map:
+            result.append(braille_number_map[char])
     
     return ''.join(result)
 
@@ -75,7 +75,7 @@ def braille_to_english(braille_string):
                 char = str(ord(char) - ord('a') + 1)  # Convert a-j to 1-0
                 if char == '10':
                     char = '0'
-            elif char == '':
+            elif char == " ":
                 is_number = False
             output.append(char)
             i += 6
