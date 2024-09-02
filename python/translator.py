@@ -1,3 +1,6 @@
+import sys
+
+
 brailleToEnglish = {
     'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd', 'O..O..': 'e',
     'OOO...': 'f', 'OOOO..': 'g', 'O.OO..': 'h', '.OO...': 'i', '.OOO..': 'j',
@@ -59,13 +62,16 @@ def convertBrailleToEnglish(inputBraille):
 
 # Main function
 if __name__ == "__main__":
-    inputString = input("Enter the String: ")
+    if len(sys.argv) < 2:
+        print("Provide an input text in English or Braille to translate")
+        sys.exit(1)
 
-    if isBraille(inputString):
-        print("Braille")
-        print("Converted to English: ", convertBrailleToEnglish(inputString))
+    input_text = ' '.join(sys.argv[1:])
+    # print(input_text)
+
+    if isBraille(input_text):
+        print(convertBrailleToEnglish(input_text))
     else:
-        print("English")
-        print("Converted to Braille: ", convertEnglishToBraille(inputString))
+        print(convertEnglishToBraille(input_text))
 
 
