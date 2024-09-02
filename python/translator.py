@@ -1,6 +1,6 @@
 import sys
 
-# Dictionary to map English alphabet and digits to Braille patterns
+# Dictionary to map English alphabet to Braille patterns
 ALPHA_TO_BRAILLE = {
     'a': 'O.....',
     'b': 'O.O...',
@@ -28,57 +28,30 @@ ALPHA_TO_BRAILLE = {
     'x': 'OO..OO',
     'y': 'OO.OOO',
     'z': 'O..OOO',
-    '1': 'O.....',
-    '2': 'O.O...',
-    '3': 'OO....',
-    '4': 'OO.O..',
-    '5': 'O..O..',
-    '6': 'OOO...',
-    '7': 'OOOO..',
-    '8': 'O.OO..',
-    '9': '.OO...',
-    '0': '.OOO..',
     ' ': '......',
     'capital': '.....O', # Indicator for capitalization
     'number': '.O.OOO',  # Indicator for numbers
 }
 
+# Dictionary to map Braille patterns to English alphabet
+BRAILLE_TO_ALPHA = {v:k for k,v in ALPHA_TO_BRAILLE.items()}
 
-# Dictionary to map Braille patterns to English alphabet and digits
-BRAILLE_TO_ALPHA = {
-    'O.....': 'a:1',
-    'O.O...': 'b:2',
-    'OO....': 'c:3',
-    'OO.O..': 'd:4',
-    'O..O..': 'e:5',
-    'OOO...': 'f:6',
-    'OOOO..': 'g:7',
-    'O.OO..': 'h:8',
-    '.OO...': 'i:9',
-    '.OOO..': 'j:0',
-    'O...O.': 'k',
-    'O.O.O.': 'l',
-    'OO..O.': 'm',
-    'OO.OO.': 'n',
-    'O..OO.': 'o',
-    'OOO.O.': 'p',
-    'OOOOO.': 'q',
-    'O.OOO.': 'r',
-    '.OO.O.': 's',
-    '.OOOO.': 't',
-    'O...OO': 'u',
-    'O.O.OO': 'v',
-    '.OOO.O': 'w',
-    'OO..OO': 'x',
-    'OO.OOO': 'y',
-    'O..OOO': 'z',
-    '......': ' ',
-    '.....O': 'capital', # Indicator for capitalization in Braille
-    '.O.OOO': 'number',  # Indicator for numbers in Braille
-    '.O.O.O': '.'        # Period symbol
+# Dictionary to map alphabet to corresponding numbers used for Braille
+ALPHA_TO_NUM = {
+    'a': '1',
+    'b': '2',
+    'c': '3',
+    'd': '4',
+    'e': '5',
+    'f': '6',
+    'g': '7',
+    'h': '8',
+    'i': '9',
+    'j': '0'
 }
 
-
+# Dictionary to map numbers to corresponding alphabet used for Braille
+NUM_TO_ALPHA = {v:k for k,v in ALPHA_TO_NUM.items()}
 
 # Function to convert English text to Braille
 def english_to_braille(text):
@@ -93,7 +66,8 @@ def english_to_braille(text):
         elif text[i].isdigit():
             result.append(ALPHA_TO_BRAILLE['number']) # Add number indicator
             while i < len(text) and text[i] != ' ':
-                result.append(ALPHA_TO_BRAILLE[text[i]])
+                corresponding_alpha = NUM_TO_ALPHA[text[i]]
+                result.append(ALPHA_TO_BRAILLE[corresponding_alpha])
                 i+=1
             if i<len(text):
                 result.append(ALPHA_TO_BRAILLE[text[i]])  # Add space after number
@@ -114,19 +88,19 @@ def braille_to_english(braille):
         braille_char = braille[i:i+6]
         # Handle capital letters
         if BRAILLE_TO_ALPHA[braille_char] == 'capital':
-            char = BRAILLE_TO_ALPHA[braille[i+6:i+12]].split(":")[0].upper()
+            char = BRAILLE_TO_ALPHA[braille[i+6:i+12]].upper()
             result.append(char)
             i += 12
         # Handle numbers
         elif BRAILLE_TO_ALPHA[braille_char] == 'number':
             i += 6
             while i < len(braille) and BRAILLE_TO_ALPHA[braille[i:i+6]] != ' ':
-                char = BRAILLE_TO_ALPHA[braille[i:i+6]].split(":")[1]
+                char = ALPHA_TO_NUM[BRAILLE_TO_ALPHA[braille[i:i+6]]]
                 result.append(char)
                 i+=6           
         # Handle all other characters
         else:
-            char = BRAILLE_TO_ALPHA[braille[i:i+6]].split(":")[0]
+            char = BRAILLE_TO_ALPHA[braille[i:i+6]]
             result.append(char)
             i += 6
     
