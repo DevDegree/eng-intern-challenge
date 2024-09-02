@@ -4,7 +4,6 @@ import { promisify } from "util";
 const execAsync = promisify(exec);
 
 describe("translator.ts output", () => {
-  // PASSED THEIR TEST
   it("should print the correct output to the console", async () => {
     const { stdout } = await execAsync("ts-node translator.ts Abc 123 xYz");
 

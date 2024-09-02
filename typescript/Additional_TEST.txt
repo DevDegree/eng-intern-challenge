@@ -1,6 +1,6 @@
 These are additional test I had created to stress test my code
 
------------------------Eng to braille---------------------------
+// -----------------------Eng to braille---------------------------
 
   it("should print: Eng to braille: A", async () => {
     const { stdout } = await execAsync("ts-node translator.ts A");
@@ -237,7 +237,7 @@ These are additional test I had created to stress test my code
     expect(stdout.trim()).toBe(expected);
   });
 
-  ------------------ Test for conversion from Braille to English ------------------
+  // ------------------ Test for conversion from Braille to English ------------------
 
   it("should print: braille to Eng: A", async () => {
     const { stdout } = await execAsync("ts-node translator.ts .....OO.....");

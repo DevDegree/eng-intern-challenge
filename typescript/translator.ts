@@ -20,7 +20,7 @@ function translateEnglishToBraille(english: string): string {
   return engllishToBraille(englishArray);
 }
 
-// The function identifies if the arguments passed are braille or english and returns the converted string
+// The function checks if the argument passed is braille or english and returns the converted string
 function translator(args: string) {
   const regexBraille: RegExp = /^[O.]*$/;
   const isBraille: boolean = args.length >= 6 && regexBraille.test(args);
