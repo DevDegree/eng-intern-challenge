@@ -76,7 +76,7 @@ const isAlphanumeric = (input) => {
 }
 
 const isBraille = (input) => {
-    return /^[0\.]+$/.test(input);
+    return /^[O\.]+$/.test(input);
 }
 
 // function for converting english to braille 
