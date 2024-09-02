@@ -60,6 +60,9 @@ def get_system_arguments(args):
         text += args[i] + " "
     text += args[len(args) - 1]
 
+    if text == "":
+        return(args[0])
+    
     return text
 
 '''
@@ -164,8 +167,8 @@ English to Braille:
 3. "Abc 123"     -> ".....OO.....O.O...OO...........O.OOOO.....O.O...OO...."                    -> Correct
 4. "HeLLo"       -> ".....OO.OO..O..O.......OO.O.O......OO.O.O.O..OO."                          -> Correct
 5. "123 456"     -> ".O.OOOO.....O.O...OO...........O.OOOOO.O..O..O..OOO..."                    -> Correct
-6. "1 "          -> ".O.OOOO..........."                                                        -> Correct NOTE: Make sure to quote it the input like python3 translator.py "1 ". If you don't do that it will skip the trailling space. The actually quotes "" wont't be included in the input argumnets due to the way Python3 handles it.
-7. " "           -> "......"                                                                    -> Correct NOTE: Make sure to quote it the input like python3 translator.py " ". If you don't do that it will skip the space. The actually quotes "" wont't be included in the input argumnets due to the way Python3 handles it.                            
+6. "1 "          -> ".O.OOOO..........."                                                        -> Correct NOTE: Make sure to quote it the input like 'python3 translator.py "1 "'. If you don't do that it will skip the trailling space. The actually quotes "" wont't be included in the input argumnets due to the way Python3 handles it.
+7. " "           -> "......"                                                                    -> Correct NOTE: Make sure to quote it the input like 'python3 translator.py " "'. If you don't do that it will skip the space. The actually quotes "" wont't be included in the input argumnets due to the way Python3 handles it.                            
 
 Braille to English:
 1. ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.." -> "Hello world"  -> Correct
@@ -177,8 +180,7 @@ Braille to English:
 7. "......"                                                                   -> " "            -> Correct
 
 Invaild Inputs:
-1. "Hello .....OO"   -> "Invaild input in terminal" -> Correct
-2. "23/ 97g"         -> "Invaild input in terminal" -> Correct
-3. "" 
-
+1. "Hello .....OO"   -> "Invaild input in terminal" -> Correct NOTE: Both english and Braille were inputed
+2. "23/ 97g"         -> "Invaild input in terminal" -> Correct NOTE: Invaild charaters("/")
+3. ""                -> "Invaild input in terminal" -> Correct NOTE: Works regardless if input is like "python3 translator.py  " or 'python3 translator.py ""'
 '''
