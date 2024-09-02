@@ -1,6 +1,6 @@
 ALPHABET_TO_BRAILLE = {
 "a" => "O.....", "b" => "O.O...", "c" => "OO....", "d" => "OO.O..", "e" => "O..O..", "f" => "OOO...", "g" => "OOOO..",
-"h" => "O.OO..", "i" => ".OO...", "j" => ".OOO..", "k" => "O...O.", "l" => "O.O.O.", "m" => "OO..O.", "n" => "OO.O.O",
+"h" => "O.OO..", "i" => ".OO...", "j" => ".OOO..", "k" => "O...O.", "l" => "O.O.O.", "m" => "OO..O.", "n" => "OO.OO.",
 "o" => "O..OO.", "p" => "OOO.O.", "q" => "OOOOO.", "r" => "O.OOO.", "s" => ".OO.O.", "t" => ".OOOO.", "u" => "O...OO",
 "v" => "O.O.OO", "w" => ".OOO.O", "x" => "OO..OO", "y" => "OO.OOO", "z" => "O..OOO",
 
@@ -75,8 +75,10 @@ def convert_alphabet_to_braille(input)
       result += ALPHABET_TO_BRAILLE["capital"]
       char = char.downcase
       result += ALPHABET_TO_BRAILLE[char]
+      next_char_is_number = false
     else
       result += ALPHABET_TO_BRAILLE[char]
+      next_char_is_number = false
     end
   end
   return result
@@ -94,6 +96,6 @@ if code == -1 # invalid input
     puts "Invalid characters detected!"
     exit
   end
-    code = convert_alphabet_to_braille(input)
+  code = convert_alphabet_to_braille(input)
 end
 puts code
