@@ -205,7 +205,7 @@ class transl:
  
 def main():
     
-    word = "".join(sys.argv[1:])
+    word = " ".join(sys.argv[1:])
     t = transl(word)
     x = ""
     #check if braille or eng
