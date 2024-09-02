@@ -129,4 +129,4 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         print(translatePhrase(" ".join(sys.argv[1:])))
     else:
-        print("Welcome to Braille translator: enter a Braille phrase or English phrase as an argument to translate")
+        print("Please enter a valid input")
