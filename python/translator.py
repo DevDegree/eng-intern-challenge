@@ -1,6 +1,15 @@
 import sys
 from bidirectional_dict import BidirectionalDict
 
+'''
+Comments:
+
+Bidirectional Dictionary
+I decided to use a bidirectional dictionary because if the alphabets(key) and numbers(key) are seperate the braille(value) are one to one.
+I need this to be able to quikly find the keys value or the values key. ex ("a" -> "o.....") and ("o....." -> "a")
+This also allowed me to do O(1) look up for the key or value. 
+I could have used 4 dictionaries to replicate what the bidirectional dictionary is doing but, it seemed more complicated for the task at hand
+'''
 # Constants
 BRALLIE_SIZE = 6
 CAPITAL_PREFIX = ".....O"
