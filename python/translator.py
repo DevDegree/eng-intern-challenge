@@ -39,7 +39,6 @@ def englishHandler(s):
     space = 1
     upper = 0
     for i in s:
-        
         letter = i
         if i.isupper():
             translation += edict.get("cap")
@@ -56,11 +55,8 @@ def englishHandler(s):
         if upper == 1:
             letter = i.lower()
             upper = 0
-
         letter = edict.get(letter)
-        
         translation += letter
-        
     return translation
 
 
@@ -111,29 +107,29 @@ def dictMaker(lang):
     '0': '.OOO..',
                     }   
     
-    braille = dict((v, k) for k, v in english.items())
-
-    braillenums = dict((v, k) for k, v in englishnums.items())
-   
     match lang:
         case "english":
             return english
         case "englishnums":
             return englishnums
         case "braille":
+            braille = dict((v, k) for k, v in english.items())
             return braille
         case "braillenums":
+            braillenums = dict((v, k) for k, v in englishnums.items())
             return braillenums
         
 if __name__ == "__main__":
-
   n = len(sys.argv)
-  
   for i in range(1,n):
     s = sys.argv[i]
     print(translator(s), end = "")
-    if i != n-1:
-        print("......", end = "")
+
+# test wants braille spaces btwn outputs, thus the code below
+    for j in s[0:5]:
+        if j == ".":
+            if i != n-1:
+                print("......", end = "")
         
 
 
