@@ -109,10 +109,20 @@ def english_to_braille(english_string: str) -> str:
 
 
 def translate(input_string : str) -> str:
-    # TODO: Implement this function
-    return ""
+    if is_braille(input_string):
+        return braille_to_english(input_string)
+    else:
+        return english_to_braille(input_string)
 
 
-if __name__ == 'main':
-    input_string = sys.argv[1]
-    print(translate(input_string))
+# if __name__ == 'main':
+#     input_string = sys.argv[1]
+#     print(translate(input_string))
+
+
+inp = "Abc 123 xYz"
+out = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
+result = translate(inp)
+gh = translate(out)
+assert result == out, "English to Braille FAILED"
+assert gh == inp, "Braille to English FAILED"
