@@ -125,11 +125,12 @@ if __name__ == "__main__":
     s = sys.argv[i]
     print(translator(s), end = "")
 
-# test wants braille spaces btwn outputs, thus the code below
-    for j in s[0:5]:
-        if j == ".":
-            if i != n-1:
-                print("......", end = "")
+# test wants braille spaces btwn braille outputs, thus the code below
+    edict = dictMaker("english")
+    enumdict = dictMaker("englishnums")
+    if (edict.get(s[i].lower()) or enumdict.get(s[i].lower())) != None:
+        if i != n-1:
+            print("......", end = "")
         
 
 
