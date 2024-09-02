@@ -17,7 +17,10 @@ BRAILLE_TO_ENGLISH = {v: k for k, v in ENGLISH_TO_BRAILLE.items() if k not in '0
 
 # checks if input is braille or not (is English)
 def is_braille(s):
-    return all(c in 'O.' for c in s)
+    for c in s:
+        if c in '.':
+            return True
+        return False
 
 def english_to_braille(english):
     braille = []
