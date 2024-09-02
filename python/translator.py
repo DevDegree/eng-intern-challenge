@@ -1,6 +1,6 @@
-import re
+import re, sys
 
-TRANSLATOR = {
+ENG_TO_BRAILLE = {
     "a": "O.....",
     "b": "O.O...",
     "c": "OO....",
@@ -58,7 +58,7 @@ NUM_MODE = {
     ">": "o"
 }
 
-REVERSE_TRANSLATOR = {v: k for k, v in TRANSLATOR.items()}
+REVERSE_TRANSLATOR = {v: k for k, v in ENG_TO_BRAILLE.items()}
 REVERSE_NUM = {v: k for k, v in NUM_MODE.items()}
 
 def translate_to_braille(input, mode):
@@ -69,18 +69,18 @@ def translate_to_braille(input, mode):
             #check if we are at the first digit of the number, if we are, change mode to num 
             if mode == "alpha":
                 mode = "num"
-                result = result + TRANSLATOR["num"]
-            result = result + TRANSLATOR[NUM_MODE[c]]
+                result = result + ENG_TO_BRAILLE["num"]
+            result = result + ENG_TO_BRAILLE[NUM_MODE[c]]
         #check if where we are in the string is a decimal
         elif c == "." and mode == "num":
-            result = result + TRANSLATOR["dec"] + TRANSLATOR["."]
+            result = result + ENG_TO_BRAILLE["dec"] + ENG_TO_BRAILLE["."]
         else:
             #change the mode to alphabet if no longer numeric (assuming number is followed by a space)
             mode = "alpha"
             if c.isupper():
-                result = result + TRANSLATOR["cap"] + TRANSLATOR[c.lower()]
+                result = result + ENG_TO_BRAILLE["cap"] + ENG_TO_BRAILLE[c.lower()]
             else:
-                result = result + TRANSLATOR[c]
+                result = result + ENG_TO_BRAILLE[c]
         
     
     return result
@@ -93,11 +93,13 @@ def translate_to_eng(input, mode):
         if c not in REVERSE_TRANSLATOR:
             return translate_to_braille(input, "alpha")
         
+        #check if we are in any of the special modes 
         if REVERSE_TRANSLATOR[c] in ["num", "cap", "dec"]:
             mode = REVERSE_TRANSLATOR[c]
             continue
     
         if mode == "num":
+            #check if we have encountered the end of the numeric string
             if REVERSE_TRANSLATOR[c] == " ":
                 mode = "alpha"
                 result = result + " "
@@ -120,8 +122,9 @@ def translate(input):
     else:
         return translate_to_braille(input, "alpha")
     
-while True:    
-    user_input = input("please enter a word or enter q to quit:\n")
-    if (user_input == "q"):
-        break
+def main():  
+    user_input = ' '.join(sys.argv[1:])
     print(translate(user_input))
+
+if __name__ == '__main__':
+    main()
