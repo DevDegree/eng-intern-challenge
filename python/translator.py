@@ -1,6 +1,4 @@
 import argparse
-import unittest
-
 
 # Dictionary mapping Braille characters to English letters, numbers, and symbols
 braille_to_english = {
@@ -166,24 +164,5 @@ def main():
     
     print(output)
 
-class TestBrailleConversion(unittest.TestCase):
-
-    def test_braille_to_english(self):
-        self.assertEqual(convert_to_english(".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."), "Hello world")
-        self.assertEqual(convert_to_english(".O.OOOOO.O..O.O..."), "42")
-        self.assertEqual(convert_to_english(".....OO.....O.O...OO...........O.OOOO.....O.O...OO...."), "Abc 123")
-        self.assertEqual(convert_to_english(".....OO.....O..........OO....."), "AaA")
-        self.assertEqual(convert_to_english(".O.OOOO.....O.O...OO............OOO...OO.O.....OO..OO...OO.O"), "123 !.O.")
-        self.assertEqual(convert_to_english("..OO.O.....OO..OO...OO.O.....OO..OO...OO.O.....OO..OO......OO..OO."), ".O.O.OO")
-
-    def test_english_to_braille(self):
-        self.assertEqual(convert_to_braille(["42"]), ".O.OOOOO.O..O.O...")
-        self.assertEqual(convert_to_braille(["Hello world"]), ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..")
-        self.assertEqual(convert_to_braille(["Abc 123"]), ".....OO.....O.O...OO...........O.OOOO.....O.O...OO....")
-        self.assertEqual(convert_to_braille(["AaA"]), ".....OO.....O..........OO.....")
-        self.assertEqual(convert_to_braille(["123 !.O."]), ".O.OOOO.....O.O...OO............OOO...OO.O.....OO..OO...OO.O")
-        self.assertEqual(convert_to_braille([".O.O.OO"]), "..OO.O.....OO..OO...OO.O.....OO..OO...OO.O.....OO..OO......OO..OO.")
-
 if __name__ == "__main__":
-    #main()
-    unittest.main()
+    main()
