@@ -5,6 +5,7 @@ const dictionaryBraille = {};
 
 const english = [..."abcdefghijklmnopqrstuvwxyz1234567890 "];
 const braille = ["O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..", ".OO...", ".OOO..", "O...O.", "O.O.O.", "OO..O.", "OO.OO.", "O..OO.", "OOO.O.", "OOOOO.", "O.OOO.", ".OO.O.", ".OOOO.", "O...OO", "O.O.OO", ".OOO.O", "OO..OO", "OO.OOO", "O..OOO", "O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..", ".OO...", ".OOO..", "......"];
+const numbers = "1234567890";
 
 const options = {
     capital: ".....O",
@@ -24,15 +25,11 @@ const englishToBraille = () => {
             throw new Error(`Invalid character included: ${l}`)
         }
 
-        if (l === " ") {
-            return "......"
-        }
-
-        if (!isNaN(+l) && (isNaN(+query[i - 1]) || query[i - 1] === " " )) {
+        if (numbers.includes(l) && (i === 0 || !numbers.includes(query[i - 1]))) {
             return options.number + dictionaryEnglish[l]
         }
 
-        if ( l === l.toUpperCase() && (i === 0 || query[i - 1] !== query[i - 1].toUpperCase()) ) {
+        if ( l !== " " && l === l.toUpperCase() && (i === 0 || query[i - 1] !== query[i - 1].toUpperCase()) ) {
             return options.capital + dictionaryEnglish[l.toLowerCase()]
         }
 
