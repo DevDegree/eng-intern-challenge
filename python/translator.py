@@ -152,17 +152,20 @@ def translate_to_english(braille):
 def main():
     if len(sys.argv) < 2:
         # Error handling
-        print("Usage: python braille.py Enter text")
+        print("Usage: python translator.py Enter text")
         sys.exit(1)
-    
-    input_str = ''.join(sys.argv[1:]) # Concatenates all arguments into a single string
+
+    args = sys.argv[1:]
+    # Join the arguments with a space
+    input_str = " ".join(args)
+
     
     if detect_input_type(input_str) == 'english':
         braille_translation = translate_to_braille(input_str)
-        print(braille_translation)
+        print(braille_translation, end='')
     else:
         english_translation = translate_to_english(input_str)
-        print(english_translation)
+        print(english_translation, end='')
 
 if __name__ == "__main__":
     main()
