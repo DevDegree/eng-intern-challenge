@@ -103,7 +103,7 @@ BRAILLE_TO_ENGLISH = {
     'O..OO.': '>',
     'O.O..O': '(',
     '.O.OO.': ')',
-    '......': ' '
+    '......': ' ',
 }
 
 BRAILLE_TO_DIGITS = {
@@ -117,11 +117,14 @@ BRAILLE_TO_DIGITS = {
     "O.OO..": '8',
     ".OO...": '9',
     ".OOO..": '0',
+    ".O...O": '.' #decimal follows symbol
 }
 
 BRAILLE_CAPITAL_FOLLOWS = ".....O"
 BRAILLE_DECIMAL_FOLLOWS = ".O...O"
 BRAILLE_NUMBER_FOLLOWS = ".O.OOO"
+BRAILLE_SPACE = "......"
+BRAILLE_INVALID_STRING = "Invalid braille string"
 
 # Helpers
 
@@ -147,7 +150,7 @@ def translateFromEnglish(inputStr: str, conversionDict: dict[str, str]) -> str:
         elif (char.isnumeric() or char == ".") and (i == 0 or not(inputStr[i-1].isnumeric() or inputStr[i-1] == ".")): 
             result += BRAILLE_NUMBER_FOLLOWS
             if char == ".": 
-                result += BRAILLE_DECIMAL_FOLLOWS
+                result += BRAILLE_DECIMAL_FOLLOWS #if it's a decimal point, don't lookup
             else: 
                 result += conversionDict[char]
         elif char == "." and char != inputStr[-1] and inputStr[i+1].isnumeric():
@@ -156,12 +159,48 @@ def translateFromEnglish(inputStr: str, conversionDict: dict[str, str]) -> str:
             result += conversionDict[char]
     return result 
         
+# Returns the English translation of a Braille string, or BRAILLE_INVALID_STRING if the inputted braille string is not valid
+def translateFromBraille(inputStr: str, conversionDict: dict[str,str]) -> str: 
+    result = ""
+    i = 6
+    length = len(inputStr)
+    isNumber = False
+    isCapital = False
+    while i <= length: 
+        brailleChar = inputStr[i-6:i]
+        if brailleChar == BRAILLE_NUMBER_FOLLOWS: 
+            isNumber = True
+        elif isNumber and brailleChar != BRAILLE_SPACE: 
+            result += BRAILLE_TO_DIGITS[brailleChar]
+        elif brailleChar == BRAILLE_SPACE: 
+            isNumber = False
+            result += " "
+        elif brailleChar == BRAILLE_CAPITAL_FOLLOWS: 
+            isCapital = True
+        else: #standard case 
+            try:
+                currChar = conversionDict[brailleChar]
+            except KeyError:
+                return BRAILLE_INVALID_STRING
+            
+            if isCapital: 
+                result += currChar.upper()
+                isCapital = False
+            else: 
+                result += currChar
+        i += 6
+    return result
+
 
 # main
 def main(): 
     args = sys.argv[1:]
     if isBraille(args): 
-        pass
+        result = translateFromBraille("".join(args), BRAILLE_TO_ENGLISH)
+        if result == BRAILLE_INVALID_STRING: # if braille translation failed
+            print(translateFromEnglish(" ".join(args), ENGLISH_TO_BRAILLE)) #translate as an english string instead
+        else: 
+            print(result)
     else: 
         print(translateFromEnglish(" ".join(args), ENGLISH_TO_BRAILLE))
 
