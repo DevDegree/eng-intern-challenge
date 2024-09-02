@@ -58,7 +58,6 @@ for key in brail_to_eng_dic_num.keys():
 
 
 output_text = ""
-input_text = str(sys.argv[1])
 
 arguments = sys.argv[1:]
 input_text = (" ".join(arguments))
