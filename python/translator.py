@@ -1,65 +1,63 @@
-
 import sys
 #LETS CREATE A DICTIONARY FOR BRAILE TO ENGLISH
 
 braille_dict = {
-    '0.....': 'a',
-    '0.0...': 'b',
-    '00....': 'c',
-    '00.0..': 'd',
-    '0..0..': 'e',
-    '000...': 'f',
-    '0000..': 'g',
-    '0.00..': 'h',
-    '.00...': 'i',
-    '.000..': 'j',
-    '0...0.': 'k',
-    '0.0.0.': 'l',
-    '00..0.': 'm',
-    '00.00.': 'n',
-    '0..00.': 'o',
-    '000.0.': 'p',
-    '00000.': 'q',
-    '0.000.': 'r',
-    '.00.0.': 's',
-    '.0000.': 't',
-    '0...00': 'u',
-    '0.0.00': 'v',
-    '.000.0': 'w',
-    '00..00': 'x',
-    '00.000': 'y',
-    '0..000': 'z',
+    'O.....': 'a',
+    'O.O...': 'b',
+    'OO....': 'c',
+    'OO.O..': 'd',
+    'O..O..': 'e',
+    'OOO...': 'f',
+    'OOOO..': 'g',
+    'O.OO..': 'h',
+    '.OO...': 'i',
+    '.OOO..': 'j',
+    'O...O.': 'k',
+    'O.O.O.': 'l',
+    'OO..O.': 'm',
+    'OO.OO.': 'n',
+    'O..OO.': 'o',
+    'OOO.O.': 'p',
+    'OOOOO.': 'q',
+    'O.OOO.': 'r',
+    '.OO.O.': 's',
+    '.OOOO.': 't',
+    'O...OO': 'u',
+    'O.O.OO': 'v',
+    '.OOO.O': 'w',
+    'OO..OO': 'x',
+    'OO.OOO': 'y',
+    'O..OOO': 'z',
     '......': ' ',
-    '.....0_act': 'capital',
-    '.0...0_act': 'decimal',
-    '.0.000_act': 'number',
-    '..0..._punct': ',',
-    '..00.0_punct': '.',
-    '..0.00_punct': '?',
-    '..00.._punct': ':',
-    '..0.0._punct': ';',
-    '....00_punct': '-',
-    '.0..0._punct': '/',
-    '.00..0_punct': '<',
-    '0..00._punct': '>',
-    '0.0..0_punct': '(',
-    '.0.00._punct': ')',
-
+    '.....O_act': 'capital',
+    '.O...O_act': 'decimal',
+    '.O.OOO_act': 'number',
+    '..O..._punct': ',',
+    '..OO.O_punct': '.',
+    '..O.OO_punct': '?',
+    '..OO.._punct': ':',
+    '..O.O._punct': ';',
+    '....OO_punct': '-',
+    '.O..O._punct': '/',
+    '.OO..O_punct': '<',
+    'O..OO._punct': '>',
+    'O.O..O_punct': '(',
+    '.O.OO._punct': ')',
 }
 
 #act = action
 
 braille_dict_num = {
-    '0.....': '1',
-    '0.0...': '2',
-    '00....': '3',
-    '00.0..': '4',
-    '0..0..': '5',
-    '000...': '6',
-    '0000..': '7',
-    '0.00..': '8',
-    '.00...': '9',
-    '.000..': '0'
+    'O.....': '1',
+    'O.O...': '2',
+    'OO....': '3',
+    'OO.O..': '4',
+    'O..O..': '5',
+    'OOO...': '6',
+    'OOOO..': '7',
+    'O.OO..': '8',
+    '.OO...': '9',
+    '.OOO..': '0'
 }
 
 
@@ -90,7 +88,7 @@ def trans_eng_to_braille(text):
                 boolean_num = True
             braille += eng_to_braille_num[char]
         elif char in pun:
-            braille += eng_to_braille[char + '_punct']
+            braille += eng_to_braille[char].split('_')[0]
             boolean_num = False
         elif char == ".":
             braille += eng_to_braille['decimal'].split('_')[0]
@@ -108,7 +106,7 @@ def trans_brail_to_eng(text):
     for i in range(0, len(text), 6):
         word = text[i:i+6]
         
-        if word == ".....0":  # Capital
+        if word == ".....O":  # Capital
             boolean_cap = True
             continue
         elif word == '......':  # Space
@@ -116,11 +114,11 @@ def trans_brail_to_eng(text):
             boolean_cap = False
             boolean_num = False
             continue
-        elif word == '.0...O':  # Decimal indicator
+        elif word == '.O...O':  # Decimal indicator
             eng += '.'
             boolean_cap = False
             continue
-        elif word == '.0.000':  # Number indicator
+        elif word == '.O.OOO':  # Number indicator
             boolean_num = True
             continue
 
@@ -136,5 +134,14 @@ def trans_brail_to_eng(text):
     return eng
 
 
-    
+def main():
+    input_str = " ".join(sys.argv[1:])
+    if all(c in '.O' for c in input_str):
+        output = trans_brail_to_eng(input_str)
+    else:
+        output = trans_eng_to_braille(input_str)
+    print(output)
+    return output
 
+if __name__ == "__main__":
+    main()
