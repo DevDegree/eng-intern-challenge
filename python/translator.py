@@ -160,12 +160,14 @@ def main() -> None:
     Determines the input type (English or Braille) and prints the translation.
     """
     translator = Translator()
-    string = " ".join(sys.argv[1:])
+
+    string = ' '.join(sys.argv[1:])
 
     if translator.is_braille(string):
-        print(translator.braille_to_english(string))
+        sys.stdout.write(translator.braille_to_english(string))
     else:
-        print(translator.english_to_braille(string))
+        sys.stdout.write(translator.english_to_braille(string))
 
 if __name__ == "__main__":
     main()
+
