@@ -1,3 +1,6 @@
+// Isabelle Choi 
+// IsabelleLissina@gmail.com
+
 const BrailleAlphabet = {
     a: "O.....",
     b: "O.O...",
