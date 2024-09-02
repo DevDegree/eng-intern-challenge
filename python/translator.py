@@ -115,6 +115,7 @@ def isBraille(args: list[str]) -> bool:
             numOfDot +=1
     return numOfO + numOfDot == len(rawString) and len(rawString)%6==0 
 
+# Returns the Braille translation of inputStr
 def translateFromEnglish(inputStr: str, conversionDict: dict[str, str]) -> str: 
     result = ""
     for i in range(len(inputStr)): 
@@ -129,7 +130,7 @@ def translateFromEnglish(inputStr: str, conversionDict: dict[str, str]) -> str:
             result += conversionDict[char]
     return result 
         
-# Returns the English translation of a Braille string, or BRAILLE_INVALID_STRING if the inputted braille string is not valid
+# Returns the English translation of inputStr, or BRAILLE_INVALID_STRING if the inputted braille string is not valid
 def translateFromBraille(inputStr: str, conversionDict: dict[str,str]) -> str: 
     result = ""
     i = 6
