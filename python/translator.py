@@ -51,15 +51,28 @@ def translate_braille_to_english(input_str: str) -> str:
 
     for braille in brailles:
         if braille in braille_to_escape_characters:
-            if braille_to_escape_characters[braille] == "num":
+            escape_char = braille_to_escape_characters[braille]
+            if escape_char == "num":
                 in_number_mode = True
-            elif braille_to_escape_characters[braille] == "cap":
+            elif escape_char == "cap":
                 is_capital = True
-            elif braille_to_escape_characters[braille] == " ":
+            elif escape_char == " ":
                 output.append(' ')
             continue
+        
+        if braille == "......":   
+            in_number_mode = False
+            output.append(' ')
+            continue
 
-        if in_number_mode and braille in braille_to_number_map:
+
+        # very ugly code but i have only a few hours left to submit 
+        if braille in braille_to_number_map and in_number_mode:
+            char = braille_to_english_map[braille]
+            if is_capital:
+                output.append(char.upper())
+                is_capital = False
+                continue
             output.append(braille_to_number_map[braille])
         else:
             char = braille_to_english_map[braille]
@@ -67,10 +80,6 @@ def translate_braille_to_english(input_str: str) -> str:
                 char = char.upper()
                 is_capital = False
             output.append(char)
-        
-        if braille == "......":   
-            in_number_mode = False
-            output.append(' ')
 
     return ''.join(output)
 
