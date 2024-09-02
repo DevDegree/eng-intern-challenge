@@ -8,8 +8,6 @@ alphabet_to_brail = {
     'p': '000.0.', 'q': '00000.', 'r': '0.000.', 's': '.00.0.', 't': '.0000.',
     'u': '0...00', 'v': '0.0.00', 'w': '.000.0', 'x': '00..00', 'y': '00.000',
     'z': '0..000', 
-    #'1': '0.....', '2': '0.0...', '3': '00....', '4': '00.0..', '5': '0..0..',
-    #'6': '000...', '7': '0000..', '8': '0.00..', '9': '.00...', '0': '.000..', 
     'capital_follows': '.....0', 
     'decimal_follows': '.0...0', 
     'number_follows': '.0.000',
@@ -56,6 +54,19 @@ brail_to_alphabet={
     '......': ' ',
 }
 
+brail_to_numbers = {
+    '0.....': '1',
+    '0.0...': '2',
+    '00....': '3',
+    '00.0..': '4',
+    '0..0..': '5',
+    '000...': '6',
+    '0000..': '7',
+    '0.00..': '8',
+    '.00...': '9',
+    '.000..': '0',
+}
+
 #make function to translate english to brail
 def english_to_brail(text):
     #need to add capital,decimal and numbers
@@ -64,23 +75,30 @@ def english_to_brail(text):
         brail += alphabet_to_brail[letter]
     return brail
 
-
 #make function to translate brail to english
 def brail_to_english(input):
-    #need to add capital,decimal and numbers
+    #need to add decimal
     text = ''
     character = wrap(input, 6) #separate input into sections of 6
     capitalize_next = False
+    is_number = False
 
-
+    #build translation text
     for i in character:
-        if capitalize_next:
-            text += brail_to_alphabet[i].upper()  # Capitalize next character
-            capitalize_next = False
-        elif i == '.....0':  # Assuming this is your capitalization marker
+        if is_number:
+            if i in brail_to_numbers: #if i is in brail_to_numbers add number
+                text += brail_to_numbers[i]
+            is_number = False  # reset is_number too False            
+        elif i == '.0.000':  
+            is_number = True
+        elif capitalize_next:
+            text += brail_to_alphabet[i].upper()  # capitalize letter and add to text
+            capitalize_next = False  # reset capitalize_next to false
+        elif i == '.....0':  
             capitalize_next = True
         else:
             text += brail_to_alphabet[i]
+    
     return text
 
 #make function to choose how to translate
@@ -91,4 +109,4 @@ def translate(input):
         return english_to_brail(input)
 
 
-print(translate('.....000....0......0000.'))
+print(translate('00..0.00.000......00....0.....0.000.'))
