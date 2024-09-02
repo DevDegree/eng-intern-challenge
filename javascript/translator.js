@@ -95,57 +95,77 @@ function brailleDecoder(str){
     var result = ""; 
     var isCapitalized = false;
     var numberMap = false;
+    var currentMap = brailleToEnglishMap;
 
     for(let i = 0; i < str.length; i+= 6){
         let curr = str.slice(i, i+6);
-        if(brailleToEnglishMap.getValue(curr) === '*'){
+        if(currentMap.getValue(curr) === '*'){
             isCapitalized = true;
             continue
         }
-        if(brailleToEnglishMap.getValue(curr) === '***'){
+        if(currentMap.getValue(curr) === '***'){
             numberMap = true;
+            currentMap = brailleToNumberMap;
             continue
         }
 
-        if(brailleToEnglishMap.getValue(curr) === ' '){
+        if(currentMap.getValue(curr) === ' '){
             numberMap = false;
+            currentMap = brailleToEnglishMap;
         }
         
         if (numberMap) {
-            result += brailleToNumberMap.getValue(curr);
+            result += currentMap.getValue(curr);
         } else {
-            let value = brailleToEnglishMap.getValue(curr)
+            let value = currentMap.getValue(curr)
             result += isCapitalized ? value.toUpperCase() : value;
             isCapitalized = false;
         }
     }
     return result
 }
-
 function brailleEncoder(str){
     let result = "";
+    let currentMap = brailleToEnglishMap;
+
     for(const letter of str){
         const isCapitalized = letter === letter.toUpperCase() && letter !== letter.toLowerCase();
         const isNumber = !isNaN(letter) && letter.trim() !== '';
 
         if(isCapitalized){
-            result += brailleToEnglishMap.getKey('*');
-            result += brailleToEnglishMap.getKey(letter.toLowerCase());
+            if (currentMap !== brailleToEnglishMap) {
+                currentMap = brailleToEnglishMap;
+            }
+            result += currentMap.getKey('*'); 
+            result += currentMap.getKey(letter.toLowerCase());
         }
-        else if(!isNumber && (letter !== '>' && letter !== '<')){
-            result += brailleToEnglishMap.getKey(letter);
+        else if(letter === ' '){
+            if (currentMap !== brailleToEnglishMap) {
+                currentMap = brailleToEnglishMap;
+            }
+            result += currentMap.getKey(' ');
+        }
+        else if(isNumber){
+            if (currentMap !== brailleToNumberMap) {
+                result += brailleToNumberMap.getKey('***');
+                currentMap = brailleToNumberMap;
+            }
+            result += currentMap.getKey(letter);
         }
         else{
-            
-            result += brailleToNumberMap.getKey('***');
-            result += brailleToNumberMap.getKey(letter);
+            if (currentMap !== brailleToEnglishMap) {
+                currentMap = brailleToEnglishMap;
+            }
+            result += currentMap.getKey(letter);
         }
     }
     return result;
 }
 
+
 const originalStatement = process.argv.slice(2);
 const regex = /^[O.]*$/;
+console.log(originalStatement.join(" "))
 
 //To find if the arguments passed are in braille
 if(regex.test(originalStatement[0])){
