@@ -1,12 +1,11 @@
 ------------------------
 Key assumptions
 ------------------------
-1) Braille inputs are at least 6 characters long and can only contain 'O' and '.' in any combination as long as the minimum string length is satisfied
-2) Based on research the '<', '>' and '.' (depending on situation) are used in the context of numbers. As a result when they are processed, the NUMBERFOLLOWS symbol preceeds them
-3) When the NUMBERFOLLOWS symbol appears it is assumed that the following characters are strictly numbers, with the exception being punctuations (ie. "1." OR "is it only 1?")
+1) Based on research the '<', '>' and '.' (depending on situation) are used in the context of numbers. As a result when they are processed, the NUMBERFOLLOWS symbol preceeds them
+2) When the NUMBERFOLLOWS symbol appears it is assumed that the following characters are strictly numbers, with the exception being punctuations (ie. "1." OR "is it only 1?")
    However, '.' depends on context and must be checked
-4) When there is a space, the following characters are assumed to be anything unless the NUMBERFOLLOWS appears again
-5) If a char = '.' but the next char is not a digit, then it is treated as a period. Otherwise it is treated as a decimal (will be preceeded by NUMBERFOLLOWS braille symbol )
+3) When there is a space, the following characters are assumed to be anything unless the NUMBERFOLLOWS appears again
+4) If a char = '.' but the next char is not a digit, then it is treated as a period. Otherwise it is treated as a decimal (will be preceeded by NUMBERFOLLOWS braille symbol )
    ie. If something like 1.2, then NUMBERFOLLOWS comes before the digit 1
        If something like .1, then NUMBERFOLLOWS comes before the dot 
 
@@ -19,7 +18,7 @@ Hashmaps and constants used by the translators were saved in separate files and 
 
 Any functions that were common between the translators were treated as library functions and placed in a separate file which were imported for use.
 
-In order to solve this problem I decided to break the problem into smaller pieces  that were easier to read and help with debugging. When an argument is passed into my translator functions, we check to see if it's braille based on the assumptions. In case of either function, an array is passed to the corresponding translators. Arrays were used for readability and ease to work with. For braille to english, an array where each element had 6 chars were passed and for english to braille the sentence was simply split.
+In order to solve this problem I decided to break the problem into smaller pieces  that were easier to read and help with debugging. When an argument is passed into my translator functions, we check to see if it's braille (at least 6 characters long and can only contain 'O' and '.' in any combination). In case of either function, an array is passed to the corresponding translators. Arrays were used for readability and ease to work with. For braille to english, an array where each element had 6 chars were passed and for english to braille the sentence was simply split.
 
     
 brailleToEngTranslator.ts:=>

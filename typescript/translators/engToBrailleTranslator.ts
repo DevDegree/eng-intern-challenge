@@ -1,8 +1,8 @@
-import { getConvertedChar } from "../lib/libFunctions";
-import { CAPITALFOLLOWS, NUMBERFOLLOWS, SPACEBRAILLE } from "../variables/constants";
-import { alphToBraille, digitToBraille, punctToBraille } from "../variables/mappings";
+import { getConvertedChar } from '../lib/libFunctions';
+import { CAPITALFOLLOWS, NUMBERFOLLOWS, SPACEBRAILLE } from '../variables/constants';
+import { alphToBraille, digitToBraille, punctToBraille } from '../variables/mappings';
 
-export const engllishToBraille = (englishArray: string[]): string => {
+export const englishToBraille = (englishArray: string[]): string => {
   let isNum: boolean = false; // Track when we have numbers
   let brailleStr: string = ""; // This will be the returned string
 
@@ -13,7 +13,7 @@ export const engllishToBraille = (englishArray: string[]): string => {
   };
 
   // Check context of '.' is not in number format, if not convert to braille and add to string
-  const isCharacterPeriodAndConvert = (char: string, idx: number) => {
+  const isCharacterPeriodAndConvert = (char: string, idx: number) : boolean => {
     const isNextDigit: boolean = digitToBraille.get(englishArray[idx + 1]) !== undefined;
     const isPeriod = char === "." && !isNextDigit;
     if (isPeriod) {

@@ -29,7 +29,6 @@ const alphToBraille = new Map<string, string>([
   ["y", "OO.OOO"],
   ["z", "O..OOO"],
   ["w", ".OOO.O"],
-  //   [".", "..OO.O"],
 ]);
 
 // hashmap for the numbers
@@ -62,8 +61,6 @@ const punctToBraille = new Map<string, string>([
   ["(", "O.O..O"],
   [")", ".O.OO."],
   [" ", "......"],
-  //   ["<", ".OO..O"],
-  //   [">", "O..OO."],
 ]);
 
 // REVERSE MAPPING
