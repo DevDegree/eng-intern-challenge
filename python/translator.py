@@ -1,4 +1,3 @@
-
 import sys
 
 
@@ -26,6 +25,17 @@ def is_braille(text):
 
 
 def translate(text, to_braille=True):
+    """
+    Translates text between English and Braille.
+
+    Args:
+        text (str): The text to translate.
+        to_braille (bool, optional): If True, translates from English to Braille.
+            If False, translates from Braille to English. Defaults to True.
+
+    Returns:
+        str: The translated text.
+    """
 
     translated_text = ""
     in_number_mode = False
@@ -58,6 +68,10 @@ def translate(text, to_braille=True):
             elif letter == NUMBER_FOLLOWS:
                 in_number_mode = True
                 text = text[6:]
+            elif letter == BRAILLE_ALPHABET[' ']:
+                translated_text += " "
+                in_number_mode = False
+                text = text[6:]
             else:
                 if in_number_mode:
                     translated_text += next(
@@ -77,6 +91,7 @@ def translate(text, to_braille=True):
 
 
 def main():
+    """Gets user input, translates it, and prints the result."""
 
     if len(sys.argv) < 2:
         print("Usage: python translator.py <text>")
