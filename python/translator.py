@@ -1,74 +1,70 @@
 import argparse
 
-# Binary representation of A-Z
-braille_dict = {
-    32: 'a',
-    40: 'b',
-    48: 'c',
-    52: 'd',
-    36: 'e',
-    56: 'f',
-    60: 'g',
-    44: 'h',
-    24: 'i',
-    28: 'j',
-    34: 'k',
-    42: 'l',
-    50: 'm',
-    54: 'n',
-    38: 'o',
-    58: 'p',
-    62: 'q',
-    46: 'r',
-    26: 's',
-    30: 't',
-    35: 'u',
-    43: 'v',
-    29: 'w',
-    51: 'x',
-    55: 'y',
-    39: 'z',
-    1: "CAPITAL_FOLLOWS",
-    17: "DECIMAL_FOLLOWS",
-    23: "NUMBER_FOLLOWS",
-    13: ".",
-    8: ",",
-    11: "?",
-    14: "!",
-    12: ":",
-    10: ";",
-    3: "-",
-    18: "/",
-    25: "<",
-    # 38: ">", # WARNING CLASH
-    41: "(",
-    22: ")",
-    0: "SPACE"
-}
-
-number_dict = {
-    32: '1',
-    40: '2',
-    48: '3',
-    52: '4',
-    36: '5',
-    56: '6',
-    60: '7',
-    44: '8',
-    24: '9',
-    28: '0',
-}
-
-reverse_braille_dict = {v: k for k, v in braille_dict.items()}
-reverse_number_dict = {v: k for k, v in number_dict.items()}
-
 UNKNOWN_PLACEHOLDER = "█"
 NUM_DOTS_PER_TOKEN = 6
 
-def to_braille(char):
-    binary_representation = bin(int(char))[2:]
-    padded_binary_representation = '0' * (NUM_DOTS_PER_TOKEN - len(binary_representation)) + binary_representation
-    return padded_binary_representation.replace('0', '.').replace('1', 'O')
+char_to_braille = {
+    "a": "O.....",
+    "b": "O.O...",
+    "c": "OO....",
+    "d": "OO.O..",
+    "e": "O..O..",
+    "f": "OOO...",
+    "g": "OOOO..",
+    "h": "O.OO..",
+    "i": ".OO...",
+    "j": ".OOO..",
+    "k": "O...O.",
+    "l": "O.O.O.",
+    "m": "OO..O.",
+    "n": "OO.OO.",
+    "o": "O..OO.",
+    "p": "OOO.O.",
+    "q": "OOOOO.",
+    "r": "O.OOO.",
+    "s": ".OO.O.",
+    "t": ".OOOO.",
+    "u": "O...OO",
+    "v": "O.O.OO",
+    "w": ".OOO.O",
+    "x": "OO..OO",
+    "y": "OO.OOO",
+    "z": "O..OOO",
+    ".": "..OO.O",
+    ",": "..O...",
+    "?": "..O.OO",
+    "!": "..OOO.",
+    ":": "..OO..",
+    ";": "..O.O.",
+    "-": "....OO",
+    "/": ".O..O.",
+    "<": ".OO..O",
+    # ">": "O..OO.", duplicated symbol with "o" - even with context, it's ambiguous
+    "(": "O.O..O",
+    ")": ".O.OO.",
+    " ": "......",
+    "CAPITAL_FOLLOWS": ".....O",
+    "NUMBER_FOLLOWS": ".O.OOO",
+    "DECIMAL_FOLLOWS": ".O...O"
+}
+
+number_to_braille = {
+    "1": "O.....",
+    "2": "O.O...",
+    "3": "OO....",
+    "4": "OO.O..",
+    "5": "O..O..",
+    "6": "OOO...",
+    "7": "OOOO..",
+    "8": "O.OO..",
+    "9": ".OO...",
+    "0": ".OOO..",
+    ".": "..OO.O",
+    " ": "......",
+}
+
+braille_to_char = {v: k for k, v in char_to_braille.items()}
+braille_to_number = {v: k for k, v in number_to_braille.items()}
 
 def is_braille(payload):
     for char in payload:
@@ -76,26 +72,10 @@ def is_braille(payload):
             return False
     return True
 
-def braille_to_char(token, capital_follows=False, number_follows=False):
-    token = token.replace('.', '0').replace('O', '1')
-
-    if number_follows:
-        return number_dict.get(int(token, 2), UNKNOWN_PLACEHOLDER)
-
-    if capital_follows:
-        return braille_dict.get(int(token, 2), UNKNOWN_PLACEHOLDER).upper()
-    
-    return braille_dict.get(int(token, 2), UNKNOWN_PLACEHOLDER)
-
-
 def main():
-    # Create the parser
+    # Parse arguments
     parser = argparse.ArgumentParser(description="CMD-line Braille Translator")
-
-    # Add arguments
     parser.add_argument('args', nargs='*', help='Payload to be parsed by the translator')
-
-    # Parse the arguments
     args = parser.parse_args()
 
     # Process the arguments ---------------------------------------------
@@ -103,8 +83,8 @@ def main():
     payload_is_braille = len(args.args) == 1 and is_braille(''.join(args.args)) # Optimization: terminate early if more than one continuous string is passed
     output = ""
 
-    capital_follows_toggle = False # only the next
-    number_follows_toggle = False # until the next space
+    capital_follows_toggle = False # only the next char
+    number_follows_toggle = False # every char until the next space
 
     if payload_is_braille:
         payload = args.args[0]
@@ -114,8 +94,7 @@ def main():
             start = i * NUM_DOTS_PER_TOKEN
             end = start + NUM_DOTS_PER_TOKEN # exclusive
             token = payload[start:end]
-            
-            translated = braille_to_char(token)
+            translated = braille_to_char[token]
 
             if translated == "CAPITAL_FOLLOWS":
                 capital_follows_toggle = True
@@ -125,37 +104,43 @@ def main():
                 number_follows_toggle = True
                 continue
 
-            if translated == "SPACE":
+            if translated == " ":
                 output += " "
                 number_follows_toggle = False
                 continue
-            
-            output += braille_to_char(token, capital_follows_toggle, number_follows_toggle)
 
             if capital_follows_toggle:
+                output += translated.upper()
                 capital_follows_toggle = False
+                continue
 
+            if number_follows_toggle:
+                output += braille_to_number[token]
+                continue
+
+            output += translated
     else:
         payload = ' '.join(args.args)
-
         for char in payload:
             if char == ' ':
-                output += to_braille(reverse_braille_dict.get("SPACE", UNKNOWN_PLACEHOLDER))
                 number_follows_toggle = False
-                continue
+                output += char_to_braille[char]
 
-            if char.isdigit() and not number_follows_toggle:
-                number_follows_toggle = True
-                output += to_braille(reverse_braille_dict.get("NUMBER_FOLLOWS", UNKNOWN_PLACEHOLDER))
-                output += to_braille(reverse_number_dict.get(char, UNKNOWN_PLACEHOLDER))
-                continue
+            elif char.isdigit():
+                if number_follows_toggle:
+                    output += number_to_braille[char]
+                else:
+                    number_follows_toggle = True
+                    output += char_to_braille["NUMBER_FOLLOWS"]
+                    output += number_to_braille[char]
 
-            if char.isupper():
-                output += to_braille(reverse_braille_dict.get("CAPITAL_FOLLOWS", UNKNOWN_PLACEHOLDER))
-                char = char.lower()
+            elif char.isupper():
+                output += char_to_braille["CAPITAL_FOLLOWS"]
+                output += char_to_braille[char.lower()]
+            
+            else:
+                output += char_to_braille[char]
 
-            output += to_braille(reverse_braille_dict.get(char, UNKNOWN_PLACEHOLDER))
-    
     print(output)
 
 if __name__ == "__main__":
