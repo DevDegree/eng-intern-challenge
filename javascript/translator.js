@@ -104,6 +104,11 @@ const brailleConverter = (input) => {
         continue;
        }
 
+       if (substring === '......') { //check for space
+        newString += ' '; 
+        continue; 
+       }
+
        let translatedCharacter = brailleToEnglish[substring] || '';
 
        if(capitalize) {
