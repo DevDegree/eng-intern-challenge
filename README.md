@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Eng Intern Challenge Fall - Winter 2025
 
 # **Note: In order for our submission automation to function correctly:**
@@ -75,3 +76,7 @@ Upon completion of the challenge, create a PR of your work and compare it agains
 - Do not apply any labels on your PR. We will mark your PR as `reviewed` with a label when it has been so. Marking this yourself will cause your PR to be skipped.
 
 This repo is designed to run a unit test against your work to ensure the correct string is outputted to the console when executing your code. 
+=======
+Contained within these files is my submission for Shopify's winter 2025 challenge. Briefly, this project takes strings as input in the command line
+and then translates them to Braille/English if possible. 
+>>>>>>> cdf2b117af0a88a14ed333cb8d2299640841c682
