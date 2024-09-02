@@ -37,14 +37,16 @@ english_to_braille = {
 }
 
 def verify_braille(input_string):
-    return 42
+    for char in input_string:
+        if char not in ('.', 'O'):
+            return False
+    return True
 
 def braille_to_eng(braille_string):
     return 42
 
 
 def eng_to_braille(english_string):
-    """Translate English input to Braille without spaces between chunks."""
     return 42
 
 def main():
