@@ -72,16 +72,18 @@ def english_to_braille(text):
 
         if char.isdigit():
             if not numbers_next:
+                # if the next char is a number, then add a number indicator before adding the number 
                 braille += BRAILLE_ALPHABET['number']
                 numbers_next = True
             braille += BRAILLE_ALPHABET[char]
+
         # if the charcater is capitalised, then add braille capital indicator before adding that character
         else:
             numbers_next = False
             if char.isupper():
                 braille += BRAILLE_ALPHABET['capital']
                 char = char.lower()
-            # if the next char is a number, then add a number indicator before adding the number 
+            
             braille += BRAILLE_ALPHABET.get(char, '')# return '' if key not found
 
     return braille
