@@ -60,7 +60,7 @@ def translate_to_english(braille):
                 if is_number:
                     char = str(ord(char) - ord('a') + 1)
                 result.append(char)
-                is_number = False  # Reset after each valid character
+                is_number = False  
         
         i += 6
     return ''.join(result)
