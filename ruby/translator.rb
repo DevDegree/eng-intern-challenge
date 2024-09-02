@@ -17,11 +17,11 @@ def brailie_to_english(brailie)
     result = ''
     number_mode = false
     capitalize_next = false
-    validate_brailie_input(brailie)
+    #validate_brailie_input(brailie)
     brailie.tr('^O.', '').scan(/.{6}/).each do |symbol|
         if symbol == Capital_Prefix
             capitalize_next = true
-        elsif symbol = Number_Prefix
+        elsif symbol == Number_Prefix
             number_mode = true
         else
             char = Brailie_Mapping.key(symbol)
@@ -35,7 +35,7 @@ def brailie_to_english(brailie)
                 else
                     result  = result + char
                 end
-                number_mode = false if !('a..j').include?(char)
+                number_mode = false if !('a'..'j').include?(char)
             else
                 result = result + '?'
             end
@@ -44,7 +44,7 @@ def brailie_to_english(brailie)
     result
 end
 
-def english_to_brailie(text){
+def english_to_brailie(text)
     result = ''
     number_mode = false
     text.each_char do |char|
@@ -70,10 +70,9 @@ if ARGV.empty?
     exit
 end
 input = ARGV.join(" ")
-if input.match(/^[O.\s]+$/)
+if input.match?(/^[O.\s]+$/)
     output = brailie_to_english(input)
 else
     output = english_to_brailie(input)
 end
 puts output
-}
