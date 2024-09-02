@@ -1,7 +1,6 @@
-
 import sys
 
-# Braille mapping 
+# Braille mapping
 braille_dict = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..', 'f': 'OOO...', 
     'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..', 'k': 'O...O.', 'l': 'O.O.O.', 
@@ -16,7 +15,7 @@ braille_dict = {
 # Reverse dictionary for English lookup
 english_dict = {v: k for k, v in braille_dict.items()}
 
-def braille_english(braille_text):
+def translate_braille_to_english(braille_text: str) -> str:
     words = braille_text.split(' ')
     translated = []
     is_number = False
@@ -40,7 +39,7 @@ def braille_english(braille_text):
         translated.append(''.join(translated_word))
     return ' '.join(translated)
 
-def english_braille(english_text):
+def translate_english_to_braille(english_text: str) -> str:
     translated = []
     for ch in english_text:
         if ch.isdigit():
@@ -49,18 +48,19 @@ def english_braille(english_text):
             translated.append(braille_dict['cap'] + braille_dict[ch.lower()])
         else:
             translated.append(braille_dict[ch.lower()])
-    return ' '.join(translated)
+    return ''.join(translated)
 
-def check_translate(input_text):
+def detect_and_translate(input_text: str) -> str:
     if set(input_text) <= {'O', '.', ' '}:
-        return braille_english(input_text)
+        return translate_braille_to_english(input_text)
     else:
-        return english_braille(input_text)
+        return translate_english_to_braille(input_text)
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print("Usage: python translator.py '<input_text>'")
+    if len(sys.argv) < 2:
+        print("Usage: python translator.py <input_text>")
         sys.exit(1)
     
-    input_text = sys.argv[1]
-    print(check_translate(input_text))
+    # Join all arguments into a single string with spaces
+    input_text = ' '.join(sys.argv[1:])
+    print(detect_and_translate(input_text))
