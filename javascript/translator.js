@@ -2,64 +2,64 @@
 
 const brailleMap = {
 	// Letters
-	a: '0.....',
-	b: '00....',
-	c: '0..0..',
-	d: '00.0..',
-	e: '0..0..',
-	f: '000...',
-	g: '0000..',
-	h: '0.00..',
-	i: '.00...',
-	j: '.000..',
-	k: '0...0.',
-	l: '0.0.0.',
-	m: '00..0.',
-	n: '00.00.',
-	o: '0..00.',
-	p: '000.0.',
-	q: '00000.',
-	r: '0.000.',
-	s: '.00.0.',
-	t: '.0000.',
-	u: '0...00',
-	v: '0.0.00',
-	w: '.000.0',
-	x: '00..00',
-	y: '00.000',
-	z: '0..000',
+	a: 'O.....',
+	b: 'OO....',
+	c: 'O..O..',
+	d: 'OO.O..',
+	e: 'O..O..',
+	f: 'OOO...',
+	g: 'OOOO..',
+	h: 'O.OO..',
+	i: '.OO...',
+	j: '.OOO..',
+	k: 'O...O.',
+	l: 'O.O.O.',
+	m: 'OO..O.',
+	n: 'OO.OO.',
+	o: 'O..OO.',
+	p: 'OOO.O.',
+	q: 'OOOOO.',
+	r: 'O.OOO.',
+	s: '.OO.O.',
+	t: '.OOOO.',
+	u: 'O...OO',
+	v: 'O.O.OO',
+	w: '.OOO.O',
+	x: 'OO..OO',
+	y: 'OO.OOO',
+	z: 'O..OOO',
 
 	// Numbers
-	1: '0.....',
-	2: '0.0...',
-	3: '00....',
-	4: '00.0..',
-	5: '0..0..',
-	6: '000...',
-	7: '0000..',
-	8: '0.00..',
-	9: '.00...',
-	0: '.000..',
+	1: 'O.....',
+	2: 'O.O...',
+	3: 'OO....',
+	4: 'OO.O..',
+	5: 'O..O..',
+	6: 'OOO...',
+	7: 'OOOO..',
+	8: 'O.OO..',
+	9: '.OO...',
+	O: '.OOO..',
 
 	// ...Follows
-	CAPITAL: '.....0',
-	DECIMAL: '.0...0',
-	NUMBER: '.0.000',
+	CAPITAL: '.....O',
+	DECIMAL: '.O...O',
+	NUMBER: '.O.OOO',
 
 	// Special Characters
-	'.': '..00.0',
-	',': '..0...',
-	'?': '..0.00',
-	'!': '..000.',
-	':': '..00..',
-	';': '..0.0.',
-	'-': '....00',
-	'/': '.0..0.',
-	'<': '.00..0',
-	'>': '0..00.',
-	'(': '0.0..0',
-	')': '.0.00.',
-	space: '......',
+	'.': '..OO.O',
+	',': '..O...',
+	'?': '..O.OO',
+	'!': '..OOO.',
+	':': '..OO..',
+	';': '..O.O.',
+	'-': '....OO',
+	'/': '.O..O.',
+	'<': '.OO..O',
+	'>': 'O..OO.',
+	'(': 'O.O..O',
+	')': '.O.OO.',
+	' ': '......',
 };
 
 // Reverse mapping for Braille to English
@@ -68,18 +68,28 @@ const reverseBrailleMap = Object.fromEntries(
 );
 
 function englishToBraille(englishInput) {
-	let result = '';
-	for (let char of englishInput) {
-		if (char === char.toUpperCase() && char !== ' ') {
-			result += brailleMap.CAPITAL;
-		}
-		if (!isNaN(char)) {
-			result += brailleMap.NUMBER;
-		}
-		result += brailleMap[char.toLowerCase()] || ''; // Convert to lowercase for mapping
-	}
-	return result;
+    let result = '';
+    let isPreviousCharNumber = false;
+
+    for (let char of englishInput) {
+        if (!isNaN(char) && char !== ' ') {
+            if (!isPreviousCharNumber) {
+                result += brailleMap.NUMBER;
+                isPreviousCharNumber = true;
+            }
+            result += brailleMap[char]; // No need to convert to lowercase for numbers
+        } else {
+            if (char === char.toUpperCase() && char !== ' ') {
+                result += brailleMap.CAPITAL;
+            }
+            result += brailleMap[char.toLowerCase()] || ''; // Convert to lowercase for letters
+            isPreviousCharNumber = false;
+        }
+    }
+
+    return result;
 }
+
 
 function brailleToEnglish(brailleInput) {
 	let result = '';
@@ -109,4 +119,22 @@ function brailleToEnglish(brailleInput) {
 		result += englishChar || ''; // Fallback in case of unmatched Braille pattern
 	}
 	return result;
+}
+
+// Function to check if input is Braille or English
+function detectInputType(input) {
+	return input.match(/^[01.O]*$/) ? 'braille' : 'english';
+}
+
+// Main function to translate input based on detected type
+function translate(input) {
+	const inputType = detectInputType(input);
+	return inputType === 'braille'
+		? brailleToEnglish(input)
+		: englishToBraille(input);
+}
+
+if (require.main === module) {
+    const input = process.argv.slice(2).join(" "); // Capture command line arguments as a single string
+    console.log(translate(input)); // Run the translation and print the result
 }
