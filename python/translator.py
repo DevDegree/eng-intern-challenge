@@ -1,4 +1,5 @@
 import sys
+from alphabets import english_alphabet
 
 
 def detect_language(input_list):
@@ -26,6 +27,35 @@ def detect_language(input_list):
     return 1
 
 
+def english_to_braille(sentence):
+    num_added = False
+    result = ""
+    for character in sentence:
+        if (character.isdigit() and not num_added):
+            num_added = True
+            result += english_alphabet['digit']
+
+        if (character == ' '):
+            num_added = False
+
+        result += english_alphabet[character]
+
+    return result
+
+
+def merge_english_words(english_words):
+    '''
+    '''
+    result = ""
+    for i in range(len(english_words)):
+        result += english_words[i]
+
+        if (i != (len(english_words) - 1)):
+            result += " "
+
+    return result
+
+
 if __name__ == "__main__":
     if (len(sys.argv) <= 1):
         print("Error: Not enough arguments.")
@@ -34,3 +64,13 @@ if __name__ == "__main__":
         print("\t- python3 translator.py hello world")
         print("\t- python3 translator.py .O.OOOOO.O..O.O...")
         exit()
+
+    language = detect_language(sys.argv[1:])
+
+    if (language): # is Braille
+        pass
+
+    else: # is English 
+        sentence = merge_english_words(sys.argv[1:])
+        print(english_to_braille(sentence))
+
