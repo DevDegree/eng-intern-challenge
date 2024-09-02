@@ -1,13 +1,3 @@
-# Requirements: 
-'''
-EDGE CASES: 
-    - decimal follows symbol - need to make sure that you use the decimal symbol not just period when you're translating a decimal from English to Braille
-        this also has to work when you do numbers like .65 where there is no number before the decimal follows symbol. This should translate to decmial follows, 6, 5. 
-    - string that is all O and . and length multiple of 6 but is not valid Braille - should just read it as English after trying Braille in that case
-
-
-'''
-
 # Imports
 import sys
 
@@ -96,7 +86,6 @@ BRAILLE_TO_DIGITS = {
 }
 
 BRAILLE_CAPITAL_FOLLOWS = ".....O"
-BRAILLE_DECIMAL_FOLLOWS = ".O...O"
 BRAILLE_NUMBER_FOLLOWS = ".O.OOO"
 BRAILLE_SPACE = "......"
 BRAILLE_INVALID_STRING = "Invalid braille string"
