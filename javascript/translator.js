@@ -87,7 +87,7 @@ function englishToBraille(englishInput) {
 		}
 	}
 
-	console.log('English to Braille Result:', result); // Debugging output
+	// console.log('English to Braille Result:', result); // Debugging output
 	return result;
 }
 
@@ -99,7 +99,7 @@ function brailleToEnglish(brailleInput) {
 	let isSpace = false;
 
 	for (let brailleChar of brailleChars) {
-		console.log(`Processing Braille Character: ${brailleChar}`); // Debugging output
+		// console.log(`Processing Braille Character: ${brailleChar}`); // Debugging output
 
 		if (brailleChar === brailleMap.CAPITAL) {
 			isCapital = true;
@@ -128,11 +128,11 @@ function brailleToEnglish(brailleInput) {
 				)?.[0] || '';
 		}
 
-		console.log(`Detected English Character: ${englishChar}`); // Debugging output
+		// console.log(`Detected English Character: ${englishChar}`); // Debugging output
 		result += englishChar || ''; // Fallback in case of unmatched Braille pattern
 	}
 
-	console.log('Final Result:', result); // Debugging output
+	// console.log('Final Result:', result); // Debugging output
 	return result;
 }
 
@@ -144,7 +144,7 @@ function detectInputType(input) {
 // Main function to translate input based on detected type
 function translate(input) {
 	const inputType = detectInputType(input);
-	console.log('Detected Input Type:', inputType); // Debugging output
+	// console.log('Detected Input Type:', inputType); // Debugging output
 	return inputType === 'braille'
 		? brailleToEnglish(input)
 		: englishToBraille(input);
@@ -152,6 +152,6 @@ function translate(input) {
 
 if (require.main === module) {
 	const input = process.argv.slice(2).join(' '); // Capture command line arguments as a single string
-	console.log('Input:', input); // Debugging output
+	// console.log('Input:', input); // Debugging output
 	console.log(translate(input)); // Run the translation and print the result
 }
