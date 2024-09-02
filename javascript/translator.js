@@ -36,7 +36,7 @@ const braille = {
     "7": "OOOO..",
     "8": "O.OO..",
     "9": ".OO...",
-    "O": ".OOO..",
+    "0": ".OOO..",
     " ": "......",
 };
 
@@ -57,17 +57,30 @@ const translateFromBraille = (userInput) => {
     const capitalMarker = ".....O";
     const numericMarker = ".O.OOO";
     let isCapital = false;
+    let isNumber = false;
+
     let result = "";
     const chunks = userInput.match(/.{1,6}/g);
     const alphabet = Object.fromEntries(Object.entries(braille).map(([k, v]) => [v, k]));
-    chunks.map(chunk => {
+    chunks.forEach(chunk => {
         if (chunk === numericMarker) {
-            null;
+            isNumber = true;
         } else if (chunk === capitalMarker) {
             isCapital = true;
         } else if (isCapital) {
             result+=alphabet[chunk].toUpperCase();
             isCapital = false;
+        } else if (isNumber && chunk !== "......") {
+            const nextValue = Object.keys(braille).find(key => braille[key] === chunk && !isNaN(key))
+            if (nextValue !== undefined) {
+                result+=nextValue;
+            } else {
+                result+=alphabet[chunk];
+                isNumber = false;
+            }
+        } else if (chunk === "......") {
+            result+=alphabet[chunk];
+            isNumber = false;
         } else {
             result+=alphabet[chunk];
         }
@@ -85,7 +98,7 @@ const translateFromEnglish = (userInput) => {
     let isNumberSequence = false;
     let result = "";
 
-    chars.map(char => {
+    chars.forEach(char => {
         if (isCapital.test(char)) {
             result+=".....O";
             isNumberSequence = false;
