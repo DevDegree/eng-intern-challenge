@@ -19,7 +19,8 @@ def english_to_braille(text, braille_alphabet)
   in_number_mode = false
   text.each_char do |char|
     if char =~ /[A-Z]/
-      output += braille_alphabet["capital"] + braille_alphabet[char.downcase]
+      output += braille_alphabet["capital"]
+      output += braille_alphabet[char.downcase]
     elsif char =~ /\d/
       unless in_number_mode
         output += braille_alphabet["number"]
@@ -43,6 +44,7 @@ def braille_to_english(braille, braille_alphabet)
 
   while i < braille.length
     current_symbol = braille[i, 6]
+
     if current_symbol == braille_alphabet["capital"]
       capitalize_next = true
       i += 6
