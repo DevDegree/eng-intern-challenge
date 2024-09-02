@@ -35,6 +35,7 @@ def create_braille_alphabet_bidict():
     braille_alphabet_bidict.add("x", "OO..OO")
     braille_alphabet_bidict.add("y", "OO.OOO")
     braille_alphabet_bidict.add("z", "O..OOO")
+
     return braille_alphabet_bidict
 
 def create_braille_numerical_bidict():
@@ -49,7 +50,17 @@ def create_braille_numerical_bidict():
     braille_numerical_bidict.add("8", "O.OO..")
     braille_numerical_bidict.add("9", ".OO...")
     braille_numerical_bidict.add("0", ".OOO..")
+
     return braille_numerical_bidict
+
+# Gets input from terminal
+def get_system_arguments(args):
+    text = ""
+    for i in range(1,len(args) - 1):
+        text += args[i] + " "
+    text += args[len(args) - 1]
+
+    return text
 
 '''
 In Braille Alphabet in the technical requirements it does not state that '.' can be a vaild alphabet input in this program
@@ -65,22 +76,21 @@ def vaild_braille(text):
     for c in text:
         if (c != '.') and (c != 'O'):
             return False
+        
     return len(text) % 6 == 0
 
+'''
+Criteria needed for a vaild english text(Braille Alphabet) are:
+    1. Letters a through z(lowercase and uppercase)
+    2. Numbers 0 through 9
+    3. Spaces
+'''
 def vaild_english(text):
     for c in text:
         if not (c.isalpha() or c.isdigit() or c == " "):
             return False
+        
     return True
-
-# Gets input from terminal
-def get_system_arguments(args):
-    text = ""
-    for i in range(1,len(args) - 1):
-        text += args[i] + " "
-    text += args[len(args) - 1]
-
-    return text
 
 def convert_brallie_to_english(text, braille_alphabet_bidict, braille_numerical_bidict):
     english = ""
@@ -129,7 +139,6 @@ def convert_english_to_brallie(text, braille_alphabet_bidict, braille_numerical_
     
     return full_brallie
 
-
 # Runs the Translator
 def main():
     text = get_system_arguments(sys.argv)
@@ -142,6 +151,34 @@ def main():
     else:
         print("Invaild input in terminal")
 
-
 if __name__ == "__main__":
     main() 
+
+
+'''
+Test Cases:
+
+English to Braille:
+1. "Hello world" -> ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."  -> Correct
+2. "42"          -> ".O.OOOOO.O..O.O..."                                                        -> Correct
+3. "Abc 123"     -> ".....OO.....O.O...OO...........O.OOOO.....O.O...OO...."                    -> Correct
+4. "HeLLo"       -> ".....OO.OO..O..O.......OO.O.O......OO.O.O.O..OO."                          -> Correct
+5. "123 456"     -> ".O.OOOO.....O.O...OO...........O.OOOOO.O..O..O..OOO..."                    -> Correct
+6. "1 "          -> ".O.OOOO..........."                                                        -> Correct NOTE: Make sure to quote it the input like python3 translator.py "1 ". If you don't do that it will skip the trailling space. The actually quotes "" wont't be included in the input argumnets due to the way Python3 handles it.
+7. " "           -> "......"                                                                    -> Correct NOTE: Make sure to quote it the input like python3 translator.py " ". If you don't do that it will skip the space. The actually quotes "" wont't be included in the input argumnets due to the way Python3 handles it.                            
+
+Braille to English:
+1. ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.." -> "Hello world"  -> Correct
+2. ".O.OOOOO.O..O.O..."                                                       -> "42"           -> Correct
+3. ".....OO.....O.O...OO...........O.OOOO.....O.O...OO...."                   -> "Abc 123"      -> Correct
+4. ".....OO.OO..O..O.......OO.O.O......OO.O.O.O..OO."                         -> "HeLLo"        -> Correct
+5. ".O.OOOO.....O.O...OO...........O.OOOOO.O..O..O..OOO..."                   -> "123 456"      -> Correct
+6. ".O.OOOO..........."                                                       -> "1 "           -> Correct
+7. "......"                                                                   -> " "            -> Correct
+
+Invaild Inputs:
+1. "Hello .....OO"   -> "Invaild input in terminal" -> Correct
+2. "23/ 97g"         -> "Invaild input in terminal" -> Correct
+3. "" 
+
+'''
