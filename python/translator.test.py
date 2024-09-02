@@ -1,5 +1,6 @@
 import unittest
 import subprocess
+import translator
 
 class TestTranslator(unittest.TestCase):
     def test_output(self):
