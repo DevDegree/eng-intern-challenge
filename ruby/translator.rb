@@ -1,4 +1,6 @@
-Brailie_Mapping = {'a' => 'O.....',  'b' => 'O.O...', 'c' => 'OO....', 'd' => 'OO.O..', 'e' => 'O..O..',
+# I'm mapping the characters to their brailie representation
+Brailie_Mapping = {
+  'a' => 'O.....', 'b' => 'O.O...', 'c' => 'OO....', 'd' => 'OO.O..', 'e' => 'O..O..',
   'f' => 'OOO...', 'g' => 'OOOO..', 'h' => 'O.OO..', 'i' => '.OO...', 'j' => '.OOO..',
   'k' => 'O...O.', 'l' => 'O.O.O.', 'm' => 'OO..O.', 'n' => 'OO.OO.', 'o' => 'O..OO.',
   'p' => 'OOO.O.', 'q' => 'OOOOO.', 'r' => 'O.OOO.', 's' => '.OO.O.', 't' => '.OOOO.',
@@ -10,14 +12,17 @@ Brailie_Mapping = {'a' => 'O.....',  'b' => 'O.O...', 'c' => 'OO....', 'd' => 'O
   ';' => '..O.O.', ':' => '..OO..', '(' => 'O.O..O', '<' => '.OO..O', '>' => 'O..OO.',
   ')' => '.O.OO.', '/' => '.O..O.'
 }
-Capital_Prefix = '.....O'
-Number_Prefix = '.O.OOO'
+#Indication them outside for syntactical sugar 
+Capital_Prefix = '.....O' # Indicates that next character is capitalized
+Number_Prefix = '.O.OOO' # It will indicate the start of a number sequence
 
 def brailie_to_english(brailie)
     result = ''
-    number_mode = false
-    capitalize_next = false
+    number_mode = false # It will track if we are in a number sequence
+    capitalize_next = false # It will track if next character shoule be capitalized
     #validate_brailie_input(brailie)
+
+    # It will process each 6- character brailie symbol
     brailie.tr('^O.', '').scan(/.{6}/).each do |symbol|
         if symbol == Capital_Prefix
             capitalize_next = true
@@ -27,6 +32,7 @@ def brailie_to_english(brailie)
             char = Brailie_Mapping.key(symbol)
             if char
                 if number_mode && ('a'..'j').include?(char)
+                    # this will convert letter a-j to numbers 1-0 in number mode
                     num = (char.ord - 'a'.ord + 1) % 10
                     result = result + num.to_s
                 elsif capitalize_next
@@ -35,8 +41,10 @@ def brailie_to_english(brailie)
                 else
                     result  = result + char
                 end
+                # Now we will exit number mode if the character isn't a-j
                 number_mode = false if !('a'..'j').include?(char)
             else
+                # using '?' for unknown brailie symbols
                 result = result + '?'
             end
         end
@@ -49,9 +57,11 @@ def english_to_brailie(text)
     number_mode = false
     text.each_char do |char|
         if char.match?(/[A-Z]/)
+            # Adding capital prefix for uppercase
             result = result + Capital_Prefix + (Brailie_Mapping[char.downcase] || Brailie_Mapping[' '])
             number_mode = false
         elsif char.match?(/[0-9]/)
+            #adding number prefix before the first digit in a sequende
             unless number_mode
                 result = result + Number_Prefix
                 number_mode = true
@@ -65,19 +75,24 @@ def english_to_brailie(text)
     result 
 end
 
+# Here we check if CLI arguments are provided
 if ARGV.empty?
     puts "Please provide some input"
     exit
 end
+
+#Joining all the CLI arguments int a single string
 input = ARGV.join(" ")
 begin   
+    # We are determining if the input is brailie ('O', '.', and spaces)
     if input.match?(/^[O.\s]+$/)
         output = brailie_to_english(input)
     else
         output = english_to_brailie(input)
     end
     puts output
-rescue ArgumentError => e
+rescue => e
+    #Erros that occur during processing are catched and reported
     puts "Error: #{e.message}"
     exit 1
 end
