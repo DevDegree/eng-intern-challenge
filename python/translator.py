@@ -1,4 +1,5 @@
 import textwrap
+import sys
 
 braille_dict = {
     "O....." : 'a',
@@ -130,7 +131,7 @@ def translate_to_braille(english):
             for key, value in braille_numbers.items():
                 if value == char:
                     braille.append(key)
-                    
+
         elif char in braille_special.values():
             for key, value in braille_special.items():
                 if value == char:
@@ -139,10 +140,11 @@ def translate_to_braille(english):
 
 if __name__ == "__main__":
     # input text in terminal
-    text = input("Enter text: ")
-    if set(text).issubset({'O', '.', ' '}):
-        english = translate_to_english(text)
-        print(english)
-    else:
-        braille = translate_to_braille(text)
-        print(braille)
+    if len(sys.argv) > 1:
+        text = ' '.join(sys.argv[1:])
+        if set(text).issubset({'O', '.', ' '}):
+            english = translate_to_english(text)
+            print(english)
+        else:
+            braille = translate_to_braille(text)
+            print(braille)
