@@ -1,6 +1,6 @@
 import sys
-from collections import Counter
 
+# Dictionary to convert English to Braille
 braille_dict = {
     'a': 'O.....',
     'b': 'O.O...',
@@ -41,14 +41,15 @@ braille_dict = {
     '8': 'O.OO..',
     '9': '.OO...',
     
-    # Special indicators
+    # Indicators
     'capital_follows': '.....O',
     'number_follows': '.O.OOO',
+
     # Space
     ' ': '......'
 }
 
-
+# Dictionary to convert Braille to English
 english_dict = {
     'O.....': ['a','1'],
     'O.O...': ['b','2'],
@@ -77,15 +78,17 @@ english_dict = {
     'OO.OOO': 'y',
     'O..OOO': 'z',
 
+    # Indicators
     '.....O': 'capital_follows',
     '.O.OOO': 'number_follows',
 
+    # Space
     '......': ' ',
 }
 
 
 def brailleToEnglish(s):
-
+    # Converts a Braille string into its English Equivalent
     englishString = ""
     n = len(s)//6
     is_number = False
@@ -96,25 +99,31 @@ def brailleToEnglish(s):
         return 0
     try:
         for i in range(n):
+            # Gets the 6 digit braille code
             sub_str = s[i*6: i*6+6]
             
+            # If space is identified, then add space and change is_number to True
             if(english_dict[sub_str] == " "):
                 englishString += " "
                 is_number = False
                 continue
             
+            # If number_follows code is identified, sets is_number to True 
             if english_dict[sub_str] == "number_follows":
                 is_number = True
                 continue
-        
+            
+            # if capital_follows is identified, sets is_capital to True
             if english_dict[sub_str] == "capital_follows":
                 is_capital = True
                 continue
             
+            # if is_number is True, then all the following codes are numbers, until we hit a space
             if is_number == True:
                 englishString += english_dict[sub_str][1]
                 continue
             
+            # This adds the aplhabets to the string. If is_capital is True, only the next alphabet is capitalized. 
             if is_capital == True:
                 englishString += english_dict[sub_str][0].upper()
                 is_capital = False
@@ -127,7 +136,7 @@ def brailleToEnglish(s):
 
 def engToBraille(s):
     
-    # For english string
+    # Converts an English String into its Braille Equivalent
     brailleString = ""
     slist = s.split()
     n = len(slist)
@@ -135,11 +144,9 @@ def engToBraille(s):
         for i in range(n):
             
             if slist[i][0].isalpha():
-                brailleString += stringToBraile(slist[i])
+                brailleString += stringToBraille(slist[i])
             elif slist[i][0].isdigit():
-                brailleString += numberToBraile(slist[i])
-            # else:
-            #     brailleString += decimalToBraile(slist[i])
+                brailleString += numberToBraille(slist[i])
             
             if i!=n-1:
                 brailleString += braille_dict[' ']
@@ -147,9 +154,9 @@ def engToBraille(s):
     except Exception as e:
         print(f"Input string incorrect {e} was used")
 
-def stringToBraile(string):
+def stringToBraille(string):
+    # Converts a given string into its Braille equivalent
     s = ""
-
     for i in range(len(string)):
         if string[i].isupper():
             s += braille_dict['capital_follows']
@@ -157,7 +164,8 @@ def stringToBraile(string):
         s += braille_dict[string[i].lower()]
     return s
 
-def numberToBraile(number):
+def numberToBraille(number):
+    # Converts a given number into its Braille equivalent
     s = ""
     s += braille_dict['number_follows']
     for i in range(len(number)):
@@ -169,9 +177,9 @@ def numberToBraile(number):
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        # Join all arguments after the script name into a single string
+        # Create input_string, by taking input from user through standard input
         input_string = ' '.join(sys.argv[1:])
-        # freq = Counter(input_string)
+        
         if '.' in input_string:
             brailleToEnglish(input_string)
         else:
