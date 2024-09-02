@@ -5,13 +5,11 @@ import { alphToBraille, digitToBraille, punctToBraille } from "../variables/mapp
 export const engllishToBraille = (englishArray: string[]): string => {
   let isNum: boolean = false; // Track when we have numbers
   let brailleStr: string = ""; // This will be the returned string
-  let isNumIdentifierOn = false; // Track when we have the number follows set
 
   const periodToBraille = (char: string) => {
     const period = getConvertedChar(char, punctToBraille);
     brailleStr += period;
     isNum = false;
-    isNumIdentifierOn = false;
   };
 
   // Check context of '.' is not in number format, if not convert to braille and add to string
@@ -31,20 +29,18 @@ export const engllishToBraille = (englishArray: string[]): string => {
   for (let ii = 0; ii < englishArray.length; ii++) {
     const char: string = englishArray[ii];
 
-    if (digitToBraille.has(char) && !isNumIdentifierOn) {
+    if (digitToBraille.has(char) && !isNum) {
       // Check context of '.' is not in number format, if not convert to braille and add to string
       if (isCharacterPeriodAndConvert(char, ii)) {
         continue;
       }
       isNum = true;
-      isNumIdentifierOn = true;
       brailleStr += NUMBERFOLLOWS;
     }
 
     if (char === " ") {
       brailleStr += SPACEBRAILLE;
       isNum = false;
-      isNumIdentifierOn = false;
       continue;
     }
 

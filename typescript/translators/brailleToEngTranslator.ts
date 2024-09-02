@@ -26,7 +26,7 @@ export const brailleToEnglish = (brailleArray: string[]): string => {
       continue;
     }
 
-    // Check punctation. Since its independent of capital or number flags set (1?, a!, HEY!, a1!)
+    // Check punctation (appears regardless of isNum or isCapital)
     if (brailleToPunct.has(brailleCell)) {
       engStr += getConvertedChar(brailleCell, brailleToPunct);
       continue;
