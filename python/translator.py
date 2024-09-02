@@ -43,7 +43,7 @@ punctuation_to_braille = {
     '>': 'O..OO.',  # Arrow Right
     '/': '.O..O.',  # Slash
 }
-
+# Reverse mapping from above dictionaries
 letters_from_braille = {v: k for k, v in english_to_braille.items()}
 numbers_from_braille = {v: k for k, v in numbers_to_braille.items()}
 punctuation_from_braille = {v: k for k, v in punctuation_to_braille.items()}
@@ -76,10 +76,9 @@ def translate_to_braille(text):
             result.append(numbers_to_braille[char])
         else:
             if char in punctuation_to_braille and number_mode == True:
+                # Add decimal marker and decimal if number
                 result.append(special_symbols_to_braille['decimal'])
                 result.append(punctuation_to_braille['.'])
-
-              # Reset number mode when encountering a non-digit
             
             elif char in english_to_braille:
                 number_mode = False
@@ -92,7 +91,7 @@ def translate_to_braille(text):
                 result.append(space_to_braille[char])
             else:
                 number_mode = False
-                result.append('')  # Handle any unexpected input gracefully
+                result.append('')  # Handle any unexpected input
 
     return ''.join(result)
 
@@ -106,9 +105,10 @@ def translate_to_english(braille):
     decimal_mode = False
 
     while i < length:
-        braille_char = braille[i:i+6]
+        braille_char = braille[i:i+6] # Chunk of characters representing one braille symbol
 
         if braille_char in special_symbols_from_braille:
+            # Different modes depending on conditions
             if special_symbols_from_braille[braille_char] == 'capital':
                 capital_mode = True
             elif special_symbols_from_braille[braille_char] == 'number':
@@ -119,11 +119,14 @@ def translate_to_english(braille):
             continue
 
         if number_mode:
+            # Prints number
             if braille_char in numbers_from_braille:
                 char = numbers_from_braille[braille_char]
             elif braille_char == '..OO.O' and decimal_mode == True:
+                # Prints decimal within number
                 char = '.'
             elif braille_char  == '......':
+                # Space; turns off number mode
                 number_mode = False  # Exit number mode if the character isn't a number
                 char = space_from_braille.get(braille_char, ' ')
         else:
@@ -134,7 +137,7 @@ def translate_to_english(braille):
             elif braille_char in space_from_braille:
                 char = space_from_braille[braille_char]
             else:
-                char = ''  # Handle any unexpected input gracefully
+                char = ''  # Handle any unexpected input
 
         if capital_mode:
             char = char.upper()
@@ -148,21 +151,19 @@ def translate_to_english(braille):
 # Main function to run the translator
 def main():
     if len(sys.argv) < 2:
+        # Error handling
         print("Usage: python braille.py Enter text")
         sys.exit(1)
     
     input_str = sys.argv[1]
     
-    # Assuming translate_to_braille and translate_to_english functions are defined
-    # For example, if you want to translate to Braille:
-    
     if detect_input_type(input_str) == 'english':
         braille_translation = translate_to_braille(input_str)
         print(braille_translation)
     else:
-        # Or if you want to translate from Braille to English:
         english_translation = translate_to_english(input_str)
         print(english_translation)
 
 if __name__ == "__main__":
     main()
+    
