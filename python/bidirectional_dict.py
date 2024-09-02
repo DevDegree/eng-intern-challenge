@@ -1,4 +1,3 @@
-
 class BidirectionalDict:
     def __init__(self):
         self.key_to_value = {}

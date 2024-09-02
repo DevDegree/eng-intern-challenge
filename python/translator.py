@@ -11,10 +11,10 @@ I am using bidirectional dictionary to quickly(O(1) time) find the keys value or
 I could have used 4 dictionaries to replicate what the bidirectional dictionary is doing but, doing so would have been more complicated for the task at hand.
 '''
 # Constants
-BRALLIE_SIZE = 6
 CAPITAL_PREFIX = ".....O"
 NUMBER_PREFIX = ".O.OOO"
 SPACE = "......" # ' '
+BRALLIE_SIZE = 6
 
 def create_braille_alphabet_bidict():
     braille_alphabet_bidict = BidirectionalDict()
@@ -165,7 +165,6 @@ def main():
 
 if __name__ == "__main__":
     main() 
-
 
 '''
 Test Cases:
