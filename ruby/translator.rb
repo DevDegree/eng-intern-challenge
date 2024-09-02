@@ -70,9 +70,14 @@ if ARGV.empty?
     exit
 end
 input = ARGV.join(" ")
-if input.match?(/^[O.\s]+$/)
-    output = brailie_to_english(input)
-else
-    output = english_to_brailie(input)
+begin   
+    if input.match?(/^[O.\s]+$/)
+        output = brailie_to_english(input)
+    else
+        output = english_to_brailie(input)
+    end
+    puts output
+rescue ArgumentError => e
+    puts "Error: #{e.message}"
+    exit 1
 end
-puts output
