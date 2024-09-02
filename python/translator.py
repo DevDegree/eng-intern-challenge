@@ -19,7 +19,7 @@ def detect_language(input_list):
     if (len(input_list) > 1):
         return 0
     
-    if (len(input_list[0]) <= 6):
+    if (len(input_list[0]) < 6):
         return 0
     
     unique_characters = set()
