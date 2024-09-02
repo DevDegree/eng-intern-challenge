@@ -163,6 +163,8 @@ def translate_to_braille(text):
 
     # Iterate over each character in the input text
     for i in range(len(text)):
+        if text[i].isspace() and is_number == True: # Reset is_number flag when space is encountered
+            is_number = False
 
         if text[i].isalpha(): # Handle alphabetic characters
             ascii_num = ord(text[i].lower())
