@@ -165,7 +165,6 @@ function brailleEncoder(str){
 
 const originalStatement = process.argv.slice(2);
 const regex = /^[O.]*$/;
-console.log(originalStatement.join(" "))
 
 //To find if the arguments passed are in braille
 if(regex.test(originalStatement[0])){
