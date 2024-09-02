@@ -61,7 +61,7 @@ function englishInput( input ) {
     while ( input ) {
         let char = input.substring( 0, 1 );
         indicator( char );
-        if ( um ) {
+        if ( num ) {
             input = numberToBraille( input );
             num = false;
         }
