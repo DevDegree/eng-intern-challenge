@@ -43,3 +43,27 @@ def brailie_to_english(brailie)
     end
     result
 end
+
+def english_to_brailie(text){
+    result = ''
+    number_mode = false
+    text.each_char do |char|
+        if char.match?(/[A-Z]/)
+            result = result + Capital_Prefix + (Brailie_Mapping[char.downcase] || Brailie_Mapping[' '])
+            number_mode = false
+        elsif char.match?(/[0-9]/)
+            unless number_mode
+                result = result + Number_Prefix
+                number_mode = true
+            end
+            result = result + Brailie_Mapping[char]
+        else
+            result = result + Brailie_Mapping[char.downcase] || Brailie_Mapping[' ']
+            number_mode  = false
+        end
+    end
+    result 
+end
+
+
+}
