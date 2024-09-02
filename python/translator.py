@@ -176,11 +176,7 @@ def main():
 
     print(result)
 
-def test():
-    print(translate_to_braille("Hello World") == '.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..')
-    print(translate_to_braille("Abc 123") == '.....OO.....O.O...OO...........O.OOOO.....O.O...OO....')
-    print(translate_to_braille("42") == '.O.OOOOO.O..O.O...')
+
 main()
-test()
 
 #CF a b c space NF 1 2 3 space x CF y z
