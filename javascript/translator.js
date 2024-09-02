@@ -1,6 +1,4 @@
-process.stdin.setEncoding('utf8');
-
-const BrailleReference = {
+const BrailleAlphabet = {
     a: "O.....",
     b: "O.O...",
     c: "OO....",
@@ -27,19 +25,9 @@ const BrailleReference = {
     x: "OO..OO",
     y: "OO.OOO",
     z: "O..OOO",
-    "1": "O.....",
-    "2": "O.O...",
-    "3": "OO....",
-    "4": "OO.O..",
-    "5": "O..O..",
-    "6": "OOO...",
-    "7": "OOOO..",
-    "8": "O.OO..",
-    "9": ".OO...",
-    "0": ".OOO..",
     CAPITAL: ".....O",
     DECIMAL: "..O.OO",
-    NUMBER: "..OO.O",
+    NUMBER: ".O.OOO",
     DOT: "O.....",
     COMMA: ".O....",
     QUESTION_MARK: ".O..O.",
@@ -54,21 +42,41 @@ const BrailleReference = {
     CLOSE_PAREN: ".O.OO.",
     SPACE: "......"
 };
- 
 
-const brailleToEnglish = Object.fromEntries(
-    Object.entries(BrailleReference).map(([key, value]) => [value, key])
-);
+const BrailleNumbers = {
+    "1": "O.....",
+    "2": "O.O...",
+    "3": "OO....",
+    "4": "OO.O..",
+    "5": "O..O..",
+    "6": "OOO...",
+    "7": "OOOO..",
+    "8": "O.OO..",
+    "9": ".OO...",
+    "0": ".OOO..",
+}
+
 
 function getBrailleToEnglishTranslation(key){
-    return BrailleReference[key];
+    return BrailleAlphabet[key];
+}
+
+function getBrailleNumberTranslation(key){
+    return BrailleNumbers[key];
 }
 
 function getEnglishToBrailleTranslation(braille) {
+    const brailleToEnglish = Object.fromEntries(
+        Object.entries(BrailleAlphabet).map(([key, value]) => [value, key])
+    );
     return brailleToEnglish[braille];
 }
 
-const input = process.argv.slice(2).join('');
+function isUpperCase(letter) {
+    return letter === letter.toUpperCase() && letter !== letter.toLowerCase();
+}
+
+const input = process.argv.slice(2).join(' ');
 const isEnglish = input.split('').some(letter => letter !== 'O' && letter !== '.');
 
 if (!isEnglish) {
@@ -109,10 +117,37 @@ function getBrailleToEnglish(input) {
 function getEnglishFromBraille(input){
     let translation = [];
     const inputLetters = input.split("");
+    let previousWasNumber = false;
+    let previousWasCapital = false;
 
     inputLetters.forEach(letter => {
-        translation.push(getBrailleToEnglishTranslation(letter))
-    })
+        let isNumber = !isNaN(parseInt(letter, 10));
+
+        if (isNumber) {
+            if (!previousWasNumber) {
+                translation.push(BrailleAlphabet.NUMBER);
+            }
+            translation.push(getBrailleNumberTranslation(letter));
+            previousWasNumber = true; 
+        } 
+        else {
+            if (letter === " ") {
+              translation.push(BrailleAlphabet.SPACE);
+            }
+            if(isUpperCase(letter)){
+                if(!previousWasCapital){
+                    translation.push(BrailleAlphabet.CAPITAL)
+                }
+                translation.push(getBrailleToEnglishTranslation(letter.toLowerCase()));
+                previousWasCapital = true;
+            }
+            else{
+                previousWasCapital = false;
+                previousWasNumber = false;
+                translation.push(getBrailleToEnglishTranslation(letter.toLowerCase()));
+            }
+        }
+    });
 
     console.log(translation.join(""))
 }
