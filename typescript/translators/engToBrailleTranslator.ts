@@ -13,13 +13,11 @@ export const engllishToBraille = (englishArray: string[]): string => {
   };
 
   // Check context of '.' is not in number format, if not convert to braille and add to string
-  // 1. Converts period to braille if '.' is not in context for number
-  // 2. Updates the returning string equivalent
-  // 3. Returns a boolean to indicating steps 1 and 2 above were satisfied
   const isCharacterPeriodAndConvert = (char: string, idx: number) => {
     const isNextDigit: boolean = digitToBraille.get(englishArray[idx + 1]) !== undefined;
     const isPeriod = char === "." && !isNextDigit;
     if (isPeriod) {
+      // Convert period to braille equivalent
       periodToBraille(char);
       return true;
     }
