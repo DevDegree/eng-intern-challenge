@@ -30,7 +30,8 @@ def is_braille(input_string : str) -> bool:
             return False
     return True
 
-def braille_to_english(braille_string):
+
+def braille_to_english(braille_string: str ) -> str:
     english_output = []
     capitalize_next = False
     number_mode = False
@@ -57,7 +58,8 @@ def braille_to_english(braille_string):
     
     return ''.join(english_output)
 
-def handle_special_braille(braille_char, english_output, capitalize_next, number_mode):
+
+def handle_special_braille(braille_char: str, english_output: str, capitalize_next: bool, number_mode: bool) -> tuple:
     if braille_char == braille_dict['cap']:
         return True, True, number_mode  # Set capitalize_next to True
     elif braille_char == braille_dict['num']:
@@ -67,7 +69,8 @@ def handle_special_braille(braille_char, english_output, capitalize_next, number
         return True, capitalize_next, False  # Set number_mode to False after space
     return False, capitalize_next, number_mode
 
-def convert_braille_to_char(braille_char, number_mode):
+
+def convert_braille_to_char(braille_char: str, number_mode: False) -> str:
     if number_mode:
         char = number_braille_dict.get(braille_char, '')
         if not char:
@@ -77,7 +80,31 @@ def convert_braille_to_char(braille_char, number_mode):
         return english_dict.get(braille_char, '')
 
 
+def english_to_braille(english_string: str) -> str:
+    braille_output = []
+    number_mode = False
+    
+    for char in english_string:
 
+        if char.isupper():
+            braille_output.append(braille_dict['cap'])
+            char = char.lower()
+        
+        if char.isdigit() and not number_mode:
+            braille_output.append(braille_dict['num'])  # Add number marker once before digits
+            number_mode = True
+        
+        if not char.isdigit():
+            number_mode = False  # Exit number mode after digits
+        
+        if char in braille_dict:
+            braille_output.append(braille_dict[char])
+        elif char in num_to_braille:
+            braille_output.append(num_to_braille[char]) 
+        else:
+            braille_output.append(braille_dict[' '])  # Treat any non-letter, non-number as space
+    
+    return ''.join(braille_output)
 
 
 
