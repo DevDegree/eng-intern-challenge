@@ -46,7 +46,7 @@ function translateBrailleToAlphabet(braille: string): string {
   const cleanedBraille = braille.replace(/\s+/g, ''); // Remove all spaces from Braille input
   // Match each Braille cell (6 characters) in the cleaned input
   const brailleWords = cleanedBraille.match(/.{1,6}/g) || [];
-  
+
   let result = '';
   let isCapital = false; // Flag to handle capital letters
   let isNumberMode = false; // Flag to handle numbers
@@ -61,7 +61,7 @@ function translateBrailleToAlphabet(braille: string): string {
       isNumberMode = false; // Exit number mode after space
     } else {
       let letter = isNumberMode ? brailleDigits[brailleWord] : brailleAlphabet[brailleWord];
-      
+
       if (letter !== undefined) {
         if (isCapital) {
           result += letter.toUpperCase(); // Convert to uppercase if in capital mode
@@ -73,7 +73,7 @@ function translateBrailleToAlphabet(braille: string): string {
         console.error(`Unrecognized pattern: ${brailleWord}`); // Log error for unrecognized patterns
         result += '?'; // Placeholder for unrecognized patterns
       }
-      
+
       if (isNumberMode && brailleDigits[brailleWord] === undefined) {
         isNumberMode = false; // Exit number mode if the pattern is not a digit
       }
@@ -129,4 +129,5 @@ function translate(input: string): string {
 // Read input from command line arguments, translate it, and print the result
 const input = process.argv.slice(2).join(' ');
 const output = translate(input);
+
 console.log(output);
