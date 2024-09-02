@@ -3,8 +3,8 @@
 const brailleMap = {
 	// Letters
 	a: 'O.....',
-	b: 'OO....',
-	c: 'O..O..',
+	b: 'O.O...',
+	c: 'OO....',
 	d: 'OO.O..',
 	e: 'O..O..',
 	f: 'OOO...',
@@ -40,7 +40,7 @@ const brailleMap = {
 	8: 'O.OO..',
 	9: '.OO...',
 	0: '.OOO..',
-	
+
 	// ...Follows
 	CAPITAL: '.....O',
 	DECIMAL: '.O...O',
@@ -87,17 +87,19 @@ function englishToBraille(englishInput) {
 		}
 	}
 
-	console.log("English to Braille Result:", result); // Debugging output
+	console.log('English to Braille Result:', result); // Debugging output
 	return result;
 }
 
 function brailleToEnglish(brailleInput) {
 	let result = '';
-	const brailleChars = brailleInput.match(/.{1,6}/g); // Splits input into chunks of 6
+	const brailleChars = brailleInput.match(/.{6}/g) || []; // Ensures each Braille character is exactly 6 dots long
 	let isCapital = false;
 	let isNumber = false;
 
 	for (let brailleChar of brailleChars) {
+		console.log(`Processing Braille Character: ${brailleChar}`); // Debugging output
+
 		if (brailleChar === brailleMap.CAPITAL) {
 			isCapital = true;
 			continue;
@@ -109,24 +111,23 @@ function brailleToEnglish(brailleInput) {
 
 		let englishChar = reverseBrailleMap[brailleChar];
 		if (isCapital) {
-			englishChar = englishChar.toUpperCase();
+			englishChar = englishChar ? englishChar.toUpperCase() : '';
 			isCapital = false;
 		}
 		if (isNumber) {
 			// Convert back to a digit
-			for (let [key, value] of Object.entries(brailleMap)) {
-				if (value === brailleChar && !isNaN(key)) {
-					englishChar = key;
-					break;
-				}
-			}
-			isNumber = false; // Reset after using the number follows symbol
+			englishChar =
+				Object.entries(brailleMap).find(
+					([key, value]) => value === brailleChar && !isNaN(key)
+				)?.[0] || '';
+			//isNumber = false; // Reset after using the number follows symbol
 		}
 
+		console.log(`Detected English Character: ${englishChar}`); // Debugging output
 		result += englishChar || ''; // Fallback in case of unmatched Braille pattern
 	}
 
-	console.log("Braille to English Result:", result); // Debugging output
+	console.log('Final Result:', result); // Debugging output
 	return result;
 }
 
@@ -138,7 +139,7 @@ function detectInputType(input) {
 // Main function to translate input based on detected type
 function translate(input) {
 	const inputType = detectInputType(input);
-	console.log("Detected Input Type:", inputType); // Debugging output
+	console.log('Detected Input Type:', inputType); // Debugging output
 	return inputType === 'braille'
 		? brailleToEnglish(input)
 		: englishToBraille(input);
@@ -146,6 +147,6 @@ function translate(input) {
 
 if (require.main === module) {
 	const input = process.argv.slice(2).join(' '); // Capture command line arguments as a single string
-	console.log("Input:", input); // Debugging output
+	console.log('Input:', input); // Debugging output
 	console.log(translate(input)); // Run the translation and print the result
 }
