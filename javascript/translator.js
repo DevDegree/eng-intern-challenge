@@ -54,59 +54,65 @@ const BrailleReference = {
     CLOSE_PAREN: ".O.OO.",
     SPACE: "......"
 };
-
-
-let input = ''; 
-let isEnglish = false;
-let translation = [];
-
-function getBrailleTranslation(key){
-    return BrailleReference[key];
-}
+ 
 
 const brailleToEnglish = Object.fromEntries(
     Object.entries(BrailleReference).map(([key, value]) => [value, key])
 );
 
-function getEnglishFromBraille(braille) {
+function getBrailleToEnglishTranslation(key){
+    return BrailleReference[key];
+}
+
+function getEnglishToBrailleTranslation(braille) {
     return brailleToEnglish[braille];
 }
 
-process.stdin.on('data', function(data) {
-    input += data.trim(); 
-    isEnglish = input.split('').some(letter => letter !== 'O' && letter !== '.');
+const input = process.argv.slice(2).join('');
+const isEnglish = input.split('').some(letter => letter !== 'O' && letter !== '.');
 
+if (!isEnglish) {
+    getBrailleToEnglish(input)
+}
+getEnglishFromBraille(input)
 
-    if(!isEnglish){
-        const inputSize = 6;
-        let brailleInputSplit = [];
-        let brailleTranslation = [];
-        let translation = [];
+function getBrailleToEnglish(input) {
+    const inputSize = 6;
+    let brailleInputSplit = [];
+    let brailleTranslation = [];
+    let translation = [];
 
-        for(let i = 0; i < input.length; i+= inputSize){
-            brailleInputSplit.push(input.slice(i, i + inputSize))
-        }
-        brailleInputSplit.forEach(item => {
-            brailleTranslation.push(getEnglishFromBraille(item));
-        })
-
-        for(let i = 0; i < brailleTranslation.length; i++) {
-            if (brailleTranslation[i] === "CAPITAL"){
-                translation.push(brailleTranslation[i + 1].toUpperCase())
-                i++;
-                i++;
-            }
-            if(brailleTranslation[i] === "SPACE"){
-                translation.push(" ")
-            }
-            else {
-                translation.push(brailleTranslation[i])
-            }
-        }
-        console.log(translation.join(""));
+    for(let i = 0; i < input.length; i+= inputSize){
+        brailleInputSplit.push(input.slice(i, i + inputSize))
     }
 
-    process.exit();
-});
+    brailleInputSplit.forEach(letter => {
+        brailleTranslation.push(getEnglishToBrailleTranslation(letter));
+    })
 
-// .....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..
+    for(let i = 0; i < brailleTranslation.length; i++) {
+        if (brailleTranslation[i] === "CAPITAL"){
+            translation.push(brailleTranslation[i + 1].toUpperCase())
+            i++;
+            i++;
+        }
+        if(brailleTranslation[i] === "SPACE"){
+            translation.push(" ")
+        }
+        else {
+            translation.push(brailleTranslation[i])
+        }
+    }
+    console.log(translation.join(""));
+}
+
+function getEnglishFromBraille(input){
+    let translation = [];
+    const inputLetters = input.split("");
+
+    inputLetters.forEach(letter => {
+        translation.push(getBrailleToEnglishTranslation(letter))
+    })
+
+    console.log(translation.join(""))
+}
