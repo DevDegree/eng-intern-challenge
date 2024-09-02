@@ -1,6 +1,3 @@
-import sys
-
-
 BRAILLE_CHARS = {
     "letters": {
         chr(i): dots for i, dots in enumerate("O.....", ord('a'))
@@ -21,6 +18,17 @@ def is_braille(text):
 
 
 def translate(text, to_braille=True):
+    """
+    Translates text between English and Braille.
+
+    Args:
+        text (str): The text to translate.
+        to_braille (bool, optional): If True, translates from English to Braille.
+            If False, translates from Braille to English. Defaults to True.
+
+    Returns:
+        str: The translated text.
+    """
 
     translated_text = ""
     in_number_mode = False
@@ -46,6 +54,9 @@ def translate(text, to_braille=True):
             if letter == CAPITAL_FOLLOWS:
                 translated_text += BRAILLE_CHARS["letters"][text[6:12]].upper()
                 text = text[12:]
+            elif letter == NUMBER_FOLLOWS:
+                in_number_mode = True
+                text = text[6:]
             elif letter == BRAILLE_CHARS["space"]:
                 translated_text += " "
                 in_number_mode = False
@@ -69,8 +80,10 @@ def translate(text, to_braille=True):
 
 
 def main():
+    """Gets user input, translates it, and prints the result."""
 
     if len(sys.argv) < 2:
+        print("Usage: python translator.py <text>")
         sys.exit(1)
 
     text = " ".join(sys.argv[1:])
