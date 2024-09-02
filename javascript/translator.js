@@ -94,8 +94,11 @@ function TranslateToBraille(english) {
   for (let i = 0; i < len; i++) {
     const char = english.charAt(i);
     if (INTEGER_REGEX.test(char)) { // Char is a 0-9 number
-      if (!inNumberMode) inNumberMode = true;
-      translation += (NUMBER_FOLLOWS + englishToBraille[char]);
+      if (!inNumberMode) {
+        inNumberMode = true;
+        translation += NUMBER_FOLLOWS;
+      }
+      translation += englishToBraille[char];
     } else if (char === " ") { // Char is a space
       inNumberMode = false;
       translation += SPACE;
