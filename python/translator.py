@@ -64,7 +64,7 @@ def translate(sequence_chars):
                 else:
                     translated_string = translated_string + ALPHANUMERICALS_TO_BRAILLE.get(character)
                     previous_char = character
-            elif character == '.' and previous_char.isnumeric():
+            elif character == '.' and previous_char.isdigit():
                 translated_string = translated_string + ALPHANUMERICALS_TO_BRAILLE.get("decimal")
                 translated_string = translated_string + ALPHANUMERICALS_TO_BRAILLE.get(character)
                 previous_char = character
