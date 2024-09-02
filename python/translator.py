@@ -2,6 +2,7 @@ import sys
 
 
 #Define braille dictionaries
+
 num_br_dict = {"1": "O.....", "2": "O.O...", 
 				"3": "OO....", "4": "OO.O..", 
 				"5": "O..O..", "6": "OOO...", 
@@ -66,8 +67,6 @@ def braile_to_english(s):
             else:
                 output += br_eng_dict[letter]
     return output
-
-
 
 
 def main():
