@@ -54,8 +54,31 @@ class Translator:
         return all(ch in '.O' for ch in sentence)
     
     def _translate_braille2en(self, sentence):
-        # TODO
-        return ''
+        res = []
+        read_number = False
+        capitalize = False
+        for i in range(0, len(sentence), 6):
+            action = self.braille_to_en[sentence[i:i+6]]
+            if action == 'Capital':
+                capitalize = True
+                continue
+            if action == 'Number':
+                read_number = True
+                continue
+            if read_number:
+                if action != ' ':
+                    res.append('0' if action == 'j' else chr(ord('1') + ord(action) - ord('a')))
+                else:
+                    res.append(action)
+                    read_number = False
+                continue
+            if capitalize:
+                res.append(action.upper())
+                capitalize = False
+                continue
+            res.append(action)
+
+        return ''.join(res)
     
     def _translate_en2braille(self, sentence):
         res = []
