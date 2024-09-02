@@ -39,7 +39,10 @@ BRAILLE_SYMBOLS = {
 }
 
 def is_braille(translation_input: str) -> bool:
-    return all([char in ['.', '0'] for char in translation_input]) and len(translation_input) % 6 == 0
+    return all([char in ['.', 'O'] for char in translation_input]) and len(translation_input) % 6 == 0
+
+def is_english(translation_input: str) -> bool:
+    return all([char.isalnum() or char.isspace() for char in translation_input])
 
 def english_to_braille(translation_input: str) -> str:
     translated_string = ''
@@ -52,7 +55,10 @@ def english_to_braille(translation_input: str) -> str:
                 translated_string += BRAILLE_CONSTANTS['number']
                 is_number = True
             translated_string += BRAILLE_NUMBERS[char]
-        elif char.isalpha():
+        elif char.isalnum():
+            if is_number:
+                print(f'Invalid character: number and alphabet in the same word: {char}')
+                sys.exit(1)
             if char.isupper():
                 if not is_capital:
                     translated_string += BRAILLE_CONSTANTS['capital']
@@ -117,7 +123,11 @@ if __name__ == '__main__':
     output = ''
     if is_braille(input_string[0]):
         output = braille_to_english(input_string[0])
-    else:
+    elif is_english(' '.join(input_string)):
         output = english_to_braille(' '.join(input_string))
+    else:
+        print('Invalid input')
+        sys.exit(1)
+
     print(output)
     sys.exit(0)
