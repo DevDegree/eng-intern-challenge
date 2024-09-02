@@ -1,4 +1,5 @@
 import sys
+from typing import Dict
 
 # Mapping from English letters, numbers, and symbols to Braille
 ENGLISH_TO_BRAILLE = {
@@ -52,7 +53,7 @@ class BrailleDictionary:
     Handles the translation between English characters and their Braille representations.
     """
 
-    def __init__(self, to_braille: dict[str, str]) -> None:
+    def __init__(self, to_braille: Dict[str, str]) -> None:
         """
         Initializes the BrailleDictionary with a given dictionary for translating 
         from English to Braille. Also creates a reverse dictionary for translating
