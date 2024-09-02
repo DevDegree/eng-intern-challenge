@@ -14,7 +14,7 @@ CAP_SEQUENCE = ".....O"
 
 NUMERIC_SEQUENCE = ".O.OOO"
 
-SPACE_SEQUENCE =  "......"
+SPACE_SEQUENCE = "......"
 
 TO_BRAILLE_ALPHA = {
     "a": "O.....",
@@ -72,6 +72,7 @@ TO_BRAILLE_NUMERIC = {
     ">": "O..OO.",
 }
 
+
 def reverseMap(map: Dict[str, str]) -> Dict[str, str]:
     """
     Creates a new dictionary by reverse-mapping the input dictionary's keys to values and vice versa. 
@@ -87,11 +88,13 @@ def reverseMap(map: Dict[str, str]) -> Dict[str, str]:
         rtn[value] = key
     return rtn
 
+
 TO_ENGLISH_ALPHA = reverseMap(TO_BRAILLE_ALPHA)
 
 TO_ENGLISH_NUMERIC = reverseMap(TO_BRAILLE_NUMERIC)
 
-def fastConcat(l : List[str]) -> str: 
+
+def fastConcat(l: List[str]) -> str:
     """
     Efficiently concatinate a list of strings. 
     Optimization to fast concat strings: https://stackoverflow.com/questions/1316887/what-is-the-most-efficient-string-concatenation-method-in-python
@@ -103,11 +106,12 @@ def fastConcat(l : List[str]) -> str:
         str: The concatinated string.
     """
     return ''.join(l)
- 
+
+
 def translateToEnglish(brailleString: str) -> (bool, str):
     """
     Translates a Braille string into an English string.
-    
+
     Braille - each character is read as a series of O (the letter O) or . (a period); 6-character string read from left to right, line by line, starting at the top left. 
     When a Braille capital follows symbol is read, only the next symbol is capitalized.
     When a Braille number follows symbol is read, all following symbols are translated into numbers until the next space symbol.
@@ -123,11 +127,10 @@ def translateToEnglish(brailleString: str) -> (bool, str):
     isUpper = False
     i = 0
 
-   
     while i < len(brailleString):
         # Read input string 6 characters at a time.
         character = brailleString[i:i+6]
-        i += 6 
+        i += 6
 
         # Determine if string is alphabetical or numeric; if is alphabetical, determine if it is upper or lower case.
         if character == CAP_SEQUENCE:
@@ -139,7 +142,7 @@ def translateToEnglish(brailleString: str) -> (bool, str):
         if character == SPACE_SEQUENCE:
             # assume alphabetic input if a space is read
             isNumeric = False
-        
+
         # if character has valid mapping, in its respective dictionaries, append to rtn; else, return unsuccessful translation (False, "")
         if isNumeric:
             if character in TO_ENGLISH_NUMERIC:
@@ -183,8 +186,8 @@ def translateToBraille(englishWord: str) -> str:
         elif l.isnumeric():
             if not isNum:
                 rtn.append(NUMERIC_SEQUENCE)
-            isNum = True 
-        
+            isNum = True
+
         # Assume all numeric sequences are followed by a " " (space).
         if l == " ":
             isNum = False
@@ -194,6 +197,7 @@ def translateToBraille(englishWord: str) -> str:
         else:
             rtn.append(TO_BRAILLE_ALPHA[l])
     return fastConcat(rtn)
+
 
 def translate(phrase: str) -> str:
     """
@@ -209,10 +213,9 @@ def translate(phrase: str) -> str:
     # Assume braille and if it fails fall back to translating from english.
     successful, english = translateToEnglish(phrase)
     return english if successful else translateToBraille(phrase)
-    
+
 
 if __name__ == "__main__":
     # Concatinate multiple arguments into one, seperated by " " (space).
     input = ' '.join(sys.argv[1:])
     print(translate(input))
-    
