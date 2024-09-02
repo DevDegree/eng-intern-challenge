@@ -1,6 +1,6 @@
 process.stdin.setEncoding('utf8');
 
-const brailleReference = {
+const BrailleReference = {
     a: "O.....",
     b: "O.O...",
     c: "OO....",
@@ -61,17 +61,16 @@ let isEnglish = false;
 let translation = [];
 
 function getBrailleTranslation(key){
-    return brailleReference[key];
+    return BrailleReference[key];
 }
 
 const brailleToEnglish = Object.fromEntries(
-    Object.entries(brailleReference).map(([key, value]) => [value, key])
+    Object.entries(BrailleReference).map(([key, value]) => [value, key])
 );
 
 function getEnglishFromBraille(braille) {
     return brailleToEnglish[braille];
 }
-
 
 process.stdin.on('data', function(data) {
     input += data.trim(); 
@@ -82,6 +81,7 @@ process.stdin.on('data', function(data) {
         const inputSize = 6;
         let brailleInputSplit = [];
         let brailleTranslation = [];
+        let translation = [];
 
         for(let i = 0; i < input.length; i+= inputSize){
             brailleInputSplit.push(input.slice(i, i + inputSize))
@@ -89,9 +89,23 @@ process.stdin.on('data', function(data) {
         brailleInputSplit.forEach(item => {
             brailleTranslation.push(getEnglishFromBraille(item));
         })
-        console.log(brailleTranslation)
 
+        for(let i = 0; i < brailleTranslation.length; i++) {
+            if (brailleTranslation[i] === "CAPITAL"){
+                translation.push(brailleTranslation[i + 1].toUpperCase())
+                i++;
+                i++;
+            }
+            if(brailleTranslation[i] === "SPACE"){
+                translation.push(" ")
+            }
+            else {
+                translation.push(brailleTranslation[i])
+            }
+        }
+        console.log(translation.join(""));
     }
+
     process.exit();
 });
 
