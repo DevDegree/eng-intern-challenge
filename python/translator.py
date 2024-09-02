@@ -220,9 +220,6 @@ class translator :
         return translatedText
 
 # main function
-if len(argv) > 1:  
-    # if input is provided attempt to translate the text
-    INPUT_ARR: list[str] = argv[1:] 
-    translator = translator();
-    print(translator.translate(INPUT_ARR), file=stdout);
+translator = translator();
+print(translator.translate(argv[1:]));
 
