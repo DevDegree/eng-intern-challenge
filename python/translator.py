@@ -1,5 +1,7 @@
 import sys
 
+# Using maps to create a dictionary of the braille alphabet to be able to translate between braille and text
+# Using maps is efficient in time complexity with O(1) for both insertion and lookup
 translate_words = {
     "a" : "O.....",
     "b" : "O.O...",
@@ -92,12 +94,15 @@ translate_braille_numbers = {
     '.OOO..': '0', 
 }
 
+# this function determines if a word is in braille or text, telling the program what to expect when translating
+# essentially checks if there is a character that is not a '.' or 'O' which means it is not braille
 def determine_braille(word):
     for w in word:
         if w != '.' and w != 'O':
             return False
     return True
         
+# this function translates braille to text
 def braille_to_text(word):
     output = ""
     i = 0
@@ -115,6 +120,7 @@ def braille_to_text(word):
             i += 6
     return output
 
+# this function translates text to braille
 def text_to_braille(words):
     output = ""
     setNumber = False
@@ -130,6 +136,7 @@ def text_to_braille(words):
         output += translate_words[w]
     return output
 
+# this function takes in the input from the user
 sentence = " ".join(sys.argv[1:])
 
 is_braille = determine_braille(sentence)
