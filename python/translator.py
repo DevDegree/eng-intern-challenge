@@ -204,12 +204,15 @@ def main():
     
     word = input()
     t = transl(word)
-    
+    x = ""
     #check if braille or eng
     if(word[0:6] in brailleToEng):
-        t.toEng()
+        x = (t.toEng())
     else:
-        t.toBr()
+        x = (t.toBr())
+    
+    print(x)
+    return x
 
     
 
