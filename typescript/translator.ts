@@ -1,7 +1,7 @@
 /* Created By: Mohit Verma */
 
-import { brailleToEnglish } from "./translators/brailleToEngTranslator";
-import { englishToBraille } from "./translators/engToBrailleTranslator";
+import { brailleToEnglish } from './translators/brailleToEngTranslator';
+import { englishToBraille } from './translators/engToBrailleTranslator';
 
 // Function translates braille language into english equivalent
 function translateBrailleToEnglish(sentence: string): string {
@@ -23,10 +23,11 @@ function translateEnglishToBraille(english: string): string {
 // The function checks if the argument passed is braille or english and returns the converted string
 function translator(args: string) {
   const regexBraille: RegExp = /^[O.]*$/; // only 'O' and '.' in any combination
-  const isBraille: boolean = args.length >= 6 && regexBraille.test(args);
+  const isBraille: boolean = args.length >= 6 && args.length % 6 === 0 && regexBraille.test(args);
   isBraille
     ? console.log(translateBrailleToEnglish(args))
     : console.log(translateEnglishToBraille(args));
+    
 }
 
 // Take in arguments from command line and unit tests

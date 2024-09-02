@@ -13,7 +13,7 @@ export const englishToBraille = (englishArray: string[]): string => {
   };
 
   // Check context of '.' is not in number format, if not convert to braille and add to string
-  const isCharacterPeriodAndConvert = (char: string, idx: number): boolean => {
+  const ifCharPeriodThenConvert = (char: string, idx: number): boolean => {
     const nextChar: string = englishArray[idx + 1];
     const isNextDigit: boolean = digitToBraille.get(nextChar) !== undefined && nextChar !== "."; // check for !=="." to account for strings with "..."
     const isPeriod = char === "." && !isNextDigit;
@@ -28,9 +28,13 @@ export const englishToBraille = (englishArray: string[]): string => {
   for (let ii = 0; ii < englishArray.length; ii++) {
     const char: string = englishArray[ii];
 
+    if (isNum && alphToBraille.has(char)) {
+      return "Error: Invalid sentence, cannot have letter immediately after digit";
+    }
+
     if (digitToBraille.has(char) && !isNum) {
       // Check context of '.' is not in number format, if not convert to braille and add to string
-      if (isCharacterPeriodAndConvert(char, ii)) {
+      if (ifCharPeriodThenConvert(char, ii)) {
         continue;
       }
       isNum = true;
@@ -49,7 +53,7 @@ export const englishToBraille = (englishArray: string[]): string => {
       brailleStr += braillePunct;
     }
     // Check context of '.' is not in number format, if not convert to braille and add to string
-    else if (isCharacterPeriodAndConvert(char, ii)) {
+    else if (ifCharPeriodThenConvert(char, ii)) {
       continue;
     }
 
