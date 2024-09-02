@@ -65,5 +65,15 @@ def english_to_brailie(text){
     result 
 end
 
-
+if ARGV.empty?
+    puts "Please provide some input"
+    exit
+end
+input = ARGV.join(" ")
+if input.match(/^[O.\s]+$/)
+    output = brailie_to_english(input)
+else
+    output = english_to_brailie(input)
+end
+puts output
 }
