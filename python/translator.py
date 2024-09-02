@@ -24,24 +24,19 @@ def braille_to_english_translator(text):
         char = text[i:i+6]
         # Check for capital letter indicator
         if char == '.....O':
-            # Capitalize next letter
-            final_result += braille_to_english[text[i+6:i+12]].upper()
-            i += 12
+            i += 6
+            final_result += braille_to_english[text[i:i+6]].upper()
         # Check for number indicator
         elif char == '.O.OOO':
-            # Enter numbers mode
-            j = i + 6
-            while j < len(text) and text[j:j+6] != '......':
-                final_result += braille_to_english[text[j:j+6]]
-                j += 6
-            i = j
-        else:
-            # Regular character conversion
-            final_result += braille_to_english[char]
             i += 6
-    return final_result.replace(' ', '')
-
-
+            while i < len(text) and text[i:i+6] != '......':
+                final_result += braille_to_english[text[i:i+6]]
+                i += 6
+            i -= 6  # To reprocess the space after numbers mode
+        else:
+            final_result+= braille_to_english[char]
+        i += 6
+    return ''.join(final_result)
 
 
 def english_to_braille_translator(text):
