@@ -56,6 +56,10 @@ const englishToBraille = {
     'space': '......', 
 };
 
+const numberDict = {
+    
+}
+
 // braille to english dictionary 
 const brailleToEnglish = {};
 
@@ -87,7 +91,38 @@ const englishConverter = (input) => {
 // function for converting braille to english
 const brailleConverter = (input) => {
     let brailleCharacters = input.match(/.{1,6}/g); //splits user input into substrings of 6 
-    return brailleCharacters.map(x => brailleToEnglish[x] || '').join(''); 
+    let newString = '';
+    let capitalize = false;
+    let number = false;
+    
+    for (let i = 0; i<brailleCharacters.length; i++) {
+        let substring = brailleCharacters[i];
+        
+       if (substring === '.....0') {  // check for capital symbol
+        capitalize = true;
+        continue; 
+       } 
+
+       if (substring === '.0.000') { //check for number symbol
+        number = true;
+        continue;
+       }
+
+       let translatedCharacter = brailleToEnglish[substring] || '';
+
+       if(capitalize) {
+        translatedCharacter = translatedCharacter.toUpperCase();
+        capitalize = false;
+       } 
+
+       if (number) {
+        translatedCharacter = brailleToEnglish[substring] || '';
+        number = false; // reset number flag
+    }
+       newString += translatedCharacter;
+    }
+    return newString;
+    //return brailleCharacters.map(x => brailleToEnglish[x] || '').join(''); 
 };
 
 // main translator function
@@ -102,4 +137,3 @@ const translator = (input) => {
 }
 
 translator(userInput);
-
