@@ -4,7 +4,7 @@ input = ARGV.join(" ")
 
 # detects lanugage
 def is_braille?(input)
-  return false unless input.length % 6 == 0
+  return false unless input.length % 6 == 0 # if the input is not divisible by 6, it's not braille
   input.chars.each_slice(6).all? { |chunk| BRAILLE_ALPHABET.value?(chunk.join) }
 end
 
@@ -62,10 +62,10 @@ def translate_eng_to_braille(input)
   translated_string
 end
 
-# This doesn't account for foreign languages, gibberish phrases or phrases consisting of only special characters.
-# It's possible a user might want to check specific letters, or characters.
+# This app doesn't account for foreign languages, gibberish phrases or phrases consisting of only special characters.
+# It's possible a user might want to check specific letters, or characters so strings like "<<>//..<" are considered english.
 # To ensure english only input we could check against an english dictionary, or use a gem like 'lingua' to detect the language.
-# This check will reject any input including a character not in the BRAILLE_ALPHABET hash.
+# This check will reject any input including a character not in the BRAILLE_ALPHABET or BRAILLE_NUMBERS hashes.
 
 if is_braille?(input)
 puts translate_braille_to_eng(input)
