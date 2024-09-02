@@ -115,6 +115,15 @@ def translate_braille(inp):
                 cap = False
             else:
                 print(chr(list(dict.keys())[list(dict.values()).index(braille)]+48), end='')
+        #o
+        elif list(dict.keys())[list(dict.values()).index(braille)] == 62:
+            if num == True:
+                print('>', end='')
+            else:
+                if cap == True:
+                    print('O', end='')
+                else:
+                    print('o', end='')
         #any other letter
         elif list(dict.keys())[list(dict.values()).index(braille)] < 123 and list(dict.keys())[list(dict.values()).index(braille)] > 106:
             if cap == True:
