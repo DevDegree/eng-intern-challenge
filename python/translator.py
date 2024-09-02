@@ -1,7 +1,7 @@
 import sys
 
 braille_alphabet = {
-    'a': 'O.....',
+    'a': 'O.....', 
     'b': 'O.O...',
     'c': 'OO....',
     'd': 'OO.O..',
