@@ -8,6 +8,7 @@ BRAILLE_CHARS = {
     "numbers": {
         chr(i): dots for i, dots in enumerate("O.....", ord('1'))
     },
+    "space": "......"
 }
 
 CAPITAL_FOLLOWS = ".....O"
