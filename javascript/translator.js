@@ -56,10 +56,6 @@ const englishToBraille = {
     'space': '......', 
 };
 
-const numberDict = {
-    
-}
-
 // braille to english dictionary 
 const brailleToEnglish = {};
 
@@ -116,8 +112,8 @@ const brailleConverter = (input) => {
        } 
 
        if (number) {
-        translatedCharacter = brailleToEnglish[substring] || '';
-        number = false; // reset number flag
+        translatedCharacter = Object.keys(englishToBraille).find(key => englishToBraille[key] === substring && key.match(/[0-9]/)) || ''; //find the number keys from dictionary
+        number = false;
     }
        newString += translatedCharacter;
     }
