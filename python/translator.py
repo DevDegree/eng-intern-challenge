@@ -194,15 +194,20 @@ def translate(A):
 
 
 if __name__ == "__main__":
-    # Collect all command-line arguments
-    inputs = sys.argv[1:]
     
-    out = ''
+    inputs = sys.argv[1:]
+    translated_outputs = []
+    for input_str in inputs:
+        # Translate each input
+        translated = translate(input_str)
+        # Add a space between translations if not the first item
+        if translated_outputs:
+            translated_outputs.append(letter_to_Braille['space'])
+        translated_outputs.append(translated)
 
-    for word in inputs:
-        out += translate(word+' ')
-
-    print(out)
+    # Combine the translations into a single string
+    final_output = ''.join(translated_outputs)
+    print(final_output)
     
     
 
