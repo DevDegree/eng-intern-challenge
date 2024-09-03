@@ -2,12 +2,11 @@
 
 
 Note:
-I've created a companion repo to store my additional test cases
-and documentation. This way, I don't accidentally break the
-automated validation by modifying other files in this repo.
-
-You can find the companion repo here:
-https://github.com/callumcurtis/shopify-intern-challenge-harness
+- I've created a companion repo to store my additional test cases
+  and documentation. This way, I don't accidentally break the
+  automated validation by modifying other files in this repo.
+- You can find the companion repo here:
+  https://github.com/callumcurtis/shopify-intern-challenge-harness
 
 
 Assumptions:
@@ -48,7 +47,7 @@ ENGLISH_ALPHABET = {*(
     + [" "]
 )}
 BRAILLE_CELL_SIZE = 6
-BRAILLE_AND_ENGLISH_CAPITALIZED = [
+CAPITALIZED_BRAILLE_AND_ENGLISH = [
     # uppercase letters
     ("O.....", "A"),
     ("O.O...", "B"),
@@ -78,7 +77,7 @@ BRAILLE_AND_ENGLISH_CAPITALIZED = [
     ("O..OOO", "Z"),
 ]
 BRAILLE_SPACE = "......"
-BRAILLE_AND_ENGLISH_CHARACTER = [
+UNMODDED_BRAILLE_AND_ENGLISH = [
     # lowercase letters
     ("O.....", "a"),
     ("O.O...", "b"),
@@ -109,7 +108,7 @@ BRAILLE_AND_ENGLISH_CHARACTER = [
     # space
     (BRAILLE_SPACE, " "),
 ]
-BRAILLE_AND_ENGLISH_NUMBER = [
+NUMERIC_BRAILLE_AND_ENGLISH = [
     # numbers
     (".OOO..", "0"),
     ("O.....", "1"),
@@ -122,10 +121,10 @@ BRAILLE_AND_ENGLISH_NUMBER = [
     ("O.OO..", "8"),
     (".OO...", "9"),
 ]
-BRAILLE_TO_ENGLISH_CAPITALIZED = dict(BRAILLE_AND_ENGLISH_CAPITALIZED)
-BRAILLE_TO_ENGLISH_CHARACTER = dict(BRAILLE_AND_ENGLISH_CHARACTER)
-BRAILLE_TO_ENGLISH_NUMBER = dict(BRAILLE_AND_ENGLISH_NUMBER)
-BRAILLE_UPPERCASE_MODIFIER = ".....O"
+CAPITALIZED_BRAILLE_TO_ENGLISH = dict(CAPITALIZED_BRAILLE_AND_ENGLISH)
+UNMODDED_BRAILLE_TO_ENGLISH = dict(UNMODDED_BRAILLE_AND_ENGLISH)
+NUMERIC_BRAILLE_TO_ENGLISH = dict(NUMERIC_BRAILLE_AND_ENGLISH)
+BRAILLE_CAPITALIZE_MODIFIER = ".....O"
 BRAILLE_NUMBER_MODE_MODIFIER = ".O.OOO"
 BRAILLE_NUMBER_MODE_TERMINAL = BRAILLE_SPACE
 
@@ -134,15 +133,17 @@ T = typing.TypeVar("T")
 V = typing.TypeVar("V")
 
 def flip_pairs(pairs: list[tuple[T, V]]) -> list[tuple[V, T]]:
+    """Flips tupled pairs within a list."""
     return [(pair[1], pair[0]) for pair in pairs]
 
 
-ENGLISH_CAPITALIZED_TO_BRAILLE = dict(flip_pairs(BRAILLE_AND_ENGLISH_CAPITALIZED))
-ENGLISH_CHARACTER_TO_BRAILLE = dict(flip_pairs(BRAILLE_AND_ENGLISH_CHARACTER))
-ENGLISH_NUMBER_TO_BRAILLE = dict(flip_pairs(BRAILLE_AND_ENGLISH_NUMBER))
+CAPITALIZED_ENGLISH_TO_BRAILLE = dict(flip_pairs(CAPITALIZED_BRAILLE_AND_ENGLISH))
+UNMODDED_ENGLISH_TO_BRAILLE = dict(flip_pairs(UNMODDED_BRAILLE_AND_ENGLISH))
+NUMERIC_ENGLISH_TO_BRAILLE = dict(flip_pairs(NUMERIC_BRAILLE_AND_ENGLISH))
 
 
 def chunk(s: str, chunk_size: int) -> typing.Iterator[str]:
+    """Splits a string into a series of fixed-size chunks."""
     return (s[i:i + chunk_size] for i in range(0, len(s), chunk_size))
 
 
@@ -152,6 +153,7 @@ class Language(enum.Enum):
 
 
 class CliMessageParser:
+    """Parses a message from the command line."""
 
     def __init__(
         self,
@@ -189,6 +191,7 @@ class CliMessageParser:
 
 
 class LanguageDiscriminator:
+    """Determines which language a message belongs to."""
 
     def __init__(
         self,
@@ -222,18 +225,28 @@ class BrailleToEnglishTranslator:
         self,
         *,
         braille_cell_size: int = BRAILLE_CELL_SIZE,
-        braille_to_english_character: dict[str, str] = BRAILLE_TO_ENGLISH_CHARACTER,
-        braille_to_english_capitalized: dict[str, str] = BRAILLE_TO_ENGLISH_CAPITALIZED,
-        braille_to_english_number: dict[str, str] = BRAILLE_TO_ENGLISH_NUMBER,
-        braille_uppercase_modifer: str = BRAILLE_UPPERCASE_MODIFIER,
+        unmodded_braille_to_english: dict[str, str] = UNMODDED_BRAILLE_TO_ENGLISH,
+        capitalized_braille_to_english: dict[str, str] = CAPITALIZED_BRAILLE_TO_ENGLISH,
+        numeric_braille_to_english: dict[str, str] = NUMERIC_BRAILLE_TO_ENGLISH,
+        braille_capitalize_modifier: str = BRAILLE_CAPITALIZE_MODIFIER,
         braille_number_mode_modifier: str = BRAILLE_NUMBER_MODE_MODIFIER,
         braille_number_mode_terminal: str = BRAILLE_NUMBER_MODE_TERMINAL,
     ):
+        """
+        Optional keyword arguments:
+            braille_cell_size: size of each braille cell, equal to width x height
+            unmodded_braille_to_english: mapping of normal-mode english characters by braille cell
+            capitalized_braille_to_english: mapping of capitalize-mode english characters by braille cell
+            numeric_braille_to_english: mapping of number-mode english characters by braille cell
+            braille_capitalize_modifier: braille cell signaling use of the capitalize mode
+            braille_number_mode_modifier: braille cell signaling beginning of the number mode
+            braille_number_mode_terminal: braille cell signaling end of the number mode
+        """
         self._braille_cell_size = braille_cell_size
-        self._braille_to_english_character = braille_to_english_character
-        self._braille_to_english_capitalized = braille_to_english_capitalized
-        self._braille_to_english_number = braille_to_english_number
-        self._braille_uppercase_modifier = braille_uppercase_modifer
+        self._unmodded_braille_to_english = unmodded_braille_to_english
+        self._capitalized_braille_to_english = capitalized_braille_to_english
+        self._numeric_braille_to_english = numeric_braille_to_english
+        self._braille_capitalize_modifier = braille_capitalize_modifier
         self._braille_number_mode_modifier = braille_number_mode_modifier
         self._braille_number_mode_terminal = braille_number_mode_terminal
 
@@ -245,7 +258,7 @@ class BrailleToEnglishTranslator:
         has_used_mode = False
         translated: list[str] = []
         for cell in chunk(message, self._braille_cell_size):
-            if cell == self._braille_uppercase_modifier:
+            if cell == self._braille_capitalize_modifier:
                 if mode:
                     raise ValueError(f"cannot enter uppercase mode when mode is already {mode}")
                 mode = self._Mode.CAPITALIZE
@@ -258,16 +271,16 @@ class BrailleToEnglishTranslator:
             elif mode is self._Mode.NUMBER and cell == self._braille_number_mode_terminal:
                 if not has_used_mode:
                     raise ValueError(f"cannot terminate number mode before translating any numbers")
-                translated.append(self._braille_to_english_character[cell])
+                translated.append(self._unmodded_braille_to_english[cell])
                 mode = None
             elif mode is self._Mode.CAPITALIZE:
-                translated.append(self._braille_to_english_capitalized[cell])
+                translated.append(self._capitalized_braille_to_english[cell])
                 mode = None
             elif mode is self._Mode.NUMBER:
-                translated.append(self._braille_to_english_number[cell])
+                translated.append(self._numeric_braille_to_english[cell])
                 has_used_mode = True
             else:
-                translated.append(self._braille_to_english_character[cell])
+                translated.append(self._unmodded_braille_to_english[cell])
 
         if mode is not None and not has_used_mode:
             raise ValueError(f"cannot terminate mode {mode} before using it")
@@ -283,17 +296,26 @@ class EnglishToBrailleTranslator:
     def __init__(
         self,
         *,
-        english_character_to_braille: dict[str, str] = ENGLISH_CHARACTER_TO_BRAILLE,
-        english_capitalized_to_braille: dict[str, str] = ENGLISH_CAPITALIZED_TO_BRAILLE,
-        english_number_to_braille: dict[str, str] = ENGLISH_NUMBER_TO_BRAILLE,
-        braille_uppercase_modifier: str = BRAILLE_UPPERCASE_MODIFIER,
+        unmodded_english_to_braille: dict[str, str] = UNMODDED_ENGLISH_TO_BRAILLE,
+        capitalized_english_to_braille: dict[str, str] = CAPITALIZED_ENGLISH_TO_BRAILLE,
+        numeric_english_to_braille: dict[str, str] = NUMERIC_ENGLISH_TO_BRAILLE,
+        braille_capitalize_modifier: str = BRAILLE_CAPITALIZE_MODIFIER,
         braille_number_mode_modifier: str = BRAILLE_NUMBER_MODE_MODIFIER,
         braille_number_mode_terminal: str = BRAILLE_NUMBER_MODE_TERMINAL,
     ):
-        self._english_character_to_braille = english_character_to_braille
-        self._english_capitalized_to_braille = english_capitalized_to_braille
-        self._english_number_to_braille = english_number_to_braille
-        self._braille_uppercase_modifer = braille_uppercase_modifier
+        """
+        Optional keyword arguments:
+            unmodded_english_to_braille: mapping of normal-mode braille cells by english character
+            capitalized_english_to_braille: mapping of capitalize-mode braille cells by english character
+            numeric_braille_to_english: mapping of number-mode braille cells by english character
+            braille_capitalize_modifier: braille cell signaling use of the capitalize mode
+            braille_number_mode_modifier: braille cell signaling beginning of the number mode
+            braille_number_mode_terminal: braille cell signaling end of the number mode
+        """
+        self._unmodded_english_to_braille = unmodded_english_to_braille
+        self._capitalized_english_to_braille = capitalized_english_to_braille
+        self._numeric_english_to_braille = numeric_english_to_braille
+        self._braille_capitalize_modifier = braille_capitalize_modifier
         self._braille_number_mode_modifier = braille_number_mode_modifier
         self._braille_number_mode_terminal = braille_number_mode_terminal
 
@@ -301,32 +323,32 @@ class EnglishToBrailleTranslator:
         mode: EnglishToBrailleTranslator._Mode | None = None
         translated: list[str] = []
         for character in message:
-            if character in self._english_capitalized_to_braille:
+            if character in self._capitalized_english_to_braille:
                 translated.extend([
-                    self._braille_uppercase_modifer,
-                    self._english_capitalized_to_braille[character],
+                    self._braille_capitalize_modifier,
+                    self._capitalized_english_to_braille[character],
                 ])
-            elif character in self._english_number_to_braille:
+            elif character in self._numeric_english_to_braille:
                 if mode is not self._Mode.NUMBER:
                     translated.append(self._braille_number_mode_modifier)
-                translated.append(self._english_number_to_braille[character])
+                translated.append(self._numeric_english_to_braille[character])
                 mode = self._Mode.NUMBER
-            elif character == self._braille_number_mode_terminal:
+            elif mode is self._Mode.NUMBER and character == self._braille_number_mode_terminal:
                 mode = None
-                translated.append(self._english_character_to_braille[character])
+                translated.append(self._unmodded_english_to_braille[character])
             else:
-                translated.append(self._english_character_to_braille[character])
+                translated.append(self._unmodded_english_to_braille[character])
 
         return "".join(translated)
 
 
 if __name__ == "__main__":
-    original_message = CliMessageParser().parse()
-    original_language = LanguageDiscriminator().determine(original_message)
-    if original_language is Language.BRAILLE:
+    message = CliMessageParser().parse()
+    language = LanguageDiscriminator().determine(message)
+    if language is Language.BRAILLE:
         translator = BrailleToEnglishTranslator()
     else:
         translator = EnglishToBrailleTranslator()
-    translated_message = translator.translate(original_message)
-    print(translated_message, end="")
+    translated = translator.translate(message)
+    print(translated, end="")
 
