@@ -43,7 +43,7 @@ ENGLISH_ALPHABET = {*(
     + [" "]
 )}
 BRAILLE_CELL_SIZE = 6
-BRAILLE_TO_ENGLISH_CAPITALIZED: dict[str, str] = dict([
+BRAILLE_AND_ENGLISH_CAPITALIZED = [
     # uppercase letters
     ("O.....", "A"),
     ("O.O...", "B"),
@@ -71,9 +71,9 @@ BRAILLE_TO_ENGLISH_CAPITALIZED: dict[str, str] = dict([
     ("OO..OO", "X"),
     ("OO.OOO", "Y"),
     ("O..OOO", "Z"),
-])
+]
 BRAILLE_SPACE = "......"
-BRAILLE_TO_ENGLISH_CHARACTER: dict[str, str] = dict([
+BRAILLE_AND_ENGLISH_CHARACTER = [
     # lowercase letters
     ("O.....", "a"),
     ("O.O...", "b"),
@@ -103,8 +103,8 @@ BRAILLE_TO_ENGLISH_CHARACTER: dict[str, str] = dict([
     ("O..OOO", "z"),
     # space
     (BRAILLE_SPACE, " "),
-])
-BRAILLE_TO_ENGLISH_NUMBER: dict[str, str] = dict([
+]
+BRAILLE_AND_ENGLISH_NUMBER = [
     # numbers
     (".OOO..", "0"),
     ("O.....", "1"),
@@ -116,10 +116,25 @@ BRAILLE_TO_ENGLISH_NUMBER: dict[str, str] = dict([
     ("OOOO..", "7"),
     ("O.OO..", "8"),
     (".OO...", "9"),
-])
+]
+BRAILLE_TO_ENGLISH_CAPITALIZED = dict(BRAILLE_AND_ENGLISH_CAPITALIZED)
+BRAILLE_TO_ENGLISH_CHARACTER = dict(BRAILLE_AND_ENGLISH_CHARACTER)
+BRAILLE_TO_ENGLISH_NUMBER = dict(BRAILLE_AND_ENGLISH_NUMBER)
 BRAILLE_UPPERCASE_MODIFIER = ".....O"
 BRAILLE_NUMBER_MODE_MODIFIER = ".O.OOO"
 BRAILLE_NUMBER_MODE_TERMINAL = BRAILLE_SPACE
+
+
+T = typing.TypeVar("T")
+V = typing.TypeVar("V")
+
+def flip_pairs(pairs: list[tuple[T, V]]) -> list[tuple[V, T]]:
+    return [(pair[1], pair[0]) for pair in pairs]
+
+
+ENGLISH_CAPITALIZED_TO_BRAILLE = dict(flip_pairs(BRAILLE_AND_ENGLISH_CAPITALIZED))
+ENGLISH_CHARACTER_TO_BRAILLE = dict(flip_pairs(BRAILLE_AND_ENGLISH_CHARACTER))
+ENGLISH_NUMBER_TO_BRAILLE = dict(flip_pairs(BRAILLE_AND_ENGLISH_NUMBER))
 
 
 def chunk(s: str, chunk_size: int) -> typing.Iterator[str]:
