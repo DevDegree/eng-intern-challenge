@@ -4,11 +4,11 @@ import subprocess
 class TestTranslator(unittest.TestCase):
     def test_output(self):
         # Command to run translator.py script
-        command = ["python", "translator.py", "Abc", "123", "xYz"]
-        print(command)
+        command = ["python3", "translator.py", "Abc", "123", "xYz"]
+        
         # Run the command and capture output
-        result = subprocess.run(command, capture_output=True, text=True)
-        print(result)
+        result = subprocess.run(command, capture_output=False, text=True)
+        
         # Expected output without the newline at the end
         expected_output = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
         
