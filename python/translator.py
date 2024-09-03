@@ -72,7 +72,7 @@ class BrailleToEnglishTranslator:
     def __init__(self):
         self.i = 0
 
-    def translate(self, text: str) -> str:
+    def translate(self, text: str):
         """Translates a string of Braille into English."""
         if len(text) % BRAILLE_CHAR_LEN != 0:
             raise BrailleTranslationError(
@@ -96,7 +96,7 @@ class BrailleToEnglishTranslator:
 
         return translated
 
-    def _read_char(self, text: str, number: bool = False) -> str | None:
+    def _read_char(self, text: str, number: bool = False):
         """Read the next Braille character (chunk of 6 chars).
         Returns None if there is nothing left to read.
         An exception is raised if the Braille character is invalid.
@@ -115,8 +115,10 @@ class BrailleToEnglishTranslator:
         else:
             return BRAILLE_TO_ENGLISH[braille_char]
 
-    def _read_number(self, text: str) -> str:
-        """Reads a number in braille until a space or end of input is encountered."""
+    def _read_number(self, text: str):
+        """Reads a number in braille until a space or end of input is encountered.
+        An exception is raised if a non-digit character that isn't a space if encountered.
+        """
         num = ""
         while char := self._read_char(text, number=True):
             if char == " ":
@@ -145,6 +147,7 @@ class EnglishToBrailleTranslator:
         self.i = 0
 
     def translate(self, text: str):
+        """Translate a string in English into Braille."""
         self._reset_state()
         translated = ""
 
@@ -171,7 +174,8 @@ class EnglishToBrailleTranslator:
 
         return translated
 
-    def _read_number(self, text):
+    def _read_number(self, text: str):
+        """Read the next number from the input and convert it into Braille."""
         num = ""
         while self.i < len(text) and text[self.i].isdigit():
             num += ENGLISH_DIGITS_TO_BRAILLE[text[self.i]]
