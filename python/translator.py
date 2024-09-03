@@ -6,7 +6,6 @@ class Translator:
     _DEFAULT_MAP_VAL = ""
 
     BRAILLE_CAPITALIZE_FOLLOWS = ".....O"
-    BRAILLE_DECIMAL_FOLLOWS = ".O...O"
     BRAILLE_NUMBER_FOLLOWS = ".O.OOO"
     BRAILLE_SPACE_FOLLOWS = "......"
 
@@ -55,19 +54,42 @@ class Translator:
     def __init__(self) -> None:
         pass
 
-    def is_braille(self, input_str: str) -> bool:
+    def _is_braille(self, input_str: str) -> bool:
+        """Checks to see if the text is braille.
+        - Could use better checks but we assume length character sets are valid.
+        """
         chunkable = len(input_str) % self._BRAILLE_READ_LEN == 0
         all_zero_dots = set(input_str) == set("O.")
         return chunkable and all_zero_dots
 
     def translate(self, input_str: str) -> str:
+        """Converts a string from English to Braille, or vice versa.
+        We assume the English and Braille can only consist of the
+        alphanumeric values [Aa-Zz][0-9], including whitespaces.
+        The Braille text should consists of only `O`s and `.` alongisde
+        additional symbols that denote capitalization and whitespace.
+
+        Args:
+            input_str (str): the string to be translated.
+
+        Returns:
+            str: the translated string.
+        """
         return (
             self.translate_braille_to_eng(input_str)
-            if self.is_braille(input_str)
+            if self._is_braille(input_str)
             else self.translate_eng_to_braille(input_str)
         )
 
     def translate_eng_to_braille(self, input_str: str) -> str:
+        """Converts a string from English to Braille.
+
+        Args:
+            input_str (str): the string to be translated.
+
+        Returns:
+            str: the translated string.
+        """
         encoding = []
 
         encoding_number = False
@@ -96,6 +118,14 @@ class Translator:
         return "".join(encoding)
 
     def translate_braille_to_eng(self, input_str: str) -> str:
+        """Converts a string from Braille to English.
+
+        Args:
+            input_str (str): the string to be translated.
+
+        Returns:
+            str: the translated string.
+        """
         words = []
 
         is_number = capitalize = False
