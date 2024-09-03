@@ -1,14 +1,11 @@
 # QUESTIONS:
-    # If the input str is '123 abc' and we translate this to braille, should the output have 2 space characters next to each other
-    # 1 to symbolize that numbers finish, and then the actual space character? Or just 1 space that represents both
+    # There were no instructions regarding decimal follows and the non alphanumeric symbols in
+    # the alphabet.
+    # I wasn't sure if we needed to implement this portion, but I chose to implement decimal
+    # follows to behave like capital follows and for this to appear before any special character.
+    # The 'O' character has the same braille translation as the '>' character.
 
-    # DECIMAL FOLLOWS???? (only for decimals or also for other symbols)
-
-    # test
-    # when to read braille and enghlish (finish function)
-            # braille when str only has "." and "O" and divisible by 6
-    # number follows and spaces
-
+import sys
 
 # English to Braille mappings
 e_to_b_alpha = {
@@ -37,11 +34,10 @@ b_to_e_num = {v: k for k, v in e_to_b_num.items()}
 b_to_e_sym = {v: k for k, v in e_to_b_sym.items()}
 
 # Special characters for capitalization and numbers
-CAPITAL_FOLLOWS = '.....O'
-NUMBER_FOLLOWS = '.O.OOO'
-DECIMAL_FOLLOWS = '.O...O'
+CAPITAL_FOLLOWS = '.....O' # Following character is a capital
+NUMBER_FOLLOWS = '.O.OOO'  # Follow characters are numeric until we read a SPACE character
+DECIMAL_FOLLOWS = '.O...O' # Behaves like capital follows
 SPACE = '......'
-
 
 def braille_to_english(braille_str):
     english_str = ''
@@ -59,15 +55,17 @@ def braille_to_english(braille_str):
         elif character == DECIMAL_FOLLOWS:
             decimal_follows = True
         elif character == SPACE:
-            english_str += ' '
+            if not number_follows:
+                english_str += ' '
             number_follows = False
-        elif number_follows:
+        elif number_follows and character in b_to_e_num:
             num_char = b_to_e_num[character]
             english_str += num_char
-        elif decimal_follows:
+        elif decimal_follows and character in b_to_e_sym:
             sym_char = b_to_e_sym[character]
             english_str += sym_char
-        else:
+            decimal_follows = False
+        elif character in b_to_e_alpha:
             english_char = b_to_e_alpha[character]
 
             if (capital_follows):
@@ -76,7 +74,6 @@ def braille_to_english(braille_str):
             
             english_str += english_char
 
-    print(english_str)
     return english_str
 
 def english_to_braille(english_str):
@@ -94,30 +91,28 @@ def english_to_braille(english_str):
         elif character.isspace():
             braille_str += SPACE
             number_follows = False
-        elif character.isupper():
-            braille_str += CAPITAL_FOLLOWS
-            braille_str += e_to_b_alpha[character.lower()]
-            number_follows = False
-        elif character in e_to_b_alpha:
-            braille_str += e_to_b_alpha[character]
-            number_follows = False
-        elif character in e_to_b_num:
-            braille_str += e_to_b_num[character]
-            number_follows = False
+        else:
+            if number_follows:
+                # Add terminating space
+                braille_str += SPACE
+                number_follows = False
 
-    print(braille_str)
+            if character.isupper():
+                braille_str += CAPITAL_FOLLOWS
+                braille_str += e_to_b_alpha[character.lower()]
+            elif character in e_to_b_alpha:
+                braille_str += e_to_b_alpha[character]
+            elif character in e_to_b_sym:
+                braille_str += DECIMAL_FOLLOWS
+                braille_str += e_to_b_sym[character]
+
     return braille_str
 
-
 if __name__ == "__main__":
-    import sys
     # Combine all arguments into a single input string
-    input_str = ''.join(sys.argv[1:])
+    input_str = ' '.join(sys.argv[1:])
 
-    # input_str = 'O.OO..O..O..O.O.O.'
-    # braille_to_english(input_str)
-
-    if all(c in 'O.' for c in input_str):
-        braille_to_english(input_str)
+    if len(input_str) % 6 == 0 and all(c in 'O.' for c in input_str):
+        print(braille_to_english(input_str))
     else:
-        english_to_braille(input_str)
+        print(english_to_braille(input_str))
