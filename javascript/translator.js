@@ -220,16 +220,46 @@ const translationNumbers = {
     //made them all strings becuase i dont want to code the logic to not to.
 }
 // console.log(getKey(translationNumbers, "000001"));
+// console.log(translationNumbers[0]);
 
+function isNumber(c) {
+    return !isNaN(c);
+}
+// console.log(isNumber("h"))
+// console.log(isNumber("4"))
 
 
 
 
 function translateEngToBr(str){
     let brailMessage = "";
+    let firstIterationOfNumber = true;
     
     for (let i = 0; i< str.length; i++){
         let englishLetter = str[i];
+        console.log(englishLetter)
+        
+        if(englishLetter === " "){
+            firstIterationOfNumber = true; //reset because there is a space.
+        }
+        //lets handle numbers
+        if(isNumber(englishLetter) && englishLetter !== " "){
+          //were handling numbers now
+          //englishLetter is a number
+          const brailleNumber = translationNumbers[parseInt(englishLetter)];
+          console.log("parseInt(englishLetter)", parseInt(englishLetter))
+          console.log("brailleNumber", brailleNumber)
+
+          const brailNumberText = convertBrailledigits(brailleNumber);
+           if(firstIterationOfNumber){
+            firstIterationOfNumber = false;
+            brailMessage += ".O.OOO";
+           }
+           brailMessage += brailNumberText;
+           continue;
+        }
+        //for letters
+        //let englishLetter = str[i];
         const isCapitalized = isUpperCase(englishLetter);
         englishLetter = englishLetter.toLowerCase();
         const brailleIndex = EngToBrArr.indexOf(englishLetter);
@@ -245,7 +275,9 @@ function translateEngToBr(str){
     }
     return brailMessage;
 }
-// console.log(translateEngToBr("Hello world"));
+// console.log(translateEngToBr("Hello world 42"));
+console.log(translateEngToBr("Hello world 42"));
+
 
 function getKey(obj, value) {
     for (let key in obj) {
