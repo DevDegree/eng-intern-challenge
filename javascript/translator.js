@@ -237,7 +237,7 @@ function translateEngToBr(str){
     
     for (let i = 0; i< str.length; i++){
         let englishLetter = str[i];
-        console.log(englishLetter)
+        // console.log(englishLetter)
         
         if(englishLetter === " "){
             firstIterationOfNumber = true; //reset because there is a space.
@@ -247,8 +247,8 @@ function translateEngToBr(str){
           //were handling numbers now
           //englishLetter is a number
           const brailleNumber = translationNumbers[parseInt(englishLetter)];
-          console.log("parseInt(englishLetter)", parseInt(englishLetter))
-          console.log("brailleNumber", brailleNumber)
+        //   console.log("parseInt(englishLetter)", parseInt(englishLetter))
+        //   console.log("brailleNumber", brailleNumber)
 
           const brailNumberText = convertBrailledigits(brailleNumber);
            if(firstIterationOfNumber){
@@ -276,7 +276,7 @@ function translateEngToBr(str){
     return brailMessage;
 }
 // console.log(translateEngToBr("Hello world 42"));
-console.log(translateEngToBr("Hello world 42"));
+// console.log(translateEngToBr("Hello world 42"));
 
 
 function getKey(obj, value) {
@@ -337,8 +337,24 @@ function translateBrToEng(str){
             decryptedMessage += engLetters[num];
         }
     }
-    console.log(decryptedMessage)
+    // console.log(decryptedMessage)
 }
 // translateBrToEng(".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..");
 // translateBrToEng(".O.OOOOO.O..O.O..............OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..");
+
+
+
+
+if (!process.argv[2]){
+    return "Please enter a valid String";
+}else{
+    if(natureOfString(process.argv[2])){ //if it returns true, it means the string is english
+       console.log(translateEngToBr(process.argv[2]));
+    }else{
+        console.log(translateBrToEng(process.argv[2]));
+    }
+}
+ 
+
+
 
