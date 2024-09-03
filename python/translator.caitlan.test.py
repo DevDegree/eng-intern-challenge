@@ -37,8 +37,10 @@ class TestTranslator(unittest.TestCase):
         braille_str = '......'
         self.check_english_to_braille(english_str, braille_str)
 
-        # Stdout can't read the single space?
-        # self.check_braille_to_english(english_str, braille_str)
+        # Check the braille to english stripping only the newline
+        command = ["python3", "translator.py", braille_str]
+        result = subprocess.run(command, capture_output=True, text=True)
+        self.assertEqual(result.stdout.strip('\n'), english_str)
 
     def test_only_capital(self):
         english_str = "ABC"
