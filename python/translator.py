@@ -220,7 +220,12 @@ def translateToEnglish(braille_string):
 
 if __name__ == '__main__':
 
-    input_language = sys.argv[1]
+    arguments = sys.argv[1:]
+    input_language = ""
+    for i, arg in enumerate(arguments):
+        input_language += arg + " "
+    input_language=input_language.strip()
+
     found_lang = detectLanguage(input_language)
 
     if(found_lang == "English"):
