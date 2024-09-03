@@ -48,6 +48,17 @@ def translate(phrases: List[str]) -> str:
         "space": "......",
         "number_follows": ".O.OOO",
         ".": "..OO.O",
+        ",": "..O...",
+        "?": "..O.OO",
+        "!": "..OOO.",
+        ":": "..OO..",
+        ";": "..O.O.",
+        "-": "....OO",
+        "/": ".O..O.",
+        "<": ".OO..O",
+        ">": "O..OO.",
+        "(": "O.O..O",
+        ")": ".O.OO.",
     }
 
     isNum = False
@@ -90,7 +101,7 @@ def translate(phrases: List[str]) -> str:
                 out += " "
             elif phrase[0:6] == ".O...O":  # decimal_follows
                 isNum = True
-                
+
             elif isNum:
                 if phrase[0:6] == "..OO.O":
                     out += brail[phrase[0:6]]
