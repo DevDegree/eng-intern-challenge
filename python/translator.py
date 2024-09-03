@@ -79,19 +79,21 @@ def translateEnglishToBraille(input: list[str]) -> str:
                 translatedText += NumberFollows
                 isNumber = True
 
-            translatedText += numsToBraille.get(char, "_")
-        else:
+            translatedText += numsToBraille.get(char, "")
+        if char.isalpha():
             # reset back to chars if char is anything except space
-            if char != " ":
-                isNumber = False
+            isNumber = False
 
             if char.isupper():
                 # add capital follows symbol
                 translatedText += CapitalFollows
-                translatedText += alphaToBraille.get(char.lower(), "_").upper()
+                translatedText += alphaToBraille.get(char.lower(), "").upper()
             else:
-                # add translated char and add "_" in case char doesnt exist
-                translatedText += alphaToBraille.get(char, "_")
+                # add translated char and add "" in case char doesnt exist
+                translatedText += alphaToBraille.get(char, "")
+        else:
+            # handle spaces and punctuation
+            translatedText += alphaToBraille.get(char, "")
 
     return translatedText
 
@@ -112,15 +114,15 @@ def translateBrailleToEnglish(input: list[str]) -> str:
         elif char == BrailleSpace:
             # add space and reset back to alphabet chars
             numFollows = False
-            translatedText += brailleToAlpha.get(char, "_")
+            translatedText += brailleToAlpha.get(char, "")
         elif capFollows:
-            translatedText += brailleToAlpha.get(char, "_").upper()
+            translatedText += brailleToAlpha.get(char, "").upper()
             capFollows = False
         elif numFollows:
-            translatedText += brailleToNums.get(char, "_")
+            translatedText += brailleToNums.get(char, "")
         else:
             # add translated char and add "_" in case char doesnt exist
-            translatedText += brailleToAlpha.get(char, "_")
+            translatedText += brailleToAlpha.get(char, "")
 
     return translatedText
 
