@@ -139,7 +139,6 @@ class Translator:
 
 def main():
     input_str = " ".join(sys.argv[1:])
-
     translator = Translator()
     print(translator.translate(input_str))
 
