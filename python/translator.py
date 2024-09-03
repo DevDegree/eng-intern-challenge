@@ -239,22 +239,35 @@ class BrailleToEnglishTranslator:
             raise ValueError("the message size is not divisible by the braille cell size")
 
         mode: BrailleToEnglishTranslator._Mode | None = None
+        has_used_mode = False
         translated: list[str] = []
         for cell in chunk(message, self._braille_cell_size):
             if cell == self._braille_uppercase_modifier:
+                if mode:
+                    raise ValueError(f"cannot enter uppercase mode when mode is already {mode}")
                 mode = self._Mode.CAPITALIZE
+                has_used_mode = False
             elif cell == self._braille_number_mode_modifier:
+                if mode:
+                    raise ValueError(f"cannot enter number mode when mode is already {mode}")
                 mode = self._Mode.NUMBER
-            elif cell == self._braille_number_mode_terminal:
+                has_used_mode = False
+            elif mode is self._Mode.NUMBER and cell == self._braille_number_mode_terminal:
+                if not has_used_mode:
+                    raise ValueError(f"cannot terminate number mode before translating any numbers")
                 translated.append(self._braille_to_english_character[cell])
                 mode = None
-            elif mode == self._Mode.CAPITALIZE:
+            elif mode is self._Mode.CAPITALIZE:
                 translated.append(self._braille_to_english_capitalized[cell])
                 mode = None
-            elif mode == self._Mode.NUMBER:
+            elif mode is self._Mode.NUMBER:
                 translated.append(self._braille_to_english_number[cell])
+                has_used_mode = True
             else:
                 translated.append(self._braille_to_english_character[cell])
+
+        if mode is not None and not has_used_mode:
+            raise ValueError(f"cannot terminate mode {mode} before using it")
 
         return "".join(translated)
 
@@ -291,7 +304,7 @@ class EnglishToBrailleTranslator:
                     self._english_capitalized_to_braille[character],
                 ])
             elif character in self._english_number_to_braille:
-                if mode != self._Mode.NUMBER:
+                if mode is not self._Mode.NUMBER:
                     translated.append(self._braille_number_mode_modifier)
                 translated.append(self._english_number_to_braille[character])
                 mode = self._Mode.NUMBER
@@ -307,7 +320,7 @@ class EnglishToBrailleTranslator:
 if __name__ == "__main__":
     original_message = CliMessageParser().parse()
     original_language = LanguageDiscriminator().determine(original_message)
-    if original_language == Language.BRAILLE:
+    if original_language is Language.BRAILLE:
         translator = BrailleToEnglishTranslator()
     else:
         translator = EnglishToBrailleTranslator()
