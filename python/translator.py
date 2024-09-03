@@ -10,6 +10,23 @@ automated validation by modifying other files in this repo.
 You can find the companion repo here:
 https://github.com/callumcurtis/shopify-intern-challenge-harness
 --------------------------------------------------------------------------------
+
+This application makes some assumptions (since the starter repo did not completely
+specify expected behavior in all cases).
+
+- A message is considered to be in Braille if it consists of only 'O' and '.'
+  characters.
+- If a message is not considered Braille then it is considered English.
+- If a message is considered Braille but is not otherwise syntactically correct
+  (e.g., its length is not evenly divisibly by 6), then this application will exit
+  with an exception.
+- If a message is considered English but contains periods then it is considered
+  syntactically incorrect and the application will exit with an exception.
+- The message is expected to fit in memory.
+- Multiple consecutive spaces are combined into a single space in the **input**
+  to maintain consistency between usage with quoted and unquoted arguments.
+- Trailing and leading spaces are stripped in the **output** as spaces are
+  intended only as separators between words.
 """
 
 from __future__ import annotations
