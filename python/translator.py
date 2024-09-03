@@ -138,7 +138,6 @@ def detectLanguage(lang):
 #English to Braille translation
 def translateToBraille(english_string):
     translated_braille = ""
-
     i=0
     while i < len(english_string):
         c = english_string[i]
