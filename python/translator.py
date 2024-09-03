@@ -53,8 +53,6 @@ if (re.search("^[.O]*$", str)):
                 capitalization = False
             elif reverseHash[substring] == "capital":
                 capitalization = True
-            elif reverseHash[substring] == 'decimal':
-                result_string += "."
             elif reverseHash[substring] != 'number':
                 result_string += chr(reverseHash[substring])
 
