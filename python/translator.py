@@ -215,7 +215,13 @@ class LanguageDiscriminator:
         return Language.ENGLISH
 
 
-class BrailleToEnglishTranslator:
+class LanguageToLanguageTranslator(typing.Protocol):
+
+    def translate(self, message: str) -> str:
+        ...
+
+
+class BrailleToEnglishTranslator(LanguageToLanguageTranslator):
 
     class _Mode(enum.Enum):
         CAPITALIZE = "capitalize"
@@ -288,7 +294,7 @@ class BrailleToEnglishTranslator:
         return "".join(translated)
 
 
-class EnglishToBrailleTranslator:
+class EnglishToBrailleTranslator(LanguageToLanguageTranslator):
 
     class _Mode(enum.Enum):
         NUMBER = "number"
@@ -342,13 +348,27 @@ class EnglishToBrailleTranslator:
         return "".join(translated)
 
 
+class Translator:
+
+    def __init__(
+        self,
+        *,
+        translator_by_source_language: dict[Language, LanguageToLanguageTranslator] = {
+            Language.BRAILLE: BrailleToEnglishTranslator(),
+            Language.ENGLISH: EnglishToBrailleTranslator(),
+        },
+        language_discriminator: LanguageDiscriminator = LanguageDiscriminator(),
+    ):
+        self._language_discriminator = language_discriminator
+        self._translator_by_source_language = translator_by_source_language
+
+    def translate(self, message: str) -> str:
+        source_language = self._language_discriminator.determine(message)
+        return self._translator_by_source_language[source_language].translate(message)
+
+
 if __name__ == "__main__":
     message = CliMessageParser().parse()
-    language = LanguageDiscriminator().determine(message)
-    if language is Language.BRAILLE:
-        translator = BrailleToEnglishTranslator()
-    else:
-        translator = EnglishToBrailleTranslator()
-    translated = translator.translate(message)
+    translated = Translator().translate(message)
     print(translated, end="")
 
