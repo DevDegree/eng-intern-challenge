@@ -1,9 +1,6 @@
 import sys
 from typing import List
 
-def translate2(phrase: str):
-    print(phrase[0])
-    print(phrase[1])
 
 def translate(phrases: List[str]) -> str:
 
@@ -53,35 +50,35 @@ def translate(phrases: List[str]) -> str:
         ".": "..OO.O",
     }
 
-    other = {
-        "a": "1",
-        "b": "2",
-        "c": "3",
-        "d": "4",
-        "e": "5",
-        "f": "6",
-        "g": "7",
-        "h": "8",
-        "i": "9",
-        "j": "0",
-    }
-
-    brail = {value: key for key, value in c.items()}
-    brail["O....."] = "a"
-    brail["O.O..."] = "b"
-    brail["OO...."] = "c"
-    brail["OO.O.."] = "d"
-    brail["O..O.."] = "e"
-    brail["OOO..."] = "f"
-    brail["OOOO.."] = "g"
-    brail["O.OO.."] = "h"
-    brail[".OO..."] = "i"
-    brail[".OOO.."] = "j"
-
     isNum = False
 
     if len(phrases) == 1 and set(phrases[0]) == {".", "O"}:
-        # phrase = list(phrases[0])
+
+        other = {
+            "a": "1",
+            "b": "2",
+            "c": "3",
+            "d": "4",
+            "e": "5",
+            "f": "6",
+            "g": "7",
+            "h": "8",
+            "i": "9",
+            "j": "0",
+        }
+
+        brail = {value: key for key, value in c.items()}
+        brail["O....."] = "a"
+        brail["O.O..."] = "b"
+        brail["OO...."] = "c"
+        brail["OO.O.."] = "d"
+        brail["O..O.."] = "e"
+        brail["OOO..."] = "f"
+        brail["OOOO.."] = "g"
+        brail["O.OO.."] = "h"
+        brail[".OO..."] = "i"
+        brail[".OOO.."] = "j"
+
         phrase = phrases[0]
 
         while len(phrase) > 0:
@@ -91,10 +88,14 @@ def translate(phrases: List[str]) -> str:
             elif phrase[0:6] == "......":  # space
                 isNum = False
                 out += " "
-            elif isNum and phrase[0:6] == "..OO.O":  # decimal_follows
-                out += other[brail[phrase[0:6]]]
+            elif phrase[0:6] == ".O...O":  # decimal_follows
+                isNum = True
+                
             elif isNum:
-                out += other[brail[phrase[0:6]]]
+                if phrase[0:6] == "..OO.O":
+                    out += brail[phrase[0:6]]
+                else:
+                    out += other[brail[phrase[0:6]]]
 
             elif phrase[0:6] == ".....O":  # capital_follows
                 phrase = phrase[6:]
