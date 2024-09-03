@@ -35,7 +35,6 @@ def main():
         32: '......',   # ' '
 
         "capital": '.....O',  # 'Upper case'
-        "decimal": '.O...O',  # 'Decimal'
         "number": '.O.OOO',  # 'Digit'
 
     }
