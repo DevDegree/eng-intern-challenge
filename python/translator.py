@@ -19,9 +19,9 @@ braille_to_numbers = {
 
 # Braille to Special Characters Mapping
 braille_to_special_chars = {
-    '..OO.O': '.', '..O...': ',', '..O.OO': '?', '..OOO.': '|',
+    '..OO.O': '.', '..O...': ',', '..O.OO': '?',
     '..OO..': ':', '..O.O.': ';', '....OO': '-', '.O..O.': '/',
-    '.OO..O': '<', 'O..OO.': '>', 'O.O..O': '(', '.O.OO.': ')', '..000.': '!'
+    '.OO..O': '<', 'O..OO.': '>', 'O.O..O': '(', '.O.OO.': ')', '..OOO.': '!'
 }
 
 # English to Braille Mapping
@@ -38,9 +38,9 @@ english_to_braille = {
 
 # English to Braille Special Characters Mapping
 special_chars_to_braille = {
-    '.': '..OO.O', ',': '..O...', '?': '..O.OO', '|': '..OOO.',
+    '.': '..OO.O', ',': '..O...', '?': '..O.OO',
     ':': '..OO..', ';': '..O.O.', '-': '....OO', '/': '.O..O.',
-    '<': '.OO..O', '>': 'O..OO.', '(': 'O.O..O', ')': '.O.OO.', '!': '..000.'
+    '<': '.OO..O', '>': 'O..OO.', '(': 'O.O..O', ')': '.O.OO.', '!': '..OOO.'
 }
 # Takes all the characters in the input text and translates them to Braille characters
 def translate_to_braille(text):
@@ -145,7 +145,8 @@ def is_braille_input(braille):
 # Main function to run code
 def main():
     if len(sys.argv) < 2:
-        return "Usage: python3 translator.py <text>"
+        print("Usage: python3 translator.py <text>")
+        return
 
     input_text = " ".join(sys.argv[1:])
 
