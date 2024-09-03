@@ -1,19 +1,16 @@
 """CLI application to translate messages between Braille and English.
 
---------------------------------------------------------------------------------
-IMPORTANT
---------------------------------------------------------------------------------
+
+Note:
 I've created a companion repo to store my additional test cases
 and documentation. This way, I don't accidentally break the
 automated validation by modifying other files in this repo.
 
 You can find the companion repo here:
 https://github.com/callumcurtis/shopify-intern-challenge-harness
---------------------------------------------------------------------------------
 
-This application makes some assumptions (since the starter repo did not completely
-specify expected behavior in all cases).
 
+Assumptions:
 - A message is considered to be in Braille if it consists of only 'O' and '.'
   characters.
 - If a message is not considered Braille then it is considered English.
@@ -29,6 +26,12 @@ specify expected behavior in all cases).
   consistency between usage with quoted and unquoted arguments.
 - Braille-encoded spaces are **not** modified (e.g., combined into a single space)
   as their usage is unambiguous from the command line.
+
+
+Possible Improvements:
+- Generalizing the translators to accept any modes/modifiers, not just numbers
+  and capitalization.
+- Support streaming (input and output) for real-time translation.
 """
 
 from __future__ import annotations
