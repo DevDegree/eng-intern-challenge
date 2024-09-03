@@ -3,7 +3,6 @@ import re
 str = ' '.join(sys.argv[1:])
 
 hash = {
-    # 96: '.OOO..',  # '0' temporary fix for 0 not being mapped to a
     97: 'O.....',  # 'a' '1'
     98: 'O.O...',  # 'b' '2'
     99: 'OO....',  # 'c' '3'
@@ -38,23 +37,6 @@ hash = {
 
 }
 
-special = {
-    46: '..OO.O',   # '.'
-    44: '..O...',   # ','
-    63: '..O.OO',   # '?'
-    33: '..OOO.',   # '!'
-    58: '..OO..',   # ':'
-    59: '..O.O.',   # ';'
-    45: '....OO',   # '-'
-    47: '.O..O.',   # '/'
-    60: '.OO..O',   # '<'
-    62: 'O..OO.',   # '>'
-    40: 'O.O..O',   # '('
-    41: '.O.OO.',   # ')'
-}
-
-# Check if it's in braille or english
-
 numSequence = False
 result_string = ''
 
@@ -77,7 +59,6 @@ if (re.search("^[.O]*$", str)):
                 result_string += chr(reverseHash[substring])
 
 else:
-    hash.update(special)
     ascii_str = [ord(c) for c in str]
 
     for ascii in ascii_str:
