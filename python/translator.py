@@ -156,27 +156,3 @@ def to_english(string):
 
 if __name__ == "__main__":
     main()
-
-
-# expected_output =
-# ".....O"
-# "O....."  A
-# "O.O..."  b
-# "OO...."  c
-# "......"
-# ".O.OOO"
-# "O....."  1
-# "O.O..."  2
-# "OO...."
-# "......"
-# "OO..OO"
-# ".....O"
-# "OO.OOO"
-# "O..OOO"
-
-# "Abc 1"
-
-# "OOO.O."
-# "OO.OOO"
-# ".OOOO."
-# "O.OO.."
