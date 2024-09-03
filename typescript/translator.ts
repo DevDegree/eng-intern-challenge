@@ -113,7 +113,9 @@ function isBraille(str: string): boolean {
 }
 
 function parseBraille(str: string): string {
-  const chars: string[] = str.match(/.{1,6}/g);
+  const chars: RegExpMatchArray | null = str.match(/.{1,6}/g);
+  if (chars === null) return "";
+
   let output: string = "";
 
   let capitalFlag: boolean = false;
