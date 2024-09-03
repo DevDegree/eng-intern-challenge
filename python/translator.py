@@ -2,57 +2,62 @@ import sys
 
 
 class Translator:
-    ALPHANUM_ENG_TO_BRAILLE_MAP = {
-        "a": "0.....",
-        "b": "0.0...",
-        "c": "00....",
-        "d": "00.0..",
-        "e": "0..0..",
-        "f": "000...",
-        "g": "0000..",
-        "h": "0.00..",
-        "i": ".00...",
-        "j": ".000..",
-        "k": "0...0.",
-        "l": "0.0.0.",
-        "m": "00..0.",
-        "n": "00.00.",
-        "o": "0..00.",
-        "p": "000.0.",
-        "q": "00000.",
-        "r": "0.000.",
-        "s": ".00.0.",
-        "t": ".0000.",
-        "u": "0...00",
-        "v": "0.0.00",
-        "w": ".000.0",
-        "x": "00..00",
-        "y": "00.000",
-        "z": "0..000",
-        "1": "0.....",
-        "2": "0.0...",
-        "3": "00....",
-        "4": "00.0..",
-        "5": "0..0..",
-        "6": "000...",
-        "7": "0000..",
-        "8": "0.00..",
-        "9": ".00...",
-        "0": ".000..",
-        " ": "......",
+    _BRAILLE_READ_LEN = 6
+
+    BRAILLE_CAPITALIZE_FOLLOWS = ".....O"
+    BRAILLE_DECIMAL_FOLLOWS = ".O...O"
+    BRAILLE_NUMBER_FOLLOWS = ".O.OOO"
+    BRAILLE_SPACE_FOLLOWS = "......"
+
+    ALPHA_ENG_TO_BRAILLE_MAP = {
+        "a": "O.....",
+        "b": "O.O...",
+        "c": "OO....",
+        "d": "OO.O..",
+        "e": "O..O..",
+        "f": "OOO...",
+        "g": "OOOO..",
+        "h": "O.OO..",
+        "i": ".OO...",
+        "j": ".OOO..",
+        "k": "O...O.",
+        "l": "O.O.O.",
+        "m": "OO..O.",
+        "n": "OO.OO.",
+        "o": "O..OO.",
+        "p": "OOO.O.",
+        "q": "OOOOO.",
+        "r": "O.OOO.",
+        "s": ".OO.O.",
+        "t": ".OOOO.",
+        "u": "O...OO",
+        "v": "O.O.OO",
+        "w": ".OOO.O",
+        "x": "OO..OO",
+        "y": "OO.OOO",
+        "z": "O..OOO",
     }
 
-    BRAILLE_CAPITALIZE_FOLLOWS = ".....0"
-    BRAILLE_DECIMAL_FOLLOWS = ".0...0"
-    BRAILLE_NUMBER_FOLLOWS = ".0.000"
-
-    BRAILLE_SPACE = "......"
+    NUM_ENG_TO_BRAILLE_MAP = {
+        "1": "O.....",
+        "2": "O.O...",
+        "3": "OO....",
+        "4": "OO.O..",
+        "5": "O..O..",
+        "6": "OOO...",
+        "7": "OOOO..",
+        "8": "O.OO..",
+        "9": ".OO...",
+        "0": ".OOO..",
+    }
 
     def __init__(self) -> None:
         pass
 
     def is_braille(self, input_str: str) -> bool:
-        return set(input_str) == set("0.")
+        chunkable = len(input_str) % self._BRAILLE_READ_LEN == 0
+        all_zero_dots = set(input_str) == set("O.")
+        return chunkable and all_zero_dots
 
     def translate(self, input_str: str) -> str:
         return (
@@ -65,11 +70,52 @@ class Translator:
         return input_str
 
     def translate_braille_to_eng(self, input_str: str) -> str:
-        return input_str
+        words = []
+
+        is_number = capitalize = False
+
+        ALPHA_BRAILLE_TO_ENG_MAP = {
+            enc: word for word, enc in self.ALPHA_ENG_TO_BRAILLE_MAP.items()
+        }
+
+        NUM_BRAILLE_TO_ENG_MAP = {
+            enc: num for num, enc in self.NUM_ENG_TO_BRAILLE_MAP.items()
+        }
+
+        for i in range(0, len(input_str), self._BRAILLE_READ_LEN):
+            token = input_str[i : i + self._BRAILLE_READ_LEN]
+
+            if token == self.BRAILLE_SPACE_FOLLOWS:
+                is_number = False
+                words.append(" ")
+
+            elif token == self.BRAILLE_NUMBER_FOLLOWS:
+                is_number = True
+
+            elif token == self.BRAILLE_CAPITALIZE_FOLLOWS:
+                capitalize = True
+
+            else:
+                word = (
+                    NUM_BRAILLE_TO_ENG_MAP.get(token, "")
+                    if is_number
+                    else ALPHA_BRAILLE_TO_ENG_MAP.get(token, "")
+                )
+
+                if not is_number and capitalize:
+                    word = word.capitalize()
+                    capitalize = False
+
+                words.append(word)
+
+        return "".join(words)
 
 
 def main():
-    print(sys.argv[1:])
+    input_str = " ".join(sys.argv[1:])
+
+    translator = Translator()
+    print(translator.translate(input_str))
 
 
 if __name__ == "__main__":
