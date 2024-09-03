@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-// white = . ;  black = 0
 const translation = [
   { 'a': ['O', '.', '.', '.', '.', '.'] },
   { 'b': ['O', '.', 'O', '.', '.', '.'] },
@@ -68,13 +67,15 @@ function init() {
     for (const arg of args) {
       const arr = Array.from(arg);
 
-      const isBraille = arr.filter((item) =>
+      let isBraille;
+
+      isBraille = arr.every((item) =>
         item === 'O' || item === '.'
       );
 
-      isBraille.length === 0
-        ? tranlsateTo = 'braille'
-        : tranlsateTo = 'english'    
+      isBraille
+        ? tranlsateTo = 'english'
+        : tranlsateTo = 'braille'    
     }
 
     if (tranlsateTo === 'braille') {
@@ -118,10 +119,10 @@ const toEnglish = (args) => {
     }
   }
 
-  sortAndUpdateFormat(englishArr);
+  updateAlphaFormat(englishArr);
 }
 
-const sortAndUpdateFormat = (array) => {
+const updateAlphaFormat = (array) => {
   let capIndexStart = [];
   let numIndexStart = [];
   let spaces = [];
@@ -175,6 +176,7 @@ const sortAndUpdateFormat = (array) => {
     let tempArr= [];
     let num = [];
     let capWord = [];
+    let regString = []
 
     for (let i = 0; i < word.length; i++) {
       const key = Object.keys(word[i]).toString();
@@ -191,32 +193,112 @@ const sortAndUpdateFormat = (array) => {
       const upper = capWord[0].toUpperCase();
       capWord[0] = upper;
       tempArr = [...capWord];
-    }
-    
-    if (tempArr[0] === 'number') {
+
+    } else if (tempArr[0] === 'number') {
       num = tempArr.filter((a) => {
         return /^\d*\.?\d*$/.test(a);
       });
       tempArr = [...num];
-    };
+
+    } else {
+      regString = tempArr.filter((a) => {
+        return /^[a-zA-Z\s]+$/.test(a);
+      });
+
+      tempArr = [...regString];
+    }
 
     stringArr.push(tempArr);
   }
 
   const finalStringArr = stringArr.flatMap(x => x);
   translated = finalStringArr.join('');
-  console.log(translated);
+  // console.log(translated);
   return translated;
 }
 
 const toBraille = (args) => {
-  console.log('to braille', args);
+  let brailleArr = [];
 
   // for each letter split
-  for (const arg of args) {
+  for (const [i, arg] of args.entries()) {
     const arr = Array.from(arg);
 
-    console.log(arr);
+    if (i !== (args.length - 1)) {
+      arr.push(' ');
+    }
+    brailleArr.push(arr);
+  }
+
+  updateBrailleFormat(brailleArr);
+}
+
+const updateBrailleFormat = (array) => {
+  let updatedFormatArr = [];
+
+  // find if there are capitals or numbers
+  for (const [i, item] of array.entries()) {
+    const tempObj = checkTypeof(item, i);
+    updatedFormatArr[tempObj.index] = tempObj.arr;
+  }
+
+  const combinedArr = updatedFormatArr.flat();
+
+  const brailleArr = combinedArr.map((item, index) => {
+    for (let i = 0; i < translation.length; i++) {
+      let key = Object.keys(translation[i])[0];
+
+      if (item === key) {
+        return translation[i][key];
+      }
+    }
+  });
+
+  const tranlsatedArr = brailleArr.flatMap(x => x).join('');
+  // console.log(tranlsatedArr);
+}
+
+
+const checkTypeof = (x, i) => {
+  const cap = 'capital';
+  const num = 'number';
+  const dec = 'decimal';
+
+  let isNum;
+  let isAlpha;
+
+  x.filter(a => {
+    isNum = /^\d+(\.\d+)?$/.test(a);
+
+    isAlpha = /^[^0-9]*$/.test(a);
+  })
+
+  if (isNum) {
+    x.unshift(num);
+    return {
+      index: i,
+      arr: [...x]
+    }
+
+  } else if (isAlpha) {
+    let hasCapital;
+
+    if (x[0] === x[0].toUpperCase()) {
+      x.filter(item => {
+          /^[^0-9]*$/.test(item)
+            ? hasCapital = true
+            : hasCapital = false;
+        });
+      
+      if (hasCapital) {
+        x[0] = x[0].toLowerCase();
+        x.unshift(cap);
+      }
+    }
+    return {
+      index: i,
+      arr: [...x]
+    }
   }
 }
 
