@@ -67,8 +67,14 @@ NUMBER_FOLLOWS = ".O.OOO"
 
 
 def main():
-    for string in sys.argv[1:]:
-        determine_lang(string)
+    answer = ""
+    string = " ".join(sys.argv[1:])
+    if determine_lang(string) == "english":
+        answer = answer + to_braille(string)
+    else:
+        answer = answer + to_english(string)
+
+    print(answer)
 
 
 def determine_lang(string):
@@ -76,13 +82,11 @@ def determine_lang(string):
     for letter in string:
         # if we find a non-braille letter, it's in english
         if letter != "O" and letter != ".":
-            to_braille(string)
-            found_english = True
-            break
+            return "english"
 
     # if we only have Os and .s this is braille
     if not found_english:
-        to_english(string)
+        return "braille"
 
 
 def to_braille(string):
@@ -111,7 +115,7 @@ def to_braille(string):
         else:
             converted = converted + to_braille_dict[letter.lower()]
 
-    print(converted)
+    return converted
 
 
 def to_english(string):
@@ -147,8 +151,32 @@ def to_english(string):
         else:
             converted = converted + to_eng_dict[braille_letter]
 
-    print(converted)
+    return converted
 
 
 if __name__ == "__main__":
     main()
+
+
+# expected_output =
+# ".....O"
+# "O....."  A
+# "O.O..."  b
+# "OO...."  c
+# "......"
+# ".O.OOO"
+# "O....."  1
+# "O.O..."  2
+# "OO...."
+# "......"
+# "OO..OO"
+# ".....O"
+# "OO.OOO"
+# "O..OOO"
+
+# "Abc 1"
+
+# "OOO.O."
+# "OO.OOO"
+# ".OOOO."
+# "O.OO.."
