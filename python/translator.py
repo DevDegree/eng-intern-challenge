@@ -31,6 +31,7 @@ specify expected behavior in all cases).
 
 from __future__ import annotations
 
+import typing
 import enum
 
 
@@ -41,6 +42,88 @@ ENGLISH_ALPHABET = {*(
     + [chr(i) for i in range(ord("0"), ord("9") + 1)]
     + [" "]
 )}
+BRAILLE_CELL_SIZE = 6
+BRAILLE_TO_ENGLISH_CAPITALIZED: dict[str, str] = dict([
+    # uppercase letters
+    ("O.....", "A"),
+    ("O.O...", "B"),
+    ("OO....", "C"),
+    ("OO.O..", "D"),
+    ("O..O..", "E"),
+    ("OOO...", "F"),
+    ("OOOO..", "G"),
+    ("O.OO..", "H"),
+    (".OO...", "I"),
+    (".OOO..", "J"),
+    ("O...O.", "K"),
+    ("O.O.O.", "L"),
+    ("OO..O.", "M"),
+    ("OO.OO.", "N"),
+    ("O..OO.", "O"),
+    ("OOO.O.", "P"),
+    ("OOOOO.", "Q"),
+    ("O.OOO.", "R"),
+    (".OO.O.", "S"),
+    (".OOOO.", "T"),
+    ("O...OO", "U"),
+    ("O.O.OO", "V"),
+    (".OOO.O", "W"),
+    ("OO..OO", "X"),
+    ("OO.OOO", "Y"),
+    ("O..OOO", "Z"),
+])
+BRAILLE_SPACE = "......"
+BRAILLE_TO_ENGLISH_CHARACTER: dict[str, str] = dict([
+    # lowercase letters
+    ("O.....", "a"),
+    ("O.O...", "b"),
+    ("OO....", "c"),
+    ("OO.O..", "d"),
+    ("O..O..", "e"),
+    ("OOO...", "f"),
+    ("OOOO..", "g"),
+    ("O.OO..", "h"),
+    (".OO...", "i"),
+    (".OOO..", "j"),
+    ("O...O.", "k"),
+    ("O.O.O.", "l"),
+    ("OO..O.", "m"),
+    ("OO.OO.", "n"),
+    ("O..OO.", "o"),
+    ("OOO.O.", "p"),
+    ("OOOOO.", "q"),
+    ("O.OOO.", "r"),
+    (".OO.O.", "s"),
+    (".OOOO.", "t"),
+    ("O...OO", "u"),
+    ("O.O.OO", "v"),
+    (".OOO.O", "w"),
+    ("OO..OO", "x"),
+    ("OO.OOO", "y"),
+    ("O..OOO", "z"),
+    # space
+    (BRAILLE_SPACE, " "),
+])
+BRAILLE_TO_ENGLISH_NUMBER: dict[str, str] = dict([
+    # numbers
+    (".OOO..", "0"),
+    ("O.....", "1"),
+    ("O.O...", "2"),
+    ("OO....", "3"),
+    ("OO.O..", "4"),
+    ("O..O..", "5"),
+    ("OOO...", "6"),
+    ("OOOO..", "7"),
+    ("O.OO..", "8"),
+    (".OO...", "9"),
+])
+BRAILLE_UPPERCASE_MODIFIER = ".....O"
+BRAILLE_NUMBER_MODE_MODIFIER = ".O.OOO"
+BRAILLE_NUMBER_MODE_TERMINAL = BRAILLE_SPACE
+
+
+def chunk(s: str, chunk_size: int) -> typing.Iterator[str]:
+    return (s[i:i + chunk_size] for i in range(0, len(s), chunk_size))
 
 
 class Language(enum.Enum):
@@ -109,8 +192,63 @@ class LanguageDiscriminator:
         return Language.ENGLISH
 
 
+class BrailleToEnglishConverter:
+
+    class _Mode(enum.Enum):
+        CAPITALIZE = "capitalize"
+        NUMBER = "number"
+
+    def __init__(
+        self,
+        *,
+        braille_cell_size: int = BRAILLE_CELL_SIZE,
+        braille_to_english_character: dict[str, str] = BRAILLE_TO_ENGLISH_CHARACTER,
+        braille_to_english_capitalized: dict[str, str] = BRAILLE_TO_ENGLISH_CAPITALIZED,
+        braille_to_english_number: dict[str, str] = BRAILLE_TO_ENGLISH_NUMBER,
+        braille_uppercase_modifer: str = BRAILLE_UPPERCASE_MODIFIER,
+        braille_number_mode_modifier: str = BRAILLE_NUMBER_MODE_MODIFIER,
+        braille_number_mode_terminal: str = BRAILLE_NUMBER_MODE_TERMINAL,
+    ):
+        self._braille_cell_size = braille_cell_size
+        self._braille_to_english_character = braille_to_english_character
+        self._braille_to_english_capitalized = braille_to_english_capitalized
+        self._braille_to_english_number = braille_to_english_number
+        self._braille_uppercase_modifier = braille_uppercase_modifer
+        self._braille_number_mode_modifier = braille_number_mode_modifier
+        self._braille_number_mode_terminal = braille_number_mode_terminal
+
+    def convert(self, message: str) -> str:
+        if len(message) % self._braille_cell_size != 0:
+            raise ValueError("the message size is not divisible by the braille cell size")
+
+        mode: BrailleToEnglishConverter._Mode | None = None
+        converted: list[str] = []
+        for cell in chunk(message, self._braille_cell_size):
+            if cell == self._braille_uppercase_modifier:
+                mode = self._Mode.CAPITALIZE
+            elif cell == self._braille_number_mode_modifier:
+                mode = self._Mode.NUMBER
+            elif cell == self._braille_number_mode_terminal:
+                converted.append(self._braille_to_english_character[cell])
+                mode = None
+            elif mode == self._Mode.CAPITALIZE:
+                converted.append(self._braille_to_english_capitalized[cell])
+                mode = None
+            elif mode == self._Mode.NUMBER:
+                converted.append(self._braille_to_english_number[cell])
+            else:
+                converted.append(self._braille_to_english_character[cell])
+
+        return "".join(converted)
+
+
 if __name__ == "__main__":
     original_message = CliMessageParser().parse()
     original_language = LanguageDiscriminator().determine(original_message)
-    print(original_language)
+    if original_language == Language.BRAILLE:
+        translator = BrailleToEnglishConverter()
+    else:
+        raise NotImplementedError("only braille is implemented")
+    translated_message = translator.convert(original_message)
+    print(translated_message)
 
