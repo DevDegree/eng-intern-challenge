@@ -353,10 +353,10 @@ if (!process.argv[2]){
     const userString = tempArr.join(" ");
     if(natureOfString(process.argv[2])){ //if it returns true, it means the string is english
         // console.log("translating english");
-       console.log(translateEngToBr(userString));
+       translateEngToBr(userString);
     }else{
         // console.log("translating brail");
-        console.log(translateBrToEng(userString));
+        translateBrToEng(userString);
     }
 }
  
