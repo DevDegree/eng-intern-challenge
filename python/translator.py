@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """CLI application to translate messages between Braille and English.
 
 
