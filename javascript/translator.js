@@ -213,7 +213,7 @@ const updateAlphaFormat = (array) => {
 
   const finalStringArr = stringArr.flatMap(x => x);
   translated = finalStringArr.join('');
-
+  console.log(translated);
   return translated;
 }
 
@@ -255,7 +255,7 @@ const updateBrailleFormat = (array) => {
   });
 
   translated = brailleArr.flatMap(x => x).join('');
-  // console.log(tranlsatedArr);
+  console.log(translated);
 
   return translated 
 }
