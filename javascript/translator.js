@@ -268,7 +268,7 @@ function translateEngToBr(str){
         let prepend = ".".repeat(6 - String(brailleNumber).length)
         const brailLetterwrongFlipped = convertBrailledigits(String(brailleNumber))
         let correctBrailLetter = flipString(prepend + brailLetterwrongFlipped);
-        if(isCapitalized){
+        if(isCapitalized && englishLetter !== " "){
             correctBrailLetter = ".....O" + correctBrailLetter;
         }
         brailMessage += correctBrailLetter
