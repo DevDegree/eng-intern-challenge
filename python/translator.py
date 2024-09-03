@@ -23,10 +23,12 @@ specify expected behavior in all cases).
 - If a message is considered English but contains periods then it is considered
   syntactically incorrect and the application will exit with an exception.
 - The message is expected to fit in memory.
-- Multiple consecutive spaces are combined into a single space in the **input**
-  to maintain consistency between usage with quoted and unquoted arguments.
-- Trailing and leading spaces are stripped in the **output** as spaces are
-  intended only as separators between words.
+- Multiple consecutive English-encoded spaces are combined into a single space in
+  the **input** to maintain consistency between usage with quoted and unquoted arguments.
+- Trailing and leading whitespace is discarded from English **inputs** to maintain
+  consistency between usage with quoted and unquoted arguments.
+- Braille-encoded spaces are **not** modified (e.g., combined into a single space)
+  as their usage is unambiguous from the command line.
 """
 
 from __future__ import annotations
@@ -257,13 +259,58 @@ class BrailleToEnglishTranslator:
         return "".join(translated)
 
 
+class EnglishToBrailleTranslator:
+
+    class _Mode(enum.Enum):
+        NUMBER = "number"
+
+    def __init__(
+        self,
+        *,
+        english_character_to_braille: dict[str, str] = ENGLISH_CHARACTER_TO_BRAILLE,
+        english_capitalized_to_braille: dict[str, str] = ENGLISH_CAPITALIZED_TO_BRAILLE,
+        english_number_to_braille: dict[str, str] = ENGLISH_NUMBER_TO_BRAILLE,
+        braille_uppercase_modifier: str = BRAILLE_UPPERCASE_MODIFIER,
+        braille_number_mode_modifier: str = BRAILLE_NUMBER_MODE_MODIFIER,
+        braille_number_mode_terminal: str = BRAILLE_NUMBER_MODE_TERMINAL,
+    ):
+        self._english_character_to_braille = english_character_to_braille
+        self._english_capitalized_to_braille = english_capitalized_to_braille
+        self._english_number_to_braille = english_number_to_braille
+        self._braille_uppercase_modifer = braille_uppercase_modifier
+        self._braille_number_mode_modifier = braille_number_mode_modifier
+        self._braille_number_mode_terminal = braille_number_mode_terminal
+
+    def translate(self, message: str) -> str:
+        mode: EnglishToBrailleTranslator._Mode | None = None
+        translated: list[str] = []
+        for character in message:
+            if character in self._english_capitalized_to_braille:
+                translated.extend([
+                    self._braille_uppercase_modifer,
+                    self._english_capitalized_to_braille[character],
+                ])
+            elif character in self._english_number_to_braille:
+                if mode != self._Mode.NUMBER:
+                    translated.append(self._braille_number_mode_modifier)
+                translated.append(self._english_number_to_braille[character])
+                mode = self._Mode.NUMBER
+            elif character == self._braille_number_mode_terminal:
+                mode = None
+                translated.append(self._english_character_to_braille[character])
+            else:
+                translated.append(self._english_character_to_braille[character])
+
+        return "".join(translated)
+
+
 if __name__ == "__main__":
     original_message = CliMessageParser().parse()
     original_language = LanguageDiscriminator().determine(original_message)
     if original_language == Language.BRAILLE:
         translator = BrailleToEnglishTranslator()
     else:
-        raise NotImplementedError("only braille is implemented")
+        translator = EnglishToBrailleTranslator()
     translated_message = translator.translate(original_message)
-    print(translated_message)
+    print(translated_message, end="")
 
