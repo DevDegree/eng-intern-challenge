@@ -31,6 +31,22 @@ specify expected behavior in all cases).
 
 from __future__ import annotations
 
+import enum
+
+
+BRAILLE_ALPHABET = {"O", "."}
+ENGLISH_ALPHABET = {*(
+    [chr(i) for i in range(ord("a"), ord("z") + 1)]
+    + [chr(i) for i in range(ord("A"), ord("Z") + 1)]
+    + [chr(i) for i in range(ord("0"), ord("9") + 1)]
+    + [" "]
+)}
+
+
+class Language(enum.Enum):
+    BRAILLE = "braille"
+    ENGLISH = "english"
+
 
 class CliMessageParser:
 
@@ -69,8 +85,32 @@ class CliMessageParser:
         return self.separator.join(args[1:])
 
 
+class LanguageDiscriminator:
+
+    def __init__(
+        self,
+        *,
+        braille_alphabet: set[str] = BRAILLE_ALPHABET,
+        english_alphabet: set[str] = ENGLISH_ALPHABET,
+    ):
+        self._braille_alphabet = braille_alphabet
+        self._english_alphabet = english_alphabet
+
+    def determine(self, message: str) -> Language:
+        is_english = is_braille = True
+        for character in message:
+            is_braille &= character in self._braille_alphabet
+            is_english &= character in self._english_alphabet
+            if not (is_braille or is_english):
+                raise ValueError("the provided message is neither english nor braille")
+        if is_braille:
+            # braille takes priority over english
+            return Language.BRAILLE
+        return Language.ENGLISH
+
+
 if __name__ == "__main__":
-    message_parser = CliMessageParser()
-    message = message_parser.parse()
-    print(message)
+    original_message = CliMessageParser().parse()
+    original_language = LanguageDiscriminator().determine(original_message)
+    print(original_language)
 
