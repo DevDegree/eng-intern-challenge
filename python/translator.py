@@ -128,6 +128,7 @@ def translateBrailleToEnglish(input: list[str]) -> str:
 def main():
     # validate input
     if len(sys.argv) < 2:
+        print("")
         return
 
     input = sys.argv[1:]
