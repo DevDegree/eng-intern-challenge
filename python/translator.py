@@ -79,6 +79,6 @@ input_text = input("Enter text to translate (English or Braille): ")
 
 # Check if input is Braille and translate accordingly
 if detect_braille(input_text):
-    print("Translated to English:", translate_braille_to_english(input_text))
+    print(translate_braille_to_english(input_text))
 else:
-    print("Translated to Braille:", translate_english_to_braille(input_text))
+    print(translate_english_to_braille(input_text))
