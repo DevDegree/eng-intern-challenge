@@ -192,7 +192,7 @@ class LanguageDiscriminator:
         return Language.ENGLISH
 
 
-class BrailleToEnglishConverter:
+class BrailleToEnglishTranslator:
 
     class _Mode(enum.Enum):
         CAPITALIZE = "capitalize"
@@ -217,38 +217,38 @@ class BrailleToEnglishConverter:
         self._braille_number_mode_modifier = braille_number_mode_modifier
         self._braille_number_mode_terminal = braille_number_mode_terminal
 
-    def convert(self, message: str) -> str:
+    def translate(self, message: str) -> str:
         if len(message) % self._braille_cell_size != 0:
             raise ValueError("the message size is not divisible by the braille cell size")
 
-        mode: BrailleToEnglishConverter._Mode | None = None
-        converted: list[str] = []
+        mode: BrailleToEnglishTranslator._Mode | None = None
+        translated: list[str] = []
         for cell in chunk(message, self._braille_cell_size):
             if cell == self._braille_uppercase_modifier:
                 mode = self._Mode.CAPITALIZE
             elif cell == self._braille_number_mode_modifier:
                 mode = self._Mode.NUMBER
             elif cell == self._braille_number_mode_terminal:
-                converted.append(self._braille_to_english_character[cell])
+                translated.append(self._braille_to_english_character[cell])
                 mode = None
             elif mode == self._Mode.CAPITALIZE:
-                converted.append(self._braille_to_english_capitalized[cell])
+                translated.append(self._braille_to_english_capitalized[cell])
                 mode = None
             elif mode == self._Mode.NUMBER:
-                converted.append(self._braille_to_english_number[cell])
+                translated.append(self._braille_to_english_number[cell])
             else:
-                converted.append(self._braille_to_english_character[cell])
+                translated.append(self._braille_to_english_character[cell])
 
-        return "".join(converted)
+        return "".join(translated)
 
 
 if __name__ == "__main__":
     original_message = CliMessageParser().parse()
     original_language = LanguageDiscriminator().determine(original_message)
     if original_language == Language.BRAILLE:
-        translator = BrailleToEnglishConverter()
+        translator = BrailleToEnglishTranslator()
     else:
         raise NotImplementedError("only braille is implemented")
-    translated_message = translator.convert(original_message)
+    translated_message = translator.translate(original_message)
     print(translated_message)
 
