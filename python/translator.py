@@ -3,6 +3,7 @@ import sys
 
 class Translator:
     _BRAILLE_READ_LEN = 6
+    _DEFAULT_MAP_VAL = ""
 
     BRAILLE_CAPITALIZE_FOLLOWS = ".....O"
     BRAILLE_DECIMAL_FOLLOWS = ".O...O"
@@ -67,7 +68,32 @@ class Translator:
         )
 
     def translate_eng_to_braille(self, input_str: str) -> str:
-        return input_str
+        encoding = []
+
+        encoding_number = False
+
+        for char in input_str:
+
+            if char == " ":
+                encoding_number = False
+                encoding.append(self.BRAILLE_SPACE_FOLLOWS)
+                continue
+
+            if char.isnumeric() and not encoding_number:
+                encoding_number = True
+                encoding.append(self.BRAILLE_NUMBER_FOLLOWS)
+
+            if char.isupper():
+                encoding.append(self.BRAILLE_CAPITALIZE_FOLLOWS)
+                char = char.lower()
+
+            encoding.append(
+                self.NUM_ENG_TO_BRAILLE_MAP.get(char, self._DEFAULT_MAP_VAL)
+                if encoding_number
+                else self.ALPHA_ENG_TO_BRAILLE_MAP.get(char, self._DEFAULT_MAP_VAL)
+            )
+
+        return "".join(encoding)
 
     def translate_braille_to_eng(self, input_str: str) -> str:
         words = []
@@ -97,9 +123,9 @@ class Translator:
 
             else:
                 word = (
-                    NUM_BRAILLE_TO_ENG_MAP.get(token, "")
+                    NUM_BRAILLE_TO_ENG_MAP.get(token, self._DEFAULT_MAP_VAL)
                     if is_number
-                    else ALPHA_BRAILLE_TO_ENG_MAP.get(token, "")
+                    else ALPHA_BRAILLE_TO_ENG_MAP.get(token, self._DEFAULT_MAP_VAL)
                 )
 
                 if not is_number and capitalize:
