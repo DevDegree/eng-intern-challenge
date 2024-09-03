@@ -52,7 +52,22 @@ function flipString(str){
 }
 // console.log(flipString("HELLO"));
 
+function convertBrailToNumber(str){
+    let newStr = ""
+    for(let i = 0; i<str.length; i++){
+        if(str[i] === "O"){// the letter O not zero
+            newStr += "1"
+        }else{ //if str[i] === "."
+            newStr += "0"
+        }
+    }
+    return newStr;
+}
+// console.log(convertBrailToNumber("...O"))
+
+
 //for eng -> braille
+//converts number into brail, so 1011 becomes O.OO
 function convertBrailledigits(str){
     let newStr = ""
     for(let i = 0; i<str.length; i++){
@@ -189,6 +204,26 @@ EngToBrArrIndexReference[25] = 111001
 EngToBrArrIndexReference[26] = 0
 
 
+//for numbers, i'm doing to use an object
+
+const translationNumbers = {
+    1: "000001",
+    2: "000101",
+    3: "000011",
+    4: "001011",
+    5: "001001",
+    6: "000111",
+    7: "001111",
+    8: "001101",
+    9: "000110",
+    0: "001110"
+    //made them all strings becuase i dont want to code the logic to not to.
+}
+// console.log(getKey(translationNumbers, "000001"));
+
+
+
+
 
 function translateEngToBr(str){
     let brailMessage = "";
@@ -210,9 +245,20 @@ function translateEngToBr(str){
     }
     return brailMessage;
 }
-console.log(translateEngToBr("Hello world"));
+// console.log(translateEngToBr("Hello world"));
+
+function getKey(obj, value) {
+    for (let key in obj) {
+        if (obj[key] === value) {
+            return key;
+        }
+    }
+    return null; //hopefully this doesnt ever reach
+}
 
 
+
+//DONE
 //need to add number functionality
 function translateBrToEng(str){
     if(str.length % 6 !== 0){
@@ -221,9 +267,29 @@ function translateBrToEng(str){
 
     let capitalize = false;
     let decryptedMessage = "";
-    
+    let isNumber = false;
+    let firstIterationOfNumber = true;
     for (let i = 0; i < str.length; i += 6) {
         const letter = flipString(str.slice(i, i + 6));
+        if(letter === "......"){ //if we reach a space, no more dealing with numbers
+            isNumber = false;
+        }
+        if(letter === "OOO.O." || isNumber){
+            //we're not dealing with numbers now
+            isNumber = true; //let it to true or keep it true;
+            if(firstIterationOfNumber === true){ //to skip 1 iteration
+                firstIterationOfNumber = false;
+                continue
+            }
+            const brailNumber = convertBrailToNumber(letter); //return 0 and 1 version of the brain. Where O = 1 and 0 = . this returns a string
+            const num = getKey(translationNumbers, brailNumber) //returns key representing the number
+            const letterNumber = String(num);
+
+            decryptedMessage += letterNumber;
+            continue;
+        }
+        
+        //if it's a letter
         const num = computeEngLetter(letter);
 
         if(num === 100000){ //100000 represents capital follows.
@@ -239,7 +305,8 @@ function translateBrToEng(str){
             decryptedMessage += engLetters[num];
         }
     }
-    // console.log(decryptedMessage)
+    console.log(decryptedMessage)
 }
-//translateBrToEng(".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..");
+// translateBrToEng(".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..");
+// translateBrToEng(".O.OOOOO.O..O.O..............OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..");
 
