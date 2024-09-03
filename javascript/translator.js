@@ -255,7 +255,7 @@ function translateEngToBr(str){
             firstIterationOfNumber = false;
             brailMessage += ".O.OOO";
            }
-           brailMessage += brailNumberText;
+           brailMessage += flipString(brailNumberText);
            continue;
         }
         //for letters
@@ -351,8 +351,10 @@ if (!process.argv[2]){
     const tempArr = process.argv.slice(2);
     const userString = tempArr.join(" ");
     if(natureOfString(process.argv[2])){ //if it returns true, it means the string is english
+        console.log("translating english");
        console.log(translateEngToBr(userString));
     }else{
+        console.log("translating brail");
         console.log(translateBrToEng(userString));
     }
 }
