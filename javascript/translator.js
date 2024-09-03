@@ -36,7 +36,7 @@ function computeEngLetter(str){
         if (str[i] === "O"){
             value += 1 * Math.pow(10,str.length - 1 - i);    //Math.pow(base, exponent)
         }
-    } //OOOOOO 
+    } //OOOOOO
    // console.log(value);
    return value;
 }
@@ -52,6 +52,7 @@ function flipString(str){
 }
 // console.log(flipString("HELLO"));
 
+//for eng -> braille
 function convertBrailledigits(str){
     let newStr = ""
     for(let i = 0; i<str.length; i++){
@@ -64,6 +65,9 @@ function convertBrailledigits(str){
     return newStr;
 }
 
+function isUpperCase(lett) {
+    return lett === lett.toUpperCase();
+}
 
 
 //just to help me copy paste all of the thing below because im too lazy to write it all
@@ -188,19 +192,25 @@ EngToBrArrIndexReference[26] = 0
 
 function translateEngToBr(str){
     let brailMessage = "";
+    
     for (let i = 0; i< str.length; i++){
-        const englishLetter = str[i];
+        let englishLetter = str[i];
+        const isCapitalized = isUpperCase(englishLetter);
+        englishLetter = englishLetter.toLowerCase();
         const brailleIndex = EngToBrArr.indexOf(englishLetter);
         const brailleNumber = EngToBrArrIndexReference[brailleIndex];
 
         let prepend = ".".repeat(6 - String(brailleNumber).length)
-        const brailTextwrongFlipped = convertBrailledigits(String(brailleNumber))
-        let correctLetter = flipString(prepend + brailTextwrongFlipped);
-        brailMessage += correctLetter
+        const brailLetterwrongFlipped = convertBrailledigits(String(brailleNumber))
+        let correctBrailLetter = flipString(prepend + brailLetterwrongFlipped);
+        if(isCapitalized){
+            correctBrailLetter = ".....O" + correctBrailLetter;
+        }
+        brailMessage += correctBrailLetter
     }
     return brailMessage;
 }
-console.log(translateEngToBr("hello world"));
+console.log(translateEngToBr("Hello world"));
 
 
 //need to add number functionality
