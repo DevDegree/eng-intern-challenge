@@ -229,7 +229,7 @@ if __name__ == '__main__':
         translated_string = translateToEnglish(input_language)
 
     print(translated_string)
-    print(".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO")
+    
 
 
 
