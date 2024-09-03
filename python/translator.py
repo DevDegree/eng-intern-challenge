@@ -1,5 +1,6 @@
 import sys
 
+# Dictionary to map English letters to Braille
 ENG_TO_BRAILLE = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
     'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..',
@@ -10,19 +11,23 @@ ENG_TO_BRAILLE = {
     ' ': '......'
 }
 
+# Dictionary to map numbers to Braille
 NUM_TO_BRAILLE = {
     '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
     '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..'
 }
 
+# Reverse mapping of Braille to English letters and numbers
 BRAILLE_TO_ENG = {v: k for k, v in ENG_TO_BRAILLE.items()}
 BRAILLE_TO_NUM = {v: k for k, v in NUM_TO_BRAILLE.items()}
 
+# Function to check if a string is Braille based on its structure
 def detect_braille(input_text):
     if len(input_text) % 6 != 0:
         return False
     return all(char in 'O.' for char in input_text)
 
+# Convert Braille text to English
 def translate_braille_to_english(braille_text):
     result = ""
     num_mode = False
@@ -55,6 +60,7 @@ def translate_braille_to_english(braille_text):
 
     return result
 
+# Convert English text to Braille
 def translate_english_to_braille(english_text):
     braille_result = ""
     number_mode = False
@@ -74,9 +80,13 @@ def translate_english_to_braille(english_text):
 
     return braille_result
 
-# Main script execution with direct input from the command prompt
-input_text = input("Enter text to translate (English or Braille): ")
+# Main script execution
+if len(sys.argv) < 2:
+    print('Insufficient argument to translate')
+    sys.exit(1)
 
+# Join command line arguments as input text
+input_text = ' '.join(sys.argv[1:])
 # Check if input is Braille and translate accordingly
 if detect_braille(input_text):
     print(translate_braille_to_english(input_text))
