@@ -338,6 +338,7 @@ function translateBrToEng(str){
         }
     }
     // console.log(decryptedMessage)
+    return decryptedMessage;
 }
 // translateBrToEng(".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..");
 // translateBrToEng(".O.OOOOO.O..O.O..............OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..");
