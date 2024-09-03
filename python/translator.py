@@ -187,7 +187,9 @@ class EnglishToBrailleTranslator:
 
 
 def main():
+    # Read the whole input as a single string
     text = " ".join(sys.argv[1:]).strip()
+
     if is_braille(text):
         print(BrailleToEnglishTranslator().translate(text))
     else:
