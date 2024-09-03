@@ -275,7 +275,7 @@ function translateEngToBr(str){
     }
     return brailMessage;
 }
-// console.log(translateEngToBr("Hello world 42"));
+// console.log(translateEngToBr("Hello world"));
 // console.log(translateEngToBr("Hello world 42"));
 
 
@@ -348,10 +348,12 @@ function translateBrToEng(str){
 if (!process.argv[2]){
     return "Please enter a valid String";
 }else{
+    const tempArr = process.argv.slice(2);
+    const userString = tempArr.join(" ");
     if(natureOfString(process.argv[2])){ //if it returns true, it means the string is english
-       console.log(translateEngToBr(process.argv[2]));
+       console.log(translateEngToBr(userString));
     }else{
-        console.log(translateBrToEng(process.argv[2]));
+        console.log(translateBrToEng(userString));
     }
 }
  
