@@ -19,7 +19,7 @@ UNRAISED_DOT: str = '.'
 BRAILLE_CAP_FOLLOWS: str = '.....O'
 BRAILLE_NUM_FOLLOWS: str = '.O.OOO'
 BRAILLE_SPACE: str = '......'
-BRAILLE_NON_ALPHANUM_SYMBOLS: list[str] = {BRAILLE_CAP_FOLLOWS, BRAILLE_NUM_FOLLOWS, BRAILLE_SPACE}
+BRAILLE_NON_ALPHANUM_SYMBOLS = [BRAILLE_CAP_FOLLOWS, BRAILLE_NUM_FOLLOWS, BRAILLE_SPACE]
 BRAILLE_SYMBOL_LEN: int  = 6
 ENGLISH_SPACE: str = ' '
 
@@ -196,16 +196,12 @@ class translator :
         if len(inputText) % BRAILLE_SYMBOL_LEN != 0:
             return False;
         
-        # chunk input into substring 6-char and verify if substring is a known braille symbol
-        for i in range(0, len(inputText), BRAILLE_SYMBOL_LEN):
-
-            substring: str = inputText[ i: (i + BRAILLE_SYMBOL_LEN)]
-
-            if not(substring in BRAILLE_NON_ALPHANUM_SYMBOLS) and not(substring in BRAILLE_ENGLISH_DICT):
-                return False
-
-        # input passed all braille checks
-        return True
+        # assuming that first the 1st 6 char of input is a braille symbol, then entire input is braille
+        substring: str = inputText[0:BRAILLE_SYMBOL_LEN]
+        if (substring in BRAILLE_NON_ALPHANUM_SYMBOLS) or (substring in BRAILLE_ENGLISH_DICT):
+            return True
+        
+        return False
     
     # determines if the inputArr should be translated to english or braille and returns the result of the translation 
     def translate(self, inputArr: list[str]) -> str:
