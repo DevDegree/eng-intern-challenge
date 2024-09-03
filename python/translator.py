@@ -4,8 +4,8 @@ import re
 #Capture command line arguments
 args = sys.argv[1:] 
 
-#Dictionaries with corresponding braile and numbers
-braile = {
+#Dictionaries with corresponding braille and numbers
+braille = {
     'a': 'O.....','b': 'O.O...','c': 'OO....','d': 'OO.O..','e': 'O..O..','f': 'OOO...','g': 'OOOO..','h': 'O.OO..','i': '.OO...','j': '.OOO..',
     'k': 'O...O.','l': 'O.O.O.','m': 'OO..O.','n': 'OO.OO.','o': 'O..OO.','p': 'OOO.O.','q': 'OOOOO.','r': 'O.OOO.','s': '.OO.O.','t': '.OOOO.',
     'u': 'O...OO','v': 'O.O.OO','w': '.OOO.O','x': 'OO..OO','y': 'OO.OOO','z': 'O..OOO',
@@ -16,10 +16,10 @@ numbers = {
     'O.....': '1', 'O.O...': '2', 'OO....': '3', 'OO.O..': '4', 'O..O..': '5', 'OOO...':'6', 'OOOO..':'7', 'O.OO..':'8', '.OO...': '9', '.OOO..' : '0'
 }
 
-#The inverse dictionary of the braile and number dictionaries
-# braile -> english 
-braile_inv = {val : key for key, val in braile.items()}
-# number -> braile
+#The inverse dictionary of the braille and number dictionaries
+# braille -> english 
+braille_inv = {val : key for key, val in braille.items()}
+# number -> braille
 numbers_inv = {val: key for key, val in numbers.items()}
 
 def main(args):
@@ -34,35 +34,35 @@ def main(args):
             arg += ' '
         arg = arg.strip()
 
-    if not check_braile(arg):
+    if not check_braille(arg):
         print(parse_english(arg))
     else:
-        print (parse_braile(arg))
+        print (parse_braille(arg))
 
-def check_braile(string):
-    braileset = set('O.')
+def check_braille(string):
+    brailleset = set('O.')
     stringset = set(string)
 
     if len(string) % 6 != 0:
         return False
     
-    if stringset == braileset:
+    if stringset == brailleset:
         return True
     else:
         return False
 
-def parse_braile(input):
+def parse_braille(input):
     # Constants representing the characters for capital_next & num_follows
     num_follows = '.O.OOO'
     capital_next = '.....O'
     space = '......'
-    # Make sure our braile string is valid
+    # Make sure our braille string is valid
     if len(input) % 6 != 0:
         print("Length of string: ",len(input))
-        print("Error: Braile is not inputted correctly. (Invald Length; should be a multiple of 6)")
+        print("Error: Braille is not inputted correctly. (Invald Length; should be a multiple of 6)")
 
 
-    # Breakup braile string into substrings of length 6, representing characters
+    # Breakup braille string into substrings of length 6, representing characters
     # Uses a regular expression
     chars = re.findall(r'.{6}', input) 
 
@@ -73,7 +73,7 @@ def parse_braile(input):
     # The string we will return
     ret = ""
 
-    # Looping through each character in the braile string (of length 6)
+    # Looping through each character in the braille string (of length 6)
     for char in chars:
         #If the character is a space turn off 'number mode' and append a space
         if char == space:
@@ -89,10 +89,10 @@ def parse_braile(input):
             if not number:
                 if cap:
                     # Capitalize only one characther then toggle the boolean
-                    ret += braile_inv[char].capitalize()
+                    ret += braille_inv[char].capitalize()
                     cap = False
                 else:
-                    ret += braile_inv[char]
+                    ret += braille_inv[char]
             else:
                 ret += numbers[char]
     return ret
@@ -114,11 +114,11 @@ def parse_english(word):
             # If it is a letter following a number, remember to add a space
             if number:
                 number = False
-                ret += braile[' ']
+                ret += braille[' ']
 
-            # Add the capital_follows symbol to our braile, then append the letter
+            # Add the capital_follows symbol to our braille, then append the letter
             ret += capital_next
-            ret += braile[letter.lower()]
+            ret += braille[letter.lower()]
         elif letter.isnumeric():
             # If the letter is a number, then add the num_follows character
             if number:
@@ -133,9 +133,9 @@ def parse_english(word):
                 number = False
             elif number:
                 number = False
-                ret += braile[' ']
+                ret += braille[' ']
 
-            ret += braile[letter]
+            ret += braille[letter]
 
     return ret
 
