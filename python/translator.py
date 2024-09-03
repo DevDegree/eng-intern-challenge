@@ -28,17 +28,7 @@ alphaToBraille = {
     "x": "OO..OO",
     "y": "OO.OOO",
     "z": "O..OOO",
-    # space and punctuation
     " ": "......",
-    ".": "..OO.O",
-    ",": "..O...",
-    "?": "..OOO.",
-    "!": "..OOO.",
-    ":": "..OO..",
-    ";": "..O.O.",
-    "-": "....OO",
-    "(": "O.O..O",
-    ")": ".O.OO.",
 }
 
 # map digits to braille
@@ -87,7 +77,7 @@ def translateEnglishToBraille(input: list[str]) -> str:
             if char.isupper():
                 # add capital follows symbol
                 translatedText += CapitalFollows
-                translatedText += alphaToBraille.get(char.lower(), "").upper()
+                translatedText += alphaToBraille.get(char.lower(), "")
             else:
                 # add translated char and add "" in case char doesnt exist
                 translatedText += alphaToBraille.get(char, "")
