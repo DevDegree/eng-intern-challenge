@@ -40,6 +40,7 @@ hash = {
 numSequence = False
 result_string = ''
 
+# Assuming all o and . sequences are valid braille characters
 if (re.search("^[.O]*$", str)):
     len_six_substr = [str[i:i+6] for i in range(0, len(str), 6)]
     reverseHash = dict((v, k) for k, v in hash.items())
