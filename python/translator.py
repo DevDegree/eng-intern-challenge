@@ -82,7 +82,6 @@ def is_braille(text):
 def english_to_braille(english):
     braille = []
     is_number = False
-
     for char in english:
         if char.isupper():
             braille.append(INSTRUCT_TO_BRAILLE['CAPITAL'])
@@ -104,19 +103,18 @@ def english_to_braille(english):
 def braille_to_english(braille):
     result = []
     is_number = False
-    i = 0
 
     if len(braille) % 6 != 0:
         return ''
 
-    while i < len(braille):
-        char = braille[i:i+6]
-        
+    braille_chunks = [braille[i:i+6] for i in range(0, len(braille), 6)]
+    i = 0
+    while i < len(braille_chunks):
+        char = braille_chunks[i]
         if char in BRAILLE_TO_INSTRUCT:
-            if BRAILLE_TO_INSTRUCT[char] == 'CAPITAL':
-                next_char = braille[i+6:i+12]
-                result.append(BRAILLE_TO_ALPHA.get(next_char, '').upper())
-                i += 6
+            if BRAILLE_TO_INSTRUCT[char] == 'CAPITAL' and i < len(braille_chunks) - 1:
+                result.append(BRAILLE_TO_ALPHA[braille_chunks[i+1]].upper())
+                i += 1
             elif BRAILLE_TO_INSTRUCT[char] == 'NUMBER':
                 is_number = True
         elif char in BRAILLE_TO_ALPHA and not is_number:
@@ -125,17 +123,16 @@ def braille_to_english(braille):
             result.append(BRAILLE_TO_NUM[char])
         elif char in BRAILLE_TO_SYMBOL:
             result.append(BRAILLE_TO_SYMBOL[char])
-            if char == BRAILLE_TO_SYMBOL[' ']:
+            if char == SYMBOL_TO_BRAILLE[' ']:
                 is_number = False
-        i += 6
-
+        i += 1
     return ''.join(result)
 
 def main():
     if len(sys.argv) < 2:
         return
     
-    input_text = sys.argv[1]
+    input_text = ' '.join(sys.argv[1:])
     translated_text = ''
 
     if is_braille(input_text):
