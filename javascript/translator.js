@@ -56,6 +56,8 @@ const translation = [
   { ' ': ['.', '.', '.', '.', '.', '.'] },
 ];
 
+let translated;
+
 function init() {
   const args = process.argv.slice(2);
 
@@ -87,7 +89,6 @@ function init() {
 }
 
 const toEnglish = (args) => {
-  console.log('to English');
   let englishArr = [];
   let results = [];
 
@@ -100,6 +101,7 @@ const toEnglish = (args) => {
     }
   }
 
+  // Prepare to break up words, numbers, capitals, etc... and place into its own array
   for (const [index, res] of results.entries()) {
     const resString = res.join().toString();
 
@@ -111,60 +113,101 @@ const toEnglish = (args) => {
       if (resString === transString) {
         let obj = {};
         obj[index] = key;
-
         englishArr.push(obj);
       }
     }
   }
 
-  sortToEnglish(englishArr);
+  sortAndUpdateFormat(englishArr);
 }
 
-const sortToEnglish = (array) => {
-  // console.log('arr', array);
+const sortAndUpdateFormat = (array) => {
   let capIndexStart = [];
   let numIndexStart = [];
-  let breaks = [];
+  let spaces = [];
   let sections = [];
   
-  
-  // find out where the spaces are
+  // find out where the breaks are
   for (let i = 0; i < array.length; i++) {
     const obj = array[i];
     const key = Object.keys(obj)[0];
 
+
     switch (obj[key]) {
       case 'capital':
         capIndexStart.push(i);
-        break
+        break;
 
       case 'number':
         numIndexStart.push(i);
-        break
+        break;
 
       case ' ':
-        breaks.push(i);
-        break
+        spaces.push(i);
+        break;
+
+      case 'decimal':
+        let ob = {};
+        ob[key] = '.';
+        array[key] = ob
+
+        const decIndex = array.findIndex(el => el === obj);
+        array[decIndex] = ob
+        break;
     }
   }
 
   let tempArr = capIndexStart.concat(numIndexStart);
-  sections = tempArr.concat(breaks);
+  sections = tempArr.concat(spaces);
   sections = [...sections.sort((a, b) => a - b)];
 
-  console.log(sections);
+  let exampleArr = [];
+  let stringArr = [];
 
-  let stringed = [];
-
-  for (const [i, item] of array.entries()) {
-    let index = i.toString();
-    console.log(item);
-    
+  let a = [];
+  // split each word or break into it's own array
+  for (let i = 0; i < sections.length; i++) {
+    a = [...array.slice(sections[i], sections[i + 1])];    
+    exampleArr.push([...a]);
   }
 
+  for(const word of exampleArr) {
+    let tempArr= [];
+    let num = [];
+    let capWord = [];
+
+    for (let i = 0; i < word.length; i++) {
+      const key = Object.keys(word[i]).toString();
+      const val = (word[i][key]);
+      tempArr.push(val);
+    }
+
+    if(tempArr[0] === 'capital') {
+      capWord = tempArr.filter((a) => {
+        return /^[A-Za-z]+$/.test(a);
+      });
+
+      capWord.shift();
+      const upper = capWord[0].toUpperCase();
+      capWord[0] = upper;
+      tempArr = [...capWord];
+    }
+    
+    if (tempArr[0] === 'number') {
+      num = tempArr.filter((a) => {
+        return /^\d*\.?\d*$/.test(a);
+      });
+      tempArr = [...num];
+    };
+
+    stringArr.push(tempArr);
+  }
+
+  const finalStringArr = stringArr.flatMap(x => x);
+  translated = finalStringArr.join('');
+  console.log(translated);
+  return translated;
 }
-
-
 
 const toBraille = (args) => {
   console.log('to braille', args);
