@@ -49,7 +49,7 @@ inverted_character_map = {v: k for (k, v) in character_map.items()}
 inverted_number_map = {v: k for (k, v) in number_map.items()}
 
 
-def to_english(command: str) -> None:
+def to_english(command: str) -> str:
     """ Converts the given Braille string <command> to English. """
     statement = ''
     capitalize = False
@@ -88,10 +88,10 @@ def to_english(command: str) -> None:
             statement += char
             i += 6
             command = command[i:]
-    print(statement)
+    return statement
 
 
-def to_braille(command: list[str]) -> None:
+def to_braille(command: list[str]) -> str:
     """ Converts the strings in <command> to Braille. """
     statement = ''
     number = False
@@ -109,10 +109,10 @@ def to_braille(command: list[str]) -> None:
             else:
                 statement += character_map.get(char)
         statement += character_map.get(' ')
-    print(statement[:-6])
+    return statement[:-6]
 
 
-def parse() -> None:
+def parse() -> str:
     """ Parses a set of command-line arguments to English or Braille. """
     # Create a parser and add a variable argument.
     parser = argparse.ArgumentParser(
@@ -125,10 +125,10 @@ def parse() -> None:
     # Determine if English or Braille, then print the corresponding output.
     argument = ' '.join(command.arg)
     if '.' in argument:
-        to_english(argument)
+        return to_english(argument)
     else:
-        to_braille(command.arg)
+        return to_braille(command.arg)
 
 
 if __name__ == "__main__":
-    parse()
+    print(parse())
