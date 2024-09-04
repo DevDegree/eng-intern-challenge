@@ -1,9 +1,6 @@
-import argparse
+import sys
 
-parser = argparse.ArgumentParser(prog="Translator", description="Translates Braille to English and vice versa")
-parser.add_argument("text", type=str, nargs='+')
-args = parser.parse_args()
-text = ' '.join(args.text)
+text = ' '.join(sys.argv[1:])
 
 braille_alphabet = ['O.....', 'O.O...', 'OO....', 'OO.O..', 'O..O..', 'OOO...', 'OOOO..', 'O.OO..', '.OO...', '.OOO..', 'O...O.', 'O.O.O.', 'OO..O.', 'OO.OO.', 'O..OO.', 'OOO.O.', 'OOOOO.', 'O.OOO.', '.OO.O.', '.OOOO.', 'O...OO', 'O.O.OO', '.OOO.O', 'OO..OO', 'OO.OOO', 'O..OOO', 'O.....', 'O.O...', 'OO....', 'OO.O..', 'O..O..', 'OOO...', 'OOOO..', 'O.OO..', '.OO...', '.OOO..', '.....O', '.O...O', '.O.OOO', '..OO.O', '..O...', '..O.OO', '..OOOO', '..OO..', '..O.O.', '....OO', '.O..O.', '.OO..O', 'O..OO.', 'O.O..O', '.O.OO.', '......']
 english_alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'capital follows', 'decimal follows', 'number follows', '.', ',', '?', '!', ':', ';', '-', '/', '<', '>', '(', ')', ' ']
