@@ -1,4 +1,4 @@
-import argparse
+import sys
 
 character_map = {
     'a': "O.....",
@@ -113,18 +113,11 @@ def to_braille(command: list[str]) -> str:
 
 
 if __name__ == "__main__":
-    """ Parses a set of command-line arguments to English or Braille. """
-    # Create a parser and add a variable argument.
-    parser = argparse.ArgumentParser(
-        description="A script that converts English to Braille, and vice-versa.")
-    parser.add_argument('arg', nargs="*", help="The provided argument.")
-
-    # Parse the command.
-    cmd = parser.parse_args()
+    """ Parses command-line arguments to English or Braille. """
+    argument = ' '.join(sys.argv[1:])
 
     # Determine if English or Braille, then print the corresponding output.
-    argument = ' '.join(cmd.arg)
     if '.' in argument:
         print(to_english(argument))
     else:
-        print(to_braille(cmd.arg))
+        print(to_braille(sys.argv[1:]))
