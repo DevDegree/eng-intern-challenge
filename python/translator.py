@@ -88,14 +88,14 @@ def englishToBraille(text: str) -> str:
 # Translate Braille to English text
 def brailleToEnglish(text: str) -> str:
     res = []
-    capital_mode = False
+    capitalMode = False
     numMode = False
 
     for i in range(0, len(text), 6):
         brailleCode = text[i: i + 6]
 
         if brailleCode == BRAILLE_CAPITAL:
-            capital_mode = True
+            capitalMode = True
         elif brailleCode == BRAILLE_NUMERIC:
             numMode = True
         elif brailleCode == BRAILLE_SPACE:
@@ -105,9 +105,9 @@ def brailleToEnglish(text: str) -> str:
             res.append(BRAILLE_TO_ENGLISH_NUMERIC[brailleCode])
         elif brailleCode in BRAILLE_TO_ENGLISH_ALPHA:
             letter = BRAILLE_TO_ENGLISH_ALPHA[brailleCode]
-            if capital_mode:
+            if capitalMode:
                 res.append(letter.upper())
-                capital_mode = False
+                capitalMode = False
             else:
                 res.append(letter)
 
