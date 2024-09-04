@@ -5,51 +5,51 @@ class EnglishBrailleTranslatorException(Exception):
 
 class EnglishBrailleTranslator:
     APLHA_TO_BRAILLE = {
-        'a': '0.....',
-        'b': '0.0...',
-        'c': '00....',
-        'd': '00.0..',
-        'e': '0..0..',
-        'f': '000...',
-        'g': '0000..',
-        'h': '0.00..',
-        'i': '.00...',
-        'j': '.000..',
-        'k': '0...0.',
-        'l': '0.0.0.',
-        'm': '00..0.',
-        'n': '00.00.',
-        'o': '0..00.',
-        'p': '000.0.',
-        'q': '00000.',
-        'r': '0.000.',
-        's': '.00.0.',
-        't': '.0000.',
-        'u': '0...00',
-        'v': '0.0.00',
-        'w': '.000.0',
-        'x': '00..00',
-        'y': '00.000',
-        'z': '0..000',
+        'a': 'O.....',
+        'b': 'O.O...',
+        'c': 'OO....',
+        'd': 'OO.O..',
+        'e': 'O..O..',
+        'f': 'OOO...',
+        'g': 'OOOO..',
+        'h': 'O.OO..',
+        'i': '.OO...',
+        'j': '.OOO..',
+        'k': 'O...O.',
+        'l': 'O.O.O.',
+        'm': 'OO..O.',
+        'n': 'OO.OO.',
+        'o': 'O..OO.',
+        'p': 'OOO.O.',
+        'q': 'OOOOO.',
+        'r': 'O.OOO.',
+        's': '.OO.O.',
+        't': '.OOOO.',
+        'u': 'O...OO',
+        'v': 'O.O.OO',
+        'w': '.OOO.O',
+        'x': 'OO..OO',
+        'y': 'OO.OOO',
+        'z': 'O..OOO',
         ' ': '......',
-        'CAPITAL': '.....0',
+        'CAPITAL': '.....O',
     }
     NUMBER_TO_BRAILLE = {
-        '1': '0.....',
-        '2': '0.0...',
-        '3': '00....',
-        '4': '00.0..',
-        '5': '0..0..',
-        '6': '000...',
-        '7': '0000..',
-        '8': '0.00..',
-        '9': '.00...',
-        '0': '.000..',
-        'NUMBER': '.0.000',
+        '1': 'O.....',
+        '2': 'O.O...',
+        '3': 'OO....',
+        '4': 'OO.O..',
+        '5': 'O..O..',
+        '6': 'OOO...',
+        '7': 'OOOO..',
+        '8': 'O.OO..',
+        '9': '.OO...',
+        '0': '.OOO..',
+        'NUMBER': '.O.OOO',
     }
     BRAILLE_TO_ALPHA = {v: k for k, v in APLHA_TO_BRAILLE.items()}
     BRAILLE_TO_NUMBER = {v: k for k, v in NUMBER_TO_BRAILLE.items()}
-    VALID_BRAILLE = ['0', '.']
+    VALID_BRAILLE = ['O', '.']
     BRAILLE_CHAR_LENGTH = 6
 
     def __init__(self):
@@ -58,7 +58,7 @@ class EnglishBrailleTranslator:
     def __check_if_braille(self, text: str) -> bool:
         """
         Check if the given text is braille or not. 
-        Text is only valid Braille if it composed of only '0' and '.'.
+        Text is only valid Braille if it composed of only 'O' and '.'.
 
         :param text: The text to check.
         :return: True if the text is braille, False otherwise.
@@ -141,7 +141,7 @@ class EnglishBrailleTranslator:
 
 
 def main():
-    input = sys.argv[1]
+    input = " ".join(sys.argv[1:])
     translator = EnglishBrailleTranslator()
 
     try:
