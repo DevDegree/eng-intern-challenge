@@ -62,37 +62,36 @@ BRAILLE_NUMERIC = '.O.OOO'
 
 def isThisBraille(text : str) -> bool: return set(text) <= set('.O') and not len(text) % 6
 
-def englishToBraille(text: str) -> str:
-    res = []
+def englishToBraille(text : str) -> str:
+    res = ''
     numFollow = False
 
     for char in text:
         if char == ' ':
             numFollow = False
-            res.append(BRAILLE_SPACE)
-        elif char.isdigit():
-            if not numFollow:
-                res.append(BRAILLE_NUMERIC)
-                numFollow = True
-            res.append(ENGLISH_TO_BRAILLE_NUMERIC[char])
-        elif char.isalpha():
+            res += BRAILLE_SPACE
+        elif char.lower() in ENGLISH_TO_BRAILLE_ALPHA:
             if char.isupper():
-                res.append(BRAILLE_CAPITAL)
-            res.append(ENGLISH_TO_BRAILLE_ALPHA[char.lower()])
-            numFollow = False
-        else:
-            # You could add logic here for any special characters if needed
-            pass
+                res += BRAILLE_CAPITAL
 
-    return ''.join(res)
+            res += ENGLISH_TO_BRAILLE_ALPHA[char.lower()]
+        elif char in ENGLISH_TO_BRAILLE_NUMERIC:
+            if not numFollow:
+                res += BRAILLE_NUMERIC
+                numFollow = True
 
-def brailleToEnglish(text: str) -> str:
-    res = []
-    capFollow = False
-    numFollow = False
+            res += ENGLISH_TO_BRAILLE_NUMERIC[char]
+
+    return res
+
+def brailleToEnglish(text : str) -> str:
+    res = ''
+
+    capFollow = False 
+    numFollow = False 
 
     for i in range(0, len(text), 6):
-        brailleCode = text[i:i + 6]
+        brailleCode = text[i : i + 6]
 
         if brailleCode == BRAILLE_CAPITAL:
             capFollow = True
@@ -100,18 +99,18 @@ def brailleToEnglish(text: str) -> str:
             numFollow = True
         elif brailleCode == BRAILLE_SPACE:
             numFollow = False
-            res.append(' ')
-        elif numFollow and brailleCode in BRAILLE_TO_ENGLISH_NUMERIC:
-            res.append(BRAILLE_TO_ENGLISH_NUMERIC[brailleCode])
-        elif brailleCode in BRAILLE_TO_ENGLISH_ALPHA:
-            char = BRAILLE_TO_ENGLISH_ALPHA[brailleCode]
+            res += ' '
+        elif numFollow:
+            if brailleCode in BRAILLE_TO_ENGLISH_NUMERIC:
+                res += BRAILLE_TO_ENGLISH_NUMERIC[brailleCode]
+        else:
             if capFollow:
-                res.append(char.upper())
+                res += BRAILLE_TO_ENGLISH_ALPHA[brailleCode].upper()
                 capFollow = False
             else:
-                res.append(char)
-    
-    return ''.join(res)
+                res += BRAILLE_TO_ENGLISH_ALPHA[brailleCode]
+
+    return res
 
 def main():
     text = ' '.join(sys.argv[1:])
