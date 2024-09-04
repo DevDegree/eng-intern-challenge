@@ -1,6 +1,4 @@
 import sys
-import subprocess
-
 
 letter_to_braille_dict = {
   'a': 'O.....',
