@@ -46,47 +46,9 @@ num_to_br_dict = {
     '0': ".OOO.."
 }
 
-br_to_letter_dict = {
-    "O.....":"a",
-    "O.O...":"b",
-    "OO....":"c",
-    "OO.O..":"d",
-    "O..O..":"e",
-    "OOO...":"f",
-    "OOOO..":"g",
-    "O.OO..":"h",
-    ".OO...":"i",
-    ".OOO..":"j",
-    "O...O.":"k",
-    "O.O.O.":"l",
-    "OO..O.":"m",
-    "OO.OO.":"n",
-    "O..OO.":"o",
-    "OOO.O.":"p",
-    "OOOOO.":"q",
-    "O.OOO.":"r",
-    ".OO.O.":"s",
-    ".OOOO.":"t",
-    "O...OO":"u",
-    "O.O.OO":"v",
-    ".OOO.O":"w",
-    "OO..OO":"x",
-    "OO.OOO":"y",
-    "O..OOO":"z",
-}
+br_to_letter_dict = dict((br, letter) for letter, br in letter_to_br_dict.items())
 
-br_to_num_dict = {
-    "O.....":'1',
-    "O.O...":'2',
-    "OO....":'3',
-    "OO.O..":'4',
-    "O..O..":'5',
-    "OOO...":'6',
-    "OOOO..":'7',
-    "O.OO..":'8',
-    ".OO...":'9',
-    ".OOO..":'0'
-}
+br_to_num_dict = dict((br, letter) for letter, br in num_to_br_dict.items())
 
 def translate_braille_to_letter(arg):
     text = ""
@@ -110,6 +72,8 @@ def translate_braille_to_letter(arg):
             text = text + ' '
             if num_counter:
                 num_counter = 0
+        else:
+            raise Exception(f"Invalid Braille character '{unit}'.")
     return text
 
 def translate_letters_to_braille(args):
@@ -126,7 +90,9 @@ def translate_letters_to_braille(args):
                     br = br + NUM_FOLLOWS +  num_to_br_dict[i]
                     num_counter = 1
                 else:
-                    br = br +  num_to_br_dict[i]              
+                    br = br +  num_to_br_dict[i]
+            else:
+                Exception(f"Invalid character '{i}'.")              
         br = br + SPACE
         num_counter = 0
 
@@ -138,6 +104,7 @@ def main():
     res = ""
     if len(sys.argv) > 1:
         # decide if the inputs are braille
+        # edge case: if input text consists only of Os, then it is considered as english instead of braille
         if len(sys.argv) == 2 and any(letter == "." for letter in sys.argv[1]):
             res = translate_braille_to_letter(sys.argv[1])
         else:
