@@ -152,7 +152,7 @@ def translate_english(translate_string) -> str:
   return ''.join(result_string)
 
 
-def translator() -> str:
+def translator() -> None:
   # program to run to translate
   args = sys.argv
   translate_string = ' '.join(args[1:])
@@ -161,5 +161,7 @@ def translator() -> str:
       print(translate_braille(translate_string))
     else:
       print(translate_english(translate_string))
+  else:
+    print('')
   
 translator()
