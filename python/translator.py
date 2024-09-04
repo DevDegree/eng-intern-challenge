@@ -129,7 +129,11 @@ def englishToBraille(s: str):
   return res
 
 def main():
-  arg = sys.argv[1] # Extract the provided argument
+  arg = ""
+  for i in range(1, len(sys.argv)-1, 1):
+    arg += sys.argv[i] + ' ' # Extract the provided arguments
+  
+  arg += sys.argv[len(sys.argv) - 1]
 
   if isBraille(arg):
     print(brailleToEnglish(arg))
