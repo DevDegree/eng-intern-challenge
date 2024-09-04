@@ -3,11 +3,11 @@ import argparse
 class Translator:
     def __init__(self):
         """
-        A Translator that translates Braille to English and vice versa.
+        A translator that translates Braille to English and vice versa.
         
         Requirements:
         1. Letters a through z
-            The ability to capitalize letters
+            - The ability to capitalize letters
         2. Numbers 0 through 9
         3. The ability to include spaces (multiple words)
         
@@ -25,23 +25,22 @@ class Translator:
         self.CAPITAL = ".....O"
         self.NUMBER = ".O.OOO"
     
-    def translate(self, words_list):
+    def translate(self, words):
         """Determine if the string given is either Braille or English and convert it.
 
         Args:
-            words_list (list): the list of words to be translated
+            words (str): the string to be translated
 
         Returns:
-            the result of translation
+            list: the final result of translation
         """
         translation = []
-        words = words_list
         is_brail = self._is_braille(words)
     
         if not is_brail:
-            self.string_to_braille(words, translation)
+            self.eng_to_braille(words, translation)
         else:
-            self.braille_to_string(words, translation)
+            self.braille_to_eng(words, translation)
             
         return "".join(translation)
     
@@ -49,19 +48,19 @@ class Translator:
         """Return True if words is braille and False if not.
 
         Args:
-            words (str): a word string given to be translated
+            words (str): a string given to be translated
 
         Returns:
             boolean: True if words is braille.
         """
         return all(char == "." or char == "O" for char in words)
     
-    def string_to_braille(self, words, translation):
-        """Convert the alphanemeric string to brailles.
+    def eng_to_braille(self, words, translation):
+        """Convert an alphanumeric string to brailles.
 
         Args:
-            words (str): a word string given to be translated
-            translation (list): stores traslated word
+            words (str): a string given to be translated
+            translation (list): stores translated word
         """
         is_digit = [False]
         for char in words:
@@ -79,12 +78,12 @@ class Translator:
         
         NOTE: Brailles of numeric characters of [1, 2, 3, 4, 5, 6, 7, 8, 9, 0] are equal to 
         those of alphabetical characters from a to j, respectively.
-        To avoid redundant space, we calculate the integer representation of the numerical char 
+        To avoid redundancy, we calculate the integer representation of the numerical char 
         to match the braille of the corresponding alphabet in the self.alphabet_to_braille.
 
         Args:
             char (str): a string to be translated
-            translation (list): stores traslated char
+            translation (list): stores translated char
             is_digit (bool): tells whether the following strings should be numbers
         """
         if not is_digit[0]:
@@ -101,12 +100,12 @@ class Translator:
         
         NOTE: Brailles of numeric characters of [1, 2, 3, 4, 5, 6, 7, 8, 9, 0] are equal to 
         those of alphabetical characters from a to j, respectively.
-        To avoid redundant space, we calculate the integer representation of the alphabetical char
+        To avoid redundancy, we calculate the integer representation of the alphabetical char
         to convert it to a digit.
 
         Args:
             char (str): a string to be translated
-            translation (list): stores traslated char
+            translation (list): stores translated char
         """
         if char == "j":
             translation.append("0")
@@ -118,7 +117,7 @@ class Translator:
 
         Args:
             char (str): a string to be translated
-            translation (list): stores traslated char
+            translation (list): stores translated char
         """
         if char.isupper():
             translation.append(self.CAPITAL)
@@ -126,12 +125,12 @@ class Translator:
         else:
             translation.append(self.alphabet_to_braille[char.lower()])
         
-    def braille_to_string(self, words, translation):
-        """Convert the brailles to string.
+    def braille_to_eng(self, words, translation):
+        """Convert brailles to an alphanumeric string.
 
         Args:
-            words (str): a word string given to be translated
-            translation (list): stores traslated word
+            words (str): a string given to be translated
+            translation (list): stores translated word
         """
         curr_braille = ""
         is_capital = False
@@ -157,12 +156,7 @@ class Translator:
                         translation.append(alph.upper())
                         is_capital = False
                     elif is_digit:
-                        # same analogy of 
                         alph = self.braille_to_alphabet[curr_braille]
-                        # if alph == "j":
-                        #     translation.append("0")
-                        # else:
-                        #     translation.append(chr(ord(alph) - ord("0")))
                         self.braille_to_num(alph, translation)
                     else: # it's just a regular alphabet now
                         translation.append(alph)
