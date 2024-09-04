@@ -147,13 +147,12 @@ function translateBrailleToEnglish(braille: string): string {
         }
 
         if (isReadingNumber) {
-            const number = brailleToNumber[brailleSymbol];
-            english += number;
-            continue;
+            english += brailleToNumber[brailleSymbol];
+        } else {
+            const letter = brailleToLetter[brailleSymbol];
+            english += isReadingCapitalized ? letter.toUpperCase() : letter;
         }
 
-        const letter = brailleToLetter[brailleSymbol];
-        english += isReadingCapitalized ? letter.toUpperCase() : letter;
         isReadingCapitalized = false;
     }
 
