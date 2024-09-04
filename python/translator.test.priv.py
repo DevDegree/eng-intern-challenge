@@ -1,5 +1,3 @@
-import io
-import subprocess
 import unittest
 
 from translator import Translator
@@ -34,6 +32,10 @@ class TestTranslator(unittest.TestCase):
                 "Hello world 42",
                 ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.........O.OOOOO.O..O.O...",
             ),
+            (
+                "Hello world42",
+                ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O...O.OOOOO.O..O.O...",
+            ),
         ]
 
         for input_str, expected in cases:
@@ -44,7 +46,7 @@ class TestTranslator(unittest.TestCase):
                 )
 
     def test_back_n_forth(self):
-        input_str = "The 12 quick 34 brown 56 Fox 78 jumps 9 over 0 the lazy dog"
+        input_str = "The 12 quick 34 brown5 6 Fox 78 jumps 9 over 0 the lazy dog"
 
         in_braille = self.translator.translate(input_str)
         in_english = self.translator.translate(in_braille)
