@@ -30,8 +30,10 @@ def brailleToEng(string):
         elif char == ".O.OOO":  # All characters following are numbers until space found
             i += 6
             while i < len(string) and string[i:i + 6] != "......": # Keep going until reaches the end or a space
-                output += numMap[string[i:i + 6]] # Append
+                output += numMap[string[i:i + 6]]   # Append
                 i += 6
+            if string[i:i + 6] == "......":
+                output += " "
         else:
             output += bteMap[char]
         i += 6  # Move to next group of characters
@@ -41,25 +43,19 @@ def engToBraille(string):
     output = ""
     number = False
     for i in string:    # Iterative over input
-        if i.isalpha(): # If character is a letter
-            if number: # If previously in number mode, exit first
-                output += "......"
-                number = False
-            if i.isupper(): # Add "capital follows" symbol if needed
+        if i.isalpha():     # If character is a letter
+            if i.isupper():     # Add "capital follows" symbol if needed
                 output += ".....O"
             output += etbMap[i.lower()]
         elif i.isdigit():   # If character is a number
-            if not number: # If previously not in number mode, enter first
+            if not number:  # If previously not in number mode, enter first
                 output += ".O.OOO"
                 number = True
             output += etbMap[i]
         else:   # All other symbols
-            if number:
-                output += "......"  # Add a space to indicate end of numbers
-                number = False
+            number = False
             output += etbMap[i]
     return output
-
 
 
 if __name__ == "__main__":
