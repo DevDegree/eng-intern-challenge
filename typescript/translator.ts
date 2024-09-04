@@ -67,13 +67,20 @@ function isLetterUpperCase(letter: string): boolean {
 function isBrailleString(str: string): boolean {
     // In the constraints of the challenge, a simpler check could be just to look
     // at the first six characters and see if there is a dot in it.
+
+    let seenDot = false;
+
     for (const char of str) {
         if (char !== "." && char !== "O") {
             return false;
         }
+
+        if (!seenDot && char === ".") {
+            seenDot = true;
+        }
     }
 
-    return true;
+    return seenDot;
 }
 
 function translateEnglishToBraille(english: string): string {
