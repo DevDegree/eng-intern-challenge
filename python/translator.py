@@ -97,7 +97,7 @@ class EnglishBrailleTranslator:
             elif char.isdigit() and not last_char_was_digit:
                 ans += self.NUMBER_TO_BRAILLE['NUMBER']
                 last_char_was_digit = True
-            elif char == ' ':
+            elif char.isspace():
                 last_char_was_digit = False # Reset digit flag
 
 
