@@ -112,11 +112,26 @@ function TranslateBrilleToAlphabet(text) {
   return alphabetForm;
 }
 
+function Translator(text) {
+  const testingIfBrille = /O./;
 
+  if (testingIfBrille.test(text) && text.length % 6 == 0) {
+    return TranslateBrilleToAlphabet(text);
+  }
 
-console.log(TranslateAlpbahetToBrille("Abc 123 xYz"));
+  return TranslateAlpbahetToBrille(text);
+}
+
+console.log(Translator("Abc 123 xYz"));
 console.log(
-  TranslateBrilleToAlphabet(
+  Translator(
     ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
   )
 );
+
+// console.log(TranslateAlpbahetToBrille("Abc 123 xYz"));
+// console.log(
+//   TranslateBrilleToAlphabet(
+//     ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
+//   )
+// );
