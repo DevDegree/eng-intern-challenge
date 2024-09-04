@@ -52,12 +52,8 @@ def translate_letters_to_braille(args):
     for elem in args:
         for i in elem:
             if i in letter_to_br_dict:
-                if num_counter == 1:
-                    num_counter = 0
                 br = br + letter_to_br_dict[i]
             elif i.isupper() and i.lower() in letter_to_br_dict:
-                if num_counter == 1:
-                    num_counter = 0
                 br = br + CAPITAL_FOLLOWS + letter_to_br_dict[i.lower()]
             elif i in num_to_br_dict:
                 if num_counter == 0:
@@ -66,6 +62,8 @@ def translate_letters_to_braille(args):
                 else:
                     br = br +  num_to_br_dict[i]              
         br = br + SPACE
+        num_counter = 0
+
     # cut off the last SPACE
     br = br[:-6]
     return br
