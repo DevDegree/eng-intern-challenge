@@ -1,7 +1,7 @@
 import sys
 
-CAPITALFOLLOWS = 'C'
-NUMBERFOLLOWS = 'N'
+CAPITALFOLLOWS = "CAPITALFOLLOWS"
+NUMBERFOLLOWS = "NUMBERFOLLOWS"
 
 brailleToAlphabetMap = {
   "O.....": 'a',
@@ -31,7 +31,6 @@ brailleToAlphabetMap = {
   "OO.OOO": 'y',
   "O..OOO": 'z',
 }
-
 brailleToNumberMap = {
   "O.....": '1',
   "O.O...": '2',
@@ -44,12 +43,15 @@ brailleToNumberMap = {
   ".OO...": '9',
   ".OOO..": '0',
 }
-
 brailleToSymbolMap = {
   ".....O": CAPITALFOLLOWS,
   ".O.OOO": NUMBERFOLLOWS,
-  "......": ' ',
+  "......": " ",
 }
+
+alphabetToBrailleMap = {val: key for key, val in brailleToAlphabetMap.items()}
+numberToBrailleMap = {val: key for key, val in brailleToNumberMap.items()}
+symbolToBrailleMap = {val: key for key, val in brailleToSymbolMap.items()}
 
 def isBraille(s: str):
   if len(s) % 6 != 0:
@@ -101,19 +103,37 @@ def brailleToEnglish(s: str):
   return res
 
 def englishToBraille(s: str):
-  
-  return None
+  res = ""
+
+  for i, c in enumerate(s):
+    # Case 1: Symbol read (space)
+    if c == " ":
+      res += symbolToBrailleMap[c]
+
+    # Case 2: Uppercase Letter read
+    elif c.isalpha() and c.isupper():
+      res += symbolToBrailleMap[CAPITALFOLLOWS] + alphabetToBrailleMap[c.lower()]
+    
+    # Case 3: Lowercase Letter read
+    elif c.isalpha() and c.islower():
+      res += alphabetToBrailleMap[c]
+
+    # Case 4: Start of number read
+    elif (c.isnumeric() and not res) or (c.isnumeric() and res and not s[i-1].isnumeric()):
+      res += symbolToBrailleMap[NUMBERFOLLOWS] + numberToBrailleMap[c]
+
+    # Case 5: Subsequent digit of number read
+    elif c.isnumeric():
+      res += numberToBrailleMap[c]
+
+  return res
 
 def main():
   arg = sys.argv[1] # Extract the provided argument
 
-  print(f"Provided argument: {arg}")
-
   if isBraille(arg):
-    print("Braille->English Result:")
     print(brailleToEnglish(arg))
   else:
-    print("English->Braille Result:")
     print(englishToBraille(arg))
 
 if __name__ == "__main__":
