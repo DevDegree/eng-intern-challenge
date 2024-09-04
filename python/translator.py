@@ -59,4 +59,14 @@ num2braille_dict = {
 
 # reverse mapping of dictionary from 'num': 'braille' to 'braille': 'num'
 braille2num_dict = {v: k for k, v in num2braille_dict.items()}
+
+def braille_to_eng(input):
+    # vars to correctly translate next char
+
+    result = ""
+    cap_follows = ".....O"
+    num_follows = ".O.OOO"
+
+    cap_flag = False
+    num_flag = False
 
