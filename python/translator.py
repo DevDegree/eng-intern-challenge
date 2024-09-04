@@ -38,25 +38,36 @@ class Translator:
         "z": "O..OOO",
     }
 
-    NUM_ENG_TO_BRAILLE_MAP = {
-        "1": "O.....",
-        "2": "O.O...",
-        "3": "OO....",
-        "4": "OO.O..",
-        "5": "O..O..",
-        "6": "OOO...",
-        "7": "OOOO..",
-        "8": "O.OO..",
-        "9": ".OO...",
-        "0": ".OOO..",
-    }
-
     def __init__(self) -> None:
         pass
 
+    def _get_number_encoding(self, char: str) -> str:
+        """Converts a number (0-9) to its corresponding letter (a-j) and vice versa.
+
+        The symbols for 1-9 is the same as the symbols for a-i. Thus, we can obtain the number's
+        unicode value, using `ord()`, offset by the unicode for 0. This allows us to to obtain
+        the mapping between numbers and letters. We also specially handle "j" and "0"
+        as `ord("j") != ord("0") == ord(":")`.
+        """
+        offset = ord("0")
+        unicode = ord(char)
+
+        if char.isnumeric():
+            as_letter = (
+                chr(unicode + offset) if unicode in range(ord("1"), ord(":")) else "j"
+            )
+
+            return as_letter
+
+        as_number = (
+            chr(unicode - offset) if unicode in range(ord("a"), ord("j")) else "0"
+        )
+
+        return as_number
+
     def _is_braille(self, input_str: str) -> bool:
-        """Checks to see if the text is braille.
-        - Could use better checks but we assume length character sets are valid.
+        """Checks to see if the text is Braille.
+        - Could use better checks but we assume length and character sets are valid.
         """
         chunkable = len(input_str) % self._BRAILLE_READ_LEN == 0
         all_zero_dots = set(input_str) == set("O.")
@@ -66,7 +77,7 @@ class Translator:
         """Converts a string from English to Braille, or vice versa.
         We assume the English and Braille can only consist of the
         alphanumeric values [Aa-Zz][0-9], including whitespaces.
-        The Braille text should consists of only `O`s and `.` alongisde
+        The Braille text should consists of only `O`s and `.` alongside
         additional symbols that denote capitalization and whitespace.
 
         Args:
@@ -101,18 +112,19 @@ class Translator:
                 encoding.append(self.BRAILLE_SPACE_FOLLOWS)
                 continue
 
-            if char.isnumeric() and not encoding_number:
-                encoding_number = True
-                encoding.append(self.BRAILLE_NUMBER_FOLLOWS)
+            if char.isnumeric():
+                char = self._get_number_encoding(char)
+
+                if not encoding_number:
+                    encoding_number = True
+                    encoding.append(self.BRAILLE_NUMBER_FOLLOWS)
 
             if char.isupper():
                 encoding.append(self.BRAILLE_CAPITALIZE_FOLLOWS)
                 char = char.lower()
 
             encoding.append(
-                self.NUM_ENG_TO_BRAILLE_MAP.get(char, self._DEFAULT_MAP_VAL)
-                if encoding_number
-                else self.ALPHA_ENG_TO_BRAILLE_MAP.get(char, self._DEFAULT_MAP_VAL)
+                self.ALPHA_ENG_TO_BRAILLE_MAP.get(char, self._DEFAULT_MAP_VAL)
             )
 
         return "".join(encoding)
@@ -126,16 +138,12 @@ class Translator:
         Returns:
             str: the translated string.
         """
-        words = []
+        chars = []
 
         is_number = capitalize = False
 
         ALPHA_BRAILLE_TO_ENG_MAP = {
-            enc: word for word, enc in self.ALPHA_ENG_TO_BRAILLE_MAP.items()
-        }
-
-        NUM_BRAILLE_TO_ENG_MAP = {
-            enc: num for num, enc in self.NUM_ENG_TO_BRAILLE_MAP.items()
+            enc: char for char, enc in self.ALPHA_ENG_TO_BRAILLE_MAP.items()
         }
 
         for i in range(0, len(input_str), self._BRAILLE_READ_LEN):
@@ -143,7 +151,7 @@ class Translator:
 
             if token == self.BRAILLE_SPACE_FOLLOWS:
                 is_number = False
-                words.append(" ")
+                chars.append(" ")
 
             elif token == self.BRAILLE_NUMBER_FOLLOWS:
                 is_number = True
@@ -152,19 +160,18 @@ class Translator:
                 capitalize = True
 
             else:
-                word = (
-                    NUM_BRAILLE_TO_ENG_MAP.get(token, self._DEFAULT_MAP_VAL)
-                    if is_number
-                    else ALPHA_BRAILLE_TO_ENG_MAP.get(token, self._DEFAULT_MAP_VAL)
-                )
+                char = ALPHA_BRAILLE_TO_ENG_MAP.get(token, self._DEFAULT_MAP_VAL)
 
-                if not is_number and capitalize:
-                    word = word.capitalize()
+                if is_number:
+                    char = self._get_number_encoding(char)
+
+                elif capitalize:
+                    char = char.capitalize()
                     capitalize = False
 
-                words.append(word)
+                chars.append(char)
 
-        return "".join(words)
+        return "".join(chars)
 
 
 def main():
