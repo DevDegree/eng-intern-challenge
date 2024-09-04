@@ -51,7 +51,7 @@ def translateInput(input):
         return translateEnglishToBraille(input)
     
 
-input = 'o.....o.....'
+input = input("Enter text to translate: ")
 translatedOutput = translateInput(input)
 brailleCharacters = separateBrailleCharacters(input)
 
