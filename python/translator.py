@@ -13,10 +13,15 @@ def detectLanguage(input):
             return Language.ENGLISH
     return Language.BRAILLE
 
-def translateBrailleToEnglish(input):
+def separateBrailleCharacters(input):
+    
 
+def translateBrailleToEnglish(input):
+    output = ""
+    brailleCharacters = separateBrailleCharacters(input)
 
 def translateEnglishToBraille(input):
+    output = ""
 
 
 def translateInput(input, inputLanguage):
