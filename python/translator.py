@@ -46,7 +46,7 @@ num_to_br_dict = {
     '0': ".OOO.."
 }
 
-def translate_letter_to_braille(args):
+def translate_letters_to_braille(args):
     br = ""
     num_counter = 0
     for elem in args:
@@ -77,7 +77,7 @@ def main():
         if len(sys.argv) == 2 and any(letter == "." for letter in sys.argv[1]):
             res = translate_braille_to_letter(sys.argv[1])
         else:
-            res = translate_letter_to_braille(sys.argv[1:])
+            res = translate_letters_to_braille(sys.argv[1:])
     return res
 
 if __name__ == "__main__":
