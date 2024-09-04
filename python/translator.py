@@ -72,7 +72,7 @@ def translate(input_string):
             else:
                 answer.append(reverse_braille_dict[char_braille])
     
-    return ''.join(answer)  # Join the list into a single string
+    return ''.join(answer) 
 
 
     
