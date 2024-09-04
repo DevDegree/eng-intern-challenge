@@ -63,10 +63,39 @@ braille2num_dict = {v: k for k, v in num2braille_dict.items()}
 def braille_to_eng(input):
     # vars to correctly translate next char
 
+    # encapulated function to get number
+    def get_num(input, i):
+        cur_char = input[i:i+6]
+        result = ""
+
+        while cur_char != braille2eng_dict[' '] or cur_char != braille2eng_dict['.']:
+            result += braille2num_dict[cur_char]
+            i+=6
+            if i >= len(input):
+                break
+            cur_char = input[i:i+6]
+        
+        return i, result
+
     result = ""
     cap_follows = ".....O"
     num_follows = ".O.OOO"
 
     cap_flag = False
-    num_flag = False
+
+    i = 0
+    while i < len(input):
+        cur_char = input[i:i+6]
+        # print(cur_char)
+        # check if flag character
+        if cur_char == num_follows:
+            # num_flag = True
+            i+=6
+            i, num_result = get_num(input, i)
+            result += num_result
+
+            continue
+
+
+        # i+=6 # increment to next braille char
 
