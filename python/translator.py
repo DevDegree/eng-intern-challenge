@@ -48,15 +48,14 @@ def translateBrailleToEnglish(input):
     isCapital = False
     isNum = False
     for char in brailleCharacters:
-        if isNum:
-            translatedChar = dictionaries.brailleToNum[char]
+        translatedChar = dictionaries.brailleToEnglish[char]
+        if isNum and translatedChar is not Modifier.DECIMAL_FOLLOWS:
+            translatedChar = dictionaries.brailleToNum[char] #search the number dictionary instead of the letter / symbol dictionary
             output += str(translatedChar)
         elif isCapital:
-            translatedChar = dictionaries.brailleToEnglish[char].upper()
-            output += translatedChar
+            output += translatedChar.upper()
             isCapital = False #only capitalize the character immediately after capital follows symbol
         else:
-            translatedChar = dictionaries.brailleToEnglish[char]
             if translatedChar == Modifier.CAPITAL_FOLLOWS:
                 isCapital = True
             elif translatedChar == Modifier.NUM_FOLLOWS:
