@@ -12,7 +12,7 @@ ALPHABET_TO_BRAILLE = {
 NUMBER_TO_BRAILLE = {
   "number" => ".O.OOO",  # Braille representation for indicating a number sequence
   "0" => ".OOO..", "1" => "O.....", "2" => "O.O...", "3" => "OO....", "4" => "OO.O..", "5" => "O..O..", "6" => "OOO...",
-  "7" => "OOOO..", "8" => "O.OO..", "9" => ".OO...", " " => "......"  # Braille representation for space
+  "7" => "OOOO..", "8" => "O.OO..", "9" => ".OO..."  # Braille representation for space
 }
 
 # Invert the mappings for translation from Braille to Alphabet/Number
@@ -44,9 +44,14 @@ end
 
 # Function to translate Braille text back to English
 def translate_to_english(input)
-  solution = ""
-  check_capital = false  # Flag to determine if the next character should be capitalized
-  number_mode = false  # Flag to determine if the current mode is number mode
+  # Ensure that the input length is a multiple of 6
+  unless input.length % 6 == 0
+    raise "Invalid Braille input: Length must be a multiple of 6."
+  end
+
+  result = "" 
+  capital = false  # Flag to determine if the next character should be capitalized
+  number_sequence = false  # Flag to determine if the current mode is number mode
   curr_string = ''  # Accumulator for Braille characters
 
   input.each_char do |char|
@@ -54,28 +59,28 @@ def translate_to_english(input)
 
     if curr_string.length == 6  # Braille characters are 6 dots long
       if curr_string == ALPHABET_TO_BRAILLE['capital']  # Check if the current string is the capital indicator
-        check_capital = true
+        capital = true
       elsif curr_string == NUMBER_TO_BRAILLE['number']  # Check if the current string is the number indicator
-        number_mode = true
+        number_sequence = true
       else
-        if curr_string == ALPHABET_TO_BRAILLE[" "] && number_mode # Check if it's the end of the sequence of numbers
+        if curr_string == ALPHABET_TO_BRAILLE[" "] && number_sequence # Check if it's the end of the sequence of numbers
           char = BRAILLE_TO_ALPHABET.fetch(curr_string, '')
-          number_mode = false
-        elsif number_mode # Translate digits
+          number_sequence = false
+        elsif number_sequence # Translate braille to digits
           char = BRAILLE_TO_NUMBER.fetch(curr_string, '')
-        else # Translate alphabet
+        else # Translate braille to alphabet
           char = BRAILLE_TO_ALPHABET.fetch(curr_string, '')
-          if check_capital
+          if capital
             char = char.upcase  # Capitalize the character if needed
-            check_capital = false
+            capital = false
           end
         end
-        solution += char
+        result += char
       end
       curr_string = ''  # Reset the accumulator for the next Braille character
     end
   end
-  solution
+  result
 end
 
 # Function to determine if the input contains Braille characters
@@ -86,7 +91,6 @@ end
 # Main function to handle command-line arguments and execute translation
 def main(args)
   input = args.join(' ')  # Combine arguments into a single string
-
   if determine_input_type(input)
     puts translate_to_english(input)
   else
@@ -94,5 +98,4 @@ def main(args)
   end
 end
 
-# Command-line execution with a sample input
-main([".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"])
+main(ARGV)
