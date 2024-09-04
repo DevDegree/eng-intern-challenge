@@ -6,7 +6,7 @@ ENGLISH_TO_BRAILLE_ALPHA = {
     'k' : 'O...O.', 'l' : 'O.O.O.', 'm' : 'OO..O.', 'n' : 'OO.OO.', 'o' : 'O..OO.',
     'p' : 'OOO.O.', 'q' : 'OOOOO.', 'r' : 'O.OOO.', 's' : '.OO.O.', 't' : '.OOOO.',
     'u' : 'O...OO', 'v' : 'O.O.OO', 'w' : '.OOO.O', 'x' : 'OO..OO', 'y' : 'OO.OOO',
-    'z' : 'O..OOO', ' ' : '......'
+    'z' : 'O..OOO'
     }
 
 ENGLISH_TO_BRAILLE_NUMERIC = {
@@ -17,6 +17,7 @@ ENGLISH_TO_BRAILLE_NUMERIC = {
 BRAILLE_TO_ENGLISH_ALPHA = {value : key for key, value in ENGLISH_TO_BRAILLE_ALPHA.items()}
 BRAILLE_TO_ENGLISH_NUMERIC = {value : key for key, value in ENGLISH_TO_BRAILLE_NUMERIC.items()}
 
+BRAILLE_SPACE   = '......'
 BRAILLE_CAPITAL = '.....O'
 BRAILLE_NUMERIC = '.O.OOO'
 
@@ -26,29 +27,52 @@ def is_braille(text : str) -> bool:
     else:
         return False
 
+def english_to_braille(text : str) -> str:
+    braille_result = ''
+
+    numeric_follows = False # if numeric characters follow
+
+    for character in text:
+        if character == ' ':
+            numeric_follows = False
+            braille_result += BRAILLE_SPACE
+        elif character.lower() in ENGLISH_TO_BRAILLE_ALPHA:
+            if character.isupper():
+                braille_result += BRAILLE_CAPITAL
+
+            braille_result += ENGLISH_TO_BRAILLE_ALPHA[character.lower()]
+        elif character in ENGLISH_TO_BRAILLE_NUMERIC:
+            if not numeric_follows:
+                braille_result += BRAILLE_NUMERIC
+                numeric_follows = True
+
+            braille_result += ENGLISH_TO_BRAILLE_NUMERIC[character]
+
+    return braille_result
+
 def braille_to_english(text : str) -> str:
     english_result = ''
 
-    parse_capital = False # if next char will be a capital
-    parsing_numeric = False # if parsing numeric characters
+    capital_follows = False # if next char will be a capital
+    numeric_follows = False # if parsing numeric characters
 
     for i in range(0, len(text), 6):
         braille_code = text[i : i + 6]
 
         if braille_code == BRAILLE_CAPITAL:
-            parse_capital = True
+            capital_follows = True
         elif braille_code == BRAILLE_NUMERIC:
-            parsing_numeric = True
-        elif BRAILLE_TO_ENGLISH_ALPHA[braille_code] == ' ':
-            parsing_numeric = False
+            numeric_follows = True
+        elif braille_code == BRAILLE_SPACE:
+            numeric_follows = False
             english_result += ' '
-        elif parsing_numeric:
+        elif numeric_follows:
             if braille_code in BRAILLE_TO_ENGLISH_NUMERIC:
                 english_result += BRAILLE_TO_ENGLISH_NUMERIC[braille_code]
         else:
-            if parse_capital:
+            if capital_follows:
                 english_result += BRAILLE_TO_ENGLISH_ALPHA[braille_code].upper()
-                parse_capital = False
+                capital_follows = False
             else:
                 english_result += BRAILLE_TO_ENGLISH_ALPHA[braille_code]
 
@@ -58,10 +82,12 @@ def main():
     if len(sys.argv) < 2:
         sys.exit(1)
 
-    text = " ".join(sys.argv[1:])
+    text = ' '.join(sys.argv[1:])
 
     if is_braille(text):
         print(braille_to_english(text))
+    else:
+        print(english_to_braille(text))
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
