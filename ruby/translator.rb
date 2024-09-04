@@ -30,7 +30,7 @@ def braille?(input_string)
 end
 
 # Convert Braille to English
-def braille_to_english(braille_string)
+def braille_to_english(braille_translation)
 
   # Store the translated characters
   english_translation = []
@@ -41,10 +41,10 @@ def braille_to_english(braille_string)
   is_number = false
 
   # Loop through the braille string, processing 6 characters (one Braille symbol) at a time
-  while i < braille_string.length
+  while i < braille_translation.length
 
     # Extract the next 6 characters to form a Braille symbol
-    symbol = braille_string[i, 6]
+    symbol = braille_translation[i, 6]
     
     # Check if the symbol is the Braille "capital" indicator
     if symbol == BRAILLE_LETTER_DICT["capital"]
@@ -92,6 +92,35 @@ def braille_to_english(braille_string)
 
 end
 
+# Convert English to Braille
+def english_to_braille(english_string)
+  braille_translation = []
+  is_number = false
+
+  english_string.each_char do |char|
+    if char.match?(/[A-Z]/)
+      # Add capital indicator and convert to lowercase
+      braille_translation << BRAILLE_LETTER_DICT["capital"]
+      char = char.downcase
+    end
+
+    if char.match?(/\d/)
+      # Add number indicator if it's not already added
+      unless is_number
+        braille_translation << BRAILLE_NUMBER_DICT["number"]
+        is_number = true
+      end
+      braille_translation << BRAILLE_NUMBER_DICT[char]
+    else
+      # set flag to false, if a letter or space is encountered
+      is_number = false
+      braille_translation << BRAILLE_LETTER_DICT[char] || ""
+    end
+  end
+
+  braille_translation.join
+end
+
 
 def main
 
@@ -108,7 +137,7 @@ def main
   if braille?(input_string)
     puts braille_to_english(input_string)
   else
-    puts "English"
+    puts english_to_braille(input_string)
   end
 
 end
