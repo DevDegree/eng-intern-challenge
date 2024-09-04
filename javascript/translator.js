@@ -1,9 +1,12 @@
-const input = '.....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO';
+const input = 'Abc 123 xYz';
+const brailleCharacters = [];
+let englishCharacters = [];
+let isCapital = false;
+let isNumber = false;
 let output;
 
 if (input.includes('.')) {
   // Input in braille
-  const brailleCharacters = [];
   const lengthOfInput = input.length;
   let index = 0;
 
@@ -12,10 +15,6 @@ if (input.includes('.')) {
     brailleCharacters.push(brailleCharacter);
     index += 6;
   }
-
-  const englishCharacters = [];
-  let isCapital = false;
-  let isNumber = false;
 
   for (const brailleCharacter of brailleCharacters) {
     let englishCharacter = '';
@@ -164,7 +163,120 @@ if (input.includes('.')) {
   output = englishCharacters.join('');
 } else {
   // Input in English
-  output = 'English';
+  englishCharacters = input.split('');
+
+  for (const englishCharacter of englishCharacters) {
+    const englishCharacterInLowerCase = englishCharacter.toLowerCase();
+    let modifier = '';
+    let brailleCell = '';
+
+    if (englishCharacter === ' ') {
+      modifier = '......';
+      isNumber = false;
+    } else if (!isNaN(englishCharacter)) {
+      if (!isNumber) {
+        isNumber = true;
+        modifier = '.O.OOO';
+      }
+    } else if (englishCharacter === englishCharacter.toUpperCase()) {
+      modifier = '.....O';
+    }
+
+    switch (englishCharacterInLowerCase) {
+      case '1':
+      case 'a':
+        brailleCell = 'O.....';
+        break;
+      case '2':
+      case 'b':
+        brailleCell = 'O.O...';
+        break;
+      case '3':
+      case 'c':
+        brailleCell = 'OO....';
+        break;
+      case '4':
+      case 'd':
+        brailleCell = 'OO.O..';
+        break;
+      case '5':
+      case 'e':
+        brailleCell = 'O..O..';
+        break;
+      case '6':
+      case 'f':
+        brailleCell = 'OOO...';
+        break;
+      case '7':
+      case 'g':
+        brailleCell = 'OOOO..';
+        break;
+      case '8':
+      case 'h':
+        brailleCell = 'O.OO..';
+        break;
+      case '9':
+      case 'i':
+        brailleCell = '.OO...';
+        break;
+      case '0':
+      case 'j':
+        brailleCell = '.OOO..';
+        break;
+      case 'k':
+        brailleCell = 'O...O.';
+        break;
+      case 'l':
+        brailleCell = 'O.O.O.';
+        break;
+      case 'm':
+        brailleCell = 'OO..O.';
+        break;
+      case 'n':
+        brailleCell = 'OO.OO.';
+        break;
+      case 'o':
+        brailleCell = 'O..OO.';
+        break;
+      case 'p':
+        brailleCell = 'OOO.O.';
+        break;
+      case 'q':
+        brailleCell = 'OOOOO.';
+        break;
+      case 'r':
+        brailleCell = 'O.OOO.';
+        break;
+      case 's':
+        brailleCell = '.OO.O.';
+        break;
+      case 't':
+        brailleCell = '.OOOO.';
+        break;
+      case 'u':
+        brailleCell = 'O...OO';
+        break;
+      case 'v':
+        brailleCell = 'O.O.OO';
+        break;
+      case 'w':
+        brailleCell = '.OOO.O';
+        break;
+      case 'x':
+        brailleCell = 'OO..OO';
+        break;
+      case 'y':
+        brailleCell = 'OO.OOO';
+        break;
+      case 'z':
+        brailleCell = 'O..OOO';
+        break;
+    }
+
+    brailleCharacters.push(modifier + brailleCell);
+  }
+
+  output = brailleCharacters.join('');
 }
 
 console.log(output);
