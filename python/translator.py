@@ -1,16 +1,25 @@
 from enum import Enum
 
+class Language (Enum):
+    BRAILLE = 0
+    ENGLISH = 1
+
+class Modifier (Enum):
+    CAPITAL_FOLLOWS = 0
+    NUM_FOLLOWS = 1
+    DECIMAL_FOLLOWS = 2
+
 class dictionaries:
     brailleSymbols = {'o', '.'}
     brailleToEnglish = {
         'o.....': 'a',
         'o.o...': 'b',
+        '.o.ooo': Modifier.NUM_FOLLOWS
         #think about ideas on how to do this in a less manual / error-prone way before continuing
     }
-
-class Language (Enum):
-    BRAILLE = 0
-    ENGLISH = 1
+    brailleToNum = {
+        'o.....': 1,
+    }
 
 def detectLanguage(input):
     for char in input:
@@ -33,10 +42,29 @@ def translateBrailleToEnglish(input):
     output = ''
     translatedChar = ''
     brailleCharacters = separateBrailleCharacters(input)
+    isCapital = False
+    isNum = False
     for char in brailleCharacters:
-        translatedChar = dictionaries.brailleToEnglish[char]
-        output += translatedChar
-    
+        if isNum:
+            translatedChar = dictionaries.brailleToNum[char]
+            output += str(translatedChar)
+        elif isCapital:
+            translatedChar = translatedChar.upper()
+            output += translatedChar
+            isCapital = False #only capitalize the character immediately after capital follows symbol
+        else:
+            translatedChar = dictionaries.brailleToEnglish[char]
+            if translatedChar == Modifier.CAPITAL_FOLLOWS:
+                isCapital = True
+            elif translatedChar == Modifier.NUM_FOLLOWS:
+                isNum = True
+            elif isNum and translatedChar == ' ':
+                isNum = False
+                output += ' '
+            elif translatedChar == Modifier.DECIMAL_FOLLOWS:
+                output += '.'
+            else:
+                output += translatedChar
     return output
 
 def translateEnglishToBraille(input):
