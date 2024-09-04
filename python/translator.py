@@ -30,7 +30,7 @@ def is_braille(text : str) -> bool:
 def english_to_braille(text : str) -> str:
     braille_result = ''
 
-    numeric_follows = False # if numeric characters follow
+    numeric_follows = False # numeric characters follow
 
     for character in text:
         if character == ' ':
@@ -53,8 +53,8 @@ def english_to_braille(text : str) -> str:
 def braille_to_english(text : str) -> str:
     english_result = ''
 
-    capital_follows = False # if next char will be a capital
-    numeric_follows = False # if parsing numeric characters
+    capital_follows = False # next char will be a capital
+    numeric_follows = False # numeric characters follow
 
     for i in range(0, len(text), 6):
         braille_code = text[i : i + 6]
