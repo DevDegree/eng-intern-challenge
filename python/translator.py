@@ -14,7 +14,15 @@ def detectLanguage(input):
     return Language.BRAILLE
 
 def separateBrailleCharacters(input):
-    
+    brailleCharacters = []
+    charStart = 0
+    charEnd = 6
+    inputLength = len(input)
+    while charEnd <= inputLength:
+        brailleCharacters.append(input[charStart:charEnd])
+        charStart += 6
+        charEnd +=6
+    return brailleCharacters
 
 def translateBrailleToEnglish(input):
     output = ""
@@ -31,9 +39,10 @@ def translateInput(input, inputLanguage):
         return translateEnglishToBraille(input)
     
 
-input = 'FISH'
-inputLength = len(input)
+input = 'ooo...oo..oo'
 inputLanguage = detectLanguage(input)
 translatedOutput = translateInput(input, inputLanguage)
+brailleCharacters = separateBrailleCharacters(input)
 
 print (inputLanguage)
+print (brailleCharacters)
