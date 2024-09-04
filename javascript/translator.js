@@ -28,9 +28,7 @@ const alphabetToBrille = {
   " ": "......", // ⠀ (space)
   capital: ".....O", // ⠠ (Capital indicator)
   number: ".O.OOO", // ⠼ (Number indicator)
-
 };
-
 
 const numberToBrille = {
   1: "O.....", // ⠁
@@ -46,8 +44,6 @@ const numberToBrille = {
   " ": "......", // ⠀ (space)
 };
 
-
-
 const brilleToAlphabet = {};
 const brilleToNumber = {};
 
@@ -59,12 +55,9 @@ for (let key in numberToBrille) {
   brilleToNumber[numberToBrille[key]] = key;
 }
 
-
-
 // translator from alphabet to brille
 
 function TranslateAlpbahetToBrille(text) {
-  
   let brilleForm = "";
   let numberMode = false;
 
@@ -87,8 +80,43 @@ function TranslateAlpbahetToBrille(text) {
     }
   }
 
-
   return brilleForm;
 }
 
-console.log(TranslateAlpbahetToBrille('Abc 123 xYz'));
+function TranslateBrilleToAlphabet(text) {
+  let char = "";
+  let i = 0;
+  let alphabetForm = "";
+  let numberMode = false;
+
+  for (i = 0; i < text.length; i += 6) {
+    char = text.substr(i, 6);
+    if (brilleToAlphabet[char] == " ") {
+      numberMode = false;
+      alphabetForm += brilleToAlphabet[char];
+    } else if (numberMode) {
+      alphabetForm += brilleToNumber[char];
+    } else if (brilleToAlphabet[char] == "number") {
+      numberMode = true;
+      i += 6;
+      char = text.substr(i, 6);
+      alphabetForm += brilleToNumber[char];
+    } else if (brilleToAlphabet[char] == "capital") {
+      i += 6;
+      char = text.substr(i, 6);
+      alphabetForm += brilleToAlphabet[char].toUpperCase();
+    } else {
+      alphabetForm += brilleToAlphabet[char];
+    }
+  }
+  return alphabetForm;
+}
+
+
+
+console.log(TranslateAlpbahetToBrille("Abc 123 xYz"));
+console.log(
+  TranslateBrilleToAlphabet(
+    ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
+  )
+);
