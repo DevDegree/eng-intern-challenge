@@ -2,6 +2,11 @@ from enum import Enum
 
 class dictionaries:
     brailleSymbols = {'o', '.'}
+    brailleToEnglish = {
+        'o.....': 'a',
+        'o.o...': 'b',
+        #think about ideas on how to do this in a less manual / error-prone way before continuing
+    }
 
 class Language (Enum):
     BRAILLE = 0
@@ -25,24 +30,29 @@ def separateBrailleCharacters(input):
     return brailleCharacters
 
 def translateBrailleToEnglish(input):
-    output = ""
+    output = ''
+    translatedChar = ''
     brailleCharacters = separateBrailleCharacters(input)
+    for char in brailleCharacters:
+        translatedChar = dictionaries.brailleToEnglish[char]
+        output += translatedChar
+    
+    return output
 
 def translateEnglishToBraille(input):
-    output = ""
+    output = ''
 
 
-def translateInput(input, inputLanguage):
+def translateInput(input):
+    inputLanguage = detectLanguage(input)
     if inputLanguage == Language.BRAILLE:
         return translateBrailleToEnglish(input)
     elif inputLanguage == Language.ENGLISH:
         return translateEnglishToBraille(input)
     
 
-input = 'ooo...oo..oo'
-inputLanguage = detectLanguage(input)
-translatedOutput = translateInput(input, inputLanguage)
+input = 'o.....o.....'
+translatedOutput = translateInput(input)
 brailleCharacters = separateBrailleCharacters(input)
 
-print (inputLanguage)
-print (brailleCharacters)
+print (translatedOutput)
