@@ -23,7 +23,7 @@ BRAILLE_NON_ALPHANUM_SYMBOLS = [BRAILLE_CAP_FOLLOWS, BRAILLE_NUM_FOLLOWS, BRAILL
 BRAILLE_SYMBOL_LEN: int  = 6
 ENGLISH_SPACE: str = ' '
 
-BRAILLE_ENGLISH_DICT : dict[str,str]=  { # maps braille symbols to english lowercase letters
+BRAILLE_ENGLISH_DICT: dict[str,str]=  { # maps braille symbols to english lowercase letters
     'O.....': 'a',
     'O.O...': 'b',
     'OO....': 'c',
@@ -182,7 +182,7 @@ class translator :
         return brailleResult
     
     # if inputArr contains valid braille input, returns true. Other wise False 
-    def isBraille(self, inputArr: list[str]) -> bool:
+    def __isBraille__(self, inputArr: list[str]) -> bool:
         # opted not to  simplying checking for if input contain UNRAISED_DOT
         # as would allow translator to be expanded to the full braille alphabet
 
@@ -190,7 +190,7 @@ class translator :
         if len(inputArr) > 1:
             return False; 
     
-        inputText : str = inputArr[0]; #
+        inputText: str = inputArr[0]; 
 
         # determine if the len of input is a multiple of braille symbol length
         if len(inputText) % BRAILLE_SYMBOL_LEN != 0:
@@ -205,9 +205,9 @@ class translator :
     
     # determines if the inputArr should be translated to english or braille and returns the result of the translation 
     def translate(self, inputArr: list[str]) -> str:
-        translatedText : str = ""
+        translatedText: str = ""
 
-        if self.isBraille(inputArr): 
+        if self.__isBraille__(inputArr): 
             translatedText = self.__braille2English__(inputArr[0])
 
         else:
