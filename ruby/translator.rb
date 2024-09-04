@@ -23,8 +23,56 @@ TRANSLATION_TABLE = {
   " ": []
 }
 
-def main
+BRAILLE_PATTERN = /^(?:[.O]{6})+$/
+ENGLISH_PATTERN = /^[a-z0-9.,?!:;\-\/<>() ]+$/i
 
+def main
+  words = ARGV
+  translated = translate(words)
+  puts translated
+end
+
+# @param words [Array<String>]
+# @return [Symbol] <code>:braille</code>, <code>:english</code>, <code>:unknown</code>
+def determine_language(words)
+  if words.all? { |word| word.match?(BRAILLE_PATTERN) }
+    :braille
+  elsif words.all? { |word| word.match?(ENGLISH_PATTERN) }
+    :english
+  else
+    :unknown
+  end
+end
+
+# @param words [Array<String>]
+# @return [String]
+def translate(words)
+  language = determine_language(words)
+
+  case language
+  when :braille
+    # translate from Braille to English
+    translated = words.map { |word| braille_to_english(word) }
+    translated.join " "
+  when :english
+    # translate from English to Braille
+    translated = words.map { |word| english_to_braille(word) }
+    translated.join "......"
+  else # some words are not in Braille and not in English
+    words.join " "
+  end
+end
+
+# @param word [String]
+# @return [String]
+def braille_to_english(word)
+  " "
+end
+
+# @param word [String]
+# @return [String]
+def english_to_braille(word)
+  "......"
 end
 
 if __FILE__ == $0
