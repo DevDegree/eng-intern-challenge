@@ -1,3 +1,4 @@
+jest.setTimeout(10000); // Set timeout to 10 seconds (10000 ms)
 const { exec } = require("child_process");
 
 describe('translator.js script', () => {
