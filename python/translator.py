@@ -4,7 +4,7 @@ class EnglishBrailleTranslatorException(Exception):
     pass
 
 class EnglishBrailleTranslator:
-    ENGLISH_TO_BRAILLE = {
+    APLHA_TO_BRAILLE = {
         'a': '0.....',
         'b': '0.0...',
         'c': '00....',
@@ -31,6 +31,10 @@ class EnglishBrailleTranslator:
         'x': '00..00',
         'y': '00.000',
         'z': '0..000',
+        ' ': '......',
+        'CAPITAL': '.....0',
+    }
+    NUMBER_TO_BRAILLE = {
         '1': '0.....',
         '2': '0.0...',
         '3': '00....',
@@ -41,23 +45,10 @@ class EnglishBrailleTranslator:
         '8': '0.00..',
         '9': '.00...',
         '0': '.000..',
-        '.': '..00.0',
-        ',': '..0...',
-        '?': '..0.00',
-        '!': '..000.',
-        ':': '..00..',
-        ';': '..0.0.',
-        '-': '....00',
-        '/': '.0..0.',
-        '<': '.00..0',
-        '>': '0..00.',
-        '(': '0.0..0',
-        ')': '.0.00.',
-        ' ': '......',
-        'CAPITAL': '.....0',
         'NUMBER': '.0.000',
     }
-    BRAILLE_TO_ENGLISH = {v: k for k, v in ENGLISH_TO_BRAILLE.items()}
+    BRAILLE_TO_ALPHA = {v: k for k, v in APLHA_TO_BRAILLE.items()}
+    BRAILLE_TO_NUMBER = {v: k for k, v in NUMBER_TO_BRAILLE.items()}
     VALID_BRAILLE = ['0', '.']
     BRAILLE_CHAR_LENGTH = 6
 
@@ -102,15 +93,15 @@ class EnglishBrailleTranslator:
         last_char_was_digit = False
         for char in text:
             if char.isupper():
-                ans += self.ENGLISH_TO_BRAILLE['CAPITAL']
+                ans += self.APLHA_TO_BRAILLE['CAPITAL']
             elif char.isdigit() and not last_char_was_digit:
-                ans += self.ENGLISH_TO_BRAILLE['NUMBER']
+                ans += self.NUMBER_TO_BRAILLE['NUMBER']
                 last_char_was_digit = True
             elif char == ' ':
                 last_char_was_digit = False # Reset digit flag
 
 
-            ans += self.ENGLISH_TO_BRAILLE[char.lower()]
+            ans += self.NUMBER_TO_BRAILLE[char] if char.isdigit() else self.APLHA_TO_BRAILLE[char.lower()]
         
         return ans        
 
@@ -131,19 +122,20 @@ class EnglishBrailleTranslator:
             index += self.BRAILLE_CHAR_LENGTH
 
             # Check for special characters
-            if braille_char == self.ENGLISH_TO_BRAILLE['CAPITAL']:
+            if braille_char == self.APLHA_TO_BRAILLE['CAPITAL']:
                 is_capital = True
                 continue
-            if braille_char == self.ENGLISH_TO_BRAILLE['NUMBER']:
+            if braille_char == self.NUMBER_TO_BRAILLE['NUMBER']:
                 is_number = True
                 continue
-
-            char = self.BRAILLE_TO_ENGLISH.get(braille_char)
-            print(char, braille_char, index)
-            ans += char.upper() if is_capital else char
-            is_capital = False
-            if char.isspace():
+            
+            # Space resets number flag
+            if braille_char == self.APLHA_TO_BRAILLE[' ']:
                 is_number = False
+
+            char = self.BRAILLE_TO_NUMBER[braille_char] if is_number else self.BRAILLE_TO_ALPHA[braille_char]
+            ans += char.upper() if is_capital else char
+            is_capital = False # Reset capital flag after every character
 
         return ans
 
