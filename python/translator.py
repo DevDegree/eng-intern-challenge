@@ -130,6 +130,7 @@ def braille_to_english(braille):
 
 def main():
     if len(sys.argv) < 2:
+        print("Insufficient arguments")
         return
     
     input_text = ' '.join(sys.argv[1:])
