@@ -72,7 +72,45 @@ end
 # @param word [String]
 # @return [String]
 def english_to_braille(word)
-  "......"
+  braille = ""
+  last_character = ""
+
+  # Read characters one by one, add special symbols when necessary
+  word.each_char do |c|
+    if c.match? /[0-9]/
+      # c is a number
+      # add the number sign if necessary
+      unless last_character.match?(/[0-9.]/)
+        braille << braille_symbol(TRANSLATION_TABLE[:number_follows])
+      end
+      braille << braille_symbol(TRANSLATION_TABLE[c.to_i])
+    elsif c == "." && last_character.match?(/[0-9]/)
+      # c is a decimal point
+      braille << braille_symbol(TRANSLATION_TABLE[:decimal_follows])
+    elsif c.match? /[a-z]/i
+      # c is a letter
+      # add the capital letter sign if the letter is in upper case
+      if c == c.upcase
+        braille << braille_symbol(TRANSLATION_TABLE[:capital_follows])
+      end
+      braille << braille_symbol(TRANSLATION_TABLE[c.downcase.to_sym])
+    else # c is non-letter and non-digit symbol
+      braille << braille_symbol(TRANSLATION_TABLE[c.to_sym])
+    end
+
+    # update last_character
+    last_character = c
+  end
+
+  braille
+end
+
+# @param raised [Array<Integer>] The raised dots of a Braille symbol, should be the indices of the raised dots from 0 to 5.
+# @return [String]
+def braille_symbol(raised)
+  braille = "......"
+  raised.each { |i| braille[i] = "O" }
+  braille
 end
 
 if __FILE__ == $0
