@@ -14,7 +14,10 @@ class dictionaries:
     brailleToEnglish = {
         'o.....': 'a',
         'o.o...': 'b',
-        '.o.ooo': Modifier.NUM_FOLLOWS
+        '.o.ooo': Modifier.NUM_FOLLOWS,
+        '.....o': Modifier.CAPITAL_FOLLOWS,
+        '.o...o': Modifier.DECIMAL_FOLLOWS
+
         #think about ideas on how to do this in a less manual / error-prone way before continuing
     }
     brailleToNum = {
@@ -49,7 +52,7 @@ def translateBrailleToEnglish(input):
             translatedChar = dictionaries.brailleToNum[char]
             output += str(translatedChar)
         elif isCapital:
-            translatedChar = translatedChar.upper()
+            translatedChar = dictionaries.brailleToEnglish[char].upper()
             output += translatedChar
             isCapital = False #only capitalize the character immediately after capital follows symbol
         else:
