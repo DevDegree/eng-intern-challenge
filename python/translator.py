@@ -1,3 +1,5 @@
+import sys
+
 symbolHash = {
     "a": "O.....", "b": "O.O...", "c": "OO....", "d": "OO.O..",
     "e": "O..O..", "f": "OOO...", "g": "OOOO..", "h": "O.OO..",
@@ -63,11 +65,20 @@ def brailleToEnglish(input):
     
     return english
 
-if __name__ == "__main__":
-    
-    userInput = input()
+if __name__ == "__main__":  
+
+    userInput = ""
+    args = sys.argv
+
+    for i in range(1, len(args)):
+        if i != len(args) - 1:
+            userInput += args[i] + " "
+        else:
+            userInput += args[i]
+        
     if checkEnglish(userInput):
         returnString = englishToBraille(userInput)
     else:
         returnString = brailleToEnglish(userInput)
-    print(returnString)
+
+    print(returnString, end='')
