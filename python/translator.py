@@ -1,6 +1,7 @@
 import sys
 
 #get letter, number, and special character
+#from braille to character
 def english_letter(input_data, cap, num):
     if (cap):
         if input_data == "O.....":
@@ -159,7 +160,9 @@ def english_letter(input_data, cap, num):
             return ")"
         else:
             return " "
-        
+
+#brute force checking number and alphabet
+# convert letter into braille        
 def braille_letter(input_data, digit):
     if(digit):
         if input_data == "1":
@@ -323,6 +326,7 @@ def convert_to_English(input_data):
     print(english)
     return 
 
+#get input_data and check if Capitalize or number 
 def convert_to_Braille(input_data):
     braille = ""
     for i, character in enumerate(input_data):
