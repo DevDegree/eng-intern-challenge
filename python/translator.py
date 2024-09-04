@@ -84,15 +84,15 @@ def brailleToEnglish(s: str):
         addCapital = True
       elif symbol == NUMBERFOLLOWS:
         addNumber = True
-      else:
+      else: # Space
         res += symbol
+        addNumber = False
       
       continue
 
     # CASE 2: NUMBER
     if addNumber:
       res += brailleToNumberMap[currBraille]
-      addNumber = False
       continue
     
     # CASE 3: LETTER
