@@ -15,7 +15,7 @@ numMap = {
     "OOO...": "6", "OOOO..": "7", "O.OO..": "8", ".OO...": "9", ".OOO..": "0"
 }
 # Map from English to braille
-etbMap = {v: k for k, v in bteMap.items()} | {v: k for k, v in numMap.items()}
+etbMap = {**{v: k for k, v in bteMap.items()},**{v: k for k, v in numMap.items()}}
 
 
 def brailleToEng(string):
@@ -26,7 +26,7 @@ def brailleToEng(string):
         if char == ".....O":  # Next character is capital
             i += 6
             char = string[i:i + 6]
-            output += bteMap[char]  # Concatenate the corresponding English letter to our output string
+            output += bteMap[char].upper()  # Concatenate the corresponding English letter to our output string
         elif char == ".O.OOO":  # All characters following are numbers until space found
             i += 6
             while i < len(string) and string[i:i + 6] != "......": # Keep going until reaches the end or a space
@@ -35,14 +35,37 @@ def brailleToEng(string):
         else:
             output += bteMap[char]
         i += 6  # Move to next group of characters
-        return output
+    return output
+
+def engToBraille(string):
+    output = ""
+    number = False
+    for i in string:    # Iterative over input
+        if i.isalpha(): # If character is a letter
+            if number: # If previously in number mode, exit first
+                output += "......"
+                number = False
+            if i.isupper(): # Add "capital follows" symbol if needed
+                output += ".....O"
+            output += etbMap[i.lower()]
+        elif i.isdigit():   # If character is a number
+            if not number: # If previously not in number mode, enter first
+                output += ".O.OOO"
+                number = True
+            output += etbMap[i]
+        else:   # All other symbols
+            if number:
+                output += "......"  # Add a space to indicate end of numbers
+                number = False
+            output += etbMap[i]
+    return output
+
 
 
 if __name__ == "__main__":
-    args = str(sys.argv[1:])  # Convert input to string
-
+    args = ' '.join(sys.argv[1:])  # Convert input to string
     # Determine function to run
     if all(c in '.O' for c in args):
-        print(brailleToEng(args))  # If input consist
+        print(brailleToEng(args))  # If input consists of only '.' and 'O'
     else:
-        print(engtoBraille(args))
+        print(engToBraille(args))
