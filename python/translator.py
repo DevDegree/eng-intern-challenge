@@ -112,7 +112,7 @@ def to_braille(command: list[str]) -> str:
     return statement[:-6]
 
 
-def parse() -> str:
+if __name__ == "__main__":
     """ Parses a set of command-line arguments to English or Braille. """
     # Create a parser and add a variable argument.
     parser = argparse.ArgumentParser(
@@ -120,15 +120,11 @@ def parse() -> str:
     parser.add_argument('arg', nargs="*", help="The provided argument.")
 
     # Parse the command.
-    command = parser.parse_args()
+    cmd = parser.parse_args()
 
     # Determine if English or Braille, then print the corresponding output.
-    argument = ' '.join(command.arg)
+    argument = ' '.join(cmd.arg)
     if '.' in argument:
-        return to_english(argument)
+        print(to_english(argument))
     else:
-        return to_braille(command.arg)
-
-
-if __name__ == "__main__":
-    print(parse())
+        print(to_braille(cmd.arg))
