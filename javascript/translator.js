@@ -1,4 +1,6 @@
-const input = 'Abc 123 xYz';
+const args = process.argv.slice(2);
+const input = args.join(' ');
+
 const brailleCharacters = [];
 let englishCharacters = [];
 let isCapital = false;
