@@ -26,7 +26,10 @@ def translate(text: str) -> str:
                 last_char = char
 
             elif last_char == 'number follows':
-                char = english_alphabet[char_index + 26]
+                if char_index == 51: # check for space
+                    char, last_char = ' ', ' '
+                else:     
+                    char = english_alphabet[char_index + 26]
 
             else:
                 char = english_alphabet[char_index]
