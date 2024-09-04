@@ -13,8 +13,22 @@ def detectLanguage(input):
             return Language.ENGLISH
     return Language.BRAILLE
 
+def translateBrailleToEnglish(input):
+
+
+def translateEnglishToBraille(input):
+
+
+def translateInput(input, inputLanguage):
+    if inputLanguage == Language.BRAILLE:
+        return translateBrailleToEnglish(input)
+    elif inputLanguage == Language.ENGLISH:
+        return translateEnglishToBraille(input)
+    
+
 input = 'FISH'
 inputLength = len(input)
 inputLanguage = detectLanguage(input)
+translatedOutput = translateInput(input, inputLanguage)
 
 print (inputLanguage)
