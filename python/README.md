@@ -57,4 +57,6 @@ The tool will raise a `TranslationError` if the input text contains unsupported 
 - Create a script to take csvs or images like braille.jpg of langauge symbols to braille mappings and convert them into dictionaries to simplify support of new languages/chars
 
 :)
+
+Made Email Public on github.
 ---
