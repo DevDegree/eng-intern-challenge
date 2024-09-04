@@ -24,7 +24,6 @@ ENGLISH_NUMBER_DICT = BRAILLE_NUMBER_DICT.invert
 def braille?(input_string)
 
   # if the string contains all Os and .s then it is Braille
-  # TO DO: Logic out if it makes sense to check all values - I think it does
   input_string.chars.all? { |c| c == 'O' || c == '.' }
 
 end
@@ -61,7 +60,7 @@ def braille_to_english(braille_translation)
       # Search number dictionary for the conversion if it exists
       if is_number
 
-        # TO DO: decide if adding "" makes sense if a symbol isn't in dictionary
+        # Skip/add nothing if the symbol is not in the dictionary
         char = ENGLISH_NUMBER_DICT[symbol] || ""
         if char.match?(/\d/)
           english_translation << char
@@ -72,6 +71,7 @@ def braille_to_english(braille_translation)
 
       else
 
+        # Skip/add nothing if the symbol is not in the dictionary
         char = ENGLISH_LETTER_DICT[symbol] || ""
         if is_capital
           char = char.upcase
@@ -94,31 +94,44 @@ end
 
 # Convert English to Braille
 def english_to_braille(english_string)
+
   braille_translation = []
   is_number = false
 
   english_string.each_char do |char|
+
     if char.match?(/[A-Z]/)
+
       # Add capital indicator and convert to lowercase
       braille_translation << BRAILLE_LETTER_DICT["capital"]
       char = char.downcase
+
     end
 
     if char.match?(/\d/)
+
       # Add number indicator if it's not already added
       unless is_number
         braille_translation << BRAILLE_NUMBER_DICT["number"]
         is_number = true
       end
+
       braille_translation << BRAILLE_NUMBER_DICT[char]
+
     else
-      # set flag to false, if a letter or space is encountered
+
+      # Set flag to false, if a letter or space is encountered
       is_number = false
+
+      # Skip/add nothing if the symbol is not in the dictionary
       braille_translation << BRAILLE_LETTER_DICT[char] || ""
+
     end
+
   end
 
   braille_translation.join
+
 end
 
 
@@ -129,15 +142,21 @@ def main
 
   # Verifies that there is at least something to translate
   if input_string.empty?
+
     puts "Usage: ruby translator.rb <input_string>"
     return
+
   end
 
   # Check if input is braille or english
   if braille?(input_string)
+
     puts braille_to_english(input_string)
+
   else
+
     puts english_to_braille(input_string)
+    
   end
 
 end
