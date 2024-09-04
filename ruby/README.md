@@ -69,7 +69,7 @@ An RSpec test is included to verify the correctness of the translation functions
 rspec translator.test.rb
 ```
 The tests were:
-```
+```ruby
 RSpec.describe 'Braille Translator Script' do
   it 'outputs the correct string' do
     output = `ruby translator.rb Abc 123 xYz`
@@ -84,5 +84,5 @@ RSpec.describe 'English Translator Script' do
   end
 end
 ```
-###Results
+### Results
 ![TestDone](https://github.com/user-attachments/assets/35e5bd00-f0c9-44de-9324-fc8e34a63f81)
