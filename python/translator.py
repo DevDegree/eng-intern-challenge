@@ -1,3 +1,5 @@
+import sys
+
 braille_dict = {
     'A': 'O.....', 'B': 'O.O...', 'C': 'OO....', 'D': 'OO.O..', 'E': 'O..O..',
     'F': 'OOO...', 'G': 'OOOO..', 'H': 'O.OO..', 'I': '.OO...', 'J': '.OOO..',
@@ -88,3 +90,8 @@ def translator(input_string):
     return ''.join(answer)  #make string
 
 
+if __name__ == "__main__":
+
+    input_string = ' '.join(sys.argv[1:]) 
+    output = translator(input_string)
+    print(output)  
