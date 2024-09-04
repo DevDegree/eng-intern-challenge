@@ -1,19 +1,24 @@
 // mvp
-// import maps
-import { englishToBrailleMap, brailleToEnglishMap } from './maps';
-import englishToBraille from './englishToBraille';
-import brailleToEnglish from './brailleToEnglish';
+// imports
+import { englishToBrailleMap, brailleToEnglishMap } from './maps/maps';
+import englishToBraille from './converters/englishToBraille';
+import brailleToEnglish from './converters/brailleToEnglish';
+import inputChecker from './validators/inputValidator';
 
 // create conversion function
 function translator() {
   // store user arguments
-  const args = process.argv.slice(2).join(' ');
+  const input = process.argv.slice(2).join(' ');
 
-  // determine whether to translate into braille or english
-  // if args is divisible by 6 and contains only "O" or ".", it's braille
-  // otherwise, it's an alphanumeric string
+  // call inputChecker to determine whether to translate into braille or english
+  const inputType = inputChecker(input);
 
   // translate from english to braille
+  if (inputType === 'braille') {
+    console.log('Braille');
+  } else {
+    console.log('Alphanumeric');
+  }
   // translate from braille to english
   // account for numbers, capital letters, and spaces
 

@@ -1,6 +1,7 @@
 {
   "name": "javascript",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "translator.js",
   "scripts": {
