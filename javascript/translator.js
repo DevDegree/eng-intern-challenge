@@ -116,21 +116,36 @@ function brailleToEnglish(input) {
 
         // Check if the character is a capital indicator
         if (brailleChar === brailleMap.capital) {
+
+            // In number mode, a capital indicator should not appear
+            if (isNumber) {
+                return '';
+            }
+
             capitalizeNext = true;
             continue;
         }
 
         // Check if the character is a number indicator
         if (brailleChar === brailleMap.number) {
+
+            // In number mode, another number indicator should not appear
+            if (isNumber) {
+                return '';
+            }
+
             isNumber = true;
             continue;
         }
 
         // Check if the character is a space
         if (brailleChar === brailleMap[' ']) {
+            
             result += ' ';
-            // Reset number mode after a space
+
+            // Stop number mode after a space
             isNumber = false;
+
             continue;
         }
 
