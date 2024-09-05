@@ -1,3 +1,5 @@
+import sys
+
 BRAILLE_TO_CHARACTER = {
     "O.....": "a", "O.O...": "b", "OO....": "c",
     "OO.O..": "d", "O..O..": "e", "OOO...": "f",
@@ -70,3 +72,10 @@ def translate_to_braille(text: str) -> str:
         previous_character = character
 
     return "".join(braille_characters)
+
+if __name__ == "__main__":
+    text_args = sys.argv[1:]
+    text = " ".join(text_args)
+    text_is_braille = set(text).issubset({".", "O"}) and len(text) % 6 == 0
+    translated_text = translate_to_english(text) if text_is_braille else translate_to_braille(text)
+    print(translated_text)
