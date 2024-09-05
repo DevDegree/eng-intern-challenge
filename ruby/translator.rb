@@ -84,7 +84,6 @@ num_to_braille_hash = braille_to_num_hash.invert
 
   
   #4
-  
 
 
 # pp braille_to_eng_hash
@@ -108,15 +107,29 @@ def eng_to_braille(input_value)
   p "eng to braille"
 end
 
-def braille_to_eng(input_value)
-  p "braille to eng"
-  
+def braille_to_eng(input_value, braille_to_eng_map)
+  # p "braille to eng"
+  output = ""
+  is_num = false
+  is_capital = false
+  input_index = 0
+  while input_index < input_value.length
+    if braille_to_eng_map[input_value[input_index,6]] == 'capital follows'
+      output = output + braille_to_eng_map[input_value[input_index + 6,6]].upcase
+      input_index += 6
+    else
+      output = output + braille_to_eng_map[input_value[input_index,6]]
+    end
+    input_index += 6
+  end
+    
+  p output
 end
 
 input_value = gets.chomp 
 
 if check_braille(input_value)
-  braille_to_eng(input_value)
+  braille_to_eng(input_value, braille_to_eng_hash)
 else
   eng_to_braille(input_value)
 end
