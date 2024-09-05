@@ -11,18 +11,34 @@ class Modifier (Enum):
 
 class dictionaries:
     brailleSymbols = {'o', '.'}
+
     brailleToEnglish = {
         'o.....': 'a',
         'o.o...': 'b',
         '.o.ooo': Modifier.NUM_FOLLOWS,
         '.....o': Modifier.CAPITAL_FOLLOWS,
-        '.o...o': Modifier.DECIMAL_FOLLOWS
-
+        '.o...o': Modifier.DECIMAL_FOLLOWS,
+        '......': ' '
         #think about ideas on how to do this in a less manual / error-prone way before continuing
     }
+
     brailleToNum = {
-        'o.....': 1,
+        'o.....': '1',
     }
+
+    englishToBraille = {
+        'a': 'o.....',
+        'b': 'o.o...',
+        ' ': '......',
+        Modifier.NUM_FOLLOWS: '.o.ooo',
+        Modifier.CAPITAL_FOLLOWS: '.....o',
+        Modifier.DECIMAL_FOLLOWS: '.o...o',
+    }
+
+    numToBraille = {
+        '1': 'o.....',
+    }
+
 
 def detectLanguage(input):
     for char in input:
@@ -49,9 +65,9 @@ def translateBrailleToEnglish(input):
     isNum = False
     for char in brailleCharacters:
         translatedChar = dictionaries.brailleToEnglish[char]
-        if isNum and translatedChar is not Modifier.DECIMAL_FOLLOWS:
+        if isNum and translatedChar not in [Modifier.DECIMAL_FOLLOWS, ' ']:
             translatedChar = dictionaries.brailleToNum[char] #search the number dictionary instead of the letter / symbol dictionary
-            output += str(translatedChar)
+            output += translatedChar
         elif isCapital:
             output += translatedChar.upper()
             isCapital = False #only capitalize the character immediately after capital follows symbol
@@ -71,7 +87,49 @@ def translateBrailleToEnglish(input):
 
 def translateEnglishToBraille(input):
     output = ''
+    translatedChar = ''
+    isNum = False
+    for n in range(len(input)):
+        char = input[n]
+        # Periods and decimals
+        if char == '.':
+            # If current position is not in the middle of a number
+            if isNum == False:
+                next_char = input[n+1]
+                # If current character is a decimal at the beginning of a number
+                if next_char.isnumeric():
+                    isNum = True
+                    output += dictionaries.englishToBraille[Modifier.NUM_FOLLOWS]
+                else:
+                    output += dictionaries.englishToBraille[char]
+            # If current position is in the middle of a number
+            else:
+                output += dictionaries.englishToBraille[Modifier.DECIMAL_FOLLOWS]
 
+        # Numeric characters
+        elif char.isnumeric():
+            if isNum == False:
+                isNum = True
+                output += dictionaries.englishToBraille[Modifier.NUM_FOLLOWS]
+            output += dictionaries.numToBraille[char]
+
+        # Letters and non-period punctuation
+        else:
+            # End of numeric characters
+            if isNum == True: #Adds a space to signify the end of a number
+                isNum = False
+                output += dictionaries.englishToBraille[' ']
+        
+            # Capitals
+            if char.isupper():
+                output += dictionaries.englishToBraille[Modifier.CAPITAL_FOLLOWS]
+                output += dictionaries.englishToBraille[char.lower()]
+
+            # Lowercase or non-period punctuation
+            else:
+                output += dictionaries.englishToBraille[char]
+        
+    return output
 
 def translateInput(input):
     inputLanguage = detectLanguage(input)
@@ -80,9 +138,6 @@ def translateInput(input):
     elif inputLanguage == Language.ENGLISH:
         return translateEnglishToBraille(input)
     
-
-input = input("Enter text to translate: ")
-translatedOutput = translateInput(input)
-brailleCharacters = separateBrailleCharacters(input)
-
-print (translatedOutput)
+def main():
+    input = input("Enter text to translate: ")
+    return translateInput(input)
