@@ -1,4 +1,4 @@
-export default function validator(input) {
+function validator(input) {
   const regex = /^[O.]+$/;
 
   // if args is divisible by 6 and contains only "O" or ".", it's braille
@@ -7,8 +7,10 @@ export default function validator(input) {
   }
 
   // otherwise, it's alphanumeric
-  return 'alphanumeric';
+  return 'english';
 }
+
+module.exports = validator;
 
 // stretch
 // return an error message if arguments contain invalid characters
