@@ -76,11 +76,12 @@ for i in range(len(alphabet)):
     alphabet_to_braille[alphabet[i]] = braille[i]
     braille_to_alphabet[braille[i]] = alphabet[i]
 
+# Braille system has 1 -> 0 with the same six dot formation as A -> J - Thus, we can just reuse the first dict and loop through it.
 for i in range(len(numbers)):
     numbers_to_braille[numbers[i]] = braille[i]
     braille_to_numbers[braille[i]] = numbers[i]
 
-# Also will need a final dict to check to if characters are numerical or need to be capitalized.
+# Will need a final dict to check to if characters are numerical or need to be capitalized.
 alpha_modes = {"capitalize": ".....O", "numerize": ".O.OOO"}
 
 
@@ -101,18 +102,18 @@ def convert_to_braille(input):
     number_flag = False
     for char in input:
         if char.isdigit():
-            # if numberflag hasn't yet been set, set the flag to false and insert the numerize braille symbol
+            # If number_flag hasn't yet been set been set to true, do so and then insert the numerize braille symbol.
             if not number_flag:
                 number_flag = True
                 res += alpha_modes["numerize"]
             res += numbers_to_braille[char]
             continue
-        # if char is a space, reset number flag for string
+        # If char is a space, then number_flag should be turned off.
         if char == " ":
             number_flag = False
         if char.isupper():
             res += alpha_modes["capitalize"]
-            # Need to convert char to lowercase so it can be found in the dict
+            # Need to convert char to lowercase so the key can be found in the dictionary.
             char = char.lower()
         res += alphabet_to_braille[char]
 
@@ -121,9 +122,8 @@ def convert_to_braille(input):
 
 def convert_to_alphanumerics(input):
     res = ""
-    # as the string must be multiple of six, split the string into an array so each character can be easily parsed
+    # As the string must be multiple of six, split the string into an array so each character can be easily parsed
     split = [input[i : i + 6] for i in range(0, len(input), 6)]
-    # set flags for numerize
     number_flag = False
     capital_flag = False
     for segment in split:
@@ -145,7 +145,7 @@ def convert_to_alphanumerics(input):
             res += braille_to_numbers[segment]
             continue
 
-        # if all other checks allow to pass to this point, must be a character
+        # If all other checks allow to pass to this point, segment must be a character - check for capitalization then insert into result.
         insertion = braille_to_alphabet[segment]
         if capital_flag:
             insertion = insertion.upper()
