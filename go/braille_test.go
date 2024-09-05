@@ -66,7 +66,7 @@ type decodeAlphanumericParams struct {
 	capital, number bool
 }
 
-func TestDecodeAlphaNumeric(t *testing.T) {
+func TestDecodeAlphanumeric(t *testing.T) {
 	inExpect := map[decodeAlphanumericParams]byte{
 		{"O.....", false, false}: 'a',
 		{"O.....", true, false}:  'A',

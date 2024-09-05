@@ -155,24 +155,24 @@ func splitCells(braille string) ([]string, error) {
 // number, decodeAlphanumeric returns ErrInvalidCell.
 func decodeAlphanumeric(cell string, capital, number bool) (byte, error) {
 	if number {
-		return decodeNumeric(cell)
+		return decodeNumber(cell)
 	}
-	return decodeAlpha(cell, capital)
+	return decodeLetter(cell, capital)
 }
 
-// decodeNumeric converts a single Braille cell to a numeric character (0-9), or returns
+// decodeNumber converts a single Braille cell to a numeric character (0-9), or returns
 // ErrInvalidCell if cell is not a Braille number.
-func decodeNumeric(cell string) (byte, error) {
+func decodeNumber(cell string) (byte, error) {
 	if i := slices.Index(numbers, cell); i >= 0 {
 		return byte('0' + i), nil
 	}
 	return 0, ErrInvalidCell{cell}
 }
 
-// decodeAlpha converts a single Braille cell to an English letter or returns
+// decodeLetter converts a single Braille cell to an English letter or returns
 // ErrInvalidCell if cell is not a Braille letter. If capital is true, the uppercase form
 // of the letter is returned.
-func decodeAlpha(cell string, capital bool) (byte, error) {
+func decodeLetter(cell string, capital bool) (byte, error) {
 	i := slices.Index(letters, cell)
 	if i < 0 {
 		return 0, ErrInvalidCell{cell}
