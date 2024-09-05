@@ -57,39 +57,11 @@ for (let key in numberToBrille) {
 
 // translator from alphabet to brille
 
-// function TranslateAlpbahetToBrille(text) {
-//   let brilleForm = "";
-//   let numberMode = false;
-
-//   for (i in text) {
-//     char = text[i];
-
-//     if (char === " ") {
-//       brilleForm += alphabetToBrille[" "];
-//       numberMode = false;
-//     } else if (numberMode) {
-//       brilleForm += numberToBrille[char];
-//     } else if (!isNaN(char)) {
-//       numberMode = true;
-//       brilleForm += alphabetToBrille["number"] + numberToBrille[char];
-//     } else if (char == char.toUpperCase()) {
-//       brilleForm +=
-//         alphabetToBrille["capital"] + "" + alphabetToBrille[char.toLowerCase()];
-//     } else {
-//       brilleForm += alphabetToBrille[char];
-//     }
-//   }
-
-//   return brilleForm;
-// }
-
 function TranslateAlpbahetToBrille(text) {
   let brilleForm = "";
   let numberMode = false;
 
-   
   for (let char of text) {
-
     if (char === " ") {
       brilleForm += alphabetToBrille[" "];
       numberMode = false;
@@ -116,7 +88,6 @@ function TranslateBrilleToAlphabet(text) {
   let numberMode = false;
 
   for (i = 0; i < text.length; i += 6) {
-    
     char = text.substr(i, 6);
     decodedValue = brilleToAlphabet[char];
 
@@ -153,16 +124,13 @@ function Translator(text) {
   return TranslateAlpbahetToBrille(text);
 }
 
-console.log(Translator("Abc 123 xYz"));
-console.log(
-  Translator(".....OO.....O.O...OO...........O.OOOO.....O.O...OO....")
-);
+const argument = process.argv.slice(2);
 
-// console.log(TranslateAlpbahetToBrille("Abc 123 xYz"));
-// console.log(
-//   TranslateBrilleToAlphabet(
-//     ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
-//   )
-// );
+if (argument.length > 0) {
+  const enterdText = argument.join(" "); 
+  console.log(Translator(enterdText)); 
+} else {
+  console.log("Please provide text to translate.");
+}
 
 module.exports = Translator;
