@@ -21,7 +21,7 @@ def main():
                     is_numbers = True 
             for char in arg:
                 # if there is a mixture of numbers and letters then the input should be invalid according to our rules
-                if (char not in numbers and is_numbers) or (char in numbers and not is_numbers): 
+                if char not in numbers and is_numbers: 
                     print("ERROR: cannot mix numbers and letters in the same continous string")
                     return 
                 if char.isupper():
