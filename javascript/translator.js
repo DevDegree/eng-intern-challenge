@@ -53,6 +53,12 @@ const brailleMap = {
   " ": "......",
 };
 
-// Detect input type (alphabet VS braille)
-// Implement text to Braille translation
-// Implement Braille to text translation
+function translateToBraille(input) {
+  if (input.includes("O") || input.includes(".")) {
+    // If input is in Braille
+    // Implement Braille to text translation
+  } else {
+    // If input is a string of alphabets
+    // Implement text to Braille translation
+  }
+}
