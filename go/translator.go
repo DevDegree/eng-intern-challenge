@@ -1,3 +1,8 @@
+// translator converts Braille to English and vice versa. The string to translate is
+// passed as command-line arguments. Braille is represented as 'O' (uppercase letter O),
+// and '.' (period) characters. Cells are read left to right, line by line, starting from
+// the top left. Only roman characters (a-z, A-Z), numbers (0-9), and spaces (' ') are
+// supported.
 package main
 
 import (
