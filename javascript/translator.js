@@ -1,6 +1,3 @@
-const readline = require('readline');
-
-// Braille to English mapping
 const brailleToEnglish = {
     '......': ' ', '.O....': 'a', 'O.....': '1', 'OO....': 'b', 'OO.O..': '2',
     '.O.O..': 'c', '.OOO..': '3', '.OO...': 'd', '.OOOO.': '4', '.O.O.O': 'e',
@@ -12,7 +9,6 @@ const brailleToEnglish = {
     'OO.OOO': 'y', 'O.O.OO': 'z'
 };
 
-// Create English to Braille mapping
 const englishToBraille = Object.fromEntries(
     Object.entries(brailleToEnglish).map(([k, v]) => [v, k])
 );
@@ -30,24 +26,19 @@ function englishToBrailleTranslate(input) {
     return input.toLowerCase().split('').map(char => englishToBraille[char] || '').join('');
 }
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
-function processInput(input) {
+function translate(input) {
     if (input.match(/^[.O]+$/)) {
-        console.log("Output:", brailleToEnglishTranslate(input));
+        return brailleToEnglishTranslate(input);
     } else {
-        console.log("Output:", englishToBrailleTranslate(input));
+        return englishToBrailleTranslate(input);
     }
-    rl.prompt();
 }
 
-console.log("Enter text to translate (Ctrl+C to exit):");
-rl.prompt();
+// Get input from command line arguments
+const input = process.argv.slice(2).join(' ');
 
-rl.on('line', processInput).on('close', () => {
-    console.log('Goodbye!');
-    process.exit(0);
-});
+if (input) {
+    console.log(translate(input));
+} else {
+    console.log("Please provide input text or Braille pattern.");
+}
