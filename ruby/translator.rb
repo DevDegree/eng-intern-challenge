@@ -98,43 +98,21 @@ end
 # @return [String]
 def english_to_braille(word)
   braille = ""
-  last_character = ""
+  previous = ""
 
-  # Read characters one by one, add special symbols when necessary
-  word.each_char do |c|
-    if c.match? /[0-9]/
-      # c is a number
-      # add the number sign if necessary
-      unless last_character.match?(/[0-9.]/)
-        braille << braille_symbol(TRANSLATION_TABLE[:special][:number_follows])
-      end
-      braille << braille_symbol(TRANSLATION_TABLE[:numbers][c.to_i])
-    elsif c == "." && last_character.match?(/[0-9]/)
-      # c is a decimal point
-      braille << braille_symbol(TRANSLATION_TABLE[:special][:decimal_follows])
-    elsif c.match? /[a-z]/i
-      # c is a letter
-      # add the capital letter sign if the letter is in upper case
-      if c == c.upcase
-        braille << braille_symbol(TRANSLATION_TABLE[:special][:capital_follows])
-      end
-      braille << braille_symbol(TRANSLATION_TABLE[:letters][c.downcase.to_sym])
-    else # c is non-letter and non-digit symbol
-      braille << braille_symbol(TRANSLATION_TABLE[:punctuations][c.to_sym])
-    end
-
-    # update last_character
-    last_character = c
+  word.each_char do |current|
+    previous = parse_english_character current, previous, braille
   end
 
   braille
 end
 
-# @param raised [Array<Integer>] The raised dots of a Braille symbol, should be the indices of the raised dots from 0 to 5.
+# @param category [Symbol]
+# @param key [Symbol, Integer]
 # @return [String]
-def braille_symbol(raised)
+def braille_symbol(category, key)
   braille = "......"
-  raised.each { |i| braille[i] = "O" }
+  TRANSLATION_TABLE[category][key]&.each { |i| braille[i] = "O" }
   braille
 end
 
@@ -194,6 +172,36 @@ end
 # @return [String, nil]
 def look_up(category, symbol)
   REVERSE_TRANSLATION_TABLE[category][symbol]&.to_s
+end
+
+# @param current [String]
+# @param previous [String]
+# @param braille_text [String]
+# @return [String]
+def parse_english_character(current, previous, braille_text)
+  if current.match? /[0-9]/ # current is a digit
+    # add the number mark unless previous is already a digit or a decimal point
+    braille_text << braille_symbol(:special, :number_follows) \
+      unless previous.match?(/[0-9.]/)
+
+    braille_text << braille_symbol(:numbers, current.to_i)
+
+  elsif current == "." && previous.match?(/[0-9]/) # current is a decimal point
+    braille_text << braille_symbol(:special, :decimal_follows)
+
+  elsif current.match? /[a-z]/i # current is a letter
+    # add the capital letter sign if the letter is in upper case
+    braille_text << braille_symbol(:special, :capital_follows) \
+      if current == current.upcase
+
+    braille_text << braille_symbol(:letters, current.downcase.to_sym)
+
+  else # current is punctuation
+    braille_text << braille_symbol(:punctuations, current.to_sym)
+
+  end
+
+  current
 end
 
 if __FILE__ == $0
