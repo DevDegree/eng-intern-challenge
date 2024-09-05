@@ -79,63 +79,90 @@ Z = {"char": "z",
     "braille": "O..OOO"
      }
 #-----------numbers----------
-num_1 = {"char": "1",
+NUM_1 = {"char": "1",
     "braille": "O....."
-     }
-num_2 = {"char": "2",
+         }
+NUM_2 = {"char": "2",
     "braille": "O.O..."
-     }
-num_3 = {"char": "3",
+         }
+NUM_3 = {"char": "3",
     "braille": "OO...."
-     }
-num_4 = {"char": "4",
+         }
+NUM_4 = {"char": "4",
     "braille": "OO.O.."
-     }
-num_5 = {"char": "5",
+         }
+NUM_5 = {"char": "5",
     "braille": "O..O.."
-     }
-num_6 = {"char": "6",
+         }
+NUM_6 = {"char": "6",
     "braille": "OOO..."
-     }
-num_7 = {"char": "7",
+         }
+NUM_7 = {"char": "7",
     "braille": "OOOO.."
-     }
-num_8 = {"char": "8",
+         }
+NUM_8 = {"char": "8",
     "braille": "O.OO.."
-     }
-num_9 = {"char": "9",
+         }
+NUM_9 = {"char": "9",
     "braille": ".OO..."
-     }
-num_zero = {"char": "0",
+         }
+NUM_ZERO = {"char": "0",
     "braille": ".OOO.."
      }
 #------------------------follows_marker----------
-cap_follows = {
+CAP_FOLLOWS = {
     "braille": ".....O"
      }
-decimal_follows = {
+DECIMAL_FOLLOWS = {
     "braille": ".O...O"
      }
-num_follows = {
+NUM_FOLLOWS = {
     "braille": ".O.OOO"
      }
 #------------symbols-----------
-# period =
-# comma =
-# question_mrk =
-# exclamation_mrk =
-# colon =
-# semi_colon =
-# dash =
-# slash =
-# less_than =
-# greater_than =
-# left_bracket =
-# right_bracket =
-space = {"char": " ",
+PERIOD = {"char": ".",
+    "braille": "..OO.O"
+          }
+COMMA = {"char": ",",
+    "braille": "..O..."
+     }
+QUESTION_MRK = {"char": "?",
+    "braille": "..O.OO"
+     }
+EXCLAMATION_MRK = {"char": "!",
+    "braille": "..OOO."
+     }
+COLON = {"char": ":",
+    "braille": "..OO.."
+     }
+SEMI_COLON = {"char": ";",
+    "braille": "..O.O."
+     }
+DASH = {"char": "-",
+    "braille": "....OO"
+     }
+SLASH = {"char": "/",
+    "braille": ".O..O."
+     }
+LESS_THAN = {"char": "<",
+    "braille": ".OO..O"
+     }
+GREATER_THAN = {"char": ">",
+    "braille": "O..OO."
+     }
+LEFT_BRACKET = {"char": "(",
+    "braille": "O.O..O"
+     }
+RIGHT_BRACKET = {"char": ")",
+    "braille": ".O.OO."
+     }
+SPACE = {"char": " ",
     "braille": "......"
      }
 
 
 LETTERS = [A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z]
-NUMBERS = [num_1, num_2, num_3, num_4, num_5, num_6, num_7, num_8, num_9]
+NUMBERS = [NUM_1, NUM_2, NUM_3, NUM_4, NUM_5, NUM_6, NUM_7, NUM_8, NUM_9, NUM_ZERO]
+SYMBOLS = [PERIOD, COMMA, QUESTION_MRK, EXCLAMATION_MRK, COLON, SEMI_COLON, DASH, SLASH, GREATER_THAN, LESS_THAN,
+           LEFT_BRACKET, RIGHT_BRACKET, SPACE]
+FOLLOW_MARKERS = [NUM_FOLLOWS, CAP_FOLLOWS, DECIMAL_FOLLOWS]
