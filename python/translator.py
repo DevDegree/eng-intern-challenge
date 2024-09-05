@@ -59,7 +59,7 @@ def is_braille(input_string: str) -> bool:
     Returns:
         bool: True if Braille, else False.
     """
-    BRAILLE_SYMBOLS = {"0", "."}
+    BRAILLE_SYMBOLS = {"O", "."}
     return BRAILLE_SYMBOLS.issuperset(set(input_string))
 
 
