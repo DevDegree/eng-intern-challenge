@@ -1,4 +1,4 @@
-import keyboard
+import sys
 from collections import defaultdict
 
 english_to_braille = {
@@ -50,8 +50,6 @@ for k, v in english_to_braille.items():
     braille_to_english[v].append(k)
 
 braille_to_english = dict(braille_to_english)
-
-print(braille_to_english)
 
 def braille_to_english_translation(braille_text):
     english_text = []
@@ -105,7 +103,7 @@ def braille_to_english_translation(braille_text):
 def english_to_braille_translation(english_text):
     braille_text = []
     interpreting_numbers = False
-
+    
     for char in english_text:
         if char == ' ':
             braille_text.append("......")  # space
@@ -121,44 +119,39 @@ def english_to_braille_translation(english_text):
                 braille_text.append(".O.OOO")  # numbers follow
                 interpreting_numbers = True
             braille_text.append(english_to_braille.get(char, '?'))
+            
         else:
             if interpreting_numbers:
                 interpreting_numbers = False
             braille_text.append(english_to_braille.get(char, '?'))
 
-    return ' '.join(braille_text)
+    return ''.join(braille_text)
 
 def is_braille(text):
-    return all(c in 'O.' for c in text.replace(' ', ''))
+    return bool(text.strip()) and all(c in 'O.' for c in text.replace(' ', ''))
+
+def is_valid_braille(text):
+    return len(text) % 6 == 0 
 
 def translate(text):
     if is_braille(text):
-        print("its braille")
-        return braille_to_english_translation(text)
+        #it consists of braille (.,O)
+        if is_valid_braille(text):
+            return braille_to_english_translation(text)
+
+        else:
+            return "Braille text len should be divisible by 6."
     else:
-        print("its english")
+        #its english
         return english_to_braille_translation(text)
 
 def main():
-    print("CLI App Started. Type 'quit' to exit or press 'Esc' to quit.")
+    if len(sys.argv) > 1:
+        user_input = ' '.join(sys.argv[1:]) # preserve spaces
+        print(translate(user_input))
 
-    while True:
-        try:
-            if keyboard.is_pressed('esc'):
-                print("Escape key pressed. Exiting...")
-                break
-
-            user_input = input("Enter your command: ")
-
-            if user_input.lower() == "quit":
-                print("Quitting...")
-                break
-
-            print(translate(user_input))
-
-        except KeyboardInterrupt:
-            print("\nInterrupted by user. Exiting...")
-            break
+    else:
+        print("No input provided.")
 
 if __name__ == "__main__":
     main()
