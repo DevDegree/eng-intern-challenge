@@ -24,7 +24,22 @@ REVERSE_BRAILLE_MAP = {v: k for k, v in {**BRAILLE_MAP, **NUMERIC_MAP}.items()}
 
 
 def translate_to_braille(text):
-    return text
+    result = []
+    for char in text:
+        # Append the Braille capital indicator if the character is uppercase, then add its lowercase Braille mapping
+        if char.isupper():
+            result.append(CAPITAL)
+            result.append(BRAILLE_MAP[char.lower()])
+        # Append the Braille number indicator if the character is a digit, then add its numeric Braille mapping
+        elif char.isdigit():
+            result.append(NUMBER)
+            result.append(NUMERIC_MAP[char])
+        # Append the Braille mapping for regular characters (lowercase letters and spaces)
+        else:
+            result.append(BRAILLE_MAP[char])
+            
+    # Concatenate the list of Braille strings into a single string and return
+    return ''.join(result)
 
 def translate_to_english(braille):
     return braille
