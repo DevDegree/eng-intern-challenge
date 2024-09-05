@@ -52,13 +52,11 @@ def translate_to_braille(msg):
                     number_found = False
                 break
 
-    # print(translated_msg)
-    print("".join(translated_msg))
-    # print(msg)
-    # print("".join(translated_msg) == ".O.OOOOO.O..O.O...")
-    # print("".join(translated_msg) == ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..")
 
-# translate_to_braille(arg1)
+    print("".join(translated_msg))
+    # print("".join(translated_msg) == ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO")
+    # print(msg)
+# translate_to_braille("Hello world")
 # translate_to_braille(40)
 # translate_to_braille("hello 45.6")
 
@@ -140,12 +138,7 @@ def check_if_braille_or_not(msg):
         translate_to_braille(msg)
 
 msgs = sys.argv[1:]
-temp = ""
-for i in range(len(msgs)):
-    temp += str(msgs[i])
-    if i < len(msgs) - 2:
-        temp += " "
-msgs = temp
+msgs = " ".join(msgs)
 check_if_braille_or_not(msgs)
 
 
