@@ -113,6 +113,46 @@ func TestEncode(t *testing.T) {
 	}
 }
 
+func TestEncodeNumber(t *testing.T) {
+	inExpect := map[string][2]string{
+		"":     {"", ""},
+		"123":  {"", ".O.OOOO.....O.O...OO...."},
+		"a123": {"a123", ""},
+		"123a": {"a", ".O.OOOO.....O.O...OO.........."},
+		"123 ": {"", ".O.OOOO.....O.O...OO.........."},
+	}
+	for in, expect := range inExpect {
+		trimmed, braille := encodeNumber([]byte(in))
+		if string(trimmed) != expect[0] || string(braille) != expect[1] {
+			t.Errorf("encodeNumber(%q) returned %q, %q; wanted %q, %q",
+				in, trimmed, braille, expect[0], expect[1])
+		}
+	}
+}
+
+func TestEncodeLetter(t *testing.T) {
+	inExpect := map[byte]string{
+		'a': "O.....",
+		'A': ".....OO.....",
+	}
+	for in, expect := range inExpect {
+		out, err := encodeLetter(in)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if string(out) != expect {
+			t.Errorf("encodeLetter(%c) returned %s; wanted %s", in, out, expect)
+		}
+	}
+
+	invalids := []byte{'1', ' ', '<'}
+	for _, invalid := range invalids {
+		if _, err := encodeLetter(invalid); err == nil {
+			t.Errorf("encodeLetter accepted invalid letter %c; wanted error", invalid)
+		}
+	}
+}
+
 // sliceEq returns true if s1 and s2 are the same length and contain the same elements.
 func sliceEq[E comparable](s1, s2 []E) bool {
 	if len(s1) != len(s2) {

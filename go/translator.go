@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"slices"
 	"strings"
 	"unicode"
 )
@@ -22,47 +23,48 @@ const (
 var (
 	braillePattern = regexp.MustCompile("(?m)^[O.]*$")
 
-	// Braille cell -> English letter.
-	letters = map[string]byte{
-		"O.....": 'a',
-		"O.O...": 'b',
-		"OO....": 'c',
-		"OO.O..": 'd',
-		"O..O..": 'e',
-		"OOO...": 'f',
-		"OOOO..": 'g',
-		"O.OO..": 'h',
-		".OO...": 'i',
-		".OOO..": 'j',
-		"O...O.": 'k',
-		"O.O.O.": 'l',
-		"OO..O.": 'm',
-		"OO.OO.": 'n',
-		"O..OO.": 'o',
-		"OOO.O.": 'p',
-		"OOOOO.": 'q',
-		"O.OOO.": 'r',
-		".OO.O.": 's',
-		".OOOO.": 't',
-		"O...OO": 'u',
-		"O.O.OO": 'v',
-		".OOO.O": 'w',
-		"OO..OO": 'x',
-		"OO.OOO": 'y',
-		"O..OOO": 'z',
+	// Alphabetical Braille cells.
+	letters = []string{
+		"O.....", // a
+		"O.O...", // b
+		"OO....", // c
+		"OO.O..", // ...
+		"O..O..",
+		"OOO...",
+		"OOOO..",
+		"O.OO..",
+		".OO...",
+		".OOO..",
+		"O...O.",
+		"O.O.O.",
+		"OO..O.",
+		"OO.OO.",
+		"O..OO.",
+		"OOO.O.",
+		"OOOOO.",
+		"O.OOO.",
+		".OO.O.",
+		".OOOO.",
+		"O...OO",
+		"O.O.OO",
+		".OOO.O",
+		"OO..OO",
+		"OO.OOO",
+		"O..OOO", // z
 	}
 
-	// Braille cell -> number.
-	numbers = map[string]byte{
-		"O.....": '1',
-		"O.O...": '2',
-		"OO....": '3',
-		"OO.O..": '4',
-		"O..O..": '5',
-		"OOO...": '6',
-		"OOOO..": '7',
-		"O.OO..": '8',
-		".OO...": '9',
+	// Numeric Braille cells.
+	numbers = []string{
+		".OOO..", // 0
+		"O.....", // 1
+		"O.O...", // 2
+		"OO....", // ...
+		"OO.O..",
+		"O..O..",
+		"OOO...",
+		"OOOO..",
+		"O.OO..",
+		".OO...", // 9
 	}
 )
 
@@ -126,44 +128,6 @@ func decode(braille string) (string, error) {
 	return string(english), nil
 }
 
-// encode converts an English string to Braille. english must contain only a-z, A-Z, 0-9,
-// and ' ' (space) characters. If english contains any other characters, encode returns
-// ErrInvalidChar.
-func encode(english string) (string, error) {
-	chars := []byte(english)
-	braille := make([]byte, 0, len(chars)*dotsPerCell)
-	for len(chars) > 0 {
-		c := chars[0]
-		if unicode.IsDigit(rune(c)) {
-			braille = append(braille, encodeNumber(&chars)...)
-		} else if unicode.IsLetter(rune(c)) {
-			braille = append(braille, encodeLetter(c)...)
-			chars = chars[1:]
-		} else if c == ' ' {
-			braille = append(braille, space...)
-			chars = chars[1:]
-		} else {
-			return "", ErrInvalidChar{c}
-		}
-	}
-	return string(braille), nil
-}
-
-// encodeNumber converts decimal digits from the start of english to Braille and
-// trims the digits from the start of english. If the number is followed by a letter,
-// a space is added to the returned Braille string to terminate the number.
-func encodeNumber(english *[]byte) (braille []byte) {
-	// TODO
-	return nil
-}
-
-// encodeLetter converts an English letter to Braille. If letter is capital, the
-// returned Braille string will start with a `number follows' cell.
-func encodeLetter(letter byte) (braille []byte) {
-	// TODO
-	return nil
-}
-
 // splitCells breaks a Braille string into individual cells, 3x2 dot matrices of 'O'
 // (uppercase letter O) and '.' (period) characters. If braille contains any other
 // characters, or if braille does not divide evenly into cells, splitCells returns
@@ -199,8 +163,8 @@ func decodeAlphanumeric(cell string, capital, number bool) (byte, error) {
 // decodeNumeric converts a single Braille cell to a numeric character (0-9), or returns
 // ErrInvalidCell if cell is not a Braille number.
 func decodeNumeric(cell string) (byte, error) {
-	if c, ok := numbers[cell]; ok {
-		return c, nil
+	if i := slices.Index(numbers, cell); i >= 0 {
+		return byte('0' + i), nil
 	}
 	return 0, ErrInvalidCell{cell}
 }
@@ -209,14 +173,82 @@ func decodeNumeric(cell string) (byte, error) {
 // ErrInvalidCell if cell is not a Braille letter. If capital is true, the uppercase form
 // of the letter is returned.
 func decodeAlpha(cell string, capital bool) (byte, error) {
-	c, ok := letters[cell]
-	if !ok {
+	i := slices.Index(letters, cell)
+	if i < 0 {
 		return 0, ErrInvalidCell{cell}
 	}
+	c := byte('a' + i)
 	if capital {
 		c = byte(unicode.ToUpper(rune(c)))
 	}
 	return c, nil
+}
+
+// encode converts an English string to Braille. english must contain only a-z, A-Z, 0-9,
+// and ' ' (space) characters. If english contains any other characters, encode returns
+// ErrInvalidChar.
+func encode(english string) (string, error) {
+	chars := []byte(english)
+	braille := make([]byte, 0, len(chars)*dotsPerCell)
+	var cells []byte
+	for len(chars) > 0 {
+		c := chars[0]
+		if unicode.IsDigit(rune(c)) {
+			chars, cells = encodeNumber(chars)
+			braille = append(braille, cells...)
+		} else if unicode.IsLetter(rune(c)) {
+			cells, err := encodeLetter(c)
+			if err != nil {
+				return "", err
+			}
+			braille = append(braille, cells...)
+			chars = chars[1:]
+		} else if c == ' ' {
+			braille = append(braille, space...)
+			chars = chars[1:]
+		} else {
+			return "", ErrInvalidChar{c}
+		}
+	}
+	return string(braille), nil
+}
+
+// encodeNumber converts decimal digits from the start of english to Braille and trims the
+// digits from the start of english. If the number is followed by a letter, a space is
+// added to the Braille string to terminate the number.
+func encodeNumber(english []byte) (trimmedEnglish, braille []byte) {
+	if len(english) <= 0 || !unicode.IsDigit(rune(english[0])) {
+		return english, []byte{}
+	}
+
+	braille = []byte(numberFollows)
+	for len(english) > 0 && unicode.IsDigit(rune(english[0])) {
+		braille = append(braille, numbers[english[0]-'0']...)
+		english = english[1:]
+	}
+	if len(english) > 0 { // Terminate number with space.
+		braille = append(braille, space...)
+		if english[0] == ' ' {
+			english = english[1:]
+		}
+	}
+	return english, braille
+}
+
+// encodeLetter converts an English letter to Braille. If letter is capital, the
+// returned Braille string will start with a `capital follows' cell. If letter is
+// invalid, encodeLetter returns nil, ErrInvalidChar.
+func encodeLetter(letter byte) (braille []byte, err error) {
+	if !unicode.IsLetter(rune(letter)) {
+		return nil, ErrInvalidChar{letter}
+	}
+	if unicode.IsUpper(rune(letter)) {
+		braille = append(braille, capitalFollows...)
+		letter = byte(unicode.ToLower(rune(letter)))
+	}
+	cell := letters[letter-'a']
+	braille = append(braille, cell...)
+	return
 }
 
 type ErrInvalidCell struct {
