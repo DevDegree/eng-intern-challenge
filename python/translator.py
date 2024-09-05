@@ -19,8 +19,7 @@ def reverse_d(d):
     return {val: key for key, val in d.items()}
 
 # We combine to make 1 English dictionairy since no repetitive symbols
-E_to_B = reverse_d(B_to_E_char) | reverse_d(B_to_E_num)
-print("SOMEHOW THIS PRINTS?")
+E_to_B = {**reverse_d(B_to_E_char), **reverse_d(B_to_E_num)}
 
 # Now, our translate functions, 
 # Keeping in mind: 
@@ -31,7 +30,6 @@ upper = ".....O"
 number = ".O.OOO"
 capital = ".....O"
 
-print("this gets printed instead?")
 def Braille_to_English(input):
     english_output = ""
     next_symbol = "lower" # 3 options: lower (default), upper or number
@@ -79,8 +77,6 @@ def English_to_Braille(input):
     return braille_output
 
 
-
-print("does this get printed")
 if len(sys.argv) > 1:
     # Parses input passed in
     input = sys.argv[1:]
