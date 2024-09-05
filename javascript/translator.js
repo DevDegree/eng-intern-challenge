@@ -1,3 +1,6 @@
+// Please note that the account "TheBester14" is also mine such as written in my resume. I connected this account to facilitate the operations
+// related to pushing the code and creating the PR
+
 // Read command-line arguments
 const inputArgs = process.argv.slice(2).join(" ");
 
