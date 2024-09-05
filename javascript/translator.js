@@ -12,7 +12,6 @@ const {
 function translator() {
   const args = process.argv.slice(2);
   const input = args.join(" ");
-  console.log(input);
 
   let translated;
   if (isBraille(input)) {
