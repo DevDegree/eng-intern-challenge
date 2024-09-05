@@ -86,9 +86,9 @@ for (let key in numberToBrille) {
 function TranslateAlpbahetToBrille(text) {
   let brilleForm = "";
   let numberMode = false;
- 
-  for (i in text) {
-    char = text[i];
+
+   
+  for (let char of text) {
 
     if (char === " ") {
       brilleForm += alphabetToBrille[" "];
@@ -140,7 +140,7 @@ function TranslateBrilleToAlphabet(text) {
 
 function Translator(text) {
   text = text.toString();
-  text= text.trim()
+  text = text.trim();
   const testingIfBrille = /O./;
 
   if (testingIfBrille.test(text) && text.length % 6 == 0) {
