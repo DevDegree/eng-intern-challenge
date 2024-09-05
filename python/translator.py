@@ -1,5 +1,7 @@
 import sys
 
+print("is this outputting anything")
+
 # Braille to English Mapping
 B_to_E_char = {
     "O.....": "a", "O.O...": "b", "OO....": "c", "OO.O..": "d", "O..O..": "e",
