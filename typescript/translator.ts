@@ -1,6 +1,7 @@
 
 const BRAILLE_CAPITAL_FOLLOWS = ".....O";
 const BRAILLE_NUMBER_FOLLOWS = ".O.OOO";
+const BRAILLE_SPACE = "......";
 
 const englishToBrailleMap: Map<string, string> = new Map([
   ["a", "O....."],
@@ -28,8 +29,7 @@ const englishToBrailleMap: Map<string, string> = new Map([
   ["w", ".OOO.O"],
   ["x", "OO..OO"],
   ["y", "OO.OOO"],
-  ["z", "O..OOO"],
-  [" ", "......"]
+  ["z", "O..OOO"]
 ]);
 
 const englishToBrailleNumberMap: Map<string, string> = new Map([
@@ -70,6 +70,11 @@ function brailleToEnglish(braille: string): string {
   if (!brailleCells) return '';
 
   for (const cell of brailleCells) {
+    if (cell === BRAILLE_SPACE) {
+      isNumber = false;
+      result += ' ';
+      continue;
+    }
     if (cell === BRAILLE_CAPITAL_FOLLOWS) {
       isCapital = true;
       continue;
@@ -80,12 +85,23 @@ function brailleToEnglish(braille: string): string {
       continue;
     }
 
-    const translated = brailleToEnglishMap.get(cell) || '';
+    let translated = '';
 
     if (isNumber) {
-      result += translated;
-      isNumber = false;
-    } else if (isCapital) {
+      translated = brailleToEnglishNumberMap.get(cell) || '';
+      if (translated === '') {
+        // Fallback to letters if symbol not found in numbers
+        translated = brailleToEnglishMap.get(cell) || '';
+      }
+    } else {
+      translated = brailleToEnglishMap.get(cell) || '';
+    }
+
+    if (translated === '') {
+      continue;
+    }
+
+    if (isCapital) {
       result += translated.toUpperCase();
       isCapital = false;
     } else {
