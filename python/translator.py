@@ -156,7 +156,7 @@ def convert_to_alphanumerics(input):
 
 
 if __name__ == "__main__":
-    # Need to get the arguments excluding the first, and then turn the arguments into one coherent string - braille will have no spaces, so the join will never be called for braille.
+    # Need to get the arguments excluding the first, and then turn the arguments into one coherent string.
     args = sys.argv[1:]
     input = " ".join(args)
 
