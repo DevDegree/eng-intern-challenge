@@ -1,5 +1,5 @@
 import sys
-print("SOMEHOW THIS PRINTS?")
+
 # Braille to English Mapping
 B_to_E_char = {
     "O.....": "a", "O.O...": "b", "OO....": "c", "OO.O..": "d", "O..O..": "e",
@@ -14,6 +14,7 @@ B_to_E_num = {
     "OOO...": "6", "OOOO..": "7", "O.OO..": "8", ".OO...": "9", ".OOO..": "0", "......": " "
 }
 
+print("SOMEHOW THIS PRINTS?")
 # English to Braille Mapping, we'll just reverse the dictionairy
 def reverse_d(d):
     return {val: key for key, val in d.items()}
