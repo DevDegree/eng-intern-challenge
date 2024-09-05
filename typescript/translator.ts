@@ -53,13 +53,9 @@ const brailleToEnglishNumberMap: Map<string, string> = new Map(
   Array.from(englishToBrailleNumberMap.entries()).map(([k, v]) => [v, k])
 );
 
-
-function isBraille(input: string): boolean {
-  //TODO: checks the lenghts is multiple of 6
-  return /^[O.]+$/.test(input);
+function isValidBraille(input: string): boolean {
+  return /^[O.]+$/.test(input) && input.length % 6 === 0;
 }
-
-
 
 function brailleToEnglish(braille: string): string {
   let result = '';
@@ -114,6 +110,6 @@ function brailleToEnglish(braille: string): string {
 
 const text = process.argv.slice(2).join(' ');
 
-if (isBraille(text)) {
+if (isValidBraille(text)) {
   console.log(brailleToEnglish(text));
 }
