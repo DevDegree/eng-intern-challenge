@@ -87,3 +87,5 @@ if __name__ == "__main__":
             print(Braille_to_English(input))
         else:
             print(English_to_Braille(input))
+    else:
+        print("input required")
