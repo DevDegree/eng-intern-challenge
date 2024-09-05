@@ -95,28 +95,28 @@ def translate_braille(input_string):
     return result
 
 def translate_english(input_string):
-  result = ""
-  is_number = False
+    result = ""
+    is_number = False
 
-  for char in input_string:
-    if char == ' ':
-      is_number = False
-      result += SPACE
+    for char in input_string:
+        if char == ' ':
+            is_number = False
+            result += SPACE
 
-    elif char.isdigit():
-      if not is_number:
-        is_number = True
-        result += NUMBER_FLAG
-      result += NUMBERS_TO_BRAILLE[char]
+        elif char.isdigit():
+            if not is_number:
+                is_number = True
+                result += NUMBER_FLAG
+            result += NUMBERS_TO_BRAILLE[char]
 
-    else:
-      if char.isupper():
-        result += CAPITAL_FLAG
-        char = char.lower()
+        else:
+            if char.isupper():
+                result += CAPITAL_FLAG
+                char = char.lower()
 
-      result += ENGLISH_TO_BRAILLE[char]
+            result += ENGLISH_TO_BRAILLE[char]
 
-  return result
+    return result
 
 # check if the input string is provided in braille
 def is_braille(input_string):
