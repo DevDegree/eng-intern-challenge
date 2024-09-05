@@ -4,7 +4,9 @@
   "description": "",
   "main": "translator.ts",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "ts-node ./translator.ts",
+    "start:awesome": "ts-node ./awesomeTranslator.ts"
   },
   "keywords": [],
   "author": "",
