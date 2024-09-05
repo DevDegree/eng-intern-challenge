@@ -1,6 +1,6 @@
 import sys
 
-alphaDict = {
+alphaToBrailleDict = {
     'a': '0.....',
     'b': '0.0...',
     'c': '00....',
@@ -28,7 +28,7 @@ alphaDict = {
     'y': '00.000',
     'z': '0..000'
 }
-numericDict = {
+numToBrailleDict = {
     '1': '0.....',
     '2': '0.0...',
     '3': '00....',
@@ -47,6 +47,11 @@ modifierDict = {
     'number': '.0.000'
 }
 
+brailleToAlphaDict = {i: j for j, i in alphaToBrailleDict.items()}
+brailleToNumDict = {i: j for j, i in numToBrailleDict.items()}
+
+print(brailleToAlphaDict)
+
 chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789,?!:;-/<>() '
 
 def isBraille(input): # checks if input string is braille or english
@@ -54,6 +59,34 @@ def isBraille(input): # checks if input string is braille or english
         return False
     else:
         return True
+    
+def translateBraille(input):
+    inputSplit = [input[i:i+6] for i in range(0, len(input), 6)] 
+
+    print(inputSplit)
+
+    caps, dec, num = False
+
+    for char in inputSplit:
+        if (char in modifierDict.values()):
+            if (char == modifierDict['capital']):
+                caps = True
+                continue
+            elif (char == modifierDict['decimal']):
+                dec = True
+                continue
+            elif (char == modifierDict['number']):
+                num = True
+                continue
+        if(num):
+
+        
+
+        
+
+def translateEnglish(input):
+
+    return 
 
 
 if __name__ == '__main__':
@@ -64,6 +97,8 @@ if __name__ == '__main__':
 
     if (isBraille(input)):
         print ('Braille')
+        translateBraille(input)
+
     elif (not isBraille(input)):
         print ('English')
 
