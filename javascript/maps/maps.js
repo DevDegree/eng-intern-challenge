@@ -1,5 +1,5 @@
 // define english to braille conversion map
-export const englishToBrailleMap = {
+export const englishToBraille = {
   letters: {
     A: 'O.....',
     B: 'O.O...',
@@ -44,7 +44,7 @@ export const englishToBrailleMap = {
 };
 
 // define braille to english conversion table
-export const brailleToEnglishMap = {
+export const brailleToEnglish = {
   letters: {
     'O.....': 'A',
     'O.O...': 'B',
