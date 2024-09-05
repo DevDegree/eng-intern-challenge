@@ -116,23 +116,26 @@ function TranslateBrilleToAlphabet(text) {
   let numberMode = false;
 
   for (i = 0; i < text.length; i += 6) {
+    
     char = text.substr(i, 6);
-    if (brilleToAlphabet[char] == " ") {
+    decodedValue = brilleToAlphabet[char];
+
+    if (decodedValue == " ") {
       numberMode = false;
-      alphabetForm += brilleToAlphabet[char];
+      alphabetForm += decodedValue;
     } else if (numberMode) {
       alphabetForm += brilleToNumber[char];
-    } else if (brilleToAlphabet[char] == "number") {
+    } else if (decodedValue == "number") {
       numberMode = true;
       i += 6;
       char = text.substr(i, 6);
       alphabetForm += brilleToNumber[char];
-    } else if (brilleToAlphabet[char] == "capital") {
+    } else if (decodedValue == "capital") {
       i += 6;
       char = text.substr(i, 6);
       alphabetForm += brilleToAlphabet[char].toUpperCase();
     } else {
-      alphabetForm += brilleToAlphabet[char];
+      alphabetForm += decodedValue;
     }
   }
   return alphabetForm;
