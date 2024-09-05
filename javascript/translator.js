@@ -152,4 +152,5 @@ function translateToBraille(input) {
       translatedArr.push(brailleMap[alphabet.toLowerCase()]);
     });
   }
+  return translatedArr.join(""); // Return translated array as string
 }
