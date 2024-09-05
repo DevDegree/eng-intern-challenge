@@ -126,6 +126,29 @@ def braille_to_eng(input):
 
     print(result)
 
+def eng_to_braille(input):
+    result = ""
 
-        # i+=6 # increment to next braille char
-
+    i = 0
+    while i < len(input):
+        cur_char = input[i]
+        if cur_char.isnumeric():
+            result += num_follows
+            while cur_char != ' ' and i < len(input):
+                result += num2braille_dict[cur_char]
+                i+=1
+                if i >= len(input):
+                    break
+                cur_char = input[i]
+        elif cur_char.isupper():
+            result += cap_follows
+            result += eng2braille_dict[cur_char.lower()]
+            i+=1
+        else:
+            # otherwise just add the item as is, do not need to worry about special char
+            result += eng2braille_dict[cur_char]
+            i+=1
+        # i+=1
+    
+    print(result)
+
