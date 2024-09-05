@@ -3,6 +3,9 @@ from enum import Enum
 from itertools import batched
 from collections.abc import Iterator
 
+# Each decade in the Braille system shares the same ten squares of data, here
+# called the "core". Each decade is obtained by appending (or in the case of the
+# fifth decade, prepending) the final two symbols.
 decade_core: list[str] = [
     "O...",
     "O.O.",
@@ -17,7 +20,6 @@ decade_core: list[str] = [
     ".O..",
     ".O.O",
 ]
-
 decade_affices: dict[int, tuple[str, str]] = {
     1: ("", ".."),
     2: ("", "O."),
@@ -28,6 +30,10 @@ decade_affices: dict[int, tuple[str, str]] = {
 
 
 def get_decade(n: int) -> list[str]:
+    """Given one of the five decades in the Braille system, return a list of
+    each symbol, written in left-to-right, top-down notation, with a '.'
+    representing an empty space, and an 'O' representing a raised dot.
+    """
     return list(
         map(
             lambda s: decade_affices[n][0] + s + decade_affices[n][1],
@@ -129,6 +135,11 @@ def parse_braille_to_english(s: str) -> Iterator[str]:
 
 
 def parse(s: str) -> str:
+    """Convert a string from English to Braille.
+
+    Given either an alphanumeric string with spaces or a string containing
+    only '.' and 'O' of length 6n, `parse` detects the transcription form, then
+    performs the appropriate translation."""
     if "." in s and set(s).issubset(set(".O")):
         return "".join(parse_braille_to_english(s))
     return "".join(parse_english_to_braille(s))
