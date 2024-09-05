@@ -1,8 +1,14 @@
 import sys
 from typing import Tuple
 
+BRAILLE_CHARACTER_LENGTH = 6
+
 
 class EnglishAlphabetMapper:
+    """
+    Maps english letters, numbers, and symbols to their braille representations.
+    """
+
     def __init__(self):
         self.letters_and_symbols = {
             " ": "......",
@@ -50,6 +56,10 @@ class EnglishAlphabetMapper:
 
 
 class BrailleAlphabetMapper:
+    """
+    Maps braille characters to their corresponding english letters, numbers, and symbols.
+    """
+
     def __init__(self):
         self.letters_and_symbols = {
             "......": " ",
@@ -97,16 +107,25 @@ class BrailleAlphabetMapper:
 
 
 class EnglishToBrailleTranslator:
+    """
+    Translates an english message into braille using the english alphabet mapping.
+    """
+
     def __init__(self, message):
         self.message = message
         self.english_alphabet = EnglishAlphabetMapper()
         self.translated_messsage = None
-        self.number_follows = (
-            None  # this might break something -> we might need to start at True??
-        )
+        self.number_follows = None
         self.capital_follows = None
 
     def translate(self) -> str:
+        """
+        Performs the translation of the english message into braille.
+
+        Returns:
+            str: The translated message in braille.
+        """
+
         translated_word_list = []
         message_length = len(self.message)
         for i in range(0, message_length):
@@ -148,20 +167,29 @@ class EnglishToBrailleTranslator:
 
 
 class BrailleToEnglishTranslator:
+    """
+    Translates a braille message into english using the braille alphabet mapping.
+    """
+
     def __init__(self, message):
         self.message = message
         self.braille_alphabet = BrailleAlphabetMapper()
         self.translated_messsage = None
-        self.number_follows = (
-            None  # this might break something -> we might need to start at True??
-        )
+        self.number_follows = None
         self.capital_follows = None
 
     def translate(self) -> str:
+        """
+        Performs the translation of the braeille message into nglish.
+
+        Returns:
+            str: The translated message in english.
+        """
+
         message_length = len(self.message[0])
         translated_word_list = []
-        for i in range(0, message_length, 6):
-            braille_char = self.message[0][i : i + 6]
+        for i in range(0, message_length, BRAILLE_CHARACTER_LENGTH):
+            braille_char = self.message[0][i : i + BRAILLE_CHARACTER_LENGTH]
             english_char = ""
 
             # check if we are going to need to print a number
@@ -204,6 +232,10 @@ class BrailleToEnglishTranslator:
 
 
 class InputValidator:
+    """
+    Validates whether the input message is written in braille or english.
+    """
+
     def __init__(self, message):
         self.message = message
         self.english = True
@@ -212,27 +244,40 @@ class InputValidator:
         self.braille_alphabet = BrailleAlphabetMapper()
 
     def validate(self) -> Tuple[bool, bool]:
+        """
+        Validates the message by determining whether it is braille, english or none.
+
+        Returns:
+            Tuple[bool, bool]: A tuple indicating whether the message is braille, english or none.
+        """
+
+        # if input is empty
+        if len(self.message) == 0:
+            return False, False
+
         # check if its braille, if not, then we can assume its english
         for word in self.message:
-            # we could be encountering a potential braille word
-            if len(word) == 6:
-                # if we're translating an english word and the word appears in the braille language, then it cannot be an english phrase
+            # we could be encountering a potential braille word if the word length is of 6
+            if len(word) == BRAILLE_CHARACTER_LENGTH:
+                # and if we're translating from english to braille and this word appears in the braille language,
+                # then it cannot be an english phrase at all
                 if (
                     self.english
                     and word in self.braille_alphabet.letters_and_symbols
                     or word in self.braille_alphabet.nums
                 ):
                     self.english = False
-                #  otherwise, we ARE translating an english word, meaning it can't be a braille word
+                #  otherwise, we are most likely translating an english word, meaning it can't be a braille word
                 else:
                     self.braille = False
-            # if we're translating an english word, we do it character by character
+            # if we're translating a likely english word, we validate character by character
             if self.english:
-                # self.braille = False -> this does not work on first try -> FIX
                 for char in word:
                     new_char = char
+                    # if the character is not a number it could be a could be a capital letter
                     if not char.isdigit():
-                        new_char = char.lower()  # could be a capital letter if not a
+                        new_char = char.lower()
+                    # and if the character isn't in the english alphabet, then we're not translating an english phrase
                     if (
                         new_char not in self.english_alphabet.letters_and_symbols
                         and new_char not in self.english_alphabet.nums
@@ -240,11 +285,9 @@ class InputValidator:
                         self.english = False
             # if we're tranlating a braille word, we just check if the word doesn't appear in the braille mapping -> we have to process word in chunks of 6 characters
             if self.braille:
-                # self.english = False -> this does not work on first try -> FIX
                 # loop through the word to process in batches
-
-                for i in range(0, len(word), 6):
-                    braille_char = word[i : i + 6]
+                for i in range(0, len(word), BRAILLE_CHARACTER_LENGTH):
+                    braille_char = word[i : i + BRAILLE_CHARACTER_LENGTH]
                     if (
                         braille_char not in self.braille_alphabet.letters_and_symbols
                         and braille_char not in self.braille_alphabet.nums
@@ -257,11 +300,25 @@ class InputValidator:
 
 
 class Translator:
+    """
+    Handles the translation between braille and english depending on input validation.
+    """
+
     def __init__(self, message: str):
         self.message = message
         self.translated_messsage = None
 
     def translate(self) -> str:
+        """
+        Determines the input language and translates it accordingly (english to braille or braille to english).
+
+        Returns:
+            str: The translated message.
+
+        Raises:
+            ValueError: If the input is invalid, contains a mix of braille and english, or is empty.
+        """
+
         braille, english = InputValidator(self.message).validate()
         if braille:
             self.translated_messsage = BrailleToEnglishTranslator(
@@ -274,7 +331,7 @@ class Translator:
             ).translate()
         else:
             raise ValueError(
-                "Provided input was invalid. Either invalid braille, english or a mix of the two was present."
+                "Provided input was invalid. Either empty, invalid braille or english, or a mix of the two was present."
             )
 
         return self.translated_messsage
