@@ -82,47 +82,13 @@ end
 # @return [String]
 def braille_to_english(text)
   english = ""
+  state = :letter_or_punctuation
 
-  # 0: lower case letters or punctuations, 1: capital follows, 2: number follows
-  state = 0
-
-  # for each Braille symbol, check the current state and look up the
-  # corresponding character of the symbol, add/change characters in certain
-  # situations
+  # scan through each Braille symbol where each symbol consists of 6 characters
+  # of either "." or "O" (capital letter "o")
   text.scan(/([.O]{6})/) do |match|
-    braille = match[0] || ""
-    raised = raised_dots(braille)
-    symbol = REVERSE_TRANSLATION_TABLE[:special][raised]
-
-    if symbol.nil? # if is not a special symbol
-      case state
-      when 0 # lower case letters or punctuations
-        # determine if the symbol represents a letter or a punctuation and append to the output
-        english << (REVERSE_TRANSLATION_TABLE[:letters][raised] \
-          || REVERSE_TRANSLATION_TABLE[:punctuations][raised]).to_s
-      when 1 # upper case letters
-        # the letter should be capitalized, and the state should be reset to 0
-        english << REVERSE_TRANSLATION_TABLE[:letters][raised].to_s.upcase
-        state = 0
-      when 2 # numbers or spaces
-        # append digits until there is a space, in which case append a space and set state to 0
-        if REVERSE_TRANSLATION_TABLE[:special][raised] == " "
-          english << " "
-          state = 0
-        else
-          english << REVERSE_TRANSLATION_TABLE[:numbers][raised].to_s
-        end
-      else
-        # unreachable
-      end
-    else # the current symbol is a special character
-      case symbol
-      when :capital_follows then state = 1
-      when :number_follows then state = 2
-      when :decimal_follows then english << "."
-      else # unreachable
-      end
-    end
+    symbol = raised_dots(match[0] || "......")
+    state = parse_braille_symbol symbol, state, english
   end
 
   english
@@ -180,6 +146,54 @@ def raised_dots(braille)
     raised << i if c == "O"
   end
   raised
+end
+
+# @param symbol [Array<Integer>]
+# @param state [Symbol]
+# @param text [String]
+# @return [Symbol]
+def parse_braille_symbol(symbol, state, text)
+  # check if it is a special symbol
+  case look_up(:special, symbol)&.to_sym
+  when :capital_follows then state = :capital_follows
+  when :number_follows then state = :number_follows
+  when :decimal_follows
+    # in this case, the state should already be in :number_follows, so we only
+    # have to append the decimal point and the state does not change
+    text << "."
+  else # symbol represents a letter, or a digit, or a punctuation
+    # determine which character the symbol represents and append it to text, and
+    # determine what the next state is based on current state and the symbol
+    text << \
+      case state
+      when :letter_or_punctuation
+        look_up(:letters, symbol) || look_up(:punctuations, symbol) || ""
+      when :capital_follows
+        state = :letter_or_punctuation
+        look_up(:letters, symbol)&.upcase || ""
+      when :number_follows
+        if look_up(:punctuations, symbol) == " "
+          # a space represents the end of a number, so the state should be
+          # changed and the space should be appended
+          state = :letter_or_punctuation
+          " "
+        else
+          # still reading a number, append the digit and the state does not change
+          look_up :numbers, symbol
+        end
+      else # unreachable
+        raise "Unknown state: \"#{state}\""
+      end
+  end
+
+  state
+end
+
+# @param category [Symbol]
+# @param symbol [Array<Integer>]
+# @return [String, nil]
+def look_up(category, symbol)
+  REVERSE_TRANSLATION_TABLE[category][symbol]&.to_s
 end
 
 if __FILE__ == $0
