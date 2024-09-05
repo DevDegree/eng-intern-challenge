@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
 	"strings"
 )
+
+var braillePattern = regexp.MustCompile("(?m)^[O.]*$")
 
 func main() {
 	if len(os.Args) < 2 {
@@ -29,8 +32,7 @@ func main() {
 // isBraille returns true if str is a valid Braille string. A valid Braille string
 // contains only 'O' (uppercase letter O), and '.' (period) characters.
 func isBraille(str string) bool {
-	// TODO
-	return false
+	return braillePattern.MatchString(str)
 }
 
 // decode converts a Braille string to English. braille must contain only 'O' (uppercase
