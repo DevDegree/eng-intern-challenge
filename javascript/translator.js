@@ -64,7 +64,7 @@ const isDecimal = (val) => {
     return !isNaN(parseFloat(val)) && isFinite(val)
 }
 
-const brailToEnglish = (val) => {
+const brailleToEnglish = (val) => {
     let output = '';
 
     let inputArr = val.split('');
@@ -93,18 +93,54 @@ const brailToEnglish = (val) => {
     return output
 }
 
+const englishToBraille = (val) => {
+    let output = '';
+    let valArr = val.split('')
+    let inputArr = [];
+    let capitalize = false;
+    let number = false;
+    let decimal = false;
+
+    for(let i = 0; i < valArr.length; i += 6){
+        let chunk = valArr.slice(i, i + 6);
+        inputArr.push(chunk.join(''));
+    }
+
+    console.log(inputArr)
+
+    for(let m = 0; m < inputArr.length; m++){
+        for(const key in brailleAlphabet){
+            if(brailleAlphabet[key] == inputArr[m]){
+                if(capitalize){
+                    output += key.toUpperCase();
+                    capitalize = false;
+                }else if(number){
+                    
+                }
+
+                if(key == 'capital'){
+                    capitalize = true;
+                }else if(key == 'number'){
+                    number = true;
+                }else if(key == 'decimal'){
+                    decimal = true;
+                }
+            }
+        }
+    }
+}
 
 if(inputString){
     let output;
 
-    output = brailToEnglish(inputString)
-    console.log(output)
+    output = englishToBraille(inputString)
+    // console.log(output)
 
-    if(output == 'Abc 123'){
-        console.log('passed')
-    }
+    // if(output == 'Abc 123'){
+    //     console.log('passed')
+    // }
     
-    // output = brailToEnglish(inputString)
+    // output = brailleToEnglish(inputString)
     // console.log(output)
 
     // if(output == '.O.OOOOO.O..O.O...'){
