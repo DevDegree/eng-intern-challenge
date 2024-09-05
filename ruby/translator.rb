@@ -13,7 +13,9 @@ BRAILLE_LETTER_DICT = {
 # Seperate dictionary for numbers as to avoid confusion when converting from braille to english a = 1, b = 2, etc.
 BRAILLE_NUMBER_DICT = {
   "0" => ".OOO..", "1" => "O.....", "2" => "O.O...", "3" => "OO....", "4" => "OO.O..",
-  "5" => "O..O..", "6" => "OOO...", "7" => "OOOO..", "8" => "O.OO..", "9" => ".OO...", "number" => ".O.OOO"
+  "5" => "O..O..", "6" => "OOO...", "7" => "OOOO..", "8" => "O.OO..", "9" => ".OO...",
+  "number" => ".O.OOO",
+  " " => "......"
 }
 
 # Reverse Dictionaries for English Translation
@@ -156,7 +158,7 @@ def main
   else
 
     puts english_to_braille(input_string)
-    
+
   end
 
 end
