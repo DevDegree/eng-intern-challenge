@@ -66,24 +66,15 @@ function translateToBraille(input) {
     for (let i = 0; i < input.length; i += 6) {
       splitBraillesArr.push(input.substring(i, i + 6));
     }
-    console.log("Split Brailles: ", splitBraillesArr);
     // Loop over the splitBrailleArr and find matching key in brailleMap
     splitBraillesArr.forEach((braille, index) => {
       if (braille === brailleMap.Number) {
         // If the braille value is for "Number", enable number mode
         isNumberMode = true;
-        console.log(
-          "Entering Number Mode. Following characters will be numbers."
-        );
       } else if (braille === brailleMap[" "]) {
         // If the braille value is for empty space, disable number mode
-        isNumberMode &&
-          console.log(
-            "Exiting Number Mode. Following characters will be alphabets."
-          );
         isNumberMode = false;
         translatedArr.push(" ");
-        console.log("Pushing empty space");
       } else {
         // Translate based on the current mode (number or alphabet)
         for (let [key, value] of Object.entries(brailleMap)) {
@@ -96,17 +87,14 @@ function translateToBraille(input) {
             if (isNumberMode && !isNaN(key)) {
               // If loop is in number mode and the key is a number
               translatedArr.push(key);
-              console.log("Pushing number: ", key);
               break;
             } else if (!isNumberMode && isNaN(key)) {
               // If loop is not in number mode and the key is a letter or symbol
               if (splitBraillesArr[index - 1] === brailleMap.Capital) {
                 // If the braille in the previous index is a Capital, convert current braille into uppercase
                 translatedArr.push(key.toUpperCase());
-                console.log("Pushing capital letter: ", key.toUpperCase());
               } else {
                 translatedArr.push(key); // Otherwise keep it as lowercase alphabet
-                console.log("Pushing letter: ", key);
               }
               break;
             }
