@@ -1,3 +1,5 @@
+const userInput = process.argv.slice(2).join(" "); // Get the command line input
+
 const brailleMap = {
   a: "O.....",
   b: "O.O...",
@@ -154,3 +156,7 @@ function translateToBraille(input) {
   }
   return translatedArr.join(""); // Return translated array as string
 }
+
+const result = translateToBraille(userInput);
+console.log(result);
+return result;
