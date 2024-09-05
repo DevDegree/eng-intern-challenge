@@ -77,12 +77,16 @@ def English_to_Braille(input):
 
 
 # Parses input passed in
-if len(sys.argv) > 1:
-    input = sys.argv[1:]
-    input = " ".join(input)
+def main():
+    if len(sys.argv) > 1:
+        input = sys.argv[1:]
+        input = " ".join(input)
 
-    # We are checking if input is Braille or English
-    if len(input) % 6 == 0 and (input[:6] in B_to_E_char or input[:6] in B_to_E_num):
-        print(Braille_to_English(input))
-    else:
-        print(English_to_Braille(input))
+        # We are checking if input is Braille or English
+        if len(input) % 6 == 0 and (input[:6] in B_to_E_char or input[:6] in B_to_E_num):
+            print(Braille_to_English(input))
+        else:
+            print(English_to_Braille(input))
+
+if __name__ == "__main__":
+    main()
