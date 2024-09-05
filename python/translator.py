@@ -14,14 +14,13 @@ B_to_E_num = {
     "OOO...": "6", "OOOO..": "7", "O.OO..": "8", ".OO...": "9", ".OOO..": "0", "......": " "
 }
 
-print("SOMEHOW THIS PRINTS?")
 # English to Braille Mapping, we'll just reverse the dictionairy
 def reverse_d(d):
     return {val: key for key, val in d.items()}
 
 # We combine to make 1 English dictionairy since no repetitive symbols
 E_to_B = reverse_d(B_to_E_char) | reverse_d(B_to_E_num)
-
+print("SOMEHOW THIS PRINTS?")
 
 # Now, our translate functions, 
 # Keeping in mind: 
