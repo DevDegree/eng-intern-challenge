@@ -2,7 +2,11 @@
 import sys
 def translatorBraille():
     inputType = "braille"
-    input = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
+    inputs = sys.argv[1:]
+    inputList = []
+    for input in inputs:
+        inputList.append(input)
+    input = ' '.join(inputList)
     for letter in input:
         if letter != '.' and letter != 'O':
             inputType =  "string"
@@ -164,7 +168,7 @@ def encode_braille( plain_string :str ):
         if letter.isupper():
             encoded_output += braille_dict['cap_follow']
             letter = letter.lower()
-        if letter.isnumeric():
+        if letter.isnumeric() and not num:
             encoded_output += braille_dict['number_follow']
             num = True
         if num:
