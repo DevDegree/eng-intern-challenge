@@ -106,15 +106,6 @@ def english_to_braille(word)
   braille
 end
 
-# @param category [Symbol]
-# @param key [Symbol, Integer]
-# @return [String]
-def braille_symbol(category, key)
-  braille = "......"
-  TRANSLATION_TABLE[category][key]&.each { |i| braille[i] = "O" }
-  braille
-end
-
 # @param symbol [String]
 # @param state [Symbol]
 # @param text [String]
@@ -133,16 +124,21 @@ def parse_braille_symbol(symbol, state, text)
     # in this case, the state should already be in :number_follows, so we only
     # have to append the decimal point and the state does not change
     text << "."
+
   else # symbol represents a letter, or a digit, or a punctuation
     # determine which character the symbol represents and append it to text, and
     # determine what the next state is based on current state and the symbol
     text << \
       case state
       when :letter_or_punctuation
-        look_up(:letters, braille_dots) || look_up(:punctuations, braille_dots) || ""
+        look_up(:letters, braille_dots) \
+          || look_up(:punctuations, braille_dots) \
+          || ""
+
       when :capital_follows
         state = :letter_or_punctuation
         look_up(:letters, braille_dots)&.upcase || ""
+
       when :number_follows
         if look_up(:punctuations, braille_dots) == " "
           # a space represents the end of a number, so the state should be
@@ -153,19 +149,14 @@ def parse_braille_symbol(symbol, state, text)
           # still reading a number, append the digit and the state does not change
           look_up :numbers, braille_dots
         end
+
       else # unreachable
         raise "Unknown state: \"#{state}\""
+
       end
   end
 
   state
-end
-
-# @param category [Symbol]
-# @param braille_dots [Array<Integer>]
-# @return [String, nil]
-def look_up(category, braille_dots)
-  REVERSE_TRANSLATION_TABLE[category][braille_dots]&.to_s
 end
 
 # @param current [String]
@@ -196,6 +187,24 @@ def parse_english_character(current, previous, braille_text)
   end
 
   current
+end
+
+# Helpers
+
+# @param category [Symbol]
+# @param braille_dots [Array<Integer>]
+# @return [String, nil]
+def look_up(category, braille_dots)
+  REVERSE_TRANSLATION_TABLE[category][braille_dots]&.to_s
+end
+
+# @param category [Symbol]
+# @param key [Symbol, Integer]
+# @return [String]
+def braille_symbol(category, key)
+  braille = "......"
+  TRANSLATION_TABLE[category][key]&.each { |i| braille[i] = "O" }
+  braille
 end
 
 if __FILE__ == $0
