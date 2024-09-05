@@ -8,10 +8,13 @@ console_input = " ".join(sys.argv[1:])
 # Detected by the below loop to detect non-braille characters. Default Braille unless proven otherwise
 input_type = "Braille"
 
-for char in console_input:
-    if char != '.' and char != 'O':
-        input_type = "English"
-        break
+if len(console_input) % 6 != 0:
+    input_type = "English"
+else:
+    for char in console_input:
+        if char != '.' and char != 'O':
+            input_type = "English"
+            break
 
 output = ""
 if input_type == "English":
