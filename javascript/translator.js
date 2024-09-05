@@ -1,3 +1,6 @@
+/**
+ * Dictionary which stores the braille symbols and the letters/numbers they represent
+ */
 const brailleAlphabet = {
     'a': 'O.....',
     'b': 'O.O...',
@@ -41,33 +44,40 @@ const brailleAlphabet = {
     '0': '.OOO..'
 }
 
-const input = process.argv.slice(2);
-const inputString = input.join(' ');
-
+/**
+ * Function that checks if a string character is a number
+ */
 const isNumber = (val) => {
     return !isNaN(parseInt(val)) && isFinite(val)
 }
 
+/**
+ * Function that checks if a string character is a decimal
+ */
 const isDecimal = (val) => {
     return !isNaN(parseFloat(val)) && isFinite(val)
 }
 
+
+/**
+ * Function that converts a string in english to a string in braille
+ */
 const englishToBraille = (val) => {
     let output = '';
 
     let inputArr = val.split('');
     for(let i = 0; i < inputArr.length; i++){
-        //if the letter is uppercase
+        //Checks if the letter is uppercase
         if(inputArr[i] == inputArr[i].toUpperCase() && inputArr[i] != ' ' && /^[a-zA-Z]+$/.test(inputArr[i])){
             output += brailleAlphabet['capital'];
         }
-        //if the letter is a number
+        //Checks if the character is a number
         else if(isNumber(inputArr[i])){
             if(i == 0 || (i-1 > 0 && !isNumber(inputArr[i-1]))){
                 output += brailleAlphabet['number']
             }
         }
-        //if the letter is a decimal
+        //Checks if the character is a decimal
         else if(isDecimal(inputArr[i])){
             if(i == 0 || (i-1 >= 0 && !isDecimal(inputArr[i-1]))){
                 output += brailleAlphabet['decimal']
@@ -79,6 +89,9 @@ const englishToBraille = (val) => {
     return output
 }
 
+/**
+ * Function that converts a string in braille to a string in english
+ */
 const brailleToEnglish = (val) => {
     let output = '';
     let valArr = val.split('')
@@ -94,6 +107,7 @@ const brailleToEnglish = (val) => {
     }
 
     for(let m = 0; m < inputArr.length; m++){
+        
         for(const key in brailleAlphabet){
             if(brailleAlphabet[key] == inputArr[m]){
 
@@ -114,16 +128,19 @@ const brailleToEnglish = (val) => {
                         }
 
                         if(number){
-                            if(m+1 < inputArr.length && isNumber(brailleAlphabet[inputArr[m+1]])){
+                            let temp = m+1
+                            if(temp < inputArr.length && inputArr[temp]=='......'){
                                 number = false;
                             }
                         }
 
                         if(decimal){
-                            if(m+1 < inputArr.length && isDecimal(brailleAlphabet[inputArr[m+1]])){
+                            if(m+1 < inputArr.length && inputArr[m+1]=='......'){
                                 decimal = false;
                             }
                         }
+
+                        break;
                     }else{
                         if(!isNumber(key) && !isDecimal(key)){
                             if(capitalize){
@@ -142,6 +159,12 @@ const brailleToEnglish = (val) => {
     return output;
 }
 
+/**
+ * Receiving and working with user input
+ */
+const input = process.argv.slice(2);
+const inputString = input.join(' ');
+
 if(inputString){
     let output;
     let filteredAlphabet = Object.keys(brailleAlphabet).filter(ele => !['capital', 'decimal', 'number', 'o', '.'].includes(ele));
@@ -153,6 +176,7 @@ if(inputString){
         }
     })
 
+    //Detecting braille
     if(englishDetected){
         output = englishToBraille(inputString)
         englishDetected = false;
@@ -162,5 +186,4 @@ if(inputString){
 
 
     console.log(output)
-
 }
