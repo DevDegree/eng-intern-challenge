@@ -62,16 +62,16 @@ braille_to_eng_hash = {
 eng_to_braille_hash = braille_to_eng_hash.invert
 
 braille_to_num_hash = {
-  'o.....' => 1,
-  'o.o...' => 2,
-  'oo....' => 3,
-  'oo.o..' => 4,
-  'o..o..' => 5,
-  'ooo...' => 6,
-  'oooo..' => 7,
-  'o.oo..' => 8,
-  '.oo...' => 9,
-  '.ooo..' => 0
+  'o.....' => '1',
+  'o.o...' => '2',
+  'oo....' => '3',
+  'oo.o..' => '4',
+  'o..o..' => '5',
+  'ooo...' => '6',
+  'oooo..' => '7',
+  'o.oo..' => '8',
+  '.oo...' => '9',
+  '.ooo..' => '0'
 }
 num_to_braille_hash = braille_to_num_hash.invert
 
@@ -97,41 +97,86 @@ num_to_braille_hash = braille_to_num_hash.invert
 # check if input is braille or english
 def check_braille(input_value)
   if input_value.match?(/^[o.]+$/) == true
-      true
+    true
   else 
-      false
+    false
   end
 end
 
-def eng_to_braille(input_value)
+def eng_to_braille(input_value, eng_to_braille_hash, num_to_braille_hash)
   p "eng to braille"
+  index = 0
+  output = ""
+  while index < input_value.length
+    if input_value[index] =~ /[A-Z]/
+      output += eng_to_braille_hash["capital follows"] + eng_to_braille_hash[input_value[index].downcase]
+    elsif input_value[index] =~ /[0-9]/
+      p input_value[index] 
+      output += eng_to_braille_hash['number follows']  + num_to_braille_hash[input_value[index]]
+    else
+      output = output + eng_to_braille_hash[input_value[index]]
+    end
+    index += 1
+  end
+  p output
 end
 
-def braille_to_eng(input_value, braille_to_eng_map)
-  # p "braille to eng"
+# .o.oooo.o...o.oo........ooo.o
+# .o.ooo.ooo.o.......ooo.o.....ooo..oo.o.ooooo.o..
+def braille_to_eng(input_value, braille_to_eng_map, braille_to_num_map)
   output = ""
-  is_num = false
-  is_capital = false
+  is_n = false
   input_index = 0
   while input_index < input_value.length
-    if braille_to_eng_map[input_value[input_index,6]] == 'capital follows'
-      output = output + braille_to_eng_map[input_value[input_index + 6,6]].upcase
+    if braille_to_eng_map[input_value[input_index,6]] == 'number follows'
+      is_n = true
       input_index += 6
-    else
-      output = output + braille_to_eng_map[input_value[input_index,6]]
     end
+    if braille_to_eng_map[input_value[input_index,6]] == ' '
+      is_n = false
+      # input_index += 6
+    end
+    # elsif braille_to_eng_map[input_value[input_index,6]] == '......'
+    #   is_n = false
+    #   p braille_to_eng_map[input_value[input_index,6]]
+    # end
+    # if is_n
+    #   output = output + braille_to_num_map[input_value[input_index,6]]
+    # end
+    if is_n 
+      p braille_to_num_map[input_value[input_index,6]]
+      # output = output + braille_to_num_map[input_value[input_index,6]]
+    else
+      if braille_to_eng_map[input_value[input_index,6]] == 'capital follows'
+        output = output + braille_to_eng_map[input_value[input_index + 6,6]].upcase
+        input_index += 6
+      else
+        output = output + braille_to_eng_map[input_value[input_index,6]]
+      end
+    end
+    # if braille_to_eng_map[input_value[input_index,6]] == 'capital follows'
+    #   output = output + braille_to_eng_map[input_value[input_index + 6,6]].upcase
+    #   input_index += 6
+    # elsif is_n == true
+    #   p braille_to_num_map[input_value[input_index,6]]
+    #   output = output + braille_to_num_map[input_value[input_index,6]]
+    # else
+    #   output = output + braille_to_eng_map[input_value[input_index,6]]
+    # end
     input_index += 6
   end
     
   p output
 end
 
+
+# ##### main 
 input_value = gets.chomp 
 
 if check_braille(input_value)
-  braille_to_eng(input_value, braille_to_eng_hash)
+  braille_to_eng(input_value, braille_to_eng_hash, braille_to_num_hash)
 else
-  eng_to_braille(input_value)
+  eng_to_braille(input_value, eng_to_braille_hash, num_to_braille_hash)
 end
 # index =0
 # newoutput= ""
