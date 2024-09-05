@@ -43,9 +43,9 @@ const braille_symbols_dict = {
 }
 
 const braille_precursor_dict = {
-    ".....O": ".",
-    ".O...O": ",",
-    ".O.OOO": "?",
+    ".....O": "capital follows",
+    ".O...O": "decimal follows",
+    ".O.OOO": "number follows",
     "......": " ",
 }
 
