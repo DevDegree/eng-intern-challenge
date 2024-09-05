@@ -91,6 +91,28 @@ func TestDecodeAlphaNumeric(t *testing.T) {
 	}
 }
 
+func TestEncode(t *testing.T) {
+	inExpect := map[string]string{
+		"":            "",
+		"a":           "O.....",
+		"ab":          "O.....O.O...",
+		"abc":         "O.....O.O...OO....",
+		"Hello world": ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..",
+		"42":          ".O.OOOOO.O..O.O...",
+		"a1":          "O......O.OOOO.....",
+		"1a":          ".O.OOOO...........O.....",
+	}
+	for in, expect := range inExpect {
+		out, err := encode(in)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if out != expect {
+			t.Errorf("encode(%s) returned %s; wanted %s", in, out, expect)
+		}
+	}
+}
+
 // sliceEq returns true if s1 and s2 are the same length and contain the same elements.
 func sliceEq[E comparable](s1, s2 []E) bool {
 	if len(s1) != len(s2) {

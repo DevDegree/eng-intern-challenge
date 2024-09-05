@@ -130,8 +130,38 @@ func decode(braille string) (string, error) {
 // and ' ' (space) characters. If english contains any other characters, encode returns
 // ErrInvalidChar.
 func encode(english string) (string, error) {
+	chars := []byte(english)
+	braille := make([]byte, 0, len(chars)*dotsPerCell)
+	for len(chars) > 0 {
+		c := chars[0]
+		if unicode.IsDigit(rune(c)) {
+			braille = append(braille, encodeNumber(&chars)...)
+		} else if unicode.IsLetter(rune(c)) {
+			braille = append(braille, encodeLetter(c)...)
+			chars = chars[1:]
+		} else if c == ' ' {
+			braille = append(braille, space...)
+			chars = chars[1:]
+		} else {
+			return "", ErrInvalidChar{c}
+		}
+	}
+	return string(braille), nil
+}
+
+// encodeNumber converts decimal digits from the start of english to Braille and
+// trims the digits from the start of english. If the number is followed by a letter,
+// a space is added to the returned Braille string to terminate the number.
+func encodeNumber(english *[]byte) (braille []byte) {
 	// TODO
-	return "", nil
+	return nil
+}
+
+// encodeLetter converts an English letter to Braille. If letter is capital, the
+// returned Braille string will start with a `number follows' cell.
+func encodeLetter(letter byte) (braille []byte) {
+	// TODO
+	return nil
 }
 
 // splitCells breaks a Braille string into individual cells, 3x2 dot matrices of 'O'
@@ -195,4 +225,12 @@ type ErrInvalidCell struct {
 
 func (e ErrInvalidCell) Error() string {
 	return fmt.Sprintf("invalid Braille cell: %s", e.cell)
+}
+
+type ErrInvalidChar struct {
+	c byte
+}
+
+func (e ErrInvalidChar) Error() string {
+	return fmt.Sprintf("invalid English character: %c", e.c)
 }
