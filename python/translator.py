@@ -1,4 +1,4 @@
-
+import sys
 # English to Braille map
 ENGLISH_TO_BRAILLE = {
     'A':'O.....',
@@ -76,7 +76,22 @@ Input is English, output is Braille.
 Takes a string as an argument and uses it as the input string
 '''
 def translate_english_to_braille(_input):
-    pass
+    output_str = ""
+    flag_set = False
+    for letter in _input:
+        if(letter.isupper()):
+            output_str+=CAPITAL_FOLLOWS
+            # Reset the NUMBER_FOLLOWS flag to false
+            flag_set = False
+        elif(letter.isdigit()):
+            if(not flag_set):
+                # Set the the NUMBER_FOLLOWS flag to True
+                flag_set = True
+                output_str+=NUMBER_FOLLOWS
+        # Append the current character to the output string
+        output_str+=ENGLISH_TO_BRAILLE[letter.upper()]
+
+    return output_str
 
 '''
 Input is Braille, output is English.
@@ -84,3 +99,26 @@ Takes a string as an argument and uses it as the input string
 '''
 def translate_braille_to_english(_input):
     pass
+
+
+
+# Get all command-line arguments but ignoring the script name
+_input = ' '.join(sys.argv[1:])
+# Save the first 6 characters of the string
+inputTypeCheck = _input[0:6]
+# E for English, B for Braille
+inputType = 'E'
+outputString = ""
+
+# Check if the first 6 characters make up a valid braille character
+for alpha in ENGLISH_TO_BRAILLE:
+    if(ENGLISH_TO_BRAILLE[alpha] == inputTypeCheck):
+        inputType='B'
+    elif(inputTypeCheck == CAPITAL_FOLLOWS or inputTypeCheck == NUMBER_FOLLOWS):
+        inputType='B'
+if(inputType == 'B'): # Braille to English
+    outputString = translate_braille_to_english(_input)
+else: # English to Braille
+    outputString = translate_english_to_braille(_input)
+    
+print(outputString)
