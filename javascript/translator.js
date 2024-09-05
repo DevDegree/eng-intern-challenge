@@ -14,6 +14,7 @@ function translator() {
   // translate and store in a variable
   const translation =
     inputType === 'english' ? englishToBraille(input) : brailleToEnglish(input);
+
   console.log(translation);
 
   // return translation

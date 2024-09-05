@@ -49,7 +49,52 @@ function englishToBraille(input) {
   return translation;
 }
 
-function brailleToEnglish(input) {}
+function brailleToEnglish(input) {
+  // separate string into sequences of six characters
+  const sequences = input.match(/.{1,6}/g);
+  // define translated string variable
+  let translation = '';
+  // define toggles for capital letters and numbers
+  let isCapitalized = false;
+  let isNumber = false;
+
+  // iterate through each sequence
+  for (const sequence of sequences) {
+    // check if sequence is number signifier
+    if (sequence === '.O.OOO') {
+      isNumber = true;
+    }
+    // check if sequence is capital letter signifier
+    else if (sequence === '.....O') {
+      isCapitalized = true;
+    }
+    // else, convert and insert character
+    else {
+      // insert space
+      if (sequence === '......') {
+        translation += ' ';
+        // turn off number toggle
+        isNumber = false;
+      }
+      // if isNumber, insert number
+      else if (isNumber) {
+        translation += brailleToEnglishMap.numbers[sequence];
+      }
+      // if isCapitalized, insert uppercase letter
+      else if (isCapitalized) {
+        translation += brailleToEnglishMap.letters[sequence];
+        // turn off capitalization toggle
+        isCapitalized = false;
+      }
+      // otherwise, insert lowercase letter
+      else {
+        translation += brailleToEnglishMap.letters[sequence].toLowerCase();
+      }
+    }
+  }
+
+  return translation;
+}
 
 module.exports = {
   englishToBraille,
