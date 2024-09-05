@@ -1,5 +1,3 @@
-const readline = require('readline');
-
 const capitalIndicator = ".....O";
 const numberIndicator = ".O.OOO";
 
@@ -62,7 +60,6 @@ function translateToBraille(text) {
     return brailleOutput.join('');
 }
 
-
 function translateToEnglish(braille) {
     let englishOutput = [];
     let isCapital = false;
@@ -111,18 +108,17 @@ function translateToEnglish(braille) {
     return englishOutput.join('');
 }
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
+const args = process.argv.slice(2);
+if (args.length < 1) {
+    console.log("Usage: node translator.js <text>");
+    process.exit(1);
+}
 
-rl.question("Enter the text (English or Braille): ", (input) => {
-    if (isBraille(input)) {
-        const englishTranslation = translateToEnglish(input);
-        console.log(englishTranslation);
-    } else {
-        const brailleTranslation = translateToBraille(input);
-        console.log(brailleTranslation);
-    }
-    rl.close();
-});
+const input = args.join(' ');
+if (isBraille(input)) {
+    const englishTranslation = translateToEnglish(input);
+    console.log(englishTranslation);
+} else {
+    const brailleTranslation = translateToBraille(input);
+    console.log(brailleTranslation);
+}
