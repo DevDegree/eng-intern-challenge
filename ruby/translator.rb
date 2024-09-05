@@ -2,13 +2,14 @@
 
 # Problem break up
 
-  #1 Read input string and clasiify as eng or braille
+  #1 Read input string and classify as eng or braille
   #2 create hash for mapping alphabets, numbers and other patterns.
-    # Read in input alphabet and output the braille pattern. 
-  #3 Read in input alphabet string and convert to braille
-  #4 Check input for uppercase alphabets and convert to braille by adding uppercase pattern before the alphabet
-  #5 Check for number 0-9 and convert to braille pattern by adding number pattern before and space after the numbers
-  #6 
+  #3 Read in input alphabet string and convert to braille . Check output
+  #4 Add edge cases like capital letter and numbers. check ouput
+  #5 Read in braille charaters and convert to letters. Check output
+  #6 Add edge case for capital letters. Check output
+  #7 Add edge case for numbers. Check output
+  
 
 
 # Create hash to store the braille pattern - alphabet/ special pattern mapping. Create a reverse hash to store Alphabet/special mapping - braille pattern mapping
@@ -59,6 +60,7 @@ braille_to_eng_hash = {
   '.o.oo.' => ')',
   '......' => ' '
 }
+# create reverse hash
 eng_to_braille_hash = braille_to_eng_hash.invert
 
 braille_to_num_hash = {
@@ -73,26 +75,8 @@ braille_to_num_hash = {
   '.oo...' => '9',
   '.ooo..' => '0'
 }
+# create reverse hash
 num_to_braille_hash = braille_to_num_hash.invert
-
- # i = gets.chomp
-    # if i.match?(/^[o.]+$/) == true
-    #   p "braille"
-    # else 
-    #   p "eng"
-    # end
-
-  
-  #4
-
-
-# pp braille_to_eng_hash
-# pp eng_to_braille_hash
-# pp braille_to_num_hash
-# pp num_to_braille_hash
-# i = gets.chomp
-# p num_to_braille_hash[i.to_i]
-# p braille_to_num_hash[i]
 
 # check if input is braille or english
 def check_braille(input_value)
@@ -103,6 +87,7 @@ def check_braille(input_value)
   end
 end
 
+# Translate English to Braille
 def eng_to_braille(input_value, eng_to_braille_hash, num_to_braille_hash)
   p "eng to braille"
   index = 0
@@ -121,49 +106,30 @@ def eng_to_braille(input_value, eng_to_braille_hash, num_to_braille_hash)
   p output
 end
 
-# .o.oooo.o...o.oo........ooo.o
-# .o.ooo.ooo.o.......ooo.o.....ooo..oo.o.ooooo.o..
+# Translate Braille to English
+
 def braille_to_eng(input_value, braille_to_eng_map, braille_to_num_map)
   output = ""
-  is_n = false
-  input_index = 0
-  while input_index < input_value.length
-    if braille_to_eng_map[input_value[input_index,6]] == 'number follows'
-      is_n = true
-      input_index += 6
-    end
-    if braille_to_eng_map[input_value[input_index,6]] == ' '
-      is_n = false
-      # input_index += 6
-    end
-    # elsif braille_to_eng_map[input_value[input_index,6]] == '......'
-    #   is_n = false
-    #   p braille_to_eng_map[input_value[input_index,6]]
-    # end
-    # if is_n
-    #   output = output + braille_to_num_map[input_value[input_index,6]]
-    # end
-    if is_n 
-      p braille_to_num_map[input_value[input_index,6]]
-      # output = output + braille_to_num_map[input_value[input_index,6]]
+  is_num = false
+  index = 0
+  while index < input_value.length
+    braille_string = input_value[index,6]
+    if braille_to_eng_map[braille_string] == 'number follows'
+      is_num = true
+    elsif braille_to_eng_map[braille_string] == 'capital follows'
+      output = output + braille_to_eng_map[input_value[index + 6,6]].upcase
+      index += 6
     else
-      if braille_to_eng_map[input_value[input_index,6]] == 'capital follows'
-        output = output + braille_to_eng_map[input_value[input_index + 6,6]].upcase
-        input_index += 6
-      else
-        output = output + braille_to_eng_map[input_value[input_index,6]]
+      if braille_string == '......'
+        is_num = false
       end
-    end
-    # if braille_to_eng_map[input_value[input_index,6]] == 'capital follows'
-    #   output = output + braille_to_eng_map[input_value[input_index + 6,6]].upcase
-    #   input_index += 6
-    # elsif is_n == true
-    #   p braille_to_num_map[input_value[input_index,6]]
-    #   output = output + braille_to_num_map[input_value[input_index,6]]
-    # else
-    #   output = output + braille_to_eng_map[input_value[input_index,6]]
-    # end
-    input_index += 6
+      if is_num 
+        output = output + braille_to_num_map[input_value[index,6]]
+      else
+        output = output + braille_to_eng_map[braille_string]
+      end    
+    end 
+    index += 6
   end
     
   p output
@@ -178,15 +144,7 @@ if check_braille(input_value)
 else
   eng_to_braille(input_value, eng_to_braille_hash, num_to_braille_hash)
 end
-# index =0
-# newoutput= ""
 
-
-# while index < i.length
-#   newoutput = newoutput +  eng_to_braille_hash[i[index]]
-#   index += 1
-# end
-# p newoutput
 
 
 
