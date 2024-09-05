@@ -27,6 +27,10 @@ E_to_B = reverse_d(B_to_E_char) | reverse_d(B_to_E_num)
 # Keeping in mind: 
 # When a Braille capital follows symbol is read, assume only the next symbol should be capitalized.
 # When a Braille number follows symbol is read, assume all following symbols are numbers until the next space symbol.
+space = "......"
+upper = ".....O"
+number = ".O.OOO"
+capital = ".....O"
 
 def Braille_to_English(input):
     english_output = ""
@@ -35,12 +39,12 @@ def Braille_to_English(input):
     for i in range(word_size):
         s = input[i*6 : i*6 + 6]
 
-        if s == "......": # After a space, assume lower_case
+        if s == space: # After a space, assume lower_case
             next_symbol = "lower"
 
-        if s == ".....O":
+        if s == upper:
             next_symbol = "upper"
-        elif s == ".O.OOO":
+        elif s == number:
             next_symbol = "number"     
         else:
             if next_symbol == "lower":
@@ -57,8 +61,6 @@ def Braille_to_English(input):
 
 def English_to_Braille(input):
     braille_output = ""
-    capital = ".....O" # when next char is uppercase
-    number = ".O.OOO" # when next char is number
     number_sym_added = False  # True if already added number symbol
      
     for s in input:
@@ -77,17 +79,14 @@ def English_to_Braille(input):
     return braille_output
 
 
-if len(sys.argv) > 1:
-    # Parses input passed in
-    input = sys.argv[1:]
-    input = " ".join(input)
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        # Parses input passed in
+        input = sys.argv[1:]
+        input = " ".join(input)
 
-    # We are checking if input is Braille or English
-    if len(input) % 6 == 0 and (input[:6] in B_to_E_char or input[:6] in B_to_E_num):
-        print("Braille is executed as expected")
-        print(Braille_to_English(input))
-    else:
-        print(English_to_Braille(input))
-        print("English is wrongfully executed")
-else:
-    print("input required")
+        # We are checking if input is Braille or English
+        if len(input) % 6 == 0 and (input[:6] in B_to_E_char or input[:6] in [space, upper , number, capital]):
+            print(Braille_to_English(input))
+        else:
+            print(English_to_Braille(input))
