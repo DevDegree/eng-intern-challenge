@@ -9,7 +9,7 @@ class Modifier (Enum):
     NUM_FOLLOWS = 1
     DECIMAL_FOLLOWS = 2
 
-class dictionaries:
+class Dictionaries:
     brailleSymbols = {'o', '.'}
 
     brailleToEnglish = {
@@ -42,7 +42,7 @@ class dictionaries:
 
 def detectLanguage(input):
     for char in input:
-        if char not in dictionaries.brailleSymbols:
+        if char not in Dictionaries.brailleSymbols:
             return Language.ENGLISH
     return Language.BRAILLE
 
@@ -64,9 +64,9 @@ def translateBrailleToEnglish(input):
     isCapital = False
     isNum = False
     for char in brailleCharacters:
-        translatedChar = dictionaries.brailleToEnglish[char]
+        translatedChar = Dictionaries.brailleToEnglish[char]
         if isNum and translatedChar not in [Modifier.DECIMAL_FOLLOWS, ' ']:
-            translatedChar = dictionaries.brailleToNum[char] #search the number dictionary instead of the letter / symbol dictionary
+            translatedChar = Dictionaries.brailleToNum[char] #search the number dictionary instead of the letter / symbol dictionary
             output += translatedChar
         elif isCapital:
             output += translatedChar.upper()
@@ -99,35 +99,35 @@ def translateEnglishToBraille(input):
                 # If current character is a decimal at the beginning of a number
                 if next_char.isnumeric():
                     isNum = True
-                    output += dictionaries.englishToBraille[Modifier.NUM_FOLLOWS]
+                    output += Dictionaries.englishToBraille[Modifier.NUM_FOLLOWS]
                 else:
-                    output += dictionaries.englishToBraille[char]
+                    output += Dictionaries.englishToBraille[char]
             # If current position is in the middle of a number
             else:
-                output += dictionaries.englishToBraille[Modifier.DECIMAL_FOLLOWS]
+                output += Dictionaries.englishToBraille[Modifier.DECIMAL_FOLLOWS]
 
         # Numeric characters
         elif char.isnumeric():
             if isNum == False:
                 isNum = True
-                output += dictionaries.englishToBraille[Modifier.NUM_FOLLOWS]
-            output += dictionaries.numToBraille[char]
+                output += Dictionaries.englishToBraille[Modifier.NUM_FOLLOWS]
+            output += Dictionaries.numToBraille[char]
 
         # Letters and non-period punctuation
         else:
             # End of numeric characters
             if isNum == True: #Adds a space to signify the end of a number
                 isNum = False
-                output += dictionaries.englishToBraille[' ']
+                output += Dictionaries.englishToBraille[' ']
         
             # Capitals
             if char.isupper():
-                output += dictionaries.englishToBraille[Modifier.CAPITAL_FOLLOWS]
-                output += dictionaries.englishToBraille[char.lower()]
+                output += Dictionaries.englishToBraille[Modifier.CAPITAL_FOLLOWS]
+                output += Dictionaries.englishToBraille[char.lower()]
 
             # Lowercase or non-period punctuation
             else:
-                output += dictionaries.englishToBraille[char]
+                output += Dictionaries.englishToBraille[char]
         
     return output
 
