@@ -133,11 +133,7 @@ def translate_to_braille(english):
 
 
 def main():
-    if len(sys.argv) != 2:
-        print("Please provide a signle string as an argument")
-        return
-    
-    input_text = sys.argv[1]
+    input_text = " ".join(sys.argv[1:])
 
     if is_braille(input_text):
         output = translate_to_english(input_text)
