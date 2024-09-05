@@ -108,8 +108,38 @@ function brailleToEnglish(braille: string): string {
   return result;
 }
 
+function englishToBraille(english: string): string {
+  let result = '';
+  let isNumber = false;
+
+  for (const char of english) {
+    if (char >= 'A' && char <= 'Z') {
+      result += BRAILLE_CAPITAL_FOLLOWS;
+      result += englishToBrailleMap.get(char.toLowerCase()) || '';
+      isNumber = false;
+    } else if (char >= 'a' && char <= 'z') {
+      result += englishToBrailleMap.get(char) || '';
+      isNumber = false;
+    } else if (char >= '0' && char <= '9') {
+      if (!isNumber) {
+        result += BRAILLE_NUMBER_FOLLOWS;
+        isNumber = true;
+      }
+      result += englishToBrailleNumberMap.get(char) || '';
+    } else if (char === ' ') {
+      result += BRAILLE_SPACE;
+      isNumber = false;
+    }
+    // TODO: handle other special characters
+  }
+
+  return result;
+}
+
 const text = process.argv.slice(2).join(' ');
 
 if (isValidBraille(text)) {
   console.log(brailleToEnglish(text));
+} else {
+  console.log(englishToBraille(text));
 }
