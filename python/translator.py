@@ -1,3 +1,5 @@
+import sys
+
 alphabet_to_braille = {
     'a': 'O.....','b': 'O.O...','c': 'OO....','d': 'OO.O..','e': 'O..O..','f': 'OOO...',
     'g': 'OOOO..','h': 'O.OO..','i': '.OO...','j': '.OO...','k': 'O...O.','l': 'O.O.O.',
@@ -52,9 +54,12 @@ def translate_to_English(braille_message):
         if braille_to_alphabet[braille_Alphabet] == "cap":
             is_cap = True
             continue
+        elif braille_to_alphabet[braille_Alphabet] == " ":
+            is_num = False
         elif braille_to_alphabet[braille_Alphabet] == "num" or braille_to_alphabet[braille_Alphabet] == "dec":
             is_num = True
             continue
+
 
         if is_cap:
             english_message += braille_to_alphabet[braille_Alphabet].capitalize()
@@ -79,8 +84,8 @@ def is_braille(message):
         character = character.lower()
         if character != "." and character != "o" and (character in alphabet_to_braille.keys() or character in numbers.keys()):
             contains_only_alpha = True
-        else:
-            contains_only_braille = True
+        elif character != "o":
+                contains_only_braille = True
 
     if contains_only_alpha and contains_only_braille :
         raise ValueError("you can't put english and braille, you have to choose one")
@@ -94,7 +99,8 @@ def is_braille(message):
 
 def main():
 
-    message = input()
+    message = ' '.join(sys.argv[1:])
+
     if is_braille(message):
         print(translate_to_English(message))
     else:
