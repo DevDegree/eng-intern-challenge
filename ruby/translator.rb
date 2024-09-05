@@ -87,8 +87,7 @@ def braille_to_english(text)
   # scan through each Braille symbol where each symbol consists of 6 characters
   # of either "." or "O" (capital letter "o")
   text.scan(/([.O]{6})/) do |match|
-    symbol = raised_dots(match[0] || "......")
-    state = parse_braille_symbol symbol, state, english
+    state = parse_braille_symbol (match[0] || "......"), state, english
   end
 
   english
@@ -116,23 +115,18 @@ def braille_symbol(category, key)
   braille
 end
 
-# @param braille [String] A Braille symbol in the form of <code>O..OO..</code>.
-# @return [Array<Integer>] The indices of the raised dots.
-def raised_dots(braille)
-  raised = []
-  braille.chars.each_with_index do |c, i|
-    raised << i if c == "O"
-  end
-  raised
-end
-
-# @param symbol [Array<Integer>]
+# @param symbol [String]
 # @param state [Symbol]
 # @param text [String]
 # @return [Symbol]
 def parse_braille_symbol(symbol, state, text)
+  braille_dots = []
+  symbol.chars.each_with_index do |c, i|
+    braille_dots << i if c == "O"
+  end
+
   # check if it is a special symbol
-  case look_up(:special, symbol)&.to_sym
+  case look_up(:special, braille_dots)&.to_sym
   when :capital_follows then state = :capital_follows
   when :number_follows then state = :number_follows
   when :decimal_follows
@@ -145,19 +139,19 @@ def parse_braille_symbol(symbol, state, text)
     text << \
       case state
       when :letter_or_punctuation
-        look_up(:letters, symbol) || look_up(:punctuations, symbol) || ""
+        look_up(:letters, braille_dots) || look_up(:punctuations, braille_dots) || ""
       when :capital_follows
         state = :letter_or_punctuation
-        look_up(:letters, symbol)&.upcase || ""
+        look_up(:letters, braille_dots)&.upcase || ""
       when :number_follows
-        if look_up(:punctuations, symbol) == " "
+        if look_up(:punctuations, braille_dots) == " "
           # a space represents the end of a number, so the state should be
           # changed and the space should be appended
           state = :letter_or_punctuation
           " "
         else
           # still reading a number, append the digit and the state does not change
-          look_up :numbers, symbol
+          look_up :numbers, braille_dots
         end
       else # unreachable
         raise "Unknown state: \"#{state}\""
@@ -168,10 +162,10 @@ def parse_braille_symbol(symbol, state, text)
 end
 
 # @param category [Symbol]
-# @param symbol [Array<Integer>]
+# @param braille_dots [Array<Integer>]
 # @return [String, nil]
-def look_up(category, symbol)
-  REVERSE_TRANSLATION_TABLE[category][symbol]&.to_s
+def look_up(category, braille_dots)
+  REVERSE_TRANSLATION_TABLE[category][braille_dots]&.to_s
 end
 
 # @param current [String]
