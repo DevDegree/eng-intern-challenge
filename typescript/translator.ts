@@ -136,10 +136,14 @@ function englishToBraille(english: string): string {
   return result;
 }
 
-const text = process.argv.slice(2).join(' ');
+function main() {
+  const text = process.argv.slice(2).join(' ');
 
-if (isValidBraille(text)) {
-  console.log(brailleToEnglish(text));
-} else {
-  console.log(englishToBraille(text));
+  if (isValidBraille(text)) {
+    console.log(brailleToEnglish(text));
+  } else {
+    console.log(englishToBraille(text));
+  }
 }
+
+main();
