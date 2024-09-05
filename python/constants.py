@@ -1,4 +1,4 @@
-LETTER_TO_BRAILLE = {
+ENGLISH_TO_BRAILLE = {
     'a': 'O.....',
     'b': 'O.O...',
     'c': 'OO....',
@@ -25,26 +25,7 @@ LETTER_TO_BRAILLE = {
     'x': 'OO..OO',
     'y': 'OO.OOO',
     'z': 'O..OOO',
-}
-# Inverted Map for converting braille to string
-BRAILLE_TO_LETTER = {v: k for k, v in LETTER_TO_BRAILLE}
 
-NUMBER_TO_BRAILLE = {
-    '1': 'O.....',
-    '2': 'O.O...',
-    '3': 'OO....', 
-    '4': 'OO.O..', 
-    '5': 'O..O..',
-    '6': 'OOO...',
-    '7': 'OOOO..',
-    '8': 'O.OO..',
-    '9': '.OO...',
-    '0': '.OOO..',
-}
-
-BRAILLE_TO_NUMBER = {v: k for k, v in NUMBER_TO_BRAILLE}
-
-SPECIAL_CHARACTERS_TO_BRAILLE = {
     '.': '..OO.O',
     ',': '..O...',
     '?': '..O.OO',
@@ -57,7 +38,27 @@ SPECIAL_CHARACTERS_TO_BRAILLE = {
     '>': 'O..OO.',
     '(': 'O.O..O',
     ')': '.O.OO.',
+
     ' ': '......',
 }
+# Inverted Map for converting braille to string
+BRAILLE_TO_ENGLISH = {v: k for k, v in ENGLISH_TO_BRAILLE.items()}
 
-BRAILLE_TO_SPECIAL_CHARACTERS = {v: k for k, v in SPECIAL_CHARACTERS_TO_BRAILLE}
+NUMBERS_TO_BRAILLE = {
+    '1': 'O.....',
+    '2': 'O.O...',
+    '3': 'OO....', 
+    '4': 'OO.O..', 
+    '5': 'O..O..',
+    '6': 'OOO...',
+    '7': 'OOOO..',
+    '8': 'O.OO..',
+    '9': '.OO...',
+    '0': '.OOO..',
+}
+
+BRAILLE_TO_NUMBERS = {v: k for k, v in NUMBERS_TO_BRAILLE.items()}
+
+CAPITAL_FOLLOWS = '.....O'
+NUMBER_FOLLOWS = '.O.OOO'
+SPACE = '......'
