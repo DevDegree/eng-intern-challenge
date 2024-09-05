@@ -128,8 +128,7 @@ const brailleToEnglish = (val) => {
                         }
 
                         if(number){
-                            let temp = m+1
-                            if(temp < inputArr.length && inputArr[temp]=='......'){
+                            if(m+1 < inputArr.length && inputArr[m+1]=='......'){
                                 number = false;
                             }
                         }
