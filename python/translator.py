@@ -23,3 +23,30 @@ DIGIT_TO_BRAILLE = {digit: braille_char for braille_char, digit in BRAILLE_TO_DI
 CAPITAL_FOLLOWS = ".....O"
 NUMBER_FOLLOWS = ".O.OOO"
 SPACE = CHARACTER_TO_BRAILLE[" "]
+
+def translate_to_english(text) -> str:
+    """Translates braille text to English. Returns translated text in English."""
+    characters = []
+    capital_follows = False
+    number_follows = False
+
+    for i in range(0, len(text), 6):
+        braille_character = text[i:i+6]
+
+        if braille_character == CAPITAL_FOLLOWS:
+            capital_follows = True
+        elif braille_character == NUMBER_FOLLOWS:
+            number_follows = True
+        elif braille_character == SPACE:
+            characters.append(" ")
+            number_follows = False
+        elif number_follows:
+            digit = BRAILLE_TO_DIGIT[braille_character]
+            characters.append(digit)
+        else:
+            character = BRAILLE_TO_CHARACTER[braille_character]
+            cased_character = character.upper() if capital_follows else character.lower()
+            characters.append(cased_character)
+            capital_follows = False
+            
+    return "".join(characters)
