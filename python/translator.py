@@ -1,112 +1,83 @@
-import argparse
-from typing import Dict
+import sys
+from typing import List, Dict
 
-BRAILLE_TO_ENGLISH : Dict[str, str] = {
-    'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd', 'O..O..': 'e',
-    'OOO...': 'f', 'OOOO..': 'g', 'O.OO..': 'h', '.OO...': 'i', '.OOO..': 'j',
-    'O...O.': 'k', 'O.O.O.': 'l', 'OO..O.': 'm', 'OO.OO.': 'n', 'O..OO.': 'o',
-    'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't',
-    'O....O': 'u', 'O.O..O': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.O.O': 'y',
-    'O..O.O': 'z', '......': 'SPACE',
-    '.....O': 'CAPITAL',
-    '.O.OOO': 'NUMBER'
+ENGLISH_TO_BRAILLE: Dict[str, str] = {
+    'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..', 'f': 'OOO...',
+    'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..', 'k': 'O...O.', 'l': 'O.O.O.',
+    'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.', 'p': 'OOO.O.', 'q': 'OOOOO.', 'r': 'O.OOO.',
+    's': '.OO.O.', 't': '.OOOO.', 'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO',
+    'y': 'OO.OOO', 'z': 'O..OOO', '1': 'O.....', '2': 'O.O...', '3': 'OO....',
+    '4': 'OO.O..', '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...',
+    '0': '.OOO..', 'CAPITAL': '.....O', 'NUMBER': '.O.OOO', 'SPACE': '......'
 }
 
-BRAILLE_TO_NUMBER : Dict[str, str] = {
-    'O.....': '1', 'O.O...': '2', 'OO....': '3', 'OO.O..': '4', 'O..O..': '5',
-    'OOO...': '6', 'OOOO..': '7', 'O.OO..': '8', '.OO...': '9', '.OOO..': '0'
-}
+BRAILLE_TO_ENGLISH: Dict[str, str] = {v: k for k, v in ENGLISH_TO_BRAILLE.items() if not k.isdigit()}
+BRAILLE_TO_NUMBER: Dict[str, str] = {v: k for k, v in ENGLISH_TO_BRAILLE.items() if k.isdigit()}
 
-ENGLISH_TO_BRAILLE: Dict[str, str] = { v: k for k, v in BRAILLE_TO_ENGLISH.items() if not k.isdigit() }
-NUMBER_TO_BRAILLE: Dict[str, str] = { v: k for k, v in BRAILLE_TO_NUMBER.items() if not k.isdigit() }
-
-for k, v in BRAILLE_TO_ENGLISH.items():
-    if v.islower():
-        ENGLISH_TO_BRAILLE[v] = k
-
-# Adding mapping for capital letters
-for letter in 'abcdefghijklmnopqrstuvwxyz':
-    ENGLISH_TO_BRAILLE[letter.upper()] = '.....O' + ENGLISH_TO_BRAILLE[letter]
-
-# Map numbers since they have the same braille representations as chars a-j
-for number, letter in zip('1234567890', 'abcdefghij'):
-    ENGLISH_TO_BRAILLE[number] = '.O.OOO' + ENGLISH_TO_BRAILLE[letter]
+def is_braille(input_string: str) -> bool:
+    return all(char in ('O', '.') for char in input_string)
 
 def braille_to_english_translator(braille: str) -> str:
-    translated = ''
-    capital_follows = False
-    number_follows = False
-    i = 0
+    translated: List[str] = []
+    number_follows: bool = False
+    capital_follows: bool = False
 
-    while i < len(braille):
-        braille_char = braille[i:i+6]
-        if braille_char == '.....O':
+    for i in range(0, len(braille), 6):
+        braille_char: str = braille[i:i+6]
+        if braille_char == ENGLISH_TO_BRAILLE['CAPITAL']:
             capital_follows = True
-        elif braille_char == '.O.OOO':
+        elif braille_char == ENGLISH_TO_BRAILLE['SPACE']:
+            translated.append(' ')
+            number_follows = False # reset after space
+        elif braille_char == ENGLISH_TO_BRAILLE['NUMBER']:
             number_follows = True
-        elif braille_char == '......':
-            translated += ' '
-            number_follows = False  # reset on space
         else:
-            if number_follows:
-                char = BRAILLE_TO_NUMBER.get(braille_char, '?')
+            if number_follows and braille_char in BRAILLE_TO_NUMBER:
+                char = BRAILLE_TO_NUMBER[braille_char]
             else:
-                char = BRAILLE_TO_ENGLISH.get(braille_char, '?')
+                char = BRAILLE_TO_ENGLISH[braille_char]
                 if capital_follows:
                     char = char.upper()
                     capital_follows = False
-            translated += char
-        i += 6
-    return translated.strip()
+            translated.append(char)
 
-def english_to_braille_translator(english: str) -> str:
-    #translated = ''
+    return ''.join(translated)
+
+def english_to_braille_translator(text: str) -> str:
     translated: List[str] = []
-    number_follows = False
+    number_follows: bool = False
 
-    for char in english:
-        if char == ' ':
-            translated.append(ENGLISH_TO_BRAILLE['SPACE'])
-            #translated += '......'
+    for char in text:
+        if char.isalpha():
+            if char.isupper():
+                translated.append(ENGLISH_TO_BRAILLE['CAPITAL'])
+            translated.append(ENGLISH_TO_BRAILLE[char.lower()])
             number_follows = False
         elif char.isdigit():
             if not number_follows:
                 translated.append(ENGLISH_TO_BRAILLE['NUMBER'])
-                #translated += '.O.OOO'
                 number_follows = True
-            #translated += ENGLISH_TO_BRAILLE.get(char, '......')
-            translated.append(NUMBER_TO_BRAILLE[char])
-        else:
-            number_follows = False
-            #translated += ENGLISH_TO_BRAILLE.get(char, '......')
             translated.append(ENGLISH_TO_BRAILLE[char])
+        elif char == ' ':
+            translated.append(ENGLISH_TO_BRAILLE['SPACE'])
+            number_follows = False
+        else:
+            translated.append(ENGLISH_TO_BRAILLE[char])
+            number_follows = False
+
     return ''.join(translated)
 
-def detect_input_type(input_string):
-    braille_chars = {'O.....', 'O.O...', 'OO....', 'OO.O..', 'O..O..',
-                     'OOO...', 'OOOO..', 'O.OO..', '.OO...', '.OOO..',
-                     'O...O.', 'O.O.O.', 'OO..O.', 'OO.OO.', 'O..OO.',
-                     'OOO.O.', 'OOOOO.', 'O.OOO.', '.OO.O.', '.OOOO.',
-                     'O....O', 'O.O..O', '.OOO.O', 'OO...O', 'OO.O.O',
-                     'O..O.O', '......', '.....O', '.O.OOO'
-                     }
-
-    if any(braille_char in input_string for braille_char in braille_chars):
-        return 'braille'
-    else:
-        return 'english'
-
 def main():
-    parser = argparse.ArgumentParser(description="Translate between English and Braille")
-    parser.add_argument('input_string', type=str)
-    args = parser.parse_args()
+    input: List[str] = sys.argv[1:]
+    input_string: str = ' '.join(input)
 
-    input_type = detect_input_type(args.input_string)
-
-    if input_type == 'braille':
-        print(braille_to_english_translator(args.input_string))
+    if is_braille(input_string):
+        translated: str = braille_to_english_translator(input_string)
+        print(translated)
     else:
-        print(english_to_braille_translator(args.input_string))
+        translated: str = english_to_braille_translator(input_string)
+        print(translated)
+
 
 if __name__ == "__main__":
     main()
