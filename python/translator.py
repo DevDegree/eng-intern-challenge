@@ -31,19 +31,6 @@ def main():
         "O..OOO" : "z",
         "......" : " "
     }
-        # ".O...O" : ".",
-        # "..OO.O" : ".",
-        # "..O..." : ",",
-        # "..O.OO" : "?",
-        # "..OOO." : "!",
-        # "..OO.." : ":",
-        # "..O.O." : ";",
-        # "....OO" : "-",
-        # ".O..O." : "/",
-        # ".OO..O" : "<",
-        #"O..OO." : ">",
-        # "O.O..O" : "(",
-        # ".O.OO." : ")",
     
     # make the dictionary bidirectional
     temp = {v: k for k, v in dictionary.items()}
