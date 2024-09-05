@@ -31,6 +31,7 @@ alphabet = [
     "x",
     "y",
     "z",
+    " ",
 ]
 braille = [
     "O.....",
@@ -59,6 +60,7 @@ braille = [
     "OO..OO",
     "OO.OOO",
     "O..OOO",
+    "......",
 ]
 numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
 
@@ -80,7 +82,8 @@ for i in range(len(numbers)):
     braille_to_numbers[braille[i]] = numbers[i]
 
 # create final dict for braille to check if number:
-modes = {".....O": "capitalize", ".O.OOO": "numerize"}
+braille_modes = {".....O": "capitalize", ".O.OOO": "numerize"}
+alpha_modes = {value: key for key, value in braille_modes.items()}
 
 
 # create a function to check if braille input or if alphabet
@@ -98,11 +101,36 @@ def is_braille(input):
 
 # create function to convert alphanumerics to braille
 def convert_to_braille(input):
-    return ""
+    res = ""
+    number_flag = False
+    for char in input:
+        # check if is a number
+        if char.isdigit():
+            # if numberflag hasn't yet been set, swap the flag and insert the numerize braille symbol
+            if not number_flag:
+                number_flag = True
+                res += alpha_modes["numerize"]
+            # insert braille number key
+            res += numbers_to_braille[""]
+            # after number inserted, skip to next cycle
+            continue
+        # if char is a space, reset number flag for string
+        if char == " ":
+            number_flag = False
+        # if char is capitalized, insert the capitalize braille symbol
+        if char.isupper():
+            res += alpha_modes["capitalize"]
+            # then, convert char to lowercase so it can be found in the dict
+            char = char.lower()
+        # after all previous checks, insert char into result
+        res += alphabet_to_braille[char]
+
+    return res
 
 
 def convert_to_alphanumerics(input):
-    return ""
+    res = ""
+    return
 
 
 # test to see each function is working
@@ -115,3 +143,5 @@ if __name__ == "__main__":
     print(test1)
     print(test2)
     print(test3)
+    ### test4 = "Hello world"
+    print(convert_to_braille("Hello world"))
