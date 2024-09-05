@@ -88,7 +88,7 @@ def main():
     text = ' '.join(sys.argv[1:])
 
     # Detect if the input is Braille or English
-    is_braille = all(char in "O." for char in text)
+    is_braille = all(char in "O." for char in text) && len(text) % 6 == 0
 
     if is_braille:
         result = translate_to_english(text)
