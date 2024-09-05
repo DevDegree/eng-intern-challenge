@@ -82,19 +82,14 @@ def translate(input: str) -> Union[str, None] :
         return convert_braille_to_english(input)
     return convert_english_to_braille(input)
 
-def main():
+if __name__ == '__main__':
     num_args = len(sys.argv)
     # Ensure that at least one string is entered into the command line
-    if num_args < 2:
-        return
-    
-    input_str = ''.join(sys.argv[1:])
+    if num_args > 1:
+        input_str = ' '.join(sys.argv[1:])
 
-    res = translate(input_str)
-    if not res:
-        print("Incorrectly formatted string")
-    print(res)
-
-if __name__ == '__main__':
-    main()
+        res = translate(input_str)
+        if not res:
+            print("Incorrectly formatted string")
+        print(res)
 
