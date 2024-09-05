@@ -9,6 +9,9 @@ import (
 )
 
 const (
+	// Number of dots per Braille cell.
+	dotsPerCell = 3 * 2
+
 	// Non-alphanumeric Braille cells.
 	capitalFollows = ".....O"
 	numberFollows  = ".O.OOO"
@@ -90,8 +93,19 @@ func encode(english string) (string, error) {
 // characters, or if braille does not divide evenly into cells, splitCells returns
 // ErrInvalidCell.
 func splitCells(braille string) ([]string, error) {
-	// TODO
-	return nil, nil
+	cells := make([]string, 0, len(braille)%dotsPerCell)
+	for len(braille) >= dotsPerCell {
+		cell := braille[:dotsPerCell]
+		if !isBraille(cell) {
+			return cells, ErrInvalidCell{cell}
+		}
+		cells = append(cells, cell)
+		braille = braille[dotsPerCell:]
+	}
+	if len(braille) > 0 { // Trailing partial cell.
+		return cells, ErrInvalidCell{braille}
+	}
+	return cells, nil
 }
 
 // decodeAlphanumeric converts a single Braille cell to an English character. If
@@ -102,4 +116,12 @@ func splitCells(braille string) ([]string, error) {
 func decodeAlphanumeric(cell string, capital, number bool) (byte, error) {
 	// TODO
 	return 0, nil
+}
+
+type ErrInvalidCell struct {
+	cell string
+}
+
+func (e ErrInvalidCell) Error() string {
+	return fmt.Sprintf("invalid Braille cell: %s", e.cell)
 }

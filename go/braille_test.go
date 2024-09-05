@@ -36,3 +36,33 @@ func TestDecode(t *testing.T) {
 		}
 	}
 }
+
+func TestSplitCells(t *testing.T) {
+	inExpect := map[string][]string{
+		"":                   {},
+		"O.....O.O...":       {"O.....", "O.O..."},
+		"OO....OO.O..O..O..": {"OO....", "OO.O..", "O..O.."},
+	}
+	for in, expect := range inExpect {
+		out, err := splitCells(in)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !sliceEq(out, expect) {
+			t.Errorf("splitCells(%s) returned %v; wanted %v", in, out, expect)
+		}
+	}
+}
+
+// sliceEq returns true if s1 and s2 are the same length and contain the same elements.
+func sliceEq[E comparable](s1, s2 []E) bool {
+	if len(s1) != len(s2) {
+		return false
+	}
+	for i := range s1 {
+		if s1[i] != s2[i] {
+			return false
+		}
+	}
+	return true
+}
