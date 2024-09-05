@@ -84,8 +84,10 @@ if len(sys.argv) > 1:
 
     # We are checking if input is Braille or English
     if len(input) % 6 == 0 and (input[:6] in B_to_E_char or input[:6] in B_to_E_num):
+        print("Braille is executed as expected")
         print(Braille_to_English(input))
     else:
         print(English_to_Braille(input))
+        print("English is wrongfully executed")
 else:
     print("input required")
