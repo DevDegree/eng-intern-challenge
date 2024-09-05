@@ -7,7 +7,6 @@ This is a simple translator that translates a text message to braille and vice v
 import sys
 import dictionary
 
-
 def braille_to_text(mssg_to_translate):
     """
     This function translates a braille message to text
@@ -33,6 +32,7 @@ def braille_to_text(mssg_to_translate):
             else:
                 translated_mssg += dictionary.BRAILLE[character]
     print(translated_mssg)
+
 
 def text_to_braille(mssg_to_translate):
     """
