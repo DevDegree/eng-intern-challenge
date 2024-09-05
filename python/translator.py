@@ -5,23 +5,16 @@ input = sys.argv
 # no need for #s since we'll ascii map them to a-z
 alphaToBraille = {
 'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..', 'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...',
-'j': '.OOO..', 'k': 'O...O.', 'l': 'O.O.O.', 'm': 'OO..O.', 'n': 'OO.OO.', 'O': 'O..OO.', 'p': 'OOO.O.', 'q': 'OOOOO.', 'r': 'O.OOO.',
+'j': '.OOO..', 'k': 'O...O.', 'l': 'O.O.O.', 'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.', 'p': 'OOO.O.', 'q': 'OOOOO.', 'r': 'O.OOO.',
 's': '.OO.O.', 't': '.OOOO.', 'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO', 'z': 'O..OOO', 'cap': '.....O',
-'dec': '.O...O', '#': '.O.OOO', '.': '..OO.O', ':': '..O...', '?': '..O.OO', '!': '..OOO.', ':': '..OO..', ';': '..O.O.', '-': '....OO',
-'/': '.O..O.', '<': '.OO..O', '>': 'O..OO.', '(': 'O.O..O', ')': '.O.OO.', ' ': '......'}
+'num': '.O.OOO', ' ': '......'}
 
 
 # reverse dictionary
 brailleToAlpha = {}
 for key in alphaToBraille:
-    value = {alphaToBraille[key]: key} # lower to enforce no O
+    value = {alphaToBraille[key]: key}
     brailleToAlpha.update(value)
-
-"""
-for i in range(1, len(input)):
-    # do stuff
-    print(input[i])
-"""
 
 def processBraille():
     if (len(input) != 2):
@@ -31,7 +24,7 @@ def processBraille():
     # break up input after every 6th character
     splits = [potentialBraille[i:i+6] for i in range(0, len(potentialBraille), 6)]
     translation = ""
-    follows = "low" # denotes whether caps follows, decimal follows, or number follows (low means lowercase)
+    follows = "low" # denotes whether caps follows, or number follows (low means lowercase)
     for i in range (0, len(splits), 1):
         try:
             key = splits[i]
@@ -47,11 +40,13 @@ def processBraille():
                 translation += value
             elif (follows == "cap"):
                 translation += value.upper()
-            elif (follows == "dec"):
-                value -= 'a'
-                if (value == 'j' - 'a'):
-                    value = '0'
-                translation += value - 'a'
+                follows = "low" # reset
+            elif (follows == "num"):
+                value = list(alphaToBraille.keys()).index(value) + 1
+                if (value == 10):
+                    value = 0
+                value = str(value)
+                translation += value;
         except:
             # not Braille!
             return False
