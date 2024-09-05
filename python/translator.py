@@ -20,7 +20,8 @@ NUMERIC_MAP = {
 }
 
 # Reverse mappings for Braille to English
-REVERSE_BRAILLE_MAP = {v: k for k, v in {**BRAILLE_MAP, **NUMERIC_MAP}.items()}
+REVERSE_BRAILLE_LETTER_MAP = {v: k for k, v in BRAILLE_MAP.items()}
+REVERSE_BRAILLE_NUMBER_MAP = {v: k for k, v in NUMERIC_MAP.items()}
 
 
 def translate_to_braille(text):
@@ -37,12 +38,45 @@ def translate_to_braille(text):
         # Append the Braille mapping for regular characters (lowercase letters and spaces)
         else:
             result.append(BRAILLE_MAP[char])
-            
+
     # Concatenate the list of Braille strings into a single string and return
     return ''.join(result)
 
 def translate_to_english(braille):
-    return braille
+    result = []
+    index = 0
+    number_mode = False
+
+    while index < len(braille):
+        braille_char = braille[index:index+6]
+
+        # Check for the Braille capital indicator
+        if braille_char == CAPITAL:
+            index += 6
+            next_braille_char = braille[index:index+6]
+            result.append(REVERSE_BRAILLE_LETTER_MAP[next_braille_char].upper())
+        # Check for the Braille number indicator
+        elif braille_char == NUMBER:
+            number_mode = True
+            index += 6
+        else:
+            # Decide which map to use based on number mode
+            if number_mode:
+                char = REVERSE_BRAILLE_NUMBER_MAP.get(braille_char, '')
+                if char:
+                    result.append(char)
+            else:
+                char = REVERSE_BRAILLE_LETTER_MAP.get(braille_char, '')
+                if char:
+                    result.append(char)
+
+        # Exit number mode if a letter is encountered
+        if not number_mode and braille_char in REVERSE_BRAILLE_NUMBER_MAP:
+            number_mode = False
+
+        index += 6
+
+    return ''.join(result)
 
 
 if __name__ == '__main__':
