@@ -59,7 +59,7 @@ const translatedArr = [];
 function translateToBraille(input) {
   let isNumberMode = false; // Use to track if loop is in "Number" mode
 
-  if (input.includes("O") || input.includes(".")) {
+  if (input.includes(".")) {
     // If input is in Braille, split into 6-character strings and add to splitBrailleArr
     for (let i = 0; i < input.length; i += 6) {
       splitBraillesArr.push(input.substring(i, i + 6));
