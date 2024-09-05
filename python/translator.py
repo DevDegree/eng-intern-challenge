@@ -111,7 +111,7 @@ def convert_to_braille(input):
                 number_flag = True
                 res += alpha_modes["numerize"]
             # insert braille number key
-            res += numbers_to_braille[""]
+            res += numbers_to_braille[char]
             # after number inserted, skip to next cycle
             continue
         # if char is a space, reset number flag for string
@@ -130,18 +130,47 @@ def convert_to_braille(input):
 
 def convert_to_alphanumerics(input):
     res = ""
-    return
+    # as the string must be multiple of six, split the string into an array so each character can be easily parsed
+    split = [input[i : i + 6] for i in range(0, len(input), 6)]
+    # set flags for numerize
+    number_flag = False
+    capital_flag = False
+    # loop through each segment
+    for segment in split:
+        # check if the character is a numerize or capitalize flag
+        if segment == alpha_modes["numerize"]:
+            number_flag = True
+            continue
+        elif segment == alpha_modes["capitalize"]:
+            capital_flag = True
+            continue
+
+        # check if space - if a space, turn off the number flag and then insert segment then continue
+        if segment == alphabet_to_braille[" "]:
+            number_flag = False
+            res += braille_to_alphabet[segment]
+            continue
+        # if the number flag is on, treat segment as a number and append
+        if number_flag:
+            res += braille_to_numbers[segment]
+            continue
+
+        # if all other checks allow to pass to this point, must be a character
+        insertion = braille_to_alphabet[segment]
+        # check if need to capitalize - if so, capitalize before insertion
+        if capital_flag:
+            insertion = insertion.upper()
+            capital_flag = False
+        # then insert
+        res += insertion
+
+    return res
 
 
 # test to see each function is working
 if __name__ == "__main__":
-    print(alphabet_to_braille["a"] + alphabet_to_braille["b"])
-    print("There are " + str(len(braille)) + " braille characters in the dict.")
-    test1 = is_braille("Hello")
-    test2 = is_braille("O.....")
-    test3 = is_braille("O......")
-    print(test1)
-    print(test2)
-    print(test3)
-    ### test4 = "Hello world"
-    print(convert_to_braille("Hello world"))
+    test_string = "Abc 123 aBc"
+    brail_equiv = convert_to_braille(test_string)
+    print(brail_equiv)
+    convert_back = convert_to_alphanumerics(brail_equiv)
+    print(convert_back)
