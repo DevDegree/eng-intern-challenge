@@ -12,8 +12,14 @@ class TestTranslator(unittest.TestCase):
             "Abc 123 xYz",
             ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
         ),
+        EnglishBraillePair(
+            "Hello world",
+            ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."
+        ),
+        EnglishBraillePair("42", ".O.OOOOO.O..O.O..."),
+        EnglishBraillePair("Abc 123", ".....OO.....O.O...OO...........O.OOOO.....O.O...OO...."),
     ]
-    
+
     def test_english_to_braille(self):
         for english_braille_pair in self.english_braille_pairs:
             # Split English text into list of arguments to pass to command
