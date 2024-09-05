@@ -31,6 +31,13 @@ TRANSLATION_TABLE = {
   },
 }
 
+REVERSE_TRANSLATION_TABLE = {
+  letters: TRANSLATION_TABLE[:letters].invert,
+  numbers: TRANSLATION_TABLE[:numbers].invert,
+  special: TRANSLATION_TABLE[:special].invert,
+  punctuations: TRANSLATION_TABLE[:punctuations].invert,
+}
+
 BRAILLE_PATTERN = /^(?:[.O]{6})+$/
 ENGLISH_PATTERN = /^[a-z0-9.,?!:;\-\/<>() ]+$/i
 
@@ -71,10 +78,54 @@ def translate(words)
   end
 end
 
-# @param word [String]
+# @param text [String]
 # @return [String]
-def braille_to_english(word)
-  " "
+def braille_to_english(text)
+  english = ""
+
+  # 0: lower case letters or punctuations, 1: capital follows, 2: number follows
+  state = 0
+
+  # for each Braille symbol, check the current state and look up the
+  # corresponding character of the symbol, add/change characters in certain
+  # situations
+  text.scan(/([.O]{6})/) do |match|
+    braille = match[0] || ""
+    raised = raised_dots(braille)
+    symbol = REVERSE_TRANSLATION_TABLE[:special][raised]
+
+    if symbol.nil? # if is not a special symbol
+      case state
+      when 0 # lower case letters or punctuations
+        # determine if the symbol represents a letter or a punctuation and append to the output
+        english << (REVERSE_TRANSLATION_TABLE[:letters][raised] \
+          || REVERSE_TRANSLATION_TABLE[:punctuations][raised]).to_s
+      when 1 # upper case letters
+        # the letter should be capitalized, and the state should be reset to 0
+        english << REVERSE_TRANSLATION_TABLE[:letters][raised].to_s.upcase
+        state = 0
+      when 2 # numbers or spaces
+        # append digits until there is a space, in which case append a space and set state to 0
+        if REVERSE_TRANSLATION_TABLE[:special][raised] == " "
+          english << " "
+          state = 0
+        else
+          english << REVERSE_TRANSLATION_TABLE[:numbers][raised].to_s
+        end
+      else
+        # unreachable
+      end
+    else # the current symbol is a special character
+      case symbol
+      when :capital_follows then state = 1
+      when :number_follows then state = 2
+      when :decimal_follows then english << "."
+      else # unreachable
+      end
+    end
+  end
+
+  english
 end
 
 # @param word [String]
@@ -119,6 +170,16 @@ def braille_symbol(raised)
   braille = "......"
   raised.each { |i| braille[i] = "O" }
   braille
+end
+
+# @param braille [String] A Braille symbol in the form of <code>O..OO..</code>.
+# @return [Array<Integer>] The indices of the raised dots.
+def raised_dots(braille)
+  raised = []
+  braille.chars.each_with_index do |c, i|
+    raised << i if c == "O"
+  end
+  raised
 end
 
 if __FILE__ == $0
