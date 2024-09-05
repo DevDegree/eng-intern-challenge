@@ -9,12 +9,26 @@ class Modifier (Enum):
     NUM_FOLLOWS = 1
     DECIMAL_FOLLOWS = 2
 
-class CurrentCharState (Enum):
-    NUMBER = 0
-    UPPERCASE_LETTER = 1
-    DECIMAL = 2
+class BrailleCharType (Enum):
+    NUMBER_FOLLOWS_SYMBOL = 0
+    DECIMAL_FOLLOWS_SYMBOL = 1
+    CAPITAL_FOLLOWS_SYMBOL = 2
+    DIGIT = 3
+    CAPITAL_LETTER = 4
+    OTHER = 5
+    END_OF_NUMBER = 6
+
+class EnglishCharType (Enum):
+    DIGIT = 0
+    DECIMAL = 1
+    CAPITAL_LETTER = 2
     OTHER = 3
 
+class BrailleOutputModifier (Enum):
+    START_OF_NUMBER = 0
+    END_OF_NUMBER = 1
+    START_AND_END_OF_NUMBER = 2
+    
 class Dictionaries:
     braille_symbols = {'o', '.'}
 
@@ -24,11 +38,12 @@ class Dictionaries:
         '.o.ooo': Modifier.NUM_FOLLOWS,
         '.....o': Modifier.CAPITAL_FOLLOWS,
         '.o...o': Modifier.DECIMAL_FOLLOWS,
-        '......': ' '
+        '......': ' ',
+        '..o...': '.'
         #think about ideas on how to do this in a less manual / error-prone way before continuing
     }
 
-    braille_to_num = {
+    braille_to_digit = {
         'o.....': '1',
     }
 
@@ -36,12 +51,13 @@ class Dictionaries:
         'a': 'o.....',
         'b': 'o.o...',
         ' ': '......',
+        '.': '..o...',
         Modifier.NUM_FOLLOWS: '.o.ooo',
         Modifier.CAPITAL_FOLLOWS: '.....o',
         Modifier.DECIMAL_FOLLOWS: '.o...o',
     }
 
-    num_to_braille = {
+    digit_to_braille = {
         '1': 'o.....',
     }
 
@@ -63,79 +79,145 @@ def separate_braille_characters(input):
         char_end +=6
     return braille_characters
 
-def translate_braille_to_english(input):
-    output = ''
-    translated_char = ''
-    braille_characters = separate_braille_characters(input)
-    #isCapital = False
-    #isNum = False
-    for char in braille_characters:
-        translated_char = Dictionaries.braille_to_english[char]
-        if isNum and translated_char not in [Modifier.DECIMAL_FOLLOWS, ' ']:
-            translated_char = Dictionaries.braille_to_num[char] #search the number dictionary instead of the letter / symbol dictionary
-            output += translated_char
-        elif isCapital:
-            output += translated_char.upper()
-            isCapital = False #only capitalize the character immediately after capital follows symbol
-        else:
-            if translated_char == Modifier.CAPITAL_FOLLOWS:
-                isCapital = True
-            elif translated_char == Modifier.NUM_FOLLOWS:
-                isNum = True
-            elif isNum and translated_char == ' ':
-                isNum = False
-                output += ' '
-            elif translated_char == Modifier.DECIMAL_FOLLOWS:
-                output += '.'
+def classify_braille_char(curr_char, char_type):
+        # Modifiers
+        if curr_char == Dictionaries.english_to_braille[Modifier.NUM_FOLLOWS]:
+            return BrailleCharType.NUMBER_FOLLOWS_SYMBOL
+        if curr_char == Dictionaries.english_to_braille[Modifier.DECIMAL_FOLLOWS]:
+            return BrailleCharType.DECIMAL_FOLLOWS_SYMBOL
+        if curr_char == Dictionaries.english_to_braille[Modifier.CAPITAL_FOLLOWS]:
+            return BrailleCharType.CAPITAL_FOLLOWS_SYMBOL
+
+        # If current character is not a modifier, check if it is impacted by a preceding modifier
+        elif char_type == BrailleCharType.NUMBER_FOLLOWS_SYMBOL: # previous character was number follows
+            return BrailleCharType.DIGIT
+        elif char_type == BrailleCharType.DECIMAL_FOLLOWS_SYMBOL:
+            return BrailleCharType.DIGIT # Assumes a decimal will always be followed by a number and not be the end of a number
+        elif char_type == BrailleCharType.CAPITAL_FOLLOWS_SYMBOL:
+            return BrailleCharType.CAPITAL_LETTER
+        
+        # Numbers
+        elif char_type == BrailleCharType.DIGIT:
+            if curr_char == Dictionaries.english_to_braille[' ']: # a space at the end of a number signifies the end of the number
+                return BrailleCharType.END_OF_NUMBER
             else:
-                output += translated_char
+                return BrailleCharType.DIGIT
+        
+        # Lowercase letters and punctuation
+        else:
+            return BrailleCharType.OTHER
+
+def translate_braille_char(curr_char, char_type):
+    if char_type == BrailleCharType.NUMBER_FOLLOWS_SYMBOL:
+        return '' # modifier only, no translation needed
+    elif char_type == BrailleCharType.DECIMAL_FOLLOWS_SYMBOL:
+        return '.'
+    elif char_type == BrailleCharType.CAPITAL_FOLLOWS_SYMBOL:
+        return '' # modifier only, no translation needed
+    elif char_type == BrailleCharType.DIGIT:
+        return Dictionaries.braille_to_digit[curr_char]
+    elif char_type == BrailleCharType.CAPITAL_LETTER:
+        return Dictionaries.braille_to_english[curr_char].upper()
+    elif char_type == BrailleCharType.OTHER:
+        return Dictionaries.braille_to_english[curr_char]
+    elif char_type == BrailleCharType.END_OF_NUMBER:
+        return '' # modifier only, no translation needed
+    
+def classify_english_char (curr_char, next_char, prev_char_type):
+    modifier = None
+
+    # Start and middle of numbers
+    if curr_char.isnumeric():
+        # Check if current character is the start of a number
+        if prev_char_type not in [EnglishCharType.DIGIT, EnglishCharType.DECIMAL]: # Preceding character was a number or decimal
+            
+            # Check if current character is also the end of a number
+            if not next_char.isnumeric() and next_char != '.':
+                modifier = BrailleOutputModifier.START_AND_END_OF_NUMBER
+            
+            else:
+                modifier = BrailleOutputModifier.START_OF_NUMBER
+
+        # Set char_type of current character
+        char_type = EnglishCharType.DIGIT
+    
+    # End of numbers
+    elif prev_char_type == EnglishCharType.DIGIT and not curr_char.isnumeric(): # Assumes a number will never end with a decimal character
+        modifier = BrailleOutputModifier.END_OF_NUMBER
+    
+    # Decimals
+    elif curr_char == '.' and next_char.isnumeric():
+        # Check if decimal is the start of a number
+        if prev_char_type != EnglishCharType.DIGIT:
+            modifier = BrailleOutputModifier.START_OF_NUMBER
+        
+        char_type = EnglishCharType.DECIMAL
+
+    # Capital Letters
+    elif curr_char.isupper():
+        char_type = EnglishCharType.CAPITAL_LETTER
+    
+    
+    # Other
+    else:
+        char_type = EnglishCharType.OTHER
+    
+    return {"char_type": char_type, "modifier": modifier}
+        
+def translate_english_char (curr_char, char_type, modifier):
+    output = []
+    # Add NUM_FOLLOWS for the start of a number if necessary
+    if modifier in [BrailleOutputModifier.START_AND_END_OF_NUMBER, BrailleOutputModifier.START_OF_NUMBER]:
+        output.append(Dictionaries.english_to_braille[Modifier.NUM_FOLLOWS])
+    
+    # Translate characters based on type
+    if char_type == EnglishCharType.CAPITAL_LETTER:
+        output.append(Dictionaries.english_to_braille[Modifier.CAPITAL_FOLLOWS])
+        output.append(Dictionaries.english_to_braille[curr_char.lower()])
+    elif char_type == EnglishCharType.DECIMAL:
+        output.append(Dictionaries.english_to_braille[Modifier.DECIMAL_FOLLOWS])
+    elif char_type == EnglishCharType.DIGIT:
+        output.append(Dictionaries.digit_to_braille[curr_char])
+    elif char_type == EnglishCharType.OTHER:
+        output.append(Dictionaries.english_to_braille[curr_char])
+
+    # Add space to signify end of number if necessary
+    if modifier in [BrailleOutputModifier.START_AND_END_OF_NUMBER, BrailleOutputModifier.END_OF_NUMBER]:
+        output.append(Dictionaries.english_to_braille[' '])
+    
     return output
+
+def translate_braille_to_english(input):
+    output = []
+    braille_characters = separate_braille_characters(input)
+    char_type = None # state of the current character being translated
+
+    for char in braille_characters:
+        char_type = classify_braille_char(char, char_type) # First determine whether a character's state is a modifier, a number, a capital letter, or other symbol
+        char_translation = translate_braille_char(char, char_type) # Translate based on current character's identified state
+
+        output.append(char_translation)
+  
+    return ''.join(output) # Join translated characters into a single string
 
 def translate_english_to_braille(input):
-    output = ''
-    translated_char = ''
-    #isNum = False
+    output = []
+    char_type = None
+    
     for n in range(len(input)):
-        char = input[n]
-        # Periods and decimals
-        if char == '.':
-            # If current position is not in the middle of a number
-            if isNum == False:
-                next_char = input[n+1]
-                # If current character is a decimal at the beginning of a number
-                if next_char.isnumeric():
-                    isNum = True
-                    output += Dictionaries.english_to_braille[Modifier.NUM_FOLLOWS]
-                else:
-                    output += Dictionaries.english_to_braille[char]
-            # If current position is in the middle of a number
-            else:
-                output += Dictionaries.english_to_braille[Modifier.DECIMAL_FOLLOWS]
-
-        # Numeric characters
-        elif char.isnumeric():
-            if isNum == False:
-                isNum = True
-                output += Dictionaries.english_to_braille[Modifier.NUM_FOLLOWS]
-            output += Dictionaries.num_to_braille[char]
-
-        # Letters and non-period punctuation
+        curr_char = input[n]
+        if n == len(input)-1:
+            next_char = None
         else:
-            # End of numeric characters
-            if isNum == True: #Adds a space to signify the end of a number
-                isNum = False
-                output += Dictionaries.english_to_braille[' ']
+            next_char = input[n+1]
         
-            # Capitals
-            if char.isupper():
-                output += Dictionaries.english_to_braille[Modifier.CAPITAL_FOLLOWS]
-                output += Dictionaries.english_to_braille[char.lower()]
-
-            # Lowercase or non-period punctuation
-            else:
-                output += Dictionaries.english_to_braille[char]
+        char_type_and_modifier = classify_english_char(curr_char, next_char, char_type)
+        char_translation = translate_english_char (curr_char, char_type_and_modifier["char_type"], char_type_and_modifier["modifier"])
         
-    return output
+        for symbol in char_translation: # Braille translation of a single English character may require 2-3 symbols
+            output.append(symbol)
+        
+    return ''.join(output) # Join translated characters into a single string
 
 def translate_input(input):
     input_language = detect_language(input)
@@ -145,5 +227,8 @@ def translate_input(input):
         return translate_english_to_braille(input)
     
 def main():
-    input = input("Enter text to translate: ")
-    return translate_input(input)
+    inp = input("Enter text to translate: ")
+    print (translate_input(inp))
+    return translate_input(inp)
+
+main()
