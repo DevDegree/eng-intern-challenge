@@ -16,10 +16,14 @@ def main():
         arg = sys.argv[i]
         if is_english(arg):
             is_numbers = False
-            for char in arg:
-                if char in numbers and not is_numbers:
+            if arg[0] in numbers and not is_numbers:
                     res = res + special_characters_to_braille['number']
                     is_numbers = True 
+            for char in arg:
+                # if there is a mixture of numbers and letters then the input should be invalid according to our rules
+                if (char not in numbers and is_numbers) or (char in numbers and not is_numbers): 
+                    print("ERROR: cannot mix numbers and letters in the same continous string")
+                    return 
                 if char.isupper():
                     res = res + special_characters_to_braille['capital']
                 res = res + english_to_braille[char.upper()]
