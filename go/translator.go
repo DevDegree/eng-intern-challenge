@@ -105,11 +105,14 @@ func brailleToEnglish(braille string) string {
 }
 
 func main() {
-	isBraille := false
+	isBraille := true
 	input := strings.Join(os.Args[1:], " ")
 
-	if len(input)%6 == 0 {
-		isBraille = true
+	for _, char := range input {
+		if char != '.' && char != 'O' && char != ' ' {
+			isBraille = false
+			break
+		}
 	}
 
 	if isBraille {
