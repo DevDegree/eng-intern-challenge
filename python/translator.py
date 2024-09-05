@@ -50,3 +50,23 @@ def translate_to_english(text) -> str:
             capital_follows = False
             
     return "".join(characters)
+
+def translate_to_braille(text: str) -> str:
+    """Translates English text to braille. Returns translated text in braille."""
+    previous_character = None
+    braille_characters = []
+
+    for character in text:
+        if character.isdigit():
+            first_digit_of_number = not previous_character or not previous_character.isdigit()
+            if first_digit_of_number:
+                braille_characters.append(NUMBER_FOLLOWS)
+            braille_characters.append(DIGIT_TO_BRAILLE[character])
+        else:
+            if character.isupper():
+                braille_characters.append(CAPITAL_FOLLOWS)
+            lowercased_character = character.lower()
+            braille_characters.append(CHARACTER_TO_BRAILLE[lowercased_character])
+        previous_character = character
+
+    return "".join(braille_characters)
