@@ -10,10 +10,14 @@ def main(input_string):
 
 def braille_to_english(braille_string):
     braille_to_english_map = {
-        # Add the Braille-to-English mappings here
-        "O.....": "a",
-        "O.O...": "b",
-        # Add more mappings
+        "O.....": "a", "O.O...": "b", "OO....": "c", "OOO...": "d", "O..O..": "e",
+        "OO.O..": "f", "OOOO..": "g", "O.OO..": "h", ".OO...": "i", ".OOO..": "j",
+        "O...O.": "k", "O.O.O.": "l", "OO..O.": "m", "OOO.O.": "n", "O..OO.": "o",
+        "OO.OO.": "p", "OOOOO.": "q", "O.OOO.": "r", ".OO.O.": "s", ".OOOO.": "t",
+        "O...OO": "u", "O.O.OO": "v", ".OOO.O": "w", "OO..OO": "x", "OOO.OO": "y", "O..OOO": "z",
+        ".O.OOO": "#",  # Number sign
+        ".....O": "^",  # Capital letter sign
+        "......": " ",   # Space
     }
     
     translation = []
@@ -28,6 +32,8 @@ def braille_to_english(braille_string):
             capitalize_next = True
         elif braille_char == ".O.OOO":  # Number marker
             number_mode = True
+        elif braille_char == "......":  # Space
+            translation.append(" ")
         elif braille_char in braille_to_english_map:
             char = braille_to_english_map[braille_char]
             if number_mode:
@@ -41,12 +47,12 @@ def braille_to_english(braille_string):
 
 def english_to_braille(english_string):
     english_to_braille_map = {
-        # Add the English-to-Braille mappings here
-        "a": "O.....",
-        "b": "O.O...",
-        # Add more mappings
-        "capital": ".....O",
-        "number": ".O.OOO"
+        "a": "O.....", "b": "O.O...", "c": "OO....", "d": "OOO...", "e": "O..O..",
+        "f": "OO.O..", "g": "OOOO..", "h": "O.OO..", "i": ".OO...", "j": ".OOO..",
+        "k": "O...O.", "l": "O.O.O.", "m": "OO..O.", "n": "OOO.O.", "o": "O..OO.",
+        "p": "OO.OO.", "q": "OOOOO.", "r": "O.OOO.", "s": ".OO.O.", "t": ".OOOO.",
+        "u": "O...OO", "v": "O.O.OO", "w": ".OOO.O", "x": "OO..OO", "y": "OOO.OO", "z": "O..OOO",
+        "capital": ".....O", "number": ".O.OOO", " ": "......",
     }
     
     translation = []
@@ -65,22 +71,18 @@ def english_to_braille(english_string):
 def convert_to_number(char):
     # Map letters to numbers (Braille digits mode)
     letter_to_number_map = {
-        "a": "1",
-        "b": "2",
-        # Add more mappings
+        "a": "1", "b": "2", "c": "3", "d": "4", "e": "5",
+        "f": "6", "g": "7", "h": "8", "i": "9", "j": "0"
     }
     return letter_to_number_map.get(char, char)
 
 def convert_to_braille_digit(digit):
     # Convert a digit to its Braille representation
     digit_to_braille_map = {
-        "1": "O.....",
-        "2": "O.O...",
-        # Add more mappings
+        "1": "O.....", "2": "O.O...", "3": "OO....", "4": "OOO...", "5": "O..O..",
+        "6": "OO.O..", "7": "OOOO..", "8": "O.OO..", "9": ".OO...", "0": ".OOO.."
     }
     return digit_to_braille_map.get(digit, digit)
 
-# Example usage (replace with any test input)
-test_input = "python3"  # This is an example Braille input
+test_input = "python"  # This is an example input
 main(test_input)
-
