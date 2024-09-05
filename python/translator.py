@@ -1,12 +1,26 @@
 from sys import argv
 from enum import Enum
-from itertools import batched
-from collections.abc import Iterator
+from itertools import islice
+from typing import List, Dict, Tuple, Iterator
+
+
+def batched(iterable, n):
+    """
+    Implementation of itertools.batched from 3.12 as found on Python's
+    documentation https://docs.python.org/3/library/itertools.html#itertools.batched
+    """
+    # batched('ABCDEFG', 3) → ABC DEF G
+    if n < 1:
+        raise ValueError("n must be at least one")
+    iterator = iter(iterable)
+    while batch := tuple(islice(iterator, n)):
+        yield batch
+
 
 # Each decade in the Braille system shares the same ten squares of data, here
 # called the "core". Each decade is obtained by appending (or in the case of the
 # fifth decade, prepending) the final two symbols.
-decade_core: list[str] = [
+decade_core: List[str] = [
     "O...",
     "O.O.",
     "OO..",
@@ -20,7 +34,7 @@ decade_core: list[str] = [
     ".O..",
     ".O.O",
 ]
-decade_affices: dict[int, tuple[str, str]] = {
+decade_affices: Dict[int, Tuple[str, str]] = {
     1: ("", ".."),
     2: ("", "O."),
     3: ("", "OO"),
@@ -29,7 +43,7 @@ decade_affices: dict[int, tuple[str, str]] = {
 }
 
 
-def get_decade(n: int) -> list[str]:
+def get_decade(n: int) -> List[str]:
     """Given one of the five decades in the Braille system, return a list of
     each symbol, written in left-to-right, top-down notation, with a '.'
     representing an empty space, and an 'O' representing a raised dot.
@@ -61,7 +75,7 @@ k_to_t = list("klmnopqrst")
 uvxyz = list("uvxyz")
 
 EnglishState = Enum("EnglishState", ["Number", "NonNumber"])
-ascii_to_braille_table: dict[str, str] = {
+ascii_to_braille_table: Dict[str, str] = {
     **dict(zip(a_to_j, get_decade(1))),
     **dict(zip(k_to_t, get_decade(2))),
     **dict(zip(uvxyz, get_decade(3))),
@@ -75,7 +89,7 @@ ascii_to_braille_table: dict[str, str] = {
 }
 
 BrailleState = Enum("BrailleState", ["Number", "Capital", "Normal"])
-braille_to_ascii_table: dict[tuple[BrailleState, str], str] = {
+braille_to_ascii_table: Dict[Tuple[BrailleState, str], str] = {
     **dict(zip(map(lambda c: (BrailleState.Normal, c), get_decade(1)), a_to_j)),
     **dict(zip(map(lambda c: (BrailleState.Normal, c), get_decade(2)), k_to_t)),
     **dict(zip(map(lambda c: (BrailleState.Normal, c), get_decade(3)), uvxyz)),
