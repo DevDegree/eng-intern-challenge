@@ -5,11 +5,8 @@ This is a simple translator that translates a text message to braille and vice v
 """
 
 import sys
-import os
+import dictionary
 
-sys.path.append(os.path.abspath('./resource'))
-
-from resource import dictionary
 
 def braille_to_text(mssg_to_translate):
     """
