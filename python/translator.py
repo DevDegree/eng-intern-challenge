@@ -98,7 +98,52 @@ Input is Braille, output is English.
 Takes a string as an argument and uses it as the input string
 '''
 def translate_braille_to_english(_input):
-    pass
+    stringEquivelant = ""
+    currentBrailleLetter = ""
+    length = len(_input)
+    numChunks = 0
+    readingNumberFlag = False
+    capitalizeFlag = False
+    while(numChunks < (length/6)):
+        # Split into chucks of 6 characters
+        currentBrailleLetter = _input[(numChunks*6):int((numChunks*6)+6)]           
+
+        if(currentBrailleLetter == CAPITAL_FOLLOWS):
+            # print("Capitalize letter")
+            capitalizeFlag = True
+            numChunks+=1
+            continue
+            
+        if(currentBrailleLetter == NUMBER_FOLLOWS):
+            # print("Reading number")
+            isDigit = True
+            while(isDigit):
+                matches = 0
+                numChunks+=1
+                currentBrailleLetter = _input[(numChunks*6):int((numChunks*6)+6)]  
+                for num in ENGLISH_TO_BRAILLE_NUMS:
+                    if(ENGLISH_TO_BRAILLE_NUMS[num] == currentBrailleLetter):
+                        stringEquivelant += num
+                        matches+=1
+                if(matches<1):
+                    isDigit = False
+
+            
+        # Find the English equivelant
+        for alpha in ENGLISH_TO_BRAILLE:
+            if(ENGLISH_TO_BRAILLE[alpha] == currentBrailleLetter):
+                if(capitalizeFlag):
+                    stringEquivelant+=alpha.upper()
+                    capitalizeFlag = False
+                    break
+                else:
+                    stringEquivelant+=alpha.lower()
+                    break
+        numChunks+=1
+        
+
+    return stringEquivelant
+
 
 
 
