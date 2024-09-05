@@ -76,9 +76,9 @@ def English_to_Braille(input):
     return braille_output
 
 
-# Parses input passed in
-def main():
+if __name__ == "__main__":
     if len(sys.argv) > 1:
+        # Parses input passed in
         input = sys.argv[1:]
         input = " ".join(input)
 
@@ -87,6 +87,3 @@ def main():
             print(Braille_to_English(input))
         else:
             print(English_to_Braille(input))
-
-if __name__ == "__main__":
-    main()
