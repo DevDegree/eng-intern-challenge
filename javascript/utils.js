@@ -1,4 +1,3 @@
-
 /**
  * This function checks if the input is Braille
  * 
@@ -37,4 +36,24 @@ function splitEverySixChars(string) {
     return chunks;
 }
 
-module.exports = { isBrailleCheck, splitEverySixChars };
+/**
+ * This function returns the english translation of the Braille character
+ * 
+ * @param {string} key - Braille string that will need to be translated
+ * @param {object} dict - Translation dictionary defined in constants
+ * @returns - Returns the key from the dictionary, otherwise `false`
+ * 
+ */
+function getKeyFromDict(key, dict) {
+    let value;
+    value = dict[key];
+
+    if (value === undefined) {
+        return false;
+    }
+
+    return value;
+}
+
+
+module.exports = { isBrailleCheck, splitEverySixChars, getKeyFromDict };
