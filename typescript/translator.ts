@@ -57,12 +57,12 @@ function isValidBraille(input: string): boolean {
   return /^[O.]+$/.test(input) && input.length % 6 === 0;
 }
 
-function brailleToEnglish(braille: string): string {
+function brailleToEnglish(brailleText: string): string {
   let result = '';
   let isCapital = false;
   let isNumber = false;
 
-  const brailleCells = braille.match(/.{1,6}/g);
+  const brailleCells = brailleText.match(/.{1,6}/g);
   if (!brailleCells) return '';
 
   for (const cell of brailleCells) {
@@ -108,11 +108,11 @@ function brailleToEnglish(braille: string): string {
   return result;
 }
 
-function englishToBraille(english: string): string {
+function englishToBraille(englishText: string): string {
   let result = '';
   let isNumber = false;
 
-  for (const char of english) {
+  for (const char of englishText) {
     if (char >= 'A' && char <= 'Z') {
       result += BRAILLE_CAPITAL_FOLLOWS;
       result += englishToBrailleMap.get(char.toLowerCase()) || '';
