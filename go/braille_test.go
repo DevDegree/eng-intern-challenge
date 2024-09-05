@@ -61,6 +61,36 @@ func TestSplitCells(t *testing.T) {
 	}
 }
 
+type decodeAlphanumericParams struct {
+	cell            string
+	capital, number bool
+}
+
+func TestDecodeAlphaNumeric(t *testing.T) {
+	inExpect := map[decodeAlphanumericParams]byte{
+		{"O.....", false, false}: 'a',
+		{"O.....", true, false}:  'A',
+		{"O.....", false, true}:  '1',
+		{"O.....", true, true}:   '1',
+	}
+	for in, expect := range inExpect {
+		out, err := decodeAlphanumeric(in.cell, in.capital, in.number)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if out != expect {
+			t.Errorf("decodeAlphanumeric(%v) returned %c; wanted %c", in, out, expect)
+		}
+	}
+
+	invalids := []string{capitalFollows, numberFollows, space, ".O.O.", ".O.O.O."}
+	for _, invalid := range invalids {
+		if _, err := decodeAlphanumeric(invalid, false, false); err == nil {
+			t.Errorf("decodeAlphanumeric accepted non-alphanumeric cell %s; wanted error", invalid)
+		}
+	}
+}
+
 // sliceEq returns true if s1 and s2 are the same length and contain the same elements.
 func sliceEq[E comparable](s1, s2 []E) bool {
 	if len(s1) != len(s2) {

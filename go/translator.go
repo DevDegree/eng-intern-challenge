@@ -6,6 +6,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"unicode"
 )
 
 const (
@@ -18,7 +19,52 @@ const (
 	space          = "......"
 )
 
-var braillePattern = regexp.MustCompile("(?m)^[O.]*$")
+var (
+	braillePattern = regexp.MustCompile("(?m)^[O.]*$")
+
+	// Braille cell -> English letter.
+	letters = map[string]byte{
+		"O.....": 'a',
+		"O.O...": 'b',
+		"OO....": 'c',
+		"OO.O..": 'd',
+		"O..O..": 'e',
+		"OOO...": 'f',
+		"OOOO..": 'g',
+		"O.OO..": 'h',
+		".OO...": 'i',
+		".OOO..": 'j',
+		"O...O.": 'k',
+		"O.O.O.": 'l',
+		"OO..O.": 'm',
+		"OO.OO.": 'n',
+		"O..OO.": 'o',
+		"OOO.O.": 'p',
+		"OOOOO.": 'q',
+		"O.OOO.": 'r',
+		".OO.O.": 's',
+		".OOOO.": 't',
+		"O...OO": 'u',
+		"O.O.OO": 'v',
+		".OOO.O": 'w',
+		"OO..OO": 'x',
+		"OO.OOO": 'y',
+		"O..OOO": 'z',
+	}
+
+	// Braille cell -> number.
+	numbers = map[string]byte{
+		"O.....": '1',
+		"O.O...": '2',
+		"OO....": '3',
+		"OO.O..": '4',
+		"O..O..": '5',
+		"OOO...": '6',
+		"OOOO..": '7',
+		"O.OO..": '8',
+		".OO...": '9',
+	}
+)
 
 func main() {
 	if len(os.Args) < 2 {
@@ -114,8 +160,33 @@ func splitCells(braille string) ([]string, error) {
 // and cell is interpreted as a number. If cell is anything other than a letter or a
 // number, decodeAlphanumeric returns ErrInvalidCell.
 func decodeAlphanumeric(cell string, capital, number bool) (byte, error) {
-	// TODO
-	return 0, nil
+	if number {
+		return decodeNumeric(cell)
+	}
+	return decodeAlpha(cell, capital)
+}
+
+// decodeNumeric converts a single Braille cell to a numeric character (0-9), or returns
+// ErrInvalidCell if cell is not a Braille number.
+func decodeNumeric(cell string) (byte, error) {
+	if c, ok := numbers[cell]; ok {
+		return c, nil
+	}
+	return 0, ErrInvalidCell{cell}
+}
+
+// decodeAlpha converts a single Braille cell to an English letter or returns
+// ErrInvalidCell if cell is not a Braille letter. If capital is true, the uppercase form
+// of the letter is returned.
+func decodeAlpha(cell string, capital bool) (byte, error) {
+	c, ok := letters[cell]
+	if !ok {
+		return 0, ErrInvalidCell{cell}
+	}
+	if capital {
+		c = byte(unicode.ToUpper(rune(c)))
+	}
+	return c, nil
 }
 
 type ErrInvalidCell struct {
