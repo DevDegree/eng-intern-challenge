@@ -52,6 +52,13 @@ func TestSplitCells(t *testing.T) {
 			t.Errorf("splitCells(%s) returned %v; wanted %v", in, out, expect)
 		}
 	}
+
+	invalids := []string{"..xx..", "OOOOOO....."}
+	for _, invalid := range invalids {
+		if _, err := splitCells(invalid); err == nil {
+			t.Errorf("splitCells accepted invalid Braille string %s; wanted error", invalid)
+		}
+	}
 }
 
 // sliceEq returns true if s1 and s2 are the same length and contain the same elements.
