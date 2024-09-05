@@ -4,37 +4,23 @@
 
 import sys
 
-#input_str = sys.argv[1]
-
-global_dict = {'a':"0.....", 'b':'0.0...', 'c':'00....', 'd':'00.0..', 'e':'0..0..', 'f':'000...', 
-               'g':'0000..', 'h':'0.00..', 'i':'.00...', 'j':".000..", 'k':'0....0', 'l':'0.0.0.', 
-               'm':'00..0.', 'n':'00.00.', 'o':'0..00.', 'p':'000.0.', 'q':'00000.', 'r':'0.000.', 
-               's':'.00.0.', 't':'.0000.', 'u':'0...00', 'v':'0.0.00', 'w':'.000.0', 'x':'00..00', 
-               'y':'00.000', 'z':'0..0000', '1':'a', '2':'b', '3':'c', '4':'d', '5':'e', '6':'f', 
-               '7':'g', '8':'h', '9':'i', '0':'j', 'CAP':'.....0', ' ':'......', 'NUM':'.0.000'}
-
-test_str_e = "XOXOXO" ## --> 00..00 0..00. 00..00 0..00. 00..00 0..00. 
-test_str_b = "......00..0.0.....0.0....0.0000....." ## --> ' mab1'
-
+input_str = ' '.join(sys.argv[1:])
+global_dict = {'a':"O.....", 'b':'O.O...', 'c':'OO....', 'd':'OO.O..', 'e':'O..O..', 'f':'OOO...', 
+               'g':'OOOO..', 'h':'O.OO..', 'i':'.OO...', 'j':".OOO..", 'k':'O....O', 'l':'O.O.O.', 
+               'm':'OO..O.', 'n':'OO.OO.', 'o':'O..OO.', 'p':'OOO.O.', 'q':'OOOOO.', 'r':'O.OOO.', 
+               's':'.OO.O.', 't':'.OOOO.', 'u':'O...OO', 'v':'O.O.OO', 'w':'.OOO.O', 'x':'OO..OO', 
+               'y':'OO.OOO', 'z':'O..OOO', '1':'a', '2':'b', '3':'c', '4':'d', '5':'e', '6':'f', 
+               '7':'g', '8':'h', '9':'i', '0':'j', 'CAP':'.....O', ' ':'......', 'NUM':'.O.OOO'}
 keys = list(global_dict.keys())
-values = list(global_dict.values()) # use this string to index the translation of the characters. Example: '0.....' indexes 0, thrown into keys[0] gives 'a'. 
-
+values = list(global_dict.values()) # use this string to index the translation of the characters. Example: 'O.....' indexes 0, thrown into keys[0] gives 'a'. 
 
 def main(val):
-    ## Main segment:
-    ## TO-DO: Language detection [_], English -> Braille [_], Braille -> English [_], output handlerself.
     
     final_msg = lang_converter(lang_detect(val), val) # 1 for braille, 0 for english. 
-   
-    print(final_msg)
     return final_msg
 
-
-
 def lang_detect(string):
-    print(set(string))
-    if set(['0','.']) == set(string): # This means it is in braille
-#        print(str(set(['0','.'])) + " and " + str(set(string)))
+    if set(['O','.']) == set(string): # This means it is in braille
         return 1 
 
     else: # This means it is in english
@@ -50,28 +36,69 @@ def lang_converter(convertee, val): # receives 0 or 1 and terminal value
 
         while char_end <= len(val): # grabs set of 6 characters to be converted from braille to english
             snippet = val[char_start:char_end]
-            
-            if snippet == '.....0':
+
+            if snippet == '......': # Catches space after numlock and disables num flag
+                if mode == 2:
+                    mode = 0
+                char_start += 6
+                char_end += 6
+                message += char_retrieval(snippet, mode)
+
+            elif snippet == '.....O': # sets the mode for an uppercase 
                 mode = 1
                 if (char_end + 6) <= len(val):
                     char_end += 6 
                     char_start += 6
 
+            elif mode == 1:
+                message += char_retrieval(snippet, mode)
+                char_end += 6
+                char_start += 6
+                mode = 0
 
-            elif snippet == '.0.000':
+            elif snippet == '.O.OOO': ## Needs to stay num's locked until a space occurs
                 mode = 2
                 if (char_end + 6) <= len(val):
-                    char_end += 6 
+                    char_end += 6
                     char_start += 6
-
-
             else:
-                char_end += 6 
+                char_end += 6
                 char_start += 6
                 message += char_retrieval(snippet, mode)
-                mode = 0
+
         return message
 
+    else:
+        message = ''
+        eng_text = list(val)
+        i = 0
+        mode = 0
+        while i < len(eng_text): ## Processes english alphanum into braille
+
+            if str(eng_text[i]) == ' ':
+                mode = 0
+
+            if eng_text[i].isupper() == True:
+                message += str(global_dict['CAP'])
+                message += str(global_dict[eng_text[i].lower()])
+                i += 1
+
+            elif eng_text[i].isnumeric() == True:
+                if mode == 1:
+                    message += str(global_dict[global_dict[eng_text[i]]])
+                    i += 1
+                
+                else:
+                    message += str(global_dict['NUM'])
+                    message += str(global_dict[global_dict[eng_text[i]]])
+                    mode = 1
+                    i += 1
+
+            else:
+                message += str(global_dict[eng_text[i]])
+                i += 1 
+
+        return message
 
 def char_retrieval(snippet, mode):
     if mode == 1: # returns uppercase
@@ -82,6 +109,6 @@ def char_retrieval(snippet, mode):
         return keys[values.index(snippet)]
 
 
-main(test_str_b)
+main(input_str)
 
 
