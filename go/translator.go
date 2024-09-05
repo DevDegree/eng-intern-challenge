@@ -77,6 +77,7 @@ func main() {
 	if len(os.Args) < 2 {
 		return
 	}
+
 	if isBraille(os.Args[1]) {
 		english, err := decode(strings.Join(os.Args[1:], ""))
 		if err != nil {
@@ -105,9 +106,7 @@ func decode(braille string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
 	english := make([]byte, 0, len(cells))
-
 	capital := false // Next character is capitalized.
 	number := false  // Next character is a number.
 
@@ -197,6 +196,7 @@ func encode(english string) (string, error) {
 	chars := []byte(english)
 	braille := make([]byte, 0, len(chars)*dotsPerCell)
 	var cells []byte
+
 	for len(chars) > 0 {
 		c := chars[0]
 		if unicode.IsDigit(rune(c)) {
@@ -248,6 +248,7 @@ func encodeLetter(letter byte) (braille []byte, err error) {
 	if !unicode.IsLetter(rune(letter)) {
 		return nil, ErrInvalidChar{letter}
 	}
+
 	if unicode.IsUpper(rune(letter)) {
 		braille = append(braille, capitalFollows...)
 		letter = byte(unicode.ToLower(rune(letter)))
