@@ -1,6 +1,5 @@
 import sys
 
-
 # Braille to English Mapping
 B_to_E_char = {
     "O.....": "a", "O.O...": "b", "OO....": "c", "OO.O..": "d", "O..O..": "e",
@@ -32,6 +31,7 @@ upper = ".....O"
 number = ".O.OOO"
 capital = ".....O"
 
+print("this gets printed instead?")
 def Braille_to_English(input):
     english_output = ""
     next_symbol = "lower" # 3 options: lower (default), upper or number
