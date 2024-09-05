@@ -29,7 +29,6 @@ const brailleAlphabet = {
     'y': 'OO.OOO',
     'z': 'O..OOO',
     'capital': '.....O',
-    'decimal': '.O...O',
     'number': '.O.OOO',
     ' ': '......',
     '1': 'O.....',
@@ -52,14 +51,6 @@ const isNumber = (val) => {
 }
 
 /**
- * Function that checks if a string character is a decimal
- */
-const isDecimal = (val) => {
-    return !isNaN(parseFloat(val)) && isFinite(val)
-}
-
-
-/**
  * Function that converts a string in english to a string in braille
  */
 const englishToBraille = (val) => {
@@ -77,12 +68,7 @@ const englishToBraille = (val) => {
                 output += brailleAlphabet['number']
             }
         }
-        //Checks if the character is a decimal
-        else if(isDecimal(inputArr[i])){
-            if(i == 0 || (i-1 >= 0 && !isDecimal(inputArr[i-1]))){
-                output += brailleAlphabet['decimal']
-            }
-        }
+        
 
         output += brailleAlphabet[inputArr[i].toLowerCase()]
     }
@@ -98,7 +84,6 @@ const brailleToEnglish = (val) => {
     let inputArr = [];
     let capitalize = false;
     let number = false;
-    let decimal = false;
     let addToOutput = false;
 
     for(let i = 0; i < valArr.length; i += 6){
@@ -113,8 +98,6 @@ const brailleToEnglish = (val) => {
 
                 if(key == 'number'){
                     number = true;
-                }else if(key == 'decimal'){
-                    decimal = true;
                 }else if(key == 'capital'){
                     capitalize = true;
                 }else{
@@ -122,8 +105,8 @@ const brailleToEnglish = (val) => {
                 }
 
                 if(addToOutput){
-                    if(number || decimal){
-                        if(isNumber(key) || isDecimal(key)){
+                    if(number){
+                        if(isNumber(key)){
                             output += key;
                         }
 
@@ -133,15 +116,9 @@ const brailleToEnglish = (val) => {
                             }
                         }
 
-                        if(decimal){
-                            if(m+1 < inputArr.length && inputArr[m+1]=='......'){
-                                decimal = false;
-                            }
-                        }
-
                         break;
                     }else{
-                        if(!isNumber(key) && !isDecimal(key)){
+                        if(!isNumber(key)){
                             if(capitalize){
                                 output += key.toUpperCase();
                                 capitalize = false;
@@ -166,7 +143,7 @@ const inputString = input.join(' ');
 
 if(inputString){
     let output;
-    let filteredAlphabet = Object.keys(brailleAlphabet).filter(ele => !['capital', 'decimal', 'number', 'o', '.'].includes(ele));
+    let filteredAlphabet = Object.keys(brailleAlphabet).filter(ele => !['capital', 'number', 'o', '.'].includes(ele));
     let englishDetected = false;
 
     filteredAlphabet.forEach(ele => {
