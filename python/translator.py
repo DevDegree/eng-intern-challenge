@@ -124,9 +124,6 @@ def braille_to_eng(input):
         i, char_result = get_char(input, i)
         result += char_result
 
-
-        i+=6 # increment to next braille char
-
     print(result)
 
 
