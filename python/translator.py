@@ -72,7 +72,7 @@ def to_braille(text):
         else:
             raise ValueError(f"Unsupported character: {char}")
         
-        # Handle case where decimal starts the number (e.g., ".5")
+        # Handle case where decimal starts the number 
         if char == '.' and (i == 0 or not text[i - 1].isdigit()):
             result.insert(-1, braille_special_chars['number'])  # Add number sign before decimal if no digit precedes
 
@@ -131,11 +131,7 @@ def translate(input_string):
 
 # Main function to handle command-line arguments
 def main():
-    # Process each command-line argument and concatenate the results
     translations = [to_braille(arg) for arg in sys.argv[1:]]  # Translate each argument
     print('......'.join(translations))
-    #print(''.join(translations))  # Join all translations without spaces
-
-
-#if __name__ == "__main__":
+    
 main()
