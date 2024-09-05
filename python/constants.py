@@ -38,8 +38,6 @@ ENGLISH_TO_BRAILLE = {
     '>': 'O..OO.',
     '(': 'O.O..O',
     ')': '.O.OO.',
-
-    ' ': '......',
 }
 # Inverted Map for converting braille to string
 BRAILLE_TO_ENGLISH = {v: k for k, v in ENGLISH_TO_BRAILLE.items()}
