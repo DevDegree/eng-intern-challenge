@@ -127,6 +127,7 @@ func decode(braille string) (string, error) {
 				return "", err
 			}
 			english = append(english, enChar)
+			capital = false
 		}
 	}
 

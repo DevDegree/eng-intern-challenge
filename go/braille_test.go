@@ -25,6 +25,7 @@ func TestDecode(t *testing.T) {
 		"O.....":                         "a",
 		".....OO...........O.O...":       "A b",
 		".O.OOOO.....O.O.........O.....": "12 a",
+		".....OO.....O.O...OO...........O.OOOO.....O.O...OO....": "Abc 123",
 	}
 	for in, expect := range inExpect {
 		out, err := decode(in)
