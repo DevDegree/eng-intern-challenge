@@ -135,11 +135,16 @@ def parse_braille_to_english(s: str) -> Iterator[str]:
 
 
 def parse(s: str) -> str:
-    """Convert a string from English to Braille.
+    """
+    Convert a string from English to Braille.
 
     Given either an alphanumeric string with spaces or a string containing
     only '.' and 'O' of length 6n, `parse` detects the transcription form, then
-    performs the appropriate translation."""
+    performs the appropriate translation.
+
+    `parse` is an involution, i.e. for valid inputs `x`, `parse(parse(x)) == x`.
+
+    """
     if "." in s and set(s).issubset(set(".O")):
         return "".join(parse_braille_to_english(s))
     return "".join(parse_english_to_braille(s))
