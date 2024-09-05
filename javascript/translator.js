@@ -113,12 +113,43 @@ function translateToBraille(input) {
       }
     });
   } else {
-    // If input is a string of alphabets
-    // Implement text to Braille translation
-    // Split string into Alphabet Array
+    // If input is a string of alphabets, split string into Alphabet Array
+    const splitAlphabetArr = input.split("");
     // Loop over Alphabet Array and find matching braille value in brailleMap
-    // If character is a number, enable number mode
-    // If character is an empty space, disable number mode
-    // If character is an uppercase, push "Capital" symbol into Translation Array
+    splitAlphabetArr.forEach((alphabet, index) => {
+      if (!isNaN(parseInt(alphabet))) {
+        // If character is a number, enable number mode
+        if (!isNumberMode) {
+          // Only push the Number symbol when entering number mode
+          isNumberMode = true;
+          translatedArr.push(brailleMap.Number);
+        }
+        translatedArr.push(brailleMap[alphabet]);
+        return;
+      }
+
+      if (alphabet === " ") {
+        // If character is an empty space, disable number mode
+        isNumberMode = false;
+        translatedArr.push(brailleMap[" "]); // Push braille value of " "
+        return; // Continue to next character
+      }
+
+      if (
+        isNaN(parseInt(alphabet)) &&
+        alphabet.trim() == alphabet.toUpperCase()
+      ) {
+        // If character is an uppercase, push "Capital" symbol into Translation Array
+        // Exclude empty space and numbers
+        translatedArr.push(brailleMap.Capital); // Push braille value of "Capital"
+
+        translatedArr.push(brailleMap[alphabet.toLowerCase()]); // Convert uppercase character into lowercase to match the key in brailleMap object
+
+        return; // Continue to next character
+      }
+
+      // Handle Lowercase Letters and Symbols
+      translatedArr.push(brailleMap[alphabet.toLowerCase()]);
+    });
   }
 }
