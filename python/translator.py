@@ -1,3 +1,5 @@
+import sys
+
 # constants
 cap_follows = ".....O"
 num_follows = ".O.OOO"
@@ -124,7 +126,7 @@ def braille_to_eng(input):
         i, char_result = get_char(input, i)
         result += char_result
 
-    print(result)
+    return result
 
 def eng_to_braille(input):
     result = ""
@@ -150,5 +152,16 @@ def eng_to_braille(input):
             i+=1
         # i+=1
     
+    return result
+
+
+def eng_braille_translator(input):
+    result = ''
+    if '.' in input:
+        result = braille_to_eng(input)
+    else:
+        result = eng_to_braille(input)
+    
     print(result)
 
+eng_braille_translator(' '.join(sys.argv[1:]))
