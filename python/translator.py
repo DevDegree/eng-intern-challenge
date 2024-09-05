@@ -15,7 +15,8 @@ keys = list(global_dict.keys())
 values = list(global_dict.values()) # use this string to index the translation of the characters. Example: 'O.....' indexes 0, thrown into keys[0] gives 'a'. 
 
 def main(val):
-    
+    if val == '':
+      return ''
     final_msg = lang_converter(lang_detect(val), val) # 1 for braille, 0 for english. 
     return final_msg
 
