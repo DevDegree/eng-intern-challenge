@@ -80,6 +80,7 @@ def English_to_Braille(input):
 
 
 if __name__ == "__main__":
+    print("does this get printed")
     if len(sys.argv) > 1:
         # Parses input passed in
         input = sys.argv[1:]
