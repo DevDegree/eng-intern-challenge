@@ -1,3 +1,7 @@
+# constants
+cap_follows = ".....O"
+num_follows = ".O.OOO"
+
 eng2braille_dict = {
     'a': 'O.....',
     'b': 'O.O...',
@@ -25,18 +29,18 @@ eng2braille_dict = {
     'x': 'OO..OO',
     'y': 'OO.OOO',
     'z': 'O..OOO',
-    '.': '..OO.O',
-    ',': '..O...',
-    '?': '..O.OO',
-    '!': '..OOO.',
-    ':': '..OO..',
-    ';': '..O.O.',
-    '-': '....OO',
-    '/': '.O..O.',
-    '<': '.OO..O',
-    '>': 'O..OO.',
-    '(': 'O.O..O',
-    ')': '.O.OO.',
+    # '.': '..OO.O',
+    # ',': '..O...',
+    # '?': '..O.OO',
+    # '!': '..OOO.',
+    # ':': '..OO..',
+    # ';': '..O.O.',
+    # '-': '....OO',
+    # '/': '.O..O.',
+    # '<': '.OO..O',
+    # '>': 'O..OO.',
+    # '(': 'O.O..O',
+    # ')': '.O.OO.',
     ' ': '......',
 }
 
@@ -54,7 +58,7 @@ num2braille_dict = {
     '8': 'O.OO..',
     '9': '.OO...',
     '0': '.OOO..',
-    '.': '.O...O', # decimal point
+    # '.': '.O...O', # decimal point
 }
 
 # reverse mapping of dictionary from 'num': 'braille' to 'braille': 'num'
@@ -66,28 +70,49 @@ def braille_to_eng(input):
     # encapulated function to get number
     def get_num(input, i):
         cur_char = input[i:i+6]
-        result = ""
+        get_num_result = ""
 
-        while cur_char != braille2eng_dict[' '] or cur_char != braille2eng_dict['.']:
-            result += braille2num_dict[cur_char]
+        while cur_char != eng2braille_dict[' '] and i < len(input):
+            get_num_result += braille2num_dict[cur_char]
             i+=6
             if i >= len(input):
                 break
             cur_char = input[i:i+6]
         
-        return i, result
+        return i, get_num_result
+
+    # encapulated function to get non-number
+    def get_char(input, i):
+        cur_char = input[i:i+6]
+        get_char_result = ""
+        cap_flag = False
+
+        while cur_char != num_follows and i < len(input):
+            if cur_char == cap_follows:
+                cap_flag = True
+                i+=6
+                cur_char = input[i:i+6]
+                continue
+            # otherwise
+            result_char = braille2eng_dict[cur_char]
+            if(cap_flag):
+                result_char = result_char.upper()
+                cap_flag = False
+            get_char_result += result_char
+            i+=6
+            if i >= len(input):
+                break
+            cur_char = input[i:i+6]
+
+        return i, get_char_result
+
 
     result = ""
-    cap_follows = ".....O"
-    num_follows = ".O.OOO"
-
-    cap_flag = False
 
     i = 0
     while i < len(input):
         cur_char = input[i:i+6]
-        # print(cur_char)
-        # check if flag character
+        # check if number flag character
         if cur_char == num_follows:
             # num_flag = True
             i+=6
@@ -95,6 +120,14 @@ def braille_to_eng(input):
             result += num_result
 
             continue
+        # otherwise continue aquiring characters
+        i, char_result = get_char(input, i)
+        result += char_result
+
+
+        i+=6 # increment to next braille char
+
+    print(result)
 
 
         # i+=6 # increment to next braille char
