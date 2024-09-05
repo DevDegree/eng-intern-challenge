@@ -53,12 +53,26 @@ const brailleMap = {
   " ": "......",
 };
 
+const splitBraillesArr = [];
+const translatedArr = [];
+
 function translateToBraille(input) {
   if (input.includes("O") || input.includes(".")) {
     // If input is in Braille
     // Implement Braille to text translation
+    // Split into 6-character strings and add to splitBrailleArr
+    // Loop over the splitBrailleArr and find matching key in brailleMap
+    // Push translated values into translatedArr
+    // If the braille value is for "Number", enable number mode
+    // If the braille value is for empty space, disable number mode
+    // Translate based on the current mode (number or alphabet)
   } else {
     // If input is a string of alphabets
     // Implement text to Braille translation
+    // Split string into Alphabet Array
+    // Loop over Alphabet Array and find matching braille value in brailleMap
+    // If character is a number, enable number mode
+    // If character is an empty space, disable number mode
+    // If character is an uppercase, push "Capital" symbol into Translation Array
   }
 }
