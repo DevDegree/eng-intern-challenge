@@ -16,7 +16,7 @@ REVERSE_BRAILLE_DICT_NUMBERS = {v: k for k, v in BRAILLE_DICT.items() if k.isdig
 REVERSE_BRAILLE_DICT_LETTERS = {v: k for k, v in BRAILLE_DICT.items() if k.isalpha()}
 
 def braille_to_english(braille):
-    """Translate Braille to English with no spaces between Braille characters."""
+    """Translate Braille to English"""
     result = []
     is_number = False
     i = 0
