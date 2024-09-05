@@ -1,6 +1,5 @@
 import sys
 
-print("is this outputting anything")
 
 # Braille to English Mapping
 B_to_E_char = {
@@ -78,16 +77,15 @@ def English_to_Braille(input):
     return braille_output
 
 
-if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        # Parses input passed in
-        input = sys.argv[1:]
-        input = " ".join(input)
+if len(sys.argv) > 1:
+    # Parses input passed in
+    input = sys.argv[1:]
+    input = " ".join(input)
 
-        # We are checking if input is Braille or English
-        if len(input) % 6 == 0 and (input[:6] in B_to_E_char or input[:6] in B_to_E_num):
-            print(Braille_to_English(input))
-        else:
-            print(English_to_Braille(input))
+    # We are checking if input is Braille or English
+    if len(input) % 6 == 0 and (input[:6] in B_to_E_char or input[:6] in B_to_E_num):
+        print(Braille_to_English(input))
     else:
-        print("input required")
+        print(English_to_Braille(input))
+else:
+    print("input required")
