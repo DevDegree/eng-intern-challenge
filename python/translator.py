@@ -11,12 +11,6 @@ BRAILLE_ALPHABET = {
     'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 
     'y': 'OO.OOO', 'z': 'O..OOO',
 
-
-    '.': '..OO.O', ',': '..O...', '?': '..O.OO', '!': '..OOO.', ':': '..OO..',
-    ';': '..O.O.', '-': '....OO', '/': '.O..O.', '<': '.OO..O',  
-    # '>': 'O..OO.', Repeated character
-    '(': 'O.O..O', ')': '.O.OO.',
-
     ' ': '......',  
 
     'capital': '.....O',
