@@ -26,7 +26,7 @@ class Translator:
         self.NUMBER = ".O.OOO"
     
     def translate(self, words):
-        """Determine if the string given is either Braille or English and convert it.
+        """Determine if the string given is either Braille or English and convert it accordingly.
 
         Args:
             words (str): the string to be translated
