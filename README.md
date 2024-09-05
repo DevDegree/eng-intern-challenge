@@ -1,12 +1,14 @@
 # Eng Intern Challenge Fall - Winter 2025
 
-# **Note: In order for our submission automation to function correctly:**
-1. **Your Github email must match the email you submitted your Application with (if your Github email is different, we recommend creating a new Github profile with the email you created your application with)**
-2. **Have your email set to public on your Github Profile**
-3. **Do not apply any labels on your PR. We will mark your PR as `reviewed` with a label when it has been so. Marking this yourself will cause your PR to be skipped.**
+# Solution
 
----
+This submission provides solution to the Braille translator challenge in `Python` and `Ruby`.
 
+A few comments on the design of the challenge:
+* The input of the translator is limited by how command line arguments are parsed: for example, extra space will be ignored by the command line.
+* Certain translation rules introduce ambiguities when translating: for example, since the rule assume numbers will end with a space, it's not possible to introduce letters that share the same Braille codes with numbers immediately following a number (eg. 100apple and 1001ple will share the same Braille code)
+
+# Prompt
 ## Braille Translator
 In this coding challenge you will create a terminal / command-line application that can translate Braille to English and vice versa. 
 
