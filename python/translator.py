@@ -5,13 +5,36 @@ from typing import Union
 
 def is_braille(s: str) -> bool:
     """
-    Returns whether a given string is braille (only consisting of 'O' and '.')
-    """
-    return all(char in ['O', '.'] for char in s)
+    Checks whether a given string is braille (only consisting of 'O' and '.')
 
-def convert_braille_to_english(braille_str: str) -> str:
+    Parameters:
+        s: A string possibly containing braille characters
     """
-    Converts a given braille string into an english representation
+    return all(char in {'O', '.'} for char in s)
+
+def is_english(s: str) -> bool:
+    """
+    Checks whether a string consists of only English characters
+
+    Parameters:
+        s: A string possibly containing english text
+    """
+    s = s.lower()
+
+    # Union both sets of valid characters and numbers as well as a blank space into a joint set for fast lookup
+    valid_chars = set(ENGLISH_TO_BRAILLE.keys()) | set(NUMBERS_TO_BRAILLE.keys()) | set(' ')
+    return all([char in valid_chars for char in s])
+
+def convert_braille_to_english(braille_str: str) -> Union[str, None]:
+    """
+    Converts a given braille string into an english representation.
+
+    Parameters:
+        braille_str (str): A string containing braille characters
+
+    Returns:
+        A string containing an english representation of braille_str or None
+        if the string is badly formatted.
     """
     res = ''
     capitalize = False
@@ -36,15 +59,22 @@ def convert_braille_to_english(braille_str: str) -> str:
                 capitalize = False
             else:
                 res += BRAILLE_TO_ENGLISH[braille_char]
-        # Invalid character
+        # Invalid character detected
         else:
-            return None
+            return 
 
     return res
 
-def convert_english_to_braille(english_str: str) -> str:
+def convert_english_to_braille(english_str: str) -> Union[str, None]:
     """
     Converts an english string into a braille representation.
+
+    Parameters:
+        english_str (str): A string containing english characters
+
+    Returns:
+        A string containing a braille representation of english_str or None if 
+        the string is badly formatted.
     """
     res = ''
     is_number = False
@@ -80,7 +110,9 @@ def translate(input: str) -> Union[str, None] :
 
     if is_braille(input) and len(input) % 6 == 0:
         return convert_braille_to_english(input)
-    return convert_english_to_braille(input)
+    elif is_english(input):
+        return convert_english_to_braille(input)
+    return None
 
 if __name__ == '__main__':
     num_args = len(sys.argv)
