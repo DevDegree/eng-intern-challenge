@@ -137,8 +137,11 @@ end
 
 
 # ##### main 
-input_value = gets.chomp 
 
+# get the input string
+input_value = ARGV.join(" ")
+
+# check if string is Braille or English and then call the translator method accordingly 
 if check_braille(input_value)
   braille_to_eng(input_value, braille_to_eng_hash, braille_to_num_hash)
 else
