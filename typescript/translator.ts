@@ -136,9 +136,12 @@ function englishToBraille(englishText: string): string {
   return result;
 }
 
-function main() {
-  const text = process.argv.slice(2).join(' ');
-
+function main(args: string[]) {
+  const text = args.slice(2).join(' ');
+  if (!text) {
+    console.log('Usage: translator <English Text or Braille>');
+    return;
+  }
   if (isValidBraille(text)) {
     console.log(brailleToEnglish(text));
   } else {
@@ -146,4 +149,4 @@ function main() {
   }
 }
 
-main();
+main(process.argv);
