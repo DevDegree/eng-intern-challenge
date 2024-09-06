@@ -27,7 +27,7 @@ class Translator:
                          ' ': '......', 'capital': CharacterType.CAPITAL, 'decimal': CharacterType.DECIMAL, 'number': CharacterType.NUMBER}
     
     def is_braille(self, text) -> bool:
-        if len(text) == 6:
+        if len(text) % 6 == 0:
             for charac in text:
                 if charac != 'O' and charac != '.':
                     return False
@@ -45,9 +45,9 @@ class Translator:
    
     def translate(self, text: str) -> str:
         if self.is_braille(text):
-            pass
+            pass # search by value
         else:
-            pass
+            pass # search by key
 
 def main():
     if len(argv) > 1:
