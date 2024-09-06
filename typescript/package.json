@@ -1,10 +1,11 @@
 {
   "name": "typescript",
   "version": "1.0.0",
-  "description": "",
+  "description": "A command-line application that translates Braille to English and vice versa.",
   "main": "translator.ts",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dev": "ts-node translator.ts"
   },
   "keywords": [],
   "author": "",
