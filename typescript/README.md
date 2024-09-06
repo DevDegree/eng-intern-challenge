@@ -1,7 +1,4 @@
 # TypeScript Instructions
-# TypeScript Instructions
-
-
 
 ### DotTranslate...a Braille <-> English Translator first, Shopify Eng Intern Challenge (Winter 2025) second.</h3>
 Welcome to DotTranslate, a command-line Braille Translator.
