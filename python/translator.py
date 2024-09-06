@@ -11,9 +11,7 @@ if __name__ == '__main__':
     # check if the text contains only 'O' and '.' and the length of the text is a multiple of 6 as this indicates Braille
     if (set(text)) == set(['O', '.']) and len(text) % 6 == 0:
         # translate braille to english
-        result = translate_braille(text)
-        print(result, file=sys.stdout)
+        print(translate_braille(text))
     else:
         # translate english to braille
-        result = translate_english(text)
-        print(result, file=sys.stdout)
+        print(translate_english(text))
