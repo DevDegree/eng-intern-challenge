@@ -1,1 +1,170 @@
+import sys
 
+brailleToEnglish = {
+  "a": "O.....",
+  "b": "O.O...",
+  "c": "OO....",
+  "d": "OO.O..",
+  "e": "O..O..",
+  "f": "OOO...",
+  "g": "OOOO..",
+  "h": "O.OO..",
+  "i": ".OO...",
+  "Jj": ".OOO..",
+  "k": "O...O.",
+  "l": "O.O.O.",
+  "m": "OO..O.",
+  "n": "OO.OO.",
+  "o": "O..OO.",
+  "p": "OOO.O.",
+  "q": "OOOOO.",
+  "r": "O.OOO.",
+  "s": ".OO.O.",
+  "t": ".OOOO.",
+  "u": "O...OO",
+  "v": "O.O.OO",
+  "w": ".OOO.O",
+  "x": "OO..OO",
+  "y": "OO.OOO",
+  "z": "O..OOO",
+}
+
+brailleFollows = {
+    "cap": ".....O",
+    "dec": ".O...O",
+    "num": ".O.OOO",
+}
+
+brailleToNums = {
+    "1": "O.....",
+    "2": "O.O...",
+    "3": "OO....",
+    "4": "OO.O..",
+    "5": "O..O..",
+    "6": "OOO...",
+    "7": "OOOO..",
+    "8": "O.OO..",
+    "9": ".OO...",
+    "0": ".OOO..",
+}
+
+brailleToSyms = {
+    ".": "..OO.O",
+    ",": "..O...",
+    "?": "..O.OO",
+    "!": "..OOO.",
+    ":": "..OO..",
+    ";": "..O.O.",
+    "-": "....OO",
+    "/": ".O..O.",
+    "<": ".OO..O",
+    ">": "O..OO.",
+    "(": "O.O..O",
+    ")": ".O.OO.",
+    " ": "......",
+}
+
+braille = [".", "O"]
+
+def isBraille(input):
+    for x in range(6):
+        if input[x] not in braille:
+            return False
+    return True
+
+def getEnglishLetters(letter, brailleList):
+    word = ""
+    for char, braille in brailleList.items():
+        if letter == braille:
+            word += char
+    
+    return word
+
+def convertToEnglish(input):
+    letter = ""
+    cmd = ""
+    word = ""
+
+    for x in range(len(input)):
+        if (x % 6 == 0):
+            print("letter ", letter)
+            if letter in brailleFollows.values():
+                for follows, braille in brailleFollows.items():
+                    if letter == braille:
+                        cmd = follows
+                        print(cmd)
+                        # if cmd == "cap":
+                        #     word += getEnglishLetters(letter, brailleToEnglish)
+                        #     word.capitalize()
+
+                        # if (cmd == "num"):
+                        #     print("getting num")
+                        #     word += getEnglishLetters(letter, brailleToNums)
+                        #     print("word", word)
+                        # elif (cmd == "dec"):
+                        #     word += "."
+                        #     word += getEnglishLetters(letter, brailleToNums)
+                        # else:
+                        #     word += getEnglishLetters(letter, brailleToEnglish)
+
+            # elif cmd == "dec":
+            #     word += "."
+            #     word += getEnglishLetters(letter, brailleToNums)
+
+            # elif cmd == "cap":
+            #     word += getEnglishLetters(letter, brailleToEnglish).capitalize()
+            #     cmd = ""
+
+            # elif letter in brailleToEnglish.values():
+            #     # print("letter", letter)
+            #     word += getEnglishLetters(letter, brailleToEnglish)
+
+            # elif letter in brailleToSyms.values():
+            #     # print("letter", letter)
+            #     word += getEnglishLetters(letter, brailleToSyms)
+            
+            # elif letter in brailleToNums.values():
+            #     word += getEnglishLetters(letter, brailleToNums)
+
+            elif ((cmd == "" or cmd == "cap") and (letter in brailleToEnglish.values())):
+                if (cmd == "cap"):
+                    word += getEnglishLetters(letter, brailleToEnglish).capitalize()
+                    cmd = ""
+                else: 
+                    word += getEnglishLetters(letter, brailleToEnglish)
+
+            elif ((cmd == "" or cmd == "dec") and (letter in brailleToSyms.values())):
+                word += getEnglishLetters(letter, brailleToSyms)
+            
+            elif cmd == "num" and letter in brailleToNums.values():
+                word += getEnglishLetters(letter, brailleToNums)
+            
+            letter = ""
+            
+            
+        letter += input[x]
+        
+        
+    print("word = ", word)
+    return word
+       
+      
+
+def translator():
+    input = ""
+
+    # getting inputs
+    n = len(sys.argv)
+    for i in range(1, n):
+        input += sys.argv[i]
+        # print("\nName of Python script:", sys.argv[i])
+        input += " "
+
+    # print(inputType)
+    if (isBraille(input)):
+        convertToEnglish(input)
+    # else:
+    #     convertToBraille(input)
+
+
+translator()
