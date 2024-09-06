@@ -55,50 +55,6 @@ class BrailleTranslator(Translator):
             return True
         return False
     
-    # def is_capital(self, charac, mode) -> bool:
-    #     if mode == Mode.TO_LATIN:
-    #         return charac == CharacterType.CAPITAL.value
-    #     return charac.isupper()
-    
-    # def is_decimal(self, charac, mode) -> bool:
-    #     if mode == Mode.TO_LATIN:
-    #         return charac == CharacterType.DECIMAL.value
-    #     return charac == self.latin_symbols.get(charac)
-    
-    # def is_number(self, charac, mode) -> bool:
-    #     if mode == Mode.TO_LATIN:
-    #         return charac == CharacterType.NUMBER.value
-    #     return self.latin_numbers.get(charac)
-    
-    # def is_space(self, charac, mode) -> bool:
-    #     if mode == Mode.TO_LATIN:
-    #         return charac == CharacterType.SPACE.value
-    #     return charac == ' '
-    
-    # def convert(self, characs, mode) -> str:
-    #     converted_text = ''
-    #     for charac in characs:
-    #         if self.is_space(charac, mode):
-    #             if mode == Mode.TO_LATIN:
-    #                 converted_text += ' '
-    #             else:
-    #                 converted_text += CharacterType.SPACE.value
-    #         elif self.is_capital(charac, mode):
-    #             next_capital = True
-    #             continue
-    #         elif next_capital:
-    #             next_capital = False
-    #             if mode == Mode.TO_LATIN:
-    #                 converted_text += self.braille_alphabet.get(charac)
-    #             else:
-    #                 converted_text += self.latin_alphabet.get(charac.upper())
-    #         else:
-    #             if mode == Mode.TO_LATIN:
-    #                 converted_text += self.braille_alphabet.get(charac).lower()
-    #             else:
-    #                 converted_text += self.latin_alphabet.get(charac.upper())
-    #     return converted_text
-    
     def __translate_to_braille(self, latin_text: str) -> str:
         converted_text = ''
         for charac in latin_text:
@@ -115,16 +71,44 @@ class BrailleTranslator(Translator):
         return converted_text
     
     def __translate_to_latin(self, braille_text: str) -> str:
-        pass
-            
+        converted_text = ''
+        for charac in braille_text:
+            if charac == CharacterType.CAPITAL.value:
+                self.next_capital = True
+                continue
+            if self.next_capital:
+                self.next_capital = False
+                converted_text += self.braille_alphabet.get(charac).upper()
+                continue
+            if charac == CharacterType.NUMBER.value:
+                self.next_number = True
+                continue
+            if self.next_number:
+                self.next_number = False
+                converted_text += self.braille_numbers.get(charac)
+                continue
+            if charac == CharacterType.SPACE.value:
+                converted_text += ' '
+                continue
+            if charac == CharacterType.DECIMAL.value:
+                self.next_decimal = True
+                continue
+            if self.next_decimal:
+                self.next_decimal = False
+                converted_text += self.latin_symbols.get(charac)
+                continue
+            if charac in self.latin_symbols:
+                converted_text += self.latin_symbols.get(charac)
+            else:
+                converted_text += self.braille_alphabet.get(charac).lower()
+        return converted_text
    
     def translate(self, text: str) -> str:
         characs = []
-       
         if self.is_braille(text):
             for i in range(0, len(text), 6):
                 characs.append(text[i:i+6])
-            print(self.__translate_to_latin(text))
+            print(self.__translate_to_latin(characs))
         else:
             characs = list(text)
             print(self.__translate_to_braille(text))
