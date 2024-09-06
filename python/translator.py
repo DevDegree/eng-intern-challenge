@@ -5,7 +5,7 @@ from eng_to_braille import translate_english
 
 
 if __name__ == '__main__':
-    # assume that only one string argument is passed in
+    # create a string by joining all of the arguments passed through; join by spaces
     text = ' '.join(sys.argv[1:])
 
     # check if the text contains only 'O' and '.' and the length of the text is a multiple of 6 as this indicates Braille
