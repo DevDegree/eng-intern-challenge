@@ -10,7 +10,7 @@ eng_to_braille = {
 }
 # A dictionary that maps from braille to the alphabet - simply reverse the eng_to_braille map
 braille_to_eng = {j: i for i, j in eng_to_braille.items() if i not in '0123456789'}
-braille_to_number = {j: i for i, j in eng_to_braille.items() if i in '0123456789'}
+braille_to_number = {j: i for i, j in eng_to_braille.items() if i in '0123456789 '}
 
 # braille_or_english(ipt: str) will take in an input, and determine whether or not it is Braille or English
 # PARAMETERS:
@@ -76,6 +76,8 @@ def translator(direction: str, text: str) -> str:
             elif cur_sym == eng_to_braille['number']:
                 is_num = True
             else:
+                if cur_sym == "......":
+                    is_num = False
                 # otherwise, append either the number or letter depending on the boolean switch
                 if is_num:
                     english.append(braille_to_number[cur_sym])
