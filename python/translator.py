@@ -20,7 +20,7 @@ braille_numbers_dict = {
 reverse_braille_dict = {v: k for k, v in braille_dict.items()}
 reverse_number_dict = {v: k for k, v in braille_numbers_dict.items()}
 
-# Detect input type (Braille or English)
+# Detect input type
 def identify_input_type(input_text):
     return 'braille' if all(ch in 'O.' for ch in input_text) else 'english'
 
