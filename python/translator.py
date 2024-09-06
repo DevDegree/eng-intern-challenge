@@ -27,19 +27,30 @@ brailleToEnglish = dict((v,k) for k,v in englishToBraille.items())
 #Braille to Numbers Mapping
 brailleToNumbers = dict((v,k) for k,v in numbersToBraille.items())
 
+#converts Braille text to English
 def convertBrailleToEnglish(brailleText): 
+    #end result string after conversion
     result = ""
+    
+    #flag to indicate brailleToNumbers dict should be referenced
     numbersOnly = False
+
+    #flag to indicate that next letter should be capitalized
     capitalize = False
+
+    #symbol set for inputted braille text
     brailleSymbols = [brailleText[i:i+6] for i in range(0, len(brailleText), 6)]
 
     for symbol in brailleSymbols:
+        #accounting for pre-capitalization symbol
         if symbol == '.....O':
             capitalize = True
             continue
+        #accounting for pre-number symbol
         elif symbol == '.O.OOO':
             numbersOnly = True
             continue
+        #accounting for space symbol, indicating that referencing for numbers is over
         elif symbol == '......' and numbersOnly == True:
             result += ' '
             numbersOnly = False
@@ -51,13 +62,19 @@ def convertBrailleToEnglish(brailleText):
         elif numbersOnly:
             result += brailleToNumbers[symbol]
         else:
-            result += brailleToEnglish[symbol]
+            try:
+                result += brailleToEnglish[symbol]
+            except: 
+                result += '?'
+                
         
     return result
 
 
 def convertEnglishToBraille(englishText):
     result=""
+
+    #flag to indicate whether numbersToBraille should be referenced or not 
     numberFlag = False
 
     for char in englishText:
@@ -68,15 +85,27 @@ def convertEnglishToBraille(englishText):
             numberFlag = True
         elif char.isnumeric() and numberFlag == True:
             result += numbersToBraille[char]
-        else:
+        elif char == ' ':
             result += englishToBraille[char]
+            numberFlag = False
+        else:
+            try:
+                result += englishToBraille[char]
+            except:
+                result += '??????'
 
     return result
 
 def isBraille(brailleText):
-    if len(brailleText) % 6 != 0 and len(brailleText) > 0:
+
+    #length of inputted braille text
+    brailleTextLength = len(brailleText)
+
+    #checking if braille length is valid
+    if brailleTextLength % 6 != 0 and brailleTextLength > 0:
         return False
 
+    #checking if input text contains valid characters
     for char in brailleText:
         if char not in ['.', 'O']:
             return False
@@ -90,4 +119,3 @@ if isBraille(textInput):
     print(convertBrailleToEnglish(textInput))
 else: 
     print(convertEnglishToBraille(textInput))
-
