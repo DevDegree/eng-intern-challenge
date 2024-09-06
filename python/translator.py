@@ -2,9 +2,7 @@ import sys
 from braille_to_eng import translate_braille
 from eng_to_braille import translate_english
 
-
-
-if __name__ == '__main__':
+def main():
     # create a string by joining all of the arguments passed through; join by spaces
     text = ' '.join(sys.argv[1:])
 
@@ -15,3 +13,6 @@ if __name__ == '__main__':
     else:
         # translate english to braille
         print(translate_english(text))
+
+if __name__ == '__main__':
+    main()
