@@ -29,3 +29,10 @@ def handle_translation(input_sequence):
         return convert_to_english(input_sequence)
     else:
         return convert_to_braille(input_sequence)
+
+if __name__ == "__main__":
+    import sys
+    input_text = ' '.join(sys.argv[1:])
+    print(handletranslation(input_text))
+
+        
