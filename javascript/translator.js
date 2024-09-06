@@ -30,6 +30,7 @@ function brailleToEnglishConverter(brailleStr) {
     let result = '';
     
     for (let word of words) {
+        if (!word) continue;  // Avoid processing empty strings between words
         const chars = word.match(/.{1,6}/g);  // Split every 6 characters (Braille cell)
         let capitalNext = false;
         let numberMode = false;
