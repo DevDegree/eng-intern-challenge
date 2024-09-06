@@ -4,8 +4,7 @@ from enum import Enum
 class CharacterType(Enum):
     NORMAL = 1
     CAPITAL_FOLLOWS = 2
-    DECIMAL_FOLLOWS = 3
-    NUMBER_FOLLOWS = 4
+    NUMBER_FOLLOWS = 3
 
 class Character:
     type = CharacterType
@@ -19,7 +18,6 @@ class Character:
         
 class Translator:
     CHARACTER_CAPITAL = Character(".....O", type=CharacterType.CAPITAL_FOLLOWS)
-    CHARACTER_DECIMAL = Character(".O...O", type=CharacterType.DECIMAL_FOLLOWS)
     CHARACTER_NUMBER = Character(".O.OOO", type=CharacterType.NUMBER_FOLLOWS)
 
     CHARACTERS = [
@@ -83,15 +81,20 @@ class Translator:
         capital = False
         number = False
         asciiz = ""
-        while len(braille) > 0:
-            characterString = braille[:6]
-            braille = braille[6:]
+        for i in range(0, len(braille), 6):
+            characterString = braille[i:i+6]
+            # find ascii character corresponding to braille
             if characterString in self.BRAILLE_TO_CHARACTER_MAP:
                 character = self.BRAILLE_TO_CHARACTER_MAP[characterString]
+                # precondition: if in number mode, this symbol must be a number
                 if number:
-                    if characterString not in self.BRAILLE_TO_NUMBER_CHARACTER_MAP:
-                        return False
-                    character = self.BRAILLE_TO_NUMBER_CHARACTER_MAP[characterString]
+                    # unless if it's a space, which ends number mode
+                    if character.asciiz == " ":
+                        number = False
+                    else:
+                        if characterString not in self.BRAILLE_TO_NUMBER_CHARACTER_MAP:
+                            return False
+                        character = self.BRAILLE_TO_NUMBER_CHARACTER_MAP[characterString]
                 
                 if character == self.CHARACTER_CAPITAL:
                     capital = True
@@ -99,15 +102,13 @@ class Translator:
                     number = True
                 else:
                     if capital:
-                        # this symbol must be capitalizable
+                        # precondition: this symbol must be capitalizable (a-z)
                         if ord(character.asciiz) < ord("a") or ord(character.asciiz) > ord("z"):
                             return False
                         asciiz += character.asciiz.upper()
                         capital = False
                     else:
                         asciiz += character.asciiz
-                    if character.asciiz == " ":
-                        number = False
             else:
                 return False
         print(asciiz, end='')
@@ -118,12 +119,11 @@ class Translator:
         number = False
         for character in asciiz:
             if character.isupper():
+                # precondition: this character must be capitalizable (a-z)
                 if character.lower() in self.ASCII_TO_CHARACTER_MAP:
                     print(self.CHARACTER_CAPITAL.braille, end='')
                     character = character.lower()
-                else:
-                    # very bad, but this would violate preconditions
-                    continue
+            # precondition: alphabet is from (a-z, 0-9, space)
             if character in self.ASCII_TO_CHARACTER_MAP:
                 if not number and ord(character) >= ord("0") and ord(character) <= ord("9"):
                     print(self.CHARACTER_NUMBER.braille, end='')
@@ -131,9 +131,6 @@ class Translator:
                 elif character == " ":
                     number = False
                 print(self.ASCII_TO_CHARACTER_MAP[character].braille, end='')
-            else:
-                # very bad, but this would violate preconditions
-                continue
 
 arguments = sys.argv[1:]
 argumentString = " ".join(arguments)
