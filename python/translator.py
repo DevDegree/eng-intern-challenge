@@ -44,15 +44,18 @@ def translate_to_braille(input):
             
             result += nums_to_braille[char]
 
-        elif char.isAlpha():  # If char is letter, use the english to braille dict and check for upper cases
-            if char.isUpper():
+        elif char.isalpha():  # If char is letter, use the english to braille dict and check for upper cases
+            if char.isupper():
                 result += english_to_braille['cap_next']
             
-            result += english_to_braille[char.toLower()]
+            result += english_to_braille[char.lower()]
 
-        elif char == ' ':  
+        elif char == " ":  
             result += english_to_braille[char]
             num_marker = False  # The space marks the end of a number sequence
+
+        elif char in english_to_braille:  # Handling any other special characters
+            result += english_to_braille[char]
 
     return result
             
@@ -67,9 +70,9 @@ def translate_to_english(input):
     for brl in chars:
 
         # Updating capitalization and number markers based on braille sequence
-        if brl == "....0":
+        if brl == ".....O":
             cap_next = True
-        elif brl == ".0.000":
+        elif brl == ".O.OOO":
             num_marker = True
         elif brl == "......":
             num_marker = False
@@ -91,15 +94,15 @@ def translate_to_english(input):
 # Wraper to choose which translating function to use based on is_braille function
 def translate(input):
     if is_braille(input):
-        return braille_to_english(input)
+        return translate_to_english(input)
     else:
-        return english_to_braille(input)
+        return translate_to_braille(input)
 
 
 # Checks command-line arguments and feeds them into program
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        input = "".join(sys.argv[1:])
+        input = " ".join(sys.argv[1:])
         result = translate(input)
         print(result)
     else:
