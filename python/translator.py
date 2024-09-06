@@ -72,19 +72,19 @@ def braille_to_english(string: str) -> str:
             # go to next braille character
             continue
 
+        # if space
+        if braille == "......" and braille in braille_dict:
+            output += braille_dict[braille]
+            # reset number follows
+            NUMBER_FOLLOWS = False
         # if capital letter
-        if CAPITAL_FOLLOWS and braille in braille_dict:
+        elif CAPITAL_FOLLOWS and braille in braille_dict:
             output += braille_dict[braille].upper()
             # reset capital follows
             CAPITAL_FOLLOWS = False
         # if number
         elif NUMBER_FOLLOWS and braille in braille_dict:
             output += char_to_num(braille_dict[braille])
-        # if space
-        elif braille == "......" and braille in braille_dict:
-            output += braille_dict[braille]
-            # reset number follows
-            NUMBER_FOLLOWS = False
         # if lowercase
         elif braille in braille_dict:
             output += braille_dict[braille]
