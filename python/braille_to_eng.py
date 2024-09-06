@@ -32,7 +32,7 @@ braille_to_english_dict = {
 def translate_braille(text):
     '''
     expects a text argument of type str. text variable should contain only '.' and 'O' representing braille
-    returns a string containing the english translation of the given text
+    prints a string containing the english translation of the given text
     '''
 
     # approach is similar to eng_to_braille 
@@ -87,4 +87,4 @@ def translate_braille(text):
                 
                 i = i + 6
 
-    return result
+    print(result)

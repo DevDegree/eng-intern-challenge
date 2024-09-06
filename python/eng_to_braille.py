@@ -31,7 +31,7 @@ english_to_braille_dict = {
 def translate_english(text):
     '''
     expects a text argument of type str
-    returns a string containing the braille translation of the given text
+    print a string containing the braille translation of the given text
     '''
 
     # approach:
@@ -61,4 +61,5 @@ def translate_english(text):
             result = result + english_to_braille_dict[val] # append the resulting braille number to the result
         else:
             result = result + english_to_braille_dict[char] # append all other characters
-    return result
+            
+    print(result)
