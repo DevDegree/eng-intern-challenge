@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-
 import sys
+import re
 
 ALPHA_TO_BRAILLE_DICT = {
     "a": "O.....",
@@ -94,24 +94,32 @@ def number_follows(input):
         return True
     return False
 
+def is_numeric(input):
+    # check if the input can be converted to a float
+    try:
+        float(input)
+        return True
+    except ValueError:
+        return False
+
 def translate_to_english(input):
     output = ""
     # divide the input string into a list of 6-character string for processing
     chars = [input[i:i+6] for i in range(0, len(input), BRAILLE_CODE_LENGTH)]
-    is_capital, is_number = False, False
+    is_capital, isnumeric = False, False
     
     for char in chars:
         if capital_follows(char):
             is_capital = True
         elif number_follows(char) or decimal_follows(char):
-            is_number = True
+            isnumeric = True
         elif is_capital:
             output += BRAILLE_TO_ALPHA_DICT[char].upper()
             is_capital = False
-        elif is_number:
+        elif isnumeric:
             if char == SPACE:
                 output += " "
-                is_number = False
+                isnumeric = False
             else:
                 output += BRAILLE_TO_NUMBER_DICT[char]
         elif char == SPACE:
@@ -127,13 +135,52 @@ def translate_to_english(input):
                 output += BRAILLE_TO_SIGN_DICT[char]
                 
     return output
-            
+
+def translate_to_braille(inputs):
+    output = ""
+    inputs = inputs.split()
+    
+    for input in inputs:
+        # add back the spaces that should be kept as arguments
+        output += SPACE # the first space will be removed later
+        
+        if input.isalpha():
+            for char in input:
+                if char.isupper():
+                    output += CAPITAL_FOLLOWS
+                    char = char.lower()
+                output += ALPHA_TO_BRAILLE_DICT[char]
+        elif is_numeric(input):
+            if input.isdigit():
+                output += NUMBER_FOLLOWS
+            else:
+                output += DECIMAL_FOLLOWS
+                
+            for char in input:
+                output += NUMBER_TO_BRAILLE_DICT[char]
+        # handle cases like alphanumeric string or strings with signs
+        else:
+            for char in input:
+                if char.isalpha():
+                    if char.isupper():
+                        output += CAPITAL_FOLLOWS
+                        char = char.lower()
+                    output += ALPHA_TO_BRAILLE_DICT[char]
+                elif char.isdigit():
+                    output += NUMBER_TO_BRAILLE_DICT[char]
+                else:
+                    output += SIGN_TO_BRAILLE_DICT[char]
+    
+    return re.sub(SPACE, '', output, 1)
+        
 def main():
     # retrieve the input
     if len(sys.argv) >= 2:
-        input = ' '.join(sys.argv[1:])
-        if is_braille(input):
-            print(translate_to_english(input))
+        args = " ".join(sys.argv[1:])
+        if is_braille(args):
+            print(translate_to_english(args))
+        else:
+            print(translate_to_braille(args))
     else:
         print("Please provide your input.")
         
