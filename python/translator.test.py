@@ -5,7 +5,7 @@ class TestTranslator(unittest.TestCase):
     
     def test_output(self):
         # Command to run translator.py script
-        command = ["python3", "python/translator.py", "Abc", "123", "xYz"]
+        command = ["python3", "translator.py", "Abc", "123", "xYz"]
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
         
@@ -16,7 +16,7 @@ class TestTranslator(unittest.TestCase):
 
     def test_output1(self):
         # Command to run translator.py script
-        command = ["python3", "python/translator.py", "Hello world"]
+        command = ["python3", "translator.py", "Hello world"]
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
         
@@ -27,7 +27,7 @@ class TestTranslator(unittest.TestCase):
 
     def test_output2(self):
         # Command to run translator.py script
-        command = ["python3", "python/translator.py", "42"]
+        command = ["python3", "translator.py", "42"]
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
         
@@ -38,7 +38,7 @@ class TestTranslator(unittest.TestCase):
 
     def test_output3(self):
         # Command to run translator.py script
-        command = ["python3", "python/translator.py", "Kai1.5"]
+        command = ["python3", "translator.py", "Kai1.5"]
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
         
@@ -49,7 +49,7 @@ class TestTranslator(unittest.TestCase):
     
     def test_output4(self):
         # Command to run translator.py script
-        command = ["python3", "python/translator.py", "Kai1.5 xyz"]
+        command = ["python3", "translator.py", "Kai1.5 xyz"]
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
         
@@ -60,7 +60,7 @@ class TestTranslator(unittest.TestCase):
    
     def test_output5(self):
         # Command to run translator.py script
-        command = ["python3", "python/translator.py", ".5"]
+        command = ["python3", "translator.py", ".5"]
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
         
@@ -71,7 +71,7 @@ class TestTranslator(unittest.TestCase):
     
     def test_output6(self):
         # Command to run translator.py script
-        command = ["python3", "python/translator.py", ">Hello"]
+        command = ["python3", "translator.py", ">Hello"]
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
         
@@ -83,7 +83,7 @@ class TestTranslator(unittest.TestCase):
 
     def test_output7(self):
         # Command to run translator.py script
-        command = ["python3", "python/translator.py", "kai .5"]
+        command = ["python3", "translator.py", "kai .5"]
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
         
@@ -97,7 +97,7 @@ class TestTranslator(unittest.TestCase):
 
     def test_output8(self):
         # Command to run translator.py script
-        command = ["python3", "python/translator.py", ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"]
+        command = ["python3", "translator.py", ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"]
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
         
@@ -108,7 +108,7 @@ class TestTranslator(unittest.TestCase):
 
     def test_output9(self):
         # Command to run translator.py script
-        command = ["python3", "python/translator.py", ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."]
+        command = ["python3", "translator.py", ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."]
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
         
@@ -119,7 +119,7 @@ class TestTranslator(unittest.TestCase):
 
     def test_output10(self):
         # Command to run translator.py script
-        command = ["python3", "python/translator.py", ".O.OOOOO.O..O.O..."]
+        command = ["python3", "translator.py", ".O.OOOOO.O..O.O..."]
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
         
@@ -130,7 +130,7 @@ class TestTranslator(unittest.TestCase):
 
     def test_output11(self):
         # Command to run translator.py script
-        command = ["python3", "python/translator.py", ".....OO...O.O......OO....O.OOOO......O...OO..O........OO..OOOO.OOOO..OOO"]
+        command = ["python3", "translator.py", ".....OO...O.O......OO....O.OOOO......O...OO..O........OO..OOOO.OOOO..OOO"]
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
         
@@ -141,7 +141,7 @@ class TestTranslator(unittest.TestCase):
 
     def test_output12(self):
         # Command to run translator.py script
-        command = ["python3", "python/translator.py", ".O.OOO..OO.OO..O.."]
+        command = ["python3", "translator.py", ".O.OOO..OO.OO..O.."]
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
         
@@ -152,7 +152,7 @@ class TestTranslator(unittest.TestCase):
     
     def test_output13(self):
         # Command to run translator.py script
-        command = ["python3", "python/translator.py", ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........O.OOOO..O..O..OO.O....."]
+        command = ["python3", "translator.py", ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........O.OOOO..O..O..OO.O....."]
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
         
@@ -163,7 +163,7 @@ class TestTranslator(unittest.TestCase):
 
     def test_output14(self):
         # Command to run translator.py script
-        command = ["python3", "python/translator.py", "O...O.O......OO..........O.OOO..OO.OO..O.."]
+        command = ["python3", "translator.py", "O...O.O......OO..........O.OOO..OO.OO..O.."]
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
         
@@ -175,7 +175,7 @@ class TestTranslator(unittest.TestCase):
 
     def test_output15(self):
         # Command to run translator.py script
-        command = ["python3", "python/translator.py", "Kai", "12 x",".OO.O..OOOO.O..OO.OOO.O...O.OO" ]
+        command = ["python3", "translator.py", "Kai", "12 x",".OO.O..OOOO.O..OO.OOO.O...O.OO" ]
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
         
