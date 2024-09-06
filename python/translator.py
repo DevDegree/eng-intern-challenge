@@ -16,7 +16,6 @@ class BrailleTranslator(Translator):
         super().__init__()
         self.__next_capital = False
         self.__next_number = False
-        self.__next_decimal = False
         
         self.__latin_alphabet = {'A': 'O.....', 'B': 'O.O...', 'C': 'OO....',
                                 'D': 'OO.O..', 'E': 'O..O..', 'F': 'OOO...',
@@ -101,11 +100,7 @@ class BrailleTranslator(Translator):
                 converted_text += ' '
                 continue
             if charac == CharacterType.DECIMAL.value:
-                self.__next_decimal = True
-                continue
-            if self.__next_decimal:
-                self.__next_decimal = False
-                converted_text += self.__latin_symbols.get(charac)
+                converted_text += '.'
                 continue
             if charac in self.__latin_symbols:
                 converted_text += self.__latin_symbols.get(charac)

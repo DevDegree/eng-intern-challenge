@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args": ["42.1"]
+            "args": ["Abc 123 xYz"]
         }
     ]
 }
