@@ -1,5 +1,7 @@
 import sys
 
+from typing import List
+
 character_map = {
     'a': "O.....",
     'b': "O.O...",
@@ -91,7 +93,7 @@ def to_english(command: str) -> str:
     return statement
 
 
-def to_braille(command: list[str]) -> str:
+def to_braille(command: List[str]) -> str:
     """ Converts the strings in <command> to Braille. """
     statement = ''
     number = False
