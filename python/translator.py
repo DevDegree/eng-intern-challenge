@@ -116,15 +116,15 @@ class BrailleTranslator(Translator):
             print(self.__translate_to_latin(characs))
         else:
             characs = list(text)
-            print(self.__translate_to_braille(text))
+            print(self.__translate_to_braille(characs))
 
 def main():
     if len(argv) > 1:
         translator = BrailleTranslator()
         text = ' '.join(argv[1:])
         translator.translate(text)
-    else:
-        pass
+        return 0
+    return 1
     
 if __name__ == '__main__':
     main()
