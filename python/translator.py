@@ -4,15 +4,15 @@ from eng_to_braille import translate_english
 
 def main():
     # create a string by joining all of the arguments passed through; join by spaces
-    text = ' '.join(sys.argv[1:])
+    text = " ".join(sys.argv[1:])
 
-    # check if the text contains only 'O' and '.' and the length of the text is a multiple of 6 as this indicates Braille
-    if (set(text)) == set(['O', '.']) and len(text) % 6 == 0:
+    # check if the text contains only "O" and "." and the length of the text is a multiple of 6 as this indicates Braille
+    if (set(text)) == set(["O", "."]) and len(text) % 6 == 0:
         # translate braille to english
-        translate_braille(text)
+        print(translate_braille(text))
     else:
         # translate english to braille
-        translate_english(text)
+       print(translate_english(text))
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
