@@ -110,6 +110,8 @@ def english_to_braille(english):
     for char in english:
         if number and not char.isdigit():
             number = False
+            if char != " ":
+                result += BRAILLE_SPACE
         if char == " ":
             result += BRAILLE_SPACE
         elif char.isupper():
