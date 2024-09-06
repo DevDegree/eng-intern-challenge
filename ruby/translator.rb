@@ -46,8 +46,13 @@ def main
   puts translated
 end
 
+# Determines the language of all given words.
+#
 # @param words [Array<String>]
-# @return [Symbol] <code>:braille</code>, <code>:english</code>, <code>:unknown</code>
+# @return [Symbol]
+#   <code>:braille</code> if all words are in Braille, <code>:english</code> if
+#   all words are in English (contains letters, numbers and punctuation), and
+#   <code>:unknown</code> otherwise.
 def determine_language(words)
   if words.all? { |word| word.match?(BRAILLE_PATTERN) }
     :braille
@@ -58,8 +63,13 @@ def determine_language(words)
   end
 end
 
-# @param words [Array<String>]
-# @return [String]
+# Translates the given words.
+#
+# If the given words are in Braille, translate into English. If the given words
+# are in English, then translate into Braille.
+#
+# @param words [Array<String>] A list of words either in Braille or in English.
+# @return [String] The whole text of words translated.
 def translate(words)
   language = determine_language(words)
 
@@ -77,8 +87,10 @@ def translate(words)
   end
 end
 
-# @param text [String]
-# @return [String]
+# Translates Braille text into English.
+#
+# @param text [String] A line of text consists of only Braille symbols.
+# @return [String] The Braille symbols translated to English.
 def braille_to_english(text)
   english = ""
   state = :letter_or_punctuation
@@ -92,8 +104,12 @@ def braille_to_english(text)
   english
 end
 
-# @param word [String]
-# @return [String]
+# Translates a single English word into Braille symbols.
+#
+# A word in English may contain letters, numbers and punctuation.
+#
+# @param word [String] A single word in English.
+# @return [String] Braille symbols that represents the given English word.
 def english_to_braille(word)
   braille = ""
   previous = ""
@@ -105,10 +121,17 @@ def english_to_braille(word)
   braille
 end
 
-# @param symbol [String]
-# @param state [Symbol]
-# @param text [String]
-# @return [Symbol]
+# Parse a single Braille symbol.
+#
+# The function simulates a state machine. At each step, the function checks the
+# given Braille symbol and the current state. Depending on these two factors,
+# the state machine decides what text should be appended and which state the
+# state machine should transition into in the next step.
+#
+# @param symbol [String] The Braille symbol the state machine is reading.
+# @param state [Symbol] The current state of the state machine.
+# @param text [String] The text translated by the state machine so far. May be modified in-place.
+# @return [Symbol] The next state of the state machine.
 def parse_braille_symbol(symbol, state, text)
   # check if it is a special symbol
   case REVERSE_TRANSLATION_TABLE[:special][symbol]
@@ -153,10 +176,13 @@ def parse_braille_symbol(symbol, state, text)
   state
 end
 
-# @param current [String]
-# @param previous [String]
-# @param braille_text [String]
-# @return [String]
+# Parse a single character in English and append the corresponding Braille
+# symbol to the given <code>braille_text</code>.
+#
+# @param current [String] The current character in English.
+# @param previous [String] The previous character in English.
+# @param braille_text [String] The Braille symbols translated from previous characters in English.
+# @return [String] The next <code>previous</code> character.
 def parse_english_character(current, previous, braille_text)
   if current.match? /[0-9]/ # current is a digit
     # add the number mark unless previous is already a digit or a decimal point
