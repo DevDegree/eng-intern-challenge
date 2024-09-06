@@ -101,7 +101,7 @@ def braille_to_english(input:str) -> str:
                 result += BRAILLE_TO_NUMBER[cur_seq]
             else:
                 result += BRAILLE_TO_LETTER[cur_seq]
-        else:
+        elif cur_seq == SPECIAL_TO_BRAILLE[" "]:
             result += BRAILLE_TO_SPECIAL[cur_seq]
             NUMBERS = False
         
