@@ -237,8 +237,8 @@ def braille_to_english(input):
 
 
 def main():
-    #input_string = ' '.join(sys.argv[1:])
-    print(translate("Abc 123 xYz"))
+    input_string = ' '.join(sys.argv[1:])
+    print(translate(input_string))
 
 if __name__ == "__main__":
     main()
