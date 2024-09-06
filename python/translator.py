@@ -34,8 +34,48 @@ BRAILLE_TO_ENGLISH = {
     "O..OOO": "z"
 }
 
-ENGLISH_TO_BRAILLE = {english: braille for braille, english in BRAILLE_TO_ENGLISH.items()}
-ENGLISH_TO_BRAILLE[" "] = BRAILLE_SPACE
+ENGLISH_TO_BRAILLE = {
+    'a': 'O.....',
+    'b': 'O.O...',
+    'c': 'OO....',
+    'd': 'OO.O..',
+    'e': 'O..O..',
+    'f': 'OOO...',
+    'g': 'OOOO..',
+    'h': 'O.OO..',
+    'i': '.OO...',
+    'j': '.OOO..',
+    'k': 'O...O.',
+    'l': 'O.O.O.',
+    'm': 'OO..O.',
+    'n': 'OO.OO.',
+    'o': 'O..OO.',
+    'p': 'OOO.O.',
+    'q': 'OOOOO.',
+    'r': 'O.OOO.',
+    's': '.OO.O.',
+    't': '.OOOO.',
+    'u': 'O...OO',
+    'v': 'O.O.OO',
+    'w': '.OOO.O',
+    'x': 'OO..OO',
+    'y': 'OO.OOO',
+    'z': 'O..OOO',
+    ' ': BRAILLE_SPACE,
+    '.': '..OO.O',
+    ',': '..O...',
+    '?': '..O.OO',
+    '!': '..OOO.',
+    ':': '..OO..',
+    ';': '..O.O.',
+    '-': '.O...O.',
+    '/': '.O..O.',
+    '<': '.O.O..O',
+    '>': 'O..OO.',
+    '(': 'O.O..O',
+    ')': '.O.OO.'
+}
+
 
 BRAILLE_NUMBERS = {
     "O.....": "1",
@@ -83,8 +123,7 @@ def braille_to_english_converter(input_text):
             final_text += BRAILLE_TO_ENGLISH[chunk].upper()
             caps_on = False
         elif chunk == BRAILLE_SPACE:
-            if not next_num:
-                final_text += " "
+            final_text += " "
             next_num = False
         elif next_num:
             final_text += BRAILLE_NUMBERS[chunk]
@@ -101,7 +140,6 @@ def english_to_braille(input_text):
     for i in input_text:
         if prev_num:
             if not i.isnumeric():
-                final_text += BRAILLE_SPACE
                 prev_num = False
                 if i.isupper():
                     final_text += CAPITAL_FOLLOWS
