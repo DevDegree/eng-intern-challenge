@@ -1,6 +1,6 @@
 ## Braille Translator in Python. 
 import sys
-
+test = '.....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO'
 input_str = ' '.join(sys.argv[1:])
 global_dict = {'a':"O.....", 'b':'O.O...', 'c':'OO....', 'd':'OO.O..', 'e':'O..O..', 'f':'OOO...', 
                'g':'OOOO..', 'h':'O.OO..', 'i':'.OO...', 'j':".OOO..", 'k':'O....O', 'l':'O.O.O.', 
@@ -13,8 +13,9 @@ values = list(global_dict.values()) # use this string to index the translation o
 
 def main(val):
     if val == '':
-      return ''
+        return ''
     final_msg = lang_converter(lang_detect(val), val) # 1 for braille, 0 for english. 
+    print(final_msg)
     return final_msg
 
 def lang_detect(string):
@@ -64,8 +65,8 @@ def lang_converter(convertee, val): # receives 0 or 1 and terminal value
                 char_start += 6
                 message += char_retrieval(snippet, mode)
             else:
-                char_end += 6 
-                char_start += 6 
+                char_end += 6
+                char_start += 6
 
         return message
 
@@ -75,6 +76,10 @@ def lang_converter(convertee, val): # receives 0 or 1 and terminal value
         i = 0
         mode = 0
         while i < len(eng_text): ## Processes english alphanum into braille
+
+            if str(eng_text[i]) == ' ':
+                mode = 0
+                message += str(global_dict[' '])
 
             if eng_text[i].isupper() == True:
                 message += str(global_dict['CAP'])
@@ -95,14 +100,9 @@ def lang_converter(convertee, val): # receives 0 or 1 and terminal value
             elif eng_text[i].isalpha():
                 message += str(global_dict[eng_text[i]])
                 i += 1 
-              
-            elif str(eng_text[i]) == ' ':
-                mode = 0
-                message += str(global_dict[' '])
-                i += 1   
-             
             else:
-              i += 1 
+                i += 1
+
         return message
 
 def char_retrieval(snippet, mode):
@@ -115,5 +115,4 @@ def char_retrieval(snippet, mode):
 
 
 main(input_str)
-
 
