@@ -16,3 +16,9 @@ alphabet_translation = {
     '(': 'O...O.', ')': 'O.OOO.', ' ': '......'
 }
 
+# Special indicators
+special_indicators = {
+    'capital': '.O....',    # Capitalization indicator
+    'number': '.OOO..',     # Number indicator
+    'decimal': '.OO.O.',    # Decimal indicator (optional based on standard)
+}
