@@ -1,4 +1,6 @@
-# CONSTANTS
+import sys
+
+# Create maps for english symbols to braille representations
 LETTER_TO_BRAILLE = {
     'a': 'O.....',
     'b': 'O.O...',
@@ -45,24 +47,14 @@ WHITESPACE_TO_BRAILLE = {
     ' ': '......'
 }
 
-BRAILLE_CAPITALIZE_SEQUENCE = '00000.'
-BRAILLE_NUMBER_SEQUENCE = '0.0...'
-
-CAPITALIZE = 'CAPITALIZE'
-NUMBER = 'NUMBER'
-
-SPECIAL_TO_BRAILLE = {
-    CAPITALIZE: '.....O',
-    NUMBER: '.O.OOO'
-}
-
+# invert maps to achieve braille to english symbol mappings
 BRAILLE_TO_LETTER = {braille: symbol for symbol,braille in LETTER_TO_BRAILLE.items()}
 BRAILLE_TO_NUMBER = {braille: symbol for symbol,braille in NUMBER_TO_BRAILLE.items()}
 BRAILLE_TO_WHITESPACE = {braille: symbol for symbol, braille in WHITESPACE_TO_BRAILLE.items()}
-BRAILLE_TO_SPECIAL = {braille: symbol for symbol,braille in SPECIAL_TO_BRAILLE.items()}
 
-VALID_SYMBOLS = LETTER_TO_BRAILLE | NUMBER_TO_BRAILLE | WHITESPACE_TO_BRAILLE
-VALID_BRAILLE = BRAILLE_TO_LETTER | BRAILLE_TO_NUMBER | BRAILLE_TO_WHITESPACE | BRAILLE_TO_SPECIAL
+# create constant variables for special braille escape sequences
+BRAILLE_CAPITALIZE_SEQUENCE = '.....O'
+BRAILLE_NUMBER_SEQUENCE = '.O.OOO'
 
 # HELPER FUNCTIONS
 def is_braille(user_input: str) -> bool:
@@ -77,7 +69,8 @@ def is_braille(user_input: str) -> bool:
     while right <= len(user_input):
         current_chunk = user_input[left:right]
 
-        if current_chunk not in VALID_BRAILLE:
+        # check if the current chunk is valid braille symbol
+        if current_chunk not in BRAILLE_TO_LETTER and current_chunk not in BRAILLE_TO_NUMBER and current_chunk not in BRAILLE_TO_WHITESPACE and current_chunk != BRAILLE_CAPITALIZE_SEQUENCE and current_chunk != BRAILLE_NUMBER_SEQUENCE:
             return False
         
         left = right
@@ -91,7 +84,9 @@ def is_english(user_input: str) -> bool:
     '''
     for character in user_input:
         character = character.lower()
-        if character not in VALID_SYMBOLS:
+
+        # check if current character is an allowable symbol
+        if character not in LETTER_TO_BRAILLE and character not in NUMBER_TO_BRAILLE and character not in WHITESPACE_TO_BRAILLE:
             return False
         
     return True
@@ -106,13 +101,14 @@ def convert_english_to_braille(user_input: str) -> str:
 
     for character in user_input:
         if character.lower() in LETTER_TO_BRAILLE:
-            # matches all upper or lower case letters
+            # matches all upper or lower case letters and add the capitalize sequence if needed
             if character.isupper():
                 result_string += BRAILLE_CAPITALIZE_SEQUENCE
 
             result_string += LETTER_TO_BRAILLE[character.lower()]
 
         elif character in NUMBER_TO_BRAILLE:
+            # match numbers and add number sequence if it is the first number following a new word
             if not NUMBER_SEQUENCE_WRITTEN:
                 NUMBER_SEQUENCE_WRITTEN = True
                 result_string += BRAILLE_NUMBER_SEQUENCE
@@ -120,6 +116,7 @@ def convert_english_to_braille(user_input: str) -> str:
             result_string += NUMBER_TO_BRAILLE[character]
 
         elif character in WHITESPACE_TO_BRAILLE:
+            # matches the space symbol and resets the number sequence flag variable
             result_string += WHITESPACE_TO_BRAILLE[character]
             
             NUMBER_SEQUENCE_WRITTEN = False
@@ -132,31 +129,35 @@ def convert_braille_to_english(user_input: str) -> str:
     '''
     result_string = ''
 
-    NEXT_LETTER_CAPITAL = False
-    CURRENTLY_READING_NUMBERS = False
+    capitalize_next_letter_flag = False
+    currently_reading_numbers_flag = False
 
     left, right = 0, 6
-
     while right <= len(user_input):
+        # get curent braille symbol
         current_chunk = user_input[left:right]
 
+        # determine if the current symbol is an escape sequence or a num/letter and handle accordingly
         if current_chunk == BRAILLE_CAPITALIZE_SEQUENCE:
-            NEXT_LETTER_CAPITAL = True
+            capitalize_next_letter_flag = True
+
         elif current_chunk == BRAILLE_NUMBER_SEQUENCE:
-            CURRENTLY_READING_NUMBERS = True
+            currently_reading_numbers_flag = True
+
         elif current_chunk in BRAILLE_TO_LETTER:
-            if NEXT_LETTER_CAPITAL:
+            # match valid letters and numbers, differentiating based on 'currently_reading_numbers_flag'
+            if capitalize_next_letter_flag:
                 result_string += BRAILLE_TO_LETTER[current_chunk].capitalize()
-                NEXT_LETTER_CAPITAL = False
-            elif CURRENTLY_READING_NUMBERS:
+                capitalize_next_letter_flag = False
+            elif currently_reading_numbers_flag:
                 result_string += BRAILLE_TO_NUMBER[current_chunk]
             else:
                 result_string += BRAILLE_TO_LETTER[current_chunk]
 
         elif current_chunk in BRAILLE_TO_WHITESPACE:
+            # match whitespace characters
             result_string += BRAILLE_TO_WHITESPACE[current_chunk]
-
-            CURRENTLY_READING_NUMBERS = False
+            currently_reading_numbers_flag = False
 
         left = right
         right += 6
@@ -164,16 +165,15 @@ def convert_braille_to_english(user_input: str) -> str:
     return result_string
 
 def main():
-    user_input = input().strip()
+    if len(sys.argv) < 2:
+        exit('Correct usage is: python translator.py {YOUR STRING HERE}')
+
+    user_input = " ".join(sys.argv[1:])
 
     if is_english(user_input):
-        val =  convert_english_to_braille(user_input)
+        print(convert_english_to_braille(user_input))
     elif is_braille(user_input):
-        val = convert_braille_to_english(user_input)
-    else:
-        print('Invalid input!!')
-
-    print(val)
+        print(convert_braille_to_english(user_input))
 
 if __name__ == '__main__':
     main()
