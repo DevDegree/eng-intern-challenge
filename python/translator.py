@@ -77,6 +77,11 @@ def translateBraille(input):
             elif (char == modifierDict['number']):
                 num = True
                 continue
+        if(char == '......'):
+            num = False
+            caps = False
+            output += ' '
+            continue
         if(num):
             output += brailleToNumDict[char]
             continue
@@ -92,8 +97,8 @@ def translateBraille(input):
         
 
 def translateEnglish(input):
-
-    return 
+    output = ''
+    return output
 
 
 if __name__ == '__main__':
@@ -104,7 +109,7 @@ if __name__ == '__main__':
         print(translateBraille(input))
 
     elif (not isBraille(input)):
-        print('english')
+        print(translateEnglish(input))
 
 
 
