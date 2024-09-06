@@ -3,16 +3,22 @@ import subprocess
 
 class TestTranslator(unittest.TestCase):
     def test_output(self):
-        # Command to run translator.py script
-        command = ["python3", "translator.py", "Abc", "123", "xYz"]
-        
-        # Run the command and capture output
+        # First test case: "Hello world"
+        command = ["python3", "translator.py", "Hello", "world"]
         result = subprocess.run(command, capture_output=True, text=True)
+        expected_output = ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."
+        self.assertEqual(result.stdout.strip(), expected_output)
         
-        # Expected output without the newline at the end
-        expected_output = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
+        # Second test case: "42"
+        command = ["python3", "translator.py", "42"]
+        result = subprocess.run(command, capture_output=True, text=True)
+        expected_output = ".O.OOOOO.O..O.O..."
+        self.assertEqual(result.stdout.strip(), expected_output)
         
-        # Strip any leading/trailing whitespace from the output and compare
+        # Third test case: "Abc 123"
+        command = ["python3", "translator.py", "Abc", "123"]
+        result = subprocess.run(command, capture_output=True, text=True)
+        expected_output = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO...."
         self.assertEqual(result.stdout.strip(), expected_output)
 
 if __name__ == '__main__':
