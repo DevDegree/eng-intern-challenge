@@ -21,6 +21,7 @@ def english_to_braille(text, braille_alphabet)
     if char =~ /[A-Z]/
       output += braille_alphabet["capital"]
       output += braille_alphabet[char.downcase]
+      in_number_mode = false
     elsif char =~ /\d/
       unless in_number_mode
         output += braille_alphabet["number"]
@@ -56,8 +57,13 @@ def braille_to_english(braille, braille_alphabet)
     elsif current_symbol == braille_alphabet[" "]
       english += " "
       in_number_mode = false
+      i += 6
+      next
     else
       char = reversed_alphabet[current_symbol] || ''
+      if in_number_mode && char =~ /[a-z]/
+        char = ('0'..'9').to_a[('a'..'j').to_a.index(char)]
+      end
       char = char.upcase if capitalize_next
       capitalize_next = false
       english += char
