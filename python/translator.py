@@ -29,10 +29,13 @@ def english_to_braille(input_str):
         if char.isupper():
             braille += BRAILLE_ALPHABET['CAPITAL'] + BRAILLE_ALPHABET[char.lower()]
         elif char.isdigit():
+            # Insert NUMBER marker before each number and switch number mode for each digit
             braille += BRAILLE_ALPHABET['NUMBER'] + BRAILLE_ALPHABET[char]
         else:
-            braille += BRAILLE_ALPHABET.get(char, BRAILLE_ALPHABET[' '])
+            # Convert letters and punctuation directly
+            braille += BRAILLE_ALPHABET.get(char, BRAILLE_ALPHABET[' '])  # Default to space if not found
     return braille
+
 
 # Function to convert Braille to English
 def braille_to_english(input_str):
