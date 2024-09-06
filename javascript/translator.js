@@ -73,3 +73,18 @@ function translateEngToBraille(input) {
 const brailleToEng = Object.fromEntries(
     Object.entries(engToBraille).map(([key, value]) => [value, key])
 );
+
+function translateBrailleToEng(input) {
+    const symbols = input.match(/.{6}/g);
+    let output = '';
+
+    for (const chunk of symbols) {
+        if (brailleToEng[chunk]) {
+            output += brailleToEng[chunk];
+
+        }
+    }
+    return output;
+}
+
+console.log(translateBrailleToEng('0.....'));
