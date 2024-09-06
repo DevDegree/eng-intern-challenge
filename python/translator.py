@@ -60,7 +60,7 @@ class BrailleTranslator(Translator):
         for charac in latin_text:
             if charac.isupper():
                 converted_text += CharacterType.CAPITAL.value
-            elif charac.isnumeric():
+            elif charac.isnumeric(): # TODO: Only add number follows to the beginning of the number until space is encountered, then add the rest of the number until decimal is encountered
                 converted_text += (CharacterType.NUMBER.value + self.latin_numbers.get(charac))
             elif charac in self.latin_symbols:
                 converted_text += self.latin_symbols.get(charac) # TODO: check for decimal
