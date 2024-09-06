@@ -73,22 +73,20 @@ def translateBraille(input):
         if (char in modifierDict.values()):
             if (char == modifierDict['capital']):
                 caps = True
-                continue
             elif (char == modifierDict['number']):
                 num = True
-                continue
-        if(char == '......'):
-            num = False
-            caps = False
+
+        elif(char == '......'):
+            num, caps = False, False
             output += ' '
-            continue
-        if(num):
+
+        elif(num):
             output += brailleToNumDict[char]
-            continue
-        if(caps):
+
+        elif(caps):
             output += brailleToAlphaDict[char].upper()
             caps = False
-            continue
+
         else:
             output += brailleToAlphaDict[char]
 
