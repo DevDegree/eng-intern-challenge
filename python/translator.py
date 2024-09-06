@@ -90,7 +90,6 @@ def braille_to_eng(braille: str) -> str:
         elif group == SPECIAL_CHARAS[' ']:
             is_number = False
             final_string += " "
-        
         # If number (more than 1), add to result
         elif is_number:
             final_string += BRAILLE_TO_NUMBERS.get(group)
@@ -116,8 +115,8 @@ def eng_to_braille(text: str) -> str:
     is_number= False
     
     for chara in text:
-        # If alphabetical, determine if uppercase special character required otherwise add corresponding braille character as normal
-        # If previous characters were numbers, add space & change number state to false
+        # If alphabetical character, determine if uppercase special character required otherwise add corresponding braille character as normal
+        # If previous characters were numbers make number state false so next encounter of number will add number indicator
         if chara.isalpha():
             if is_number:
                 is_number = False
@@ -129,7 +128,7 @@ def eng_to_braille(text: str) -> str:
             final_string += '.O.OOO' + NUMBERS.get(chara)
             is_number = True
         # If physical space encountered, add space character 
-        elif chara == ' ':
+        elif chara == ' ': 
             final_string += "......"
         # If number state true, add numbers as normal
         elif is_number:
