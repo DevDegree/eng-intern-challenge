@@ -37,3 +37,14 @@ const engToBraille = {
     '9': '.00...',
     '0': '.000..',
     }
+
+const capitalFollows = '.....0';
+const decimalFollows = '.0...0';
+const numberFollows = '.0.000';
+
+function translateEngToBraille(input) {
+    let output = '';
+    let numberMode = false;
+
+    for 
+}
