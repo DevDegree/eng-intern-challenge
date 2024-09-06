@@ -70,27 +70,38 @@ function translate() {
         }
         output = english_translation_array.join("");
         return output
-    } 
-    else {
+    } else {
         // handle alphabet to braille translation here.
         const braille_translation_array = [];
         const english_array = arg;
-        console.log(english_array)
         
         for (let word of english_array) {
             const wordArray = word.split('');
             for (let character of wordArray) {
                 if (!isNaN(parseInt(character))) {
-                    braille_translation_array.push(getValueFromDict(character, braille_num_dict));
+                    // Only include number follows once until a space is encountered
+                    !numberMode && braille_translation_array.push(getValueFromDict("number follows", braille_precursor_dict))
+                    numberMode = true;
+                    // Handle numbers
+                    numberMode && braille_translation_array.push(getValueFromDict(character, braille_num_dict));
                 } else if (character === character.toUpperCase()) {
+                    // Handle capital letters
                     braille_translation_array.push(getValueFromDict("capital follows", braille_precursor_dict));
                     braille_translation_array.push(getValueFromDict(character.toLowerCase(), braille_alphabet_dict));
                 } else {
-                    braille_translation_array.push(getValueFromDict(character, braille_alphabet_dict));
+                    // Handle lowercase letters and symbols
+                    const symbol = getValueFromDict(character, braille_symbols_dict);
+                    if (symbol) {
+                        braille_translation_array.push(symbol);
+                    } else {
+                        braille_translation_array.push(getValueFromDict(character, braille_alphabet_dict));
+                    }
                 }
             }
+            numberMode = false
+            braille_translation_array.push(getValueFromDict("space", braille_precursor_dict))
         }
-        output = braille_translation_array.join("");
+        output = braille_translation_array.slice(0, -1).join("");
         return output
     }
 }
