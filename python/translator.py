@@ -2,7 +2,7 @@ from textwrap import wrap
 import sys
 
 # CONSTANTS
-# Hashmaps representing alphabet, numbers, and special characters to braille
+# Hashmaps representing alphabet, numbers, special characters, and punctuation to braille
 ALPHABET = {
     'a': 'O.....',
     'b': 'O.O...',
@@ -65,7 +65,7 @@ PUNCTUATION = {
     ' ': '......',
 }
 
-# Hashmaps (reversed from above) to represent braille mapping to alphbabet, numbers, & special characters
+# Hashmaps (reversed from above) to represent braille mapping to alphbabet, numbers, special characters, & punctuation
 BRAILLE_TO_ALPHABET = {val : key for key, val in ALPHABET.items()}
 BRAILLE_TO_NUMBERS = {val : key for key, val in NUMBERS.items()}
 BRAILLE_TO_SPECIAL_CHARAS = {val : key for key, val in SPECIAL_CHARAS.items()}
@@ -73,70 +73,76 @@ BRAILLE_TO_PUNCTUATION = {val: key for key, val in PUNCTUATION.items()}
 
 # Convert from Braille - English
 def braille_to_eng(braille: str) -> str:
+    # variable to be returned & state tracking for capitals & numbers
     final_string = ''
     is_capital, is_number = False, False
     
-    # Break braille string into groups of 6 
+    # Break braille string into groups of 6 for readability
     braille_list = wrap(braille, 6)
     
     for group in braille_list:
-        # Check for capital symbol
+        # Check for special character symbols, changing states if necessary 
         if group == BRAILLE_TO_SPECIAL_CHARAS['.....0']:
             is_capital = True
-        # Check if number symbol
         elif group == BRAILLE_TO_SPECIAL_CHARAS['.0.000']:
             is_number = True
-        # Check if space
         elif group == BRAILLE_TO_SPECIAL_CHARAS['......']:
             final_string += " "
             is_number = False
+        # Add numbers to string
         elif is_number:
             final_string += BRAILLE_TO_NUMBERS.get(group)
-        else:
-            if group in BRAILLE_TO_ALPHABET:
-                letter = BRAILLE_TO_ALPHABET.get(group)
-                if is_capital:
-                    final_string += letter.upper()
-                    is_capital = False
-                else:
-                    final_string += letter
+        # If alphabet, check if uppercase otherwise add letter normally
+        elif group in BRAILLE_TO_ALPHABET:
+            letter = BRAILLE_TO_ALPHABET.get(group)
+            if is_capital:
+                final_string += letter.upper()
+                is_capital = False
             else:
-                punc = BRAILLE_TO_PUNCTUATION.get(group)
-                final_string += punc
+                final_string += letter
+        # Add punctuation
+        else:
+            punc = BRAILLE_TO_PUNCTUATION.get(group)
+            final_string += punc
     
     return final_string
 
 
 # Convert from English -> Braille
 def eng_to_braille(text: str) -> str:
+    # variable to be returned & state tracking for numbers
     final_string = ''
-    is_capital, is_number = False, False
+    is_number = False
     
     for chara in text:
-        # Check for capital symbol
+        # If alphabetical, determine if uppercase special character requiredr
         if chara in ALPHABET:
             if chara.isupper():
                 final_string += '.....0'
             final_string += ALPHABET.get(chara)
-        # Check if number symbol
-        elif chara.isdigit():
-            final_string += '.0.000' + NUMBERS.get(chara)
-            is_number == True
-        elif chara == SPECIAL_CHARAS[' ']:
-            final_string += "......"
+        # Add more than 1 number
         elif is_number:
             if BRAILLE_TO_SPECIAL_CHARAS.get(chara) != ' ':
                 final_string += NUMBERS.get(chara)
             else:
                 is_number = False
+        # Check if 1st number encountered    
+        elif chara.isdigit():
+            final_string += '.0.000' + NUMBERS.get(chara)
+            is_number == True
+        # Check for spaces & punctuation
+        elif chara == SPECIAL_CHARAS[' ']:
+            final_string += "......"
         else:
             final_string += PUNCTUATION.get(chara)
     
     return final_string
 
+# Check if inputted text was braille
 def check_for_braille(input: str) -> bool:
     return all(char in {'.', '0'} for char in input)
 
+# Run program
 if __name__ == '__main__':
     joined_args = ' '.join(sys.argv[1:])
 
