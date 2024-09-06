@@ -1,4 +1,3 @@
-
 const engToBraille = {
     'a': '0.....',
     'b': '0.0...',
@@ -49,55 +48,69 @@ const engToBraille = {
     '(': '0.0..0',
     ')': '.0.00.',
     ' ': '......',
-    }
+};
 
 const capitalFollows = '.....0';
 const decimalFollows = '.0...0';
 const numberFollows = '.0.000';
 
 
-function translateEngToBraille(input) {
-    let output = '';
-    let numberMode = false;
-
-    for (const char of input) {
-        if (char >= '0' && char <= '9') {
-            if (!numberMode) {
-                output += numberFollows;
-                numberMode = true;
-            }
-            output += engToBraille[char];
-        } else {
-            numberMode = false;
-            if (char >= 'A' && char <= 'Z') {
-            output += capitalFollows + engToBraille[char.toLowerCase()];
-            } else if (char === '.') {
-                output += decimalFollows;
-            } else {
-                output += engToBraille [char];
-            }
-        }   
-    }
-    return output;
-}
-
-// console.log(translateEngToBraille('a.A1'));
-
 const brailleToEng = Object.fromEntries(
     Object.entries(engToBraille).map(([key, value]) => [value, key])
 );
 
+
+brailleToEng[capitalFollows] = 'CAPITAL';
+brailleToEng[decimalFollows] = 'DECIMAL';
+brailleToEng[numberFollows] = 'NUMBER';
+
+console.log('brailleToEng:', brailleToEng);
+
 function translateBrailleToEng(input) {
-    const symbols = input.match(/.{6}/g);
     let output = '';
+    let mode = 'normal'; 
+    let currentPattern = '';
 
-    for (const chunk of symbols) {
-        if (brailleToEng[chunk]) {
-            output += brailleToEng[chunk];
+    for (let i = 0; i < input.length; i++) {
+        currentPattern += input[i];
 
+        if (currentPattern.length === 6) {
+            if (currentPattern === numberFollows) {
+                mode = 'number';
+            } else if (currentPattern === decimalFollows) {
+                mode = 'decimal';
+            } else if (currentPattern === capitalFollows) {
+                mode = 'capital';
+            } else {
+                let char = brailleToEng[currentPattern];
+                if (char === undefined) {
+                    console.warn(`Braille pattern '${currentPattern}' not found in brailleToEng.`);
+                } else {
+                    if (char === 'CAPITAL') {
+                        mode = 'capital';
+                    } else if (char === 'NUMBER') {
+                        mode = 'number';
+                    } else if (char === 'DECIMAL') {
+                        mode = 'decimal';
+                    } else {
+                        if (mode === 'capital') {
+                            char = char.toUpperCase();
+                            mode = 'normal'; 
+                        } else if (mode === 'number') {
+                            mode = 'normal'; 
+                        } else if (mode === 'decimal') {
+                            mode = 'normal'; 
+                        }
+                        output += char;
+                    }
+                }
+                currentPattern = ''; 
+            }
         }
     }
+
     return output;
 }
 
-console.log(translateBrailleToEng('.O.OOOOO.O..O.O...'));
+
+// console.log(translateBrailleToEng('.O.OOOOO.O..O.O...'));
