@@ -6,7 +6,7 @@ class Translator:
     BRAILLE_MAP = BRAILLE_MAP
     INVERSE_BRAILLE_MAP = INVERSE_BRAILLE_MAP
 
-    def encode_braille(self, input):
+    def encode_braille(self, input: str) -> str:
         # Translates English to braille language. Map each element to it's 
         # corresponding braille counterpart. For every capital element, capitalize
         # the following letter. For every number element, expect following to be numbers
@@ -29,7 +29,7 @@ class Translator:
             output += self.BRAILLE_MAP[element]
         return output
     
-    def decode_braille(self, input):
+    def decode_braille(self, input: str) -> str:
         # Translates braille leanguage to English. Loop through every 6,
         # elements and match them to the corresponding English counterpart.
         # For every capital match, capitalize the following letter. For every
