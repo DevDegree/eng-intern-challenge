@@ -114,4 +114,3 @@ let translator = function(input) {
 // translator('u')
 // translator('cookie')
 // translator('425')
-.
