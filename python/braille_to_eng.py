@@ -52,39 +52,37 @@ def translate_braille(text):
         # "." and "O" characters to represent a single braille character/flag
 
         # process the character/flag
-        match char:
+        if char == ".....O": # capital follows
+            next_capital = True
+            i = i + 6 
 
-            case ".....O": # capital follows
-                next_capital = True
-                i = i + 6 
+        elif char == ".O.OOO": # number follows
+            next_num = True
+            i = i + 6
 
-            case ".O.OOO": # number follows
-                next_num = True
-                i = i + 6
-
-            case "......": # space
-                if result[-1].isdigit(): # only set next_num flag to false if you encounter a space character
-                    next_num = False
-                result = result + " "
-                i = i + 6
+        elif char == "......": # space
+            if result[-1].isdigit(): # only set next_num flag to false if you encounter a space character
+                next_num = False
+            result = result + " "
+            i = i + 6
             
-            case _: # default case to handle character input
-                # if the next capital flag is raised then add the uppercase letter from the alphabet
-                if next_capital:
-                    val = braille_to_english_dict[char]
-                    result = result + val.upper()
-                    next_capital = False
+        else:  # default case to handle character input
+            # if the next capital flag is raised then add the uppercase letter from the alphabet
+            if next_capital:
+                val = braille_to_english_dict[char]
+                result = result + val.upper()
+                next_capital = False
 
-                # process the numbers
-                elif next_num:
-                    val = (ord(braille_to_english_dict[char])-ord("a") + 1) % 10 # mod 10 to account for j == 0
-                    result = result + str(val)
+            # process the numbers
+            elif next_num:
+                val = (ord(braille_to_english_dict[char])-ord("a") + 1) % 10 # mod 10 to account for j == 0
+                result = result + str(val)
                 
-                # process all other characters and append them to the result
-                else:
-                    val = braille_to_english_dict[char]
-                    result = result + val
+            # process all other characters and append them to the result
+            else:
+                val = braille_to_english_dict[char]
+                result = result + val
                 
-                i = i + 6
+            i = i + 6
 
     return result
