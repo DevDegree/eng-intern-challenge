@@ -110,11 +110,12 @@ const numberToBraille: { [braille: string]: string } = {
   "0": ".OOO..",
 };
 
+let output: string = "";
+
 if (/^[O.]+$/.test(input)) {
   // Braille is inputted
   let beginning: number = 0;
   let end: number = 6;
-  let output: string = "";
   let isNumber: boolean = false;
 
   while (end <= input.length) {
@@ -140,36 +141,39 @@ if (/^[O.]+$/.test(input)) {
       // Regular character
       output += brailleToLettersOrSpecial[currentSlice];
     }
-
     beginning += 6;
     end += 6;
   }
-  console.log(output);
 } else {
   // Regular character inputted
   let counter: number = 0;
-  let output: string = "";
   let isNumber: boolean = false;
 
   while (counter < input.length) {
     const currentChar: string = input[counter];
 
     if (currentChar === " ") {
+      // Space and turn isNumber false
       output += "......";
       isNumber = false;
     } else if (isNumber) {
+      // Not first number character and isNumber is true
       output += numberToBraille[currentChar];
     } else if (/^[0-9]$/.test(currentChar)) {
+      // First number character and turn isNumber true
       isNumber = true;
       output += ".O.OOO";
       output += numberToBraille[currentChar];
     } else if (currentChar === currentChar.toUpperCase()) {
+      // Upper case character
       output += ".....O";
       output += lettersOrSpecialToBraille[currentChar.toLowerCase()];
     } else {
+      // Regualr character
       output += lettersOrSpecialToBraille[currentChar.toLowerCase()];
     }
     counter++;
   }
-  console.log(output);
 }
+
+console.log(output);
