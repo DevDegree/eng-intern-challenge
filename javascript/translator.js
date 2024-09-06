@@ -51,9 +51,9 @@ const engToBraille = {
     ' ': '......'
 };
 
-const capitalFollows = '.....0';
-const decimalFollows = '.0...0'; 
-const numberFollows = '.0.000';  
+const capitalFollows = '.....O';
+const decimalFollows = '.O...O'; 
+const numberFollows = '.O.OOO';  
 
 
 
@@ -187,6 +187,6 @@ function translateBrailleToEng(input) {
 }
 
 
-
+console.log(translateEngToBraille("Abc 123 xYz"));
 
 
