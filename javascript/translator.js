@@ -46,5 +46,25 @@ function translateEngToBraille(input) {
     let output = '';
     let numberMode = false;
 
-    for 
+    for (const char of input) {
+        if (char >= '0' && char <= '9') {
+            if (!numberMode) {
+                output += numberFollows;
+                numberMode = true;
+            }
+            output += engToBraille[char];
+        } else {
+            numberMode = false;
+            if (char >= 'A' && char <= 'Z') {
+            output += capitalFollows + engToBraille[char.toLowerCase()];
+            } else if (char === '.') {
+                output += decimalFollows;
+            } else {
+                output += engToBraille [char];
+            }
+        }   
+    }
+    return output;
 }
+
+// console.log(translateEngToBraille('a.A1'));
