@@ -1,3 +1,7 @@
+// Braille alphabet mapping: This object maps each English letter, number, and space to its corresponding Braille representation.
+// Each Braille character is represented as a 6-dot matrix, with 'O' indicating a raised dot and '.' indicating an unraised dot.
+// The Braille characters for letters and numbers follow a standardized pattern as defined below.
+
 const brailleLetters = {
   'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O.O.O.', 'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..',
   'i': '.OO...', 'j': '.OOO..', 'k': 'O...O.', 'l': 'O.O.O.', 'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O.O..O', 'p': 'OOO.O.',
