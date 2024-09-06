@@ -1,7 +1,6 @@
-# Updated Braille Translator with Fixes
 import sys
 
-# Updated Braille mappings including punctuation and special symbols
+# Dictionary to map English alphabet, numbers, and space to Braille
 alphanumeric_to_braille = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
     'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..',
@@ -13,6 +12,7 @@ alphanumeric_to_braille = {
     '0': '.OOO..', ' ': '......',
 }
 
+# Dictionary to map Braille to English alphabet
 braille_to_alphabet = {
     'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd', 'O..O..': 'e',
     'OOO...': 'f', 'OOOO..': 'g', 'O.OO..': 'h', '.OO...': 'i', '.OOO..': 'j',
@@ -21,6 +21,8 @@ braille_to_alphabet = {
     'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y',
     'O..OOO': 'z', '......': ' '  # Space
 }
+
+# Dictionary to map Braille to English numbers
 
 braille_to_numeric = {
     'O.....': '1', 'O.O...': '2', 'OO....': '3', 'OO.O..': '4', 'O..O..': '5',
