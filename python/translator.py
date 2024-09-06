@@ -91,11 +91,8 @@ def translator(direction: str, text: str) -> str:
 
 
 def main():
-    if len(sys.argv) != 2:
-        print("Usage: python translator.py <input_string>")
-        return
-    
-    ipt_str = sys.argv[1]
+    args = sys.argv[1:]
+    ipt_str = " ".join(args)
     str_type = braille_or_english(ipt_str)
 
     if str_type == 'ENGLISH':
