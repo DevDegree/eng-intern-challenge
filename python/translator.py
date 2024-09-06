@@ -65,7 +65,7 @@ def determine_braille_or_english(input_text):
     #if the input_text fails every previous conditions,then it is in braille.
     return True
 
-#translates the input_text from braille to english
+#translates the input_text from braille to english and then prints it 
 def translate_to_english(input_txt):
     output_txt = ""             #text translated to english that will be printed 
     is_number_flag = False      #if true then the sequence is considered a number instead of a letter
@@ -127,7 +127,7 @@ def translate_to_english(input_txt):
     #prints the translated message in english.
     print(output_txt)
         
-#translates the text from english to braille
+#translates the text from english to braille and then prints it 
 def translate_to_braille(input_txt):
     output_txt = ""                 #text that will be printed 
     is_first_number_flag = True     #if true then the sequence is considered a number instead of a letter
