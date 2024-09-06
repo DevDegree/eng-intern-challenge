@@ -37,14 +37,8 @@ class BrailleTranslator(Translator):
                               '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', 
                               '0': '.OOO..'}
         
-        self.__braille_alphabet = {}
-        self.__braille_numbers = {}
-        
-        for key, value in self.__latin_alphabet.items():
-            self.__braille_alphabet[value] = key
-        
-        for key, value in self.__latin_numbers.items():
-            self.__braille_numbers[value] = key
+        self.__braille_alphabet = {value: key for key, value in self.__latin_alphabet.items()}
+        self.__braille_numbers = {value: key for key, value in self.__latin_numbers.items()}
             
     def __is_braille(self, text) -> bool:
         if len(text) % 6 == 0:
