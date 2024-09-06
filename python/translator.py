@@ -7,7 +7,7 @@ alphaToBrailleDict = {
     'd': 'OO.O..',
     'e': 'O..O..',
     'f': 'OOO...',
-    'g': 'OOO..',
+    'g': 'OOOO..',
     'h': 'O.OO..',
     'i': '.OO...',
     'j': '.OOO..',
@@ -96,6 +96,22 @@ def translateBraille(input):
 
 def translateEnglish(input):
     output = ''
+
+    num = False
+
+    for char in input:
+        if(char.isdigit()):
+            if(not num):
+                num = True
+                output += modifierDict['number']
+            output += numToBrailleDict[char]
+
+        elif(char.isupper()):
+            output += modifierDict['capital']
+            output += alphaToBrailleDict[char.lower()]
+        
+        else:
+            output += alphaToBrailleDict[char]
     return output
 
 
@@ -107,7 +123,12 @@ if __name__ == '__main__':
         print(translateBraille(input))
 
     elif (not isBraille(input)):
-        print(translateEnglish(input))
+        output = ''
+        for i in range(1, len(sys.argv)):
+            output += (translateEnglish(sys.argv[i]))
+            if(i != len(sys.argv)-1):
+                output += '......'
+        print(output)
 
 
 
