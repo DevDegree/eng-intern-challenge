@@ -100,4 +100,4 @@ function translateBrailleToEng(input) {
     return output;
 }
 
-console.log(translateBrailleToEng('0.00...00...........000.'));
+console.log(translateBrailleToEng('.O.OOOOO.O..O.O...'));
