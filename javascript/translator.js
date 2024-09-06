@@ -5,7 +5,7 @@ const brailleToEnglish = {
     'O...O.': 'k', 'O.O.O.': 'l', 'OO..O.': 'm', 'OO.OO.': 'n', 'O..OO.': 'o',
     'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't',
     'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y', 'O..OOO': 'z',
-    '......': ' ', // space
+    '......': ' ',  // space
 };
 
 const englishToBraille = {
@@ -14,31 +14,32 @@ const englishToBraille = {
     'k': 'O...O.', 'l': 'O.O.O.', 'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.',
     'p': 'OOO.O.', 'q': 'OOOOO.', 'r': 'O.OOO.', 's': '.OO.O.', 't': '.OOOO.',
     'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO', 'z': 'O..OOO',
-    ' ': '......', // space
+    ' ': '......',  // space
 };
 
 // Special symbols
-const capitalBraille = '.....O';
-const numberBraille = '.O.OOO';
+const CAPITAL_BRAILLE = '.....O';
+const NUMBER_BRAILLE = '.O.OOO';
 
+// Helper function to detect if input is Braille or English
 const isBraille = (input) => input[0] === 'O' || input[0] === '.';
 
-// Braille to English
+// Braille to English converter
 function brailleToEnglishConverter(brailleStr) {
-    const words = brailleStr.split('......');
+    const words = brailleStr.split('......');  // Split into words using the Braille space (......)
     let result = '';
     
     for (let word of words) {
-        let chars = word.match(/.{1,6}/g); // Split by every 6 characters (Braille)
+        const chars = word.match(/.{1,6}/g);  // Split every 6 characters (Braille cell)
         let capitalNext = false;
         let numberMode = false;
         
         for (let char of chars) {
-            if (char === capitalBraille) {
+            if (char === CAPITAL_BRAILLE) {
                 capitalNext = true;
                 continue;
             }
-            if (char === numberBraille) {
+            if (char === NUMBER_BRAILLE) {
                 numberMode = true;
                 continue;
             }
@@ -53,18 +54,23 @@ function brailleToEnglishConverter(brailleStr) {
                 result += letter;
             }
         }
-        result += ' '; // Add space between words
+        result += ' ';  // Add space between words
     }
     return result.trim();
 }
 
-// English to Braille
+// English to Braille converter
 function englishToBrailleConverter(englishStr) {
     let result = '';
     
     for (let char of englishStr) {
-        if (char === char.toUpperCase() && char !== ' ') {
-            result += capitalBraille; // Add capital marker
+        if (char === ' ') {
+            result += '......';  // Handle spaces
+            continue;
+        }
+
+        if (char === char.toUpperCase()) {
+            result += CAPITAL_BRAILLE;  // Add capital marker before uppercase letters
             char = char.toLowerCase();
         }
         
@@ -73,10 +79,10 @@ function englishToBrailleConverter(englishStr) {
         }
     }
     
-    return result;
+    return result.trim();  // Remove any trailing spaces
 }
 
-// Main function to handle both directions
+// Main translation function to handle both directions
 function translate(input) {
     if (isBraille(input)) {
         return brailleToEnglishConverter(input);
@@ -85,6 +91,8 @@ function translate(input) {
     }
 }
 
-// Example usage:
-const input = process.argv.slice(2).join(' '); // Take input from command line
-console.log(translate(input));
+// Command-line input handling
+if (require.main === module) {
+    const input = process.argv.slice(2).join(' ');  // Take input from the command line
+    console.log(translate(input));
+}
