@@ -46,8 +46,13 @@ NUMBERS =  {
 }
 
 SPECIAL_CHARAS = {
-    'capital' : '.....0', 'number':'.0.000', ' ':'......'
+    'capital' : '.....O', 'number':'.O.OOO', ' ':'......'
 }
+
+# Abc123xYz
+# .....O O..... O.O... OO.... ...... .O.OOO O..... O.O... OO.... ...... OO..OO .....O OO.OOO O..OOO
+# .....O O..... O.O... OO.... ...... .O.OOO O..... O.O... OO.... ...... OO..OO .....O OO.OOO O..OOO
+# (capital) a b c (space) (number) 1 2 3 (space) x (capital) Y z
 
 PUNCTUATION = {
     '.': '..OO.O',
@@ -61,8 +66,7 @@ PUNCTUATION = {
     '<': '.O..O.',
     '>': 'O..OO.',
     '(': 'O.O..O',
-    ')': '.O.OO.',
-    ' ': '......',
+    ')': '.O.OO.'
 }
 
 # Hashmaps (reversed from above) to represent braille mapping to alphbabet, numbers, special characters, & punctuation
@@ -70,6 +74,13 @@ BRAILLE_TO_ALPHABET = {val : key for key, val in ALPHABET.items()}
 BRAILLE_TO_NUMBERS = {val : key for key, val in NUMBERS.items()}
 BRAILLE_TO_SPECIAL_CHARAS = {val : key for key, val in SPECIAL_CHARAS.items()}
 BRAILLE_TO_PUNCTUATION = {val: key for key, val in PUNCTUATION.items()}
+
+# .....O O.OO.. O..O.. O.O.O. O.O.O. O..OO. ...... .....O .OOO.O O..OO. O.OOO. O.O.O. OO.O..
+# (capital) h e l l o (space) (capital) w o r l d
+
+# Abc123xYz
+# .....O O..... O.O... OO.... .O.OOO O..... .O.OOO O.O... .O.OOO OO.... OO..OO .....O OO.OOO O..OOO
+# (capital) a b c ()
 
 # Convert from Braille - English
 def braille_to_eng(braille: str) -> str:
@@ -82,14 +93,15 @@ def braille_to_eng(braille: str) -> str:
     
     for group in braille_list:
         # Check for special character symbols, changing states if necessary 
-        if group == BRAILLE_TO_SPECIAL_CHARAS['.....0']:
+        if group == '.....O':
             is_capital = True
-        elif group == BRAILLE_TO_SPECIAL_CHARAS['.0.000']:
+        elif group == '.O.OOO':
             is_number = True
-        elif group == BRAILLE_TO_SPECIAL_CHARAS['......']:
-            final_string += " "
-            is_number = False
-        # Add numbers to string
+        elif group == '......':
+            if is_number == False:
+                final_string += " "
+            else:
+                is_number = False
         elif is_number:
             final_string += BRAILLE_TO_NUMBERS.get(group)
         # If alphabet, check if uppercase otherwise add letter normally
@@ -102,8 +114,7 @@ def braille_to_eng(braille: str) -> str:
                 final_string += letter
         # Add punctuation
         else:
-            punc = BRAILLE_TO_PUNCTUATION.get(group)
-            final_string += punc
+            final_string += BRAILLE_TO_PUNCTUATION.get(group)
     
     return final_string
 
@@ -112,27 +123,25 @@ def braille_to_eng(braille: str) -> str:
 def eng_to_braille(text: str) -> str:
     # variable to be returned & state tracking for numbers
     final_string = ''
-    is_number = False
+    is_number= False
     
     for chara in text:
-        # If alphabetical, determine if uppercase special character requiredr
-        if chara in ALPHABET:
+        # If alphabetical, determine if uppercase special character required
+        if chara.isalpha():
+            if is_number:
+                final_string += '......'
+                is_number = False
             if chara.isupper():
-                final_string += '.....0'
-            final_string += ALPHABET.get(chara)
+                final_string += '.....O'
+            final_string += ALPHABET.get(chara.lower())
+        elif chara.isdigit() and is_number == False:
+            final_string += '.O.OOO' + NUMBERS.get(chara)
+            is_number = True
+        elif chara == ' ':
+            final_string += "......"
         # Add more than 1 number
         elif is_number:
-            if BRAILLE_TO_SPECIAL_CHARAS.get(chara) != ' ':
-                final_string += NUMBERS.get(chara)
-            else:
-                is_number = False
-        # Check if 1st number encountered    
-        elif chara.isdigit():
-            final_string += '.0.000' + NUMBERS.get(chara)
-            is_number == True
-        # Check for spaces & punctuation
-        elif chara == SPECIAL_CHARAS[' ']:
-            final_string += "......"
+            final_string += NUMBERS.get(chara)
         else:
             final_string += PUNCTUATION.get(chara)
     
@@ -140,7 +149,7 @@ def eng_to_braille(text: str) -> str:
 
 # Check if inputted text was braille
 def check_for_braille(input: str) -> bool:
-    return all(char in {'.', '0'} for char in input)
+    return all(char in {'.', 'O'} for char in input)
 
 # Run program
 if __name__ == '__main__':
