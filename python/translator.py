@@ -25,26 +25,35 @@ class Translator:
                          '-': '....OO', '/': '.O..O.', '<': '.OO..O',
                          '>': 'O..OO.', '(': 'O.O..O', ')': '.O.OO.',
                          ' ': '......', 'capital': CharacterType.CAPITAL, 'decimal': CharacterType.DECIMAL, 'number': CharacterType.NUMBER}
-
-    def translate(self, text):
-       pass
     
-    def is_braille(self, char) -> bool:
+    def is_braille(self, text) -> bool:
+        if len(text) == 6:
+            for charac in text:
+                if charac != 'O' and charac != '.':
+                    return False
+            return True
+        return False
+    
+    def is_capital(self, charac) -> bool:
+        pass
+    
+    def is_decimal(self, charac) -> bool:
+        pass
+    
+    def is_number(self, charac) -> bool:
         pass
    
-    def is_capital(self, char) -> bool:
-        pass
-    
-    def is_decimal(self, char) -> bool:
-        pass
-    
-    def is_number(self, char) -> bool:
-        pass
+    def translate(self, text: str) -> str:
+        if self.is_braille(text):
+            pass
+        else:
+            pass
 
 def main():
     if len(argv) > 1:
         translator = Translator()
-        
+        text = ' '.join(argv[1:])
+        translator.translate(text)
     else:
         pass
     
