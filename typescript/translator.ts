@@ -46,6 +46,14 @@ const numberToBrailleMap: BrailleMap = {
 const capitalIndicator = ".....O";
 const numberIndicator = ".O.OOO";
 
+const brailleToEnglishMap = Object.fromEntries(
+  Object.entries(englishToBrailleMap).map(([char, braille]) => [braille, char])
+);
+
+const brailleToNumberMap = Object.fromEntries(
+  Object.entries(numberToBrailleMap).map(([num, braille]) => [braille, num])
+);
+
 function englishToBraille(input: string): string {
   let result = "";
   let numberMode = false;
@@ -72,5 +80,46 @@ function englishToBraille(input: string): string {
   return result;
 }
 
+function brailleToEnglish(input: string): string {
+  let result = "";
+  const chars = input.match(/.{6}/g) || [];
+  let capitalizeNext = false;
+  let numberMode = false;
+
+  for (const braille of chars) {
+    if (braille === "......") {
+      result += " ";
+      numberMode = false;
+    } else if (braille === capitalIndicator) {
+      capitalizeNext = true;
+    } else if (braille === numberIndicator) {
+      numberMode = true;
+    } else {
+      if (numberMode) {
+        result += brailleToNumberMap[braille];
+      } else {
+        let letter = brailleToEnglishMap[braille];
+        if (capitalizeNext) {
+          letter = letter.toUpperCase();
+          capitalizeNext = false;
+        }
+        result += letter;
+      }
+    }
+  }
+
+  return result;
+}
+
+function translate(input: string): string {
+  const isBraille = /^[O.]+$/.test(input) && input.length % 6 === 0;
+
+  if (isBraille) {
+    return brailleToEnglish(input);
+  } else {
+    return englishToBraille(input);
+  }
+}
+
 const input = process.argv.slice(2).join(" ");
-console.log(englishToBraille(input));
+console.log(translate(input));
