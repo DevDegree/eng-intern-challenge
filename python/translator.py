@@ -65,11 +65,53 @@ class Translator:
     
     def text_to_braille(self, text):
         braille_output = []
+        is_digit = False
+
+        for char in text:
+            if char.isupper():
+                braille_output.append(self.char_to_braille["capital"])
+                braille_output.append(self.char_to_braille[char.lower()])
+            elif char.isdigit():
+                if not is_digit:
+                    braille_output.append(self.char_to_braille["number"])
+                    is_digit = True
+
+                braille_output.append(self.char_to_braille[char])
+            else:
+                if char == " ":
+                    is_digit = False
+
+                braille_output.append(self.char_to_braille[char])
 
         return "".join(braille_output)
     
     def braille_to_text(self, braille):
         text_output = []
+        braille_chunks = [braille[i:i+6] for i in range(0, len(braille), 6)]
+        capitalize_next = False
+        is_number = False
+
+        for chunk in braille_chunks:
+            if chunk == self.char_to_braille["capital"]:
+                capitalize_next = True
+                continue
+            elif chunk == self.char_to_braille["number"]:
+                is_number = True
+                continue
+            elif chunk == self.char_to_braille[" "]:
+                is_number = False
+
+            if is_number:
+                char = self.braille_to_number.get(chunk, "")
+            else:
+                char = self.braille_to_english.get(chunk, "")
+
+            # Capitalize if needed
+            if capitalize_next and char:
+                char = char.upper()
+                capitalize_next = False
+            
+            text_output.append(char)
 
         return "".join(text_output)
 
