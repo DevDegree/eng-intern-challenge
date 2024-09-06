@@ -1,58 +1,58 @@
 import sys
 
 alphaToBrailleDict = {
-    'a': '0.....',
-    'b': '0.0...',
-    'c': '00....',
-    'd': '00.0..',
-    'e': '0..0..',
-    'f': '000...',
-    'g': '0000..',
-    'h': '0.00..',
-    'i': '.00...',
-    'j': '.000..',
-    'k': '0...0.',
-    'l': '0.0.0.',
-    'm': '00..0.',
-    'n': '00.00.',
-    'o': '0..00.',
-    'p': '000.0.',
-    'q': '00000.',
-    'r': '0.000.',
-    's': '.00.0.',
-    't': '.0000.',
-    'u': '0...00',
-    'v': '0.0.00',
-    'w': '.000.0',
-    'x': '00..00',
-    'y': '00.000',
-    'z': '0..000'
+    'a': 'O.....',
+    'b': 'O.O...',
+    'c': 'OO....',
+    'd': 'OO.O..',
+    'e': 'O..O..',
+    'f': 'OOO...',
+    'g': 'OOO..',
+    'h': 'O.OO..',
+    'i': '.OO...',
+    'j': '.OOO..',
+    'k': 'O...O.',
+    'l': 'O.O.O.',
+    'm': 'OO..O.',
+    'n': 'OO.OO.',
+    'o': 'O..OO.',
+    'p': 'OOO.O.',
+    'q': 'OOOOO.',
+    'r': 'O.OOO.',
+    's': '.OO.O.',
+    't': '.OOOO.',
+    'u': 'O...OO',
+    'v': 'O.O.OO',
+    'w': '.OOO.O',
+    'x': 'OO..OO',
+    'y': 'OO.OOO',
+    'z': 'O..OOO'
 }
 numToBrailleDict = {
-    '1': '0.....',
-    '2': '0.0...',
-    '3': '00....',
-    '4': '00.0..',
-    '5': '0..0..',
-    '6': '000...',
-    '7': '0000..',
-    '8': '0.00..',
-    '9': '.00...',
-    '0': '.000..',
+    '1': 'O.....',
+    '2': 'O.O...',
+    '3': 'OO....',
+    '4': 'OO.O..',
+    '5': 'O..O..',
+    '6': 'OOO...',
+    '7': 'OOOO..',
+    '8': 'O.OO..',
+    '9': '.OO...',
+    '0': '.OOO..',
 }
 
 modifierDict = {
-    'capital': '.....0', # put two in front of word to capitalize word
-    'decimal': '.0...0',
-    'number': '.0.000'
+    'capital': '.....O', # put two in front of word to capitalize word
+    'decimal': '.O...O',
+    'number': '.O.OOO'
 }
 
 brailleToAlphaDict = {i: j for j, i in alphaToBrailleDict.items()}
 brailleToNumDict = {i: j for j, i in numToBrailleDict.items()}
 
-print(brailleToAlphaDict)
+chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ1234567890,?!:;-/<>() '
 
-chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789,?!:;-/<>() '
+
 
 def isBraille(input): # checks if input string is braille or english
     if any((char in chars) for char in input):
@@ -60,12 +60,15 @@ def isBraille(input): # checks if input string is braille or english
     else:
         return True
     
+
+
+
 def translateBraille(input):
     inputSplit = [input[i:i+6] for i in range(0, len(input), 6)] 
 
-    print(inputSplit)
+    caps, dec, num = False, False, False
 
-    caps, dec, num = False
+    output = ''
 
     for char in inputSplit:
         if (char in modifierDict.values()):
@@ -79,9 +82,21 @@ def translateBraille(input):
                 num = True
                 continue
         if(num):
+            output += brailleToNumDict[char]
+            continue
+        if(caps):
+            output += brailleToAlphaDict[char].upper()
+            caps = False
+            continue
+        if(dec):
+            continue
+        if (char in brailleToSpecialDict.keys()):
+            output += brailleToSpecialDict[char]
+        else:
+            output += brailleToAlphaDict[char]
 
         
-
+    return output
         
 
 def translateEnglish(input):
@@ -93,14 +108,11 @@ if __name__ == '__main__':
 
     input = sys.argv[1]
 
-    print(input)
-
     if (isBraille(input)):
-        print ('Braille')
-        translateBraille(input)
+        print(translateBraille(input))
 
     elif (not isBraille(input)):
-        print ('English')
+        print('english')
 
 
 
