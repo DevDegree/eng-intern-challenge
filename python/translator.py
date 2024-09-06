@@ -147,4 +147,5 @@ while i == 0:
                 h = phrase[d].lower()
                 phrase1[d] = h
     print(translation)
+    i = 8
 
