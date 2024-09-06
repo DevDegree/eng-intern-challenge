@@ -152,7 +152,7 @@ if(inputString){
         }
     })
 
-    //Detecting braille
+    //Detecting braille in the string
     if(englishDetected){
         output = englishToBraille(inputString)
         englishDetected = false;
