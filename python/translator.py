@@ -11,9 +11,7 @@ braille_alpha_map = {
     'O...O.': 'k', 'O.O.O.': 'l', 'OO..O.': 'm', 'OO.OO.': 'n', 'O..OO.': 'o',
     'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't',
     'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y',
-    'O..OOO': 'z', '..OO.O': '.', '..O...': ',', '..O.OO': '?', '..OOO.': '!',
-    '..OO..': ':', '..O.O.': ';', '....OO': '-', '.O..O.': '/', '.OO..O': '<',
-    'O..OO.': '>', 'O.O..O': '(', '.O.OO.': ')', '......': ' ',
+    'O..OOO': 'z',
 }
 braille_num_map = {
     'O.....': '1', 'O.O...': '2', 'OO....': '3', 'OO.O..': '4', 'O..O..': '5',
@@ -23,8 +21,8 @@ braille_num_map = {
 def braille_to_english(braille_string):
     # Braille to English mapping
     
-    number_flag = False
-    capital_flag = False
+    number_mode = False
+    capital_mode = False
     result = ''
     
     # Ensure the input string length is a multiple of 6
@@ -36,7 +34,7 @@ def braille_to_english(braille_string):
         braille_char = braille_string[i:i+6]
         
         if braille_char == braille_number_follows:
-            number_flag = True
+            number_mode = True
             continue
         
         if braille_char == braille_decimal_follows:
@@ -44,21 +42,21 @@ def braille_to_english(braille_string):
             continue
         
         if braille_char == braille_capital_follows:
-            capital_flag = True
+            capital_mode = True
             continue
         
-        if number_flag and braille_char == brailled_space:
-            number_flag = False
+        if braille_char == brailled_space:
+            number_mode = False
             result += ' '
             continue
         
         if braille_char in braille_alpha_map:
-            if number_flag:
+            if number_mode:
                 result += braille_num_map[braille_char]
             else:
-                if capital_flag:
+                if capital_mode:
                     result += braille_alpha_map[braille_char].upper()
-                    capital_flag = False
+                    capital_mode = False
                 else:
                     result += braille_alpha_map[braille_char]
         else:
@@ -99,11 +97,8 @@ def english_to_braille(text):
             result += num_to_braille[char]
 
         elif char == '.':
-            if number_mode:
-                result += braille_decimal_indicator
-            else:
-                result += alpha_to_braille['.']
-
+            result += braille_decimal_indicator
+            
         elif char == ' ':
             result += brailled_space
             number_mode = False
