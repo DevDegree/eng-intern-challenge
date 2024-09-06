@@ -1,54 +1,120 @@
 braille_to_eng = {
     # Letters
-    'a': "0.....", 'b': "0.0...", 'c': "00....", 'd': "00.0..", 'e': "0..0..",
-    'f': "000...", 'g': "0000..", 'h': "0.00..", 'i': ".00...", 'j': ".000..",
-    'k': "0...0.", 'l': "0.0.0.", 'm': "00..0.", 'n': "00.00.", 'o': "0..00.",
-    'p': "000.0.", 'q': "00000.", 'r': "0.000.", 's': ".00.0.", 't': ".0000.",
-    'u': "0...00", 'v': "0.0.00", 'w': ".000.0", 'x': "00..00", 'y': "00.000",
-    'z': "0..000",
+    'a': "o.....", 'b': "o.o...", 'c': "oo....", 'd': "oo.o..", 'e': "o..o..",
+    'f': "ooo...", 'g': "oooo..", 'h': "o.oo..", 'i': ".oo...", 'j': ".ooo..",
+    'k': "o...o.", 'l': "o.o.o.", 'm': "oo..o.", 'n': "oo.oo.", 'o': "o..oo.",
+    'p': "ooo.o.", 'q': "ooooo.", 'r': "o.ooo.", 's': ".oo.o.", 't': ".oooo.",
+    'u': "o...oo", 'v': "o.o.oo", 'w': ".ooo.o", 'x': "oo..oo", 'y': "oo.ooo",
+    'z': "o..ooo",
     
     # Numbers
-    '1': "0.....", '2': "0.0...", '3': "00....", '4': "00.0..", '5': "0..0..",
-    '6': "000...", '7': "0000..", '8': "0.00..", '9': ".00...", '0': ".000..",
+    '1': "o.....", '2': "o.o...", '3': "oo....", '4': "oo.o..", '5': "o..o..",
+    '6': "ooo...", '7': "oooo..", '8': "o.oo..", '9': ".oo...", 'o': ".ooo..",
 
     # Characters
-    '.': "..00.0", ',':"..0...", '?':"..0.00", '!':"..000.", ':':"..00..", 
-    ';':"..0.0.", '-':"....00", '/':".0..0.", '<':".00..0", '>':"0..00.",
-    '(':"0.0..0", ')':".0.00.", ' ':"......",
+    '.': "..oo.o", ',':"..o...", '?':"..o.oo", '!':"..ooo.", ':':"..oo..", 
+    ';':"..o.o.", '-':"....oo", '/':".o..o.", '<':".oo..o", '>':"o..oo.",
+    '(':"o.o..o", ')':".o.oo.", ' ':"......",
 
     # Other
-    'cap': ".....0", 'dec': ".0...0", 'num':".0.000"
+    'cap': ".....o", 'dec': ".o...o", 'num':".o.ooo"
 }
 
 eng_to_braille = {
-    v:k for k, v in braille_to_eng.items()
+        # Letters
+    'a': "o.....", 'b': "o.o...", 'c': "oo....", 'd': "oo.o..", 'e': "o..o..",
+    'f': "ooo...", 'g': "oooo..", 'h': "o.oo..", 'i': ".oo...", 'j': ".ooo..",
+    'k': "o...o.", 'l': "o.o.o.", 'm': "oo..o.", 'n': "oo.oo.", 'o': "o..oo.",
+    'p': "ooo.o.", 'q': "ooooo.", 'r': "o.ooo.", 's': ".oo.o.", 't': ".oooo.",
+    'u': "o...oo", 'v': "o.o.oo", 'w': ".ooo.o", 'x': "oo..oo", 'y': "oo.ooo",
+    'z': "o..ooo",
+    
+    # Numbers
+    '1': "o.....", '2': "o.o...", '3': "oo....", '4': "oo.o..", '5': "o..o..",
+    '6': "ooo...", '7': "oooo..", '8': "o.oo..", '9': ".oo...", 'o': ".ooo..",
+
+    # Characters
+    '.': "..oo.o", ',':"..o...", '?':"..o.oo", '!':"..ooo.", ':':"..oo..", 
+    ';':"..o.o.", '-':"....oo", '/':".o..o.", '<':".oo..o", '>':"o..oo.",
+    '(':"o.o..o", ')':".o.oo.", ' ':"......",
+
+    # Other
+    'cap': ".....o", 'dec': ".o...o", 'num':".o.ooo"
+
 }
-eng_to_braille.update({
-    'cap': ".....0", 'dec': ".0...0", 'num':".0.000"
-})
 
+def is_braille(text):
+    return all(char in "o." for char in text)
 
-def detect_lang(text):
-    return all(c in "o." for c in text)
 
 def transl_to_braille(text):
     braille_text = []
-    for char in text:
-        if char.isupper():
-            braille_text.append(eng_to_braille["cap"])
-            char = char.lower()
-        braille_text.append(eng_to_braille[char])
-    return ''.join(braille_text)
+    words = text.split()  # separate words/numbers/decimals in the input
+    for word in words:
+        if word.isdigit() or word.replace('.', '', 1).isdigit():  # check if it's a number or decimal
+            if word == word.replace('.', '', 1):
+                braille_text.append(eng_to_braille["num"])  
+            else:
+                braille_text.append(eng_to_braille["dec"])
+            for char in word:
+                braille_text.append(eng_to_braille[char])
+        else:  # process letters and other characters
+            for char in word:
+                if char.isupper():
+                    braille_text.append(eng_to_braille["cap"])  # indicate following letter is upper case
+                    char = char.lower()
+                braille_text.append(eng_to_braille[char])
+        braille_text.append(eng_to_braille[' '])  # add space between words
+    return ''.join(braille_text).strip()  # remove trailing space
+
 
 def transl_to_eng(text):
     english_text = []
     i = 0
     while i < len(text):
         char = text[i:i+6] # interpret each chunk of 6 characters (o and .) as a distinct character
-        if char == braille_to_eng["cap"]:
+        
+        if char == braille_to_eng.get('cap'):
             i = i+6
             char = text[i:i+6]
-            english_text.append(braille_to_eng[char]).upper()
-            # make if statements for decimals and numbers
-        else:
+            english_text.append(braille_to_eng.get(char, '?').upper())
+            i+=6
+            continue
+        # make if statements for decimals and numbers
+        if char == braille_to_eng.get('num'):
+            i = i+6
+            char = text[i:i+6]
+            english_text.append(braille_to_eng.get(char, '?'))
+            i+=6
+            continue
+        if char == braille_to_eng.get('dec'):
+            i = i+6
+            char = text[i:i+6]
+            english_text.append(braille_to_eng.get(char, '?'))
+            i+=6
+            continue
+
+        if char in braille_to_eng:
             english_text.append(braille_to_eng[char])
+        else:
+            english_text.append('?')  # Handle unknown Braille characters
+        
+        i += 6  # Move to the next Braille character        
+    return ''.join(english_text)
+
+
+def translator(input):
+    if is_braille(input):
+        return transl_to_eng(input)
+    else:
+        return transl_to_braille(input)
+
+import sys
+def main(): 
+    input = sys.argv[1]
+    translated_input = translator(input)
+    print(translated_input)
+
+if __name__ == "__main__":
+    main()
+
