@@ -49,13 +49,18 @@ def braille_to_english(braille):
 def english_to_braille(english):
     translation = ""
     char = ""
+    number = False
     for letter in english:
         char = letter.lower()
         if letter.isupper():
             translation += braille_map["capital"]
         elif letter.isnumeric():
-            translation += braille_map["number"]
             char = number_map[letter]
+            if number == False:
+                translation += braille_map["number"]
+                number = True
+        elif letter == braille_map[" "]:
+            number = False
         translation += braille_map[char]
     return translation
 
