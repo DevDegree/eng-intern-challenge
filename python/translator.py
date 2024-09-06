@@ -1,4 +1,4 @@
-import sys #handling for command-line input
+import sys #handling for command line input
     
 # given a text input, return whether the text is braille or not based on its characters
 def is_braille(text):
