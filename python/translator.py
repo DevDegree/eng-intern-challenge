@@ -5,26 +5,47 @@ class CharacterType(Enum):
     CAPITAL = '.....O'
     DECIMAL = '.O...O'
     NUMBER = '.O.OOO' 
+    SPACE = '......'
+    
+class Mode(Enum):
+    LATIN = 0
+    BRAILLE = 1
 
 class Translator:
     def __init__(self):
-        self.alphabet = {'A': 'O.....', 'B': 'O.O...', 'C': 'OO....',
-                         'D': 'OO.O..', 'E': 'O..O..', 'F': 'OOO...',
-                         'G': 'OOOO..', 'H': 'O.OO..', 'I': '.OO...',
-                         'J': '.OOO..', 'K': 'O...O.', 'L': 'O.O.O.',
-                         'M': 'OO..O.', 'N': 'OO.OO.', 'O': 'O..OO.',
-                         'P': 'OOO.O.', 'Q': 'OOOOO.', 'R': 'O.OOO.',
-                         'S': '.OO.O.', 'T': '.OOOO.', 'U': 'O...OO',
-                         'V': 'O.O.OO', 'W': '.OOO.O', 'X': 'OO..OO',
-                         'Y': 'OO.OOO', 'Z': 'O..OOO', '1': 'O.....',
-                         '2': 'O.O...', '3': 'OO....', '4': 'OO.O..',
-                         '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..',
-                         '8': 'O.OO..', '9': '.OO...', '0': '.OOO..',
-                         '.': '..OO.O', ',': '..O...', '?': '..O.OO',
-                         '!': '..OOO.', ':': '..OO..', ';': '..O.O.',
-                         '-': '....OO', '/': '.O..O.', '<': '.OO..O',
-                         '>': 'O..OO.', '(': 'O.O..O', ')': '.O.OO.',
-                         ' ': '......', 'capital': CharacterType.CAPITAL, 'decimal': CharacterType.DECIMAL, 'number': CharacterType.NUMBER}
+        self.next_capital = False
+        self.next_number = False
+        self.next_decimal = False
+        self.latin_alphabet = { 'A': 'O.....', 'B': 'O.O...', 'C': 'OO....',
+                                'D': 'OO.O..', 'E': 'O..O..', 'F': 'OOO...',
+                                'G': 'OOOO..', 'H': 'O.OO..', 'I': '.OO...',
+                                'J': '.OOO..', 'K': 'O...O.', 'L': 'O.O.O.',
+                                'M': 'OO..O.', 'N': 'OO.OO.', 'O': 'O..OO.',
+                                'P': 'OOO.O.', 'Q': 'OOOOO.', 'R': 'O.OOO.',
+                                'S': '.OO.O.', 'T': '.OOOO.', 'U': 'O...OO',
+                                'V': 'O.O.OO', 'W': '.OOO.O', 'X': 'OO..OO',
+                                'Y': 'OO.OOO', 'Z': 'O..OOO', 
+                                }
+        
+        self.latin_symbols = {  '.': '..OO.O', ',': '..O...', '?': '..O.OO',
+                                '!': '..OOO.', ':': '..OO..', ';': '..O.O.',
+                                '-': '....OO', '/': '.O..O.', '<': '.OO..O',
+                                '>': 'O..OO.', '(': 'O.O..O', ')': '.O.OO.'}
+        
+        self.latin_numbers = {'1': 'O.....', '2': 'O.O...', '3': 'OO....', 
+                              '4': 'OO.O..', '5': 'O..O..', '6': 'OOO...', 
+                              '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', 
+                              '0': '.OOO..'}
+        
+        self.braille_alphabet = {}
+        self.braille_numbers = {}
+        
+        for key, value in self.latin_alphabet.items():
+            self.braille_alphabet[value] = key
+        
+        for key, value in self.latin_numbers.items():
+            self.braille_numbers[value] = key
+            
     
     def is_braille(self, text) -> bool:
         if len(text) % 6 == 0:
@@ -34,20 +55,46 @@ class Translator:
             return True
         return False
     
-    def is_capital(self, charac) -> bool:
-        pass
+    def is_capital(self, charac, mode) -> bool:
+        return charac == CharacterType.CAPITAL.value
     
-    def is_decimal(self, charac) -> bool:
-        pass
+    def is_decimal(self, charac, mode) -> bool:
+        return charac == CharacterType.DECIMAL.value
     
-    def is_number(self, charac) -> bool:
-        pass
+    def is_number(self, charac, mode) -> bool:
+        return charac == CharacterType.NUMBER.value
+    
+    def is_space(self, charac, mode) -> bool:
+        return charac == CharacterType.SPACE.value
+    
+    def convert(self, characs, mode) -> str:
+        converted_text = ''
+        for charac in characs:
+            if self.is_space(charac, mode):
+                converted_text += ' '
+            elif self.is_capital(charac, mode):
+                next_capital = True
+                continue
+            elif next_capital:
+                next_capital = False
+                converted_text += self.braille_alphabet.get(charac).upper()
+            else:
+                converted_text += self.braille_alphabet.get(charac).lower()
+            
+        return converted_text
+            
    
     def translate(self, text: str) -> str:
+        characs = []
+        mode = None
         if self.is_braille(text):
-            pass # search by value
+            mode = Mode.BRAILLE
+            for i in range(0, len(text), 6):
+                characs.append(text[i:i+6])
         else:
-            pass # search by key
+            mode = Mode.LATIN
+    
+        word = self.convert(characs, mode)
 
 def main():
     if len(argv) > 1:
