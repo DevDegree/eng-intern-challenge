@@ -42,15 +42,14 @@ numToBrailleDict = {
 }
 
 modifierDict = {
-    'capital': '.....O', # put two in front of word to capitalize word
-    'decimal': '.O...O',
+    'capital': '.....O', 
     'number': '.O.OOO'
 }
 
 brailleToAlphaDict = {i: j for j, i in alphaToBrailleDict.items()}
 brailleToNumDict = {i: j for j, i in numToBrailleDict.items()}
 
-chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ1234567890,?!:;-/<>() '
+chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ1234567890 '
 
 
 
@@ -66,7 +65,7 @@ def isBraille(input): # checks if input string is braille or english
 def translateBraille(input):
     inputSplit = [input[i:i+6] for i in range(0, len(input), 6)] 
 
-    caps, dec, num = False, False, False
+    caps, num = False, False
 
     output = ''
 
@@ -74,9 +73,6 @@ def translateBraille(input):
         if (char in modifierDict.values()):
             if (char == modifierDict['capital']):
                 caps = True
-                continue
-            elif (char == modifierDict['decimal']):
-                dec = True
                 continue
             elif (char == modifierDict['number']):
                 num = True
@@ -88,10 +84,6 @@ def translateBraille(input):
             output += brailleToAlphaDict[char].upper()
             caps = False
             continue
-        if(dec):
-            continue
-        if (char in brailleToSpecialDict.keys()):
-            output += brailleToSpecialDict[char]
         else:
             output += brailleToAlphaDict[char]
 
