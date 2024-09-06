@@ -1,4 +1,4 @@
-const brailleAlphanum = [
+const brailleAlphaNum = [
   "O.....",
   "O.O...",
   "OO....",
@@ -19,7 +19,7 @@ const brailleAlphanum = [
   "O.OOO.",
   ".OO.O.",
   ".OOOO.",
-  "O.OO..",
+  "O...OO",
   "O.O.OO",
   ".OOO.O",
   "OO..OO",
@@ -34,97 +34,114 @@ const brailleAlphanum = [
   "....OO",
   ".O..O.",
   ".OO..O",
-  "O..OO.",
+  "O..OO.", //This is the code for >, but it is the same as o. There is no specification for how they should be differentiated, so it will never translate this character to >
   "O.O..O",
   ".O.OO.",
   "......",
 ];
 
-const brailleMod = [".....O", ".O...O", ".O.OOO"];
+const brailleMods = [".....O", ".O...O", ".O.OOO"];
 
-const alphNum = "abcdefghijklmnopqrstuvwxyz.x?!:;-/<>() ".split("");
+const alphaNum = "abcdefghijklmnopqrstuvwxyz.,?!:;-/<>() ".split("");
 
-let inputString = formatInput();
+let inputString = process.argv.slice(2).join(" ");
 
-idLang();
-
-function formatInput() {
-  return process.argv.slice(2).join(" ");
-}
+translate();
 
 function readBraille() {
-  let braille = [];
+  let braillePseudoString = [];
   for (let i = 0; i < inputString.length; i += 6) {
-    let char = inputString.slice(i, i + 6);
-    braille.push(char);
+    let sixPips = inputString.slice(i, i + 6);
+    braillePseudoString.push(sixPips);
   }
-  return brailleToEng(braille);
+  return braillePseudoString;
 }
 
-function brailleToEng(arr) {
-  let eng = "";
-  while (arr.length > 0) {
-    //could cut off last character?
-    let char = arr.shift();
-    let mod = brailleMod.indexOf(char);
-    if (mod === -1) {
-      eng += alphNum[brailleAlphanum.indexOf(char)];
-    }
-    if (mod === 0) {
-      eng += alphNum[brailleAlphanum.indexOf(arr.shift())].toUpperCase();
-    }
-    if (mod === 1) {
-      // Not Technically within spec to do anything with a decimal BUT DO MAKE THIS DO SOMETHING ANYWAY
-    }
-    if (mod === 2) {
-      while (arr.length > 0 && char !== "......") {
-        char = arr.shift();
-        if (char === ".OOO..") {
-          eng += "0";
+function brailleToEng() {
+  let braillePseudoString = readBraille();
+  let caps = false;
+  let nums = false;
+  let englishString = braillePseudoString.map((brailleCharacter) => {
+    if (brailleMods.includes(brailleCharacter)) {
+      switch (brailleMods.indexOf(brailleCharacter)) {
+        case 0:
+          caps = true;
+          break;
+        case 1:
+          if (nums) {
+            return ".";
+          } else {
+            console.error(
+              "Decimal signifier must be preceded by a number signifier, or part of a number string"
+            );
+            //this should not be reached with proper braille grammar. https://uebmath.aphtech.org/lesson2.0
+          }
+          break;
+        case 2:
+          nums = true;
+          break;
+      }
+    } else {
+      const characterIndex = brailleAlphaNum.indexOf(brailleCharacter);
+      if (nums) {
+        if (brailleCharacter === "......") {
+          nums = false;
+          return " ";
         } else {
-          eng += brailleAlphanum.indexOf(char) + 1;
+          if (characterIndex < 10) {
+            if (characterIndex === 9) {
+              return "0";
+            }
+            return characterIndex + 1;
+          } else {
+            return alphaNum[characterIndex];
+          }
         }
       }
+      const englishEquiv = alphaNum[characterIndex];
+      if (caps) {
+        caps = false;
+        return englishEquiv.toUpperCase();
+      }
+      return englishEquiv;
     }
-  }
-  return eng;
+  });
+  return englishString.join("");
 }
 
 function engToBraille(string) {
-  let braille = "";
-  for (i = 0; i < string.length; i++) {
-    let char = string[i];
-    if (char.match(/[a-z]|[.,?!:;]|[-/<>() ]/)) {
-      braille += brailleAlphanum[alphNum.indexOf(char)];
-    }
-    if(char.match(/[A-Z]/)) {
-      braille += brailleMod[0];
-      braille += brailleAlphanum[alphNum.indexOf(char.toLowerCase())];
-    }
-    if (char.match(/[0-9]/)) {
-      braille += brailleMod[2];
-      while (char.match(/[0-9]/) && i < string.length) {
-        char = string[i];
-        if (char === ".") {
-          braille += ".O...O";
-        } else if (char === "0") {
-          braille += ".OOO..";
-        } else {
-          braille += brailleAlphanum[char - 1];
-        }
-        i++;
+  const englishArray = string.split("");
+  let numberRuns = [-2];
+  let capsIndexShift = 0;
+  let brailleString = englishArray.flatMap((englishCharacter, index) => {
+    if (englishCharacter.match(/[0-9]/)) {
+      numberRuns.push(index + capsIndexShift);
+      if (englishCharacter.match(/[0]/)) {
+        return brailleAlphaNum[9];
       }
+      return brailleAlphaNum[englishCharacter - 1];
     }
-  }
-  return braille;
+    if (englishCharacter.match(/[A-Z]/)) {
+      capsIndexShift++;
+      return [brailleMods[0], brailleAlphaNum[alphaNum.indexOf(englishCharacter.toLowerCase())]];
+    }
+    return brailleAlphaNum[alphaNum.indexOf(englishCharacter)];
+  });
+  numberMarkers = numberRuns.filter(
+    (number, index, numberRuns) => number - numberRuns[index - 1] > 1
+  );
+  numberMarkers
+    .reverse()
+    .forEach((marker) => brailleString.splice(marker, 0, brailleMods[2]));
+  return brailleString.join("");
 }
 
-function idLang() {
+function translate() {
   const nonBrailleChar = inputString.search(/[^O.]/);
   //search for a character that is not O or .
   if (nonBrailleChar === -1) {
     //If there are not non braille characters, the string can be interpreted as braille.
-    console.log(readBraille());
+    console.log(brailleToEng(inputString));
   } else {
     console.log(engToBraille(inputString));
   }
