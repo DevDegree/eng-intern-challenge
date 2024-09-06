@@ -1,7 +1,4 @@
-#python linter
-
 ## Braille Translator in Python. 
-
 import sys
 
 input_str = ' '.join(sys.argv[1:])
@@ -79,9 +76,6 @@ def lang_converter(convertee, val): # receives 0 or 1 and terminal value
         mode = 0
         while i < len(eng_text): ## Processes english alphanum into braille
 
-            if str(eng_text[i]) == ' ':
-                mode = 0
-
             if eng_text[i].isupper() == True:
                 message += str(global_dict['CAP'])
                 message += str(global_dict[eng_text[i].lower()])
@@ -101,6 +95,12 @@ def lang_converter(convertee, val): # receives 0 or 1 and terminal value
             elif eng_text[i].isalpha():
                 message += str(global_dict[eng_text[i]])
                 i += 1 
+              
+            elif str(eng_text[i]) == ' ':
+                mode = 0
+                message += str(global_dict[' '])
+                i += 1   
+             
             else:
               i += 1 
         return message
