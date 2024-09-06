@@ -82,7 +82,6 @@ function translateToBraille(input) {
     let numberFollows = false;
 
     for(const char of input) {
-
         const isCapital = (char === char.toUpperCase() && char !== char.toLowerCase());
         const isNumber = (char >= '0' && char <= '9');
 
@@ -106,6 +105,7 @@ function translateToBraille(input) {
 // read input string from cmd
 const inputStringArray = process.argv.slice(2);
 
+// exit if no input string
 if(inputStringArray.length === 0) {
     console.log("Please enter string to be converted!!!");
     process.exit(1);
