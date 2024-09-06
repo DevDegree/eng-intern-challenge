@@ -65,42 +65,53 @@ const spa = {
 }
 
 
-// one function isn't enough, so multiple will be used. one funtion to sorta between english and braille, one function to split in coming strings or inputs into 6-characters groups, one function to translate each 6-character group into the correct word or number of the opposite languge, and lastly one to concatinate all the seperated letter or numbers into one text. 
+// one function isn't enough, so multiple will be used. one funtion to sort between english and braille, one function to split in-coming strings or inputs into 6-characters groups, one function to translate each 6-character group into the correct word or number of the opposite languge, and lastly one to concatinate all the seperated letter or numbers into one text. 
 
 let translator = function(input) {
   
   const x = `${input}`
+  
+  let lang = '';
 
   const sorter = () => {
     
-    let lang = '';
 
     const y = x.toLowerCase()
 
-    let i = 0; 
-    
-    while (i < y.length) {
-
-      console.log(y[i])
+    for (let i = 0; i < y.length; i++) {
+      
 
       if (y[i] === 'a' || y[i] === 'e' || y[i] === 'i' || y[i] === 'u' || y[i] === 'y' || y[i] === 'k' || y[i] === 'l' || y[i] === 'm' || y[i] === 'n' || y[i] === 'g' || y[i] === 'p' || y[i] === 't' || y[i] === 'b' || y[i] === '1' || y[i] === '2' || y[i] === '3' || y[i] === '4' || y[i] === '5' || y[i] === '6' || y[i] === '7' || y[i] === '8' || y[i] === '9' || y[i] === 'h' || y[i] === 'z') {
         lang = 'english'; 
-        console.log(lang);
+        console.log(lang + ' sorted');
         break;
       } 
-      if (i === y.length) {
-        lang = 'braille';
-        console.log(lang);
-        
-      }
-      
-      i++
+
     }
-    
+
+    if (lang === '') {
+    lang = 'braille';
+    console.log(lang + ' sorted');
+    brailleSpliter()
+    }
   }
 
+  const brailleSpliter = () => {
+
+    let result = x.match(/[\s\S]{1,6}/g) || [];
+    console.log('after spliting:')
+    console.log(result)
+
+
+  }
+  
+  
+  
+
+    
+
   sorter(x);
-  console.log(x);
+  console.log('end');
 }
 
 
@@ -110,7 +121,9 @@ let translator = function(input) {
 // test cases 
 
 // translator('army')
-// translator('O.....OO....')
 // translator('u')
 // translator('cookie')
 // translator('425')
+// translator('Hello world')
+translator('.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..')
+
