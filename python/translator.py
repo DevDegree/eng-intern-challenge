@@ -6,10 +6,10 @@ from eng_to_braille import translate_english
 
 if __name__ == '__main__':
     # assume that only one string argument is passed in
-    text = sys.argv[1]
+    text = ' '.join(sys.argv[1:])
 
-    # check if the text contains only 'O' and '.' as this indicates Braille
-    if (set(text)) == set(['O', '.']):
+    # check if the text contains only 'O' and '.' and the length of the text is a multiple of 6 as this indicates Braille
+    if (set(text)) == set(['O', '.']) and len(text) % 6 == 0:
         # translate braille to english
         result = translate_braille(text)
         print(result)
