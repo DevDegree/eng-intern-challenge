@@ -140,12 +140,14 @@ def english_to_braille(input_text):
     for i in input_text:
         if prev_num:
             if not i.isnumeric():
-                prev_num = False
+                #prev_num = False
                 if i.isupper():
                     final_text += CAPITAL_FOLLOWS
                     final_text += ENGLISH_TO_BRAILLE[i.lower()]
                 else:
                     final_text += ENGLISH_TO_BRAILLE[i]
+                prev_num = False
+                final_text += BRAILLE_SPACE
             else:
                 final_text += NUMBERS_BRAILLE[i]
         else:
