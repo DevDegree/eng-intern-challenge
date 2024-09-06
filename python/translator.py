@@ -2,6 +2,7 @@ import sys
 from typing import List, Dict
 from enum import IntEnum
 
+# Special Symbols that should be handled separately
 class SpecialSymbol(IntEnum):
     CAP = 0
     NUM = 1
@@ -37,10 +38,6 @@ letters = {
     'z': 'O..OOO'
 }
 
-numbers = {
-    '0': letters['j']
-}
-
 punctuations = {
     '.': '..OO.O',
     ',': '..O...',
@@ -63,6 +60,10 @@ symbols = {
     SpecialSymbol.SPACE: '......'
 }
 
+# the symbol of 1-9 are the same as the letters a-i
+numbers = {
+    '0': letters['j']
+}
 for i in range(1, 10):
     numbers[str(i)] = letters[chr(ord('a')+i-1)]
 
@@ -90,7 +91,7 @@ def encode(string: str) -> str:
 
 def splitToSix(string: str) -> List[str]:
     result = []
-    buffer = []
+    buffer = [] # buffer of 6 characters that will be grouped into 1 symbol
     for i, c in enumerate(string):
         if i and i%6 == 0:
             result.append(''.join(buffer))
@@ -102,6 +103,7 @@ def splitToSix(string: str) -> List[str]:
     
     return result
 
+# the hard-coded dicts maps character to Braille and the reverse mapping is needed for decoding
 def flipMap(map: Dict[str, str]) -> Dict[str, str]:
     result = {}
     for k, v in map.items():
@@ -120,7 +122,9 @@ def decode(string: str) -> str:
     numDecode = False
     capDecode = False
     for bSymbol in brailles:
+        # handle special symbols separately
         if bSymbol in symbolsDecode:
+            # reset the cap decode at the beginning since symbols cannot be capitalized
             capDecode = False
 
             symbol = symbolsDecode[bSymbol]
@@ -142,6 +146,7 @@ def decode(string: str) -> str:
                     decodeChar = decodeChar.capitalize()
                 decodedSeq.append(decodeChar)
     
+            # reset the cap decode after each character
             capDecode = False
     
     return ''.join(decodedSeq)
@@ -150,13 +155,14 @@ def translate(strInput: str) -> str:
     isInputBraille = True
     if len(strInput) %6 == 0:
         for c in strInput:
+            # if the input has characters other than 'O' or '.', it is not a Braille
             if c != 'O' and c != '.':
                 isInputBraille = False
                 break
-    else:
+    else: # if the input length is not a multiple of 6, it is not a Braille
         isInputBraille = False
     
-    if (isInputBraille):
+    if isInputBraille:
         return decode(strInput)
     return encode(strInput)
 
@@ -165,15 +171,3 @@ if __name__ == '__main__':
     if len(args) > 2:
         inputStr = ' '.join(args[1:])
         print(translate(inputStr))
-
-# testCases = {
-#     'Hello world': '.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..',
-#     '42': '.O.OOOOO.O..O.O...',
-#     '.....OO.....O.O...OO...........O.OOOO.....O.O...OO....': 'Abc 123'
-# }
-
-# for i, (testInput, expected) in enumerate(testCases.items()):
-#     if translate(testInput) == expected:
-#         print(f'Test case {i} passed')
-#     else:
-#         print(f'Test case {i} failed: expected {expected}, got {translate(testInput)}')
