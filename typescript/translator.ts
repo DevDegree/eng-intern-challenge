@@ -53,7 +53,7 @@ const charactersToBraille: CharactersToBrailleMap = {
   '-': '....OO',
   '/': '.O..O.',
   '<': '.OO..O',
-  '>': 'O..OO.',
+  // '>': 'O..OO.', // currently no way to diffientiate between 'o' and '>'
   '(': 'O.O..O',
   ')': '.O.OO.',
   ' ': '......',
@@ -143,14 +143,20 @@ const isBraileString = (str: string) => {
 };
 
 function main() {
-  let res = '';
-  const testInput = '42';
-  if (isBraileString(testInput)) {
-    res = convertBrailleToEnglish(testInput);
-  } else {
-    res = convertEnglishToBraille(testInput);
+  process.argv.shift(); // skip node
+  process.argv.shift(); // skip file name
+
+  const textInput = process.argv.join(' ');
+  if (!textInput) {
+    console.error('No input was provided.');
+    return;
   }
-  console.log(res);
+
+  if (isBraileString(textInput)) {
+    console.log(convertBrailleToEnglish(textInput));
+  } else {
+    console.log(convertEnglishToBraille(textInput));
+  }
 }
 main();
 
