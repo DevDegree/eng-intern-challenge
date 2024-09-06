@@ -50,6 +50,29 @@ class Translator:
         # Separate dictionary for translating Braille symbol to numbers
         self.braille_to_number = {v: k for k, v in self.char_to_braille.items() if k.isdigit()}
 
+    def is_braille(self, input_str):
+        return all(char in "O." for char in input_str) and len(input_str) % 6 == 0
+    
+    # Main translation function to switch between text-to-Braille and Braille-to-text
+    def translate(self, input_str):
+        if not input_str:
+            return ""
+        
+        if self.is_braille(input_str):
+            return self.braille_to_text(input_str)
+        else:
+            return self.text_to_braille(input_str)
+    
+    def text_to_braille(self, text):
+        braille_output = []
+
+        return "".join(braille_output)
+    
+    def braille_to_text(self, braille):
+        text_output = []
+
+        return "".join(text_output)
+
 if __name__ == "__main__":
     args = sys.argv[1:]
     input_str = " ".join(args)
