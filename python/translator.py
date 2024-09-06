@@ -16,13 +16,35 @@ BRAILLE_NUMBERS: Dict[str, str] = {
     '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..'
 }
 
+# Precomputed reverse mappings for faster lookups
 REVERSE_ALPHABET = {v: k for k, v in BRAILLE_ALPHABET.items()}
 REVERSE_NUMBERS = {v: k for k, v in BRAILLE_NUMBERS.items()}
 
 def is_braille(text: str) -> bool:
-    return set(text).issubset({'O', '.'}) and len(text) % 6 == 0
+    """
+    Check if the input text is Braille.
+    
+    Args:
+        text (str): Input text to check
+
+    Returns:
+        bool: True if the text is Braille, False otherwise
+
+    Note: Checks only the first 12 characters for efficiency.
+    """
+    sample = text[:12]
+    return set(sample).issubset({'O', '.'}) and len(text) % 6 == 0
 
 def english_to_braille(text: str) -> str:
+    """
+    Convert English text to Braille.
+
+    Args:
+        text (str): English text to convert
+
+    Returns:
+        str: Braille representation of the input text
+    """
     braille = bytearray()
     is_number_mode = False
 
@@ -46,6 +68,15 @@ def english_to_braille(text: str) -> str:
     return braille.decode()
 
 def braille_to_english(braille: str) -> str:
+    """
+    Convert Braille to English text.
+
+    Args:
+        braille (str): Braille text to convert
+
+    Returns:
+        str: English representation of the input Braille
+    """
     symbols = [braille[i:i+6] for i in range(0, len(braille), 6)]
     english = []
     is_capital = False
@@ -73,6 +104,15 @@ def braille_to_english(braille: str) -> str:
     return ''.join(english)
 
 def braille_translator(text: str) -> str:
+    """
+    Translate between English and Braille.
+
+    Args:
+        text (str): Input text to translate
+
+    Returns:
+        str: Translated text (Braille if input is English, English if input is Braille)
+    """
     return braille_to_english(text) if is_braille(text) else english_to_braille(text)
 
 if __name__ == "__main__":
