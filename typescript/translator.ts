@@ -147,22 +147,29 @@ if (/^[O.]+$/.test(input)) {
   console.log(output);
 } else {
   // Regular character inputted
-  console.log("Input is not in Braille format.");
   let counter: number = 0;
   let output: string = "";
-  let isCapital: boolean = false;
+  let isNumber: boolean = false;
 
   while (counter < input.length) {
     const currentChar: string = input[counter];
 
     if (currentChar === " ") {
       output += "......";
+      isNumber = false;
+    } else if (isNumber) {
+      output += numberToBraille[currentChar];
+    } else if (/^[0-9]$/.test(currentChar)) {
+      isNumber = true;
+      output += ".O.OOO";
+      output += numberToBraille[currentChar];
     } else if (currentChar === currentChar.toUpperCase()) {
-      console.log(true);
+      output += ".....O";
+      output += lettersOrSpecialToBraille[currentChar.toLowerCase()];
     } else {
-      console.log(false);
+      output += lettersOrSpecialToBraille[currentChar.toLowerCase()];
     }
-
     counter++;
   }
+  console.log(output);
 }
