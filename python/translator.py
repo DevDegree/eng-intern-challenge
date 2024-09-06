@@ -62,10 +62,13 @@ def lang_converter(convertee, val): # receives 0 or 1 and terminal value
                 if (char_end + 6) <= len(val):
                     char_end += 6
                     char_start += 6
-            else:
+            elif snippet in values:
                 char_end += 6
                 char_start += 6
                 message += char_retrieval(snippet, mode)
+            else:
+                char_end += 6 
+                char_start += 6 
 
         return message
 
@@ -95,10 +98,11 @@ def lang_converter(convertee, val): # receives 0 or 1 and terminal value
                     mode = 1
                     i += 1
 
-            else:
+            elif eng_text[i].isalpha():
                 message += str(global_dict[eng_text[i]])
                 i += 1 
-
+            else:
+              i += 1 
         return message
 
 def char_retrieval(snippet, mode):
