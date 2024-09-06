@@ -81,7 +81,7 @@ function translateEngToBraille(input) {
     }
     return output;
 }
-console.log(translateEngToBraille('Hi!'));
+console.log(translateEngToBraille('Abc 123 xYz'));
 
 
 // Translate Braille to English
@@ -187,7 +187,7 @@ function translateBrailleToEng(input) {
 }
 
 // test
-console.log(translateBrailleToEng('.....00.00...00.....000.')); 
+console.log(translateBrailleToEng('.....00.....0.0...00...........0.0000.....0.0...00..........00..00.....000.0000..000')); 
 
 
 
