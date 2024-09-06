@@ -1,11 +1,11 @@
 import sys
 
 # Check if the correct number of arguments were passed
-if len(sys.argv) != 2:
-    sys.exit(1)
+if __name__ == '__main__':
+    input_text = sys.argv[1]
+    # Concatenate all input arguments into a single string
+    fullText = ' '.join(sys.argv[1:])
     
-input_string = sys.argv[1]
-
 def is_braille(input_string):
     # Check if the input length is a multiple of 6 and contains only 'O' and '.'
     if len(input_string) % 6 == 0 and all(c in 'O.' for c in input_string):
@@ -85,8 +85,8 @@ def englishtToBraille(word):
         newWord += braille_alphabet[char]
     print(newWord)
         
-if is_braille(input_string):
-    brailleToEnglish(input_string)
+if is_braille(fullText):
+    brailleToEnglish(fullText)
 else:
-    englishtToBraille(input_string)
+    englishtToBraille(fullText)
 
