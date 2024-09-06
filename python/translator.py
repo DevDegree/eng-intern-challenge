@@ -12,8 +12,8 @@ if __name__ == '__main__':
     if (set(text)) == set(['O', '.']) and len(text) % 6 == 0:
         # translate braille to english
         result = translate_braille(text)
-        print(result)
+        print(result, file=sys.stdout)
     else:
         # translate english to braille
         result = translate_english(text)
-        print(result)
+        print(result, file=sys.stdout)
