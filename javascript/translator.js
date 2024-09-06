@@ -36,6 +36,19 @@ const engToBraille = {
     '8': '0.00..',
     '9': '.00...',
     '0': '.000..',
+    '.': '..00.0',
+    ',': '..0...',
+    '?': '..0.00',
+    '!': '..000.',
+    ':': '..00..',
+    ';': '..0.0.',
+    '-': '....00',
+    '/': '.0..0.',
+    '<': '.00..0',
+    '>': '0..00.',
+    '(': '0.0..0',
+    ')': '.0.00.',
+    ' ': '......',
     }
 
 const capitalFollows = '.....0';
@@ -87,4 +100,4 @@ function translateBrailleToEng(input) {
     return output;
 }
 
-console.log(translateBrailleToEng('0.....'));
+console.log(translateBrailleToEng('0.00...00...........000.'));
