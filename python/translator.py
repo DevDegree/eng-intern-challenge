@@ -120,7 +120,6 @@ def eng_to_braille(text: str) -> str:
         # If previous characters were numbers, add space & change number state to false
         if chara.isalpha():
             if is_number:
-                final_string += '......'
                 is_number = False
             if chara.isupper():
                 final_string += '.....O'
