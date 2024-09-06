@@ -25,15 +25,27 @@ BRAILLE_TO_ENGLISH = {v: k for k, v in BRAILLE_ALPHABET.items()}
 # Function to convert English to Braille
 def english_to_braille(input_str):
     braille = ""
+    number_mode = False  # Track when we are in number mode
+    
     for char in input_str:
         if char.isupper():
+            # Add the CAPITAL marker before the uppercase letter
             braille += BRAILLE_ALPHABET['CAPITAL'] + BRAILLE_ALPHABET[char.lower()]
+            number_mode = False  # Exit number mode on encountering letters
         elif char.isdigit():
-            # Insert NUMBER marker before each number and switch number mode for each digit
-            braille += BRAILLE_ALPHABET['NUMBER'] + BRAILLE_ALPHABET[char]
+            if not number_mode:
+                # Add the NUMBER marker before digits
+                braille += BRAILLE_ALPHABET['NUMBER']
+                number_mode = True
+            braille += BRAILLE_ALPHABET[char]
+        elif char == ' ':
+            # Add a space and reset modes
+            braille += BRAILLE_ALPHABET[' ']
+            number_mode = False  # Exit number mode after space
         else:
-            # Convert letters and punctuation directly
-            braille += BRAILLE_ALPHABET.get(char, BRAILLE_ALPHABET[' '])  # Default to space if not found
+            braille += BRAILLE_ALPHABET[char]
+            number_mode = False  # Exit number mode on encountering letters or punctuation
+    
     return braille
 
 
