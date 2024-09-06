@@ -1,9 +1,9 @@
-const input = 'Abc 123 xYz'
+const testInput = process.argv.slice(2)
+const input = testInput.join(' ') || 'Abc 123 xYz'
 let output = ''
 let consecutiveNumberCount = 0
 let capitalNext = false
 let numberNext = false
-let greaterNext = false
 const brailleMatch = input.match(/O|\./g)
 const braille = {
   'O.....': 'a',
@@ -34,18 +34,6 @@ const braille = {
   'O..OOO': 'z',
   '.....O': 'capital',
   '.O.OOO': 'number',
-  '.O...O': 'greater', // repurposing "decimal follows" to handle duplicate braille for "o" and ">" only because there was no instruction given on how to handle "decimal follows" or this duplication
-  '..OO.O': '.',
-  '..O...': ',',
-  '..O.OO': '?',
-  '..OOO.': '!',
-  '..OO..': ':',
-  '..O.O.': ';',
-  '....OO': '-',
-  '.O..O.': '/',
-  '.OO..O': '<',
-  'O.O..O': '(',
-  '.O.OO.': ')',
   '......': ' '
 }
 
@@ -60,9 +48,6 @@ const setNextValueType = (value) => {
 
   } else if (value === 'number' || value.match(/\d/g)) {
     return numberNext = true
-
-  } else if (value === 'greater' || value === '>') {
-    return greaterNext = true
   }
 }
 
@@ -86,12 +71,6 @@ const brailleToEnglish = (value) => {
     }
 
     return number
-
-  // using "decimal follows" braille to handle the duplicate braille value for "o" and ">" 
-  // since there was no instruction on how to handle "decimal follows" or how to handle this duplication
-  } else if (greaterNext) {
-    greaterNext = false
-    return value === 'o' ? '>' : '[Error: > character not used after "greater aka decimal follows"]'
   }
 
   return value
@@ -102,11 +81,10 @@ const getBraille = (value) => {
   return Object.keys(braille).find(key => braille[key] === value)
 }
 
-// function to translate english to braille
+// function to translate english to braille dot series
 const englishToBraille = (value) => {
   // reset for letters moving forward
   if (value.match(/^\D$/g)) { numberNext = false }
-  if (greaterNext) { value = 'o' }
 
   if (numberNext) {
     consecutiveNumberCount += 1
@@ -116,12 +94,10 @@ const englishToBraille = (value) => {
   
   value = (consecutiveNumberCount > 0 && value !== ' ' ? getBraille(' ') : '') +
     (capitalNext ? getBraille('capital') : '') +
-    (greaterNext ? getBraille('greater') : '') +
     (getBraille(value.toLowerCase()))
 
   // reset next character logic
   if (capitalNext) { capitalNext = false }
-  if (greaterNext) { greaterNext = false }
   consecutiveNumberCount = 0
   return value
 }
