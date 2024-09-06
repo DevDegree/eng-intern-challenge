@@ -8,8 +8,8 @@ class CharacterType(Enum):
     SPACE = '......'
     
 class Mode(Enum):
-    LATIN = 0
-    BRAILLE = 1
+    TO_LATIN = 0
+    TO_BRAILLE = 1
 
 class Translator:
     def __init__(self):
@@ -56,22 +56,36 @@ class Translator:
         return False
     
     def is_capital(self, charac, mode) -> bool:
-        return charac == CharacterType.CAPITAL.value
+        if mode == Mode.TO_LATIN:
+            return charac == CharacterType.CAPITAL.value
+        return charac.isupper()
     
     def is_decimal(self, charac, mode) -> bool:
-        return charac == CharacterType.DECIMAL.value
+        if mode == Mode.TO_LATIN:
+            return charac == CharacterType.DECIMAL.value
+        return charac == self.latin_symbols.get(charac)
     
     def is_number(self, charac, mode) -> bool:
-        return charac == CharacterType.NUMBER.value
+        if mode == Mode.TO_LATIN:
+            return charac == CharacterType.NUMBER.value
+        return self.latin_numbers.get(charac)
     
     def is_space(self, charac, mode) -> bool:
-        return charac == CharacterType.SPACE.value
+        if mode == Mode.TO_LATIN:
+            return charac == CharacterType.SPACE.value
+        return charac == ' '
+    
+    def get_value(self, charac, mode) -> str:
+        pass
     
     def convert(self, characs, mode) -> str:
         converted_text = ''
         for charac in characs:
             if self.is_space(charac, mode):
-                converted_text += ' '
+                if mode == Mode.TO_LATIN:
+                    converted_text += ' '
+                else:
+                    converted_text += self.braille_alphabet.get(charac)
             elif self.is_capital(charac, mode):
                 next_capital = True
                 continue
@@ -80,7 +94,6 @@ class Translator:
                 converted_text += self.braille_alphabet.get(charac).upper()
             else:
                 converted_text += self.braille_alphabet.get(charac).lower()
-            
         return converted_text
             
    
@@ -88,13 +101,14 @@ class Translator:
         characs = []
         mode = None
         if self.is_braille(text):
-            mode = Mode.BRAILLE
+            mode = Mode.TO_LATIN
             for i in range(0, len(text), 6):
                 characs.append(text[i:i+6])
         else:
-            mode = Mode.LATIN
+            mode = Mode.TO_BRAILLE
     
         word = self.convert(characs, mode)
+        print(word) 
 
 def main():
     if len(argv) > 1:
