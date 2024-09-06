@@ -56,7 +56,7 @@ const decimalFollows = '.0...0';
 const numberFollows = '.0.000';  
 
 
-// Translate English to Braille
+
 function translateEngToBraille(input) {
     let output = '';
     let numberMode = false;
@@ -84,7 +84,7 @@ function translateEngToBraille(input) {
 console.log(translateEngToBraille('Abc 123 xYz'));
 
 
-// Translate Braille to English
+
 const brailleToEng = {
     '0.....': 'a',
     '0.0...': 'b',
@@ -186,7 +186,7 @@ function translateBrailleToEng(input) {
     return output;
 }
 
-// test
+
 console.log(translateBrailleToEng('.....00.....0.0...00...........0.0000.....0.0...00..........00..00.....000.0000..000')); 
 
 
