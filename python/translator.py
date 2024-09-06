@@ -46,11 +46,13 @@ def decode(text):
                 NUMBER_FLAG = False
             elif NUMBER_FLAG: # Number
                 char = BRAILLE_TO_ENGLISH_NUMBERS[braille_char]
-            else: # Character
+            elif braille_char in BRAILLE_TO_ENGLISH_ALPHABET: # Character
                 char = BRAILLE_TO_ENGLISH_ALPHABET[braille_char]
                 if CAPITAL_FLAG:
                     char = char.upper()
                     CAPITAL_FLAG = False
+            else: # Unknown
+                continue
             print(char, end='')
 
 # Converts input text in english to braille and prints the braille string
@@ -67,10 +69,12 @@ def encode(text):
         elif char == ' ': # Space
             braille_char = BRAILLE_SPACE
             NUMBER_FLAG = False
-        else: # Character
+        elif char.lower() in ENGLISH_TO_BRAILLE_ALPHABET: # Character
             if char.isupper():
                 braille_char = BRAILE_CAPITAL_FOLLOWS
             braille_char += (ENGLISH_TO_BRAILLE_ALPHABET[char.lower()])
+        else: # Unknown 
+            continue
 
         print(braille_char, end='')
 
