@@ -1,4 +1,10 @@
 from sys import argv
+from enum import Enum
+
+class CharacterType(Enum):
+    CAPITAL = '.....O'
+    DECIMAL = '.O...O'
+    NUMBER = '.O.OOO' 
 
 class Translator:
     def __init__(self):
@@ -18,10 +24,22 @@ class Translator:
                          '!': '..OOO.', ':': '..OO..', ';': '..O.O.',
                          '-': '....OO', '/': '.O..O.', '<': '.OO..O',
                          '>': 'O..OO.', '(': 'O.O..O', ')': '.O.OO.',
-                         ' ': '......'}
+                         ' ': '......', 'capital': CharacterType.CAPITAL, 'decimal': CharacterType.DECIMAL, 'number': CharacterType.NUMBER}
 
     def translate(self, text):
        pass
+    
+    def is_braille(self, char) -> bool:
+        pass
+   
+    def is_capital(self, char) -> bool:
+        pass
+    
+    def is_decimal(self, char) -> bool:
+        pass
+    
+    def is_number(self, char) -> bool:
+        pass
 
 def main():
     if len(argv) > 1:
