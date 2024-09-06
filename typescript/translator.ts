@@ -36,7 +36,7 @@ const brailleToLettersOrSpecial: { [braille: string]: string } = {
   "....OO": "-",
   ".O..O.": "/",
   ".OO..O": "<",
-  // "O..OO.": ">",
+  // "O..OO.": ">", overlap with the "o" character, could not find alternate for ">" in brail, decided to omit for this assessment"
   "O.O..O": "(",
   ".O.OO.": ")",
   "......": " ",
@@ -55,7 +55,7 @@ const brailleToNumber: { [braille: string]: string } = {
   ".OOO..": "0",
 };
 
-const lettersOrSpecialToBraille: { [braille: string]: string } = {
+const lettersOrSpecialToBraille: { [character: string]: string } = {
   a: "O.....",
   b: "O.O...",
   c: "OO....",
@@ -97,7 +97,7 @@ const lettersOrSpecialToBraille: { [braille: string]: string } = {
   " ": "......",
 };
 
-const numberToBraille: { [braille: string]: string } = {
+const numberToBraille: { [number: string]: string } = {
   "1": "O.....",
   "2": "O.O...",
   "3": "OO....",
