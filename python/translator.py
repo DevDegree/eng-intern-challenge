@@ -8,19 +8,19 @@ def convert_to_braille(text_input):
         "O..OOO": "Z", ".O.OOO": "NUMBER_MARK", ".....O": "CAPITAL_MARK", "......": "SPACE"
     }
     
-    reverse_mapping = {value: key for key, value in code_mapping.items() if value not in ["NUMBER_MARK", "CAPITAL_MARK"]}
+    reverse_mapping = {v: x for x, v in code_mapping.items() if v not in ["NUMBER_MARK", "CAPITAL_MARK"]}
     output_sequence = []
     
-    for char in text_input:
-        if char.isdigit():
+    for i in text_input:
+        if i.isdigit():
             output_sequence.append(".O.OOO")
-            for num in char:
+            for num in i:
                 output_sequence.append(reverse_mapping[num])
-        elif char.isupper():
+        elif i.isupper():
             output_sequence.append(".....O")
-            output_sequence.append(reverse_mapping[char.upper()])
+            output_sequence.append(reverse_mapping[i.upper()])
         else:
-            output_sequence.append(reverse_mapping[char.lower()])
+            output_sequence.append(reverse_mapping[i.lower()])
     
     return ''.join(output_sequence)
 
