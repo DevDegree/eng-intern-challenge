@@ -6,6 +6,8 @@ SPACE_CHAR = ' '
 
 class Validator():
     def is_english_string(self, str_to_check: str) -> bool:
+        # since we don't need to translate english periods,
+        # and there is no 6-character braille representation that does not contain a period,
         # a string is braille if and only if it contains a period
         if '.' in str_to_check:
             return False
