@@ -87,7 +87,7 @@ def is_braille(input_str):
     # Going off the assumption that there are no symbols used, as in the instructions
     return '.' in input_str
 
-def translator():
+def main():
     input_str = ' '.join(sys.argv[1:])
 
     if is_braille(input_str):
@@ -95,5 +95,5 @@ def translator():
     else:
         print(english_to_braille_translator(input_str))
 
-
-translator()
+if __name__ == "__main__":
+    main()
