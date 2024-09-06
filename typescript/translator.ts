@@ -1,6 +1,44 @@
-type BrailleMap = { [key: string]: string };
+type BraillePattern = `${"O" | "."}${"O" | "."}${"O" | "."}${"O" | "."}${
+  | "O"
+  | "."}${"O" | "."}`;
+type BrailleArray = BraillePattern[];
+type EnglishLetterKey =
+  | "a"
+  | "b"
+  | "c"
+  | "d"
+  | "e"
+  | "f"
+  | "g"
+  | "h"
+  | "i"
+  | "j"
+  | "k"
+  | "l"
+  | "m"
+  | "n"
+  | "o"
+  | "p"
+  | "q"
+  | "r"
+  | "s"
+  | "t"
+  | "u"
+  | "v"
+  | "w"
+  | "x"
+  | "y"
+  | "z"
+  | " ";
+type NumberKey = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
+type EnglishToBrailleMap = { [key in EnglishLetterKey]: BraillePattern };
+type NumberToBrailleMap = { [key in NumberKey]: BraillePattern };
 
-const englishToBrailleMap: BrailleMap = {
+const capitalIndicator: BraillePattern = ".....O";
+const numberIndicator: BraillePattern = ".O.OOO";
+const blank: EnglishLetterKey = " ";
+
+const englishToBrailleMap: EnglishToBrailleMap = {
   a: "O.....",
   b: "O.O...",
   c: "OO....",
@@ -27,10 +65,10 @@ const englishToBrailleMap: BrailleMap = {
   x: "OO..OO",
   y: "OO.OOO",
   z: "O..OOO",
-  " ": "......",
+  [blank]: "......",
 };
 
-const numberToBrailleMap: BrailleMap = {
+const numberToBrailleMap: NumberToBrailleMap = {
   "1": "O.....",
   "2": "O.O...",
   "3": "OO....",
@@ -43,52 +81,65 @@ const numberToBrailleMap: BrailleMap = {
   "0": ".OOO..",
 };
 
-const capitalIndicator = ".....O";
-const numberIndicator = ".O.OOO";
-
 const brailleToEnglishMap = Object.fromEntries(
   Object.entries(englishToBrailleMap).map(([char, braille]) => [braille, char])
-);
+) as Record<BraillePattern, EnglishLetterKey>;
 
 const brailleToNumberMap = Object.fromEntries(
   Object.entries(numberToBrailleMap).map(([num, braille]) => [braille, num])
-);
+) as Record<BraillePattern, NumberKey>;
+
+function stringToBrailleArray(input: string): BrailleArray {
+  const brailleArray: BrailleArray = [];
+
+  for (let i = 0; i < input.length; i += 6) {
+    const braillePattern = input.slice(i, i + 6) as BraillePattern;
+    brailleArray.push(braillePattern);
+  }
+
+  return brailleArray;
+}
+
+function brailleArrayToString(brailleArray: BrailleArray): string {
+  return brailleArray.join("");
+}
 
 function englishToBraille(input: string): string {
-  let result = "";
+  const result: BrailleArray = [];
   let numberMode = false;
 
   for (const char of input) {
-    if (char === " ") {
-      result += englishToBrailleMap[" "];
+    if (char === blank) {
+      result.push(englishToBrailleMap[blank]);
       numberMode = false;
-    } else if (char >= "A" && char <= "Z") {
-      result += capitalIndicator + englishToBrailleMap[char.toLowerCase()];
+    } else if ("A" <= char && char <= "Z") {
+      result.push(capitalIndicator);
+      result.push(englishToBrailleMap[char.toLowerCase() as EnglishLetterKey]);
       numberMode = false;
     } else if (char >= "0" && char <= "9") {
       if (!numberMode) {
-        result += numberIndicator;
+        result.push(numberIndicator);
         numberMode = true;
       }
-      result += numberToBrailleMap[char];
+      result.push(numberToBrailleMap[char as NumberKey]);
     } else {
-      result += englishToBrailleMap[char];
+      result.push(englishToBrailleMap[char as EnglishLetterKey]);
       numberMode = false;
     }
   }
 
-  return result;
+  return brailleArrayToString(result);
 }
 
 function brailleToEnglish(input: string): string {
+  const brailleArrays = stringToBrailleArray(input);
   let result = "";
-  const chars = input.match(/.{6}/g) || [];
   let capitalizeNext = false;
   let numberMode = false;
 
-  for (const braille of chars) {
+  for (const braille of brailleArrays) {
     if (braille === "......") {
-      result += " ";
+      result += blank;
       numberMode = false;
     } else if (braille === capitalIndicator) {
       capitalizeNext = true;
@@ -98,12 +149,14 @@ function brailleToEnglish(input: string): string {
       if (numberMode) {
         result += brailleToNumberMap[braille];
       } else {
-        let letter = brailleToEnglishMap[braille];
+        let englishLetter = brailleToEnglishMap[braille];
+
         if (capitalizeNext) {
-          letter = letter.toUpperCase();
+          englishLetter = englishLetter.toUpperCase() as EnglishLetterKey;
           capitalizeNext = false;
         }
-        result += letter;
+
+        result += englishLetter;
       }
     }
   }
