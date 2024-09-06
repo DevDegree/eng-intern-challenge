@@ -6,19 +6,37 @@ alphabet_translation = {
     'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO', 
     'z': 'O..OOO',
 
-    # Numbers (preceded by number indicator)
     '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
-    '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..',
-
-    # Punctuation
-    '.': '..OO.O', ',': 'O.....', '?': '.O..OO', '!': '.O.O.O', ':': 'OO....',
-    ';': 'O..O..', '-': '..O.O.', '/': '.O.OO.', '<': 'O.OO..', '>': 'OO.O..', 
-    '(': 'O...O.', ')': 'O.OOO.', ' ': '......'
+    '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..'
 }
 
-# Special indicators
-special_indicators = {
-    'capital': '.O....',    # Capitalization indicator
-    'number': '.OOO..',     # Number indicator
-    'decimal': '.OO.O.',    # Decimal indicator (optional based on standard)
-}
+
+
+def word_to_brail(str):
+    word=[]
+    state = 'alph'
+    str.strip()
+    for char in str:
+        if char == ' ':
+            word.append("......")
+            continue
+        if char.isdigit() and state!='num':
+            word.append('.O.OOO')
+            state = 'num'
+        
+        elif char.isalpha():
+            if state!='alpha':
+                state = "alpha"
+            
+            if char.isupper():
+                word.append(".....O")
+        word.append(alphabet_translation[char.lower()])
+
+    return ''.join(word)
+
+
+print((word_to_brail('Abc 123 xYz')))
+# for index, char in enumerate(".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"):
+#     print(char, end="")
+#     if index != 0 and (index+1)%6 == 0:
+#         print()
