@@ -25,11 +25,6 @@ class BrailleTranslator(Translator):
                                 'V': 'O.O.OO', 'W': '.OOO.O', 'X': 'OO..OO',
                                 'Y': 'OO.OOO', 'Z': 'O..OOO'}
         
-        self.__latin_symbols = {'.': '..OO.O', ',': '..O...', '?': '..O.OO',
-                                '!': '..OOO.', ':': '..OO..', ';': '..O.O.',
-                                '-': '....OO', '/': '.O..O.', '<': '.OO..O',
-                                '>': 'O..OO.', '(': 'O.O..O', ')': '.O.OO.'}
-        
         self.__latin_numbers = {'1': 'O.....', '2': 'O.O...', '3': 'OO....', 
                               '4': 'OO.O..', '5': 'O..O..', '6': 'OOO...', 
                               '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', 
@@ -41,8 +36,7 @@ class BrailleTranslator(Translator):
         self.__lookup_table = {
             CharacterType.CAPITAL.value: 'capital',
             CharacterType.NUMBER.value: 'number',
-            CharacterType.SPACE.value: ' ',
-            CharacterType.DECIMAL.value: '.'
+            CharacterType.SPACE.value: ' '
         }
             
     def __is_braille(self, text) -> bool:
@@ -61,21 +55,18 @@ class BrailleTranslator(Translator):
                 if charac.isupper():
                     converted_text += CharacterType.CAPITAL.value
                 converted_text += self.__latin_alphabet.get(charac.upper())
-            elif charac.isnumeric():
+                continue
+            if charac.isnumeric():
                 if not first_number:
                     converted_text += CharacterType.NUMBER.value
                     first_number = True
                 converted_text += self.__latin_numbers.get(charac)
-            elif charac in self.__latin_symbols.keys():
-                if charac == '.':
-                    if first_number:
-                        converted_text += CharacterType.DECIMAL.value
-                    else:
-                        converted_text += self.__latin_symbols.get(charac)
-            elif charac == ' ':
+                continue
+            if charac == ' ':
                 if first_number:
                     first_number = False
                 converted_text += CharacterType.SPACE.value
+                continue
         return converted_text
     
     def __translate_to_latin(self, braille_text: str) -> str:
