@@ -50,8 +50,7 @@ num_follows = ".0.000"
 
 ######## ENG <-> BRAILLE Translation Lookups ########
 
-
-
+# Reading input as one big string (including spaces)
 input_str = ""
 for i in range(1, len(sys.argv)):
     if (i > 1):
@@ -93,7 +92,7 @@ output_str = ""
 capitalize = False
 numberize = False
 for chunk in chunks:
-    if chunk_size == 6:
+    if chunk_size == 6:  # converting braille -> eng
         if capitalize:
             output_char = trans_char(chunk).capitalize()
             capitalize = False
@@ -108,7 +107,7 @@ for chunk in chunks:
             continue
         else:
             output_char = trans_char(chunk)
-    else:
+    else:  # converting eng -> braille
         if chunk.isupper():
             output_char = cap_follows + trans_char(chunk.lower())
         elif chunk in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']:
@@ -118,4 +117,5 @@ for chunk in chunks:
 
     output_str = output_str + output_char
 
+# outputting results
 print(output_str)
