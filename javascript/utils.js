@@ -56,4 +56,24 @@ function getKeyFromDict(key, dict) {
 }
 
 
-module.exports = { isBrailleCheck, splitEverySixChars, getKeyFromDict };
+/**
+ * This function returns the Braille translation of the English character
+ * 
+ * @param {string} value - character that will need to be translated to Braille
+ * @param {object} dict - Translation dictionary defined in constants
+ * @returns - Returns the key from the dictionary, otherwise `false`
+ * 
+ */
+function getValueFromDict(value, dict) {
+    const key = Object.keys(dict).find(key => dict[key] === value);
+
+
+    if (key === undefined) {
+        return false;
+    }
+
+    return key
+}
+
+
+module.exports = { isBrailleCheck, splitEverySixChars, getKeyFromDict, getValueFromDict };
