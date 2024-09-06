@@ -61,6 +61,7 @@ def convertBrailleToEnglish(brailleText):
             capitalize = False
         elif numbersOnly:
             result += brailleToNumbers[symbol]
+        #accounting for invalid/unrecognized characters if it cannot be referenced
         else:
             try:
                 result += brailleToEnglish[symbol]
@@ -78,16 +79,22 @@ def convertEnglishToBraille(englishText):
     numberFlag = False
 
     for char in englishText:
+
+        #accounting for uppercase character
         if char.isupper():
             result += '.....O' + englishToBraille[char.lower()]
+        #accounting for numerical character before 'number follows' symbol is added
         elif char.isnumeric() and numberFlag == False:
             result += '.O.OOO' + numbersToBraille[char]
             numberFlag = True
+        #accounting for numerical character after 'number follows' symbol is added
         elif char.isnumeric() and numberFlag == True:
             result += numbersToBraille[char]
+        #accounting for space character and toggling numberFlag off accordingly
         elif char == ' ':
             result += englishToBraille[char]
             numberFlag = False
+        #accounting for invalid/unrecognized characters if it cannot be referenced
         else:
             try:
                 result += englishToBraille[char]
