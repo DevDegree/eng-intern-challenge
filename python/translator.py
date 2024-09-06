@@ -33,6 +33,4 @@ def handle_translation(input_sequence):
 if __name__ == "__main__":
     import sys
     input_text = ' '.join(sys.argv[1:])
-    print(handletranslation(input_text))
-
-        
+    print(handle_translation(input_text))
