@@ -50,7 +50,7 @@ SPECIAL_TO_BRAILLE = {
 
 BRAILLE_TO_LETTER = {braille:letter for letter,braille in LETTER_TO_BRAILLE.items()}
 BRAILLE_TO_NUMBER = {braille:number for number,braille in NUMBER_TO_BRAILLE.items()}
-BRAILLE_TO_SPECIAL = {braille:special for special,braille in NUMBER_TO_BRAILLE.items()}
+BRAILLE_TO_SPECIAL = {braille:special for special,braille in SPECIAL_TO_BRAILLE.items()}
 
 VALID_ENGLISH = LETTER_TO_BRAILLE | NUMBER_TO_BRAILLE | SPECIAL_TO_BRAILLE
 VALID_BRAILLE = BRAILLE_TO_LETTER | BRAILLE_TO_NUMBER | BRAILLE_TO_SPECIAL
@@ -60,15 +60,14 @@ def is_braille(input:str)->bool:
     """
     Check whether an inputted string is a valid braille sequence
     """
-    if len(input) %6 != 0:
+    if len(input)%6 != 0:
         return False
     
     cur_idx = 0
     while cur_idx+6 <= len(input):
-        if input[cur_idx][cur_idx+6] not in VALID_BRAILLE:
+        if input[cur_idx:cur_idx+6] not in VALID_BRAILLE:
             return False
-        else:
-            cur_idx+=6
+        cur_idx+=6
 
     return True       
 
@@ -89,7 +88,7 @@ def braille_to_english(input:str) -> str:
     result = ""
     cur_idx = 0
     while cur_idx+6 <= len(input):
-        cur_seq = input[cur_idx][cur_idx+6]
+        cur_seq = input[cur_idx:cur_idx+6]
         if cur_seq == SPECIAL_TO_BRAILLE["CAPITAL_FOLLOWS"]:
             CAPITALIZE_NEXT = True
         elif cur_seq == SPECIAL_TO_BRAILLE["NUMBER_FOLLOWS"]:
@@ -125,7 +124,7 @@ def english_to_braille(input:str) -> str:
             if character.isupper():
                 result += SPECIAL_TO_BRAILLE["CAPITAL_FOLLOWS"]
             result += LETTER_TO_BRAILLE[character.lower()]
-        else:
+        elif character == " ":
             result += SPECIAL_TO_BRAILLE[character]
             NUMBERS_STARTED = False
 
