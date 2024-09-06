@@ -1,5 +1,3 @@
-console.log('test log');
-
 type CharactersToBrailleMap = { [key: string]: string };
 type NumbersToBrailleMap = { [key: string]: string };
 type BraileToCharactersMap = { [key: string]: string };
@@ -76,10 +74,6 @@ const braileToCharacters: BraileToCharactersMap =
   swapKeyValues(charactersToBraille);
 const braileToNumbers: BraileToCharactersMap = swapKeyValues(numbersToBraille);
 
-const isBraileString = (str: string) => {
-  return Array.from(str).every((ch) => ch == 'O' || ch == '.');
-};
-
 const convertEnglishToBraille = (englishStr: string): string => {
   let res = '';
   let isNumberSequence = false;
@@ -115,27 +109,27 @@ const convertBrailleToEnglish = (braileStr: string): string => {
   let isCapital = false;
   for (let i = 0; i < braileStr.length; i += BRAILE_SYMBOL_LENGTH) {
     const symbol = braileStr.slice(i, i + BRAILE_SYMBOL_LENGTH);
+
     switch (symbol) {
       case numberFollows:
         isNumberSequence = true;
         break;
-      case capitalFollows:
-        // res += braileToCharacters[symbol].toUpperCase();
-        isCapital = true;
-        break;
       case charactersToBraille[' ']:
         isNumberSequence = false;
-        res += braileToCharacters[symbol];
+        res += ' ';
+        break;
+      case capitalFollows:
+        isCapital = true;
         break;
       default:
-        if (isNumberSequence) {
-          res += braileToNumbers[symbol];
+        const ch = isNumberSequence
+          ? braileToNumbers[symbol]
+          : braileToCharacters[symbol];
+
+        if (isCapital) {
+          res += ch.toUpperCase();
+          isCapital = false;
         } else {
-          let ch = braileToCharacters[symbol];
-          if (isCapital) {
-            ch = ch.toUpperCase();
-            isCapital = false;
-          }
           res += ch;
         }
     }
@@ -144,17 +138,24 @@ const convertBrailleToEnglish = (braileStr: string): string => {
   return res;
 };
 
-let res = '';
-const testInput = '42';
-if (isBraileString(testInput)) {
-  // TODO
-  console.error('NOT IMPLEMENTED');
-} else {
-  res = convertEnglishToBraille(testInput);
+const isBraileString = (str: string) => {
+  return Array.from(str).every((ch) => ch == 'O' || ch == '.');
+};
+
+function main() {
+  let res = '';
+  const testInput = '42';
+  if (isBraileString(testInput)) {
+    res = convertBrailleToEnglish(testInput);
+  } else {
+    res = convertEnglishToBraille(testInput);
+  }
+  console.log(res);
 }
+main();
 
 /*
- * ASSERTIONS
+ * TEST ASSERTIONS
  */
 console.assert(isBraileString('42') == false);
 console.assert(isBraileString('...OOO..O.O.1') == false);
@@ -164,6 +165,10 @@ console.assert(convertEnglishToBraille('42') === '.O.OOOOO.O..O.O...');
 console.assert(
   convertEnglishToBraille('Hello world') ===
     '.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..'
+);
+console.assert(
+  convertEnglishToBraille('Abc 123 xYz') ===
+    '.....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO'
 );
 
 console.assert(
