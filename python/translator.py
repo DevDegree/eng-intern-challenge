@@ -32,16 +32,17 @@ def is_braille(input_text: str) -> bool:
     # Iterate over the input text in chunks of 6
     for i in range(0, len(input_text), 6):
         chunk = input_text[i:i + 6]
-        # Check if the chunk exists in any of the Braille maps
+        # Check if the chunk is not in any of the Braille maps or special symbols
         if (
-            chunk in BRAILLE_MAP or 
-            chunk in NUMERIC_MAP or 
-            chunk == CAPITAL or 
-            chunk == NUMBER or 
-            chunk == SPACE
+            chunk not in REVERSE_BRAILLE_LETTER_MAP and 
+            chunk not in REVERSE_BRAILLE_NUMBER_MAP and 
+            chunk != CAPITAL and 
+            chunk != NUMBER and 
+            chunk != SPACE
         ):
-            return True
-    return False
+            return False  # If any chunk is invalid, it's not Braille
+    
+    return True  # All chunks are valid Braille symbols
 
 def translate_to_braille(text):
     result = []
