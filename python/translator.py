@@ -29,9 +29,9 @@ def get_key_from_value(dictionary, value):
     for key, val in dictionary.items():
         if val == value:
             return key
-    return "Value not found"
+    return None
 
-def BrailleToEnglish(braille):
+def brailleToEnglish(braille):
     englishWord = ""
     isCapital = False
     isNumber = False
@@ -70,7 +70,7 @@ def BrailleToEnglish(braille):
     print(englishWord)
     
 
-def engBrai(word):
+def englishtToBraille(word):
     newWord = ""
     firstDigit = True
     for char in word:
@@ -79,14 +79,14 @@ def engBrai(word):
         if char.isupper():
             char = char.lower()
             newWord += ".....O"
-        if char.isdigit() & firstDigit:
+        if char.isdigit() and firstDigit:
             newWord += ".O.OOO"
             firstDigit = False
         newWord += braille_alphabet[char]
     print(newWord)
         
 if is_braille(input_string):
-    BrailleToEnglish(input_string)
+    brailleToEnglish(input_string)
 else:
-    engBrai(input_string)
+    englishtToBraille(input_string)
 
