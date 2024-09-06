@@ -58,49 +58,40 @@ const brailleSymbols = {
   " ": "......",
 };
 
-const givenString = process.argv.slice(2).join(" ");
-
-let isEnglish = false;
-let outputStr = "";
-
-// To determine is the given string is English or Braille
-for (ch of givenString) {
-  if (!["O", "."].includes(ch)) {
-    isEnglish = true;
-    break;
-  }
-}
-
-if (isEnglish) {
-  //English to Braille
+const translateEnglishToBraille = (str) => {
+  let output = "";
   let prevIsNum = false;
 
-  for (ch of givenString) {
+  for (const ch of str) {
     if (ch.match(/[A-Z]/)) {
-      outputStr += capFollows + brailleAlphabets[ch.toLowerCase()];
+      output += capFollows + brailleAlphabets[ch.toLowerCase()];
       prevIsNum = false;
     } else if (ch.match(/[a-z]/)) {
-      outputStr += brailleAlphabets[ch];
+      output += brailleAlphabets[ch];
       prevIsNum = false;
     } else if (ch.match(/[0-9]/)) {
       if (!prevIsNum) {
-        outputStr += numFollows;
+        output += numFollows;
       }
 
-      outputStr += brailleNumbers[ch];
+      output += brailleNumbers[ch];
       prevIsNum = true;
     } else if (ch.match(/[.,?!:;<>\/\(\)\- ]/)) {
-      outputStr += brailleSymbols[ch];
+      output += brailleSymbols[ch];
       prevIsNum = false;
     }
   }
-} else {
-  //Braille to English
+
+  return output;
+};
+
+const translateBrailleToEnglish = (str) => {
+  let output = "";
   let nextIsCap = false;
   let nextAllNums = false;
 
-  for (let i = 0; i < givenString.length; i += 6) {
-    let ch = givenString.slice(i, i + 6);
+  for (let i = 0; i < str.length; i += 6) {
+    let ch = str.slice(i, i + 6);
 
     if (ch === numFollows) {
       nextAllNums = true;
@@ -110,29 +101,45 @@ if (isEnglish) {
     } else if (ch === "......") {
       nextAllNums = false;
       nextIsCap = false;
-      outputStr += " ";
+      output += " ";
     } else {
       if (nextAllNums) {
-        let key = Object.keys(brailleNumbers).find(
+        const key = Object.keys(brailleNumbers).find(
           (key) => brailleNumbers[key] === ch
         );
-
-        outputStr += key;
+        output += key;
       } else {
-        let key = Object.keys(brailleAlphabets).find(
+        const key = Object.keys(brailleAlphabets).find(
           (key) => brailleAlphabets[key] === ch
         );
 
         if (nextIsCap) {
-          outputStr += key.toUpperCase();
+          output += key.toUpperCase();
         } else {
-          outputStr += key;
+          output += key;
         }
 
         nextIsCap = false;
       }
     }
   }
+
+  return output;
+};
+
+// To determine is the given string is English or Braille
+let isEnglish = false;
+const givenString = process.argv.slice(2).join(" ");
+
+for (ch of givenString) {
+  if (!["O", "."].includes(ch)) {
+    isEnglish = true;
+    break;
+  }
 }
+
+const outputStr = isEnglish
+  ? translateEnglishToBraille(givenString)
+  : translateBrailleToEnglish(givenString);
 
 console.log(outputStr);
