@@ -1,4 +1,5 @@
 from textwrap import wrap
+import sys
 
 # CONSTANTS
 # Hashmaps representing alphabet, numbers, and special characters to braille
@@ -63,21 +64,20 @@ def braille_to_eng(braille: str) -> str:
     
     for group in braille_list:
         # Check for capital symbol
-        if group == SPECIAL_CHARAS['capital']:
-            is_capital == True
+        if group == SPECIAL_CHARAS['.....0']:
+            is_capital = True
         # Check if number symbol
-        elif group == SPECIAL_CHARAS['number']:
-            is_number == True
-        elif group == SPECIAL_CHARAS[' ']:
+        elif group == SPECIAL_CHARAS['.0.000']:
+            is_number = True
+        elif group == SPECIAL_CHARAS['......']:
             final_string += " "
             
         
         if is_number:
-            while BRAILLE_TO_SPECIAL_CHARAS.get(group) != ' ':
-                num = BRAILLE_TO_NUMBERS.get(group)
-                final_string += num
-            
-            is_number = False
+            if BRAILLE_TO_SPECIAL_CHARAS.get(group) != ' ':
+                final_string += BRAILLE_TO_NUMBERS.get(group)
+            else:
+                is_number = False
         else:
             letter = BRAILLE_TO_ALPHABET.get(group)
             if is_capital:
@@ -89,5 +89,46 @@ def braille_to_eng(braille: str) -> str:
     return final_string
 
 
+# Convert from English -> Braille
+def eng_to_braille(text: str) -> str:
+    final_string = ''
+    is_capital, is_number = False, False
     
+    for chara in text:
+        # Check for capital symbol
+        if chara.isupper():
+            final_string += '.....0'
+        # Check if number symbol
+        elif chara.isdigit():
+            final_string += '.0.000' + NUMBERS.get(chara)
+            is_number == True
+        elif letter == SPECIAL_CHARAS[' ']:
+            final_string += "......"
+            
         
+        if is_number:
+            if BRAILLE_TO_SPECIAL_CHARAS.get(chara) != ' ':
+                final_string += NUMBERS.get(chara)
+            else:
+                is_number = False
+        else:
+            letter = ALPHABET.get(chara)
+            if is_capital:
+                final_string += SPECIAL_CHARAS.get("capital") + letter
+                is_capital = False
+            else :
+                final_string += letter
+    
+    return final_string
+
+def check_for_braille(input: str) -> bool:
+    return all(char in {'.', '0'} for char in input)
+
+if __name__ == '__main__':
+    joined_args = ' '.join(sys.argv[1:])
+
+    if check_for_braille(joined_args):
+        print(braille_to_eng(joined_args))
+    else:
+        print(eng_to_braille(joined_args))
+
