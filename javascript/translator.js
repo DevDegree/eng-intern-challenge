@@ -42,6 +42,7 @@ const capitalFollows = '.....0';
 const decimalFollows = '.0...0';
 const numberFollows = '.0.000';
 
+
 function translateEngToBraille(input) {
     let output = '';
     let numberMode = false;
@@ -68,3 +69,7 @@ function translateEngToBraille(input) {
 }
 
 // console.log(translateEngToBraille('a.A1'));
+
+const brailleToEng = Object.fromEntries(
+    Object.entries(engToBraille).map(([key, value]) => [value, key])
+);
