@@ -13,6 +13,7 @@ A-J only use a combination of the first 4 dots in the 3x2 matrix.
 K-T repeat the pattern of A-J but with an added dot in the bottom left corner.
 U-Z repeat the pattern of A-J but with the last row filled out.
 W is unique and has a different pattern altogether.
+Numbers are also repeating the A-J pattern but follow a number decorator.
 
 In the end, I aimed for readability and simplicity of the code.
 '''
@@ -31,3 +32,25 @@ braille_patterns = {
 
 # Create reverse dictionary for Braille to English
 english_patterns = {v: k for k, v in braille_patterns.items()}
+
+
+def english_to_braille(text):
+    result = []
+    number_mode = False #Flag to indicate the start of a number sequence
+    
+    for char in text:
+        if char.isupper():
+            result.append(braille_patterns['capital'])
+            char = char.lower()
+        
+        if char.isdigit():
+            if not number_mode:
+                result.append(braille_patterns['number'])
+                number_mode = True
+            result.append(braille_patterns[chr(ord(char) - ord('0') + ord('a'))])
+        elif char.isalpha() or char == ' ':
+            if number_mode:
+                number_mode = False
+            result.append(braille_patterns[char])
+    
+    return ''.join(result)
