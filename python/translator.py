@@ -1,12 +1,12 @@
 import sys 
 
 
-# Define symbols for following char being capital, decimal, or number
+# Define symbols for special Braille cases
 CAPITAL_FOLLOWS = ".....O"
 NUMBER_FOLLOWS = ".O.OOO"
 SPACE = "......"
 
-# Define Braille alphabet for translation
+# Define Braille alphabet for English translation
 braille_to_letter = {
     'O.....' : 'a', 
     'O.O...' : 'b',
@@ -49,6 +49,7 @@ braille_to_number = {
     '.OOO..' : '0',
 }
 
+# Reverse mappings for English to Braille translations
 letter_to_braille = {v: k for k, v in braille_to_letter.items()}
 number_to_braille = {v: k for k, v in braille_to_number.items()}
 
@@ -85,17 +86,20 @@ def braille_to_english(braille_string: str) -> str:
     is_number = False  # Flag to indicate next char is number
     is_capital = False  # Flag to indicate next char is capital
     
+    # Loop over input Braille string in groups of 6 chars
     while i < len(braille_string):
         current_char = braille_string[i:i+6]
         
-        # Handle special chars and modes
+        # Handle space
         if current_char == SPACE:
             translated_string.append(" ")
+        # Handle capital letter
         elif current_char == CAPITAL_FOLLOWS:
             is_capital = True
+        # Handle number
         elif current_char == NUMBER_FOLLOWS:
             is_number = True
-        # Handle regular braille translation of letters and numbers
+        # Handle regular Braille translation
         else:
             if is_number and current_char in braille_to_number:
                 translated_string.append(braille_to_number[current_char])
@@ -124,21 +128,26 @@ def english_to_braille(english_string: str) -> str:
     translated_string = []
     is_number_mode = False  # Flag to indicate when to add NUMBER_FOLLOWS symbol
     
+    # Loop over input English string by character
     for char in english_string:
+        # Handle space
         if char == " ":
             translated_string.append(SPACE)
             is_number = False
+        # Handle number
         elif char.isdigit():
             if not is_number_mode:
                 translated_string.append(NUMBER_FOLLOWS)
                 is_number_mode = True
             translated_string.append(number_to_braille[char])
+        # Handle letter
         else:
             is_number_mode = False
             
+            # Handle capitalization
             if char.isupper():
                 translated_string.append(CAPITAL_FOLLOWS)
-                char = char.lower()
+                char = char.lower()  # Convert to lowercase for Braille lookup
             translated_string.append(letter_to_braille[char])
     
     return "".join(translated_string)
@@ -150,11 +159,11 @@ if __name__ == "__main__":
     combined_imput = " ".join(string_input)
     translation_mode = determine_translation_mode(combined_imput)
     
+    # Translate input based on detected mode
     if translation_mode == "braille-to-english":
         result = braille_to_english(combined_imput)
     else:
         result = english_to_braille(combined_imput)
         
     print(result)
-    
     
