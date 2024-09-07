@@ -46,7 +46,7 @@ function splitEverySixChars(string) {
  * @returns - Returns the key from the dictionary, otherwise `false`
  *
  */
-function getKeyFromDict(key, dict) {
+function getValueFromDict(key, dict) {
   let value;
   value = dict[key];
   return value !== undefined ? value : false;
@@ -60,8 +60,10 @@ function getKeyFromDict(key, dict) {
  * @returns - Returns the key from the dictionary, otherwise `false`
  *
  */
-function getValueFromDict(value, dict) {
+function getKeyFromDict(value, dict) {
   const key = Object.keys(dict).find((key) => dict[key] === value);
+  console.log(key)
+  console.log(value)
   return key !== undefined ? key : false;
 }
 
