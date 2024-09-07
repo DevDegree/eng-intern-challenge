@@ -72,7 +72,7 @@ def isBraille(input):
             return False
     return True
 
-def getEnglishLetters(letter, brailleList):
+def getEnglishForm(letter, brailleList):
     word = ""
     for char, braille in brailleList.items():
         if letter == braille:
@@ -85,31 +85,35 @@ def convertToEnglish(input):
     cmd = ""
     word = ""
 
-    for x in range(len(input)):
-        if (x % 6 == 0):
-            if letter in brailleFollows.values():
-                for follows, braille in brailleFollows.items():
-                    if letter == braille:
-                        cmd = follows
+    l = 0
+    r = 6
 
-            elif ((cmd == "" or cmd == "cap") and (letter in brailleToEnglish.values())):
-                if (cmd == "cap"):
-                    word += getEnglishLetters(letter, brailleToEnglish).capitalize()
-                    cmd = ""
-                else: 
-                    word += getEnglishLetters(letter, brailleToEnglish)
+    while(r <= len(input)):
+        while (l < r):
+            letter += input[l]  
+            l = l + 1
+        
+        if letter in brailleFollows.values():
+            for follows, braille in brailleFollows.items():
+                if letter == braille:
+                    cmd = follows
 
-            elif ((cmd == "" or cmd == "dec") and (letter in brailleToSyms.values())):
-                word += getEnglishLetters(letter, brailleToSyms)
-            
-            elif cmd == "num" and letter in brailleToNums.values():
-                word += getEnglishLetters(letter, brailleToNums)
-            
-            letter = ""
-            
-            
-        letter += input[x]
-    
+        elif ((cmd == "" or cmd == "cap") and (letter in brailleToEnglish.values())):
+            if (cmd == "cap"):
+                word += getEnglishForm(letter, brailleToEnglish).capitalize()
+                cmd = ""
+            else: 
+                word += getEnglishForm(letter, brailleToEnglish)  
+
+        elif ((cmd == "" or cmd == "dec" or cmd == "num") and (letter in brailleToSyms.values())):
+            word += getEnglishForm(letter, brailleToSyms)
+        
+        elif cmd == "num" and letter in brailleToNums.values():
+            word += getEnglishForm(letter, brailleToNums)
+
+        r = r + 6
+        letter = ""
+        
     return word
        
 def convertToBraille(input):
@@ -150,7 +154,5 @@ def translator():
         print (convertToEnglish(input))
     else:
         print (convertToBraille(input))
-
-
 
 translator()
