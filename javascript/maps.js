@@ -1,0 +1,85 @@
+let brailleToEngMap = new Map()
+let engToBrailleMap = new Map();
+let brailleToNumMap = new Map();
+let numberToBrailleMap = new Map()
+brailleToEngMap.set("O.....", "a");
+brailleToEngMap.set("O.O...", "b");
+brailleToEngMap.set("OO....", "c");
+brailleToEngMap.set("OO.O..", "d");
+brailleToEngMap.set("O..O..", "e");
+brailleToEngMap.set("OOO...", "f");
+brailleToEngMap.set("OOOO..", "g");
+brailleToEngMap.set("O.OO..", "h");
+brailleToEngMap.set(".OO...", "i");
+brailleToEngMap.set(".OOO..", "j");
+brailleToEngMap.set("O...O.", "k");
+brailleToEngMap.set("O.O.O.", "l");
+brailleToEngMap.set("OO..O.", "m");
+brailleToEngMap.set("OO.OO.", "n");
+brailleToEngMap.set("O..OO.", "o");
+brailleToEngMap.set("OOO.O.", "p");
+brailleToEngMap.set("OOOOO.", "q");
+brailleToEngMap.set("O.OOO.", "r");
+brailleToEngMap.set(".OO.O.", "s");
+brailleToEngMap.set(".OOOO.", "t");
+brailleToEngMap.set("O...OO", "u");
+brailleToEngMap.set("O.O.OO", "v");
+brailleToEngMap.set(".OOO.O", "w");
+brailleToEngMap.set("OO..OO", "x");
+brailleToEngMap.set("OO.OOO", "y");
+brailleToEngMap.set("O..OOO", "z");
+brailleToEngMap.set("..OO.O", ".");
+brailleToEngMap.set("......", " ");
+
+brailleToNumMap.set("O.....", "1");
+brailleToNumMap.set("O.O...", "2");
+brailleToNumMap.set("OO....", "3");
+brailleToNumMap.set("OO.O..", "4");
+brailleToNumMap.set("O..O..", "5");
+brailleToNumMap.set("OOO...", "6");
+brailleToNumMap.set("OOOO..", "7");
+brailleToNumMap.set("O.OO..", "8");
+brailleToNumMap.set(".OO...", "9");
+brailleToNumMap.set(".OOO..", "0");
+
+numberToBrailleMap.set("1", "O.....");
+numberToBrailleMap.set("2", "O.O...");
+numberToBrailleMap.set("3", "OO....");
+numberToBrailleMap.set("4", "OO.O..");
+numberToBrailleMap.set("5", "O..O..");
+numberToBrailleMap.set("6", "OOO...");
+numberToBrailleMap.set("7", "OOOO..");
+numberToBrailleMap.set("8", "O.OO..");
+numberToBrailleMap.set("9", ".OO...");
+numberToBrailleMap.set("0", ".OOO..");
+
+engToBrailleMap.set("b", "O.O...");
+engToBrailleMap.set("c", "OO....");
+engToBrailleMap.set("d", "OO.O..");
+engToBrailleMap.set("a", "O.....");
+engToBrailleMap.set("e", "O..O..");
+engToBrailleMap.set("f", "OOO...");
+engToBrailleMap.set("g", "OOOO..");
+engToBrailleMap.set("h", "O.OO..");
+engToBrailleMap.set("i", ".OO...");
+engToBrailleMap.set("j", ".OOO..");
+engToBrailleMap.set("k", "O...O.");
+engToBrailleMap.set("l", "O.O.O.");
+engToBrailleMap.set("m", "OO..O.");
+engToBrailleMap.set("n", "OO.OO.");
+engToBrailleMap.set("o", "O..OO.");
+engToBrailleMap.set("p", "OOO.O.");
+engToBrailleMap.set("q", "OOOOO.");
+engToBrailleMap.set("r", "O.OOO.");
+engToBrailleMap.set("s", ".OO.O.");
+engToBrailleMap.set("t", ".OOOO.");
+engToBrailleMap.set("u", "O...OO");
+engToBrailleMap.set("v", "O.O.OO");
+engToBrailleMap.set("w", ".OOO.O");
+engToBrailleMap.set("x", "OO..OO");
+engToBrailleMap.set("y", "OO.OOO");
+engToBrailleMap.set("z", "O..OOO");
+engToBrailleMap.set(".", "..OO.O");
+engToBrailleMap.set(" ", "......");
+
+module.exports = {engToBrailleMap, numberToBrailleMap, brailleToEngMap, brailleToNumMap}
