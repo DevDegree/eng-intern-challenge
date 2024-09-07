@@ -10,6 +10,7 @@ class Translator():
 
     number_follows = 'number_follows'
     capital_follows = 'capital_follows'
+    decimal_follows = 'decimal_follows'
     space = " "
     
     #alphabet of eng and special chars to Braille
@@ -40,8 +41,8 @@ class Translator():
         'x': 'OO..OO',
         'y': 'OO.OOO',
         'z': 'O..OOO',
-        'capital_follows': '.....O',
-        'decimal_follows': '.O...O',
+        capital_follows: '.....O',
+        decimal_follows: '.O...O',
         number_follows: '.O.OOO',
         space: '......',
         '.': '..OO.O',
