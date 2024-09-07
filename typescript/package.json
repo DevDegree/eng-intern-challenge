@@ -4,6 +4,7 @@
   "description": "",
   "main": "translator.ts",
   "scripts": {
+    "build": "npx tsc",
     "test": "jest"
   },
   "keywords": [],
