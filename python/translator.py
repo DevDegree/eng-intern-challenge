@@ -253,8 +253,8 @@ def braille_to_english(input):
 
 def main():
 
-    #if len (sys.argv) < 2:
-        #raise ValueError("Need to pass atleast one string to translate")
+    if len (sys.argv) < 2:
+        raise ValueError("Need to pass atleast one string to translate")
 
     input_string = ' '.join(sys.argv[1:])
     print(translate(input_string))
