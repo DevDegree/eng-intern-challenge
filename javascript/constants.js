@@ -49,7 +49,7 @@ const braille_symbols_dict = {
     "..O.O.": ";",
     "....OO": "-",
     ".O..O.": "/",
-    ".OO..O": "<",
+    ".OO..O": "<", // There is a bug when < is in the input or expected in the output
     "O..OO.": ">",
     "O.O..O": "(",
     ".O.OO.": ")",
