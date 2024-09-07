@@ -18,7 +18,6 @@ Plaintext_To_Braille_Hash = Braille_To_Plaintext_Hash.invert
 
 class StringBrailleConverter
   attr_accessor :lang
-  attr_accessor :phrase
   def initialize(phrase = "")
     @phrase = phrase
     @lang = :N_A
@@ -137,24 +136,17 @@ class StringBrailleConverter
 end # of class
 
 if __FILE__ == $0
-  args = ARGV
-  if args.length < 1
-    puts "Phrase not detected."
-  elsif args.length > 1
-    puts "Too many arguments present. 
-          Have you put quotations around your phrase?"
-  else
-    converter = StringBrailleConverter.new(args[0])
-    converter.checkLang
-    case converter.lang
-    when :Braille
-      converter.toPlaintext
-      # puts "Braille"
-    when :Plain
-      converter.toBraille
-      # puts "Plain"
-    else 
-      puts "Error"
-    end
+  args = ARGV.join(" ")
+  converter = StringBrailleConverter.new(args)
+  converter.checkLang
+  case converter.lang
+  when :Braille
+    converter.toPlaintext
+    # puts "Braille"
+  when :Plain
+    converter.toBraille
+    # puts "Plain"
+  else 
+    puts "Error"
   end
 end
