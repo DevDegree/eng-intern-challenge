@@ -79,3 +79,12 @@ def brail_to_word(s):
             
     return ''.join(word)
 
+if len(sys.argv) > 1:
+    test_string = ' '.join(sys.argv[1:])
+    # Check if the input is already in braille format (only dots and 'O')
+    if re.fullmatch(r'^[O.]+$', test_string):
+        # Input is in braille format, convert to word
+        print(brail_to_word(test_string))
+    else:
+        # Input is a word, convert to braille
+        print(word_to_brail(test_string))
