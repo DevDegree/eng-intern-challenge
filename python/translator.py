@@ -156,6 +156,8 @@ def english_to_braille(input):
 
 
    for c in input:
+       
+       
 
        if c == " ":
            
@@ -172,8 +174,7 @@ def english_to_braille(input):
 
            result += c_in_braille
 
-
-       else:
+       elif c in "0123456789":
            c_in_braille = ALPHA_AND_NUM_TO_BRAILLE[c]
 
            if num_sequence__not_started:
@@ -181,20 +182,42 @@ def english_to_braille(input):
                result += NUMBER_FOLLOWS
           
            result += c_in_braille
+        
+       else:
+           
+           raise ValueError("Invalid english string")
   
    return result
 
 
+def check_braille_string_for_error(curr_map_to_refer, braille_char,  num_follows_flag_seen):
+
+    if braille_char not in BRAILLE_TO_ALPHA and braille_char not in BRAILLE_TO_NUM and braille_char not in [BRAILLE_SPACE, NUMBER_FOLLOWS, CAPTIAL_FOLLOWS]:
+        raise ValueError("Invalid braille character in given string")
+    
+    if num_follows_flag_seen and (braille_char not in BRAILLE_TO_NUM):
+        raise ValueError("a non-numerical braille charcater follows the number follows braille character")
+    
+    if (curr_map_to_refer == BRAILLE_TO_NUM) and (braille_char not in BRAILLE_TO_NUM) and (braille_char != BRAILLE_SPACE):
+        raise ValueError("An alpha character follows a number braille character")
+
+    
 def braille_to_english(input):
+   
+   if len(input) % 6 != 0:
+       raise ValueError("Invalid braille string")
 
    result = ''
    cap_next_char = False
    curr_map_to_refer = BRAILLE_TO_ALPHA
+   num_follows_flag_seen = False
 
 
    for i in range(0, len(input), 6):
 
        braille_char = input[i:i+6]
+
+       check_braille_string_for_error(curr_map_to_refer, braille_char,  num_follows_flag_seen)
 
        if braille_char == BRAILLE_SPACE:
 
@@ -207,6 +230,7 @@ def braille_to_english(input):
 
        elif braille_char == NUMBER_FOLLOWS:
            curr_map_to_refer = BRAILLE_TO_NUM
+           num_follows_flag_seen = True
 
 
        else:
@@ -217,6 +241,10 @@ def braille_to_english(input):
                
                english_char = english_char.upper()
                cap_next_char = False
+
+           if num_follows_flag_seen:
+               num_follows_flag_seen = False
+
           
            result += english_char
    return result
@@ -224,6 +252,10 @@ def braille_to_english(input):
 
 
 def main():
+
+    #if len (sys.argv) < 2:
+        #raise ValueError("Need to pass atleast one string to translate")
+
     input_string = ' '.join(sys.argv[1:])
     print(translate(input_string))
 
