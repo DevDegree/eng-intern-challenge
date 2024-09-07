@@ -70,6 +70,8 @@ def eng_to_braille(english_input):
                 translated.append(".O.OOO")  # Number indicator
                 number_mode = True
             translated.append(numbers_to_braille[char])
+        elif char == " ":
+            translated.append(".....")  # Braille space
         elif char in english_to_braille:
             number_mode = False  # Exit number mode when switching back to letters
             translated.append(english_to_braille[char])
@@ -79,14 +81,14 @@ def eng_to_braille(english_input):
 # Main function to detect and translate
 def main():
     # Join all command-line arguments into one string (e.g., "Abc 123 xYz")
-    input_str = ''.join(sys.argv[1:])
+    input_str = ' '.join(sys.argv[1:])
     
     if is_braille(input_str):
         # Translate Braille to English or Numbers
-        print(braille_to_eng(input_str))
+        print(braille_to_eng(input_str), end="")
     else:
         # Translate English or Numbers to Braille
-        print(eng_to_braille(input_str))
+        print(eng_to_braille(input_str), end="")
 
 if __name__ == "__main__":
     main()
