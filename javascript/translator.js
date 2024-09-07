@@ -9,3 +9,15 @@ const brailleLetters = {
   'y': 'OO.OOO', 'z': 'O.OOOO', ' ': '......', '0': '.O.OO.', '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..',
   '5': 'O.O.O.', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...'
 };
+
+// Translates a Braille string into English by matching each 6-character Braille cell with its corresponding letter
+const translateToEnglish = (brailleString) => {
+  const brailleCells = brailleString.match(/.{6}/g);
+  return brailleCells.map(cell => Object.keys(brailleLetters).find(key => brailleLetters[key] === cell) || '?').join('');
+};
+
+// Translates an English string into Braille by mapping each character to its corresponding Braille symbol
+const translateToBraille = (englishString) => {
+  return englishString.toLowerCase().split('').map(char => brailleLetters[char] || '?').join('');
+};
+
