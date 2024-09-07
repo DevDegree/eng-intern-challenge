@@ -27,3 +27,26 @@ brail_to_alphabet = {
     'O..OOO': 'z'
 }
 
+def word_to_brail(s):
+    word = []
+    state = 'alph'
+    s = s.strip()
+    
+    for char in s:
+        if char == ' ':
+            word.append("......")
+            continue
+        
+        if char.isdigit():
+            if state != 'num':
+                word.append('.O.OOO')  # Numeric indicator
+                state = 'num'
+            word.append(alphabet_translation[char])  # Translate the digit
+        elif char.isalpha():
+            if state != 'alph':
+                state = 'alph'  # Reset back to alphabet state after numbers
+            if char.isupper():
+                word.append(".....O")  # Capital letter indicator
+            word.append(alphabet_translation[char.lower()])
+    
+    return ''.join(word)
