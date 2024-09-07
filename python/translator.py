@@ -11,6 +11,8 @@ class Translator():
     number_follows = 'number_follows'
     capital_follows = 'capital_follows'
     space = " "
+    
+    #alphabet of eng and special chars to Braille
     dic = {
         'a': 'O.....',
         'b': 'O.O...',
@@ -41,19 +43,7 @@ class Translator():
         'capital_follows': '.....O',
         'decimal_follows': '.O...O',
         number_follows: '.O.OOO',
-        space: '......'
-    }
-    numbers = {
-        '1': 'O.....',
-        '2': 'O.O...',
-        '3': 'OO....',
-        '4': 'OO.O..',
-        '5': 'O..O..',
-        '6': 'OOO...',
-        '7': 'OOOO..',
-        '8': 'O..OO..',
-        '9': '.OO...',
-        'O': '.OOO..',
+        space: '......',
         '.': '..OO.O',
         ',': '..O...',
         '?': '..O.OO',
@@ -68,16 +58,36 @@ class Translator():
         ')': '.O.OO.',
     }
 
+    #numbers dictionary
+    numbers = {
+        '1': 'O.....',
+        '2': 'O.O...',
+        '3': 'OO....',
+        '4': 'OO.O..',
+        '5': 'O..O..',
+        '6': 'OOO...',
+        '7': 'OOOO..',
+        '8': 'O..OO..',
+        '9': '.OO...',
+        'O': '.OOO..'
+    }
+
+
+    # Find the char as a start on numbers
     def numberFollows(
         self, letter): letter == self.dic.get(
         self.number_follows, '')
 
+    # find the char as a Capital char
     def capitalFollows(
         self, letter): letter == self.dic.get(
         self.capital_follows, '')
 
+    #find char as space
     def spaceFollows(self, letter): letter == self.dic.get(self.space, '')
 
+
+    #eng to Braille
     def eng_to_b(self, text):
         result = ''
         isNumber = False
@@ -87,6 +97,7 @@ class Translator():
                 result += self.dic.get(self.number_follows, '')
             if isNumber and self.spaceFollows(letter):
                 isNumber = False
+            # to relize a char is alphabet or capital
             if letter.isalpha() and letter.isupper():
                 result += self.dic.get(self.capital_follows, '')
             result += self.numbers.get(
@@ -94,6 +105,8 @@ class Translator():
                 letter.lower(), '')
         return result
 
+
+    #Braille to english
     def b_to_eng(self, value):
         result = ''
         isNumber = False
@@ -114,6 +127,8 @@ class Translator():
             result += self.get_key(letter, isNumber, isUpper)
         return result
 
+
+    # get key from value in dictionaries
     def get_key(self, val, isNumber, isUpper):
         for key, value in self.numbers.items() if isNumber else self.dic.items():
             if val == value:
@@ -121,12 +136,14 @@ class Translator():
 
         return ""
 
+    # to realize the char is alpha or space or digit
     def is_alpha_or_space_or_digit(self):
         for char in self.orgText:
             if not (char.isalpha() or char.isspace() or char.isdigit()):
                 return False
         return True
 
+    # main translate function
     def translate(self):
         if self.is_alpha_or_space_or_digit():
             return self.eng_to_b(self.orgText)
