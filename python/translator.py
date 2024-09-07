@@ -28,6 +28,12 @@ def invert_dict(dictionary):
 def is_braille(text):
     return all(all(c in 'O.' for c in word) for word in text)
 
+def remove_suffix(string, suffix):
+    if string.endswith(suffix):
+        return string[:-len(suffix)]
+    return string
+
+
 # Converts English text to Braille. 
 def to_braille(text):
     braille_output = []
@@ -51,7 +57,8 @@ def to_braille(text):
         braille_output.append(braille_lookup['space']) 
 
     # Remove trailing space
-    return ''.join(braille_output).removesuffix(braille_lookup['space']) 
+    return remove_suffix(''.join(braille_output), braille_lookup['space'])
+    
 
 def to_english(text):
 
@@ -94,5 +101,8 @@ def to_english(text):
 
 if __name__ == '__main__':
     input_words = sys.argv[1:]
-    output = to_english(input_words) if is_braille(input_words) else to_braille(input_words)
+    if is_braille(input_words):
+        output = to_english(input_words)
+    else:
+        output = to_braille(input_words)
     print(output)
