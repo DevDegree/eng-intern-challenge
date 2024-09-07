@@ -36,6 +36,20 @@ class BrailleTranslator
     'f' => '6', 'g' => '7', 'h' => '8', 'i' => '9', 'j' => '0'
   }
 
+  def translate(input)
+    if is_braille?(input)
+      braille_to_english(input)
+    else
+      english_to_braille(input)
+    end
+  end
+
+  private
+
+  def is_braille?(input)
+    return input.match?(/\A[O.]+\z/) && input.length % 6 == 0 && input.length != 1
+  end
+
   def english_to_braille(text)
     result = []
     number_mode = false
@@ -90,3 +104,8 @@ class BrailleTranslator
     result.join
   end
 end
+
+translator = BrailleTranslator.new
+input = ARGV.join(' ')
+output =  translator.translate(input)
+print output
