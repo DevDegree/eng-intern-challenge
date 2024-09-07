@@ -24,7 +24,7 @@ const numberHash: CharHash = { // hashSelector >= 1
   9: ".OO...", 0: ".OOO..",
 };
 
-const punctuationHash: CharHash = {
+const punctuationHash: CharHash = { // Assume that 0..00. is "o" unless the "number follow" sequence is used
   ".": "..OO.O", ",": "..O...", "?": "..O.OO", "!": "..OOO.", 
   ":": "..OO..", ";": "..O.O.", "-": "....OO", "/": ".O..O.",
   "<": ".OO..O", ">": "O..OO.", "(": "O.O..O", ")": ".O.OO.",
@@ -44,9 +44,36 @@ function isBraille(str: string): boolean {
 function encode(words: string[]): string {
   return words
     .map((word: string) => {
-      // for(char)
+      let brailleWord = "";
+      hashSelector = -1;
+      for(let i = 0; i < word.length; i++) {
+        if(isNaN(+word[i])) { //Use Letter Hash
+          if (hashSelector === 2 && word[i] === ".") { // Decimal number
+            brailleWord = brailleWord.concat(hashOptions[1]);
+          } else {
+            hashSelector = -1;
+            if (word[i].match(/[a-zA-Z]/i)) { // Use Letter Hash
+              if(word[i].toLowerCase() !== word[i]) { // Capitalized
+                brailleWord = brailleWord.concat(hashOptions[0]);
+              }
+              brailleWord = brailleWord.concat(letterHash[word[i].toLowerCase()]);
+            } else if (punctuationHash[word[i]] !== undefined) { // Use Punctuation Hash
+              brailleWord = brailleWord.concat(punctuationHash[word[i]]);
+            } else { // undefined character
+              brailleWord = brailleWord.concat("");
+            }
+          }
+        } else { // Use Number Hash
+          if (hashSelector !== 2) {
+            brailleWord = brailleWord.concat(hashOptions[2]);
+            hashSelector = 2;
+          }
+          brailleWord = brailleWord.concat(numberHash[word[i]]);
+        }
+      }
+      return brailleWord;
     })
-    .join("");
+    .join("......");
 }
 
 // Decode from Braille into English
