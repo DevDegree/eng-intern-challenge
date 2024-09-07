@@ -1,4 +1,9 @@
 import sys
+
+#Assumptions: Only valid strings are passed to the translator
+
+#Runtime and space time complexity
+
 # Letters a-z
 BRAILLE_A = "O....."
 BRAILLE_B = "O.O..."
@@ -8,7 +13,7 @@ BRAILLE_E = "O..O.."
 BRAILLE_F = "OOO..."
 BRAILLE_G = "OOOO.."
 BRAILLE_H = "O.OO.."
-BRAILLE_I = ".O.O.."
+BRAILLE_I = ".OO..."
 BRAILLE_J = ".OOO.."
 BRAILLE_K = "O...O."
 BRAILLE_L = "O.O.O."
@@ -44,7 +49,7 @@ BRAILLE_0 = BRAILLE_J
 
 
 #Special characters
-SPACE = "......"
+BRAILLE_SPACE = "......"
 CAPTIAL_FOLLOWS =  ".....O"
 NUMBER_FOLLOWS = ".O.OOO"
 
@@ -137,8 +142,7 @@ ALPHA_AND_NUM_TO_BRAILLE = {
 
 def translate(input_string):
 
-
-
+    # all valid braille chars have atleast one dot and the dot is not a valid char for the english alphabet given
    if '.' in input_string:
        return braille_to_english(input_string)
   
@@ -147,38 +151,30 @@ def translate(input_string):
 
 def english_to_braille(input):
 
-
    result = ''
    num_sequence__not_started = True
 
 
    for c in input:
 
-
        if c == " ":
-
-
+           
            num_sequence__not_started = True
-           result += SPACE
+           result += BRAILLE_SPACE
 
 
        elif c.isalpha():
-
-
+           
            c_in_braille = ALPHA_AND_NUM_TO_BRAILLE[c.lower()]
-
 
            if c.isupper():
                result += CAPTIAL_FOLLOWS
 
-
-          
            result += c_in_braille
 
 
        else:
            c_in_braille = ALPHA_AND_NUM_TO_BRAILLE[c]
-
 
            if num_sequence__not_started:
                num_sequence__not_started = False
@@ -191,7 +187,6 @@ def english_to_braille(input):
 
 def braille_to_english(input):
 
-
    result = ''
    cap_next_char = False
    curr_map_to_refer = BRAILLE_TO_ALPHA
@@ -199,16 +194,12 @@ def braille_to_english(input):
 
    for i in range(0, len(input), 6):
 
-
        braille_char = input[i:i+6]
 
-
-       if braille_char == SPACE:
-
+       if braille_char == BRAILLE_SPACE:
 
            curr_map_to_refer = BRAILLE_TO_ALPHA
            result += ' '
-
 
        elif braille_char == CAPTIAL_FOLLOWS:
            cap_next_char = True
@@ -219,18 +210,14 @@ def braille_to_english(input):
 
 
        else:
+           
            english_char = curr_map_to_refer[braille_char]
 
-
            if cap_next_char:
-
-
+               
                english_char = english_char.upper()
                cap_next_char = False
           
-         
-
-
            result += english_char
    return result
           
