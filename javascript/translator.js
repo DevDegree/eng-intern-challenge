@@ -100,6 +100,12 @@ const modi = {
 // one function to iiterate over the string or input value, one function to itterate over the correct object as dictated by key:value pairs and the modi object keys, and lastly one function to combine all of it and output the correct braille. 
 
 
+const cmdLineInput = process.argv.slice(2).join(' ');
+
+
+
+
+
 let translator = function(input) {
   
   const x = `${input}`
@@ -226,8 +232,7 @@ ans = getKeyByValue(object, arr[i]);
 }
 
 
-
-
+translator(cmdLineInput)
 
 // test cases 
 
