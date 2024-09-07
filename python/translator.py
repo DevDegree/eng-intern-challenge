@@ -99,7 +99,7 @@ def translator():
     else:
         translation = translate_to_braille(string)
 
-    return translation
+    return print(translation)
 
 
 def translate_to_braille(text: str) -> str:
@@ -226,4 +226,5 @@ def is_braille(braille_text: str) -> bool:
     return all(char in braille_chars for char in braille_text)
 
 
-print(translator())
+if __name__ == "__main__":
+    translator()
