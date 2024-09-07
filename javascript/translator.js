@@ -21,3 +21,16 @@ const translateToBraille = (englishString) => {
   return englishString.toLowerCase().split('').map(char => brailleLetters[char] || '?').join('');
 };
 
+
+// Translates input by detecting whether it is in Braille or English, then converts it to the opposite format
+const translate = (input) => {
+  // Determine if input is Braille or English
+  if (/^[O.]+$/.test(input)) {
+      // Input is Braille
+      return translateToEnglish(input);
+  } else {
+      // Input is English
+      return translateToBraille(input);
+  }
+};
+
