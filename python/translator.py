@@ -19,7 +19,7 @@ english_dict = {v: k for k, v in braille_dict.items()}
 
 def text_to_braille(text: str) -> str:
     """
-    Translates text to braille
+    Translates text to Braille
 
     Paramaters
     ----------
@@ -50,6 +50,8 @@ def text_to_braille(text: str) -> str:
 
 def braille_to_text(braille: str) -> str:
     """
+    Translates Braille to text
+
     Parameters
     ----------
     braille : str
