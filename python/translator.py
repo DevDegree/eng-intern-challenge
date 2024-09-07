@@ -28,3 +28,6 @@ braille_patterns = {
     'y': 'OO.OOO',    'z': 'O..OOO',    ' ': '......',
     'capital': '.....O',  'number': '.O.OOO'
 }
+
+# Create reverse dictionary for Braille to English
+english_patterns = {v: k for k, v in braille_patterns.items()}
