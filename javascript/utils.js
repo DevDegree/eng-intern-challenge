@@ -10,12 +10,14 @@ function isBrailleCheck(inputArray) {
   if (inputArray.length !== 1) {
     return false;
   }
-
+  
   const uniqueChatacters = [...new Set(inputArray[0].toLowerCase())];
-
-  // It passes as Braille if there is . or o present
-  if (uniqueChatacters.includes(".") || uniqueChatacters.includes("o")) {
-    return true;
+  
+  // It passes as Braille if the unique characters are either . or o
+  if (uniqueChatacters.length === 1) {
+    return uniqueChatacters[0] === '.' || uniqueChatacters[0] === 'o';
+  } else if (uniqueChatacters.length === 2) {
+    return uniqueChatacters.every(char => char === '.' || char === 'o');
   }
 
   return false;
@@ -25,7 +27,7 @@ function isBrailleCheck(inputArray) {
  * This function checks if the input is Braille
  *
  * @param {string} string - Braille string that will need to be translated
- * @returns {string[]} - Returns an array of Braille characters
+ * @returns isBrailleCheck - Returns an array of Braille characters
  *
  */
 function splitEverySixChars(string) {
