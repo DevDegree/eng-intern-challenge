@@ -41,7 +41,7 @@ def english_to_braille(text):
     for char in text:
         if char.isupper():
             result.append(braille_patterns['capital'])
-            char = char.lower()
+            char = char.lower() # Convert the character to lowercase
         
         if char.isdigit():
             if not number_mode:
@@ -50,7 +50,35 @@ def english_to_braille(text):
             result.append(braille_patterns[chr(ord(char) - ord('0') + ord('a'))])
         elif char.isalpha() or char == ' ':
             if number_mode:
-                number_mode = False
+                number_mode = False # Reset the flag to indicate the end of a number sequence
             result.append(braille_patterns[char])
+    
+    return ''.join(result)
+
+
+# Function to convert Braille to English
+def braille_to_english(braille):
+    result = []
+    chunks = [braille[i:i+6] for i in range(0, len(braille), 6)] # Split the Braille text into chunks of 6 characters
+    number_mode = False # Flag to indicate the start of a number sequence
+    capitalize_next = False # Flag to capitalize the next character
+    
+    for chunk in chunks:
+        if chunk == braille_patterns['capital']:
+            capitalize_next = True # Set the flag to capitalize the next character
+            continue
+        elif chunk == braille_patterns['number']:
+            number_mode = True # Set the flag to indicate the start of a number sequence
+            continue
+        
+        char = english_patterns.get(chunk, '')
+        if number_mode and char.isalpha():
+            result.append(str(ord(char) - ord('a'))) # Convert the Braille number to its corresponding English number
+        else:
+            if capitalize_next:
+                char = char.upper() # Capitalize the next character
+                capitalize_next = False
+            result.append(char)
+            number_mode = False # Reset the flag to indicate the end of a number sequence
     
     return ''.join(result)
