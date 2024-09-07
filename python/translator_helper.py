@@ -1,17 +1,17 @@
-from braille_to_english import (
+from mappings.braille_to_english import (
     BRAILLE_TO_ENGLISH_ALPHABET_MAPPING,
     BRAILLE_TO_NUMBERS_MAPPING,
     BRAILLE_TO_SPECIAL_CHARS_MAPPING,
     BRAILLE_NOT_POSSIBLE_NUMBER_OPERATORS_TO_SPECIAL_CHARS_MAPPING
 )
 
-from constants import (
+from mappings.constants import (
     BRAILLE_CAPITAL_FOLLOWS_CONSTANT,
     BRAILLE_DECIMAL_FOLLOWS_CONSTANT,
     BRAILLE_NUMBER_FOLLOWS,
 )
 
-from english_to_braille import (
+from mappings.english_to_braille import (
     ENGLISH_TO_BRAILLE_ALPHABET_MAPPING,
     NUMBER_TO_BRAILLE_MAPPING,
     SPECIAL_TO_BRAILLE_MAPPING,

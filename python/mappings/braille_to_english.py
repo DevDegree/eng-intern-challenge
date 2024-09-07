@@ -1,4 +1,4 @@
-from english_to_braille import (
+from mappings.english_to_braille import (
     ENGLISH_TO_BRAILLE_ALPHABET_MAPPING,
     NUMBER_TO_BRAILLE_MAPPING,
     SPECIAL_TO_BRAILLE_MAPPING,
