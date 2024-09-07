@@ -50,3 +50,32 @@ def word_to_brail(s):
             word.append(alphabet_translation[char.lower()])
     
     return ''.join(word)
+
+def brail_to_word(s):
+    word = []
+    state = 'alph'
+    cells = [s[i:i + 6] for i in range(0, len(s), 6)]
+    nextUpper = False
+
+    for cell in cells:
+        if cell == '......':
+            word.append(" ")
+            continue
+        if state == 'alph':
+            if cell == '.O.OOO':
+                state = 'num'
+                continue
+            elif cell == '.....O':
+                nextUpper = True
+                continue
+            else:
+                if nextUpper:
+                    word.append(brail_to_alphabet.get(cell, '?').upper())
+                    nextUpper = False
+                else:
+                    word.append(brail_to_alphabet.get(cell, '?'))
+        else:
+            word.append(brail_to_nums.get(cell, '?'))
+            
+    return ''.join(word)
+
