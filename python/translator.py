@@ -75,3 +75,7 @@ def brail_to_word(str):
             
     return ''.join(word)
 
+<<<<<<< Updated upstream
+=======
+print(brail_to_word('.....OO.....O.O...OO...........O.OOOO.....O.O...OO....'))
+>>>>>>> Stashed changes
