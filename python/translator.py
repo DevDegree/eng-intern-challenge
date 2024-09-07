@@ -154,7 +154,7 @@ def main():
     """
     Main function that reads the input from the command line and prints the translated string.
     """
-    input_str = sys.argv[1]
+    input_str = ' '.join(sys.argv[1:])
     input_type_str = input_type(input_str)
     translation = ""
 
