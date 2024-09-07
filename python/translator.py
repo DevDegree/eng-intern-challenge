@@ -1,4 +1,5 @@
 import sys
+sys.tracebacklimit = 0
 
 # Letters a-z
 BRAILLE_A = "O....."
@@ -180,7 +181,7 @@ def english_to_braille(input):
    return result
 
 
-def check_braille_string_for_error(curr_map_to_look_at, braille_char,  num_follows_flag_seen):
+def check_braille_char_for_error(curr_map_to_look_at, braille_char,  num_follows_flag_seen):
 
     if (braille_char not in BRAILLE_TO_ALPHA) and (braille_char not in BRAILLE_TO_NUM) and (braille_char not in [BRAILLE_SPACE, NUMBER_FOLLOWS, CAPTIAL_FOLLOWS]):
         raise ValueError("Atleast one invalid braille character in given string")
@@ -207,7 +208,7 @@ def braille_to_english(input):
 
        braille_char = input[i:i+6]
 
-       check_braille_string_for_error(curr_map_to_look_at, braille_char, num_follows_flag_seen)
+       check_braille_char_for_error(curr_map_to_look_at, braille_char, num_follows_flag_seen)
 
        if braille_char == BRAILLE_SPACE:
 
