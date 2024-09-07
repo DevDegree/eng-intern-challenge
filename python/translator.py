@@ -47,7 +47,10 @@ def english_to_braille(text):
             if not number_mode:
                 result.append(braille_patterns['number'])
                 number_mode = True
-            result.append(braille_patterns[chr(ord(char) - ord('0') + ord('a'))])
+            if ord(char) == ord('0'): # Special case for 0
+                result.append(braille_patterns[chr(ord(char)-ord('1') + ord('a') + 10)])
+            else: # Non zero numbers
+                result.append(braille_patterns[chr(ord(char) - ord('1') + ord('a'))]) 
         elif char.isalpha() or char == ' ':
             if number_mode:
                 number_mode = False # Reset the flag to indicate the end of a number sequence
@@ -73,7 +76,10 @@ def braille_to_english(braille):
         
         char = english_patterns.get(chunk, '')
         if number_mode and char.isalpha():
-            result.append(str(ord(char) - ord('a'))) # Convert the Braille number to its corresponding English number
+            if char == 'j': # Special case for 'j' as it is zero in Braille when following the number decorator
+                result.append('0')
+            else:
+                result.append(str(ord(char) - ord('a')+1)) # Convert the Braille number to its corresponding English number
         else:
             if capitalize_next:
                 char = char.upper() # Capitalize the next character
@@ -85,8 +91,7 @@ def braille_to_english(braille):
 
 
 def main():
-    if len(sys.argv) < 2:
-        print("Please provide input string")
+    if len(sys.argv) < 2: #edge case for no input
         return
 
     input_string = ' '.join(sys.argv[1:])
@@ -97,7 +102,6 @@ def main():
     else:
         output = english_to_braille(input_string)
     
-    print(input_string)
     print(output)
 
 if __name__ == "__main__":
