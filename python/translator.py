@@ -1,14 +1,6 @@
 import sys
 
-# Test Cases:
-# Number followed by string "42 Hello"
-# 09Abc .O.OOO.OOO...OO..............OO.....O.O...OO....
-
-# .O.OOO.OOO...OO..............OO.....O.O...OO....
-# .O.OOO.OOO...OO..............OO.....O.O...OO....z
-
-# Weird Braille Inputs
-
+# Mapping to English + Numbers
 braille_to_eng = {
     "O.....": "a",
     "O.O...": "b",
@@ -63,6 +55,7 @@ braille_to_num = {
     ".OOO..": "0",
 }
 
+# Mapping to Braille
 eng_to_braille = {v: k for k, v in braille_to_eng.items()}
 
 num_to_braille = {v: k for k, v in braille_to_num.items()}
@@ -86,7 +79,7 @@ def translate_to_braille(input_str):
             ans += num_to_braille[char]
             continue
 
-        if char.isnumeric() == False and isNum == True:
+        if char.isnumeric() == False:
             isNum = False
 
         if char.isupper():
@@ -108,6 +101,7 @@ def translate_to_english(input_str):
     isCapital = False
 
     for i in range(0, len(input_str), 6):
+        # Analyze six bits at once
         char = input_str[i : i + 6]
         if char == capital:
             isCapital = True
