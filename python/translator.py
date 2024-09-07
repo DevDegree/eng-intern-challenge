@@ -83,7 +83,7 @@ def braille_to_english(braille_string: str) -> str:
     
     translated_string = []
     i = 0
-    is_number = False  # Flag to indicate next char is number
+    is_number_mode = False  # Flag to indicate next char is number
     is_capital = False  # Flag to indicate next char is capital
     
     # Loop over input Braille string in groups of 6 chars
@@ -93,15 +93,17 @@ def braille_to_english(braille_string: str) -> str:
         # Handle space
         if current_char == SPACE:
             translated_string.append(" ")
+            is_number_mode = False
         # Handle capital letter
         elif current_char == CAPITAL_FOLLOWS:
             is_capital = True
+            is_number_mode = False
         # Handle number
         elif current_char == NUMBER_FOLLOWS:
-            is_number = True
+            is_number_mode = True
         # Handle regular Braille translation
         else:
-            if is_number and current_char in braille_to_number:
+            if is_number_mode: 
                 translated_string.append(braille_to_number[current_char])
             elif is_capital:
                 translated_string.append(braille_to_letter[current_char].upper())
@@ -130,10 +132,11 @@ def english_to_braille(english_string: str) -> str:
     
     # Loop over input English string by character
     for char in english_string:
+        
         # Handle space
         if char == " ":
             translated_string.append(SPACE)
-            is_number = False
+            is_number_mode = False
         # Handle number
         elif char.isdigit():
             if not is_number_mode:
@@ -142,14 +145,13 @@ def english_to_braille(english_string: str) -> str:
             translated_string.append(number_to_braille[char])
         # Handle letter
         else:
-            is_number_mode = False
-            
             # Handle capitalization
             if char.isupper():
                 translated_string.append(CAPITAL_FOLLOWS)
                 char = char.lower()  # Convert to lowercase for Braille lookup
+                is_number_mode = False
             translated_string.append(letter_to_braille[char])
-    
+                
     return "".join(translated_string)
             
 
