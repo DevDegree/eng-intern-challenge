@@ -60,4 +60,33 @@ class BrailleTranslator
 
     result.join
   end
+
+  def braille_to_english(braille)
+    result = []
+    braille_chars = braille.scan(/.{6}/)
+    capitalize_next = false
+    number_mode = false
+
+    braille_chars.each do |char|
+      if char == BRAILLE_MAPPING['capital']
+        capitalize_next = true
+      elsif char == BRAILLE_MAPPING['number']
+        number_mode = true
+      elsif char == BRAILLE_MAPPING[' ']
+        result << ' '
+        number_mode = false
+      else
+        letter = BRAILLE_MAPPING.key(char)
+        if number_mode
+          result << NUMBERS[letter]
+        else
+          letter = letter.upcase if capitalize_next
+          result << letter
+        end
+        capitalize_next = false
+      end
+    end
+
+    result.join
+  end
 end
