@@ -13,7 +13,7 @@ This is a simple Braille translator written in Go. It can convert text to Braill
      ```
      go run translator.go Hello world
      ``` 
-    ```
+    
 
   
 
