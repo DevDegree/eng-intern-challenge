@@ -251,7 +251,7 @@ translator(cmdLineInput)
 // translator('.O.OOOOO.O..O.O...') // output: 42
 // translator('42') // output: .O.OOOOO.O..O.O...
 
-translator('.....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO') // expected output: Abc 123 xYz
-translator('.....OO.....O.O...OO...........O.OOOO......O.OOOO.O....O.OOOOO..........OO..OO.....OOO.OOOO..OOO') // expected output: Abc 123 xYz
+// translator('.....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO') // expected output: Abc 123 xYz
+// translator('.....OO.....O.O...OO...........O.OOOO......O.OOOO.O....O.OOOOO..........OO..OO.....OOO.OOOO..OOO') // expected output: Abc 123 xYz
 
-translator('Abc 123 xYz') // expected output: .....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO 
+// translator('Abc 123 xYz') // expected output: .....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO 
