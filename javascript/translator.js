@@ -6,8 +6,8 @@ let set = new Set()
 
 function func() {
     let arg = process.argv.slice(2);
-    for(let i = 0; i < arg.length; i++){
-        set.add(arg[i]);
+    for(let i = 0; i < arg[0].length; i++){
+        set.add(arg[0][i]);
     }
     if(arg.length > 1){
         englishToBraille(arg)
