@@ -27,16 +27,16 @@ return result
 '''
 
 def translate_input(args):
-    #print(args)
-    input = args[0]
-    #print(input)
     result = ""
-    # input = braille
-    if not input.isalnum():
+    input = ' '.join(args)
+    # check if input is braille or english
+    if set(input).issubset({'O', '.', ' '}):
+        # is braille
         pass
 
     else:
-        #print('helloooo')
+        # is english
+
         # create dict for braille to english
         braille_to_english = {
             'a': "O.....",
@@ -101,11 +101,13 @@ def translate_input(args):
             if letter.isupper():
                 result += braille_to_english['capital']
                 letter = letter.lower()
+            elif letter.isnumeric():
+                result += braille_to_english['number']
 
             char = braille_to_english[letter]
 
-            #if char in ['captial', 'number', 'decimal']
             result += char
+            #print(result)
 
     return result
 
