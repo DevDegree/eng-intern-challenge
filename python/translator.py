@@ -1,3 +1,5 @@
+import sys 
+
 
 # Define symbols for following char being capital, decimal, or number
 CAPITAL_FOLLOWS = "....O"
@@ -49,3 +51,28 @@ braille_to_numbers = {
 
 letters_to_braille = {v: k for k, v in braille_to_letters.items()}
 numbers_to_braille = {v: k for k, v in braille_to_numbers.items()}
+
+
+def determine_translation_mode(string_input: str) -> str:
+    """
+    Determines the translation mode based on the characters in the input string.
+    If the string contains only 'O', '.', or ' ', the translation mode is 'braille-to-english', otherwise it is 'english-to-braille'.
+    
+    Args:
+        string_input (str): Input string to determine the translation mode.
+    
+    Returns:
+        str: 'braille-to-english' if string only contains Braille characters, otherwise 'english-to-braille'
+    """
+    
+    is_braille = all(c in ['O', '.', ' '] for c in string_input)
+    return "braille-to-english" if is_braille else "english-to-braille"
+    
+
+if __name__ == "__main__":
+    # Get command line args as one string
+    string_input = sys.argv[1:]
+    combined_imput = " ".join(string_input)
+    translation_mode = determine_translation_mode(combined_imput)
+    print(translation_mode)
+    
