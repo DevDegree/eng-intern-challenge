@@ -82,3 +82,23 @@ def braille_to_english(braille):
             number_mode = False # Reset the flag to indicate the end of a number sequence
     
     return ''.join(result)
+
+
+def main():
+    if len(sys.argv) < 2:
+        print("Please provide input string")
+        return
+
+    input_string = ' '.join(sys.argv[1:])
+    
+    # Determine if input is English or Braille
+    if all(c in 'O.' for c in input_string):
+        output = braille_to_english(input_string)
+    else:
+        output = english_to_braille(input_string)
+    
+    print(input_string)
+    print(output)
+
+if __name__ == "__main__":
+    main()
