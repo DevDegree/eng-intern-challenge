@@ -1,5 +1,3 @@
-const readline = require("node:readline");
-
 // Datasets for mapping english alphanumeric characters to braille symbols
 const charMap = {
   a: "O.....",
@@ -229,23 +227,7 @@ function convertToEnglishOrBraille(inputString) {
   }
 }
 
-// Call the main function based on the input mode
 // Uses command line arguments if present
-if (process.argv[2]) {
-  outputString = convertToEnglishOrBraille(process.argv.slice(2).join(", "));
-  // Outputs the result
-  console.log(outputString);
-}
-// Else asks user to enter the text via console
-else {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-  rl.question(``, (inputString) => {
-    outputString = convertToEnglishOrBraille(`${inputString}`);
-    // Outputs the result
-    console.log(outputString);
-    rl.close();
-  });
-}
+outputString = convertToEnglishOrBraille(process.argv.slice(2).join(", "));
+// Outputs the result
+console.log(outputString);
