@@ -1,8 +1,8 @@
 """
-Matthew Cheverie 
+Matthew Cheverie
 Shopify Internship Challenge
 This program is a translator that converts English text to Braille and Braille to English.
-Assumes that the input is either English or Braille, not a mix of both. 
+Assumes that the input is either English or Braille, not a mix of both.
 Also assumes that only english letters (a,z or A-Z), numbers (0-9), spaces as per the git repo instructions.
 """
 
@@ -57,7 +57,7 @@ class Translator:
             "x": "OO..OO",
             "y": "OO.OOO",
             "z": "O..OOO",
-        }  
+        }
 
         # Dictionary for English numbers to braille numbers
         self.eng_to_br_nums = {
@@ -71,7 +71,7 @@ class Translator:
             "7": "OOOO..",
             "8": "O.OO..",
             "9": ".OO...",
-        } 
+        }
 
         #Dictionary for English special characters to braille special characters
         self.eng_to_br_spec = {
@@ -82,7 +82,7 @@ class Translator:
 
         # Dictionary for braille to English
         self.br_to_eng_letters ={
-            "O.....": "a", 
+            "O.....": "a",
             "O.O...": "b",
             "OO....": "c",
             "OO.O..": "d",
@@ -109,7 +109,7 @@ class Translator:
             "OO.OOO": "y",
             "O..OOO": "z",
         }
-        
+
         # Dictionary for braille to English
         self.br_to_eng_nums ={
             ".OOO..": "0",
@@ -125,14 +125,14 @@ class Translator:
         }
 
 
-    
+
     def eng_to_braille(self, text):
         """
         Function to translate the text parameter from English to Braille.
 
         Parameters:
             text (str): The text to be translated from English to Braille.
-        
+
         Returns:
             str: The translated text in Braille.
 
@@ -160,15 +160,15 @@ class Translator:
                 braille += self.eng_to_br_spec[" "]
                 digitCount = 0
         return braille
-    
-    
+
+
     def braille_to_eng(self, text):
         """
         Function to translate the text parameter from braille to english.
 
         Parameters:
             text (str): The text to be translated from braille to english.
-        
+
         Returns:
             str: The translated text in English.
 
@@ -183,33 +183,33 @@ class Translator:
         caps = False
         # Split the braille text into a list of 6 characters
         words = [text[i:i+6] for i in range(0, len(text), 6)]
-        
+
         for word in words:
-            if word == ".O.OOO":
+            if word == "......":
+                digit = False
+                english += " "
+            elif word == ".O.OOO":
                 digit = True
             elif word == ".....O":
-                caps = True 
+                caps = True
             elif digit:
                 english += self.br_to_eng_nums.get(word, "")
             else:
-                if word == "......":
-                    digit = False
-                    english += " "
                 if caps:
                     english += self.br_to_eng_letters.get(word, "").upper()
                     caps = False
                 else:
                     english += self.br_to_eng_letters.get(word, "")
         return english
-    
-    
+
+
     def isEnglish(self, text):
         """
         Function to check if given input is in English.
 
         Parameters:
             text (str): The word to be checked if it is in English.
-        
+
         Returns:
             bool: True if the text is in English, False otherwise
         """
@@ -217,10 +217,10 @@ class Translator:
         if set(text) - braille_chars:
             return True
         return False
-            
+
 
 def main():
-    
+
     # Create a translator object
     translator = Translator()
 
@@ -232,7 +232,7 @@ def main():
         engCheck = translator.isEnglish(args)
         if engCheck:
             break
-    
+
     # If the text is in English, translate to Braille, otherwise translate to English
     if engCheck:
         sentence = ' '.join(sys.argv[1:])   # Join all the arguments into a single sentence
