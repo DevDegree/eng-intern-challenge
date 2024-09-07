@@ -49,8 +49,8 @@ braille_to_number = {
     '.OOO..' : '0',
 }
 
-letters_to_braille = {v: k for k, v in braille_to_letter.items()}
-numbers_to_braille = {v: k for k, v in braille_to_number.items()}
+letter_to_braille = {v: k for k, v in braille_to_letter.items()}
+number_to_braille = {v: k for k, v in braille_to_number.items()}
 
 
 def determine_translation_mode(string_input: str) -> str:
@@ -110,9 +110,39 @@ def braille_to_english(braille_string: str) -> str:
     return "".join(translated_string)
                 
 
-def english_to_braille(braille_string: str) -> str:
-    pass
+def english_to_braille(english_string: str) -> str:
+    """
+    Translates Englis text into Braille text.
     
+    Args:
+        english_string (str): English text to be translated into Braille.
+        
+    Returns:
+        str: Braille translation of the given English text.
+    """
+    
+    translated_string = []
+    is_number_mode = False  # Flag to indicate when to add NUMBER_FOLLOWS symbol
+    
+    for char in english_string:
+        if char == " ":
+            translated_string.append(SPACE)
+            is_number = False
+        elif char.isdigit():
+            if not is_number_mode:
+                translated_string.append(NUMBER_FOLLOWS)
+                is_number_mode = True
+            translated_string.append(number_to_braille[char])
+        else:
+            is_number_mode = False
+            
+            if char.isupper():
+                translated_string.append(CAPITAL_FOLLOWS)
+                char = char.lower()
+            translated_string.append(letter_to_braille[char])
+    
+    return "".join(translated_string)
+            
 
 if __name__ == "__main__":
     # Get command line args as one string
