@@ -64,7 +64,7 @@ def convert_to_text(braille):
     return text
 
 def is_braille(text):
-    valid_chars = {'o', '.'}
+    valid_chars = {'O', '.'}
     return all(char in valid_chars for char in text)
 
 if __name__ == '__main__':
