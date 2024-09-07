@@ -46,16 +46,12 @@ class StringBrailleConverter
     plaintext_str = ""
     # return if braille_chars.last.length != 6
 
-    braille_cipher_value = 0
-    factor = 1
+    b_cipher_value = 0
     braille_chars.each do |bchar|
-      bchar.chars.each do |bump| # As in the Braille dots/bumps
-        braille_cipher_value += (bump == 'O' ? factor : 0)
-        factor *= 2
-      end
-      braille_val_arr << braille_cipher_value
-      braille_cipher_value = 0
-      factor = 1
+      b_cipher_value = bchar.reverse
+      b_cipher_value.gsub!('O', '1')
+      b_cipher_value.gsub!('.', '0')
+      braille_val_arr << b_cipher_value.to_i(2)
     end
     # Braille is now converted to binary-based ciphertext values.
     # Substitute original phrase with plaintext:
