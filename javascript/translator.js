@@ -34,3 +34,8 @@ const translate = (input) => {
   }
 };
 
+// Capture arguments from the command-line, join them into a single string, and pass to the translate function
+const args = process.argv.slice(2);
+const input = args.join(' ');
+console.log(translate(input));
+
