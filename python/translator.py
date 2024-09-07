@@ -50,8 +50,7 @@ braille_dict = {
     '-': 'O..O..', 
     '/': 'O.OO..', 
     '<': 'OO.O..', 
-    '>': 'O..OO.',
-
+    '>': 'O..OO.'
 }
 
 # Reverse dictionary for Braille to English conversion
@@ -63,50 +62,57 @@ def is_braille(s):
 
 def translate_to_braille(text):
     result = []
+    number_mode = False
     for char in text:
         if char.isupper():
             # Add the capital symbol and the lowercase equivalent of the character
             result.append(braille_dict['capital'])
             result.append(braille_dict[char.lower()])
+            number_mode = False
         elif char.isdigit():
-            # Add the number symbol and the digit
-            result.append(braille_dict['number'])
+            if not number_mode:
+                # Add the number symbol before the first digit
+                result.append(braille_dict['number'])
+                number_mode = True
             result.append(braille_dict[char])
         else:
             # Add the Braille representation of the character
             result.append(braille_dict[char])
+            number_mode = False
     return ''.join(result)
 
 def translate_to_english(braille):
     result = []
     i = 0
+    capital_mode = False
+    number_mode = False
     while i < len(braille):
         symbol = braille[i:i+6]
         if symbol == braille_dict['capital']:
             # Handle capitalization
+            capital_mode = True
             i += 6
-            symbol = braille[i:i+6]
-            result.append(reverse_braille_dict[symbol].upper())
         elif symbol == braille_dict['number']:
             # Handle numbers
+            number_mode = True
             i += 6
-            while i < len(braille) and braille[i:i+6] != '......':
-                symbol = braille[i:i+6]
-                result.append(reverse_braille_dict[symbol])
-                i += 6
-            continue
         else:
-            # Add the English representation of the Braille symbol
-            result.append(reverse_braille_dict[symbol])
-        i += 6
+            if capital_mode:
+                result.append(reverse_braille_dict[symbol].upper())
+                capital_mode = False
+            elif number_mode:
+                result.append(reverse_braille_dict[symbol])
+            else:
+                result.append(reverse_braille_dict[symbol])
+            i += 6
     return ''.join(result)
 
 def main():
-    if len(sys.argv) != 2:
-        # Exit if the number of arguments is not equal to 2
+    if len(sys.argv) < 2:
+        # Exit if no arguments are provided
         return
 
-    input_string = sys.argv[1]
+    input_string = ' '.join(sys.argv[1:])  # Concatenate all arguments into a single string
     if is_braille(input_string):
         # Translate Braille to English
         print(translate_to_english(input_string))
@@ -116,4 +122,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
