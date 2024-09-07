@@ -4,16 +4,16 @@ English = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
            '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
            '.', ',', '?', '!', ':', ';', '-', '/', '<', '>', '(', ')', ' ']
 Braille = [
-    'o.....', 'o.o...', 'oo....', 'oo.o..', 'o..o..', 'ooo...', 'oooo..', 'o.oo..', '.oo...', '.ooo..',  # a-j
-    'o.. .o.', 'o.o.o.', 'oo..o.', 'oo.oo.', 'o..oo.', 'ooo.o.', 'ooooo.', 'o.oooo.', '.oo.o.', '.oooo.',  # k-t
-    'o...oo', 'o.o.oo', '.ooo.o', 'oo..oo', 'oo.ooo', 'o..ooo',  # u-z
-    'o.....', 'o.o...', 'oo....', 'oo.o..', 'o..o..', 'ooo...', 'oooo..', 'o.oo..', '.oo...', '.ooo..',  # 1-9
-    '..oo.o', '..o...', '..o.oo', '..ooo.', '..oo..', '..o.o.', '....oo', '.o..o.', '.o.o.o', 'o.o.o.',  # ., !, ?, ;, :, (, ), -
-    'o.o..o', '.o.oo.', '......'
+    'O.....', 'O.O...', 'OO....', 'OO.O..', 'O..O..', 'OOO...', 'OOOO..', 'O.OO..', '.OO...', '.OOO..',  # a-j
+    'O.. .O.', 'O.O.O.', 'OO..O.', 'OO.OO.', 'O..OO.', 'OOO.O.', 'OOOOO.', 'O.OOOO.', '.OO.O.', '.OOOO.',  # k-t
+    'O...OO', 'O.O.OO', '.OOO.O', 'OO..OO', 'OO.OOO', 'O..OOO',  # u-z
+    'O.....', 'O.O...', 'OO....', 'OO.O..', 'O..O..', 'OOO...', 'OOOO..', 'O.OO..', '.OO...', '.OOO..',  # 1-9
+    '..OO.O', '..O...', '..O.OO', '..OOO.', '..OO..', '..O.O.', '....OO', '.O..O.', '.O.O.O', 'O.O.O.',  # ., !, ?, ;, :, (, ), -
+    'O.O..O', '.O.OO.', '......'
 ]
-capital = '.....o'
-number = '.o.ooo'
-decimal = '.o...o'
+capital = '.....O'
+number = '.O.OOO'
+decimal = '.O...O'
 
 def convert_to_braille(text):
     braille = ''
