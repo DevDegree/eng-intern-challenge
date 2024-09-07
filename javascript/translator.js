@@ -27,32 +27,32 @@ const alpha = {
  'y':'OO.OOO',
  'z':'O..OOO', 
  ' ':'......',
- 'A':'......OO.....',
- 'B':'......OO.O...', 
- 'C':'......OOO....',
- 'D':'......OOO.O..', 
- 'E':'......OO..O..',
- 'F':'......OOOO...',
- 'G':'......OOOOO..', 
- 'H':'......OO.OO..',
- 'I':'......O.OO...', 
- 'J':'......O.OOO..',
- 'K':'......OO...O.',
- 'L':'......OO.O.O.', 
- 'M':'......OOO..O.',
- 'N':'......OOO.OO.', 
- 'O':'......OO..OO.',
- 'P':'......OOOO.O.', 
- 'Q':'......OOOOOO.',
- 'R':'......OO.OOO.', 
- 'S':'......O.OO.O.',
- 'T':'......O.OOOO.', 
- 'U':'......OO...OO',
- 'V':'......OO.O.OO', 
- 'W':'......O.OOO.O',
- 'X':'......OOO..OO', 
- 'Y':'......OOO.OOO',
- 'Z':'......OO..OOO', 
+ 'A':'.....OO.....',
+ 'B':'.....OO.O...', 
+ 'C':'.....OOO....',
+ 'D':'.....OOO.O..', 
+ 'E':'.....OO..O..',
+ 'F':'.....OOOO...',
+ 'G':'.....OOOOO..', 
+ 'H':'.....OO.OO..',
+ 'I':'.....O.OO...', 
+ 'J':'.....O.OOO..',
+ 'K':'.....OO...O.',
+ 'L':'.....OO.O.O.', 
+ 'M':'.....OOO..O.',
+ 'N':'.....OOO.OO.', 
+ 'O':'.....OO..OO.',
+ 'P':'.....OOOO.O.', 
+ 'Q':'.....OOOOOO.',
+ 'R':'.....OO.OOO.', 
+ 'S':'.....O.OO.O.',
+ 'T':'.....O.OOOO.', 
+ 'U':'.....OO...OO',
+ 'V':'.....OO.O.OO', 
+ 'W':'.....O.OOO.O',
+ 'X':'.....OOO..OO', 
+ 'Y':'.....OOO.OOO',
+ 'Z':'.....OO..OOO', 
 }
 
 
@@ -198,33 +198,32 @@ ans = getKeyByValue(object, arr[i]);
   }
   
   const englishToBraille = () => {
-    // console.log('Englsih to Braille:')
     let input = x;
     let record = [];
     let ans = '';
+    let numberMode = false;
 
     for (let i = 0; i < input.length; i++){
-      
-      key = `${input[i]}`
+      let key = `${input[i]}`;
     
-        if (num[key]) {
-          ans = num[key]
-          
-          if(typeof input[i - 1] !== 'number'){
-            ans = modi.numbers + num[key]
-          }
-
-          record = record + ans
+      if (num[key]) {
+        if (!numberMode) {
+          record.push(modi.numbers);
+          numberMode = true;
         }
-
-    else {ans = alpha[key]
-  
-      record = record + ans
+        ans = num[key];
+        record.push(ans);
+      } else {
+        if (numberMode) {
+          if (key === '......');
+          numberMode = false;
+        }
+        ans = alpha[key];
+        record.push(ans);
+      }
     }
-    
-    }
-    console.log(record)
-    return(record)
+    console.log(record.join(''));
+    return record.join('');
   }
 
     
@@ -252,3 +251,7 @@ translator(cmdLineInput)
 // translator('.O.OOOOO.O..O.O...') // output: 42
 // translator('42') // output: .O.OOOOO.O..O.O...
 
+translator('.....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO') // expected output: Abc 123 xYz
+translator('.....OO.....O.O...OO...........O.OOOO......O.OOOO.O....O.OOOOO..........OO..OO.....OOO.OOOO..OOO') // expected output: Abc 123 xYz
+
+translator('Abc 123 xYz') // expected output: .....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO 
