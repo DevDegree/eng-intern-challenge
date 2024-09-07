@@ -62,8 +62,6 @@ function getValueFromDict(key, dict) {
  */
 function getKeyFromDict(value, dict) {
   const key = Object.keys(dict).find((key) => dict[key] === value);
-  console.log(key)
-  console.log(value)
   return key !== undefined ? key : false;
 }
 
