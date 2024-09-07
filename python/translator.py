@@ -1,4 +1,6 @@
 
+import sys
+
 '''
 first solution that comes to mind:
 initialize result string
@@ -22,3 +24,14 @@ input = english:
 
 return result
 '''
+
+def translate_input(args):
+    print(args)
+
+    result = ""
+    return result
+
+if __name__ == "__main__":
+    args = sys.argv[1:]
+    output = translate_input(args)
+    print(output)
