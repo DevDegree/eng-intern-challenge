@@ -8,7 +8,7 @@ english_to_braille = {
     "p": "OOO.O.", "q": "OOOOO.", "r": "O.OOO.", "s": ".OO.O.", "t": ".OOOO.",
     "u": "O...OO", "v": "O.O.OO", "w": ".OOO.O", "x": "OO..OO", "y": "OO.OOO",
     "z": "O..OOO", 
-    " ": ".....",  # Space
+    " ": ".....",  # Space in Braille
     "cap": ".....O",  # Capitalization marker
 }
 
@@ -60,18 +60,20 @@ def braille_to_eng(braille_input):
 def eng_to_braille(english_input):
     translated = []
     number_mode = False
+    last_was_space = False
 
     for char in english_input:
         if char.isupper():
             translated.append(".....O")  # Capitalization symbol
             char = char.lower()
+
         if char.isdigit():
             if not number_mode:
                 translated.append(".O.OOO")  # Number indicator
                 number_mode = True
             translated.append(numbers_to_braille[char])
         elif char == " ":
-            translated.append(".....")  # Braille space
+            translated.append("......")  # Braille space for separation
         elif char in english_to_braille:
             number_mode = False  # Exit number mode when switching back to letters
             translated.append(english_to_braille[char])
