@@ -24,10 +24,10 @@ function isBrailleCheck(inputArray) {
 }
 
 /**
- * This function checks if the input is Braille
+ * This function splits the Braille string into chunks of strings in an array
  *
  * @param {string} string - Braille string that will need to be translated
- * @returns isBrailleCheck - Returns an array of Braille characters
+ * @returns chunks - Returns an array of Braille character chunks
  *
  */
 function splitEverySixChars(string) {
@@ -65,9 +65,22 @@ function getKeyFromDict(value, dict) {
   return key !== undefined ? key : false;
 }
 
+const symbolSet = new Set('.,?|:;-/<>()')
+/**
+ * Checks if the character is a symbol in braille_symbols_dict that can be translated.
+ * This is only for English to Braille translation.
+ * 
+ * @param {string} char - character to be checked
+ * @returns {boolean}
+ */
+function isSymbolInDict(char) {
+  return symbolSet.has(char)
+}
+
 module.exports = {
   isBrailleCheck,
   splitEverySixChars,
   getKeyFromDict,
   getValueFromDict,
+  isSymbolInDict,
 };
