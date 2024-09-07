@@ -5,14 +5,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const charMap_1 = __importDefault(require("./charMap"));
 const brailleMap_1 = __importDefault(require("./brailleMap"));
-function brailleTranslator(word) {
+function translator(word) {
     let regexp = /\b(?!\w*[.O])\w+\b/;
+    let output = "hello";
     if (regexp.test(word)) {
         return translateToBraille(word);
     }
     else {
         return translateToEnglish(word);
     }
+    console.log(output);
+    return output;
 }
 function translateToBraille(word) {
     let output = "";
@@ -74,6 +77,4 @@ function translateToEnglish(word) {
     console.log(output);
     return output;
 }
-brailleTranslator("Abc 123 xYz");
-brailleTranslator(".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO");
 //# sourceMappingURL=translator.js.map

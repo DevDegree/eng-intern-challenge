@@ -1,7 +1,7 @@
 import charMap from "./charMap";
 import brailleMap from "./brailleMap";
 
-function brailleTranslator(word: string): string {
+function translator(word: string): string {
 	let regexp: RegExp = /\b(?!\w*[.O])\w+\b/;
 
 	if (regexp.test(word)) {
@@ -79,4 +79,10 @@ function translateToEnglish(word: string): string {
 	}
 	console.log(output);
 	return output;
+}
+
+if (require.main === module) {
+	const args = process.argv.slice(2);
+	const input = args.join(" ");
+	translator(input);
 }
