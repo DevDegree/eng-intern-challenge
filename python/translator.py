@@ -1,9 +1,5 @@
 import sys
 
-#Assumptions: Only valid strings are passed to the translator
-
-#Runtime and space time complexity
-
 # Letters a-z
 BRAILLE_A = "O....."
 BRAILLE_B = "O.O..."
@@ -34,8 +30,6 @@ BRAILLE_Z = "O..OOO"
 
 
 # Numbers O-9
-
-
 BRAILLE_1 = BRAILLE_A
 BRAILLE_2 = BRAILLE_B
 BRAILLE_3 = BRAILLE_C
@@ -52,8 +46,6 @@ BRAILLE_0 = BRAILLE_J
 BRAILLE_SPACE = "......"
 CAPTIAL_FOLLOWS =  ".....O"
 NUMBER_FOLLOWS = ".O.OOO"
-
-
 
 
 BRAILLE_TO_ALPHA = {
@@ -157,8 +149,6 @@ def english_to_braille(input):
 
    for c in input:
        
-       
-
        if c == " ":
            
            num_sequence__not_started = True
@@ -190,16 +180,16 @@ def english_to_braille(input):
    return result
 
 
-def check_braille_string_for_error(curr_map_to_refer, braille_char,  num_follows_flag_seen):
+def check_braille_string_for_error(curr_map_to_look_at, braille_char,  num_follows_flag_seen):
 
-    if braille_char not in BRAILLE_TO_ALPHA and braille_char not in BRAILLE_TO_NUM and braille_char not in [BRAILLE_SPACE, NUMBER_FOLLOWS, CAPTIAL_FOLLOWS]:
-        raise ValueError("Invalid braille character in given string")
+    if (braille_char not in BRAILLE_TO_ALPHA) and (braille_char not in BRAILLE_TO_NUM) and (braille_char not in [BRAILLE_SPACE, NUMBER_FOLLOWS, CAPTIAL_FOLLOWS]):
+        raise ValueError("Atleast one invalid braille character in given string")
     
     if num_follows_flag_seen and (braille_char not in BRAILLE_TO_NUM):
         raise ValueError("a non-numerical braille charcater follows the number follows braille character")
     
-    if (curr_map_to_refer == BRAILLE_TO_NUM) and (braille_char not in BRAILLE_TO_NUM) and (braille_char != BRAILLE_SPACE):
-        raise ValueError("An alpha character follows a number braille character")
+    if (curr_map_to_look_at == BRAILLE_TO_NUM) and not (braille_char == BRAILLE_SPACE or braille_char in BRAILLE_TO_NUM):
+        raise ValueError("An braille character other than a braille space or a braille number character follows a number braille character")
 
     
 def braille_to_english(input):
@@ -209,7 +199,7 @@ def braille_to_english(input):
 
    result = ''
    cap_next_char = False
-   curr_map_to_refer = BRAILLE_TO_ALPHA
+   curr_map_to_look_at = BRAILLE_TO_ALPHA
    num_follows_flag_seen = False
 
 
@@ -217,11 +207,11 @@ def braille_to_english(input):
 
        braille_char = input[i:i+6]
 
-       check_braille_string_for_error(curr_map_to_refer, braille_char,  num_follows_flag_seen)
+       check_braille_string_for_error(curr_map_to_look_at, braille_char, num_follows_flag_seen)
 
        if braille_char == BRAILLE_SPACE:
 
-           curr_map_to_refer = BRAILLE_TO_ALPHA
+           curr_map_to_look_at = BRAILLE_TO_ALPHA
            result += ' '
 
        elif braille_char == CAPTIAL_FOLLOWS:
@@ -229,13 +219,13 @@ def braille_to_english(input):
 
 
        elif braille_char == NUMBER_FOLLOWS:
-           curr_map_to_refer = BRAILLE_TO_NUM
+           curr_map_to_look_at = BRAILLE_TO_NUM
            num_follows_flag_seen = True
 
 
        else:
            
-           english_char = curr_map_to_refer[braille_char]
+           english_char = curr_map_to_look_at[braille_char]
 
            if cap_next_char:
                
