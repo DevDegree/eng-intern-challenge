@@ -6,7 +6,11 @@ BRAILLE_TO_ENGLISH = {
     'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't',
     'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y',
     'O..OOO': 'z', '......': ' ',
-    '.....O': 'capital_follows', '.O.OOO': 'number_follows'
+    '.....O': 'capital_follows', '.O.OOO': 'number_follows',
+    '..O...': ',', '..O.O.': ';', '..OO..': ':',  
+    '..OO.O': '.', '..O.OO': '?', '..OOO.': '!', 
+    '....OO': '-', 'O.O..O': '(', '.O.OO.': ')',
+    '.OO..O': '<', '.O..OO': '>'
 }
 
 # English to Braille mapping
