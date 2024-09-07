@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+##
+#
 class Translator
     LETTERS_ENGLISH_TO_BRAILLE = {
       "a" => "O.....",
@@ -47,6 +49,12 @@ class Translator
     BRAILLE_NUMBER_FOLLOWS  = ".O.OOO"
     BRAILLE_SPACE           = "......"
 
+    ##
+    # Checks if a string is a valid representation of Braille.
+    # A valid Braille string has a length that is a multiple of 6, and only contains the characters "O" and "."
+    #
+    # @param s [String] The string to be checked
+    # @return [Boolean] Returns true if the string is a valid Braille representation, otherwise return false
     def is_braille?(s)
         # return false if the size of the string is not a multiple of 6
         return false unless s.size % 6 == 0
@@ -55,6 +63,10 @@ class Translator
         s.chars.all? { |c| c == "O" || c == "." }
     end
 
+    ##
+    # Prints the English translation of a given Braille string
+    #
+    # @param braille_string [String] The Braille string to be translated to English
     def translate_to_english(braille_string)
         # Initialize an empty string to hold the translation
         translation = ""
@@ -94,11 +106,18 @@ class Translator
         puts translation
     end
 
+    ##
+    # Prints the Braille translation of a given English string
+    #
+    # @param english_string [String] The English string to be translated to Braille
     def translate_to_braille(english_string)
+
+        # Checks if a given English character is a capitalized letter (A - Z)
         def is_capitalized?(char)
             char.ord.between?(65, 90)
         end
 
+        # Checks if a given English character is a digit (0 - 9)
         def is_digit?(char)
             char.ord.between?(48, 57)
         end
@@ -106,12 +125,16 @@ class Translator
         # Initialize an empty string to hold the translation
         translation = ""
 
+        # Flag to indicate if the braille character for `number_follows` needs to be added to the translation
+        # If true, then BRAILLE_NUMBER_FOLLOWS must not be added to the translation (i.e., BRAILLE_NUMBER_FOLLOWS is already included. Only append the braille number to the translation)
+        # If false, then BRAILLE_NUMBER_FOLLOWS must be added to the translation (i.e., BRAILLE_NUMBER_FOLLOWS not yet included. Must append BRAILLE_NUMBER_FOLLOWS and the braille number to the translation)
         number_follows_active = false
 
+        # Iterate through each character of the English string
         english_string.each_char do |english_char|
             case
             when is_capitalized?(english_char)
-                translation << BRAILLE_CAPITAL_FOLLOWS + LETTERS_ENGLISH_TO_BRAILLE[english_char]
+                translation << BRAILLE_CAPITAL_FOLLOWS + LETTERS_ENGLISH_TO_BRAILLE[english_char.downcase]
             when is_digit?(english_char)
                 unless number_follows_active
                     translation << BRAILLE_NUMBER_FOLLOWS
@@ -120,12 +143,13 @@ class Translator
                 translation << NUMBERS_ENGLISH_TO_BRAILLE[english_char]
             when english_char == " "
                 translation << BRAILLE_SPACE
-                number_follows_active = false
+                number_follows_active = false # When a Braille number follows symbol is read, assume all following symbols are numbers until the next space symbol.
             else
                 translation << LETTERS_ENGLISH_TO_BRAILLE[english_char]
             end
         end
 
+        # Print final translation
         puts translation
     end
 end
@@ -140,5 +164,3 @@ if __FILE__ == $0
         translator.translate_to_braille(string_to_translate)
     end
 end
-
-
