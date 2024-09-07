@@ -122,7 +122,7 @@ let translator = function(input) {
 
       if (y[i] === 'a' || y[i] === 'e' || y[i] === 'i' || y[i] === 'u' || y[i] === 'y' || y[i] === 'k' || y[i] === 'l' || y[i] === 'm' || y[i] === 'n' || y[i] === 'g' || y[i] === 'p' || y[i] === 't' || y[i] === 'b' || y[i] === '1' || y[i] === '2' || y[i] === '3' || y[i] === '4' || y[i] === '5' || y[i] === '6' || y[i] === '7' || y[i] === '8' || y[i] === '9' || y[i] === 'h' || y[i] === 'z' || y[i] === 'r') {
         lang = 'english'; 
-        console.log(lang + ' sorted');
+        // console.log(lang + ' sorted');
         englishToBraille(x)
         break;
       } 
@@ -131,7 +131,7 @@ let translator = function(input) {
 
     if (lang === '') {
     lang = 'braille';
-    console.log(lang + ' sorted');
+    // console.log(lang + ' sorted');
     brailleSpliter()
     }
   }
@@ -139,15 +139,15 @@ let translator = function(input) {
   const brailleSpliter = () => {
 
     let result = x.match(/[\s\S]{1,6}/g) || [];
-    console.log('after spliting:')
-    console.log(result)
+    // console.log('after spliting:')
+    // console.log(result)
     brailleToEnglsih(result)
 
   }
   
   const brailleToEnglsih = (arr) => {
 
-    console.log('Braille To English:')
+    // console.log('Braille To English:')
     let arr2 = [];
 
     let object = '';
@@ -194,10 +194,11 @@ ans = getKeyByValue(object, arr[i]);
   }
   
   console.log(str2);
+  return(str2);
   }
   
   const englishToBraille = () => {
-    console.log('Englsih to Braille:')
+    // console.log('Englsih to Braille:')
     let input = x;
     let record = [];
     let ans = '';
@@ -223,12 +224,13 @@ ans = getKeyByValue(object, arr[i]);
     
     }
     console.log(record)
+    return(record)
   }
 
     
 
   sorter(x);
-  console.log('end');
+  // console.log('end');
 }
 
 
