@@ -64,6 +64,49 @@ def convert_english_to_braille(text):
 
     return ''.join(result)
 
+def convert_braille_to_english(braille_text):
+    """
+    Converts a Braille string back into English.
+    Handles capital letters and number mode using special Braille indicators.
+    """
+    output = []
+    in_capital_mode = False
+    in_number_mode = False
+
+    for i in range(0, len(braille_text), 6):
+        braille_char = braille_text[i:i + 6]
+
+        # Check for special Braille indicators (capital or number mode)
+        if braille_char in special_braille_chars:
+            mode = special_braille_chars[braille_char]
+            if mode == "capital flag":
+                in_capital_mode = True
+            elif mode == "number flag":
+                in_number_mode = True
+            continue
+
+        # Handle number mode
+        if in_number_mode:
+            if braille_char in braille_to_number_map:
+                output.append(braille_to_number_map[braille_char])
+            else:
+                # Exit number mode if an invalid number is encountered
+                in_number_mode = False
+                i -= 6  # Re-check this Braille char after exiting number mode
+        else:
+            # Translate Braille to English letters, accounting for capital letters
+            if braille_char in braille_to_english_map:
+                char = braille_to_english_map[braille_char]
+                if in_capital_mode:
+                    output.append(char.upper())  # Convert to uppercase if needed
+                    in_capital_mode = False
+                else:
+                    output.append(char)
+            else:
+                output.append(' ')  # Default to space if no matching Braille pattern found
+
+    return ''.join(output)
+
 def is_braille(text):
     """
     Determines if a given text is valid Braille by checking its length and characters.
