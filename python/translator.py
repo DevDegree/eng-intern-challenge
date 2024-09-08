@@ -137,18 +137,18 @@ def main():
     input_text = ' '.join(sys.argv[1:])
 
     # Determine if the input is Braille or English, then translate accordingly
-    # if is_braille(input_text):
-    #     output = convert_braille_to_english(input_text)
-    #     if output:
-    #         print(output)
-    #     else:
-    #         print("Invalid Braille input.")
-    # else:
-    #     output = convert_english_to_braille(input_text)
-    #     if output:
-    #         print(output)
-    #     else:
-    #         print("Invalid English input.")
+    if is_braille(input_text):
+        output = convert_braille_to_english(input_text)
+        if output:
+            print(output)
+        else:
+            print("Invalid Braille input.")
+    else:
+        output = convert_english_to_braille(input_text)
+        if output:
+            print(output)
+        else:
+            print("Invalid English input.")
 
 if __name__ == "__main__":
     main()
