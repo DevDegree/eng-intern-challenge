@@ -76,7 +76,7 @@ def convert_text(input_text):
     
 def run_translator():
     if len(sys.argv) < 2:
-        print("Usage: python3 translator.py 'text to translate'")
+        print("To Use write the command in this format: python3 translator.py 'text to translate'")
         return
     input_text = ' '.join(sys.argv[1:])
     print(convert_text(input_text))
