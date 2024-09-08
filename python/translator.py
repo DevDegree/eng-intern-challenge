@@ -212,6 +212,7 @@ def translate_input():
         translation = translator.translate_to_braille(user_input)
 
     print(translation)
+    print("hello world")
 
 
 if __name__ == "__main__":
