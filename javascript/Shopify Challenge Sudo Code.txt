@@ -1,0 +1,121 @@
+//Parse arguments into input parameter
+const input = process.argv.slice(2).join(' ');
+
+//Check Braille or English
+//Param input string
+
+isBraille = true
+i = 0
+
+while(isBraille & i<set.size()) {
+	currentChar = set.get(i)
+	if(currentChar != O or .) {
+		isBraille = false
+	}
+	i++
+}
+
+return isBraille
+
+
+//Braille To English Function
+//param braille string
+
+for(i=o;i<string.length;i+6) {
+	substring = string(i,i+5)
+	charList.add(substring)
+}
+
+while(charList.hasNext) {
+	currentChar = charList.getNext
+	if(currentChar is captial) {
+		currenChar = charList.getNext
+		output += charMap.getKey(currentChar).toCaptial
+	}
+
+	else if (currentChar is number) {
+		currentChar = charList.getNext
+		output += numMap.getKey(currentChar)
+		while(charList.next != charMap.get(" ")) {
+			currentChar = charList.getNext
+			output += numMap.getKey(currentChar)
+		}
+	}
+	
+	else {
+		output += charMap.getKey(currentChar)
+	}
+}
+
+return output
+
+
+//English to Braille function
+//Param english string
+
+array = string.split("")
+
+while(array.hasNext) {
+	currentChar = array.getNext
+	if(isNaN(currentChar)) {
+		if(currentChar == currentChar.toUpperCase()) {
+			output += specCharMap.get('capital')
+			output += charMap.get(currentChar.toUpperCase)
+		}
+		
+		else {
+			output += charMap.get(currentChar.toUpperCase)
+		}
+	}
+
+	else {
+		output += numMap.get(currentChar)
+		while(!isNaN(array.next)) {
+			currentChar = array.getNext
+			output += numMap.get(currentChar)
+		}
+	}
+}
+
+return output
+
+
+expected
+.....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO
+.....OO.....O.O...OO...........O.OOOO.....O.O...OO....undefinedOO..OO.....OOO.OOOO..OOO
+actual
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
