@@ -102,7 +102,7 @@ def main():
     args = sys.argv[1:]
     input_str = ' '.join(args)
 
-    if all(c in ['O', '.'] for c in input_str):
+    if all(c in ['O', '.'] for c in input_str) and len(input_str) % 6 == 0:
         print(braille_to_english(input_str))
     else:
         print(english_to_braille(input_str))
