@@ -63,11 +63,11 @@ numMap['0'] = '.OOO..';
 
 //Main Function 
 let isBraille = determineLanguage(inputString);
-var output;
+var output = "";
 
 if(isBraille) {
     //braille to english function
-    //output = function return
+    output = brailleToEnglish(inputString);
 }
 else {
     //english to braille function
@@ -134,4 +134,19 @@ function englishToBraille(inputString) {
         }
     }
     return output;
+}
+
+function brailleToEnglish(inputString) {
+    const brailleChars = [];
+    var substring = "";
+    var output = "";
+
+    for(var i=0;i<inputString.length;i+=6) {
+        substring = inputString.substring(i,i+6).trim();
+        brailleChars.push(substring);
+    }
+
+
+    return output;
+
 }
