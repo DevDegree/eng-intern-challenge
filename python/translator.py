@@ -32,7 +32,16 @@ BRAILLE_NUMBERS = set()
 
 
 def translate_braille_to_english(braille: str) -> str:
-    _setup_braille_to_english_translator()
+    """
+    Translate a braille string to English characters.
+
+    Precondition that braille arg is a valid braille string.
+
+    :param braille: a string of braille characters represented as 6 character strings of Os and .s
+    :return: the translated text as an English character string
+    """
+
+    _set_up_braille_to_english_translator()
     number_or_letter_selector = 0
     capital_follows_flag = False
     text = []
@@ -59,10 +68,21 @@ def translate_braille_to_english(braille: str) -> str:
 
 
 def translate_english_to_braille(text: str) -> str:
+    """
+    Translate a text string to braille characters.
+
+    :param text: a string of English characters
+    :return: the translated text as a braille string
+    """
+
     return SPACE.join(map(_get_braille_word, text.split()))
 
 
 def _get_braille_word(word: str) -> str:
+    """
+    Return the braille string representation of a space separated word.
+    """
+
     braille = []
 
     if numeric := word.isnumeric():
@@ -80,12 +100,22 @@ def _get_braille_word(word: str) -> str:
     return ''.join(braille)
 
 
-def _setup_braille_to_english_translator() -> None:
+def _set_up_braille_to_english_translator() -> None:
+    """
+    Set up all derived constants required to translate braille to english.
+
+    Lazy initialisation to only allocate memory if the functionality is required.
+    """
+
     if not ENGLISH_ALPHABET:
         _init_braille_to_english_constants()
 
 
 def _init_braille_to_english_constants() -> None:
+    """
+    Initialise ENGLISH_ALPHABET derived constant.
+    """
+
     i = 1
     for english_letter, braille_letter in BRAILLE_ALPHABET.items():
         if i is not None:
@@ -98,14 +128,24 @@ def _init_braille_to_english_constants() -> None:
             ENGLISH_ALPHABET[braille_letter] = english_letter
 
 
-def _setup_braille_verification_constants() -> None:
+def _set_up_braille_verification_constants() -> None:
+    """
+    Set up all derived constants required to verify a potential braille string.
+    """
+
     if not BRAILLE_NUMBERS:
         for letter in BRAILLE_NUMBER_EQUIVALENTS.values():
             BRAILLE_NUMBERS.add(BRAILLE_ALPHABET[letter])
 
 
 def _verify_braille_text(text: str) -> bool:
-    _setup_braille_verification_constants()
+    """
+    Check if a string is a valid braille string.
+
+    :return: True if the string is braille, False otherwise
+    """
+
+    _set_up_braille_verification_constants()
     number_follows_flag = False
     braille_symbols = set(BRAILLE_ALPHABET.values()).union({NUMBER_FOLLOWS, CAPITAL_FOLLOWS, SPACE})
 
@@ -128,8 +168,29 @@ def _verify_braille_text(text: str) -> bool:
     return True
 
 
-def main():
-    pass
+def main() -> str:
+    """
+    Run the main translator application.
+
+    The console application takes as input 1 or more space separated strings
+    and prints the translation to standard output.
+
+    :return: the translated string
+    """
+
+    if len(sys.argv) > 1:
+        # only process if arguments are supplied to the program
+        arg_string = ' '.join(sys.argv[1:])
+
+        if _verify_braille_text(arg_string):
+            translated_text = translate_braille_to_english(arg_string)
+
+        else:
+            # assume if the argument string is not braille then translate it from english
+            translated_text = translate_english_to_braille(arg_string)
+
+        print(translated_text, end='')
+        return translated_text
 
 
 if __name__ == '__main__':
