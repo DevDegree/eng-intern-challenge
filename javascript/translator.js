@@ -118,9 +118,6 @@ function translateToEnglish(input) {
 function translateInput(input) {
     if (/^[O.]+$/.test(input)) {  // Braille Input
 
-        if(input.length % 6 !== 0) // Check Braille Validity
-        return "Invalid Braille Input" 
-
         return translateToEnglish(input);
     }
 
