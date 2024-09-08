@@ -29,8 +29,8 @@ return result
 def translate_input(args):
     result = ""
 
-    # create dict for braille to english
-    braille_to_english = {
+    # create dict for english to braille
+    english_to_braille = {
         'a': "O.....",
         'b': "O.O...",
         'c': "OO....",
@@ -87,28 +87,114 @@ def translate_input(args):
         ' ': "......"
     }
 
+    #create dict for braille to english
+    braille_to_english = {
+        "O.....": 'a',
+        "O.O...": 'b',
+        "OO....": 'c',
+        "OO.O..": 'd',
+        "O..O..": 'e',
+        "OOO...": 'f',
+        "OOOO..": 'g',
+        "O.OO..": 'h',
+        ".OO...": 'i',
+        ".OOO..": 'j',
+        "O...O.": 'k',
+        "O.O.O.": 'l',
+        "OO..O.": 'm',
+        "OO.OO.": 'n',
+        "O..OO.": 'o',
+        "OOO.O.": 'p',
+        "OOOOO.": 'q',
+        "O.OOO.": 'r',
+        ".OO.O.": 's',
+        ".OOOO.": 't',
+        "O...OO": 'u',
+        "O.O.OO": 'v',
+        ".OOO.O": 'w',
+        "OO..OO": 'x',
+        "OO.OOO": 'y',
+        "O..OOO": 'z',
+        
+        "..O...": ',',
+        "..O.O.": ';',
+        "..OO..": ':',
+        "..OO.O": '.',
+        "..OOO.": '!',
+        "..O.OO": '?',
+        ".OO.OO": '(',
+        ".OO.OO": ')',
+        "..O..O": '-',
+        ".O.OO.": '/',
+        ".O.OO.": '<',
+        ".O.OO.": '>',
+        
+        ".....O": 'capital',
+        ".O.OOO": 'number',
+        "......": ' '
+    }
+
+    braille_to_number = {
+        "O.....": '1',
+        "O.O...": '2',
+        "OO....": '3',
+        "OO.O..": '4',
+        "O..O..": '5',
+        "OOO...": '6',
+        "OOOO..": '7',
+        "O.OO..": '8',
+        ".OO...": '9',
+        ".OOO..": '0',
+    }
+
+
     for i in range(len(args)):
         # check if input is braille or english
         if set(args[i]).issubset({'O', '.', ' '}):
             # is braille
-            pass
+            isNumber = False
+            isCapital = False
+            for j in range(0, len(args[i]), 6):
+                braille_char = args[i][j:j+6]
+                char = braille_to_english[braille_char]
+                # handle capital
+                if isCapital:
+                    char = char.upper()
+                    isCapital = False
+                
+                elif char == 'capital':
+                    isCapital = True
+                    continue
+                
+                elif isNumber and char == ' ':
+                    isNumber = False
 
+                elif isNumber:
+                    char = braille_to_number[braille_char]
+
+                elif char == 'number':
+                    isNumber = True
+                    continue
+                
+                result += char
+            isNumber = False
+            isCapital = False
         else:
             # is english
             isNumber = False
             for letter in args[i]:
                 # handle capital case
                 if letter.isupper():
-                    result += braille_to_english['capital']
+                    result += english_to_braille['capital']
                     letter = letter.lower()
                 # handle numbers
                 elif letter.isnumeric() and not isNumber:
                     isNumber = True
-                    result += braille_to_english['number']
-                result += braille_to_english[letter]
+                    result += english_to_braille['number']
+                result += english_to_braille[letter]
             # add space after element if its not the last one
             if i != len(args)-1:
-                result += braille_to_english[' ']
+                result += english_to_braille[' ']
 
     return result
 
