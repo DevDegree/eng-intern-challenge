@@ -96,8 +96,6 @@ def braille_to_english(braille):
     return ''.join(result)
 def main():
     while True:
-        print("Braille Translator")
-        print("Enter text to translate:")
         user_input = input(">>> ").strip()
 
         if is_braille(user_input):
@@ -111,10 +109,6 @@ def main():
             
         print(translation)
         print("\n")
-
-        again = input("Do you want to translate another text? (yes/no): ").strip().lower()
-        if again != 'yes':
-            break
 
 if __name__ == "__main__":
     main()
