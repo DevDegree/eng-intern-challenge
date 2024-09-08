@@ -29,19 +29,9 @@ BRAILLE_NUMBER_EQUIVALENTS = {
 # derived constants
 ENGLISH_ALPHABET = {}
 
-i = 1
-for english_letter, braille_letter in BRAILLE_ALPHABET.items():
-    if i is not None:
-        ENGLISH_ALPHABET[braille_letter] = (english_letter, str(i))
-        i = (i + 1) % 10
-
-        if i == 1:
-            i = None
-    else:
-        ENGLISH_ALPHABET[braille_letter] = english_letter
-
 
 def translate_braille_to_english(braille: str) -> str:
+    _setup_braille_to_english_translator()
     number_or_letter_selector = 0
     capital_follows_flag = False
     text = []
@@ -87,6 +77,24 @@ def _get_braille_word(word: str) -> str:
         braille.append(BRAILLE_ALPHABET[char])
 
     return ''.join(braille)
+
+
+def _setup_braille_to_english_translator() -> None:
+    if not ENGLISH_ALPHABET:
+        _init_braille_to_english_constants()
+
+
+def _init_braille_to_english_constants() -> None:
+    i = 1
+    for english_letter, braille_letter in BRAILLE_ALPHABET.items():
+        if i is not None:
+            ENGLISH_ALPHABET[braille_letter] = (english_letter, str(i))
+            i = (i + 1) % 10
+
+            if i == 1:
+                i = None
+        else:
+            ENGLISH_ALPHABET[braille_letter] = english_letter
 
 
 def main():
