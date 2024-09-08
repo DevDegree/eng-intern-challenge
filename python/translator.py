@@ -41,8 +41,9 @@ def translate_braille_to_english(braille: str) -> str:
     :return: the translated text as an English character string
     """
 
-    _set_up_braille_to_english_translator()
-    number_or_letter_selector = 0
+    _set_up_braille_to_english_translator()  # initialise necessary constants if necessary
+
+    number_or_letter_selector = 0  # indicates whether to take the letter or number identified by a braille character
     capital_follows_flag = False
     text = []
 
@@ -84,8 +85,9 @@ def translate_english_to_braille(text: str) -> str:
 
         else:
             if len(number) > 1:
+                # if the substring of numbers is complete, add it before the next non-numeric character
                 braille += number
-                number = [number[0]]  # reset number to its original state
+                number = [number[0]]  # reset number var to its original state
 
             if char == ' ':
                 braille.append(SPACE)
@@ -122,10 +124,12 @@ def _init_braille_to_english_constants() -> None:
     i = 1
     for english_letter, braille_letter in BRAILLE_ALPHABET.items():
         if i is not None:
+            # populate the braille characters that point to both a letter and a number
             ENGLISH_ALPHABET[braille_letter] = (english_letter, str(i))
-            i = (i + 1) % 10
+            i = (i + 1) % 10  # circularly go through the digits from 0 to 9 starting with 2
 
             if i == 1:
+                # once i returns to 1, all digits have been added
                 i = None
         else:
             ENGLISH_ALPHABET[braille_letter] = english_letter
@@ -152,6 +156,7 @@ def _verify_braille_text(text: str) -> bool:
         return False
 
     _set_up_braille_verification_constants()
+
     number_follows_flag = False
     braille_symbols = set(BRAILLE_ALPHABET.values()).union({NUMBER_FOLLOWS, CAPITAL_FOLLOWS, SPACE})
 
@@ -169,6 +174,8 @@ def _verify_braille_text(text: str) -> bool:
                 # if the character between a "number follows" and space is not a number
                 return False
 
+            # if the number_follows_flag is True, keep it True
+            # if letter is "number follows", set it to True
             number_follows_flag = number_follows_flag or (letter == NUMBER_FOLLOWS)
 
     return True
@@ -186,7 +193,7 @@ def main() -> str:
 
     if len(sys.argv) > 1:
         # only process if arguments are supplied to the program
-        arg_string = ' '.join(sys.argv[1:])
+        arg_string = ' '.join(sys.argv[1:])  # join all arguments as a space separated string
 
         if _verify_braille_text(arg_string):
             translated_text = translate_braille_to_english(arg_string)
@@ -195,7 +202,7 @@ def main() -> str:
             # assume if the argument string is not braille then translate it from english
             translated_text = translate_english_to_braille(arg_string)
 
-        print(translated_text, end='')
+        print(translated_text, end='')  # print the result to standard output
         return translated_text
 
 
