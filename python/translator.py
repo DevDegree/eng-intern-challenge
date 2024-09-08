@@ -49,9 +49,9 @@ modifierDict = {
 brailleToAlphaDict = {i: j for j, i in alphaToBrailleDict.items()}
 brailleToNumDict = {i: j for j, i in numToBrailleDict.items()}
 
+
+
 chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ1234567890 '
-
-
 
 def isBraille(input): # checks if input string is braille or english
     if any((char in chars) for char in input):
@@ -61,9 +61,9 @@ def isBraille(input): # checks if input string is braille or english
     
 
 
-
+# braille -> english
 def translateBraille(input):
-    inputSplit = [input[i:i+6] for i in range(0, len(input), 6)] 
+    inputSplit = [input[i:i+6] for i in range(0, len(input), 6)] # splits input string into groups of 6
 
     caps, num = False, False
 
@@ -93,7 +93,7 @@ def translateBraille(input):
         
     return output
         
-
+# english -> braille
 def translateEnglish(input):
     output = ''
 
