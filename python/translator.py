@@ -55,7 +55,7 @@ eng_number_translator = {b: e for e, b in brl_number_translator.items()}
 def is_braille(word) -> bool:
     braille_characters = {'O', '.'}
     input_characters = set(word)
-    return (input_characters.issubset(braille_characters) and len(word) >= 6)
+    return input_characters.issubset(braille_characters)
 
 # takes english input (word) and return braille string
 def eng_to_braille(word) -> str:

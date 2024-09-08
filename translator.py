@@ -3,7 +3,6 @@ import sys
 
 brl_letter_translator = {
     'capital': '.....O',
-    'decimal': '.O...O',
     'number': '.O.OOO',
     'a': 'O.....',
     'b': 'O.O...',
@@ -47,8 +46,8 @@ brl_number_translator = {
     '0': '.OOO..',
 }
 
+# takes braille dictionary and flips keys to values and values to keys to create english dicts
 eng_letter_translator = {b: e for e, b in brl_letter_translator.items()}
-
 eng_number_translator = {b: e for e, b in brl_number_translator.items()}
 
 # if word is Braille, returns true
@@ -56,7 +55,7 @@ eng_number_translator = {b: e for e, b in brl_number_translator.items()}
 def is_braille(word) -> bool:
     braille_characters = {'O', '.'}
     input_characters = set(word)
-    return (input_characters.issubset(braille_characters) and len(word) >= 6)
+    return input_characters.issubset(braille_characters)
 
 # takes english input (word) and return braille string
 def eng_to_braille(word) -> str:
