@@ -1,6 +1,6 @@
 import sys
 
-braille_alphabet = {
+ALPHANUM_BRAILLE = {
     'a': "O.....",
     'b': "O.O...",
     'c': "OO....",
@@ -42,6 +42,14 @@ braille_alphabet = {
     '9': ".OO..."
 }
 
+BRAILLE_ALPHA = {
+    v: k for k, v in ALPHANUM_BRAILLE.items() if k.isalpha() or k == ' '
+}
+
+BRAILLE_NUM = {
+    v: k for k, v in ALPHANUM_BRAILLE.items() if k.isdigit() or k == ' '
+}
+
 
 def english_to_braille(input_str):
     result = []
@@ -49,51 +57,47 @@ def english_to_braille(input_str):
     for char in input_str:
         if char.isdigit():
             if not number_mode:
-                result.append(braille_alphabet['num'])
+                result.append(ALPHANUM_BRAILLE['num'])
                 number_mode = True
-            result.append(braille_alphabet[char])
+            result.append(ALPHANUM_BRAILLE[char])
         elif char.isalpha():
             if char.isupper():
-                result.append(braille_alphabet['cap'])
-                result.append(braille_alphabet[char.lower()])
+                result.append(ALPHANUM_BRAILLE['cap'])
+                result.append(ALPHANUM_BRAILLE[char.lower()])
             else:
-                result.append(braille_alphabet[char])
+                result.append(ALPHANUM_BRAILLE[char])
             number_mode = False
         elif char == ' ':
-            result.append(braille_alphabet[' '])
+            result.append(ALPHANUM_BRAILLE[' '])
             number_mode = False
     return ''.join(result)
 
 
 def braille_to_english(braille_str):
-    reverse_braille_letters = {
-        v: k for k, v in braille_alphabet.items() if k.isalpha() or k == ' '}
-    reverse_braille_numbers = {
-        v: k for k, v in braille_alphabet.items() if k.isdigit() or k == ' '}
 
     result = []
     number_mode = False
     capital_mode = False
     for i in range(0, len(braille_str), 6):
         symbol = braille_str[i:i+6]
-        if symbol == braille_alphabet['num']:
+        if symbol == ALPHANUM_BRAILLE['num']:
             number_mode = True
             continue
-        elif symbol == braille_alphabet['cap']:
+        elif symbol == ALPHANUM_BRAILLE['cap']:
             capital_mode = True
             continue
 
         if number_mode:
-            result.append(reverse_braille_numbers[symbol])
+            result.append(BRAILLE_NUM[symbol])
         else:
-            char = reverse_braille_letters[symbol]
+            char = BRAILLE_ALPHA[symbol]
             if capital_mode:
                 result.append(char.upper())
                 capital_mode = False
             else:
                 result.append(char)
 
-        if symbol == braille_alphabet[' ']:
+        if symbol == ALPHANUM_BRAILLE[' ']:
             number_mode = False
     return ''.join(result)
 
