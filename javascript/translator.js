@@ -75,7 +75,7 @@ const brailleToEnglish = {
 };
 
 (function main() {
-    const input = process.argv[2];
+    const input = process.argv.slice(2).join(' ');
     
     if (input) {
         if (isBraille(input)) {
