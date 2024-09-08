@@ -36,6 +36,34 @@ special_braille_chars = {
     ".O.OOO": "number flag",   # Indicates the following characters are numbers
 }
 
+def convert_english_to_braille(text):
+    """
+    Converts an English text into a Braille string.
+    Handles capital letters and number mode using special Braille indicators.
+    """
+    result = []
+    in_number_mode = False
+
+    for char in text:
+        # If it's a capital letter, add the 'capital flag' before converting
+        if 'A' <= char <= 'Z':
+            result.append(".....O")
+            char = char.lower()  # Convert to lowercase for translation
+
+        # If it's a digit, activate number mode if not already in it
+        if '0' <= char <= '9':
+            if not in_number_mode:
+                result.append(".O.OOO")  # Add 'number flag'
+                in_number_mode = True
+        else:
+            in_number_mode = False  # Exit number mode when a non-digit is found
+
+        # Get the Braille symbol for the character, defaulting to a space if not found
+        braille = english_to_braille_map.get(char, "......")
+        result.append(braille)
+
+    return ''.join(result)
+
 def is_braille(text):
     """
     Determines if a given text is valid Braille by checking its length and characters.
