@@ -27,7 +27,7 @@ def englishtobraille(input): # this function will be called if the string is Eng
 
             brailestring+=braille_numbers[char] # gets the corresponding Braille symbol
 
-    print(brailestring)
+    return(brailestring)
 
 
 def brailletoenglish(input): # this function will be called if the string is Braille
@@ -70,7 +70,7 @@ def brailletoenglish(input): # this function will be called if the string is Bra
         start_index+=6 # updates the indexes so the next 6 character braille symbol can be accessed
         end_index+=6
 
-    print(englishstring)
+    return(englishstring)
 
 def main():
     for character in input: # loops through the characters in the input string
@@ -80,8 +80,9 @@ def main():
             break
 
     if (english): 
-        englishtobraille(input)
+        return(englishtobraille(input))
     elif (not english):
-        brailletoenglish(input)
+        return(brailletoenglish(input))
 
-main()
+    
+print(main())
