@@ -51,9 +51,14 @@ BRAILLE_NUM = {
 }
 
 
-def english_to_braille(input_str):
+def is_braille(s):
+    return all(c in ['0', '.'] for c in s) and len(s) % 6 == 0
+
+
+def alphanum_to_braille(input_str):
     result = []
     number_mode = False
+
     for char in input_str:
         if char.isdigit():
             if not number_mode:
@@ -73,11 +78,11 @@ def english_to_braille(input_str):
     return ''.join(result)
 
 
-def braille_to_english(braille_str):
-
+def braille_to_alphanum(braille_str):
     result = []
     number_mode = False
     capital_mode = False
+
     for i in range(0, len(braille_str), 6):
         symbol = braille_str[i:i+6]
         if symbol == ALPHANUM_BRAILLE['num']:
@@ -106,10 +111,10 @@ def main():
     args = sys.argv[1:]
     input_str = ' '.join(args)
 
-    if all(c in ['O', '.'] for c in input_str) and len(input_str) % 6 == 0:
-        print(braille_to_english(input_str))
+    if is_braille(input_str):
+        print(braille_to_alphanum(input_str))
     else:
-        print(english_to_braille(input_str))
+        print(alphanum_to_braille(input_str))
 
 
 if __name__ == "__main__":
