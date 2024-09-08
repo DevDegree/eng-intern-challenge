@@ -114,10 +114,12 @@ def translate_input(args):
                 isNumber = False
 
             elif isNumber: 
+                print(braille_char)
                 char = braille_to_number[braille_char]
 
             # handle number
             elif char == 'number':
+                print('hello')
                 isNumber = True
                 continue
             
@@ -127,7 +129,6 @@ def translate_input(args):
 
     else:
         # is english
-        english_txt = ' '.join(args)
 
         # create dict for english to braille
         english_to_braille = {
@@ -187,10 +188,9 @@ def translate_input(args):
             ' ': "......"
         }
 
-        for word in english_txt:
+        for j in range(len(args)):
             isNumber = False
-            for letter in word:
-
+            for letter in args[j]:
                 # handle capital case
                 if letter.isupper():
                     result += english_to_braille['capital']
@@ -203,6 +203,10 @@ def translate_input(args):
                 
                 # add string to result
                 result += english_to_braille[letter]
+            
+            # handle spaces
+            if j != len(args) - 1:
+                result += english_to_braille[' ']
 
     return result
 
