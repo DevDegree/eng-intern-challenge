@@ -75,27 +75,30 @@ def translate_english_to_braille(text: str) -> str:
     :return: the translated text as a braille string
     """
 
-    return SPACE.join(map(_get_braille_word, text.split()))
-
-
-def _get_braille_word(word: str) -> str:
-    """
-    Return the braille string representation of a space separated word.
-    """
-
     braille = []
+    number = [NUMBER_FOLLOWS]
 
-    if numeric := word.isnumeric():
-        braille.append(NUMBER_FOLLOWS)
+    for char in text:
+        if char.isnumeric():
+            number.append(BRAILLE_ALPHABET[BRAILLE_NUMBER_EQUIVALENTS[char]])
 
-    for char in word:
-        if numeric:
-            char = BRAILLE_NUMBER_EQUIVALENTS[char]
-        elif char.isupper():
-            braille.append(CAPITAL_FOLLOWS)
-            char = char.lower()
+        else:
+            if len(number) > 1:
+                braille += number
+                number = [number[0]]  # reset number to its original state
 
-        braille.append(BRAILLE_ALPHABET[char])
+            if char == ' ':
+                braille.append(SPACE)
+
+            else:
+                if char.isupper():
+                    braille.append(CAPITAL_FOLLOWS)
+                    char = char.lower()
+
+                braille.append(BRAILLE_ALPHABET[char])
+
+    if len(number) > 1:
+        braille += number  # account for trailing numbers at the end of the string
 
     return ''.join(braille)
 
