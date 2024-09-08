@@ -101,7 +101,6 @@ function determineLanguage(inputString) {
 
 function englishToBraille(inputString) {
     const englishChars = inputString.split('');
-    console.log(englishChars);
     var currentChar;
     var i=0;
     var output = "";
@@ -123,14 +122,15 @@ function englishToBraille(inputString) {
             }
             i++;
         }
-        else {
+        else if(!isNaN(currentChar)) {
             output += specCharMap['number'];
-            output += numMap[currentChar];
-            
-            while(!isNaN(englishChars[++i])) {
-                currentChar = englishChars[i];
+
+            while(i+1 < englishChars.length && !isNaN(englishChars[i+1])) {
+                currentChar = englishChars[i++];
                 output += numMap[currentChar];
             }
+            output +=specCharMap['space'];
+            i++;
         }
     }
     return output;
