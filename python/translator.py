@@ -1,6 +1,6 @@
 import sys
 
-# English to Braille and Braille to English dictionaries
+# English to Braille / Braille to English dictionaries
 ENGLISH_TO_BRAILLE = {
     "a": "O.....", "b": "O.O...", "c": "OO....", "d": "OO.O..", "e": "O..O..", 
     "f": "OOO...", "g": "OOOO..", "h": "O.OO..", "i": ".OO...", "j": ".OOO..", 
@@ -83,3 +83,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+#continue
