@@ -28,6 +28,7 @@ BRAILLE_NUMBER_EQUIVALENTS = {
 
 # derived constants
 ENGLISH_ALPHABET = {}
+BRAILLE_NUMBERS = set()
 
 
 def translate_braille_to_english(braille: str) -> str:
@@ -95,6 +96,36 @@ def _init_braille_to_english_constants() -> None:
                 i = None
         else:
             ENGLISH_ALPHABET[braille_letter] = english_letter
+
+
+def _setup_braille_verification_constants() -> None:
+    if not BRAILLE_NUMBERS:
+        for letter in BRAILLE_NUMBER_EQUIVALENTS.values():
+            BRAILLE_NUMBERS.add(BRAILLE_ALPHABET[letter])
+
+
+def _verify_braille_text(text: str) -> bool:
+    _setup_braille_verification_constants()
+    number_follows_flag = False
+    braille_symbols = set(BRAILLE_ALPHABET.values()).union({NUMBER_FOLLOWS, CAPITAL_FOLLOWS, SPACE})
+
+    for i in range(0, len(text), BRAILLE_CHARACTER_LENGTH):
+        letter = text[i: i + BRAILLE_CHARACTER_LENGTH]
+
+        if letter not in braille_symbols:
+            return False
+
+        if letter == SPACE:
+            number_follows_flag = False
+
+        else:
+            if number_follows_flag and letter not in BRAILLE_NUMBERS:
+                # if the character between a "number follows" and space is not a number
+                return False
+
+            number_follows_flag = number_follows_flag or (letter == NUMBER_FOLLOWS)
+
+    return True
 
 
 def main():
