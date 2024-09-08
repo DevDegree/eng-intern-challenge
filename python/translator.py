@@ -30,8 +30,8 @@ def translate_input(args):
 
     # assume that we are either translating all arguments from english to braille or from braille to english but not both 
     # (ex: translator.py '......' 'Hello' -> wont work).
-    
-    if set(args[0]).issubset({'O', '.'}):
+
+    if set(args[0]).issubset({'O', '.'}) and len(args[0]) >= 6:
         # is braille, braille only 1st argument since the space is '......'
         braille_text = args[0]
 
@@ -113,10 +113,10 @@ def translate_input(args):
             elif isNumber and char == ' ': 
                 isNumber = False
 
-            # handle number
             elif isNumber: 
                 char = braille_to_number[braille_char]
 
+            # handle number
             elif char == 'number':
                 isNumber = True
                 continue
