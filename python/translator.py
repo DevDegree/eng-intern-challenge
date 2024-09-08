@@ -1,5 +1,23 @@
 import sys
 
+def is_braille(text):
+    """
+    Determines if a given text is valid Braille by checking its length and characters.
+    """
+    # Braille input should have length divisible by 6 (each symbol is 6 characters)
+    if len(text) % 6 != 0:
+        return False
+
+    # Verify that every 6-character chunk is a valid Braille symbol or special flag
+    for i in range(0, len(text), 6):
+        chunk = text[i:i + 6]
+        if chunk not in braille_to_english_map and \
+           chunk not in special_braille_chars and \
+           chunk not in braille_to_number_map:
+            return False
+
+    return True
+
 def main():
     """
     Takes input from the command line and determines whether to translate from English to Braille or vice versa.
