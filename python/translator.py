@@ -9,7 +9,7 @@ braille_to_eng = {
     
     # Numbers
     '1': "o.....", '2': "o.o...", '3': "oo....", '4': "oo.o..", '5': "o..o..",
-    '6': "ooo...", '7': "oooo..", '8': "o.oo..", '9': ".oo...", 'o': ".ooo..",
+    '6': "ooo...", '7': "oooo..", '8': "o.oo..", '9': ".oo...", '0': ".ooo..",
 
     # Characters
     '.': "..oo.o", ',':"..o...", '?':"..o.oo", '!':"..ooo.", ':':"..oo..", 
@@ -31,7 +31,7 @@ eng_to_braille = {
     
     # Numbers
     '1': "o.....", '2': "o.o...", '3': "oo....", '4': "oo.o..", '5': "o..o..",
-    '6': "ooo...", '7': "oooo..", '8': "o.oo..", '9': ".oo...", 'o': ".ooo..",
+    '6': "ooo...", '7': "oooo..", '8': "o.oo..", '9': ".oo...", '0': ".ooo..",
 
     # Characters
     '.': "..oo.o", ',':"..o...", '?':"..o.oo", '!':"..ooo.", ':':"..oo..", 
@@ -50,7 +50,7 @@ def is_braille(text):
 def transl_to_braille(text):
     braille_text = []
     words = text.split()  # separate words/numbers/decimals in the input
-    for word in words:
+    for i,word in enumerate(words):
         if word.isdigit() or word.replace('.', '', 1).isdigit():  # check if it's a number or decimal
             if word == word.replace('.', '', 1):
                 braille_text.append(eng_to_braille["num"])  
@@ -64,8 +64,9 @@ def transl_to_braille(text):
                     braille_text.append(eng_to_braille["cap"])  # indicate following letter is upper case
                     char = char.lower()
                 braille_text.append(eng_to_braille[char])
-        braille_text.append(eng_to_braille[' '])  # add space between words
-    return ''.join(braille_text).strip()  # remove trailing space
+        if i< len(words) -1 :
+            braille_text.append("......")  # add space between words
+    return ''.join(braille_text) # remove trailing space
 
 
 def transl_to_eng(text):
@@ -73,6 +74,7 @@ def transl_to_eng(text):
     i = 0
     while i < len(text):
         char = text[i:i+6] # interpret each chunk of 6 characters (o and .) as a distinct character
+
         
         if char == braille_to_eng.get('cap'):
             i = i+6
@@ -83,14 +85,14 @@ def transl_to_eng(text):
         # make if statements for decimals and numbers
         if char == braille_to_eng.get('num'):
             i = i+6
-            char = text[i:i+6]
-            english_text.append(braille_to_eng.get(char, '?'))
-            i+=6
+            # keep reading numbers until space is encountered
+            while i<len(text) and text[i:i+6] !="......":
+                char = text[i:i+6]
+                english_text.append(braille_to_eng.get(char, '?'))
+                i+=6
             continue
         if char == braille_to_eng.get('dec'):
-            i = i+6
-            char = text[i:i+6]
-            english_text.append(braille_to_eng.get(char, '?'))
+            english_text.append(".")
             i+=6
             continue
 
@@ -117,4 +119,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
