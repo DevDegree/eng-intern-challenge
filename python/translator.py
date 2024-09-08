@@ -1,4 +1,7 @@
-user_string = str(input())
+import sys
+
+# Get the user input from command-line arguments
+user_string = ' '.join(sys.argv[1:])
 
 # Braille alphabet of all letters and special characters
 braille_alphabet = {
@@ -88,7 +91,7 @@ def convert_to_braille():
                 braille_string += (braille_alphabet[char])
 
         index += 1
-    return braille_string
+    print(braille_string)
 
 
 # Given a braille string, converts it to an english string
@@ -157,10 +160,10 @@ def convert_to_english():
                     english_string += character  # Adds the number to the resulting string
                     break
 
-    return english_string
+    print(english_string)
 
 
 if all(char in "O." for char in user_string):  # Checks if the string is a braille string
-    print(convert_to_english())
+    convert_to_english()
 else:
-    print(convert_to_braille())
+    convert_to_braille()
