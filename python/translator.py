@@ -145,6 +145,9 @@ def _verify_braille_text(text: str) -> bool:
     :return: True if the string is braille, False otherwise
     """
 
+    if len(text) % 6 != 0:
+        return False
+
     _set_up_braille_verification_constants()
     number_follows_flag = False
     braille_symbols = set(BRAILLE_ALPHABET.values()).union({NUMBER_FOLLOWS, CAPITAL_FOLLOWS, SPACE})
