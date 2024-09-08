@@ -8,7 +8,12 @@ braille_numbers = {"1":"O.....", "2":"O.O...", "3":"OO....", "4":"OO.O..", "5":"
 capital_follows = ".....O"
 number_follows = ".O.OOO"
 
-input = input() # gets the command line argument
+import sys
+num_of_args = len(sys.argv)
+input = ""
+for j in range(1, num_of_args):
+    input += sys.argv[j] + " "
+input = input.strip()
 
 def englishtobraille(input): # this function will be called if the string is English
     firstnumber = True # boolean to keep track of whether a symbol is the first of some consecutive number symbols
