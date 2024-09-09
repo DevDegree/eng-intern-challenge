@@ -121,7 +121,6 @@ class BrailEngTranslator:
 if __name__ == "__main__":
     import sys
     input_text = " ". join(sys.argv[1:])
-    print(input_text)
     translator = BrailEngTranslator()
     if translator.input_type(input_text) == "braille":
         result = str(translator.brail_to_eng(input_text))
