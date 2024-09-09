@@ -50,15 +50,25 @@ def from_b_to_e(text):
 def from_e_to_b(text):
 
     translated_array = []
+    number_mode = False
 
-    for char in text:
-        char = str(char)
+    for i in range(len(text)):
+        char = str(text[i])
         if char.isupper():
             translated_array.append(dictionary['capital follows'])
             translated_array.append(dictionary[char.lower()])
+
         elif char.isdigit():
-            translated_array.append(dictionary['number follows'])
+            if number_mode is False:
+                translated_array.append(dictionary['number follows'])
+                number_mode = True
+
             translated_array.append(dictionary[char])
+
+        elif char == ' ':
+            translated_array.append(dictionary[char])
+            number_mode = False
+
         else:
             translated_array.append(dictionary[char])
 
