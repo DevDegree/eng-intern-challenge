@@ -116,7 +116,7 @@ class BrailleTranslator:
 
     @staticmethod
     def is_english(text: str) -> bool:
-        return any(char.isalpha() for char in text)
+        return any(char not in ("O", ".") for char in text)
 
 
 def main():
