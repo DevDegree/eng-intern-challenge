@@ -3,6 +3,7 @@ import sys
 def main():
     input = sys.argv[1:]
     finalOutput = ""
+    justStarting = True
 
     for inputString in input:
         BRAILLE_LETTERS = ["O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..", ".OO...", ".OOO..", "O...O.", "O.O.O.", "OO..O.", "OO.OO.", "O..OO.", "OO..OO", "OOOOO.", "O.OOO.", ".OO..O", ".OO.O.", "O...OO", "O.O.OO", ".OOO.O", "OO..OO", "OO.OOO", "O..OOO", "..OO.O", "..O...", "..O.OO", "..OOO.", "..OO..", "..O.O.", "....OO", ".O..O.", ".OO..O", "O..OO.", "O.O..O", ".O.OO.", "......"]
@@ -25,6 +26,10 @@ def main():
                 if char in inputString or char.lower() in inputString:
                     english = True
         if english == True:
+            if justStarting == True:
+                justStarting = False
+            else:
+                finalOutput += "......"
             for i in range(len(inputString)):
                 char = inputString[i]
                 # Upper case letter
