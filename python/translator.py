@@ -45,7 +45,7 @@ class BrailEngTranslator:
 
         return brailleLetters, brailleNumbers
 
-    # Translates a string of Brailles in English letters and numbers
+    # Translates a string of Brailles in english letters and numbers
     def brail_to_eng(self, input):
 
         # Split the input in groups of 6 characters
