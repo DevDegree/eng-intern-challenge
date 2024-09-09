@@ -19,8 +19,6 @@ function isBraille(inputVal) {
     return true;
 }
 
-console.log(isBraille(inputVal));
-
 const brailleAlphabet = {
 
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
@@ -30,20 +28,47 @@ const brailleAlphabet = {
     'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO',
     'z': 'O..OOO',
 
-    'A': 'O.....', 'B': 'O.O...', 'C': 'OO....', 'D': 'OO.O..', 'E': 'O..O..',
-    'F': 'OOO...', 'G': 'OOOO..', 'H': 'O.OO..', 'I': '.OO...', 'J': '.OOO..',
-    'K': 'O...O.', 'L': 'O.O.O.', 'M': 'OO..O.', 'N': 'OO.OO.', 'O': 'O..OO.',
-    'P': 'OOO.O.', 'Q': 'OOOOO.', 'R': 'O.OOO.', 'S': '.OO.O.', 'T': '.OOOO.',
-    'U': 'O...OO', 'V': 'O.O.OO', 'W': '.OOO.O', 'X': 'OO..OO', 'Y': 'OO.OOO',
-    'Z': 'O..OOO',
+    'A': '.....OO.....', 'B': '.....OO.O...', 'C': '.....OOO....', 'D': '.....OOO.O..', 'E': '.....OO..O..',
+    'F': '.....OOOO...', 'G': '.....OOOOO..', 'H': '.....OO.OO..', 'I': '.....O.OO...', 'J': '.....O.OOO..',
+    'K': '.....OO...O.', 'L': '.....OO.O.O.', 'M': '.....OOO..O.', 'N': '.....OOO.OO.', 'O': '.....OO..OO.',
+    'P': '.....OOOO.O.', 'Q': '.....OOOOOO.', 'R': '.....OO.OOO.', 'S': '.....O.OO.O.', 'T': '.....O.OOOO.',
+    'U': '.....OO...OO', 'V': '.....OO.O.OO', 'W': '.....O.OOO.O', 'X': '.....OOO..OO', 'Y': '.....OOO.OOO',
+    'Z': '.....OO..OOO',
 
     // Space
     ' ': '......',
 
     // Numbers (0-9)
-    '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
-    '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..',
+    '1': '.O.O..O.....', '2': '.O.O..O.O...', '3': '.O.O..OO....', '4': '.O.O..OO.O..', '5': '.O.O..O..O..',
+    '6': '.O.O..OOO...', '7': '.O.O..OOOO..', '8': '.O.O..O.OO..', '9': '.O.O...OO...', '0': '.O.O...OOO..',
 
     'CAPITAL': '.....O',
     'NUMBER': '.O.O..'
 }
+
+function brailleToText(inputVal) {
+    let outputVal = '';
+    for (let i = 0; i < inputVal.length; i += 6) {
+        const splitInput = inputVal.slice(i, i + 6);
+        if (splitInput === '......') {
+            outputVal += ' ';
+        } else if (splitInput === '.....O') {
+            const letterPattern = inputVal.slice(i, i + 12);
+            const value = Object.keys(brailleAlphabet).find(key => brailleAlphabet[key] === letterPattern);
+            outputVal += value;
+            i += 6;
+        } else if (splitInput === '.O.O..') {
+            const numPattern = inputVal.slice(i, i + 12);
+            const value = Object.keys(brailleAlphabet).find(key => brailleAlphabet[key] === numPattern);
+            outputVal += value;
+            i += 6;
+        } else {
+            const value = Object.keys(brailleAlphabet).find(key => brailleAlphabet[key] === splitInput);
+            outputVal += value ? value : '?';
+        }
+    }
+    console.log(outputVal)
+}
+brailleToText(inputVal);;
+
+function textToBraille(inputVal) { }
