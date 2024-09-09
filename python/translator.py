@@ -2,7 +2,14 @@ import sys
 
 def main():
     input = sys.argv[1:]
+    finalOutput = ""
+    justStarting = True
+
     for inputString in input:
+        if justStarting == True:
+            justStarting = False
+        else:
+            finalOutput += " "
         BRAILLE_LETTERS = ["O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..", ".OO...", ".OOO..", "O...O.", "O.O.O.", "OO..O.", "OO.OO.", "O..OO.", "OO..OO", "OOOOO.", "O.OOO.", ".OO..O", ".OO.O.", "O...OO", "O.O.OO", ".OOO.O", "OO..OO", "OO.OOO", "O..OOO", "..OO.O", "..O...", "..O.OO", "..OOO.", "..OO..", "..O.O.", "....OO", ".O..O.", ".OO..O", "O..OO.", "O.O..O", ".O.OO.", "......"]
         ALPHABET_LETTERS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", ".", ",", "?", "!", ":", ";", "-", "/", "<", ">", "(", ")", " ", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
         CAPITAL_FOLLOWS = ".....O"
@@ -17,7 +24,7 @@ def main():
         english = False
         doNothing = False
         numberMode = False
-
+        
         for char in ALPHABET_LETTERS:
             if char != "O" and char != ".":
                 if char in inputString or char.lower() in inputString:
@@ -90,7 +97,8 @@ def main():
                     if (index <= 9):
                         index += NUMBER_OF_LETTERS
                     outputString += ALPHABET_LETTERS[index].lower()
-        print(outputString)
+        finalOutput += outputString
+    print(finalOutput)
 
 if __name__ == "__main__":
     main()
