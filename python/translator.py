@@ -228,6 +228,9 @@ def englishToBraille(englishText: str) -> str:
 
 if __name__ == '__main__':
   input = sys.argv[1:]
+  text = ""
 
-  for text in input:
-    print(translate(text))
+  for word in input:
+    text += word + " "
+  
+  print(translate(text.strip()))
