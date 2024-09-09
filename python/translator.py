@@ -31,19 +31,19 @@ def charToBraille(char):
     'x': 'oo..oo',
     'y': 'oo.ooo',
     'z': 'o..ooo',
-    '1': '.....o',
-    '2': '....oo',
-    '3': '...o.o',
-    '4': '...ooo',
-    '5': '...oo.',
-    '6': '..o..o',
-    '7': '..o.oo',
-    '8': '..oo.o',
-    '9': '..ooo.',
-    '0': '..oooo',
+    '1': 'o.....',
+    '2': 'o.o...',
+    '3': 'oo....',
+    '4': 'oo.o..',
+    '5': 'o..o..',
+    '6': 'ooo...',
+    '7': 'oooo..',
+    '8': 'o.oo..',
+    '9': '.oo...',
+    '0': '.ooo..',
     ' ': '......'
 }
-    return brailleMap.get(char.lower(), 'ERROR')
+    return brailleMap.get(char.lower(), 'ERROR').upper()
 
 def brailleToChar(braille):
     engMap = {
@@ -73,30 +73,30 @@ def brailleToChar(braille):
     'oo..oo': 'x',
     'oo.ooo': 'y',
     'o..ooo': 'z',
-    '.....o': '1',
-    '....oo': '2',
-    '...o.o': '3',
-    '...ooo': '4',
-    '...oo.': '5',
-    '..o..o': '6',
-    '..o.oo': '7',
-    '..oo.o': '8',
-    '..ooo.': '9',
-    '..oooo': '0',
+    'o.....' : '1',
+    'o.o...' : '2',
+    'oo....' : '3',
+    'oo.o..' : '4',
+    'o..o..' : '5',
+    'ooo...' : '6',
+    'oooo..' : '7',
+    'o.oo..' : '8',
+    '.oo...' : '9',
+    '.ooo..' : '0',
     '......': ' '
-}
+    }
+    return engMap.get(braille.lower(), 'ERROR')
 
-    return engMap.get(braille, 'ERROR')
-
-def engToBraille(input):
+def engToBraille(string):
     translation = []
-    for string in input.split():
-        braille = ''.join([charToBraille(c) for c in string])
-        if string[0].isupper():
-            translation.append( ".....o")
-        elif string[0].isnumeric():
-            translation.append('.0.000')
-        translation.append(braille)
+    numeric = False
+    for char in string:
+        if char.isupper():
+            translation.append('.....O')
+        elif char.isnumeric() and not numeric:
+            translation.append('.O.OOO')
+            numeric = True
+        translation.append(charToBraille(char))
     return ''.join(translation)
 
 def brailleToEng(input):
@@ -124,4 +124,3 @@ if braille:
     print(' '.join(output))
 else:
     print('......'.join(output))
-
