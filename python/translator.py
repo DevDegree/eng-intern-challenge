@@ -103,33 +103,26 @@ def convert_to_english(input):
     decimal = False
 
     for i in range(1, len(input)):
-        #print(i)
         letter += input[i] #add character to braille letter
-        #print(letter)
         if i%6 == 0: # a full letter is ready for translation (6 characters parsed)
-            #print("i reached point 0")
 
             #if letter is a capital flag, reset letter string and skip to next iteration
             if letter == BRAILLE_LETTERS["capital"]:   
                 capital = True
-                print("i reached point 1")
 
             #if letter is a number flag, reset letter string and skip to next iteration
             elif letter == BRAILLE_LETTERS["number"]:   
                 number = True
-                print("i reached point 1.5")
 
             #if letter is a decimal flag, reset letter string and skip to next iteration
             elif letter == BRAILLE_LETTERS["decimal"]:   
                 decimal = True
-                print("i reached point 1.75")
 
             #else time to translate letter
             # if capital letter
             elif capital:
                 sentence += BRAILLE_LETTERS[letter].upper()
                 capital= False
-                print("i reached point 2")
             
             elif number:
                 if BRAILLE_LETTERS[letter] == " ": 
@@ -144,12 +137,9 @@ def convert_to_english(input):
 
             else:
                 sentence += BRAILLE_LETTERS[letter]
-                print("i reached point 3")
-                #print(sentence)
 
             #resetting letter only because we've processed it
             letter = ""
-            #print(letter)
         print(sentence)  
 
     return(sentence)
@@ -207,8 +197,6 @@ else:
 
     input = input_string[0: -1]
     
-print(input)
-
 #send to correct parser
 pattern = r'^[.O]+$'
 if (bool(re.match(pattern, input))) and len(input) > 1 and len(input) % 6 == 0:
