@@ -1,4 +1,4 @@
-BRAILLE_LETTERS = ["O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..", ".OO...", ".OOO..", "O...O.", "O.O.O.", "OO..O.", "OO.OO.", "O..OO.", "OO..OO", "OOOOOO", "O.OOO.", ".OO..O", ".OO.O.", "O...OO", "O.O.OO", ".OOO.O", "OO.O.O", "OO.OOO", "O..OOO", "..OO.O", "..O...", "..O.OO", "..OOO.", "..OO..", "..O.O.", "....OO", ".O..O.", ".OO..O", "O..OO.", "O.O..O", ".O.OO.", "......"]
+BRAILLE_LETTERS = ["O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..", ".OO...", ".OOO..", "O...O.", "O.O.O.", "OO..O.", "OO.OO.", "O..OO.", "OO..OO", "OOOOO.", "O.OOO.", ".OO..O", ".OO.O.", "O...OO", "O.O.OO", ".OOO.O", "OO..OO", "OO.OOO", "O..OOO", "..OO.O", "..O...", "..O.OO", "..OOO.", "..OO..", "..O.O.", "....OO", ".O..O.", ".OO..O", "O..OO.", "O.O..O", ".O.OO.", "......"]
 ALPHABET_LETTERS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", ".", ",", "?", "!", ":", ";", "-", "/", "<", ">", "(", ")", " ", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
 CAPITAL_FOLLOWS = ".....O"
 DECIMAL_FOLLOWS = ".O...O"
@@ -31,7 +31,9 @@ if english == True:
             outputString += BRAILLE_LETTERS[index]
         # Number
         elif char in NUMBERS:
-            outputString += NUMBER_FOLLOWS
+            if numberMode == False:
+                outputString += NUMBER_FOLLOWS
+                numberMode = True
             index = ALPHABET_LETTERS.index(char)
             outputString += BRAILLE_LETTERS[index]
         # Lower case letter or symbol
@@ -45,8 +47,12 @@ if english == True:
                     outputString += BRAILLE_LETTERS[index]
             else:
                 index = ALPHABET_LETTERS.index(char.capitalize())
+                # Space case
+                if index == 38:
+                    if numberMode == True:
+                        numberMode = False
                 # char is A, B, C, D, E, F, G, H, I, or J
-                if (index >= NUMBER_OF_LETTERS):
+                if index >= NUMBER_OF_LETTERS:
                         index -= NUMBER_OF_LETTERS
                 outputString += BRAILLE_LETTERS[index]
 else:
@@ -81,3 +87,4 @@ else:
                 index += NUMBER_OF_LETTERS
             outputString += ALPHABET_LETTERS[index].lower()
 print(outputString)
+print(BRAILLE_LETTERS.index("OOOOOO"))
