@@ -141,39 +141,55 @@ function brailleToEnglish(inputString) {
     }
 
     var output = "";
-    var i = 0;
     var currentChar;
+    var lowerCase;
 
-    while(i<brailleChars.length) {
+    for(let i=0;i<brailleChars.length;i++) {
         currentChar = brailleChars[i];
-        if(currentChar == specCharMap['capital']) {
-            currentChar = brailleChars[++i];
-            output += getKey(charMap,currentChar);
+        if(currentChar === specCharMap.get('capital')) {
+            i++;
+            currentChar = brailleChars[i];
+            output += getCharKey(currentChar);
         }
 
-        else if(currentChar == specCharMap['number']) {
-            currentChar = brailleChars[++i];
-            output += getKey(numMap,currentChar);
-            while(i+1 < brailleChars.length && brailleChars[i+1] != specCharMap['space']) {
-                currentChar = brailleChars[++i];
-                output += getKey(numMap,currentChar);
+        else if(currentChar === specCharMap.get('number')) {
+            i++;
+            while(brailleChars[i] != specCharMap.get('space')) {
+                currentChar = brailleChars[i];
+                output += getNumKey(currentChar);
             }
             output += " ";
-            i++;
         }
+
+        else if (currentChar === specCharMap.get('space')) {
+            output += " ";
+        }
+
         else {
-            output += getKey(charMap,currentChar);
-            i++;
+            lowerCase = getCharKey(currentChar);
+            lowerCase = lowerCase.toLowerCase();
+            output += lowerCase;
         }
     }
-    return output;
 
+    return output;
+}
+    
+
+function getCharKey(searchValue) {
+    
+    let invertedMap = new Map([...charMap.entries()].map(
+        ([key, value]) => ([value, key]))
+    );
+
+    return invertedMap.get(searchValue);
 }
 
-function getKey(map,searchValue) {
-    let invertedMap = new Map([...map.entries()].map(
+function getNumKey(searchValue) {
+    
+    let invertedMap = new Map([...numMap.entries()].map(
         ([key, value]) => ([value, key]))
-      );
-      console.log(invertedMap.get(searchValue));
-      return invertedMap.get(searchValue);
+    );
+
+    return invertedMap.get(searchValue);
 }
