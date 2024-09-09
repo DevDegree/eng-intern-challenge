@@ -1,5 +1,4 @@
 const inputVal = process.argv[2];
-console.log(inputVal);
 
 function isBraille(inputVal) {
     if (inputVal.length % 6 !== 0) {
@@ -69,7 +68,7 @@ function brailleToText(inputVal) {
     }
     console.log(outputVal)
 }
-brailleToText(inputVal);;
+
 
 function textToBraille(inputVal) {
     let outputVal = '';
@@ -87,4 +86,11 @@ function textToBraille(inputVal) {
     console.log(outputVal);
 }
 
-textToBraille(inputVal);
+function determineTextOrBraille(inputVal) {
+    if (isBraille(inputVal) === true) {
+        brailleToText(inputVal);
+    } else {
+        textToBraille(inputVal);
+    }
+}
+determineTextOrBraille(inputVal);
