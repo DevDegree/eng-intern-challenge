@@ -61,7 +61,7 @@ dictionary = {
   '8': 'O.OO..',
   '9': '.OO...',
   '0': '.OOO..',
-  'capital follows': '....O',
+  'capital follows': '.....O',
   'decimal follows': '.O...O',
   'number follows': '.O.OOO',
   '.': '..OO.O',
@@ -116,7 +116,7 @@ dictionary = {
   'O.O..O': '(',
   '.O.OO.': ')',
   '......': ' ',
-  '....O': 'capital follows',
+  '.....O': 'capital follows',
   '.O...O': 'decimal follows',
   '.O.OOO': 'number follows'
 
