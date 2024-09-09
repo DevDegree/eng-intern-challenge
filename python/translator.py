@@ -41,8 +41,8 @@ english_to_braille = {
     "9" : ".OO...",
     "0" : ".OOO..",
     "space" : "......",
-    "num_follows" : ".O.OOO",
-    "capital_follows" : ".....O"
+    "number follows" : ".O.OOO",
+    "capital follows" : ".....O"
 }
 
 braille_letters = {
@@ -72,8 +72,8 @@ braille_letters = {
     "OO..OO": "X",
     "OO.OOO": "Y",
     "O..OOO": "Z",
-    ".....O": "capital_follows",
-    ".O.OOO": "num_follows",
+    ".....O": "capital follows",
+    ".O.OOO": "number follows",
     "......": "space"
 }
 
@@ -111,11 +111,11 @@ def translate(text):
         for i in range(0,len(text)):
             # if capital we add the capital braille equivalent and then the letter
             if(text[i].isupper()):
-                result+=english_to_braille["capital_follows"]
+                result+=english_to_braille["capital follows"]
                 result+=english_to_braille[text[i]]
             # if it is a number we add the number follows equivalent and then the number (only if it is the first number so we check if there isnt already a num_follow)
             elif(text[i].isdigit() and is_number == False):
-                result+=english_to_braille["num_follows"]
+                result+=english_to_braille["number follows"]
                 result+=english_to_braille[text[i]]
                 # we put is_number true in case next character is also a number
                 is_number = True
@@ -136,9 +136,9 @@ def translate(text):
         for i in range(0,len(text), 6):
             txt = text[i:i+6]
             # if it is a number follow then we set to true so we can use the braille_num dictionnary
-            if braille_letters[txt] == "num_follows":
+            if braille_letters[txt] == "number follows":
                 is_number = True
-            elif braille_letters[txt] == "capital_follows":
+            elif braille_letters[txt] == "capital follows":
                 is_capital = True
             elif braille_letters[txt] == "space":
                 result+=" "
