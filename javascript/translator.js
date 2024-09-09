@@ -155,14 +155,14 @@ function brailleToEnglish(inputString) {
             currentChar = brailleChars[++i];
             output += getKey(numMap,currentChar);
             while(i+1 < brailleChars.length && brailleChars[i+1] != specCharMap['space']) {
-                currentChar = englishChars[++i];
+                currentChar = brailleChars[++i];
                 output += getKey(numMap,currentChar);
             }
             output += " ";
             i++;
         }
         else {
-            output += getKey(charMap,currentChar).toLowerCase();
+            output += getKey(charMap,currentChar);
             i++;
         }
     }
@@ -170,9 +170,10 @@ function brailleToEnglish(inputString) {
 
 }
 
-function getKey(map, searchValue) {
-    for (let [key, value] of map.entries()) {
-      if (value === searchValue)
-        return key;
-    }
+function getKey(map,searchValue) {
+    let invertedMap = new Map([...map.entries()].map(
+        ([key, value]) => ([value, key]))
+      );
+      console.log(invertedMap.get(searchValue));
+      return invertedMap.get(searchValue);
 }
