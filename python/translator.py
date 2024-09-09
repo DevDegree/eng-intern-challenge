@@ -36,6 +36,7 @@ ENGLISH_LETTERS = {
 }
 
 ENGLISH_NUMBERS = {
+     "0" : ".ooo..",
      "1" : "o.....",
      "2" : "o.o...",
      "3" : "oo....",
@@ -45,7 +46,6 @@ ENGLISH_NUMBERS = {
      "7" : "oooo..",
      "8" : "o.oo..",
      "9" : ".oo...",
-     "10" : ".ooo..",
 }
 
 BRAILLE_LETTERS = {
@@ -82,6 +82,7 @@ BRAILLE_LETTERS = {
 }
 
 BRAILLE_NUMBERS = {
+    ".ooo.." : "0",
     "o....." : "1",
     "o.o..." : "2",
     "oo...." : "3",
@@ -91,7 +92,6 @@ BRAILLE_NUMBERS = {
     "oooo.." : "7",
     "o.oo.." : "8",
     ".oo..." : "9",
-    ".ooo.." : "10",
 }
 
 #braille and english parsers
@@ -139,6 +139,7 @@ def convert_to_english(input):
 
             #resetting letter only because we've processed it
             letter = ""
+
     print(sentence)  
 
     return(sentence)
