@@ -65,7 +65,7 @@ def translate_to_english(braille):
 
 def main():
     if len(sys.argv) != 2:
-        print("Usage: python braille_translator.py '<text>'")
+        print("Usage: python translator.py '<text>'")
         sys.exit(1)
 
     input_text = sys.argv[1]
