@@ -2,68 +2,68 @@
 const inputString = process.argv.slice(2).join(' ');
 
 //Declare maps of english to braille characters
-let specCharMap = {};
-specCharMap['capital'] = '.....O';
-specCharMap['decimal'] = '.O...O';
-specCharMap['number'] = '.O.OOO';
-specCharMap['space'] = '......';
+let specCharMap = new Map();
+specCharMap.set('capital', '.....O');
+specCharMap.set('decimal', '.O...O');
+specCharMap.set('number', '.O.OOO');
+specCharMap.set('space', '......');
 
-let charMap = {};
-charMap['A'] = 'O.....';
-charMap['B'] = 'O.O...';
-charMap['C'] = 'OO....';
-charMap['D'] = 'OO.O..';
-charMap['E'] = 'O..O..';
-charMap['F'] = 'OOO...';
-charMap['G'] = 'OOOO..';
-charMap['H'] = 'O.OO..';
-charMap['I'] = '.OO...';
-charMap['J'] = '.OOO..';
-charMap['K'] = 'O...O.';
-charMap['L'] = 'O.O.O.';
-charMap['M'] = 'OO..O.';
-charMap['N'] = 'OO.OO.';
-charMap['O'] = 'O..OO.';
-charMap['P'] = 'OOO.O.';
-charMap['Q'] = 'OOOOO.';
-charMap['R'] = 'O.OOO.';
-charMap['S'] = '.OO.O.';
-charMap['T'] = '.OOOO.';
-charMap['U'] = 'O...OO';
-charMap['V'] = 'O.O.OO';
-charMap['W'] = '.OOO.O';
-charMap['X'] = 'OO..OO';
-charMap['Y'] = 'OO.OOO';
-charMap['Z'] = 'O..OOO';
-charMap['.'] = '..OO.O';
-charMap[','] = '..O...';
-charMap['?'] = '..O.OO';
-charMap['!'] = '..OOO.';
-charMap[':'] = '..OO..';
-charMap[';'] = '..O.O.';
-charMap['-'] = '....OO';
-charMap['/'] = '.O..O.';
-charMap['<'] = '.OO..O';
-charMap['>'] = 'O..OO.';
-charMap['('] = 'O.O..O';
-charMap[')'] = '.O.OO.';
+let charMap = new Map();
+charMap.set('A', 'O.....');
+charMap.set('B', 'O.O...');
+charMap.set('C', 'OO....');
+charMap.set('D', 'OO.O..');
+charMap.set('E', 'O..O..');
+charMap.set('F', 'OOO...');
+charMap.set('G', 'OOOO..');
+charMap.set('H', 'O.OO..');
+charMap.set('I', '.OO...');
+charMap.set('J', '.OOO..');
+charMap.set('K', 'O...O.');
+charMap.set('L', 'O.O.O.');
+charMap.set('M', 'OO..O.');
+charMap.set('N', 'OO.OO.');
+charMap.set('O', 'O..OO.');
+charMap.set('P', 'OOO.O.');
+charMap.set('Q', 'OOOOO.');
+charMap.set('R', 'O.OOO.');
+charMap.set('S', '.OO.O.');
+charMap.set('T', '.OOOO.');
+charMap.set('U', 'O...OO');
+charMap.set('V', 'O.O.OO');
+charMap.set('W', '.OOO.O');
+charMap.set('X', 'OO..OO');
+charMap.set('Y', 'OO.OOO');
+charMap.set('Z', 'O..OOO');
+charMap.set('.', '..OO.O');
+charMap.set(',', '..O...');
+charMap.set('?', '..O.OO');
+charMap.set('!', '..OOO.');
+charMap.set(':', '..OO..');
+charMap.set(';', '..O.O.');
+charMap.set('-', '....OO');
+charMap.set('/', '.O..O.');
+charMap.set('<', '.OO..O');
+charMap.set('>', 'O..OO.');
+charMap.set('(', 'O.O..O');
+charMap.set(')', '.O.OO.');
 
-let numMap = {};
-numMap['1'] = 'O.....';
-numMap['2'] = 'O.O...';
-numMap['3'] = 'OO....';
-numMap['4'] = 'OO.O..';
-numMap['5'] = 'O..O..';
-numMap['6'] = 'OOO...';
-numMap['7'] = 'OOOO..';
-numMap['8'] = 'O.OO..';
-numMap['9'] = '.OO...';
-numMap['0'] = '.OOO..';
+let numMap = new Map();
+numMap.set('1', 'O.....');
+numMap.set('2', 'O.O...');
+numMap.set('3', 'OO....');
+numMap.set('4', 'OO.O..');
+numMap.set('5', 'O..O..');
+numMap.set('6', 'OOO...');
+numMap.set('7', 'OOOO..');
+numMap.set('8', 'O.OO..');
+numMap.set('9', '.OO...');
+numMap.set('0', '.OOO..');
 
 
 //Main Function 
 let isBraille = determineLanguage(inputString);
-var output = "";
+var output;
 
 if(isBraille) {
     //braille to english function
@@ -81,12 +81,6 @@ console.log(output);
 //Determine if string is braille or english
 function determineLanguage(inputString) {
     const charArray = inputString.split("");
-    //const charSet = new Set();
-    //const setIter = charSet.values();
-
-    // for(var i=0;i<charArray.length;i++) {
-    //     charSet.add(charArray[i]);
-    // }
 
     var currentChar;
     for(var i=0;i<charArray.length;i++) {
@@ -108,28 +102,28 @@ function englishToBraille(inputString) {
     while(i<englishChars.length) {
         currentChar = englishChars[i];
         if(currentChar === " ") {
-            output +=specCharMap['space'];
+            output += specCharMap.get('space');
             i++;
         }
 
         else if(isNaN(currentChar)) {
             if(currentChar == currentChar.toUpperCase()) {
-                output += specCharMap['capital'];
-                output += charMap[currentChar];
+                output += specCharMap.get('capital');
+                output += charMap.get(currentChar);
             }
             else {
-                output += charMap[currentChar.toUpperCase()];
+                output += charMap.get(currentChar.toUpperCase());
             }
             i++;
         }
         else if(!isNaN(currentChar)) {
-            output += specCharMap['number'];
+            output += specCharMap.get('number');
 
             while(i+1 < englishChars.length && !isNaN(englishChars[i+1])) {
                 currentChar = englishChars[i++];
-                output += numMap[currentChar];
+                output += numMap.get(currentChar);
             }
-            output +=specCharMap['space'];
+            output +=specCharMap.get('space');
             i++;
         }
     }
@@ -137,16 +131,48 @@ function englishToBraille(inputString) {
 }
 
 function brailleToEnglish(inputString) {
+    
     const brailleChars = [];
     var substring = "";
-    var output = "";
-
+    
     for(var i=0;i<inputString.length;i+=6) {
         substring = inputString.substring(i,i+6).trim();
         brailleChars.push(substring);
     }
 
+    var output = "";
+    var i = 0;
+    var currentChar;
 
+    while(i<brailleChars.length) {
+        currentChar = brailleChars[i];
+        if(currentChar == specCharMap['capital']) {
+            currentChar = brailleChars[++i];
+            output += getKey(charMap,currentChar);
+        }
+
+        else if(currentChar == specCharMap['number']) {
+            currentChar = brailleChars[++i];
+            output += getKey(numMap,currentChar);
+            while(i+1 < brailleChars.length && brailleChars[i+1] != specCharMap['space']) {
+                currentChar = englishChars[++i];
+                output += getKey(numMap,currentChar);
+            }
+            output += " ";
+            i++;
+        }
+        else {
+            output += getKey(charMap,currentChar).toLowerCase();
+            i++;
+        }
+    }
     return output;
 
+}
+
+function getKey(map, searchValue) {
+    for (let [key, value] of map.entries()) {
+      if (value === searchValue)
+        return key;
+    }
 }
