@@ -100,7 +100,7 @@ def convert_to_english(input):
     letter = ""
     capital = False
     number = False
-
+    decimal = False
 
     for i in range(1, len(input)):
         #print(i)
@@ -132,15 +132,17 @@ def convert_to_english(input):
                 print("i reached point 2")
             
             elif number:
-                sentence += BRAILLE_NUMBERS[letter]
+                if BRAILLE_LETTERS[letter] == " ": 
+                    #turn off number mode at a space
+                    number = False
+                    sentence += BRAILLE_LETTERS[letter]
+                else:
+                    sentence += BRAILLE_NUMBERS[letter]
 
             elif decimal:
                 sentence += BRAILLE_NUMBERS[letter]
 
             else:
-                if BRAILLE_LETTERS[letter] == " " and number: 
-                    #turn off number mode at a space
-                    number = False
                 sentence += BRAILLE_LETTERS[letter]
                 print("i reached point 3")
                 #print(sentence)
@@ -193,11 +195,23 @@ def convert_to_braille(input):
     return(sentence.replace("o", "O")) #might need to change this
 
 #process input
-input = sys.argv[1]
+
+if len(sys.argv) < 3:
+    input = sys.argv[1]
+else:
+    input = sys.argv[1:]
+    input_string = ""
+
+    for word in input:
+        input_string += word + ' '
+
+    input = input_string[0: -1]
+    
+print(input)
 
 #send to correct parser
 pattern = r'^[.O]+$'
-if (bool(re.match(pattern, input))):
+if (bool(re.match(pattern, input))) and len(input) > 1 and len(input) % 6 == 0:
     input = "-" + input
     input = input.replace("O", "o") #might need to change this
     convert_to_english(input)
