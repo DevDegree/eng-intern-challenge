@@ -95,13 +95,11 @@ class Braille{
 
         for(let char of text){
             //check if char is alphabet letter
-            if (char.toLowerCase != char.toUpperCase()){
-                //check for uppercase letter
-                if (char === char.toUpperCase()){
-                    brailleText+=this.eToB_Map.get('capital');
-                }
-                brailleText+=this.eToB_Map.get(char.toLowerCase());
-            }else if (!isNaN(char*1)){
+            if (char===' '){
+                //space
+                isNumber=false;
+                brailleText+=this.eToB_Map.get('space');
+            }else if (char >= '0' && char <= '9'){
                 //check for number
                 if (!isNumber){
                     //first number
@@ -109,10 +107,12 @@ class Braille{
                     isNumber=true;
                 }
                 brailleText+=this.eToB_Map.get(char);
-            }else if (char===' '){
-                //space
-                isNumber=false;
-                brailleText+=this.eToB_Map.get('space');
+            }else{
+                //check for uppercase letter
+                if (char === char.toUpperCase() && char.toLowerCase() !== char.toUpperCase()){
+                    brailleText+=this.eToB_Map.get('capital');
+                }
+                brailleText+=this.eToB_Map.get(char.toLowerCase());
             }
         }
         return brailleText;
@@ -161,4 +161,4 @@ class Braille{
 const args = process.argv.slice(2);
 const input = args.join(' ');
 
-console.log(translate(input));
+console.log(Braille.translate(input));
