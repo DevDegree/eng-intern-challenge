@@ -64,11 +64,27 @@ function brailleToText(inputVal) {
             i += 6;
         } else {
             const value = Object.keys(brailleAlphabet).find(key => brailleAlphabet[key] === splitInput);
-            outputVal += value ? value : '?';
+            outputVal += value ? value : 'Enter valid braille character';
         }
     }
     console.log(outputVal)
 }
 brailleToText(inputVal);;
 
-function textToBraille(inputVal) { }
+function textToBraille(inputVal) {
+    let outputVal = '';
+
+    for (const char of inputVal) {
+        if (char === ' ') {
+            outputVal += '......';
+        } else if (brailleAlphabet[char] !== undefined) {
+            outputVal += brailleAlphabet[char];
+        } else {
+            console.log('Enter valid alphabet');
+            outputVal += '......';
+        }
+    }
+    console.log(outputVal);
+}
+
+textToBraille(inputVal);
