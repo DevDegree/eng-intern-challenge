@@ -55,6 +55,8 @@ class BrailleTranslator:
 
     def braille_to_english(self) -> str:
         result = []
+        capitalize_next = False
+        number_mode = False
         while token := self.next_token():
             if token == self.braille_map.get("capital_follows"):
                 capitalize_next = True
@@ -80,6 +82,7 @@ class BrailleTranslator:
 
     def english_to_braille(self) -> str:
         result = []
+        number_mode = False
         while token := self.next_token():
             if token.isupper():
                 result.append(self.braille_map.get("capital_follows"))
