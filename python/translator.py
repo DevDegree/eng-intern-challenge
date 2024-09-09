@@ -5,7 +5,7 @@ from data import dictionary, dictionary_number
 def translator(text):
 
     # determine the language, if the text consists of only . and 0, then it is braille
-    if set(text) == {'.', 'o'}:
+    if set(text) == {'.', 'O'}:
         return from_b_to_e(text)
     else:
         return from_e_to_b(text)
