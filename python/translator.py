@@ -87,4 +87,3 @@ else:
                 index += NUMBER_OF_LETTERS
             outputString += ALPHABET_LETTERS[index].lower()
 print(outputString)
-print(BRAILLE_LETTERS.index("OOOOOO"))
