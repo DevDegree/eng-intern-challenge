@@ -56,8 +56,8 @@ class BrailleTranslator:
     }
     ALPHA_TO_BRAILLE = {value: key for key, value in BRAILLE_TO_ALPHA.items()}
     NUM_TO_BRAILLE = {value: key for key, value in BRAILLE_TO_NUM.items()}
-    CAPITAL_FOLLOWS = ".....0"
-    NUMBER_FOLLOWS = ".0.000"
+    CAPITAL_FOLLOWS = ".....O"
+    NUMBER_FOLLOWS = ".O.OOO"
     SPACE_BRAILLE = "......"
 
     @staticmethod
