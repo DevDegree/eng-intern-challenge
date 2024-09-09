@@ -98,8 +98,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-'''
-.O.OOOOO.O..O.O...
-.O.OOOOO.O...O.OOOO.O...
-'''
