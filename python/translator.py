@@ -125,7 +125,6 @@ def translate(text):
                 is_number = False
             else:
                 result+=english_to_braille[text[i].upper()]
-                is_number = False
         return result
     else:
         #if it is braille we translate to english
@@ -150,7 +149,6 @@ def translate(text):
                 result+=braille_nums[txt]
             else:
                 result+=braille_letters[txt].lower()
-                is_number = False
         return result
 
 print(translate(input_text))
