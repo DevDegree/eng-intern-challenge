@@ -1,4 +1,14 @@
-const inputVal = process.argv[2];
+// const inputVal = process.argv.slice(2);
+// console.log(inputVal);
+let inputVal = '';
+for (i = 2; i < process.argv.length; i++) {
+    if (i === 2) {
+        inputVal += process.argv[i];
+    }
+    else {
+        inputVal += " " + process.argv[i];
+    }
+}
 
 function isBraille(inputVal) {
     if (inputVal.length % 6 !== 0) {
