@@ -13,5 +13,20 @@ func main() {
 		return
 	}
 	// Join with a space to preservce spaces in input.
-	input = strings.Join(os.Args[1:], " ")
+	input = strings.TrimSpace(strings.Join(os.Args[1:], " "))
+}
+
+// IsEnglish is a function that returns true if the input is english, and false if the input is braille.
+func IsEnglish(input string) bool {
+	const (
+		dotRune      = '.'
+		capitalORune = 'O'
+	)
+	for _, r := range input {
+		isBrailleRune := (r == dotRune || r == capitalORune)
+		if !isBrailleRune {
+			return true
+		}
+	}
+	return false
 }
