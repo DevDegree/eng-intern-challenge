@@ -25,7 +25,7 @@ func main() {
 			log.Fatal(err)
 		}
 	} else {
-		result, err = BrailleToEnglishTranslator(input) //todo: Implement
+		result, err = BrailleToEnglishTranslator(input)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -88,6 +88,57 @@ func EnglishToBrailleTranslator(input string) (string, error) {
 	return result.String(), nil
 }
 
+func BrailleToEnglishTranslator(input string) (string, error) {
+	const (
+		CapitalFollows string = ".....O"
+		DecimalFollows string = ".O...O"
+		NumberFollows  string = ".O.OOO"
+	)
+	characterLookup, digitLookup := GetBrailleToEnglishLookup()
+	var result strings.Builder
+	if len(input)%6 != 0 {
+		log.Fatal("invalid braille length detected")
+	}
+	isUppercase := false
+	for i := 0; i < len(input); i += 6 {
+		braille := input[i : i+6]
+		if braille == CapitalFollows {
+			//consume the next 6 characters to get the real value
+			i += 6
+			braille = input[i : i+6]
+			isUppercase = true
+		} else if braille == NumberFollows || braille == DecimalFollows {
+			//consume till the end
+			j := i + 6
+			var numberString strings.Builder
+			for j < len(input) && input[j:j+6] != "......" {
+				digitBraille := input[j : j+6]
+				if char, ok := digitLookup[digitBraille]; ok {
+
+					numberString.WriteRune(char)
+				} else {
+					log.Fatal("unable to convert from %v", digitBraille)
+				}
+				j += 6
+			}
+			i = j
+			result.WriteString(numberString.String())
+			continue
+		}
+		if char, ok := characterLookup[braille]; ok {
+			if isUppercase {
+				result.WriteRune(unicode.ToUpper(char))
+				isUppercase = false
+			} else {
+				result.WriteRune(char)
+			}
+		} else {
+			log.Fatal("unable to convert from %v", braille)
+		}
+	}
+	return result.String(), nil
+}
+
 // GetEnglishToBrailleLookup returns the character lookup table for converting English into Braille.
 func GetEnglishToBrailleLookup() map[rune]string {
 	return map[rune]string{
@@ -103,4 +154,23 @@ func GetEnglishToBrailleLookup() map[rune]string {
 		'1': "O.....", '2': "O.O...", '3': "OO....", '4': "OO.O..", '5': "O..O..",
 		'6': "OOO...", '7': "OOOO..", '8': "O.OO..", '9': ".OO...", '0': ".OOO..",
 	}
+}
+
+// GetBrailleToEnglishLookoup returns 2 character lookup tables for converting Braille into English.
+// Needs 2 since some brail strings map to multiple characters.
+func GetBrailleToEnglishLookup() (map[string]rune, map[string]rune) {
+	BrailleToEnglishCharacters := map[string]rune{
+		// Braille patterns to lowercase letters
+		"O.....": 'a', "O.O...": 'b', "OO....": 'c', "OO.O..": 'd', "O..O..": 'e',
+		"OOO...": 'f', "OOOO..": 'g', "O.OO..": 'h', ".OO...": 'i', ".OOO..": 'j',
+		"O...O.": 'k', "O.O.O.": 'l', "OO..O.": 'm', "OO.OO.": 'n', "O..OO.": 'o',
+		"OOO.O.": 'p', "OOOOO.": 'q', "O.OOO.": 'r', ".OO.O.": 's', ".OOOO.": 't',
+		"O...OO": 'u', "O.O.OO": 'v', ".OOO.O": 'w', "OO..OO": 'x', "OO.OOO": 'y',
+		"O..OOO": 'z', "......": ' ',
+	}
+	BrailleToEnglishDigits := map[string]rune{
+		"O.....": '1', "O.O...": '2', "OO....": '3', "OO.O..": '4', "O..O..": '5',
+		"OOO...": '6', "OOOO..": '7', "O.OO..": '8', ".OO...": '9', ".OOO..": '0',
+	}
+	return BrailleToEnglishCharacters, BrailleToEnglishDigits
 }
