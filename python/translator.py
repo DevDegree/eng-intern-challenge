@@ -100,7 +100,6 @@ def convert_to_english(input):
     letter = ""
     capital = False
     number = False
-    decimal = False
 
     for i in range(1, len(input)):
         letter += input[i] #add character to braille letter
@@ -116,7 +115,7 @@ def convert_to_english(input):
 
             #if letter is a decimal flag, reset letter string and skip to next iteration
             elif letter == BRAILLE_LETTERS["decimal"]:   
-                decimal = True
+                sentence += "."
 
             #else time to translate letter
             # if capital letter
@@ -132,15 +131,15 @@ def convert_to_english(input):
                 else:
                     sentence += BRAILLE_NUMBERS[letter]
 
-            elif decimal:
-                sentence += BRAILLE_NUMBERS[letter]
+            #elif decimal:
+                #sentence += BRAILLE_NUMBERS[letter]
 
             else:
                 sentence += BRAILLE_LETTERS[letter]
 
             #resetting letter only because we've processed it
             letter = ""
-        print(sentence)  
+    print(sentence)  
 
     return(sentence)
 
@@ -158,7 +157,7 @@ def convert_to_braille(input):
         #add capital follows character
         if ord(input[i]) >= 65 and ord(input[i]) <= 90:
             sentence += ENGLISH_LETTERS['capital']
-            sentence += ENGLISH_LETTERS[chr(ord(input[i]) + 32)]
+            sentence += ENGLISH_LETTERS[chr(ord(input[i]) + 32)] #change to .tolower()
             continue
         
         #numbers 
