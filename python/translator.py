@@ -23,14 +23,12 @@ NUMBER_INDICATOR = '.O.OOO'
 CAPITAL_INDICATOR = '.....O'
 SPACE_INDICATOR =  '......'
 
-
 def main():
     input = " ".join(sys.argv[1:])
     if all(character in ['.', 'O'] for character in input):
         print(braille_to_text(input))
     else:
         print(text_to_braille(input))
-
 
 def braille_to_text(braille):
     is_capital = False
@@ -81,6 +79,7 @@ def text_to_braille(text):
         else:
             answer += LETTER_TO_BRAILLE[character]
     return answer
+
 
 if __name__ == "__main__":
     main()
