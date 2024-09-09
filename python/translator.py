@@ -1,7 +1,8 @@
 import sys
 
-input_text = " ".join(sys.argv[1:])
-
+SPACE = "......"
+NUMBER_FOLLOWS = ".O.OOO"
+CAPITAL_FOLLOWS = ".....O"
 
 english_to_braille = {
     "A" : "O.....",
@@ -39,10 +40,7 @@ english_to_braille = {
     "7" : "OOOO..",
     "8" : "O.OO..",
     "9" : ".OO...",
-    "0" : ".OOO..",
-    "space" : "......",
-    "number follows" : ".O.OOO",
-    "capital follows" : ".....O"
+    "0" : ".OOO.."
 }
 
 braille_letters = {
@@ -91,6 +89,8 @@ braille_nums = {
 }
 
 # we check if it is english or braille
+# false = english
+# true = braille
 def writingsystem_check(text):
     if len(text) % 6 != 0:
         return False
@@ -111,17 +111,17 @@ def translate(text):
         for i in range(0,len(text)):
             # if capital we add the capital braille equivalent and then the letter
             if(text[i].isupper()):
-                result+=english_to_braille["capital follows"]
+                result+=CAPITAL_FOLLOWS
                 result+=english_to_braille[text[i]]
             # if it is a number we add the number follows equivalent and then the number (only if it is the first number so we check if there isnt already a num_follow)
             elif(text[i].isdigit() and is_number == False):
-                result+=english_to_braille["number follows"]
+                result+=NUMBER_FOLLOWS
                 result+=english_to_braille[text[i]]
                 # we put is_number true in case next character is also a number
                 is_number = True
             # check if there is space
             elif(text[i].isspace()):
-                result+=english_to_braille["space"]
+                result+=SPACE
                 is_number = False
             else:
                 result+=english_to_braille[text[i].upper()]
@@ -131,15 +131,15 @@ def translate(text):
         result = ""
         is_number = False
         is_capital = False
-        # like in braille_check we go by steps of 6 and then take only 6 characters to compare
+        # like in writingsystem_check we go by steps of 6 and then take only 6 characters to compare
         for i in range(0,len(text), 6):
             txt = text[i:i+6]
             # if it is a number follow then we set to true so we can use the braille_num dictionnary
-            if braille_letters[txt] == "number follows":
+            if txt == NUMBER_FOLLOWS:
                 is_number = True
-            elif braille_letters[txt] == "capital follows":
+            elif txt == CAPITAL_FOLLOWS:
                 is_capital = True
-            elif braille_letters[txt] == "space":
+            elif txt == SPACE:
                 result+=" "
                 is_number = False
             elif is_capital:
@@ -151,4 +151,9 @@ def translate(text):
                 result+=braille_letters[txt].lower()
         return result
 
-print(translate(input_text))
+def main():
+    input_text = " ".join(sys.argv[1:])
+    print(translate(input_text))
+
+if __name__ == "__main__":
+    main()
