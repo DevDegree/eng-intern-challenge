@@ -8,6 +8,12 @@ import (
 	"unicode"
 )
 
+const (
+	CapitalFollows string = ".....O"
+	DecimalFollows string = ".O...O"
+	NumberFollows  string = ".O.OOO"
+)
+
 func main() {
 	var input string
 	if len(os.Args) < 2 {
@@ -20,15 +26,12 @@ func main() {
 	var result string
 	var err error
 	if isEnglish {
-		result, err = EnglishToBrailleTranslator(input)
-		if err != nil {
-			log.Fatal(err)
-		}
+		result, err = EnglishToBraille(input)
 	} else {
-		result, err = BrailleToEnglishTranslator(input)
-		if err != nil {
-			log.Fatal(err)
-		}
+		result, err = BrailleToEnglish(input)
+	}
+	if err != nil {
+		log.Fatal(err)
 	}
 	fmt.Println(result)
 }
@@ -48,14 +51,10 @@ func IsEnglish(input string) bool {
 	return false
 }
 
-func EnglishToBrailleTranslator(input string) (string, error) {
-	const (
-		CapitalFollows string = ".....O"
-		DecimalFollows string = ".O...O"
-		NumberFollows  string = ".O.OOO"
-	)
+// EnglishToBraille is a function that returns a converted Braille string from an English string
+// As per Readme, only handles characters and numbers not including decimal and special symbols
+func EnglishToBraille(input string) (string, error) {
 	lookup := GetEnglishToBrailleLookup()
-	// inputRune = rune(input)
 	var result strings.Builder
 	for i := 0; i < len(input); i++ {
 		char := rune(input[i])
@@ -67,7 +66,7 @@ func EnglishToBrailleTranslator(input string) (string, error) {
 				if braille, ok := lookup[numberChar]; ok {
 					number.WriteString(braille)
 				} else {
-					log.Fatal("unable to convert from %v", numberChar)
+					log.Fatalf("unable to convert from %v", numberChar)
 				}
 				j += 1
 			}
@@ -81,34 +80,26 @@ func EnglishToBrailleTranslator(input string) (string, error) {
 			if braille, ok := lookup[unicode.ToLower(char)]; ok {
 				result.WriteString(braille)
 			} else {
-				log.Fatal("unable to convert from %v", char)
+				log.Fatalf("unable to convert from %v", char)
 			}
 		}
 	}
 	return result.String(), nil
 }
 
-func BrailleToEnglishTranslator(input string) (string, error) {
-	const (
-		CapitalFollows string = ".....O"
-		DecimalFollows string = ".O...O"
-		NumberFollows  string = ".O.OOO"
-	)
+// BrailleToEnglish is a function that returns a converted English string from a Braille string
+// As per Readme, only handles characters and numbers not including decimal and special symbols
+func BrailleToEnglish(input string) (string, error) {
 	characterLookup, digitLookup := GetBrailleToEnglishLookup()
 	var result strings.Builder
 	if len(input)%6 != 0 {
-		log.Fatal("invalid braille length detected")
+		log.Fatalf("invalid braille length detected")
 	}
-	isUppercase := false
 	for i := 0; i < len(input); i += 6 {
+		isUppercase := false
 		braille := input[i : i+6]
-		if braille == CapitalFollows {
-			//consume the next 6 characters to get the real value
-			i += 6
-			braille = input[i : i+6]
-			isUppercase = true
-		} else if braille == NumberFollows || braille == DecimalFollows {
-			//consume till the end
+		if braille == NumberFollows {
+			// consume till the end
 			j := i + 6
 			var numberString strings.Builder
 			for j < len(input) && input[j:j+6] != "......" {
@@ -117,23 +108,28 @@ func BrailleToEnglishTranslator(input string) (string, error) {
 
 					numberString.WriteRune(char)
 				} else {
-					log.Fatal("unable to convert from %v", digitBraille)
+					log.Fatalf("unable to convert from %v", digitBraille)
 				}
 				j += 6
 			}
 			i = j
 			result.WriteString(numberString.String())
-			continue
-		}
-		if char, ok := characterLookup[braille]; ok {
-			if isUppercase {
-				result.WriteRune(unicode.ToUpper(char))
-				isUppercase = false
-			} else {
-				result.WriteRune(char)
-			}
 		} else {
-			log.Fatal("unable to convert from %v", braille)
+			if braille == CapitalFollows {
+				//consume the next 6 characters to get the real value
+				i += 6
+				braille = input[i : i+6]
+				isUppercase = true
+			}
+			if char, ok := characterLookup[braille]; ok {
+				if isUppercase {
+					result.WriteRune(unicode.ToUpper(char))
+				} else {
+					result.WriteRune(char)
+				}
+			} else {
+				log.Fatalf("unable to convert from %v", braille)
+			}
 		}
 	}
 	return result.String(), nil
