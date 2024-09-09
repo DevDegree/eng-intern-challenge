@@ -142,7 +142,6 @@ function brailleToEnglish(inputString) {
 
     var output = "";
     var currentChar;
-    var lowerCase;
 
     for(let i=0;i<brailleChars.length;i++) {
         currentChar = brailleChars[i];
@@ -157,19 +156,17 @@ function brailleToEnglish(inputString) {
             while(brailleChars[i] != specCharMap.get('space')) {
                 currentChar = brailleChars[i];
                 output += getNumKey(currentChar);
+                i++;
             }
             output += " ";
         }
 
         else if (currentChar === specCharMap.get('space')) {
             output += " ";
-            i++;
         }
 
         else {
-            lowerCase = getCharKey(currentChar);
-            lowerCase = lowerCase.toLowerCase();
-            output += lowerCase;
+            output += getCharKey(currentChar).toLowerCase();
         }
     }
 
