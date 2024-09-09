@@ -60,7 +60,6 @@ numMap.set('8', 'O.OO..');
 numMap.set('9', '.OO...');
 numMap.set('0', '.OOO..');
 
-
 //Main Function 
 let isBraille = determineLanguage(inputString);
 var output;
@@ -101,12 +100,16 @@ function englishToBraille(inputString) {
 
     while(i<englishChars.length) {
         currentChar = englishChars[i];
+
+        //Check Space
         if(currentChar === " ") {
             output += specCharMap.get('space');
             i++;
         }
 
+        //Check Character
         else if(isNaN(currentChar)) {
+            //Check Upper Case
             if(currentChar == currentChar.toUpperCase()) {
                 output += specCharMap.get('capital');
                 output += charMap.get(currentChar);
@@ -116,6 +119,8 @@ function englishToBraille(inputString) {
             }
             i++;
         }
+
+        //Check Number
         else if(!isNaN(currentChar)) {
             output += specCharMap.get('number');
 
@@ -135,6 +140,7 @@ function brailleToEnglish(inputString) {
     const brailleChars = [];
     var substring = "";
     
+    //Break up braille characters
     for(var i=0;i<inputString.length;i+=6) {
         substring = inputString.substring(i,i+6).trim();
         brailleChars.push(substring);
@@ -144,48 +150,43 @@ function brailleToEnglish(inputString) {
     var currentChar;
 
     for(let i=0;i<brailleChars.length;i++) {
+        
         currentChar = brailleChars[i];
+
+        //Check Upper Case
         if(currentChar === specCharMap.get('capital')) {
             i++;
             currentChar = brailleChars[i];
-            output += getCharKey(currentChar);
+            output += getKey(charMap,currentChar);
         }
 
+        //Check Number
         else if(currentChar === specCharMap.get('number')) {
             i++;
             while(brailleChars[i] != specCharMap.get('space')) {
                 currentChar = brailleChars[i];
-                output += getNumKey(currentChar);
+                output += getKey(numMap,currentChar);
                 i++;
             }
             output += " ";
         }
 
+        //Check Space
         else if (currentChar === specCharMap.get('space')) {
             output += " ";
         }
 
+        //Check Character
         else {
-            output += getCharKey(currentChar).toLowerCase();
+            output += getKey(charMap,currentChar).toLowerCase();
         }
     }
 
     return output;
 }
     
-
-function getCharKey(searchValue) {
-    
-    let invertedMap = new Map([...charMap.entries()].map(
-        ([key, value]) => ([value, key]))
-    );
-
-    return invertedMap.get(searchValue);
-}
-
-function getNumKey(searchValue) {
-    
-    let invertedMap = new Map([...numMap.entries()].map(
+function getKey(map,searchValue) {
+    let invertedMap = new Map([...map.entries()].map(
         ([key, value]) => ([value, key]))
     );
 
