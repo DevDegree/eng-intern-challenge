@@ -163,6 +163,7 @@ function brailleToEnglish(inputString) {
 
         else if (currentChar === specCharMap.get('space')) {
             output += " ";
+            i++;
         }
 
         else {
