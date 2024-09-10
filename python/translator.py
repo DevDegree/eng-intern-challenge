@@ -18,5 +18,18 @@ def english_to_braille(english):
     num = False
     for char in english:
         if char.isdigit():
-            num = True
-            
+            if not num:
+                num = True
+                output.append(braille['num'])
+            output.append(braille[char])
+        elif char.isalpha():
+            if char.isupper():
+                output.append(braille['cap'])
+                char = char.lower()
+            output.append(braille[char])
+        elif char == ' ':
+            num = False
+            output.append(braille[' '])
+    return ''.join(output)
+
+print(english_to_braille("Hello world"))
