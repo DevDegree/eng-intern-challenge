@@ -142,7 +142,6 @@ def __main__():
         if not len(arg)%6 == 0:
             braille = False;
             break;
-        # Check if each string one is within our dictionary
 
     # Convert all of our arguments depending on the direciton
     output = ''
