@@ -19,6 +19,6 @@ func StringToOperator(s string) (Operator, error) {
 	case string(NumberFollows):
 		return NumberFollows, nil
 	default:
-		return "", fmt.Errorf("invalid BrailleOperator: %s", s)
+		return "", fmt.Errorf("invalid operator: %s", s)
 	}
 }

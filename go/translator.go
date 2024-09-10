@@ -3,83 +3,56 @@ package main
 import (
 	"fmt"
 	"os"
-	"regexp"
+	"solution/languages"
 	"solution/translations"
+	"strings"
 )
 
-var (
-	englishAlphabetRegex = regexp.MustCompile("^[a-zA-Z0-9 ]+$")
-	brailleAlphabetRegex = regexp.MustCompile("^[.O]+$")
-)
-
-type Language string
-
-const (
-	English Language = "ENGLISH"
-	Braille Language = "BRAILLE"
-)
-
-func GetLanguage(text string) (Language, error) {
-	if len(text)%6 == 0 && brailleAlphabetRegex.MatchString(text) {
-		return Braille, nil
+func Translate(sourceSentence string) (string, error) {
+	sourceSentenceLanguage, err := languages.DetectLanguage(sourceSentence)
+	if err != nil {
+		return "", fmt.Errorf("error detecting language: %v\n", err)
 	}
-	if englishAlphabetRegex.MatchString(text) {
-		return English, nil
+
+	var translationStrategy translations.TranslationStrategy = nil
+	switch sourceSentenceLanguage {
+	case languages.Braille:
+		brailleToEnglishTranslator, err := translations.NewBrailleToEnglishTranslator()
+		if err != nil {
+			return "", fmt.Errorf("error initializing Braille to English translator: %v\n", err)
+		}
+		translationStrategy = brailleToEnglishTranslator
+	case languages.English:
+		englishToBrailleTranslator, err := translations.NewEnglishToBrailleTranslator()
+		if err != nil {
+			return "", fmt.Errorf("error initializing English to Braille translator: %v\n", err)
+		}
+		translationStrategy = englishToBrailleTranslator
+	default:
+		return "", fmt.Errorf("unsupported translation from language %s\n", sourceSentenceLanguage)
 	}
-	return "", fmt.Errorf("unsupported language")
-}
 
-type TranslationStrategy interface {
-	Translate(text string) (string, error)
-}
+	translator := translations.NewTranslator(translationStrategy)
 
-type Translator struct {
-	strategy TranslationStrategy
-}
+	translatedSentence, err := translator.Translate(sourceSentence)
+	if err != nil {
+		return "", fmt.Errorf("error during translation: %v\n", err)
+	}
 
-func (t *Translator) setStrategy(strategy TranslationStrategy) {
-	t.strategy = strategy
-}
-
-func (t *Translator) Translate(text string) (string, error) {
-	return t.strategy.Translate(text)
+	return translatedSentence, nil
 }
 
 func main() {
-	args := os.Args
-	if len(args) != 2 {
-		println(args[1])
-		panic("Usage: ")
+	if len(os.Args) < 2 {
+		fmt.Printf("Usage: %s <sentence>\n", os.Args[0])
+		//os.Exit(1)
 	}
+	sourceSentence := strings.Join(os.Args[1:], " ")
 
-	translationSentence := args[1]
-
-	sourceSentenceLanguage, err := GetLanguage(translationSentence)
+	translatedSentence, err := Translate(sourceSentence)
 	if err != nil {
-		panic(err)
-	}
-
-	var translationStrategy TranslationStrategy = nil
-	switch sourceSentenceLanguage {
-	case Braille:
-		brailleToEnglishTranslator, err := translations.NewBrailleTranslator("english")
-		if err != nil {
-			panic(err)
-		}
-		translationStrategy = brailleToEnglishTranslator
-	case English:
-		englishToBrailleTranslator, err := translations.NewEnglishTranslator("braille")
-		if err != nil {
-			panic(err)
-		}
-		translationStrategy = englishToBrailleTranslator
-	}
-
-	translator := &Translator{}
-	translator.setStrategy(translationStrategy)
-	translatedSentence, err := translator.Translate(translationSentence)
-	if err != nil {
-		panic(err)
+		fmt.Println(err.Error())
+		//os.Exit(1)
 	}
 
 	println(translatedSentence)
