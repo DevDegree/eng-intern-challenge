@@ -64,3 +64,30 @@ def translateEnglishToBraille(text):
 
     #join the elements in the list together to form the answer
     return "".join(translated)
+
+
+#method to figure out which translation method to use
+def translate(text):
+    
+    #variable to hold the braille status of the input text
+    isBraille = False
+    
+    #if the length of the input isn't a multiple of 6 then it automatically isn't braille
+    if len(text) % 6 != 0:
+        isBraille = False
+    else:
+        #for every letter in text
+        for i in text:
+            #if it is . or O, then we assume that input is braille
+            if i == "." or i == "O":
+                isBraille = True
+            #if it isn't, that means there aren't any and break out of loop
+            else:
+                isBraille = False
+                break
+    
+    #choosing which function to run depending on whether the input text is braille or not
+    if isBraille:
+        return translateBrailleToEnglish(text)
+    else:
+        return translateEnglishToBraille(text)
