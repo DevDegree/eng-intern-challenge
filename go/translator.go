@@ -45,14 +45,14 @@ func Translate(sourceSentence string) (string, error) {
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Printf("Usage: %s <sentence>\n", os.Args[0])
-		//os.Exit(1)
+		os.Exit(1)
 	}
 	sourceSentence := strings.Join(os.Args[1:], " ")
 
 	translatedSentence, err := Translate(sourceSentence)
 	if err != nil {
 		fmt.Println(err.Error())
-		//os.Exit(1)
+		os.Exit(1)
 	}
 
 	println(translatedSentence)
