@@ -1,7 +1,7 @@
 # There was several assumptions made in my implementation:
 # 1. The program expects to also receive invalid inputs thus the program should be able to handle invalid inputs and provide a meaningful error message.
-# 2. Any other rules not in the specification should be considered invalid (ex. only a letter is allowed to be followed after a capital code unless there is a space).
-# 3. Any of the ambigiouty should be considered invalid (ex. only a number is allowed to be followed after a number until there is a space).
+# 2. Any other rules not in the specification should be considered invalid (ex: only space, number and alphabet is allowed, only a letter is allowed to be followed after a capital code unless there is a space).
+# 3. Any of the ambigiouty should be considered invalid (ex: in english only a number is allowed to be followed after a number until there is a space).
 # 4. As specified in the requirements, Braille Alphabet are only limited to the 26 letters of the English alphabet, the numbers 0-9 and a space.
 
 # Constants
@@ -48,10 +48,10 @@ def braille_to_english(braille: str) -> str:
             i += 6
             while i < len(braille):
                 number_code = braille[i:i + 6]
-                i += 6
                 if number_code == SPACE_BRAILLE_CODE:
                     translated_text.append(" ")
                     break
+                i += 6
                 translated_text.append(NUMBER_BRAILLE_MAP[number_code])
         elif current_code == SPACE_BRAILLE_CODE:
             translated_text.append(" ")
@@ -105,7 +105,7 @@ def validate_braille(braille: str) -> list[str]:
     """
     if len(braille) % 6 != 0:
       return ["The length of the code is not a multiple of 6."]
-    if not set(braille).issubset(VALID_ENGLISH_CHARS):
+    if not set(braille).issubset(VALID_BRAILLE_CHARS):
       return ["Invalid characters found in the code."]
     issues = []
     i = 0
@@ -161,7 +161,7 @@ def validate_english(english: str) -> list[str]:
 
 def detect_code_type(code: str) -> str:
     """
-    Detects whether the input string is Braille or English.
+    Detects whether the input string is Braille or English based on validation results.
 
     Parameters:
     code (str): The input code, which can either be Braille or English.
@@ -173,13 +173,21 @@ def detect_code_type(code: str) -> str:
     ValueError: If the code is neither valid Braille nor valid English.
     """
     braille_issues = validate_braille(code)
-    english_issues = validate_english(code)
     if not braille_issues:
         return "braille"
-    elif not english_issues:
+
+    english_issues = validate_english(code)
+    if not english_issues:
         return "english"
     
-    raise ValueError("The code is neither valid Braille nor English.")
+    # If neither is valid, raise an error with detailed messages
+    error_message = "The code is neither valid Braille nor English:\n"
+    if braille_issues:
+        error_message += "Braille issues:\n  " + "\n  ".join(braille_issues) + "\n"
+    if english_issues:
+        error_message += "English issues:\n  " + "\n  ".join(english_issues)
+    
+    raise ValueError(error_message)
 
 
 def translate(code: str) -> str:
