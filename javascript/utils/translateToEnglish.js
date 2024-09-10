@@ -1,4 +1,9 @@
-import { englishBrailleAlphabet } from "./englishBrailleAlphabet.js";
+import {
+  CAPITAL_FOLLOWS,
+  NUMBERS_FOLLOWS,
+  SPACE,
+} from "../constants/appConstants.js";
+import { englishBrailleAlphabet } from "../constants/englishBrailleAlphabet.js";
 
 export const translateToEnglish = (inputString) => {
   let englishResult = "";
@@ -10,15 +15,15 @@ export const translateToEnglish = (inputString) => {
     const brailleTranslation = englishBrailleAlphabet[brailleChar] || [];
 
     switch (brailleTranslation[0]) {
-      case "capital follows":
+      case CAPITAL_FOLLOWS:
         isCapital = true;
         break;
-      case "numbers follows":
+      case NUMBERS_FOLLOWS:
         isNumbers = true;
         break;
-      case " ":
+      case SPACE:
         isNumbers = false;
-        englishResult += " ";
+        englishResult += SPACE;
         break;
       default:
         if (isCapital) {

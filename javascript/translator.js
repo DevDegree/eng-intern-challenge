@@ -1,13 +1,14 @@
-import { validateInput } from "./validateInput.js";
-import { translateToBraille } from "./translateToBraille.js";
-import { translateToEnglish } from "./translateToEnglish.js";
+import { validateInput } from "./utils/validation/validateInput.js";
+import { translateToBraille } from "./utils/translateToBraille.js";
+import { translateToEnglish } from "./utils/translateToEnglish.js";
+import { VALID_BRAILLE, VALID_ENGLISH } from "./constants/appConstants.js";
 
 const translator = (inputString) => {
   const validateResult = validateInput(inputString);
-  if (validateResult === "Valid English") {
+  if (validateResult === VALID_ENGLISH) {
     return translateToBraille(inputString);
   }
-  if (validateResult === "Valid Braille") {
+  if (validateResult === VALID_BRAILLE) {
     return translateToEnglish(inputString);
   }
   return validateResult;

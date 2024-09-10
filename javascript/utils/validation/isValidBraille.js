@@ -1,4 +1,4 @@
-import { englishBrailleAlphabet } from "./englishBrailleAlphabet.js";
+import { englishBrailleAlphabet } from "../../constants/englishBrailleAlphabet.js";
 
 export const isValidBraille = (input) => {
   const braillePatternLength = 6;

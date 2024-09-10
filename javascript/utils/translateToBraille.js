@@ -1,17 +1,7 @@
-import { englishBrailleAlphabet } from "./englishBrailleAlphabet.js";
-
-const getBrailleEnglishAlphabet = () => {
-  return new Map(
-    Object.entries(englishBrailleAlphabet).flatMap(([key, [dot1, dot2]]) => [
-      [dot1, key],
-      [dot2, key],
-    ])
-  );
-};
+import { CAPITAL_FOLLOWS, NUMBERS_FOLLOWS } from "../constants/appConstants.js";
+import { getBrailleEnglishAlphabet } from "./getBrailleToEnglishAlphabet.js";
 
 export const translateToBraille = (inputString) => {
-  if (!inputString) return "";
-
   const brailleEnglishAlphabet = getBrailleEnglishAlphabet();
   let result = "";
   let isNumber = false;
@@ -22,14 +12,14 @@ export const translateToBraille = (inputString) => {
   for (let char of inputString) {
     //  Add uppercase letter
     if (/[A-Z]/.test(char)) {
-      result += findKeyByValue("capital follows");
+      result += findKeyByValue(CAPITAL_FOLLOWS);
       char = char.toLowerCase();
     }
 
     // Add numbers
     if (/[0-9]/.test(char)) {
       if (!isNumber) {
-        result += findKeyByValue("numbers follows");
+        result += findKeyByValue(NUMBERS_FOLLOWS);
         isNumber = true;
       }
       result += findKeyByValue(char);
