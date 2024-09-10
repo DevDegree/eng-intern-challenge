@@ -127,7 +127,7 @@ function brailleToEnglish(braille) {
 
             english += char;
         }
-        // english += ' '; // Append space between words
+       
     });
 
     return english.trim();
@@ -157,7 +157,6 @@ function englishToBraille(english) {
         } else 
         {
             if (isNumberMode) {
-                braille += ' '; // Add space to reset number mode
                 isNumberMode = false;
             }
             if (/[A-Z]/.test(char)) { //uppercase character
