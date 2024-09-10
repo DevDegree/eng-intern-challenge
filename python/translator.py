@@ -11,12 +11,15 @@ def main():
 
     # Remove the trailing space
     original = original.strip()
+
+    # Convert to entry to list of char
     char_array = list(original)
+
     if char_array[0].isdigit() or char_array[0].isalpha():
         print(word_to_braille(char_array))
     else: print(braille_to_word(original))
 
-def word_to_braille(char_array):
+def word_to_braille(char_array): # converts english to braille
     english_to_braille = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..', 
     'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..', 
@@ -49,7 +52,7 @@ def word_to_braille(char_array):
 
 
 
-def braille_to_word(original):
+def braille_to_word(original): # coverts braille to english
     braille_to_english = {
     'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd', 'O..O..': 'e', 
     'OOO...': 'f', 'OOOO..': 'g', 'O.OO..': 'h', '.OO...': 'i', '.OOO..': 'j', 
@@ -57,6 +60,7 @@ def braille_to_word(original):
     'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't', 
     'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y', 
     'O..OOO': 'z', '......': ' '}
+    
     # Special symbols
     braille_capital = '.....O'
     braille_number = '.O.OOO'
@@ -70,20 +74,17 @@ def braille_to_word(original):
     while i < length:
         # Extract the next 6-character substring
         braille_char = original[i:i+6]
-        
+        # capital 
         if braille_char == braille_capital:
-            # If we encounter the capital sign, set flag to capitalize the next character
             in_capital_sequence = True
             i += 6
             continue
-
+        # number
         if braille_char == braille_number:
-            # If we encounter the number sign, set flag to convert subsequent characters to digits
             in_number_sequence = True
             i += 6
             continue
-
-        # Translate Braille to English
+        
         if braille_char in braille_to_english:
             char = braille_to_english[braille_char]
             
@@ -116,14 +117,10 @@ def braille_to_word(original):
                     in_capital_sequence = False  # Reset capital sequence flag
                 else:
                     result += char
-        
-        # Move to the next character (increment by 6)
         i += 6
 
     return result
 
-
-# Run the main function
 if __name__ == "__main__":
     main()
 
