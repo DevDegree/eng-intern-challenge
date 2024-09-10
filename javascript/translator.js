@@ -64,6 +64,41 @@ function translateEnglishToBraille(input) {
   return result;
 }
 
+function translateBrailleToEnglish(input) {
+  let result = '';
+  let inNumberMode = false;
+  let capitalizeNext = false;
+  let brailleChars = input.match(/.{1,6}/g) || [];  // Split the input into 6-character chunks
+
+  for (let braille of brailleChars) {
+    if (braille === englishToBraille['number']) {
+      inNumberMode = true;
+      continue;
+    }
+
+    if (braille === englishToBraille['capital']) {
+      capitalizeNext = true;
+      continue;
+    }
+
+    if (braille === englishToBraille[' ']) {
+      // End number mode when space is encountered
+      inNumberMode = false;
+      result += ' ';
+    } else if (inNumberMode) {
+      result += brailleToNumber[braille] || '';
+    } else if (capitalizeNext) {
+      // Convert Braille to letter and capitalize it
+      result += (brailleToEnglish[braille] || '').toUpperCase();
+      capitalizeNext = false;
+    } else {
+      result += brailleToEnglish[braille] || '';
+    }
+  }
+
+  return result;
+}
+
 // Main function to handle the input
 function main() {
   // Get arguments from the command line
@@ -78,7 +113,7 @@ function main() {
 
   // Determine if the input is Braille or English
   if (isBraille(input)) {
-    console.log('Input is Braille');
+    console.log(translateBrailleToEnglish(input));
   } else {
     console.log(translateEnglishToBraille(input));
   }
