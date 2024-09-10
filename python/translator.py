@@ -56,13 +56,14 @@ def charToBraille(fullString, ref):
     return: string
     """
     res = ""
+    number = False
 
     # O(n)
     for i in range(len(fullString)):
         char = fullString[i]
 
         # Invalid input
-        if not ref[char]:
+        if not ref[char.lower()]:
             return ""
 
         # Decimal follow edge case
@@ -73,8 +74,12 @@ def charToBraille(fullString, ref):
                 res += ref["capital"]
                 char = char.lower()
             elif char.isdigit():
-                res += ref["number"]
+                if number == False:
+                    res += ref["number"]
+                    number = True
 
+            if char == " ":
+                number = False
             res += ref[char]
 
     return res
@@ -96,4 +101,9 @@ def translate(args):
         return ""
 
 
-print(translate(arguments))
+def main():
+    print(translate(arguments))
+
+
+if __name__ == "__main__":
+    main()
