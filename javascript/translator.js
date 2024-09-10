@@ -69,6 +69,12 @@ class Braille{
         ['OO..OO', 'x'], 
         ['OO.OOO', 'y'],
         ['O..OOO', 'z'], 
+        ['......', 'space'],
+        ['.....O', 'capital'],
+        ['.O.OOO', 'number'],
+    ]);
+
+    static number_map = new Map([
         ['O.....', '1'], 
         ['O.O...', '2'], 
         ['OO....', '3'], 
@@ -78,14 +84,10 @@ class Braille{
         ['OOOO..', '7'], 
         ['O.OO..', '8'], 
         ['.OO...', '9'], 
-        ['.OOO..', '0'],
-        ['......', 'space'],
-        ['.....O', 'capital'],
-        ['.O.OOO', 'number'],
+        ['.OOO..', '0']
     ]);
     
     static isBraille(text){
-        //check if text is braille, braille=>true, english=>false
         return (/^[O. ]+$/.test(text));
     }
 
@@ -118,34 +120,48 @@ class Braille{
         return brailleText;
     }
 
-    static toEnglish(brailleText){
+    static toEnglish(text){
         let englishText='';
         let brailleChar=[];
         let isCapital=false;
         let isNumber=false;
 
-        for (let i=0;i<brailleText.length;i+=6){
-            brailleChar.push(brailleText.substring(i, i + 6));
+        for (let i=0;i<text.length;i+=6){
+            brailleChar.push(text.substring(i, i + 6));
         }
+        
         for (let char of brailleChar){
-            if (char==this.bToE_Map.get('.O.OOO')){
-                isNumber=true;
-            }else if (char==this.eToB_Map.get('.....O')){
+            let englishChar=this.bToE_Map.get(char);
+            
+            if (englishChar==='capital'){
                 isCapital=true;
-            }else if (char==this.bToE_Map.get('......')){
+                continue; 
+            }else if (englishChar==='number'){
+                isNumber=true;
+                continue;          
+            }else if (englishChar==='space'){
                 englishText+=' ';
+                isNumber=false;
+                continue;
             }
+            
             if (isNumber){
-                englishText+=this.eToB_Map.get(char);
+                englishText+=this.number_map.get(char);
+                continue;
             }
+            
             if (isCapital){
-                englishText+=this.eToB_Map.get(char).toUpperCase();
+                englishText+=englishChar.toUpperCase();
                 isCapital=false;
             }else{
-                englishText+=this.eToB_Map.get(char);
+                englishText+=englishChar;
             }
-            return englishText;
+            
+            
+                       
         }
+        return englishText;
+
     }
 
     static translate(text){
