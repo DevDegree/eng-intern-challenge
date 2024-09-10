@@ -159,7 +159,7 @@ def braille_translator(input)
 end
 
 # TEST
-# puts braille_translator('Hello world')
+puts braille_translator('Abc 123 xYz')
 # puts braille_translator('.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..')
 # puts braille_translator('42')
 # puts braille_translator('.....OO.....O.O...OO...........O.OOOO.....O.O...OO....')
