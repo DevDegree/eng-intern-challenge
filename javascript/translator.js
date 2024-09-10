@@ -86,4 +86,27 @@ class Braille {
         ['.OO...', '9'], 
         ['.OOO..', '0']
     ]);
+
+    static isBraille(text){
+        //check if the input text is braille
+        return (/^[O. ]+$/.test(text));
+    }
+
+    static toBraille(text){
+        let brailleText='';
+        let isNumber=false;
+
+        for(let char of text){
+            if (char >= '0' && char <= '9'){
+                //check for number
+                if (!isNumber){
+                    //first number
+                    brailleText+=this.charToBraille_Map.get('number');
+                    isNumber=true;
+                }
+                brailleText+=this.charToBraille_Map.get(char);
+            }
+        }
+        return brailleText;
+    }
 }
