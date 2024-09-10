@@ -64,6 +64,19 @@ DECIMAL = ".O...O"
 NUMBER = ".O.OOO"
 
 def english_to_braille(text: str) -> str:
+    """
+    Converts English text to Braille.
+
+    This function takes a string of English text and translates it into Braille
+    representation. It handles uppercase letters, numbers, and special characters.
+
+    Args:
+        text (str): The English text to be converted.
+
+    Returns:
+        str: The Braille representation of the input text.
+
+    """
     braille_text = ""
     num_toggle = False
     for char in text:
@@ -81,7 +94,21 @@ def english_to_braille(text: str) -> str:
                 
     return braille_text
 
-def braille_to_english(text):
+def braille_to_english(text: str) -> str:
+    """
+    Converts Braille text to English.
+
+    This function takes a string of Braille characters (represented as dots) and
+    translates it into English text. It handles capital letters, numbers, and
+    special characters.
+
+    Args:
+        text (str): A string of Braille characters represented as dots.
+
+    Returns:
+        str: The translated English text.
+    """
+
     english_text = ""
     is_capital = False
     is_number = False
@@ -119,7 +146,16 @@ def braille_to_english(text):
     
     return english_text
 
-def braille_checker(text):
+def braille_checker(text: str) -> bool:
+    """
+    Check if the input text contains Braille characters.
+
+    Args:
+        text (str): The input text to be checked.
+
+    Returns:
+        bool: True if the text contains Braille characters, False otherwise.
+    """
     if ".O" in text:
         return True
     return False
