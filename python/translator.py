@@ -5,10 +5,10 @@ BRAILLE_ENCODING = {
     'k': 'O...O.', 'l': 'O.O.O.', 'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.',
     'p': 'OOO.O.', 'q': 'OOOOO.', 'r': 'O.OOO.', 's': '.OO.O.', 't': '.OOOO.',
     'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO',
-    'z': 'O..OOO', ' ': '......', 'cap': '.....O', 'num': '.O.OOO'
+    'z': 'O..OOO', ' ': '......', 'cap': '.....O', 'num': '.O.OOO', '.': '.O...O'
 }
 
-# Numbers encoding
+# Numbers encoding remains the same
 NUMBER_ENCODING = {
     '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
     '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..'
@@ -39,7 +39,7 @@ def braille_to_english(braille_string):
                 char = NUMBER_FROM_BRAILLE[br]
             else:
                 is_number = False  # Reset number mode if the pattern isn't a number
-                char = ENGLISH_FROM_BRAILLE.get(br, '?')  # Check if it's a letter
+                char = ENGLISH_FROM_BRAILLE.get(br, '?')  # Check if it's a letter or punctuation
         else:
             char = ENGLISH_FROM_BRAILLE.get(br, '?')
 
