@@ -147,8 +147,7 @@ function translate(input) {
 }
 
 const inputArgs = process.argv.slice(2);
-const input = inputArgs.join(' '); // Combine arguments into a single string
-console.log("Received input:", input);
+const input = inputArgs.join(' ');
 
 if (input) {
     translate(input);
