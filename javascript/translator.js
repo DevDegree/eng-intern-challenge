@@ -139,10 +139,10 @@ function brailleToEnglish(input) {
 
 function translate(input) {
     if (isBraille(input)) {
-        console.log(`"${brailleToEnglish(input).trim()}"`);
+        console.log(brailleToEnglish(input));
 
     } else {
-        console.log(`"${englishToBraille(input).trim()}"`);
+        console.log(englishToBraille(input));
     }
 }
 
