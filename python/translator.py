@@ -2,15 +2,19 @@ import sys
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python3 translator.py <text>")
-        return
+        print("Pass English or Braille")
+        sys.exit(1)
 
-    args = sys.argv[1:]
-    for arg in args:
-        char_array = list(arg)
-        if char_array[0].isdigit() or char_array[0].isalpha():
-            print(word_to_braille(char_array))
-        else: print(braille_to_word(original))
+    original = ""
+    for arg in sys.argv[1:]:
+        original += arg + " "
+
+    # Remove the trailing space
+    original = original.strip()
+    char_array = list(original)
+    if char_array[0].isdigit() or char_array[0].isalpha():
+        print(word_to_braille(char_array))
+    else: print(braille_to_word(original))
 
 def word_to_braille(char_array):
     english_to_braille = {
