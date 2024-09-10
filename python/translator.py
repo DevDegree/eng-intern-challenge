@@ -65,6 +65,46 @@ def translateEnglishToBraille(text):
     #join the elements in the list together to form the answer
     return "".join(translated)
 
+def translateBrailleToEnglish(text):
+    
+    #split the braille text into groups of 6 for interpretation
+    brailleCharacters = [text[i:i+6] for i in range(0, len(text), 6)]
+    #holds list of characters which composes final answer
+    translated = []
+    #checks for uppercase letters
+    isUpperCase = False
+    #boolean to check if the previous braille character was te
+    numberFollowsBefore = False
+    
+    #checking every braille character
+    for i in brailleCharacters:
+        if numberFollowsBefore:
+            translated.append(brailleToEnglishNumbers[i])
+            numberFollowsBefore = False
+        else:
+            #if it's a number, pass (FOR NOW!)
+            if brailleToEnglish[i] == "number follows":
+                numberFollowsBefore = True
+                pass
+            #if it's an uppercase, pass but set the isUpperCase to true
+            elif brailleToEnglish[i] == "uppercase follows":
+                pass
+                isUpperCase = True
+                numberFollowsBefore = False
+            #else, it's a normal letter
+            else:
+                #if it's an uppercase, then return the translation answer in uppercase
+                if isUpperCase:
+                    translated.append(brailleToEnglish[i].upper())
+                    isUpperCase = False
+                    numberFollowsBefore = False
+                #if it isn't uppercase, return the letter with no uppercase
+                else:
+                    translated.append(brailleToEnglish[i])
+                    numberFollowsBefore = False
+    
+    #join the elements in the list together to form the answer
+    return "".join(translated)
 
 #method to figure out which translation method to use
 def translate(text):
