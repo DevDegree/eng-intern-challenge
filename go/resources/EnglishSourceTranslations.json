@@ -5,7 +5,7 @@
       "DECIMAL_FOLLOWS": ".O...O",
       "NUMBER_FOLLOWS": ".O.OOO"
     },
-    "alphabet": {
+    "letter": {
       "a": "O.....",
       "b": "O.O...",
       "c": "OO....",
@@ -33,10 +33,10 @@
       "y": "OO.OOO",
       "z": "O..OOO"
     },
-    "specialCharacter": {
+    "special_character": {
       " ": "......"
     },
-    "number": {
+    "decimal": {
       "1": "O.....",
       "2": "O.O...",
       "3": "OO....",

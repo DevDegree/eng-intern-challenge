@@ -25,7 +25,7 @@ type EnglishToBrailleTranslator struct {
 }
 
 func NewEnglishToBrailleTranslator() (*EnglishToBrailleTranslator, error) {
-	englishTranslationFile, err := os.Open("resources/fromEnglishTranslations.json")
+	englishTranslationFile, err := os.Open("resources/EnglishSourceTranslations.json")
 	if err != nil {
 		return nil, fmt.Errorf("error opening braille translation json file: %s", err)
 	}
@@ -50,9 +50,9 @@ func NewEnglishToBrailleTranslator() (*EnglishToBrailleTranslator, error) {
 
 	translator := &EnglishToBrailleTranslator{
 		englishToOperatorMapping:         englishTranslationMap[destinationLanguage]["operator"],
-		englishToAlphabetMapping:         englishTranslationMap[destinationLanguage]["alphabet"],
-		englishToSpecialCharacterMapping: englishTranslationMap[destinationLanguage]["specialCharacter"],
-		englishToNumberMapping:           englishTranslationMap[destinationLanguage]["number"],
+		englishToAlphabetMapping:         englishTranslationMap[destinationLanguage]["letter"],
+		englishToSpecialCharacterMapping: englishTranslationMap[destinationLanguage]["special_character"],
+		englishToNumberMapping:           englishTranslationMap[destinationLanguage]["decimal"],
 	}
 
 	multiDigitTraillingRegex, err := regexp.Compile("\\d{2,}$")

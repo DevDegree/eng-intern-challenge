@@ -14,13 +14,13 @@ type BrailleToEnglishTranslator struct {
 	currentOperator *Operator
 
 	brailleToOperatorMapping         map[string]string
-	brailleToAlphabetMapping         map[string]string
+	brailleToLetterMapping           map[string]string
 	brailleToSpecialCharacterMapping map[string]string
-	brailleToNumberMapping           map[string]string
+	brailleToDecimalMapping          map[string]string
 }
 
 func NewBrailleToEnglishTranslator() (*BrailleToEnglishTranslator, error) {
-	brailleTranslationFile, err := os.Open("resources/fromBrailleTranslations.json")
+	brailleTranslationFile, err := os.Open("resources/BrailleSourceTranslations.json")
 	if err != nil {
 		return nil, fmt.Errorf("error opening Braille translation JSON file: %w", err)
 	}
@@ -45,9 +45,9 @@ func NewBrailleToEnglishTranslator() (*BrailleToEnglishTranslator, error) {
 
 	return &BrailleToEnglishTranslator{
 		brailleToOperatorMapping:         brailleTranslationMap[destinationLanguage]["operator"],
-		brailleToAlphabetMapping:         brailleTranslationMap[destinationLanguage]["alphabet"],
-		brailleToSpecialCharacterMapping: brailleTranslationMap[destinationLanguage]["specialCharacter"],
-		brailleToNumberMapping:           brailleTranslationMap[destinationLanguage]["number"],
+		brailleToLetterMapping:           brailleTranslationMap[destinationLanguage]["letter"],
+		brailleToSpecialCharacterMapping: brailleTranslationMap[destinationLanguage]["special_character"],
+		brailleToDecimalMapping:          brailleTranslationMap[destinationLanguage]["decimal"],
 	}, nil
 }
 
@@ -70,7 +70,7 @@ func (bet *BrailleToEnglishTranslator) translateCharacter(word string) (string, 
 			return specialCharacter, nil
 		}
 
-		if lowercaseAlphabet, isAlphabet := bet.brailleToAlphabetMapping[word]; isAlphabet {
+		if lowercaseAlphabet, isAlphabet := bet.brailleToLetterMapping[word]; isAlphabet {
 			bet.currentOperator = nil
 			return lowercaseAlphabet, nil
 		}
@@ -79,20 +79,20 @@ func (bet *BrailleToEnglishTranslator) translateCharacter(word string) (string, 
 	} else {
 		switch *bet.currentOperator {
 		case CapitalFollows:
-			if lowercaseAlphabet, isAlphabet := bet.brailleToAlphabetMapping[word]; isAlphabet {
+			if lowercaseLetter, isLetter := bet.brailleToLetterMapping[word]; isLetter {
 				bet.currentOperator = nil
-				return strings.ToUpper(lowercaseAlphabet), nil
+				return strings.ToUpper(lowercaseLetter), nil
 			}
 			return "", fmt.Errorf("invalid alphabet for capital follows: %s", word)
 		case DecimalFollows:
-			if lowercaseDecimal, isAlphabet := bet.brailleToNumberMapping[word]; isAlphabet {
+			if decimal, isDecimal := bet.brailleToDecimalMapping[word]; isDecimal {
 				bet.currentOperator = nil
-				return lowercaseDecimal, nil
+				return decimal, nil
 			}
 			return "", fmt.Errorf("invalid decimal character: %s", word)
 		case NumberFollows:
-			if number, isNumber := bet.brailleToNumberMapping[word]; isNumber {
-				return number, nil
+			if decimal, isDecimal := bet.brailleToDecimalMapping[word]; isDecimal {
+				return decimal, nil
 			}
 			if specialCharacter, isSpecialCharacter := bet.brailleToSpecialCharacterMapping[word]; isSpecialCharacter {
 				if specialCharacter == " " {
