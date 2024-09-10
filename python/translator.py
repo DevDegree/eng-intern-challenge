@@ -31,7 +31,9 @@ def translate_to_braille(text: str) -> str:
                 is_number_mode = True
             out.append(braille_numbers[char])
             continue
-        is_number_mode = False
+        elif is_number_mode:
+            out.append("......")
+            is_number_mode = False
         if char.isupper():
             out.append(capital_follows)
             out.append(braille_alphabet[char.lower()])
