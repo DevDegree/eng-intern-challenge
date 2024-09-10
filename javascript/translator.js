@@ -47,6 +47,9 @@ function englishToBraille(input) {
             output += capitalPrefix;
             char = char.toLowerCase();
         }
+        else if(char === " "){
+            isNumberMode = false;
+        }
 
         if (char >= '0' && char <= '9') {
             if (!isNumberMode) {
@@ -59,7 +62,8 @@ function englishToBraille(input) {
                 isDecimalMode = true;
                 continue;
             }
-        } else {
+        } 
+        else {
             isNumberMode = false;
             isDecimalMode = false;
         }
@@ -67,9 +71,9 @@ function englishToBraille(input) {
         if (!isNumberMode && EnglishToBrailleCharacterAndSymbols[char]) {
             output += EnglishToBrailleCharacterAndSymbols[char];
         }
-        else if (isNumberMode && EnglishToBrailleNumbers[char]) {
-            output += EnglishToBrailleNumbers[char];
-        }
+        // else if (isNumberMode && EnglishToBrailleNumbers[char]) {
+        //     output += EnglishToBrailleNumbers[char];
+        // }
     }
 
     return output;
@@ -141,7 +145,10 @@ function translate(input) {
     }
 }
 
-const input = process.argv[2];
+const inputArgs = process.argv.slice(2);
+const input = inputArgs.join(' '); // Combine arguments into a single string
+console.log("Received input:", input);
+
 if (input) {
     translate(input);
 } else {
