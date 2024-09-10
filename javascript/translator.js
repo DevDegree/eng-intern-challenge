@@ -34,6 +34,33 @@ const numberMap = {
 
 
 /**
+ * Braille to English mapping.
+ * 
+ * Maps 6-dot Braille patterns ('O' for raised, '.' for flat) to English characters.
+ * Includes letters, numbers, and punctuation.
+ */
+const brailleToEnglishMap = {
+    'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd', 'O..O..': 'e', 'OOO...': 'f', 'OOOO..': 'g',
+    'O.OO..': 'h', '.OO...': 'i', '.OOO..': 'j', 'O...O.': 'k', 'O.O.O.': 'l', 'OO..O.': 'm', 'OO.OO.': 'n',
+    'O..OO.': 'o', 'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't', 'O...OO': 'u',
+    'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y', 'O..OOO': 'z',
+    '......': ' ', //space
+    '..O...': ',', //comma
+    '..OO.O': '.', //period
+    '..O.OO': '?',
+    '..OOO.': '!', 
+    '..OO..': ':', 
+    '..O.O.': ';', 
+    '....OO': '-', //dash
+    '.O..O.': '/', 
+    'O.O..O': '(', 
+    '.O.OO.': ')', 
+    '.OO..O': '<', 
+    'O..OO.': '>', 
+   
+};
+
+/**
  * Braille encoding for capital letters.
  * When this appears before a letter, it indicates that the letter is uppercase.
  * It applies specifically to the next character only.
@@ -55,17 +82,57 @@ function isBraille(input) {
 }
 
 
-
 /**
- * Dummy function for Braille to English translation.(Following a Test Driven approach)
- * In this placeholder version, it simply returns the Braille input.
- * @param {string} braille - Braille string to be translated.
- * @returns {string} The Braille string (unchanged in this placeholder).
+ * Converts a Braille string to its corresponding English text.
+ * 
+ * This function handles both letters and numbers, as well as special cases
+ * such as capitalization and number indicators. The input Braille string
+ * is divided into words, and each 6-character Braille block is translated
+ * into its corresponding English character.
+ * 
+ * @param {string} braille - The Braille string to be translated into English.
+ * @returns {string} The translated English text.
  */
 
 function brailleToEnglish(braille) {
-   return braille;
+    const words = braille.trim().split(/\s+/); // Split on spaces
+    let english = '';
+    let isNumberMode = false;
+    let isCapitalMode = false;
+
+    words.forEach(word => {
+        for (let i = 0; i < word.length; i += 6) {
+            const brailleChar = word.slice(i, i + 6);
+
+            if (brailleChar === capitalIndicator) {
+                isCapitalMode = true;
+                continue;
+            }
+            if (brailleChar === numberIndicator) {
+                isNumberMode = true;
+                continue;
+            }
+
+            let char = brailleToEnglishMap[brailleChar] || '';
+
+            if (isNumberMode) {
+                char = Object.keys(numberMap).find(key => numberMap[key] === brailleChar);
+                if (!char) isNumberMode = false; // Reset after finding a non-number char
+            }
+
+            if (isCapitalMode) {
+                char = char.toUpperCase();
+                isCapitalMode = false;
+            }
+
+            english += char;
+        }
+        english += ' '; // Append space between words
+    });
+
+    return english.trim();
 }
+
 
 /**
  * Converts an English string to its Braille equivalent.
