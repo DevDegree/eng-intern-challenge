@@ -1,22 +1,28 @@
 # English to Braille dictionary (6 character strings)
-english_to_braille = {
-    'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
-    'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..',
-    'k': 'O...O.', 'l': 'O.O.O.', 'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.',
-    'p': 'OOO.O.', 'q': 'OOOOO.', 'r': 'O.OOO.', 's': '.OO.O.', 't': '.OOOO.',
-    'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO',
-    'z': 'O..OOO', ' ': '......', '1': 'O.....', '2': 'O.O...', '3': 'OO....',
-    '4': 'OO.O..', '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..',
-    '9': '.OO...', '0': '.OOO..', '.': '..O.OO', ',': '..O...', '?': '..OO.O',
-    '!': '..OOO.', ':': 'OOO..O', ';': 'O.O...', '-': '......'
+eng_to_braille_dict = {
+    'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..', 'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 
+    'i': '.OO...', 'j': '.OOO..', 'k': 'O...O.', 'l': 'O.O.O.', 'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.', 'p': 'OOO.O.', 
+    'q': 'OOOOO.', 'r': 'O.OOO.', 's': '.OO.O.', 't': '.OOOO.', 'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 
+    'y': 'OO.OOO', 'z': 'O..OOO', 
+    '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', 
+    '9': '.OO...', '0': '.OOO..', 
+    ' ': '......', 'capital': '.....O', 'number': '.O.OOO'
 }
 
-# Braille to English dictionary (reverse of above)
-braille_to_english = {v: k for k, v in english_to_braille.items()}
+# Braille to English letters dictionary
+braille_to_eng_letters_dict = {
+    'O.....': 'a',  'O.O...': 'b',  'OO....': 'c',  'OO.O..': 'd',  'O..O..': 'e',  'OOO...': 'f',  'OOOO..': 'g',  'O.OO..': 'h', 
+    '.OO...': 'i',  '.OOO..': 'j',  'O...O.': 'k',  'O.O.O.': 'l',  'OO..O.': 'm',  'OO.OO.': 'n',  'O..OO.': 'o',  'OOO.O.': 'p', 
+    'OOOOO.': 'q',  'O.OOO.': 'r',  '.OO.O.': 's',  '.OOOO.': 't',  'O...OO': 'u',  'O.O.OO': 'v',  '.OOO.O': 'w',  'OO..OO': 'x', 
+    'OO.OOO': 'y',  'O..OOO': 'z',  
+    '......': ' ',  '.....O': 'capital',  '.O.OOO': 'number'
+}
 
-# Capital and number indicators
-CAPITAL_INDICATOR = '.....O'
-NUMBER_INDICATOR = '..0000'
+# Braille to English numbers dictionary
+braille_to_eng_numbers_dict = {
+    'O.....': '1', 'O.O...': '2', 'OO....': '3', 'OO.O..': '4', 'O..O..': '5', 
+    'OOO...': '6','OOOO..': '7', 'O.OO..': '8', '.OO...': '9', '.OOO..': '0'
+}
 
 def text_to_braille(text):
     result = []
@@ -24,19 +30,20 @@ def text_to_braille(text):
 
     for char in text:
         if char.isupper():
-            result.append(CAPITAL_INDICATOR)  # Capital indicator
+            result.append(eng_to_braille_dict['capital'])  # Capital indicator
             char = char.lower()
-        
+
         if char.isdigit():
             if not is_number_sequence:  # Add number indicator once at the start of a number sequence
-                result.append(NUMBER_INDICATOR)
+                result.append(eng_to_braille_dict['number'])
                 is_number_sequence = True
         else:
-            is_number_sequence = False  # Reset when the sequence of digits ends
-            
+            if is_number_sequence:
+                is_number_sequence = False  # Reset when the sequence of digits ends
+
         # Add the Braille representation for the character
-        result.append(english_to_braille.get(char, ''))
-    
+        result.append(eng_to_braille_dict.get(char, ''))
+
     return ''.join(result)
 
 def braille_to_text(braille):
@@ -45,20 +52,20 @@ def braille_to_text(braille):
     number = False
     for i in range(0, len(braille), 6):
         symbol = braille[i:i+6]
-        if symbol == CAPITAL_INDICATOR:
+        if symbol == eng_to_braille_dict['capital']:
             capital = True
-        elif symbol == NUMBER_INDICATOR:
+        elif symbol == eng_to_braille_dict['number']:
             number = True
         else:
-            char = braille_to_english.get(symbol, '')
-            if number and char in '1234567890':
-                result.append(char)
-            elif capital:
-                result.append(char.upper())
-                capital = False
+            if number:
+                char = braille_to_eng_numbers_dict.get(symbol, '')
+                number = False
             else:
-                result.append(char)
-            number = False
+                char = braille_to_eng_letters_dict.get(symbol, '')
+                if capital:
+                    char = char.upper()
+                    capital = False
+            result.append(char)
     return ''.join(result)
 
 if __name__ == "__main__":
