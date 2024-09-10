@@ -139,9 +139,10 @@ function brailleToEnglish(input) {
 
 function translate(input) {
     if (isBraille(input)) {
-        console.log(brailleToEnglish(input));
+        console.log(`"${brailleToEnglish(input).trim()}"`);
+
     } else {
-        console.log(englishToBraille(input));
+        console.log(`"${englishToBraille(input).trim()}"`);
     }
 }
 
