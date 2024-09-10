@@ -1,5 +1,6 @@
 const STARTING_INDEX_OF_ARGS = 2;
-const BRAILLE_TO_ALPHABET: { [brailleCharacter: string]: string } = {
+const BRAILLE_CHARACTER_LENGTH = 6;
+const BRAILLE_TO_ENGLISH: { [brailleCharacter: string]: string } = {
   "O.....": "a",
   "O.O...": "b",
   "OO....": "c",
@@ -26,24 +27,97 @@ const BRAILLE_TO_ALPHABET: { [brailleCharacter: string]: string } = {
   "OO.OOO": "y",
   "O..OOO": "z",
   "......": " ",
-  ".....O": "Capital",
-  "..OOOO": "Number",
+  ".....O": "capital",
+  ".O.OOO": "number",
 };
 
-function isEnglishString(input: string) {
+const ENGLISH_TO_BRAILLE = generateEnglishToBraille();
+const INDEX_TO_BRAILLE = generateIndexToBraille();
+
+function generateEnglishToBraille() {
+  const brailleToEnglish: { [englishCharacter: string]: string } = {};
+
+  for (const key in BRAILLE_TO_ENGLISH) {
+    const value = BRAILLE_TO_ENGLISH[key];
+    brailleToEnglish[value] = key;
+  }
+
+  return brailleToEnglish;
+}
+
+function generateIndexToBraille() {
+  const charsWithNumberTranslation = "jabcdefghi";
+  const brailleToNumber = [];
+
+  for (let idx = 0; idx < charsWithNumberTranslation.length; idx += 1) {
+    const currentChar = charsWithNumberTranslation[idx];
+    brailleToNumber.push(ENGLISH_TO_BRAILLE[currentChar]);
+  }
+
+  return brailleToNumber;
+}
+
+function isValidEnglish(input: string) {
   return /^[a-zA-Z0-9 ]+$/.test(input);
 }
 
-function isBrailleString(input: string) {
-  return /^[.O]+$/.test(input);
+function isValidBraille(input: string) {
+  return /^[.O]+$/.test(input) && input.length % BRAILLE_CHARACTER_LENGTH === 0;
+}
+
+function isUppercaseCharacter(character: string) {
+  return /^[A-Z]$/.test(character);
+}
+
+function isNumericCharacter(character: string) {
+  return /^[0-9]$/.test(character);
+}
+
+function translateEnglishToBraille(englishText: string) {
+  let translation = "";
+  let numberMode = false;
+
+  for (let idx = 0; idx < englishText.length; idx += 1) {
+    const character = englishText[idx];
+
+    if (isUppercaseCharacter(character)) {
+      translation += ENGLISH_TO_BRAILLE["capital"];
+      translation += ENGLISH_TO_BRAILLE[character.toLowerCase()];
+      continue;
+    }
+
+    if (isNumericCharacter(character)) {
+      if (!numberMode) {
+        numberMode = true;
+        translation += ENGLISH_TO_BRAILLE["number"];
+      }
+      translation += INDEX_TO_BRAILLE[Number(character)];
+      continue;
+    }
+
+    if (character === " ") {
+      numberMode = false;
+    }
+
+    translation += ENGLISH_TO_BRAILLE[character];
+  }
+
+  return translation;
 }
 
 const commandLineInput = process.argv.slice(STARTING_INDEX_OF_ARGS);
 const formattedInput = commandLineInput.join(" ");
 
-if (isEnglishString(formattedInput)) {
-  console.log("English: ", formattedInput);
-} else if (isBrailleString(formattedInput)) {
+if (isValidEnglish(formattedInput)) {
+  const brailleResult = translateEnglishToBraille(formattedInput);
+  console.log(brailleResult);
+  console.log(
+    ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.." +
+      "......" +
+      ".O.OOOOO.O..O.O..." ===
+      brailleResult
+  );
+} else if (isValidBraille(formattedInput)) {
   console.log("Braille:", formattedInput);
 } else {
   console.log("Error, invalid input");
@@ -72,6 +146,12 @@ Questions:
   - What happens when no arguments are provided? Assuming argument will always be provided
   - What happens if the input is very large? 
   - README.md was not present
+  - Trailing spaces will be trimmed
+  - Multiple spaces in between characters will be treated as one space
+
+Notes:
+  - Made a trade-off to increase space taken by mapping out both english to braille and braille to english characters in objects
+  - Resulted in faster retrieval, but takes up more space
 
   - determine whether input is braille or english
     - if english, translate each letter into braille
