@@ -1,5 +1,6 @@
 import sys
 
+#dicts for mapping text/braille
 normal_braille_dict = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..', 
     'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..', 
@@ -33,7 +34,7 @@ inverse_num_braille_dict = {
 }
 
 
-
+#converts braille to text output
 def braille2text(braille_str):
     text = ""
     capital = False
@@ -62,6 +63,7 @@ def braille2text(braille_str):
     print(text) 
 
 
+#converts text to braille output
 def text2braille(text):
     braille = ""
     number = False
