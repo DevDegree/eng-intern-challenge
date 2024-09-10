@@ -63,3 +63,16 @@ def braille_to_english(code):
                     output.append(char)
         i += 6
     return ''.join(output)
+
+def main():
+    if len(sys.argv) < 2:
+        print("Usage: python translator.py <text>")
+        return
+    input = sys.argv[1]
+    if all(char in 'O.' for char in input.strip()):
+        print(braille_to_english(input))
+    else:
+        print(english_to_braille(input))
+
+if __name__ == '__main__':
+    main()
