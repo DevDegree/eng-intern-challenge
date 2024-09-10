@@ -97,7 +97,12 @@ class Braille {
         let isNumber=false;
 
         for(let char of text){
-            if (char >= '0' && char <= '9'){
+            //check if the current character is an alphabet letter
+            if (char===' '){
+                //space
+                isNumber=false;
+                brailleText+=this.eToB_Map.get('space');
+            } else if (char >= '0' && char <= '9'){
                 //check for number
                 if (!isNumber){
                     //first number
@@ -105,6 +110,12 @@ class Braille {
                     isNumber=true;
                 }
                 brailleText+=this.charToBraille_Map.get(char);
+            } else {
+                //check for uppercase
+                if (char === char.toUpperCase() && char.toLowerCase() !== char.toUpperCase()){
+                    brailleText+=this.eToB_Map.get('capital');
+                }
+                brailleText+=this.eToB_Map.get(char.toLowerCase());
             }
         }
         return brailleText;
