@@ -127,7 +127,7 @@ function brailleToEnglish(braille) {
 
             english += char;
         }
-        english += ' '; // Append space between words
+        // english += ' '; // Append space between words
     });
 
     return english.trim();
