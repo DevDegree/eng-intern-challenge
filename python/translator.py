@@ -4,7 +4,6 @@ class BrailleType(Enum):
   LOWER_CASE = 0
   UPPER_CASE = 1
   NUMBER = 2
-  PUNCTUATION = 3
 
 LETTER_BRAILLE_MAP = {
   'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OOO...': 'd', 'O..O..': 'e',
@@ -38,10 +37,29 @@ def fromBrailleToEnglish(braille) -> str:
   while i < len(braille):
     current_code = braille[i:i+6]
     if current_code in SEPARATOR_BRAILLE_MAP:
-      if SEPARATOR_BRAILLE_MAP[current_code] == 'C':
-        braille_status = BrailleType.UPPER_CASE
-      elif SEPARATOR_BRAILLE_MAP[current_code] == 'N':
+      if braille_status == BrailleType.LOWER_CASE:
+        if SEPARATOR_BRAILLE_MAP[current_code] == 'C':
+          braille_status = BrailleType.UPPER_CASE
+        elif SEPARATOR_BRAILLE_MAP[current_code] == 'N':
+          braille_status = BrailleType.NUMBER
         i += 6
+      else:
+        raise Exception("Invalid Braille")
+    else:
+      if braille_status == BrailleType.LOWER_CASE:
+        if current_code in SPECIAL_BRAILLE_MAP:
+          english += SPECIAL_BRAILLE_MAP[current_code]
+        elif current_code in LETTER_BRAILLE_MAP:
+          english += LETTER_BRAILLE_MAP[current_code]
+        else:
+          raise Exception("Invalid Braille")
+      elif braille_status == BrailleType.UPPER_CASE:
+        if current_code in LETTER_BRAILLE_MAP:
+          english += LETTER_BRAILLE_MAP[current_code].upper()
+        else:
+          raise Exception("Invalid Braille")
+        braille_status = BrailleType.LOWER_CASE
+      elif braille_status == BrailleType.NUMBER:
         while i < len(braille):
           number_code = braille[i:i+6]
           i += 6
@@ -49,23 +67,13 @@ def fromBrailleToEnglish(braille) -> str:
             english += NUMBER_BRAILLE_MAP[number_code]
           elif number_code in SPECIAL_BRAILLE_MAP and SPECIAL_BRAILLE_MAP[number_code] == ' ':
             english += SPECIAL_BRAILLE_MAP[number_code]
+            break
           else:
-            throw Exception("Invalid number code")
+            raise Exception("Invalid Braille")
         braille_status = BrailleType.LOWER_CASE
-
-    else:
-      if braille_status == BrailleType.LOWER_CASE:
-        if current_code in SPECIAL_BRAILLE_MAP:
-          english += SPECIAL_BRAILLE_MAP[current_code]
-        elif current_code in LETTER_BRAILLE_MAP:
-          english += LETTER_BRAILLE_MAP[current_code]
-      elif braille_status == BrailleType.UPPER_CASE:
-        if current_code in LETTER_BRAILLE_MAP:
-          english += LETTER_BRAILLE_MAP[current_code].upper()
-      elif braille_status == BrailleType.NUMBER:
-        if current_code in NUMBER_BRAILLE_MAP:
-          english += NUMBER_BRAILLE_MAP[current_code]
-      elif current_code in NUMBER_BRAILLE_MAP:
+      else:
+        raise Exception("Invalid Braille")
+  return english
 
 def fromEnglishToBraille(english) -> str:
   braille = ""
