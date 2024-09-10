@@ -2,13 +2,14 @@
   "name": "javascript",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "translator.js",
   "scripts": {
     "test": "jest"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "jest": "^29.7.0"
   }
 }
