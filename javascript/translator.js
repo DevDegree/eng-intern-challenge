@@ -1,3 +1,4 @@
+
 const letters = {
     "a":"O.....",
     "b":"O.O...",
@@ -183,3 +184,9 @@ function translate(input) {
         return toBraille(input);
     }
 }
+
+const args = process.argv.slice(2);
+
+const input = args.join(' ');
+
+console.log(translate(input));
