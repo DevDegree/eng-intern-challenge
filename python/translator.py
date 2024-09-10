@@ -64,12 +64,14 @@ def braille_to_english(code):
         i += 6
     return ''.join(output)
 
+def check(input):
+    if ".O" in input:
+        return True
+    return False
+
 def main():
-    if len(sys.argv) < 2:
-        print("Usage: python translator.py <text>")
-        return
-    input = sys.argv[1]
-    if all(char in 'O.' for char in input.strip()):
+    input = " ".join(sys.argv[1:])
+    if check(input):
         print(braille_to_english(input))
     else:
         print(english_to_braille(input))
