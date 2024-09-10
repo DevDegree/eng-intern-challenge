@@ -1,6 +1,8 @@
 import sys
 import re
 
+# For english words, insert a space between each argument
+inputString = ' '.join(sys.argv[1:])
 
 # First verify if the given string is braille or english and run the corresponding function
 def translator(inputString):
@@ -94,8 +96,32 @@ def brailleToEnglish(input):
             englishString += charList[braillePosition]
     print(englishString)
 
-#Go through each letter in a string
-def englishToBraille(english):
-    print("english detected")
+# Go through each letter in a string
+# Parse each argument individually and then append a spaces between arguments (function only needs to process a single word)
+# Cases: capital letter - append the capital character before the actual letter
+# number - append number and then look at numList
+# lowercase - proceed as normal
+def englishToBraille(input):
+    brailleString = ""
+    i = 0
+    while i < len(input):
+        if input[i].isupper():
+            # append the capital marker
+            brailleString += ".....O"
+            # append the lowercase letter
+            brailleString += englishBrailleDict[input[i].lower()]
+            i += 1
+        # If a number is encountered
+        elif input[i].isnumeric():
+            # append the number marker but loop through the rest of the input until a space is encountered
+            brailleString += ".O.OOO"
+            while (input[i] != "......" and i < len(input)):
+                brailleString += numberDict[input[i]]
+                i += 1
+        else: 
+            brailleString += englishBrailleDict[input[i]]
+            i += 1
 
-translator(".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..")
+    print(brailleString)
+
+translator("Hello world")
