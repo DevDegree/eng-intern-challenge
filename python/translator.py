@@ -64,11 +64,11 @@ brailleToEnglish = {value: key for key, value in englishToBraille.items()}
 brailleToNumber = {value: key for key, value in numberToBraille.items()}
 
 def isBraille(inputText):
-"""
-Determines if the input text is in Braille by checking 
-if it's a valid sequence of 'O' (raised dot) and '.' (unraised dot) and length 
-of input is divisible by 6.
-"""
+    """
+    Determines if the input text is in Braille by checking 
+    if it's a valid sequence of 'O' (raised dot) and '.' (unraised dot) and length 
+    of input is divisible by 6.
+    """
     if len(inputText) % 6 != 0:
         return False
 
@@ -80,10 +80,10 @@ of input is divisible by 6.
 
 
 def convertEnglishToBraille(inputText):
- """
- Converts the given English text to Braille representation.
- Handles uppercase letters, digits, and spaces.
- """
+    """
+    Converts the given English text to Braille representation.
+    Handles uppercase letters, digits, and spaces.
+    """
     outputBraille = ""
     numberMode = False
 
@@ -110,10 +110,10 @@ def convertEnglishToBraille(inputText):
 
 
 def convertBrailleToEnglish(inputText):
-"""
-Converts the given Braille text back to English.
-Handles uppercase letters, digits, and spaces.
-"""
+    """
+    Converts the given Braille text back to English.
+    Handles uppercase letters, digits, and spaces.
+    """
     chunkLen = 6
     outputEnglish = ""
     capitalMode = False
@@ -142,10 +142,10 @@ Handles uppercase letters, digits, and spaces.
 
 
 def main():
-"""
-Main function to handle input, check if it's Braille or English, 
-and perform the appropriate conversion.
-"""
+    """
+    Main function to handle input, check if it's Braille or English, 
+    and perform the appropriate conversion.
+    """
     try:
         if len(sys.argv) < 2:
             raise ValueError("No text provided for translation.")
