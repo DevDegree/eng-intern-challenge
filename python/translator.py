@@ -22,6 +22,7 @@ brailleToEnglish = {
     "O..OOO": "z", "......": " ", ".O.OOO": "number follows", ".....O": "uppercase follows"
 }
 
+#the numbers version of the above dictionary
 brailleToEnglishNumbers = {
     ".OOO..": "0", "O.....": "1", "O.O...": "2", "OO....": "3", "OO.O..": "4", 
     "O..O..": "5", "OOO...": "6", "..OO.O": "7", "OOOO..": "8", ".OO...": "9"
@@ -81,14 +82,17 @@ def translateBrailleToEnglish(text):
     for i in brailleCharacters:
         #if there is a number that follows before
         if numberFollowsBefore:
+            #we assume that if there is a space, the numberFollowsBefore toggle will be false
             if i == "......": 
                 translated.append(" ")
                 numberFollowsBefore = False
             else:
+                #if not we just append i
                 translated.append(brailleToEnglishNumbers[i])
             continue
+        #if a number doesn't follow before
         else:
-            #if it's a number
+            #if it's a number, then we set the toggle variable to true
             if brailleToEnglish[i] == "number follows":
                 numberFollowsBefore = True
                 continue
@@ -97,6 +101,7 @@ def translateBrailleToEnglish(text):
                 isUpperCase = True
                 numberFollowsBefore = False
                 continue
+            #if we encounter a space
             elif brailleToEnglish[i] == " ":
                 translated.append(brailleToEnglish["......"])
                 numberFollowsBefore = False
