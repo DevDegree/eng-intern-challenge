@@ -74,24 +74,18 @@ def english_to_braille(english):
     
     return ''.join(result)
 
-# Main function to handle input
 def main():
     if len(sys.argv) < 2:
         print("Please provide a string to translate.")
         return
 
-    # Join all command-line arguments into a single string
     input_str = ' '.join(sys.argv[1:])
 
-    # Determine if the input is Braille or English
     if is_braille(input_str):
-        # Braille to English
         translated = braille_to_english(input_str)
     else:
-        # English to Braille
         translated = english_to_braille(input_str)
 
-    # Output the result without any extra spaces
     print(translated.strip())
 
 if __name__ == "__main__":
