@@ -86,7 +86,9 @@ def text2braille(text):
     print(braille)
 
 def main():
-    if len(sys.argv) > 2:
+    if len(sys.argv) == 1:
+        return
+    elif len(sys.argv) > 2:
         text2braille(" ".join(sys.argv[1:]))
     elif len(sys.argv[1]) % 6 == 0 and sys.argv[1].count(".") + sys.argv[1].count("O") == len(sys.argv[1]):
         braille2text(sys.argv[1])
