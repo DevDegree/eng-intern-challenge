@@ -24,3 +24,43 @@ brailleToEnglishNumbers = {
     ".OOO..": "0", "O.....": "1", "..OO..": "2", "OO....": "3", "OO.O..": "4", 
     "O..O..": "5", "OOO...": "6", "..OO.O": "7", "OOOO..": "8", ".OO...": "9"
 }
+
+def translateEnglishToBraille(text):
+    #final answer that will be combined together at the end using join
+    translated = []
+    #toggle variable to check if the "number follows" has been already put
+    numberMode = False
+
+    #looping though each character in the English phrase
+    for i in text:
+        #if the character is a digit
+        if i.isdigit():
+            #if the number isn't coming in
+            if not numberMode:
+                #add the "number follows" braille symbol to the list
+                translated.append(englishToBraille["number follows"])
+                 #indicate that it isn't a number
+                numberMode = True
+            #add the corresponding number to the list
+            translated.append(englishToBraille[i])
+        #if the number is a letter from the alphabet
+        elif i.isalpha():
+            #checking for uppercase letter to add proper braille sign to string
+            if i.isupper():
+                #add the "capital letter follows" braille symbol to the list
+                translated.append(englishToBraille["uppercase follows"])
+            #convert to lowercase since the dictionary only accounts for lowercase letters
+            lowercase = i.lower()
+            #add corresponding letter to the list
+            translated.append(englishToBraille[lowercase])
+            #indicate that it isn't a number
+            numberMode = False
+        #for all other symnols
+        else:
+            #add corresponding letter to the list
+            translated.append(englishToBraille[i])
+             #indicate that it isn't a number
+            numberMode = False
+
+    #join the elements in the list together to form the answer
+    return "".join(translated)
