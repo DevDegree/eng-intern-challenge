@@ -52,12 +52,33 @@ def isArgsBraille(inputArgs: list[str]):
     
     return True
 
-def convertASCIIToBraille(consoleArgs: list[str]):
-    print("CONVERT ASCII TO BRAILLE")
-    pass
+def convertASCIIToBraille(args: list[str]):
+    # print("CONVERT ASCII TO BRAILLE")
 
-def convertBrailleToASCII(consoleArgs: list[str]):
-    print("CONVERT BRAILLE TO ASCII")
+    brailleCodeResult = ""
+
+    for text in args:
+        flagNum = False
+        brailleCode = ""
+
+        for char in text:
+            code = ord(char)
+            
+            if code >= 65 and code <= 90:
+                code += 32
+                brailleCode += english_to_braille_map["cf"]
+            elif code >= 48 and code <= 57:
+                if not flagNum:
+                    brailleCode += english_to_braille_map["nf"]
+                    flagNum = True
+            
+            brailleCode += english_to_braille_map[chr(code)]
+        
+        brailleCodeResult += brailleCode + english_to_braille_map[" "]
+    
+    return brailleCodeResult[:len(brailleCodeResult)-6]
+
+def convertBrailleToASCII(args: list[str]):
     pass
 
 
@@ -70,13 +91,12 @@ def main():
     inputArgs = sys.argv[1:]
 
     if isArgsBraille(inputArgs):
-        convertBrailleToASCII(inputArgs)
+        print(convertBrailleToASCII(inputArgs))
     else:
-        convertASCIIToBraille(inputArgs)
+        print(convertASCIIToBraille(inputArgs))
     
 
 
 
 if __name__ == "__main__":
     main()
-    pass
