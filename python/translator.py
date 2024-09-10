@@ -1,3 +1,5 @@
+import sys
+
 #dictionary that holds English characters as key and the braille equivalent as the value
 englishToBraille = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
@@ -21,7 +23,7 @@ brailleToEnglish = {
 }
 
 brailleToEnglishNumbers = {
-    ".OOO..": "0", "O.....": "1", "..OO..": "2", "OO....": "3", "OO.O..": "4", 
+    ".OOO..": "0", "O.....": "1", "O.O...": "2", "OO....": "3", "OO.O..": "4", 
     "O..O..": "5", "OOO...": "6", "..OO.O": "7", "OOOO..": "8", ".OO...": "9"
 }
 
@@ -66,31 +68,39 @@ def translateEnglishToBraille(text):
     return "".join(translated)
 
 def translateBrailleToEnglish(text):
-    
     #split the braille text into groups of 6 for interpretation
     brailleCharacters = [text[i:i+6] for i in range(0, len(text), 6)]
     #holds list of characters which composes final answer
     translated = []
     #checks for uppercase letters
     isUpperCase = False
-    #boolean to check if the previous braille character was te
+    #boolean to check if the previous braille character was the "number follows" symbol
     numberFollowsBefore = False
     
     #checking every braille character
     for i in brailleCharacters:
+        #if there is a number that follows before
         if numberFollowsBefore:
-            translated.append(brailleToEnglishNumbers[i])
-            numberFollowsBefore = False
+            if i == "......": 
+                translated.append(" ")
+                numberFollowsBefore = False
+            else:
+                translated.append(brailleToEnglishNumbers[i])
+            continue
         else:
-            #if it's a number, pass (FOR NOW!)
+            #if it's a number
             if brailleToEnglish[i] == "number follows":
                 numberFollowsBefore = True
-                pass
+                continue
             #if it's an uppercase, pass but set the isUpperCase to true
             elif brailleToEnglish[i] == "uppercase follows":
-                pass
                 isUpperCase = True
                 numberFollowsBefore = False
+                continue
+            elif brailleToEnglish[i] == " ":
+                translated.append(brailleToEnglish["......"])
+                numberFollowsBefore = False
+                continue
             #else, it's a normal letter
             else:
                 #if it's an uppercase, then return the translation answer in uppercase
@@ -121,13 +131,25 @@ def translate(text):
             #if it is . or O, then we assume that input is braille
             if i == "." or i == "O":
                 isBraille = True
-            #if it isn't, that means there aren't any and break out of loop
+            #if we come across a character that isn't . or O, break out of loop
             else:
                 isBraille = False
                 break
     
-    #choosing which function to run depending on whether the input text is braille or not
+    #choosing which function to run and return the answer depending on whether the input text is braille or not
     if isBraille:
         return translateBrailleToEnglish(text)
     else:
         return translateEnglishToBraille(text)
+
+#function to run file from the command line
+def main():
+    #get the command-line arguments (excluding the script name)
+    args = sys.argv[1:]
+    #join the arguments to form the input text
+    input_text = ' '.join(args)
+    #call the translate function and print the result
+    print(translate(input_text))
+
+if __name__ == "__main__":
+    main()
