@@ -1,8 +1,11 @@
 # There was several assumptions made in my implementation:
-# 1. The program expects to also receive invalid inputs thus the program should be able to handle invalid inputs and provide a meaningful error message.
-# 2. Any other rules not in the specification should be considered invalid (ex: only space, number and alphabet is allowed, only a letter is allowed to be followed after a capital code unless there is a space).
-# 3. Any of the ambigiouty should be considered invalid (ex: in english only a number is allowed to be followed after a number until there is a space).
-# 4. As specified in the requirements, Braille Alphabet are only limited to the 26 letters of the English alphabet, the numbers 0-9 and a space.
+# 1. I have assumed that the code is expected to be worked on by multiple developers in the future. Therefore, the focus of the code was not just on solving the problem, but also on ensuring clarity, extendability, and seperation of concerns.
+# 2. The program expects to also receive invalid inputs thus the program should be able to handle invalid inputs and provide a meaningful error message.
+# 3. Any other rules not in the specification should be considered invalid (ex: only space, number and alphabet is allowed, only a letter is allowed to be followed after a capital code unless there is a space).
+# 4. Any of the ambigiouty should be considered invalid (ex: in english only a number is allowed to be followed after a number until there is a space).
+# 5. As specified in the requirements, Braille Alphabet are only limited to the 26 letters of the English alphabet, the numbers 0-9 and a space.
+
+import sys
 
 # Constants
 VALID_ENGLISH_CHARS = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ")
@@ -220,16 +223,12 @@ def get_input_from_args() -> str:
     Raises:
     ValueError: If no input code is provided.
     """
-    import sys
     if len(sys.argv) < 2:
         raise ValueError("Please provide the code to translate.")
     return " ".join(sys.argv[1:])
 
-def main():
+if __name__ == "__main__":
     input_code = get_input_from_args()
+    print(input_code)
     result = translate(input_code)
     print(result)
-    return
-
-if __name__ == "__main__":
-    main()
