@@ -38,6 +38,32 @@ function isBraille(input) {
   return braillePattern.test(input);
 }
 
+function translateEnglishToBraille(input) {
+  let result = '';
+  let inNumberMode = false;
+
+  for (let char of input) {
+    if (/[A-Z]/.test(char)) {
+      // If the character is uppercase, add the capital indicator
+      result += englishToBraille['capital'];
+      char = char.toLowerCase();
+    }
+
+    if (/[0-9]/.test(char)) {
+      if (!inNumberMode) {
+        result += englishToBraille['number'];
+        inNumberMode = true;
+      }
+      result += numberToBraille[char];
+    } else {
+      inNumberMode = false;
+      result += englishToBraille[char] || '';
+    }
+  }
+
+  return result;
+}
+
 // Main function to handle the input
 function main() {
   // Get arguments from the command line
@@ -54,7 +80,7 @@ function main() {
   if (isBraille(input)) {
     console.log('Input is Braille');
   } else {
-    console.log('Input is English');
+    console.log(translateEnglishToBraille(input));
   }
 }
 
