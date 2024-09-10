@@ -11,7 +11,12 @@ braille = {
     ' ': '......', 'cap': '.....O', 'num': '.O.OOO'
 }
 
-reverse_braille = {value: key for key,value in braille.items()}
+reverse_braille = {}
+for key, value in braille.items():
+    if value in reverse_braille:
+        reverse_braille[value].append(key)
+    else:
+        reverse_braille[value] = [key]
 
 def english_to_braille(english):
     output = []
@@ -32,4 +37,29 @@ def english_to_braille(english):
             output.append(braille[' '])
     return ''.join(output)
 
-print(english_to_braille("Hello world"))
+def braille_to_english(code):
+    output = []
+    i = 0
+    num = False
+    cap = False
+    while i < len(code):
+        b = code[i:i+6]
+        char = reverse_braille[b][0]
+        if(char == 'num'):
+            num = True
+        elif(char == 'cap'):
+            cap = True
+        elif(char == ' '):
+            output.append(' ')
+            num = False
+        else:
+            if(num):
+                output.append(reverse_braille[b][1])
+            else:
+                if(cap):
+                    output.append(char.upper())
+                    cap = False
+                else:
+                    output.append(char)
+        i += 6
+    return ''.join(output)
