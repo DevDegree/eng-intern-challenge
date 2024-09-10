@@ -100,7 +100,6 @@ let BRAILLE_STATE = {
   
   function englishToBraille(text) {
     let translate = "";
-    // if (!text) return translate;
     text = String(text);
     let prevCh = "";
     for (let i = 0; i < text.length; i++) {
