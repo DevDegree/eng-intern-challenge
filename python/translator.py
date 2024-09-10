@@ -1,5 +1,6 @@
 #
 # Braille Translater by Alex Elliott
+# 2024-09-09
 #
 # Simple braille translate to convert english to braille and braille to english
 # in the command line. Completed for the Winter 2025 Eng Intern Challenge Fall.
