@@ -62,7 +62,7 @@ let BRAILLE_STATE = {
     return /^[O.]+$/.test(input);
   }
   function isEnglish(input) {
-    return /^[a-zA-Z0-9]+$/.test(input);
+    return /^[a-zA-Z0-9\s]+$/.test(input);
   }
 
 
@@ -124,8 +124,10 @@ let BRAILLE_STATE = {
   function translate(text) {
     if (isBraille(text)) {
       return brailleToEnglish(text);
-    } else {
+    } else if(isEnglish(text)) {
       return englishToBraille(text);
+    } else {
+        throw new Error("Invalid input");
     }
   }
   let args = process.argv.slice(2).join(" ");
