@@ -1,12 +1,17 @@
+import { validateInput } from "./validateInput.js";
 import { translateToBraille } from "./translateToBraille.js";
+import { translateToEnglish } from "./translateToEnglish.js";
 
 const translator = (inputString) => {
-  return translateToBraille(inputString);
+  const validateResult = validateInput(inputString);
+  if (validateResult === "Valid English") {
+    return translateToBraille(inputString);
+  }
+  if (validateResult === "Valid Braille") {
+    return translateToEnglish(inputString);
+  }
+  return validateResult;
 };
 
 const input = process.argv.slice(2).join(" ");
-if (input) {
-  console.log(translator(input));
-} else {
-  console.log("Please provide a valid input string.");
-}
+console.log(translator(input));
