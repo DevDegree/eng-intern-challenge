@@ -42,12 +42,12 @@ def braille_to_english(braille):
             if number:
                 char = reverse_braille_dict.get(symbol, '')
                 result.append(char)
-                number = False  # Reset number mode after the first number
+                number = False 
             else:
                 char = reverse_braille_dict.get(symbol, '')
                 if capital:
                     result.append(char.upper())
-                    capital = False  # Reset capital mode after the first letter
+                    capital = False  
                 else:
                     result.append(char)
         i += 6
