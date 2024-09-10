@@ -1,3 +1,13 @@
+/**
+ * Kirill Kirnichansky, kirill@kirnichansky.com
+ * 
+ * The technical requirements specifically say to implement letters a-z, numbers 0-9 and ability to include spaces.
+ * Therefore, I have not implemented any of the special characters (including decimal logic) in the program.  
+ * 
+ * In the case special characters are expected, I ask that you consider commit 8036c851459ad367e4f37f83edf5dece452d63f1
+ * where I added logic for special characters (excluding < & >) that is commented out.
+ */
+
 const args = process.argv.slice(2);
 let input;
 
@@ -36,20 +46,7 @@ const englishToBraille = {
     'x': 'OO..OO',
     'y': 'OO.OOO',
     'z': 'O..OOO',
-    // '.': '..OO.O',
-    // ',': '..O...',
-    // '?': '..O.OO',
-    // '!': '..OOO.',
-    // ':': '..OO..',
-    // ';': '..O.O.',
-    // '-': '....OO',
-    // '/': '.O..O.',
-    // '<': '.OO..O',
-    // '>': 'O..OO.',
-    // '(': 'O.O..O',
-    // ')': '.O.OO.',
     'capital': '.....O',
-    // 'decimal': '.O...O',
     'number': '.O.OOO',
     'space': '......'
 };
@@ -67,13 +64,6 @@ function translateEnglishToBraille(input) {
                 // a space will terminate translation of a number
                 isNumber = false;
                 break;
-            // case '.':
-            //     // if currently translating a number and another number follows after this char, '.' is considered a decimal instead of a period 
-            //     if (isNumber && i != input.length-1 && /^[0-9]$/.test(input[i+1]))
-            //         braille += englishToBraille['decimal'];
-            //     else
-            //         braille += englishToBraille['.'];
-            //     break;
             default:
                 // check if numeric
                 if (/^[0-9]$/.test(char)) {
@@ -81,7 +71,9 @@ function translateEnglishToBraille(input) {
                         braille += englishToBraille['number'];
                         isNumber = true;
                     }
-
+                    // the first 10 letters of the alphabet have the same Braille symbols as the digits 1,2,...,9,0 , respectively
+                    // therefore, since we know we are currently translating a number we can get the letter symbol corresponding to the digit through ASCII values (1 -> a, 2 -> b, ...)
+                    // the special case is when the digit is 0 where we just use the symbol for 'j'.
                     let charFromDigit = parseInt(char) == 0 ? 'j' : String.fromCharCode(parseInt(char)+96);
                     braille += englishToBraille[charFromDigit];
                 } else {
@@ -119,9 +111,6 @@ function translateBrailleToEnglish(input) {
                 // set flag so program knows the next char is capitalized
                 isCapital = true;
                 break;
-            // case 'decimal':
-            //     english += ".";
-            //     break;
             case 'space':
                 english += " ";
                 // a space will terminate translation of a number
@@ -151,12 +140,11 @@ function translateBrailleToEnglish(input) {
     return english;
 }
 
-// braille strings only consist of "." (raised dot) and "O" (dot) chars 
 const uniqueCharSet = new Set(input);
-
-if (uniqueCharSet.has('.')) {
+// since special characters are not included in the translation logic we can identify if the input string is Braille if it contains the '.' char
+// there are no Braille symbols with only raised dots ('O'), atleast for the Braille symbols in question 
+// therfore, we can always expect a Braille string to contain a '.' 
+if (uniqueCharSet.has('.'))
     console.log(translateBrailleToEnglish(input))
-}
-else {
+else
     console.log(translateEnglishToBraille(input));
-}
