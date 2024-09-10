@@ -32,7 +32,6 @@ def translate_to_braille(text: str) -> str:
             out.append(braille_numbers[char])
             continue
         elif is_number_mode:
-            out.append("......")
             is_number_mode = False
         if char.isupper():
             out.append(capital_follows)
@@ -50,6 +49,7 @@ def translate_to_english(braille: str) -> str:
     while i < len(braille):
         chunk = braille[i:i+6]
         if is_number_mode and chunk == "......":
+            out.append(" ")
             is_number_mode = False
         elif is_number_mode:
             out.append(english_number_map[chunk])
