@@ -16,22 +16,22 @@ number_Follows = ".O.OOO"
 capital_Follows = ".....O"
 space = "......"
 
-"""
-Checks if input string is a valid Braille representation.
+def brailleChecker(str string) -> bool:
+    """
+    Checks if input string is a valid Braille representation.
 
-    Args:
-    string (str): The input string to be checked.
+        Args:
+        string (string): The input string to be checked.
 
-    Returns:
-    bool: True if the string is valid Braille, False otherwise indicating String is English.
-"""
-def brailleChecker(string str) -> bool:
+        Returns:
+        bool: True if the string is valid Braille, False otherwise indicating String is English.
+    """
     # Checks if length of string is a multiple of 6.
-    if len(str) % 6 != 0:
+    if len(string) % 6 != 0:
         return False
     
     # Checks if string contains only '.' (flat dot) and 'O' (raised dot) characters.
-    if not all(char in '.O' for char in str):
+    if not all(char in '.O' for char in string):
         return False
 
     # Set of all valid braille values
@@ -42,4 +42,59 @@ def brailleChecker(string str) -> bool:
 
     # Check for every 6 characters they're a valid braille
     return all(string[i:i+6] in valid_braille for i in range(0, len(string), 6))
+
+def englishtoBraille(str string) -> str:
+    braille_string = ""
+    is_digit = False
+
+    for character in string:
+        if character.isdigit():
+            if not is_digit:
+                braille_string += number_Follows
+                is_digit = True
+            braille_string += number_Braille[character]
+        elif character.isalpha():
+            if is_digit:
+                is_digit = False
+            if character.isupper():
+                braille_string += capital_Follows
+            braille_string += letter_Braille[character.lower()]
+        elif character.isspace():
+            braille_string += space
+            is_digit = False
+
+    return braille_string
+
     
+def brailletoEnglish(str string) -> strL
+    english_string = ""
+    i = 0
+    is_caps= False
+    is_digit = False
+
+    while i < len(string):
+        braille_character = string[i:i+6]
+        
+        if braille_character == capital_Follows:
+            is_capital = True
+        elif braille_character == number_Follows:
+            is_digit = True
+        elif braille_character == space:
+            english_string += " "
+            is_digit = False
+        elif is_digit:
+            for key, value in number_Braille.items():
+                if value == braille_char:
+                    english_string += key
+                    break
+        else:
+            for key, value in letter_Braille.items():
+                if value == braille_char:
+                    char = key
+                    english_string += char.upper() if is_capital else char
+                    is_capital = False
+                    break
+
+        i += 6
+
+    return english_string
