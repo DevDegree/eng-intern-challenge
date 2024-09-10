@@ -26,11 +26,6 @@ const letters = {
     "y":"OO.OOO",
     "z":"O..OOO",
     " ":"......",
-    "cap":".....O",
-    "num":".O.OOO", 
-    "dec":".O...O"  
-}
-const specialChars = {
     ".":"..OO.O",
     ",":"..O...",
     "?":"..O.OO",
@@ -40,56 +35,151 @@ const specialChars = {
     "-":"....OO",
     "/":".O..O.",
     "<":".OO..O",
-    ">":"O..OO.",
     "(":"O.O..O",
     ")":".O.OO.",
+    "cap":".....O",
+    "num":".O.OOO", 
 }
+const brailleToLetters = {
+    "O.....": "a",
+    "O.O...": "b",
+    "OO....": "c",
+    "OO.O..": "d",
+    "O..O..": "e",
+    "OOO...": "f",
+    "OOOO..": "g",
+    "O.OO..": "h",
+    ".OO...": "i",
+    ".OOO..": "j",
+    "O...O.": "k",
+    "O.O.O.": "l",
+    "OO..O.": "m",
+    "OO.OO.": "n",
+    "O..OO.": "o",
+    "OOO.O.": "p",
+    "OOOOO.": "q",
+    "O.OOO.": "r",
+    ".OO.O.": "s",
+    ".OOOO.": "t",
+    "O...OO": "u",
+    "O.O.OO": "v",
+    ".OOO.O": "w",
+    "OO..OO": "x",
+    "OO.OOO": "y",
+    "O..OOO": "z",
+    "......": " ",
+    "..OO.O": ".",
+    "..O...": ",",
+    "..O.OO": "?",
+    "..OOO.": "!",
+    "..OO..": ":",
+    "..O.O.": ";",
+    "....OO": "-",
+    ".O..O.": "/",
+    ".OO..O": "<",
+    "O.O..O": "(",
+    ".O.OO.": ")",
+    ".....O": "cap",
+    ".O.OOO": "num",
+};
+
 const numbers = {
     "1": "O.....",
     "2": "O.O...",
-    
+    "3":"OO....",
+    "4":"OO.O..",
+    "5":"O..O..",
+    "6":"OOO...",
+    "7":"OOOO..",
+    "8":"O.OO..",
+    "9":".OO...",
+    "0":".OOO.."
 }
 
 function toBraille(text) {
     let result = "";
-    let isCap = false;
-    let isNum = false;
+    let inNumberSequence = false;  // Flag to track if we are in a sequence of numbers
+
     for (let i = 0; i < text.length; i++) {
-        if (text[i] === text[i].toUpperCase()) {
-            isCap = true;
-        }
-        let char = text[i].toLowerCase();
-        if (letters[char] && isCap) {
-            result += letters["cap"];
-            result += letters[char];
-            isCap = false;
-        }
-        else {
-            result += char;
+        let char = text[i];
+
+        if (!isNaN(char) && numbers[char]) {  // Check if the character is a number
+            if (!inNumberSequence) {  // Add number indicator only once at the start
+                result += letters["num"];
+                inNumberSequence = true;  // Set the flag to true
+            }
+            result += numbers[char];  // Add the Braille representation of the number
+        } else {
+            // If we're currently in a number sequence, reset the flag
+            if (inNumberSequence) {
+                inNumberSequence = false; 
+            }
+
+            if (char === char.toUpperCase() && letters[char.toLowerCase()] && char !== " ") {
+                result += letters["cap"];
+                result += letters[char.toLowerCase()];
+            } else if (letters[char]) {
+                result += letters[char]; 
+            }
         }
     }
+
     return result;
 }
 
-function toText(text){
+
+function toText(text) {
     let result = "";
-    for (let i = 0; i < text.length; i+=6) {
-        let isCap = false;
-        let char = text.slice(i, i+6);
-        for (let key in letters) {
-            if (letters[key] === char && key !== "cap" && !isCap) {
-                result += key;
+    let isCap = false;
+    let isNum = false;
+
+    for (let i = 0; i < text.length; i += 6) {
+        let char = text.slice(i, i + 6);
+
+        if (char === letters["cap"]) {
+            isCap = true; 
+            continue; 
+        }
+        else if(char === letters["num"]) {
+            isNum = true;
+            continue;
+        }
+
+        if(isNum){
+            for (let key in numbers) {
+                if (numbers[key] === char) {
+                    result += key;
+                }
+                if(char === letters[" "]){
+                    isNum = false;
+                    result += " ";
+                    break;
+                }
             }
-            else if (key==="cap"){
-                isCap = true;
-            }
-            else if(letters[key] === char && key !== "cap" && isCap){
-                result += key.toUpperCase();
+        }
+        else {
+            if (isCap) {
+                result += brailleToLetters[char].toUpperCase();
                 isCap = false;
+            } else {
+                result += brailleToLetters[char];
             }
         }
     }
+
     return result;
 }
-console.log(toText("O.....O.O...OO....OO.O..O..O..OOO...OOOO..O.OO...OO....OOO..O...O.O.O.O.OO..O.OO.OO.O..OO.OOO.O.OOOOO.O.OOO..OO.O..OOOO.O...OOO.O.OO.OOO.OOO..OOOO.OOOO..OOO")); // hello world
-console.log(toBraille("aBcdefghijklmnopqrstuvwxyz")); // O.....O.O...OO....OO.O..O..OOO...OOOO..O.OO...OO...O..O.OO..O...O.O.OO.O.OO.OO..OO.OOOO..OOO
+
+function translate(input) {
+    const braillePattern = /^[O.]{6}$/; 
+    const chunks = input.match(/.{1,6}/g);  
+
+    
+    const isBraille = chunks.every(chunk => braillePattern.test(chunk));
+
+    if (isBraille) {
+        return toText(input);
+    } else {
+        return toBraille(input);
+    }
+}
