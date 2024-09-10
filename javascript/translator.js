@@ -19,13 +19,21 @@ const reverseBrailleMap = Object.fromEntries(
 );
 
 function convertToBraille(text) {
+    let isNumber = false;  
+
     return Array.from(text).map(char => {
-        if (char === char.toUpperCase() && char !== ' ') {
+        if (char === char.toUpperCase() && isNaN(char) && char !== ' ') {
+            isNumber = false;  
             return CAPITAL_SIGN + brailleMap[char.toLowerCase()] || '';
         }
-        if (!isNaN(char)) {
-            return NUMBER_SIGN + brailleMap[char] || '';
+        if (!isNaN(char) && char !== ' ') {
+            if (!isNumber) {
+                isNumber = true;  
+                return NUMBER_SIGN + brailleMap[char] || '';
+            }
+            return brailleMap[char] || '';
         }
+        isNumber = false; 
         return brailleMap[char] || '';
     }).join('');
 }
@@ -37,6 +45,11 @@ function convertToEnglish(brailleText) {
     const textLength = brailleText.length;
     let isCapital = false;
     let isNumber = false;
+
+    const letterToDigitMap = {
+        'a': '1', 'b': '2', 'c': '3', 'd': '4', 'e': '5',
+        'f': '6', 'g': '7', 'h': '8', 'i': '9', 'j': '0'
+    };
 
     while (index < textLength) {
         const brailleChar = brailleText.slice(index, index + 6);
@@ -52,27 +65,29 @@ function convertToEnglish(brailleText) {
             continue;
         }
 
-        const englishChar = reverseBrailleMap[brailleChar];
+        let englishChar = reverseBrailleMap[brailleChar];
+
         if (englishChar) {
-            if (isNumber) {
-                result.push(englishChar);
+            if (isNumber && letterToDigitMap[englishChar]) {
+                englishChar = letterToDigitMap[englishChar];
             } else if (isCapital) {
-                result.push(englishChar.toUpperCase());
-            } else {
-                result.push(englishChar);
+                englishChar = englishChar.toUpperCase();
             }
-        } else {
-            result.push(''); 
+            result.push(englishChar);
         }
 
-
         isCapital = false;
-        isNumber = false;
+
+        if (englishChar === ' ') {
+            isNumber = false;
+        }
+
         index += 6;
     }
 
     return result.join('');
 }
+
 
 function processInput(inputText) {
     let isBraille = true;
