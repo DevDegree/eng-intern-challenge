@@ -71,9 +71,9 @@ function englishToBraille(input) {
         if (!isNumberMode && EnglishToBrailleCharacterAndSymbols[char]) {
             output += EnglishToBrailleCharacterAndSymbols[char];
         }
-        // else if (isNumberMode && EnglishToBrailleNumbers[char]) {
-        //     output += EnglishToBrailleNumbers[char];
-        // }
+        else if (isNumberMode && EnglishToBrailleNumbers[char]) {
+             output += EnglishToBrailleNumbers[char];
+        }
     }
 
     return output;
