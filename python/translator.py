@@ -58,7 +58,7 @@ for k, v in BRAILLE_TO_NUMBERS.items():
     ASCII_TO_BRAILLE[v] = k
 
 
-def braille_to_alpha(arg: str, is_capital: bool, is_number: bool):
+def braille_to_alpha(arg, is_capital, is_number):
     if is_number:
         return BRAILLE_TO_NUMBERS[arg]
 
@@ -69,7 +69,7 @@ def braille_to_alpha(arg: str, is_capital: bool, is_number: bool):
     return res
 
 
-def try_braille_to_alpha(arg: str):
+def try_braille_to_alpha(arg):
     if " " in arg:  # braille inputs should only be one 'word'
         raise Exception
 
@@ -99,7 +99,7 @@ def try_braille_to_alpha(arg: str):
 
 
 # convert one word to braille
-def word_to_braille(word: str):
+def word_to_braille(word):
     res = ""
     first_number = True
     for char in word:
@@ -114,7 +114,7 @@ def word_to_braille(word: str):
 
 
 # convert an entire string of ascii characters to braille
-def alpha_to_braille(words: list[str]):
+def alpha_to_braille(words):
     braille_words = [word_to_braille(w) for w in words]
     return ASCII_TO_BRAILLE[" "].join(braille_words)
 
@@ -127,6 +127,5 @@ def main():
         arg = sys.argv[1:]
         res = alpha_to_braille(arg)
     print(res)
-
 
 main()
