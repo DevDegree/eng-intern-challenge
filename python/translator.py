@@ -1,5 +1,3 @@
-import sys
-
 # Braille alphabet mapping
 
 braille_map = {
@@ -33,3 +31,16 @@ def english_to_braille(english_str):
     for char in english_str:
         braille_translation.append(braille_map.get(char, ''))
     return ''.join(braille_translation)
+
+# function to translae braille to english
+def braille_to_english(braille_str):
+    english_translation = []
+    i = 0
+    while i < len(braille_str):
+        if braille_str[i:i+6] == '.....O': # capital letter
+            english_translation.append(english_map.get(braille_str[i:i+12], ''))
+            i += 12
+        else:
+            english_translation.append(english_map.get(braille_str[i:i+6], ''))
+            i += 6
+    return ''.join(english_translation)
