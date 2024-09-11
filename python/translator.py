@@ -85,7 +85,7 @@ def handle_braile(x: str) -> None:
         else:
             res += BRAILLE_TO_ENGLISH[char]
         i += 6
-    print(res)
+    print(res, end='')
 
 braille = False
 x = sys.argv[1]
