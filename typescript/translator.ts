@@ -5,6 +5,8 @@ import {
   ENGLISH_TO_BRAILLE,
 } from "./utils/legends";
 
+import { errorMessages } from "./utils/error-messages";
+
 const STARTING_INDEX_OF_ARGS = 2;
 const BRAILLE_CHARACTER_LENGTH = 6;
 
@@ -75,19 +77,16 @@ function translateBrailleToEnglish(brailleText: string) {
   for (let idx = 0; idx < splitBrailleLetters.length; idx += 1) {
     const currentCharInBraille = splitBrailleLetters[idx];
     const currentLetterInEnglish = BRAILLE_TO_ENGLISH[currentCharInBraille];
+
     if (!currentLetterInEnglish)
-      throw new Error(
-        "Invalid Braille character detected. The compatible Braille characters are: uppercase and lowercase letters, numbers, and space."
-      );
+      throw new Error(errorMessages.BRAILLE_INVALID_CHARACTER);
 
     if (currentLetterInEnglish === "capitalPrefix") {
       const previousCharInEnglish =
         BRAILLE_TO_ENGLISH[splitBrailleLetters[idx - 1]];
 
       if (previousCharInEnglish === currentLetterInEnglish)
-        throw new Error(
-          "Invalid Braille detected. Cannot have consecutive Capital Prefixes."
-        );
+        throw new Error(errorMessages.BRAILLE_MULTIPLE_CAPITALS_PREFIXES);
 
       uppercaseMode = true;
       continue;
@@ -98,9 +97,7 @@ function translateBrailleToEnglish(brailleText: string) {
         BRAILLE_TO_ENGLISH[splitBrailleLetters[idx - 1]];
 
       if (previousCharInEnglish === currentLetterInEnglish)
-        throw new Error(
-          "Invalid Braille detected. Cannot have consecutive Number Prefixes."
-        );
+        throw new Error(errorMessages.BRAILLE_MULTIPLE_NUMBER_PREFIXES);
 
       numberMode = true;
       continue;
@@ -142,15 +139,13 @@ function main() {
     } else if (isBrailleString(formattedInput)) {
       result = translateBrailleToEnglish(formattedInput);
     } else {
-      throw new Error(
-        "Invalid input. The translator only accepts letters, numbers, and spaces in Braille or English."
-      );
+      throw new Error(errorMessages.INVALID_ARGUMENT);
     }
-  } catch (error) {
-    console.log("Error: ", error);
-  }
 
-  console.log(result);
+    console.log(result);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 main();
