@@ -122,7 +122,6 @@ def alpha_to_braille(words: list[str]):
 def main():
     try:
         arg = " ".join(sys.argv[1:])
-        arg = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
         res = try_braille_to_alpha(arg)
     except Exception:
         arg = sys.argv[1:]
