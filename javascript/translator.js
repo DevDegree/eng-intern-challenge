@@ -71,25 +71,66 @@ const brailleToEnglish = (userInput) => {
 
 };
 
-// const englishToBraille = (userInput) => {
+const englishToBraille = (userInput) => {
+    let output = '';
+    let isNumberSequence = false;
+    const capitalChar = brailleDict['capital_follows'];
+    const numberChar = brailleDict['number_follows'];
 
-// };
+    try {
+        for (let i = 0; i < userInput.length; i++){
+            const englishChar = userInput.slice(i, i + 1);
+            const lowerCaseEnglishChar = englishChar.toLowerCase();
+
+            if (brailleDict.hasOwnProperty(lowerCaseEnglishChar) || brailleNumDict.hasOwnProperty(englishChar)){
+
+                if (/^[A-Z]$/.test(englishChar)){
+                    output += capitalChar;
+                    output += brailleDict[lowerCaseEnglishChar];
+                } else if (/^[0-9]$/.test(englishChar)){
+                    if (!isNumberSequence){
+                        output += numberChar;
+                        isNumberSequence = true;
+                    }
+                    output += brailleNumDict[englishChar];
+
+                } else if (lowerCaseEnglishChar === ' '){
+                        output += brailleDict[lowerCaseEnglishChar];
+                        isNumberSequence = false;
+                } else {
+                    output += brailleDict[lowerCaseEnglishChar];
+                
+                }
+
+            }
+            else {
+                output += 'unknown input'
+            }
+        }
+    } catch (error) {
+        console.error(error);
+    }
+
+    return output === '' ? 'invalid input' : output;
+
+
+};
 
 
 const translator = () => {
 
+    let output = null;
     const userInput = process.argv.slice(2).join(' ');
-
     const isBraille = /^[O.]+$/.test(userInput);
 
     if (isBraille){
-        let output = brailleToEnglish(userInput);
+        output = brailleToEnglish(userInput);
+        console.log(output);
+    } else {
+        output = englishToBraille(userInput);
         console.log(output);
     }
-    // } else {
-    //     // englishToBraille(userInput);
-        
-    // }
+
 };
 
 translator();
