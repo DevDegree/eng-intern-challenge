@@ -58,7 +58,7 @@ braille_digits = [
 ]
 
 # A pattern that is used to check if the inputted string is exclusively O's and .'s meaning its braille
-braille_alphabet_pattern = re.compile(r"^[O.]+$")
+braille_alphabet_pattern = re.compile(r"^[O.]{6,}$")
 
 # Loop through every character in the string and add the braille equivalent onto a new string with precedent characters when needed
 def convert_to_braille(str_to_convert):
@@ -128,5 +128,6 @@ if __name__ == '__main__':
         sys.exit(1)
     
     # Process each input string and join them with a space
-    result = [check_alphabet(arg) for arg in sys.argv[1:]]
-    print(''.join(result))
+    input_string = ' '.join(sys.argv[1:])
+    result = check_alphabet(input_string)
+    print(result, end="")
