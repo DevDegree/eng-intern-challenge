@@ -59,7 +59,30 @@ def is_braille(input_str):
 
 
 def translate_braille_to_english(braille_str):
-    pass
+    english_output = []
+    in_number_mode = False
+    i = 0
+
+    while i < len(braille_str):
+        braille_char = braille_str[i : i + 6]
+        if braille_char == english_to_braille["cap"]:
+            next_char = braille_str[i + 6 : i + 12]
+            english_output.append(braille_to_english.get(next_char, "?").upper())
+            i += 12
+        elif braille_char == english_to_braille["num"]:
+            in_number_mode = True
+            i += 6
+        else:
+            # Regular character, replace unknown chars with "?"
+            if in_number_mode:
+                char = braille_to_nums.get(braille_char, "x")
+                if braille_char == english_to_braille[" "]:
+                    in_number_mode = False
+            else:
+                char = braille_to_english.get(braille_char, "?")
+            english_output.append(char)
+            i += 6
+    return "".join(english_output)
 
 
 def translate_english_to_braille(english_str):
