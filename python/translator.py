@@ -93,12 +93,11 @@ def translateToBraille(userInput):
                 output += ".O.OOO" # braille for number indicator
                 useNums = True
 
-            if letter.isalpha():
-                output += toBraille[letter.lower()]
-            else:
-                output += toBrailleNums[letter] 
+            # add letter or number
+            output += toBraille.get(letter.lower(), toBrailleNums.get(letter, "?"))
 
-        if i < len(userInput) - 1:
+
+        if i < len(userInput) - 1: #add space between words
             output += "......"
             useNums = False
     
@@ -109,23 +108,22 @@ def translateToEnglish(userInput):
     useNums = False
     capitalize = False
     for i in range(0,len(userInput[0]), 6):
-            character = userInput[0][i:i+6]
-            if character == ".O.OOO":
-                useNums = True
-                continue
-            elif character == ".....O":
-                capitalize = True
-                continue
-            if useNums and character != "......":
-                output += toEnglishNums.get(character,"?")
-            else:
-                useNums = False
-                if capitalize:
-                    output += toEnglish.get(character,"?").capitalize()
-                    capitalize = False
-                else:
-                    output += toEnglish.get(character,"?")
-            
+        character = userInput[0][i:i+6]
+        if character == ".O.OOO":
+            useNums = True
+            continue
+        elif character == ".....O":
+            capitalize = True
+            continue
+        
+        if useNums and character != "......":
+            output += toEnglishNums.get(character,"?")
+        else:
+            useNums = False
+            letter = toEnglish.get(character, "?")
+            output += letter.capitalize() if capitalize else letter
+            capitalize = False
+
     return output
 
 def main():
@@ -146,3 +144,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
