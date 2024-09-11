@@ -1,0 +1,1 @@
+VALID_BRAILLE_CHARS = {'O', '.'}
