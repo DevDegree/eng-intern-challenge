@@ -63,5 +63,19 @@ const brailleMap = {
 const englishMap = Object.fromEntries(Object.entries(brailleMap).map(([key, value]) => [value, key]));
 
 function isBraille(input) {
-    return  /^[O.]{6}$/.test(input);
+    return /^[O.]{6}$/.test(input);
+}
+
+function translateToBraille(input) {
+    let result = '';
+    for (let char of input) {
+        if (char >= 'A' && char <= 'Z') {
+            result += brailleMap['capital'] + brailleMap[char.toLowerCase()];
+        } else if (char >= '0' & char <= '9') {
+            result += brailleMap['number'] + brailleMap[char];
+        } else {
+            result += brailleMap[char];
+        }
+    }
+    return result;
 }
