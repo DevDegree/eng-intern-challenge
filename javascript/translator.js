@@ -139,7 +139,7 @@ function translateEnglishToBraille(inputString) {
     let prevLetter = "";
     const regexToCheckUpperCase = /^[A-Z]$/;
     const regexToCheckLowerCase = /^[a-z]$/;
-    const regexToCheckSpecialCharacters = /^[.,?!:;-/<>()]$/;
+    const regexToCheckSpecialCharacters = /^[.,?!:;/<>()-]$/;
     const regexToCheckNumber = /^[0-9]$/;
 
     for (let i = 0; i < inputString.length; i++) {
@@ -202,7 +202,7 @@ function isValidInput (inputArg) {
         return false;
     }
 
-    if (inputArg.length > 1 && !isBraille(inputArg[0])) {
+    if (inputArg.length > 1 && isBraille(inputArg[0])) {
         console.log('INVALID INPUT: Please provide only one argument');
         return false
     }
