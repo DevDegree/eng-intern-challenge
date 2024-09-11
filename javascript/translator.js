@@ -6,32 +6,27 @@
 const readline = require('readline-sync');
 
 const brailleToEnglish = (brailleString) => {
-    const englishString = "";
+    const result = "";
 
     const BRAILLE_CHAR_LEN = 6;
 
-    let capitalFlag = false, decimalFlag = false, numberFlag = false;
+    let capitalFlag = false, numberFlag = false;
 
     for (let i = 0; i < brailleString.length; i += BRAILLE_CHAR_LEN) {
         const brailleChar = brailleString.substring(i, i + BRAILLE_CHAR_LEN);
-        parseBraille(brailleChar, capitalFlag, decimalFlag, numberFlag);
+
+        if (brailleChar = '.....O') { capitalFlag = true; }
+        else if (brailleChar = '.O.OOO') { numberFlag = true; } 
+        else { result += parseBraille(brailleChar, capitalFlag, numberFlag); }
     }
 }
 
-const parseBraille = (char, cF, nF) => {
-    parseAlphaNumericBraille(char, false);
+const parseBraille = (char, capitalFlag, numberFlag) => {
+    parseAlphaNumericBraille(char, capitalFlag, numberFlag);
 }
 
 // TO DO: Ensure that argument is indeed alphanumeric
-const parseAlphaNumericBraille = (char, numberFlag) => {
-    const alphabet = 'abcdefghijklmnopqrstuvxyz' // Does not contain 'w'!
-    let result = '';
-
-    // if (char[4] === '.' && char[5] === '.') { row = 1; }
-    // else if (char[4] === '0' && char[5] === '.') { row = 2; }
-    // else if (char[4] === '0' && char[5] === '0') { row = 3; }
-    // else { result = 'w'; }
-
+const parseAlphaNumericBraille = (char, numberFlag) => {    
     const rowValues = {
         '..' : 0,
         'O.' : 1,
@@ -51,20 +46,15 @@ const parseAlphaNumericBraille = (char, numberFlag) => {
         '.OOO' : 9,
     }
     
-    console.log("Bottom Two: " + char.substring(4, 6));
-    console.log("Top Four: " + char.substring(0, 4));
-
     row = rowValues[char.substring(4, 6)];
     column = columnValues[char.substring(0, 4)];
-
+    
     if (numberFlag) {
         return `${(column + 1)}`;
     }
-
-    console.log("Column: " +  column);
-    console.log("Row: " + row);
-
-    console.log(alphabet.charAt(column + (row * 10)));
+    
+    const alphabet = 'abcdefghijklmnopqrstuvxyz' // Does not contain 'w'!
+    return alphabet.charAt(column + (row * 10));
 }
 
 const isEnglish = (input) => {
