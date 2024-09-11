@@ -111,11 +111,12 @@ def main():
         print("Error: No input string provided!")
         sys.exit(1)
     
-    for input_string in sys.argv[1:]:
-        if is_braille(input_string):
-            print(braille_to_english_translator(input_string))
-        else:
-            print(english_to_braille_translator(input_string))
+    input_string = " ".join(sys.argv[1:])
+    
+    if is_braille(input_string):
+        print(braille_to_english_translator(input_string))
+    else:
+        print(english_to_braille_translator(input_string))
 
 
 
