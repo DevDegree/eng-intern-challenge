@@ -234,6 +234,8 @@ function translate() {
   const input = process.argv.slice(2); // array of what has been inputted
   const isBraille = checkIfIsBraille(input);
 
+  if (input.length === 0) return;
+
   if (isBraille) {
     return translateToEnglish(input);
   } else {
