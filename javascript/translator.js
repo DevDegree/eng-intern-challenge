@@ -42,3 +42,55 @@ function translateToBraille(text) {
     }
     return braille;
 }
+function translateToEnglish(braille) {
+    let english = "";
+    let numberMode = false;
+    let capMode = false;
+    const brailleChars = braille.match(/.{1,6}/g) || [];
+
+    for (let i = 0; i < brailleChars.length; i++) {
+        const char = brailleChars[i].replace(/O/g, "o");
+        if (char === brailleMap["cap"]) {
+            capMode = true;
+        } else if (char === brailleMap["num"]) {
+            numberMode = true;
+        } else if (char === brailleMap[" "]) {
+            english += " ";
+            numberMode = false;
+        } else {
+            let translatedChar = reverseBrailleMap[char] || "";
+            if (numberMode && translatedChar.match(/[a-j]/)) {
+                translatedChar = (Object.keys(brailleMap).find(key => brailleMap[key] === char)) || translatedChar;
+                translatedChar = parseInt(translatedChar);
+            }
+            if (capMode) {
+                english += translatedChar.toUpperCase();
+                capMode = false;
+            } else {
+                english += translatedChar;
+            }
+            if (numberMode && !/[0-9]/.test(translatedChar)) {
+                numberMode = false;
+            }
+        }
+    }
+    return english;
+}
+function main() {
+    const input = process.argv.slice(2).join(" ");
+    if (!input) {
+        console.log("Please provide a string to translate.");
+        return;
+    }
+    if (isBraille(input)) {
+        const remainder = input.length % 6;
+        if (remainder !== 0) {
+            console.log("Error: Braille input length is not a multiple of 6. Please provide a valid Braille input.");
+            return;
+        }
+        console.log(translateToEnglish(input));
+    } else {
+        console.log(translateToBraille(input));
+    }
+}
+main();
