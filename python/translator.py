@@ -6,6 +6,7 @@
 # 5. As specified in the requirements, Braille Alphabet are only limited to the 26 letters of the English alphabet, the numbers 0-9 and a space.
 
 import sys
+from typing import List
 
 # Constants
 VALID_ENGLISH_CHARS = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ")
@@ -91,7 +92,7 @@ def english_to_braille(english: str) -> str:
     return ''.join(translated_text)
 
 
-def validate_braille(braille: str) -> list[str]:
+def validate_braille(braille: str) -> List[str]:
     """
     Validates a Braille string to ensure it follows correct encoding.
       The rules are:
@@ -136,7 +137,7 @@ def validate_braille(braille: str) -> list[str]:
     return issues
 
 
-def validate_english(english: str) -> list[str]:
+def validate_english(english: str) -> List[str]:
     """
     Validates an English string to ensure it contains only valid characters.
       The rules are:
@@ -229,4 +230,5 @@ def get_input_from_args() -> str:
 
 if __name__ == "__main__":
     input_code = get_input_from_args()
-    print("result")
+    result = translate(input_code)
+    print(result)
