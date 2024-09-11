@@ -1,8 +1,8 @@
 import sys
 braille_to_english = {
-    "O.....": "CAPITAL",  # Capital sign
-    "O.OO.O": "#",        # Number sign
-    "O.....": "CAPITAL",  # Capital sign
+    "O.....": "CAPITAL",  
+    "O.OO.O": "#",        
+    "O.....": "CAPITAL",  
     "O.....": "CAPITAL",
     "O.....": "CAPITAL",
     "O.....": "CAPITAL",
