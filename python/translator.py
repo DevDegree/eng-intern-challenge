@@ -1,3 +1,4 @@
+from typing import List
 import sys
 
 ENG_TO_BRAILLE_DICT = {
@@ -62,7 +63,7 @@ def braille_to_english(text: str):
 
 
 # Assume that numbers are only at the end of words
-def english_to_braille(word_list: list[str]):
+def english_to_braille(word_list: List[str]):
     text_braille: str = ''
 
     number_next: bool = False
