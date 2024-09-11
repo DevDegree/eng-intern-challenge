@@ -1,7 +1,13 @@
 // VARIABLES
 
-// "dictionary" object with key/value pairs to translate
+// "dictionary" object with key/value pairs to translate letters and symbols
+// object for numbers 
+// const for capital follows
+// const for decimal follows
+// const for number follows
 // string to hold the result
+// boolean for capital or no? 
+// boolean for number? 
 
 // create translator reference as an OBJECT
 
@@ -21,3 +27,11 @@
 // for each character, find the corresponding braille string in the translator object
 // add braille strings to result string 
 // return result string
+
+// dealing with capital, decimal, number follows & spaces
+// IF substring matches capital pattern, then append the next letter with ToUpperCase
+
+// IF it matches number, use numbers object until SPACE is reached using a while loop
+
+
+// IF it matches decimal, append the next symbol
