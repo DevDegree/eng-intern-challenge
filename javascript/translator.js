@@ -6,9 +6,6 @@ const brailleDict = {
     'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO', 
     'z': 'O..OOO',
 
-    '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..', 
-    '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..', 
-
     'capital_follows': '.....O', 'decimal_follows': '.O...O', 'number_follows': '.O.OOO',
 
     '.': '..OO.O', ',': '..O...', '?': '..O.OO', '!': '..OOO.', ':': '..OO..', 
@@ -16,8 +13,17 @@ const brailleDict = {
     '(': 'O.O..O', ')': '.O.OO.', ' ': '......',
 };
 
+const brailleNumDict = {
+    '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..', 
+    '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..', 
+}
+
 const englishDict = Object.fromEntries(
     Object.entries(brailleDict).map(([key, val]) => [val, key]),
+);
+
+const englishNumDict = Object.fromEntries(
+    Object.entries(brailleNumDict).map(([key, val]) => [val, key]),
 );
 
 
