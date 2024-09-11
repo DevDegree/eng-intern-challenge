@@ -1,4 +1,4 @@
-const brailMap = {
+const brailleMap = {
     "a":"o.....", "b":"o.o...", "c":"oo....", "d":"oo.o..", "e":"o..o..", "f":"ooo...", "g":"oooo..", "h":"o.oo..",
     "i":".oo...", "j":".ooo..", "k":"o...o.", "l":"o.o.o.", "m":"oo..o.", "n":"oo.oo.", "o":"o..oo.", "p":"ooo.o.", 
     "q":"ooooo.", "r":"o.ooo.", "s":".oo.o.", "t":".oooo.", "u":"o...oo", "v":"o.o.oo", "w":".ooo.o", "x":"oo..oo", 
