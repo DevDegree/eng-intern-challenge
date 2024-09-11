@@ -1,0 +1,577 @@
+// -----------------------Eng to braille---------------------------
+
+  it("should print: Eng to braille: 1a", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts 1a");
+
+    const expected = "Error: Invalid sentence, cannot have letter immediately after digit";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: A", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts A");
+
+    const expected = ".....OO.....";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: a", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts a");
+
+    const expected = "O.....";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: Hello world", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts Hello world");
+
+    const expected = ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: o", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts o");
+
+    const expected = "O..OO.";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: ( )", async () => {
+    const { stdout } = await execAsync('ts-node translator.ts "( )"');
+
+    const expected = "O.O..O.......O.OO.";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: ( a )", async () => {
+    const { stdout } = await execAsync('ts-node translator.ts "( a )"');
+
+    const expected = "O.O..O......O............O.OO.";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: >", async () => {
+    const { stdout } = await execAsync('ts-node translator.ts ">"');
+
+    const expected = ".O.OOOO..OO.";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: 42", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts 42");
+
+    const expected = ".O.OOOOO.O..O.O...";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: 1", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts 1");
+
+    const expected = ".O.OOOO.....";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: hi, a", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts hi, a");
+
+    const expected = "O.OO...OO.....O.........O.....";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: a1", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts a1");
+
+    const expected = "O......O.OOOO.....";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: a12 1", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts a12 1");
+
+    const expected = "O......O.OOOO.....O.O..........O.OOOO.....";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: 1.", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts 1.");
+
+    const expected = ".O.OOOO.......OO.O";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: 1.2", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts 1.2");
+
+    const expected = ".O.OOOO......O...OO.O...";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: a.1", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts a.1");
+
+    const expected = "O......O.OOO.O...OO.....";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: 1.2 eggs1?", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts 1.2 eggs1?");
+
+    const expected = ".O.OOOO......O...OO.O.........O..O..OOOO..OOOO...OO.O..O.OOOO.......O.OO";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: AbC 1.2 1.2.", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts AbC 1.2 1.2.");
+
+    const expected =
+      ".....OO.....O.O........OOO...........O.OOOO......O...OO.O..........O.OOOO......O...OO.O.....OO.O";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: ?", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts ?");
+
+    const expected = "..O.OO";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: 123 ", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts 123 ");
+
+    const expected = ".O.OOOO.....O.O...OO....";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: Abc 123 ", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts Abc 123");
+
+    const expected = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO....";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: .1 ", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts .1");
+
+    const expected = ".O.OOO.O...OO.....";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: .01 ", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts .01");
+
+    const expected = ".O.OOO.O...O.OOO..O.....";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: 1 / 2 ", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts 1 / 2");
+
+    const expected = ".O.OOOO............O..O........O.OOOO.O...";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it('should print: Eng to braille: " " ', async () => {
+    const { stdout } = await execAsync('ts-node translator.ts " "');
+
+    const expected = "......";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: Anchor tag is link to (content).", async () => {
+    const { stdout } = await execAsync('ts-node translator.ts "Anchor tag is link to (content)."');
+
+    const expected =
+      ".....OO.....OO.OO.OO....O.OO..O..OO.O.OOO........OOOO.O.....OOOO.........OO....OO.O.......O.O.O..OO...OO.OO.O...O........OOOO.O..OO.......O.O..OOO....O..OO.OO.OO..OOOO.O..O..OO.OO..OOOO..O.OO...OO.O";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: Anchor", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts Anchor");
+
+    const expected = ".....OO.....OO.OO.OO....O.OO..O..OO.O.OOO.";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: a (content).", async () => {
+    const { stdout } = await execAsync('ts-node translator.ts "a (content)."');
+
+    const expected = "O...........O.O..OOO....O..OO.OO.OO..OOOO.O..O..OO.OO..OOOO..O.OO...OO.O";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: ().", async () => {
+    const { stdout } = await execAsync('ts-node translator.ts "()."');
+
+    const expected = "O.O..O.O.OO...OO.O";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: .", async () => {
+    const { stdout } = await execAsync('ts-node translator.ts "."');
+
+    const expected = "..OO.O";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: .", async () => {
+    const { stdout } = await execAsync('ts-node translator.ts " ."');
+
+    const expected = "........OO.O";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: .", async () => {
+    const { stdout } = await execAsync('ts-node translator.ts "  . "');
+
+    const expected = "..............OO.O......";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: ..", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts ..");
+
+    const expected = "..OO.O..OO.O";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: .a", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts .a");
+
+    const expected = "..OO.OO.....";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: 1!", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts 1!");
+
+    const expected = ".O.OOOO.......OOO.";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: 1!", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts 1!");
+
+    const expected = ".O.OOOO.......OOO.";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: Eng to braille: 1!1", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts 1!1");
+
+    const expected = ".O.OOOO.......OOO.O.....";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+   // ------------------ Test for conversion from Braille to English ------------------
+
+  it("should print: braille to Eng: A", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts .....OO.....");
+
+    const expected = "A";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: 1", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts .O.OOOO.....");
+
+    const expected = "1";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: .1 ", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts .O.OOO.O...OO.....");
+
+    const expected = ".1";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: A C", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts .....OO................OOO....");
+
+    const expected = "A C";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: AbC 1.2 1.2", async () => {
+    const { stdout } = await execAsync(
+      "ts-node translator.ts .....OO.....O.O........OOO...........O.OOOO......O...OO.O..........O.OOOO......O...OO.O...",
+    );
+
+    const expected = "AbC 1.2 1.2";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: 1 / 2", async () => {
+    const { stdout } = await execAsync(
+      "ts-node translator.ts .O.OOOO............O..O........O.OOOO.O...",
+    );
+
+    const expected = "1 / 2";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: 1.2 eggs1?", async () => {
+    const { stdout } = await execAsync(
+      "ts-node translator.ts .O.OOOO......O...OO.O.........O..O..OOOO..OOOO...OO.O..O.OOOO.......O.OO",
+    );
+
+    const expected = "1.2 eggs1?";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: hi, a", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts O.OO...OO.....O.........O.....");
+
+    const expected = "hi, a";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  // NOT WORKING, BECAUSE 'O' AND '>' HAVE SAME BRAILLE
+  it("should print: braille to Eng: Hello world", async () => {
+    const { stdout } = await execAsync(
+      "ts-node translator.ts .....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..",
+    );
+
+    const expected = "Hello world";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: Abc 123 xYz", async () => {
+    const { stdout } = await execAsync(
+      "ts-node translator.ts .....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO",
+    );
+
+    const expected = "Abc 123 xYz";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: o", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts O..OO.");
+
+    const expected = "o";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: ( )", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts O.O..O.......O.OO.");
+
+    const expected = "( )";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: ( a )", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts O.O..O......O............O.OO.");
+
+    const expected = "( a )";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  // TODO: FIX THIS ISSUE, ADD CONDITION FOR > TO BE USED WITH NUMBERS ONLY AND NOT REGULAR SPEECH
+  it("should print: braille to Eng: >", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts .O.OOOO..OO.");
+
+    const expected = ">";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: 42", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts .O.OOOOO.O..O.O...");
+
+    const expected = "42";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: hi, a", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts O.OO...OO.....O.........O.....");
+
+    const expected = "hi, a";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: a1", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts O......O.OOOO.....");
+
+    const expected = "a1";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: a12 1", async () => {
+    const { stdout } = await execAsync(
+      "ts-node translator.ts O......O.OOOO.....O.O..........O.OOOO.....",
+    );
+
+    const expected = "a12 1";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: a12 11", async () => {
+    const { stdout } = await execAsync(
+      "ts-node translator.ts O......O.OOOO.....O.O..........O.OOOO..........OO.....",
+    );
+
+    const expected = "Error: Invalid sentence, cannot have letter immediately after digit";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: a12 11", async () => {
+    const { stdout } = await execAsync(
+      "ts-node translator.ts O......O.OOOO.....O.O..........O.OOOO.....O.....",
+    );
+
+    const expected = "a12 11";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: 1.", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts .O.OOOO.......OO.O");
+
+    const expected = "1.";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: a.", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts O.......OO.O");
+
+    const expected = "a.";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: 1.2", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts .O.OOOO......O...OO.O...");
+
+    const expected = "1.2";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: a.1", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts O......O.OOO.O...OO.....");
+
+    const expected = "a.1";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: 1.2 eggs1", async () => {
+    const { stdout } = await execAsync(
+      "ts-node translator.ts .O.OOOO......O...OO.O.........O..O..OOOO..OOOO...OO.O..O.OOOO.....",
+    );
+
+    const expected = "1.2 eggs1";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: A", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts .....OO.....");
+
+    const expected = "A";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: AbC 1.2 1.2.", async () => {
+    const { stdout } = await execAsync(
+      "ts-node translator.ts .....OO.....O.O........OOO...........O.OOOO......O...OO.O..........O.OOOO......O...OO.O.....OO.O",
+    );
+
+    const expected = "AbC 1.2 1.2.";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: ?", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts ..O.OO");
+
+    const expected = "?";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: 123 ", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts .O.OOOO.....O.O...OO.... ");
+
+    const expected = "123";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  ////
+  it("should print: braille to Eng: Abc 123 ", async () => {
+    const { stdout } = await execAsync(
+      "ts-node translator.ts .....OO.....O.O...OO...........O.OOOO.....O.O...OO....",
+    );
+
+    const expected = "Abc 123";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: .1 ", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts .O.OOO.O...OO.....");
+
+    const expected = ".1";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: .01 ", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts .O.OOO.O...O.OOO..O.....");
+
+    const expected = ".01";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: 1 / 2 ", async () => {
+    const { stdout } = await execAsync(
+      "ts-node translator.ts .O.OOOO............O..O........O.OOOO.O...",
+    );
+
+    const expected = "1 / 2";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: 1? ", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts .O.OOOO.......O.OO");
+
+    const expected = "1?";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: Anchor tag is link to (content).", async () => {
+    const { stdout } = await execAsync(
+      "ts-node translator.ts .....OO.....OO.OO.OO....O.OO..O..OO.O.OOO........OOOO.O.....OOOO.........OO....OO.O.......O.O.O..OO...OO.OO.O...O........OOOO.O..OO.......O.O..OOO....O..OO.OO.OO..OOOO.O..O..OO.OO..OOOO..O.OO...OO.O",
+    );
+
+    const expected = "Anchor tag is link to (content).";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: Anchor", async () => {
+    const { stdout } = await execAsync(
+      "ts-node translator.ts .....OO.....OO.OO.OO....O.OO..O..OO.O.OOO.",
+    );
+
+    const expected = "Anchor";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: a (content).", async () => {
+    const { stdout } = await execAsync(
+      "ts-node translator.ts O...........O.O..OOO....O..OO.OO.OO..OOOO.O..O..OO.OO..OOOO..O.OO...OO.O",
+    );
+
+    const expected = "a (content).";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: ().", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts O.O..O.O.OO...OO.O");
+
+    const expected = "().";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: .", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts ..OO.O");
+
+    const expected = ".";
+    expect(stdout.trim()).toBe(expected);
+  });
+
+  it("should print: braille to Eng: ..", async () => {
+    const { stdout } = await execAsync("ts-node translator.ts ..OO.O..OO.O");
+
+    const expected = "..";
+    expect(stdout.trim()).toBe(expected);
+  });
