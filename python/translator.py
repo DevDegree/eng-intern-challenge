@@ -147,10 +147,8 @@ def main():
 
     # Join all input strings into one, separated by spaces
     combined_input = ' '.join(args.input_string)
-    print(f"Combined input: {combined_input}")
     result = translator(combined_input)
     print(result)
-    return result
 
 
 
