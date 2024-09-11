@@ -30,23 +30,36 @@ const englishNumDict = Object.fromEntries(
 const brailleToEnglish = (userInput) => {
     let output = '';
     let capitalize = false;
+    let isNumber = false;
 
     try {
         for (let i = 0; i < userInput.length; i += 6){
             const brailleChar = userInput.slice(i, i + 6);
             
             if (englishDict.hasOwnProperty(brailleChar)){
-                const char = englishDict[brailleChar];
+                const englishChar = englishDict[brailleChar];
 
-                if (char === 'capital_follows'){
+                if (englishChar === 'capital_follows'){
                     capitalize = true;
+                } else if (englishChar === 'number_follows'){
+                    isNumber = true;
+                } else if (englishChar === ' '){
+                    output += englishChar;
+                    isNumber = false;
                 } else{
-                    output += capitalize ? char.toUpperCase() : char;
-                    capitalize = false;
+
+                    if (isNumber){
+                        if(englishNumDict.hasOwnProperty(brailleChar)){
+                            output += englishNumDict[brailleChar]
+                        }
+                    } else {
+                        output += capitalize ? englishChar.toUpperCase() : englishChar;
+                        capitalize = false;
+                    }
                 }
             }
             else {
-                output += 'unknown'
+                output += 'unknown input'
             }
         }
     } catch (error) {
