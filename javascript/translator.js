@@ -25,7 +25,9 @@ const brailleCharacters = {
         console.log('');
         return;
     }
-    const toElements = process.argv.toSpliced(0, 2).join(' ').split('');
+    const args = [...process.argv];
+    args.splice(0, 2);
+    const toElements = args.join(' ').split('');
     const isBraille = (toElements.length % 6 === 0) && toElements.every(element => element === '.' || element === "O");
     if(isBraille){
         const toString = toElements.join('');
