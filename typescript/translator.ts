@@ -107,7 +107,8 @@ const main = (words) => {
         }
     } else {
         // convert words to braille
-        console.log("is not braille");
+        // words.forEach(word=>{
+        // });
     }
 
     console.log(output);
