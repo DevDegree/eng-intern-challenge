@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "outDir": "./build",
+    "rootDir": ".",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "baseUrl": ".",
+  },
+  "include": ["src/**/*.ts", "translator.ts"],
+  "exclude": ["node_modules", "src/tests/**/*.ts", "build"]
+}

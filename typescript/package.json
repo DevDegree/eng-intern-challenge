@@ -1,13 +1,14 @@
 {
   "name": "typescript",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.1.0",
+  "description": "A TypeScript-based CLI application for translating between English and Braille.",
   "main": "translator.ts",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "rm -rf build && tsc"
   },
   "keywords": [],
-  "author": "",
+  "author": "Marcin Koziel <marcinzkoziel@gmail.com> (https://github.com/marcin-koziel)",
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^29.5.12",
