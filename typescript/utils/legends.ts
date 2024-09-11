@@ -1,4 +1,8 @@
-export const BRAILLE_TO_ENGLISH: { [brailleCharacter: string]: string } = {
+interface TranslationLegend {
+  [character: string]: string;
+}
+
+export const BRAILLE_TO_ENGLISH: TranslationLegend = {
   "O.....": "a",
   "O.O...": "b",
   "OO....": "c",
@@ -35,7 +39,7 @@ export const NUMBER_TO_BRAILLE = generateNumberToBrailleLegend();
 export const BRAILLE_TO_NUMBER = generateBrailleToNumberLegend();
 
 function generateEnglishToBrailleLegend() {
-  const brailleToEnglish: { [englishCharacter: string]: string } = {};
+  const brailleToEnglish: TranslationLegend = {};
 
   for (const key in BRAILLE_TO_ENGLISH) {
     const value = BRAILLE_TO_ENGLISH[key];
@@ -58,7 +62,7 @@ function generateNumberToBrailleLegend() {
 }
 
 function generateBrailleToNumberLegend() {
-  const brailleToNumber: { [number: string]: string } = {};
+  const brailleToNumber: TranslationLegend = {};
 
   NUMBER_TO_BRAILLE.forEach((letter, index) => {
     brailleToNumber[letter] = String(index);
