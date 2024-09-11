@@ -227,8 +227,6 @@ def get_input_from_args() -> str:
         raise ValueError("Please provide the code to translate.")
     return " ".join(sys.argv[1:])
 
-if __name__ == "__main__":
-    input_code = get_input_from_args()
-    print(input_code)
-    result = translate(input_code)
-    print(result)
+input_code = get_input_from_args()
+result = translate(input_code)
+print(result)
