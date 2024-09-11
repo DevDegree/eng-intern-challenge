@@ -33,4 +33,6 @@ Node version: 18.20.4
 
 - The "legend" objects that map individual characters to their respective translated ones were used with the trade-off of additional space requirements, but less time taken to translate at runtime.
 
+- Chose procedural approach over other paradigms (e.g. OOP, FP) because of the simplicity of the program. Entities were somewhat vague and the interactions were not complex.
+
 - Fun time! Thanks for the consideration!
