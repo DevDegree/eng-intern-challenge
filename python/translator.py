@@ -1,6 +1,21 @@
 import sys
 import re
 
+"""
+This app translates Braille into English and vice versa.
+It takes a string or any number of arguments (in the same language/system)
+and translates it into the other.
+It takes into account lower and upper-case letters, a dozen symbols & numbers.
+When translating English to Braille, if numbers are present,
+a space will be added when a string of numbers is finished. This is so
+the Braille reader knows when the characters switch back to letters.
+In the supplied Braille chart, there was an overlap between o and >.
+Other charts online had < and > listed as, respectively, O.O..O and
+.O.OO. while ( and ) were listed as ..OOOO. 
+This was applied to maintain correct functionality. Chart can be found at:
+https://www.vectorstock.com/royalty-free-vector/braille-alphabet-vector-1226835
+"""
+
 ## data
 braille_dict = {
     "a": "O.....",
@@ -28,7 +43,19 @@ braille_dict = {
     "w": ".OOO.O",
     "x": "OO..OO",
     "y": "OO.OOO",
-    "z": "O..OOO"
+    "z": "O..OOO",
+    ".": "..OO.O",
+    ",": "..O...",
+    "?": "..O.OO",
+    "!": "..OOO.",
+    ":": "..OO..",
+    ";": "..O.O.",
+    "-": "....OO",
+    "/": ".O..O.",
+    "<": "O.O..O",
+    ">": ".O.OO.",
+    "(": "..OOOO",
+    ")": "..OOOO"
 }
 
 braille_nums = {
@@ -70,7 +97,19 @@ english_dict = {
     ".OOO.O": "w",
     "OO..OO": "x",
     "OO.OOO": "y",
-    "O..OOO": "z" 
+    "O..OOO": "z",
+    "..OO.O": ".",
+    "..O...": ",",
+    "..O.OO": "?",
+    "..OOO.": "!",
+    "..OO..": ":",
+    "..O.O.": ";",
+    "....OO": "-",
+    ".O..O.": "/",
+    "O.O..O": "<",
+    ".O.OO.": ">",
+    "..OOOO": "(",
+    "..OOOO": ")" 
 }
 
 english_nums = {
@@ -96,7 +135,12 @@ def translate(text):
 ## detect language
 def type(text):
     if (text.count(".") + text.count("O") == len(text)):
-        return ("Braille")
+        if (len(text) % 6 == 0):
+            return ("Braille")
+        else:
+            print("Error: Verify Braille text format")
+            print("Number of characters invalid")
+            quit()     
     return ("Alpha")
 
 ## split Braille into single characters    
@@ -112,11 +156,12 @@ def convertNum(num):
     
 ## translate Braille string to English
 def transBraToEng(text):
-    text = splitBraille(text)
+    brailleText = splitBraille(text)
     cap = False
     number = False
+    closeParen = False
     result = ""
-    for char in text:
+    for char in brailleText:
         if char == "......":
             result += " "
             number = False
@@ -124,6 +169,15 @@ def transBraToEng(text):
         elif char == ".O.OOO":
             number = True
             continue
+        elif char == "..OOOO":
+            if closeParen:
+                result += ")"
+                closeParen = False
+                continue
+            else:
+                result += "("
+                closeParen = True
+                continue
         elif cap:
             result += chr(ord(convertBraToEng(char)) - 32)
             cap = False
@@ -152,7 +206,7 @@ def transEngToBra(text):
     prevWasNum = False
     for char in text:
         # check if space
-        if ord(char) == 32:
+        if ord(char) == 32 or ord(char) == 10:
             prevWasNum = False
             result += "......"
             continue
@@ -199,7 +253,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-#translate("Abc 123 xYz")
-#translate(".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..")
-#translate(".....OO..........OO.O........OOO..........OO.O..O..O..OOO..............OO.....O.O........OOO...........O.OOOO...........O......O.OOOO.O.........O.O..........O.OOOOO....OO.O.........O.OOOO..O..OOO...")
