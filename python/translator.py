@@ -28,7 +28,7 @@ def translate(input_str):
         return translate_english_to_braille(input_str)
 
 def translate_braille_to_english(braille_str):
-    output = []
+    output = ''
     is_capital = False
     is_number = False
 
@@ -41,47 +41,48 @@ def translate_braille_to_english(braille_str):
         elif braille_char == number_follows:
             is_number = True
         elif braille_char == '......':
-            output.append(' ')  # space
+            output += ' '  # space
             is_number = False  # Reset number mode on space
         else:
             char = braille_english_map.get(braille_char, '')
             if is_number:
-                output.append(char_number_map[char])
+                output += char_number_map[char]
             else:
                 if is_capital:
-                    output.append(char.upper())
+                    output += char.upper()
                     is_capital = False
                 else:
-                    output.append(char)
+                    output += char
 
-    return ''.join(output)
+    return output
 
 def translate_english_to_braille(english_str):
-    output = []
+    output = ''
     is_number = False
 
     for char in english_str:
         if char.isupper():
-            output.append(capital_follows)
-            output.append(english_braille_map[char.lower()])
+            output += capital_follows
+            output += english_braille_map[char.lower()]
         elif char.isdigit():
             if not is_number:
-                output.append(number_follows)
+                output += number_follows
                 is_number = True
-            output.append(english_braille_map[number_char_map[char]])  
+            output += english_braille_map[number_char_map[char]]  # Maps numbers to characters
         elif char == ' ':
-            output.append(english_braille_map[' '])
+            output += english_braille_map[' ']
             is_number = False  # Reset number mode on space
         else:
-            output.append(english_braille_map[char])
+            output += english_braille_map[char]
 
-    return ''.join(output)
+    return output
 
+
+# Main function
 if __name__ == "__main__":
-
     if len(sys.argv) < 2:
         sys.exit(1)
-
+    
     input_str = ' '.join(sys.argv[1:])
     print(translate(input_str))
 
