@@ -31,11 +31,11 @@ const BRAILLE_TO_ENGLISH: { [brailleCharacter: string]: string } = {
   ".O.OOO": "numberPrefix",
 };
 
-const ENGLISH_TO_BRAILLE = generateEnglishToBraille();
-const NUMBER_TO_BRAILLE = generateNumberToBraille();
-const BRAILLE_TO_NUMBER = generateBrailleToNumber();
+const ENGLISH_TO_BRAILLE = generateEnglishToBrailleLegend();
+const NUMBER_TO_BRAILLE = generateNumberToBrailleLegend();
+const BRAILLE_TO_NUMBER = generateBrailleToNumberLegend();
 
-function generateEnglishToBraille() {
+function generateEnglishToBrailleLegend() {
   const brailleToEnglish: { [englishCharacter: string]: string } = {};
 
   for (const key in BRAILLE_TO_ENGLISH) {
@@ -46,7 +46,7 @@ function generateEnglishToBraille() {
   return brailleToEnglish;
 }
 
-function generateNumberToBraille() {
+function generateNumberToBrailleLegend() {
   const brailleNumberChars = "jabcdefghi";
   const numberToBraille = [];
 
@@ -58,7 +58,7 @@ function generateNumberToBraille() {
   return numberToBraille;
 }
 
-function generateBrailleToNumber() {
+function generateBrailleToNumberLegend() {
   const brailleToNumber: { [number: string]: string } = {};
 
   NUMBER_TO_BRAILLE.forEach((letter, index) => {
@@ -72,7 +72,7 @@ function isValidEnglish(input: string) {
   return /^[a-zA-Z0-9 ]+$/.test(input);
 }
 
-function isValidBraille(input: string) {
+function isBrailleString(input: string) {
   return /^[.O]+$/.test(input) && input.length % BRAILLE_CHARACTER_LENGTH === 0;
 }
 
@@ -177,7 +177,7 @@ let result;
 
 if (isValidEnglish(formattedInput)) {
   result = translateEnglishToBraille(formattedInput);
-} else if (isValidBraille(formattedInput)) {
+} else if (isBrailleString(formattedInput)) {
   result = translateBrailleToEnglish(formattedInput);
 } else {
   console.log("Error, invalid input");
@@ -198,7 +198,8 @@ Output: string
   - Only output the translation, NOTHING ELSE
 
 Rules:
-  - When a braille "Capital follows" (.....O), only the next symbol is capitalized
+  - When a braille "Capital follows" (.....O), only the next symbol is c:w
+  apitalized
   - when a braille "Number follows" (O.O.OO), all following symbols are numbers until a space (......)
   - Each braille character consists of 6 characters
 
@@ -207,9 +208,13 @@ Questions:
   - Will the input always be a valid character? (e.g. English: only alphanumeric + space, Braille: always . and O, length is divisible by 6?)
   - What happens when no arguments are provided? Assuming argument will always be provided
   - What happens if the input is very large? 
+
+Assumptions:
+  - 
   - README.md was not present
   - Trailing spaces will be trimmed
   - Multiple spaces in between characters will be treated as one space
+  - Can there be duplicate sequential signifier characters in Braille? (e.g. double capital prefix, double number prefix)
 
 Notes:
   - Made a trade-off to increase space taken by mapping out both english to braille and braille to english characters in objects
