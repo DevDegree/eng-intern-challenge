@@ -11,3 +11,6 @@ const reverseBrailleMap = {};
 for (const [key, value] of Object.entries(brailleMap)) {
     reverseBrailleMap[value] = key;
 }
+function isBraille(input) {
+    return /^[oO\.]+$/.test(input);
+}
