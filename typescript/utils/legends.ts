@@ -12,7 +12,7 @@ export const BRAILLE_TO_ENGLISH: { [brailleCharacter: string]: string } = {
   "O...O.": "k",
   "O.O.O.": "l",
   "OO..O.": "m",
-  "OO.O.O": "n",
+  "OO.OO.": "n",
   "O..OO.": "o",
   "OOO.O.": "p",
   "OOOOO.": "q",
