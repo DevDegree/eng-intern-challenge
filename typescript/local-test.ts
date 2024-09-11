@@ -1,3 +1,5 @@
+// Note: This file must be change to a .test.ts file in order to work
+
 import { exec } from "child_process";
 import { promisify } from "util";
 
