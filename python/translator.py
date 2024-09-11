@@ -1,6 +1,7 @@
 import sys
 
-BrailleToEng = {
+#Dictionary for braille to english translation
+BrailleToEng = { 
     "O.....": "a",
     "O.O...": "b",
     "OO....": "c",
@@ -27,26 +28,15 @@ BrailleToEng = {
     "OO..OO": "x",
     "OO.OOO": "y",
     "O..OOO": "z",
-    "..OO.O": ".",
-    "..O...": ",",
-    "..O.OO": "?",
-    "..OOO.": "!",
-    "..OO..": ":",
-    "..O.O.": ";",
-    "....OO": "-",
-    ".O..O.": "/",
-    ".OO..O": "<",
-    "O..OO.": ">",
-    "O.O..O": "(",
-    ".O.OO.": ")",
     "......": " ",
     ".....O": "shift",
-    ".O...O": "decimal",
     ".O.OOO": "num"
 }
 
+#Dictionary for english to braille translation, opposite of previous dictionary
 EngToBraille = {BrailleToEng[a]:a for a in BrailleToEng}
 
+#Braille to number conversions
 BrailleToNum = {
     "O.....": "1",
     "O.O...": "2",
@@ -60,64 +50,66 @@ BrailleToNum = {
     ".OOO..": "0",
 }
 
+#Number to braille conversions, opposite of previous
 NumToBraille = {BrailleToNum[a]:a for a in BrailleToNum}
 
+#Run if input is detected as Braille
 def translateBraille(string):
     res = ""
-    isCaps = False
-    isNum = False
-    isDec = False
+    isCaps = False      #Track if translated letter is capital
+    isNum = False       #Track if translatec character is a number
     for i in range(0, len(string)//6):
         segment = string[6*i:6*i+6]
-        token = BrailleToEng[segment]
+        token = BrailleToEng[segment]   #Identify braille character
+        
+        #Identify special characters
         if token == "shift":
-            isNum = isDec = False
+            isNum = False
             isCaps = True
         elif token == "num":
-            isCaps = isDec = False
+            isCaps = False
             isNum = True
-        elif token == "decimal":
-            isCaps = isNum = False
-            isDec = True
         else:
-            if isCaps and token.isalpha():
+            if isCaps and token.isalpha():  #If letter is capital
                 res += token.capitalize()
-            elif isNum or isDec:
-                if isDec and token == ".":
-                        res += token
-                elif segment in BrailleToNum:
+            elif isNum:            #If character is numeric in any way
+                if segment in BrailleToNum: 
                     res += BrailleToNum[segment]
-                else:
-                    isNum = isDec = False
+                elif segment == "......":   #If character is a space, ending number
+                    isNum = False   
                     res += token
             else:
                 res += token
             isCaps = False
     return res
                
-
+#Run if input is detected as English
 def translateEnglish(string):
     res = ""
     isNum = False
-    for letter in string:
-        if letter.isnumeric():
-            if not isNum:
+    for letter in string: 
+        if letter.isnumeric():  
+            if not isNum:       #If translating number and number special character not added
                 res += EngToBraille["num"]
                 isNum = True
             res += NumToBraille[letter]
-        else:
-            isNum = False
-            if letter.isupper():
+        else:   #If alphabetical
+            if isNum:
+                isNum = False
+                if letter is not ' ':
+                    res += "......" #Space must end number
+            if letter.isupper():    #If upper case, add special character
                 res += EngToBraille["shift"]
             res += EngToBraille[letter.lower()]
     return res
 
 def translate(string):
+    #Check if string is braille by seeing if length is divisible by 6 and is only comprised of O and .
     if len(string) % 6 == 0:
         for char in string:
             if char != 'O' or char != '.':
                 return translateBraille(string)
-    return translateEnglish(string)
+    return translateEnglish(string)     #If not braille, assume English
     
 if __name__ == "__main__":
     inputStr = ' '.join(sys.argv[1:])
