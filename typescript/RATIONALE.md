@@ -17,6 +17,7 @@ Node version: 18.20.4
 - What lengths of input can be expected?
 - Can there be consecutive capital or number prefixes in Braille input strings?
 - Can there be consecutive spaces in Braille input strings?
+- Can a capital or number prefix have no associated character? (i.e. trailing prefixes are allowed?)
 - Should consecutive spaces in Braille be translated accurately into English? Or condensed into a single space?
 
 ## Assumptions
@@ -26,6 +27,7 @@ Node version: 18.20.4
 - Expecting input lengths between 1 and 10,000
 - Braille input strings will not contain consecutive number or capital prefixes
 - Braille input strings may contain consecutive spaces, and the resulting English translation will have consecutive spaces
+- Trailing capital or number prefixes will be omitted from the translated string
 
 - Error handling exists for inputs that violates any above assumed criteria
 
@@ -38,5 +40,7 @@ Node version: 18.20.4
 - I pondered on whether or not the error handling was too much for the multiple consecutive Braille prefixes edge case, but decided that it was better to constrain the user so that the behavior of the program is predictable to them.
 
 If, for example, we allowed for consecutive prefixes for capitals, would the user expect that the next multiple letters are capitalized? Or just a single one? Depending on their expectation, the user experience could take a hit. This ambiguity was what led to my decision.
+
+- `translator.test.ts` should not be edited, but based on the testing command being `jest`, I assume that any other jest test files I create will also be executed and may interfere with the automated checking of my application. I got around this by renaming my `.test.ts` file to a simple `.ts` file for the PR so that it wouldn't be caught by the `jest` command.
 
 - Fun time! Thanks for the consideration!
