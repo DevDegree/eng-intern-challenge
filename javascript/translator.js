@@ -110,6 +110,7 @@ const translate = () => {
             } else if (isUpperCase) {
                 character = locateBraille('alphabet', item);
                 if (character) {
+                    // make uppercase
                     character = character.toUpperCase();
                     isUpperCase = false;
                 }
@@ -143,7 +144,7 @@ const translate = () => {
             } else if (item === ".") { // decimal
                 return braille.follow.decimalFollow + braille.punctuation[item];
             } else {
-                return braille.punctuation[item] || '';
+                return braille.punctuation[item] || ''; 
             }
         }).join('');
 
