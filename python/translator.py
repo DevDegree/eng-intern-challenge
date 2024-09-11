@@ -92,7 +92,9 @@ def english_translator(message: str) -> str:
             capital_follows = False
 
         else:
-            if number_read:
+
+
+            if number_read and braille_to_english[current_substring] != 'space':
                 # If number_follows was read previously and a space has not
                 # been encountered yet, call the braille_to_nums dict
                 char = braille_to_nums[current_substring]
