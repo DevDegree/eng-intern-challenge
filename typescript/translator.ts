@@ -12,63 +12,62 @@ type Braille = { [key: string]: string };
 
 // Declare constant of all letters and symbols mapping to corresponding braille values for English to Braille translation
 const LettersToBraille: Braille = {
-    a: "0.....",
-    b: "0.0...",
-    c: "00....",
-    d: "00.0...",
-    e: "0..0..",
-    f: "000...",
-    g: "0000..",
-    h: "0.00..",
-    i: ".00...",
-    j: ".000..",
-    k: "0...0.",
-    l: "0.0.0.",
-    m: "00..0.",
-    n: "00.00.",
-    o: "0..00.",
-    p: "000.0.",
-    q: "00000.",
-    r: "0.000.",
-    s: ".00.0.",
-    t: ".0000.",
-    u: "0...00",
-    v: "0.0.00",
-    w: ".000.0",
-    x: "00..00",
-    y: "00.000",
-    z: "0..000",
-    '.': "..00.0",
-    ',': "..0...",
-    '?':"..0.00",
-    '!': "..000.",
-    ':': "..00..",
-    '-': "..0.0.",
-    '/': ".0..0.",
-    '<': ".00..0",
-    '>': "0..00.",
-    '(': "0.0..0",
-    ')': ".0.00.",
+    a: "O.....",
+    b: "O.O...",
+    c: "OO....",
+    d: "OO.O..",
+    e: "O..O..",
+    f: "OOO...",
+    g: "OOOO..",
+    h: "O.OO..",
+    i: ".OO...",
+    j: ".OOO..",
+    k: "O...O.",
+    l: "O.O.O.",
+    m: "OO..O.",
+    n: "OO.OO.",
+    o: "O..OO.",
+    p: "OOO.O.",
+    q: "OOOOO.",
+    r: "O.OOO.",
+    s: ".OO.O.",
+    t: ".OOOO.",
+    u: "O...OO",
+    v: "O.O.OO",
+    w: ".OOO.O",
+    x: "OO..OO",
+    y: "OO.OOO",
+    z: "O..OOO",
+    '.': "..OO.O",
+    ',': "..O...",
+    '?': "..O.OO",
+    '!': "..OOO.",
+    ':': "..OO..",
+    '-': "..O.O.",
+    '/': ".O..O.",
+    '<': ".OO..O",
+    '(': "O.O..O",
+    ')': ".O.OO.",
     ' ': "......"
 };
 
 // Declare constant of all numbers mapping to corresponding Braille values for English to Braille Translation
 const NumbersToBraille: Braille = {
-    1: "0.....",
-    2: "0.0...",
-    3: "00....",
-    4: "00.0..",
-    5: "0..0..",
-    6: "000...",
-    7: "0000..",
-    8: "0.00..",
-    9: ".00...",
-    0: ".000.."
+    1: "O.....",
+    2: "O.O...",
+    3: "OO....",
+    4: "OO.O..",
+    5: "O..O..",
+    6: "OOO...",
+    7: "OOOO..",
+    8: "O.OO..",
+    9: ".OO...",
+    0: ".OOO.."
 }
 
 // Declare special Braille cases
-const capitalFollows = ".....0";
-const numberFollows = ".0.000";
+const capitalFollows = ".....O";
+const numberFollows = ".O.OOO";
 
 // Each Braille symbol is a character string with size 6
 const BRAILLE_CHAR_SIZE = 6;
@@ -108,7 +107,7 @@ function isBraille(stringToTranslate: string): Boolean{
     }
 
     // Use RegExp test() function to test if string matches '.' or '0'
-    let regexp: RegExp = /^[0.]+$/; // If matches any of the enclosed characters (0 or .), $: to the end of the input
+    let regexp: RegExp = /^[O.]+$/; // If matches any of the enclosed characters (0 or .), $: to the end of the input
     return regexp.test(stringToTranslate);
 }
 
@@ -142,7 +141,7 @@ function englishToBraille(stringToTranslate: string){
             isNumber = false;
         }
         // If character is a capital letter, add 'capital follows' symbol and the translated character in braille
-        else if (char === char.toUpperCase()){
+        else if (/[A-Z]/.test(char)){
             translatedString += capitalFollows;
             char = char.toLowerCase();
         }
@@ -180,8 +179,9 @@ function brailleToEnglish(stringToTranslate: string){
                 case capitalFollows:
                     capitalize = true; // Capitalize next character
                     return;
-                case ' ':
+                case LettersToBraille[' ']:
                     useCharMap = true;
+                    translatedString += ' ';
                     return;
                 default:
                     let char;
@@ -229,15 +229,17 @@ main();
  * Other input values used for testing
  */
 function testInputValues(){
-    const validBrailleInput = ".....00.....0.0...00...........0.0000.....0.0...00....";
-    const englishInput = "Hello 000...";
-    const invalidBrailleInput = "0.000000 .0";
+    const validBrailleInput = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO....";
+    const englishInput = "Hello OOO...";
+    const invalidBrailleInput = "O.OOOOO .O";
     const inputTest = "Abc 123 xYz";
     const numberInput = "42";
+    const allValues = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRTSUVWXYZ0123456789 .,?!:-/<()"
 
     setTranslationType(englishInput);
     setTranslationType(validBrailleInput);
     setTranslationType(invalidBrailleInput);
     setTranslationType(inputTest);
     setTranslationType(numberInput);
+    setTranslationType(allValues);
 }
