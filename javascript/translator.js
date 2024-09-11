@@ -1,49 +1,43 @@
 const BrailleDictionary = {
-  letters: {
-    a: "O.....",
-    b: "O.O...",
-    c: "OO....",
-    d: "OO.O..",
-    e: "O..O..",
-    f: "OOO...",
-    g: "OOOO..",
-    h: "O.OO..",
-    i: ".OO...",
-    j: ".OOO..",
-    k: "O...O.",
-    l: "O.O.O.",
-    m: "OO..O.",
-    n: "OO.OO.",
-    o: "O..OO.",
-    p: "OOO.O.",
-    q: "OOOOO.",
-    r: "O.OOO.",
-    s: ".OO.O.",
-    t: ".OOOO.",
-    u: "O...OO",
-    v: "O.O.OO",
-    w: ".OOO.O",
-    x: "OO..OO",
-    y: "OO.OOO",
-    z: "O..OOO",
-    " ": "......",
-  },
-  numbers: {
-    1: "O.....",
-    2: "O.O...",
-    3: "OO....",
-    4: "OO.O..",
-    5: "O..O..",
-    6: "OOO...",
-    7: "OOOO..",
-    8: "O.OO..",
-    9: ".OO...",
-    0: ".OOO..",
-  },
-  symbols: {
-    capital: ".....O",
-    number: ".O.OOO",
-  },
+  a: "O.....",
+  b: "O.O...",
+  c: "OO....",
+  d: "OO.O..",
+  e: "O..O..",
+  f: "OOO...",
+  g: "OOOO..",
+  h: "O.OO..",
+  i: ".OO...",
+  j: ".OOO..",
+  k: "O...O.",
+  l: "O.O.O.",
+  m: "OO..O.",
+  n: "OO.OO.",
+  o: "O..OO.",
+  p: "OOO.O.",
+  q: "OOOOO.",
+  r: "O.OOO.",
+  s: ".OO.O.",
+  t: ".OOOO.",
+  u: "O...OO",
+  v: "O.O.OO",
+  w: ".OOO.O",
+  x: "OO..OO",
+  y: "OO.OOO",
+  z: "O..OOO",
+  1: "O.....",
+  2: "O.O...",
+  3: "OO....",
+  4: "OO.O..",
+  5: "O..O..",
+  6: "OOO...",
+  7: "OOOO..",
+  8: "O.OO..",
+  9: ".OO...",
+  0: ".OOO..",
+  capital: ".....O",
+  number: ".O.OOO",
+  space: "......",
 };
 
 const reverseMapping = (map) => {
@@ -54,87 +48,68 @@ const reverseMapping = (map) => {
   return reversed;
 };
 
-const BrailleToEnglishChar = (brailleChar, isCapital, isNumber) => {
-  const reversedLetters = reverseMapping(BrailleDictionary.letters);
-  const reversedNumbers = reverseMapping(BrailleDictionary.numbers);
-  if (isCapital) {
-    return reversedLetters[brailleChar].toUpperCase();
-  } else if (isNumber) {
-    return reversedNumbers[brailleChar];
-  } else {
-    return reversedLetters[brailleChar];
-  }
-};
-
-const EnglishToBrailleChar = (englishChar, isNumber) => {
-  if (/[A-Z]/.test(englishChar)) {
-    return (
-      BrailleDictionary.symbols.capital +
-      BrailleDictionary.letters[englishChar.toLowerCase()]
-    );
-  } else if (/[0-9]/.test(englishChar)) {
-    return (
-      (isNumber ? "" : BrailleDictionary.symbols.number) +
-      BrailleDictionary.numbers[englishChar]
-    );
-  } else {
-    return BrailleDictionary.letters[englishChar];
-  }
-};
-
-const detectType = (input) => (/^[O.]+$/.test(input) ? "braille" : "english");
-
 const translateEnglishToBraille = (input) => {
-  let isNumber = false;
+  let result = "";
+  let isNumberMode = false;
 
-  return input
-    .split("")
-    .map((char) => {
-      if (/[0-9]/.test(char)) {
-        isNumber = true;
-      } else {
-        isNumber = false;
+  for (const char of input) {
+    if (/[A-Z]/.test(char)) {
+      result +=
+        BrailleDictionary.capital + BrailleDictionary[char.toLowerCase()];
+    } else if (/[0-9]/.test(char)) {
+      if (!isNumberMode) {
+        result += BrailleDictionary.number;
+        isNumberMode = true;
       }
-      return EnglishToBrailleChar(char, isNumber);
-    })
-    .join("");
+      result += BrailleDictionary[char];
+    } else if (char === " ") {
+      result += BrailleDictionary.space;
+      isNumberMode = false;
+    } else {
+      result += BrailleDictionary[char];
+      isNumberMode = false;
+    }
+  }
+
+  return result;
 };
 
 const translateBrailleToEnglish = (input) => {
   const brailleChunks = input.match(/.{1,6}/g);
-
+  let result = "";
   let isCapital = false;
   let isNumber = false;
+  const reversedDict = reverseMapping(BrailleDictionary);
 
-  return brailleChunks
-    .map((chunk) => {
-      if (chunk === BrailleDictionary.symbols.capital) {
-        isCapital = true;
-        return "";
+  for (const chunk of brailleChunks) {
+    if (chunk === BrailleDictionary.capital) {
+      isCapital = true;
+    } else if (chunk === BrailleDictionary.number) {
+      isNumber = true;
+    } else if (chunk === BrailleDictionary.space) {
+      result += " ";
+      isNumber = false;
+    } else {
+      let char = reversedDict[chunk];
+      if (isCapital) {
+        char = char.toUpperCase();
+        isCapital = false;
       }
-      if (chunk === BrailleDictionary.symbols.number) {
-        isNumber = true;
-        return "";
-      }
+      result += char;
+      isNumber = false;
+    }
+  }
 
-      const translatedChar = BrailleToEnglishChar(chunk, isCapital, isNumber);
-      isCapital = false;
-      if (chunk === BrailleDictionary.letters[" "]) {
-        isNumber = false;
-      }
-
-      return translatedChar;
-    })
-    .join("");
+  return result;
 };
+
+const detectType = (input) => (/^[O.]+$/.test(input) ? "braille" : "english");
 
 const translate = (input) => {
   const type = detectType(input);
-  if (type === "english") {
-    return translateEnglishToBraille(input);
-  } else {
-    return translateBrailleToEnglish(input);
-  }
+  return type === "english"
+    ? translateEnglishToBraille(input)
+    : translateBrailleToEnglish(input);
 };
 
 const inputString = process.argv.slice(2).join(" ");
