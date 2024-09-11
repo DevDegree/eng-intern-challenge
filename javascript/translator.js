@@ -1,3 +1,6 @@
+// Constants
+const BRAILLE_CHAR_LENGTH = 6;
+
 // Braille cypher
 const alphaCypher = {
     alpha: {
@@ -45,16 +48,15 @@ const alphaCypher = {
         'CAP': '.....O',
         'NUM': '.O.OOO',
     }
-  };
+};
 
-// To avoid looking up the same values over and over
-// But also to make it easier to read, flip the cypher
+// Flip the cypher for easier lookup
 function flipCypher(cypher) {
     const flipped = {};
-    for (let category in cypher) {
+    for (const [category, dict] of Object.entries(cypher)) {
         flipped[category] = {};
-        for (let key in cypher[category]) {
-            flipped[category][cypher[category][key]] = key;
+        for (const [k, v] of Object.entries(dict)) {
+            flipped[category][v] = k;
         }
     }
     return flipped;
@@ -62,88 +64,101 @@ function flipCypher(cypher) {
 
 // Check if the input is braille
 function isBraille(input) {
-    return /^[.O]+$/.test(input);
+    return /^[.O]+$/.test(input) && input.length % BRAILLE_CHAR_LENGTH === 0;
 }
 
-// Convert braille to english
-function brailleToEnglish(input, brailleCypher) {
+// Convert braille to English
+function brailleToEnglish(input) {
+    const brailleCypher = flipCypher(alphaCypher);
     let result = '';
     let flag = '';
 
-    for (let i = 0; i < input.length; i += 6) {
-        const brailleChar = input.slice(i, i + 6);
-        console.log('brailleChar', brailleChar);
+    for (let i = 0; i < input.length; i += BRAILLE_CHAR_LENGTH) {
+        const brailleChar = input.slice(i, i + BRAILLE_CHAR_LENGTH);
 
-         // Check for a flag (that the last char was "special")
-         if (flag) {
-            if (flag === "NUM") {
-                // If you have an active NUM flag, check for a space (to turn off the flag) or get a number
-                if (brailleChar == alphaCypher.alpha.SPACE) {
-                    result += ' ';
-                    flag = null;
-                } else {
-                    result += brailleCypher.number[brailleChar];
-                }
-                
-            } else if (flag === "CAP") {
-                // If you have an active CAP flag, capitalize this character
-                let lowerCase = brailleCypher.alpha[brailleChar];
-                result += lowerCase.toUpperCase();
-                flag = null;
+        if (flag) { // if there is an active flag...
+            switch (flag) {
+                case "NUM": // number
+                    if (brailleChar === alphaCypher.alpha.SPACE) {
+                        result += ' ';
+                        flag = '';
+                    } else {
+                        result += brailleCypher.number[brailleChar] || ' ';
+                    }
+                    break;
+                case "CAP": // capital
+                    result += (brailleCypher.alpha[brailleChar] || ' ').toUpperCase();
+                    flag = '';
+                    break;
             }
-        } else{
+        } else { // now we can process this brail char string
             switch (brailleChar) {
-                //is a NUM flag for the next 6 characters
-                case alphaCypher.special.NUM:
-                    console.log('NUM');
+                case alphaCypher.special.NUM: // number
                     flag = "NUM";
                     break;
-                //is a CAP flag for the next 6 characters
-                case alphaCypher.special.CAP:
-                    console.log('CAP');
+                case alphaCypher.special.CAP: // capital
                     flag = "CAP";
                     break;
-                //is a space
-                case alphaCypher.alpha.SPACE:
-                    console.log('space');
+                case alphaCypher.alpha.SPACE: // space
                     result += ' ';
                     break;
-                //is a letter
-                default:
-                    console.log(brailleCypher.alpha[brailleChar]);
-                    result += brailleCypher.alpha[brailleChar];
+                default: // letter
+                    result += brailleCypher.alpha[brailleChar] || ' ';
             }
         }
     }
     return result;
 }
 
-// Convert english to braille
+// Convert English to braille
 function englishToBraille(input) {
-    //console.log('englishToBraille', input);
     let result = '';
-    for (let i = 0; i < input.length; i++) {
-        const char = input[i];
-        result += alphaCypher[char];
+    let numFlag = false;
+
+    for (const char of input) {
+        const lowerChar = char.toLowerCase();
+        switch (true) {
+            case char === ' ': // space
+                numFlag = false;
+                result += alphaCypher.alpha.SPACE;
+                break;
+            case /[0-9]/.test(char): // number
+                if (!numFlag) {
+                    result += alphaCypher.special.NUM;
+                    numFlag = true;
+                }
+                result += alphaCypher.number[char] || ' ';
+                break;
+            case /[a-z]/i.test(char): // lowercase letter
+                if (char !== lowerChar) {
+                    result += alphaCypher.special.CAP;
+                }
+                result += alphaCypher.alpha[lowerChar] || ' ';
+                break;
+            default: // not found in cypher
+                result += ' ';
+                break;
+        }
     }
     return result;
 }
 
+// Main function to process input
+function main() {
+    // Get all command-line arguments and join them into a single string
+    const input = process.argv.slice(2).join(' ');
 
+    // Check if the input is empty
+    if (!input) {
+        console.error('No input provided.');
+        return;
+    }
 
+    // Determine the translation direction based on the input
+    const result = isBraille(input) ? brailleToEnglish(input) : englishToBraille(input);
 
-// Get all command-line arguments and join them into a single string
-const input = process.argv.slice(2).join(' ');
-console.log("input", input);
-
-// check if the input is braille
-if (isBraille(input)) {    
-    // create the braille cypher
-    const brailleCypher = flipCypher(alphaCypher);
-    result = brailleToEnglish(input, brailleCypher);
-    console.log("is Braille for: ", result);
-} else {
-    console.log("is not Braille");
-    //result = englishToBraille(input)
-    //console.log("is English for: ", result);
+    // Output the result
+    console.log(result);
 }
+
+main();
