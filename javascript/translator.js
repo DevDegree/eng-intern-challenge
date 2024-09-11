@@ -47,26 +47,79 @@ const englishToBraille = {};
 
 // Loop over each entry in the brailleToEnglish object
 Object.entries(brailleToEnglish).forEach(([braille, char]) => {
-    // Handle for uppercase and lowercase letters
-    if (char.length === 1 && char !== ' ') {
-        englishToBraille[char.toLowerCase()] = braille; 
+	// Handle for uppercase and lowercase letters
+	if (char.length === 1 && char !== " ") {
+		englishToBraille[char.toLowerCase()] = braille;
 
-        // Mapping for uppercase
-        if (char.toUpperCase() === char) {
-            englishToBraille[char] = ".....O" + braille; 
-        }
-    }
-    
-    // Handle numbers
-    if (!isNaN(char)) {
-        englishToBraille[char] = "....OO" + braille; 
-    }
+		// Mapping for uppercase
+		if (char.toUpperCase() === char) {
+			englishToBraille[char] = ".....O" + braille;
+		} else {
+			console.log("error: unrecognizable character");
+		}
+	}
+
+	// Handle numbers
+	if (!isNaN(char)) {
+		englishToBraille[char] = "....OO" + braille;
+	}
 });
 
 // Space character mapping
-englishToBraille[' '] = "......"; 
+englishToBraille[" "] = "......";
 
 // Check if input is Braille (if input contains only 'O' or '.' characters)
 function isBraille(input) {
-    return /^[O.]+$/.test(input);
+	return /^[O.]+$/.test(input);
 }
+
+// Translate English to Braille
+function translateEnglishToBraille(input) {
+	let output = "";
+	for (let i = 0; i < input.length; i++) {
+		const char = input[i];
+		if (englishToBraille[char]) {
+			output += englishToBraille[char];
+		} else {
+			console.log("Error: Character does not have a Braille equivalent");
+		}
+	}
+	return output;
+}
+console.log(englishToBraille("translator"));
+
+// Translate Braille to English
+function translateBrailleToEnglish(input) {
+	let output = "";
+	let i = 0;
+	let isCapital = false;
+	let isNumber = false;
+
+	while (i < input.length) {
+		const currentSymbol = input.slice(i, i + 6); // to account for 6 braille symbols
+
+		if (currentSymbol === ".....O") {
+			isCapital = true;
+		} else if (currentSymbol === "....OO") {
+			isNumber = true;
+		} else if (currentSymbol === "......") {
+			output += " "; // to account for space
+			isNumber = false;
+		} else if (brailleToEnglish[currentSymbol]) {
+			let char = brailleToEnglish[currentSymbol];
+			if (isCapital) {
+				char = char.toUpperCase();
+				isCapital = false;
+			}
+			if (isNumber && !isNaN(char)) {
+				output += char;
+			} else if (!isNumber) {
+				output += char;
+			}
+		}
+		i += 6;
+	}
+	return output;
+}
+
+
