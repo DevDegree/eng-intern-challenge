@@ -1,3 +1,6 @@
+require 'rspec'
+require_relative '../ruby/translator'
+
 RSpec.describe 'Braille Translator Script' do
   it 'outputs the correct string' do
     output = `ruby translator.rb Abc 123 xYz`
