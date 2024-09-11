@@ -1,74 +1,14 @@
+import {
+  BRAILLE_TO_ENGLISH,
+  BRAILLE_TO_NUMBER,
+  NUMBER_TO_BRAILLE,
+  ENGLISH_TO_BRAILLE,
+} from "./utils/legends";
+
 const STARTING_INDEX_OF_ARGS = 2;
 const BRAILLE_CHARACTER_LENGTH = 6;
-const BRAILLE_TO_ENGLISH: { [brailleCharacter: string]: string } = {
-  "O.....": "a",
-  "O.O...": "b",
-  "OO....": "c",
-  "OO.O..": "d",
-  "O..O..": "e",
-  "OOO...": "f",
-  "OOOO..": "g",
-  "O.OO..": "h",
-  ".OO...": "i",
-  ".OOO..": "j",
-  "O...O.": "k",
-  "O.O.O.": "l",
-  "OO..O.": "m",
-  "O..OO.": "o",
-  "OOO.O.": "p",
-  "OOOOO.": "q",
-  "O.OOO.": "r",
-  ".OO.O.": "s",
-  ".OOOO.": "t",
-  "O...OO": "u",
-  "O.O.OO": "v",
-  ".OOO.O": "w",
-  "OO..OO": "x",
-  "OO.OOO": "y",
-  "O..OOO": "z",
-  "......": " ",
-  ".....O": "capitalPrefix",
-  ".O.OOO": "numberPrefix",
-};
 
-const ENGLISH_TO_BRAILLE = generateEnglishToBrailleLegend();
-const NUMBER_TO_BRAILLE = generateNumberToBrailleLegend();
-const BRAILLE_TO_NUMBER = generateBrailleToNumberLegend();
-
-function generateEnglishToBrailleLegend() {
-  const brailleToEnglish: { [englishCharacter: string]: string } = {};
-
-  for (const key in BRAILLE_TO_ENGLISH) {
-    const value = BRAILLE_TO_ENGLISH[key];
-    brailleToEnglish[value] = key;
-  }
-
-  return brailleToEnglish;
-}
-
-function generateNumberToBrailleLegend() {
-  const brailleNumberChars = "jabcdefghi";
-  const numberToBraille = [];
-
-  for (let idx = 0; idx < brailleNumberChars.length; idx += 1) {
-    const currentChar = brailleNumberChars[idx];
-    numberToBraille.push(ENGLISH_TO_BRAILLE[currentChar]);
-  }
-
-  return numberToBraille;
-}
-
-function generateBrailleToNumberLegend() {
-  const brailleToNumber: { [number: string]: string } = {};
-
-  NUMBER_TO_BRAILLE.forEach((letter, index) => {
-    brailleToNumber[letter] = String(index);
-  });
-
-  return brailleToNumber;
-}
-
-function isValidEnglish(input: string) {
+function isValidEnglishString(input: string) {
   return /^[a-zA-Z0-9 ]+$/.test(input);
 }
 
@@ -135,13 +75,33 @@ function translateBrailleToEnglish(brailleText: string) {
   for (let idx = 0; idx < splitBrailleLetters.length; idx += 1) {
     const currentCharInBraille = splitBrailleLetters[idx];
     const currentLetterInEnglish = BRAILLE_TO_ENGLISH[currentCharInBraille];
+    if (!currentLetterInEnglish)
+      throw new Error(
+        "Invalid Braille character detected. The compatible Braille characters are: uppercase and lowercase letters, numbers, and space."
+      );
 
     if (currentLetterInEnglish === "capitalPrefix") {
+      const previousCharInEnglish =
+        BRAILLE_TO_ENGLISH[splitBrailleLetters[idx - 1]];
+
+      if (previousCharInEnglish === currentLetterInEnglish)
+        throw new Error(
+          "Invalid Braille detected. Cannot have consecutive Capital Prefixes."
+        );
+
       uppercaseMode = true;
       continue;
     }
 
     if (currentLetterInEnglish === "numberPrefix") {
+      const previousCharInEnglish =
+        BRAILLE_TO_ENGLISH[splitBrailleLetters[idx - 1]];
+
+      if (previousCharInEnglish === currentLetterInEnglish)
+        throw new Error(
+          "Invalid Braille detected. Cannot have consecutive Number Prefixes."
+        );
+
       numberMode = true;
       continue;
     }
@@ -170,20 +130,31 @@ function translateBrailleToEnglish(brailleText: string) {
   return result;
 }
 
-const commandLineInput = process.argv.slice(STARTING_INDEX_OF_ARGS);
-const formattedInput = commandLineInput.join(" ");
+function main() {
+  const commandLineInput = process.argv.slice(STARTING_INDEX_OF_ARGS);
+  const formattedInput = commandLineInput.join(" ");
 
-let result;
+  let result;
 
-if (isValidEnglish(formattedInput)) {
-  result = translateEnglishToBraille(formattedInput);
-} else if (isBrailleString(formattedInput)) {
-  result = translateBrailleToEnglish(formattedInput);
-} else {
-  console.log("Error, invalid input");
+  try {
+    if (isValidEnglishString(formattedInput)) {
+      result = translateEnglishToBraille(formattedInput);
+    } else if (isBrailleString(formattedInput)) {
+      result = translateBrailleToEnglish(formattedInput);
+    } else {
+      throw new Error(
+        "Invalid input. The translator only accepts letters, numbers, and spaces in Braille or English."
+      );
+    }
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+
+  console.log(result);
 }
 
-console.log(result);
+main();
+
 /*
 node version: 18.20.4
 
@@ -198,8 +169,7 @@ Output: string
   - Only output the translation, NOTHING ELSE
 
 Rules:
-  - When a braille "Capital follows" (.....O), only the next symbol is c:w
-  apitalized
+  - When a braille "Capital follows" (.....O), only the next symbol is capitalized
   - when a braille "Number follows" (O.O.OO), all following symbols are numbers until a space (......)
   - Each braille character consists of 6 characters
 
@@ -207,13 +177,13 @@ Questions:
   - Will inputs always be English OR Braille, or can it be a mix of both? Assuming it will always be one or the other
   - Will the input always be a valid character? (e.g. English: only alphanumeric + space, Braille: always . and O, length is divisible by 6?)
   - What happens when no arguments are provided? Assuming argument will always be provided
-  - What happens if the input is very large? 
+  - What happens if the input is very large? Assuming inputs of length < 10,000
 
 Assumptions:
   - 
   - README.md was not present
   - Trailing spaces will be trimmed
-  - Multiple spaces in between characters will be treated as one space
+  - Multiple spaces in between English characters will be treated as one space
   - Can there be duplicate sequential signifier characters in Braille? (e.g. double capital prefix, double number prefix)
 
 Notes:
