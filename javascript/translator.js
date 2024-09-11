@@ -14,3 +14,31 @@ for (const [key, value] of Object.entries(brailleMap)) {
 function isBraille(input) {
     return /^[oO\.]+$/.test(input);
 }
+function translateToBraille(text) {
+    let braille = "";
+    let numberMode = false;
+
+    for (let i = 0; i < text.length; i++) {
+        let char = text[i].toLowerCase();
+
+        if (char >= "0" && char <= "9") {
+            if (!numberMode) {
+                braille += brailleMap["num"];
+                numberMode = true;
+            }
+            braille += brailleMap[char];
+        } else if (char >= "a" && char <= "z") {
+            if (numberMode) {
+                braille += " ";
+                numberMode = false;
+            }
+            if (text[i] !== char) {
+                braille += brailleMap["cap"];
+            }
+            braille += brailleMap[char];
+        } else {
+            braille += brailleMap[char] || "";
+        }
+    }
+    return braille;
+}
