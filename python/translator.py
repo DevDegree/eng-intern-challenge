@@ -41,12 +41,12 @@ class Translator:
         for char in inputStr:
             # If the character is a letter
             if char.isalpha():
-                if is_number_mode:
+                if is_number_mode: # If in number mode, add space and reset flag
                     translatedStr += self.ENGLISH_TO_BRAILLE[' ']
                     is_number_mode = False
-                if char.isupper():
+                if char.isupper(): # If uppercase, add capital symbol
                     translatedStr += self.ENGLISH_TO_BRAILLE['capital']
-                translatedStr += self.ENGLISH_TO_BRAILLE[char.lower()]
+                translatedStr += self.ENGLISH_TO_BRAILLE[char.lower()] # Add the lowercase letter
             elif char.isdigit():
                 if not is_number_mode:
                     translatedStr += self.ENGLISH_TO_BRAILLE['number']
@@ -68,6 +68,7 @@ class Translator:
         # Split the input string into 6-character chunks
         braille_chars = [inputStr[i:i+6] for i in range(0, len(inputStr), 6)]
         
+        # Initialize result and flags
         translatedStr = ''
         is_capital = False
         is_number = False
@@ -83,9 +84,9 @@ class Translator:
                 if letter == ' ': # If space, add to result and reset number flag
                     translatedStr += ' '
                     is_number = False
-                elif is_number: # If number flag is True, convert from letter to number with LETTER_TO_NUMBER_MAP
+                elif is_number: # Convert from letter to number with LETTER_TO_NUMBER_MAP
                     translatedStr += self.LETTER_TO_NUMBER[letter]
-                elif is_capital: # If capitalize flag is True, convert letter to uppercase and reset capitalize flag
+                elif is_capital: # Convert letter to uppercase and reset flag
                     translatedStr += letter.upper()
                     is_capital = False
                 else: # Else, just add letter normally
