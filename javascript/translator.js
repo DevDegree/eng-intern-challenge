@@ -79,3 +79,30 @@ function translateToBraille(input) {
     }
     return result;
 }
+
+function translateToEnglish(input) {
+    let result = '';
+    let isCapital = false;
+    let isNumber = false;
+    for (let i = 0; i < input.length; i += 6) {
+        let brailleChar = input.slice(i, i + 6);
+        if (brailleChar === brailleMap['capital']) {
+            isCapital = true;
+            continue;
+        }
+        if (brailleChar === brailleMap['number']) {
+            isNumber = true;
+            continue;
+        }
+        let char = englishMap[brailleChar];
+        if (isCapital) {
+            char = char.toUpperCase();
+            isCapital = false;
+        }
+        if (isNumber) {
+            isNumber = false;
+        }
+        result += char;
+    }
+    return result;
+}
