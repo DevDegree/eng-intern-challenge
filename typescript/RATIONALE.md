@@ -33,6 +33,10 @@ Node version: 18.20.4
 
 - The "legend" objects that map individual characters to their respective translated ones were used with the trade-off of additional space requirements, but less time taken to translate at runtime.
 
-- Chose procedural approach over other paradigms (e.g. OOP, FP) because of the simplicity of the program. Entities were somewhat vague and the interactions were not complex.
+- I chose procedural approach over other paradigms (e.g. OOP, FP) because of the simplicity of the program. Entities were somewhat vague and the interactions were not complex.
+
+- I pondered on whether or not the error handling was too much for the multiple consecutive Braille prefixes edge case, but decided that it was better to constrain the user so that the behavior of the program is predictable to them.
+
+If, for example, we allowed for consecutive prefixes for capitals, would the user expect that the next multiple letters are capitalized? Or just a single one? Depending on their expectation, the user experience could take a hit. This ambiguity was what led to my decision.
 
 - Fun time! Thanks for the consideration!
