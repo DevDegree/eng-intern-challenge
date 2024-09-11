@@ -47,6 +47,7 @@ BRAILLE_TO_NUMBERS = {
     "O.OO..": "8",
     ".OO...": "9",
     ".OOO..": "0",
+    "......": " ",
 }  # numbers
 
 ASCII_TO_BRAILLE = {}
@@ -121,6 +122,7 @@ def alpha_to_braille(words: list[str]):
 def main():
     try:
         arg = " ".join(sys.argv[1:])
+        arg = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
         res = try_braille_to_alpha(arg)
     except Exception:
         arg = sys.argv[1:]
