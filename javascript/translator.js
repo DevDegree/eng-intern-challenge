@@ -30,14 +30,46 @@ const brailleCharacters = {
     if(isBraille){
         const toString = toElements.join('');
         const toSplit = toString.match(/.{6}/g);
-        const translationObject = toSplit.reduce((accumulator, currentValue) => {
+        const translationObject = toSplit.reduce((accumulator, currentValue, index) => {
             const temp = {...accumulator};
-            temp.output += brailleAlpha[currentValue];
+            if(currentValue === space){
+                temp.isNumber = false;
+                temp.isCapital = false;
+                temp.isDecimal = false;
+                temp.output += ' ';
+            }
+            else if(currentValue === capitalFollows){
+                temp.isCapital = true;
+                temp.isNumber = false;
+                temp.isDecimal = false;
+            }
+            else if(currentValue === decimalFollows){
+                temp.isDecimal = true;
+                temp.isCapital = false;
+            }
+            else if(currentValue === numberFollows){
+                temp.isCapital = false;
+                temp.isDecimal = false;
+                temp.isNumber = true;
+            }
+            else{
+                if(temp.isCapital){
+                    temp.output += brailleAlpha[currentValue]?.toUpperCase() || brailleCharacters[currentValue] || `(${currentValue} is not in Braille)`;
+                    temp.isCapital = false;
+                }
+                else if(temp.isNumber){
+                    temp.output += brailleNumeric[currentValue] || brailleAlpha[currentValue] || brailleCharacters[currentValue] || `(${currentValue} is not in Braille)`
+                }
+                else{
+                    temp.output += brailleAlpha[currentValue] || brailleCharacters[currentValue] || `(${currentValue} is not in Braille)`;
+                }
+            }
             return temp;
         }, {
             output: '',
             isNumber: false,
-            isCapital: false
+            isCapital: false,
+            isDecimal: false
         });
 
         console.log(translationObject.output);
