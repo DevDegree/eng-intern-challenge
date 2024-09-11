@@ -50,13 +50,34 @@ braille_to_english = {
 braille_to_nums = {val: key for key, val in english_to_braille.items() if key.isdigit()}
 
 
+def is_braille(input_str):
+    for char in input_str:
+        if char not in {"O", "."}:
+            return False
+
+    return True
+
+
+def translate_braille_to_english(braille_str):
+    pass
+
+
+def translate_english_to_braille(english_str):
+    pass
+
 
 def main():
     if len(sys.argv) < 2:
         print("Usage: python translator.py <text>")
         return
-    args = sys.argv[1:]
-    input_text = " ".join(args)
+
+    arguments = sys.argv[1:]
+    input_text = " ".join(arguments)
+
+    if is_braille(input_text):
+        print(translate_braille_to_english(input_text))
+    else:
+        print(translate_english_to_braille(input_text))
 
 
 if __name__ == "__main__":
