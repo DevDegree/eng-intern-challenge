@@ -15,45 +15,56 @@ braille_alphabet = {
 
 # Define special symbols for capitalization and numbers
 braille_capital = '.....O'
-braille_number = '.0.000'
+braille_number = '.O.OOO'
 
 # Reverse the braille_alphabet dictionary for Braille-to-English conversion
 english_alphabet = {v: k for k, v in braille_alphabet.items()}
 
 def translate_to_braille(text):
+    """Converts English text to Braille."""
     braille_translation = []
+    number_mode = False
     for char in text:
         if char.isupper():
             braille_translation.append(braille_capital)
             braille_translation.append(braille_alphabet[char.lower()])
         elif char.isdigit():
-            braille_translation.append(braille_number)
+            if not number_mode:
+                braille_translation.append(braille_number)
+                number_mode = True
             braille_translation.append(braille_alphabet[char])
         else:
+            if number_mode:
+                number_mode = False  # Reset number mode after encountering a non-digit
             braille_translation.append(braille_alphabet[char])
     return ''.join(braille_translation)
 
 def translate_to_english(braille_text):
+    """Converts Braille to English text."""
     english_translation = []
     i = 0
+    capital_mode = False
+    number_mode = False
     while i < len(braille_text):
         braille_char = braille_text[i:i+6]
         if braille_char == braille_capital:
-            i += 6
-            next_char = braille_text[i:i+6]
-            english_translation.append(english_alphabet[next_char].upper())
+            capital_mode = True
         elif braille_char == braille_number:
-            i += 6
-            while i < len(braille_text) and braille_text[i:i+6] in english_alphabet:
-                english_translation.append(english_alphabet[braille_text[i:i+6]])
-                i += 6
-            continue
+            number_mode = True
         else:
-            english_translation.append(english_alphabet[braille_char])
+            char = english_alphabet[braille_char]
+            if capital_mode:
+                char = char.upper()
+                capital_mode = False  # Only capitalize the next character
+            if number_mode and char.isalpha():
+                char = str(ord(char) - ord('a') + 1)  # Convert to number (1-9)
+                number_mode = False  # Reset number mode after translation
+            english_translation.append(char)
         i += 6
     return ''.join(english_translation)
 
 def is_braille(text):
+    """Checks if the input text is in Braille format."""
     return all(c == 'O' or c == '.' for c in text)
 
 if __name__ == "__main__":
