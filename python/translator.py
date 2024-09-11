@@ -20,7 +20,7 @@ def is_braille(input_string):
     # Checks if the string contains only 'O' and '.'
     return set(input_string).issubset({'O', '.'})
 
-# Function to translate Braille to English
+# Functiong to translate Braille to English
 def translate_braille_to_english(input_string):
     # Split the Braille input by spaces
     braille_chars = input_string.split()
@@ -62,5 +62,6 @@ def translate_english_to_braille(input_string):
             braille_text.append(" ")  # Preserve spaces
 
     return "".join(braille_text)
+
 
 
