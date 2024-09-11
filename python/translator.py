@@ -117,14 +117,15 @@ def translateToEnglish(userInput):
                 capitalize = True
                 continue
             if useNums and character != "......":
-                output += toEnglishNums[character]
+                output += toEnglishNums.get(character,"?")
             else:
                 useNums = False
                 if capitalize:
+                    output += toEnglish.get(character,"?").capitalize()
                     capitalize = False
-                    output += toEnglish[character].capitalize()
                 else:
-                    output += toEnglish[character]
+                    output += toEnglish.get(character,"?")
+            
     return output
 
 def main():
