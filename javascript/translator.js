@@ -26,42 +26,58 @@ const englishNumDict = Object.fromEntries(
     Object.entries(brailleNumDict).map(([key, val]) => [val, key]),
 );
 
+const brailleToEnglishPropertyCheck = (char, output, flags) => {
+    const {capitalize, isNumber} = flags;
+
+    if (englishDict.hasOwnProperty(char)){
+        const englishChar = englishDict[char];
+
+        if (englishChar === 'capital_follows'){
+            flags.capitalize = true;
+
+        } else if (englishChar === 'number_follows'){
+            flags.isNumber = true;
+
+        } else if (englishChar === ' '){
+            output += englishChar;
+            flags.isNumber = false;
+
+        } else{
+
+            if (isNumber){
+                if(englishNumDict.hasOwnProperty(char)){
+                    output += englishNumDict[char]
+                }
+                
+            } else {
+                output += flags.capitalize ? englishChar.toUpperCase() : englishChar;
+                flags.capitalize = false;
+            }
+        }
+    }
+    else {
+        output += 'unknown input'
+    }
+
+    return output;
+
+};
+
+const englishToBraillePropertyCheck = () => {
+
+};
 
 const brailleToEnglish = (userInput) => {
     let output = '';
-    let capitalize = false;
-    let isNumber = false;
+    const flags = {capitalize: false, isNumber: false};
 
     try {
         for (let i = 0; i < userInput.length; i += 6){
             const brailleChar = userInput.slice(i, i + 6);
-            
-            if (englishDict.hasOwnProperty(brailleChar)){
-                const englishChar = englishDict[brailleChar];
 
-                if (englishChar === 'capital_follows'){
-                    capitalize = true;
-                } else if (englishChar === 'number_follows'){
-                    isNumber = true;
-                } else if (englishChar === ' '){
-                    output += englishChar;
-                    isNumber = false;
-                } else{
-
-                    if (isNumber){
-                        if(englishNumDict.hasOwnProperty(brailleChar)){
-                            output += englishNumDict[brailleChar]
-                        }
-                    } else {
-                        output += capitalize ? englishChar.toUpperCase() : englishChar;
-                        capitalize = false;
-                    }
-                }
-            }
-            else {
-                output += 'unknown input'
-            }
+            output = brailleToEnglishPropertyCheck(brailleChar, output, flags);
         }
+
     } catch (error) {
         console.error(error);
     }
