@@ -1,12 +1,13 @@
 {
   "name": "javascript",
   "version": "1.0.0",
-  "description": "",
+  "description": "A command-line application that can translate Braille to English and vice versa.",
   "main": "translator.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dev": "node translator.js"
   },
-  "author": "",
+  "author": "Carol Santos",
   "license": "ISC",
   "dependencies": {
     "jest": "^29.7.0"
