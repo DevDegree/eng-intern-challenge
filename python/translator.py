@@ -9,6 +9,9 @@ english_to_braille = {"A":"O.....", "B":"O.O...", "C":"OO....", "D":"OO.O..",
                       "Y":"OO.OOO", "Z":"O..OOO", "1":"O.....", "2":"O.O...",
                       "3":"OO....", "4":"OO.O..", "5":"O..O..", "6":"OOO...",
                       "7":"OOOO..", "8":"O.OO..", "9":".OO...", "0":".OOO..",
+                      # ".":"..OO.O", ",":"..O...", "?":"..O.OO", "!":"..OOO.",
+                      # ":":"..OO..", ";":"..O.O.", "-":"....OO", "/":".O..O.",
+                      # "<":".OO..O", ">":"O..OO.", "(":"O.O..O", ")":".O.OO.",
                       "capital_follows":".....O", "number_follows":".O.OOO",
                       "space": "......"}
 
@@ -18,8 +21,8 @@ braille_to_english = {"O.....":"A", "O.O...":"B", "OO....":"C", "OO.O..":"D",
                       "OO..O.":"M", "OO.OO.":"N", "O..OO.":"O", "OOO.O.":"P",
                       "OOOOO.":"Q", "O.OOO.":"R", ".OO.O.":"S", ".OOOO.":"T",
                       "O...OO":"U", "O.O.OO":"V", ".OOO.O":"W", "OO..OO":"X",
-                      "OO.OOO":"Y", "O..OOO":"Z", ".....O":"capital_follows",
-                      ".O.OOO":"number_follows", "......":"space"}
+                      "OO.OOO":"Y", "O..OOO":"Z",
+                      ".....O":"capital_follows", ".O.OOO":"number_follows", "......":"space"}
 
 braille_to_nums = {"O.....":"1", "O.O...":"2", "OO....":"3", "OO.O..":"4",
                    "O..O..":"5", "OOO...":"6", "OOOO..":"7", "O.OO..":"8",
@@ -120,17 +123,21 @@ def english_translator(message: str) -> str:
 
     return output_message
 
+if __name__ == "__main__":
+    input_message = ""
+    if len(sys.argv) > 1:
+        input_message = " ".join(sys.argv[1:])
+    else:
+        # In the case no text is given
+        print("No input provided. Please provide command-line arguments in"
+              "the format | python3 translator.py <input_text> |")
 
-input_message = ""
-if len(sys.argv) > 1:
-    input_message = sys.argv[1]
-
-if "." in input_message:
-    # Use Braille -> English translator in this case
-    message = english_translator(input_message)
-    message = message.replace("\n", "")
-    print(message.strip())
-else:
-    message = braille_translator(input_message)
-    message = message.replace("\n", "")
-    print(message.strip())
+    if "." in input_message:
+        # Use Braille -> English translator in this case
+        message = english_translator(input_message)
+        message = message.replace("\n", "")
+        print(message.strip())
+    else:
+        message = braille_translator(input_message)
+        message = message.replace("\n", "")
+        print(message.strip())
