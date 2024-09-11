@@ -63,8 +63,9 @@ const brailleToEnglishPropertyCheck = (char, output, flags) => {
 
 };
 
-const englishToBraillePropertyCheck = (char, output, isNumberSequence) => {
+const englishToBraillePropertyCheck = (char, output, flag) => {
 
+    const {isNumberSequence} = flag;
     const capitalChar = brailleDict['capital_follows'];
     const numberChar = brailleDict['number_follows'];
 
@@ -78,16 +79,16 @@ const englishToBraillePropertyCheck = (char, output, isNumberSequence) => {
 
         } else if (/^[0-9]$/.test(char)){
 
-            if (!isNumberSequence){
+            if (!flag.isNumberSequence){
                 output += numberChar;
-                isNumberSequence = true;
+                flag.isNumberSequence = true;
             }
 
             output += brailleNumDict[char];
 
         } else if (lowerCaseEnglishChar === ' '){
                 output += brailleDict[lowerCaseEnglishChar];
-                isNumberSequence = false;
+                flag.isNumberSequence = false;
 
         } else {
             output += brailleDict[lowerCaseEnglishChar];
@@ -124,14 +125,14 @@ const brailleToEnglish = (userInput) => {
 
 const englishToBraille = (userInput) => {
     let output = '';
-    const isNumberSequence = false;
+    const flag = {isNumberSequence : false};
     
 
     try {
         for (let i = 0; i < userInput.length; i++){
             const englishChar = userInput.slice(i, i + 1);
            
-            output = englishToBraillePropertyCheck(englishChar, output, isNumberSequence);
+            output = englishToBraillePropertyCheck(englishChar, output, flag);
         }
     } catch (error) {
         console.error(error);
