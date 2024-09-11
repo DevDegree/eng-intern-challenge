@@ -82,34 +82,33 @@ toEnglishNums = {
     ".OOO..":"0"
 }
 
-userInput = sys.argv[1:]
+def translateToBraille(userInput):
+    output = ""
+    useNums = False
+    for i, word in enumerate(userInput):
+        for letter in word:
+            if letter.isupper():
+                output += ".....O" # braille for capital letter indicator
+            elif letter.isdigit() and not useNums:
+                output += ".O.OOO" # braille for number indicator
+                useNums = True
 
-translatedOutput=""
-useNums = False
-capitalize = False
+            if letter.isalpha():
+                output += toBraille[letter.lower()]
+            else:
+                output += toBrailleNums[letter] 
 
-if not userInput:
-    print("Please provide an input")
-else:
-    #userInput is english
-    if "." not in userInput[0]:
-        for i, word in enumerate(userInput):
-            for letter in word:
-                if letter.isupper():
-                    translatedOutput += ".....O"
-                elif letter.isdigit() and not useNums:
-                    useNums = True
-                    translatedOutput += ".O.OOO"
+        if i < len(userInput) - 1:
+            output += "......"
+            useNums = False
+    
+    return output
 
-                if letter.isalpha():
-                    translatedOutput += toBraille[letter.lower()]
-                else:
-                   translatedOutput += toBrailleNums[letter] 
-            if i < len(userInput) - 1:
-                translatedOutput += "......"
-                useNums = False
-    else: 
-        for i in range(0,len(userInput[0]), 6):
+def translateToEnglish(userInput):
+    output = ""
+    useNums = False
+    capitalize = False
+    for i in range(0,len(userInput[0]), 6):
             character = userInput[0][i:i+6]
             if character == ".O.OOO":
                 useNums = True
@@ -118,18 +117,31 @@ else:
                 capitalize = True
                 continue
             if useNums and character != "......":
-                translatedOutput += toEnglishNums[character]
+                output += toEnglishNums[character]
             else:
                 useNums = False
                 if capitalize:
                     capitalize = False
-                    translatedOutput += toEnglish[character].capitalize()
+                    output += toEnglish[character].capitalize()
                 else:
-                    translatedOutput += toEnglish[character]
+                    output += toEnglish[character]
+    return output
+
+def main():
+    userInput = sys.argv[1:]
+
+    translatedOutput=""
+    if not userInput:
+        print("Please provide an input")
+        return
+    
+    if "." not in userInput[0]:
+        translatedOutput = translateToBraille(userInput)
+    else: 
+        translatedOutput = translateToEnglish(userInput)
+
+    print(translatedOutput)
 
 
-print(translatedOutput)
-
-
-# .O.OOOOO.O..O.O...
-# .O.OOOOO.O..O.O...
+if __name__ == "__main__":
+    main()
