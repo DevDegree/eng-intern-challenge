@@ -16,7 +16,7 @@ const brailleNumeric = {
 };
 
 const brailleCharacters = {
-    '..OO.O': '.', '..O...': ',', '..O.OO': '?', '..OO.O': '!', '..OO..': ':', '..O.O.': ';',
+    '..OO.O': '.', '..O...': ',', '..O.OO': '?', '..OO0.': '!', '..OO..': ':', '..O.O.': ';',
      '....OO': '-', '.O..O.': '/', '.OO..O': '<', 'O..OO.': '>', 'O.O..O': '(', '.O.OO.': ')'
 };
 
@@ -90,7 +90,15 @@ const brailleCharacters = {
                     accumulator.output += `${numberFollows}${Object.keys(brailleNumeric).find(key => brailleNumeric[key] === currentValue) 
                         || Object.keys(brailleAlpha).find(key => brailleAlpha[key] === currentValue)
                         || Object.keys(brailleCharacters).find(key => brailleCharacters[key] === currentValue) 
-                        || `(${currentValue}  has no Braille equivalent)`}`;
+                        || `(${currentValue} has no Braille equivalent)`}`;
+                }
+            }
+            else if(currentValue === '.'){
+                if(toElements[index + 1]?.charCodeAt(0) >= 48 && toElements[index + 1]?.charCodeAt(0) <= 57){
+                    accumulator.output += `${decimalFollows}${'..OO.O'}`;
+                }
+                else{
+                    accumulator.output += '..OO.O';
                 }
             }
             else if(currentValue === ' '){
