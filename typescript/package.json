@@ -4,7 +4,8 @@
   "description": "",
   "main": "translator.ts",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "npx ts-node translator.ts"
   },
   "keywords": [],
   "author": "",
