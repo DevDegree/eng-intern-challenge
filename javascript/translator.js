@@ -5,28 +5,39 @@
  */
 const readline = require('readline-sync');
 
+let capitalFlag = false, numberFlag = false;
+
 const brailleToEnglish = (brailleString) => {
-    const result = "";
+    let result = "";
 
     const BRAILLE_CHAR_LEN = 6;
-
-    let capitalFlag = false, numberFlag = false;
 
     for (let i = 0; i < brailleString.length; i += BRAILLE_CHAR_LEN) {
         const brailleChar = brailleString.substring(i, i + BRAILLE_CHAR_LEN);
 
-        if (brailleChar = '.....O') { capitalFlag = true; }
-        else if (brailleChar = '.O.OOO') { numberFlag = true; } 
-        else { result += parseBraille(brailleChar, capitalFlag, numberFlag); }
+        if (brailleChar === '.....O') { 
+            capitalFlag = true; 
+        } else if (brailleChar === '.O.OOO') {
+             numberFlag = true; 
+        } else if (brailleChar === '......') {
+            if (numberFlag) { numberFlag = false }
+            result += " ";
+        } else { 
+            result += parseBraille(brailleChar); 
+        }
     }
+
+    return result;
 }
 
 const parseBraille = (char, capitalFlag, numberFlag) => {
-    parseAlphaNumericBraille(char, capitalFlag, numberFlag);
+    return parseAlphaNumericBraille(char);
 }
 
 // TO DO: Ensure that argument is indeed alphanumeric
-const parseAlphaNumericBraille = (char, numberFlag) => {    
+const parseAlphaNumericBraille = (char) => {    
+    if (char === '.OOO.O') { return 'w'; } // 'w' is a pesky special value
+
     const rowValues = {
         '..' : 0,
         'O.' : 1,
@@ -53,8 +64,14 @@ const parseAlphaNumericBraille = (char, numberFlag) => {
         return `${(column + 1)}`;
     }
     
-    const alphabet = 'abcdefghijklmnopqrstuvxyz' // Does not contain 'w'!
-    return alphabet.charAt(column + (row * 10));
+    const letter = 'abcdefghijklmnopqrstuvxyz'.charAt(column + (row * 10)) // Does not contain 'w'!
+    
+    if (capitalFlag) {
+        capitalFlag = false;
+        return letter.toUpperCase();
+    }
+
+    return letter;
 }
 
 const isEnglish = (input) => {
