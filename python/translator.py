@@ -1,4 +1,5 @@
 import sys
+
 english_to_braille = {"A":"O.....", "B":"O.O...", "C":"OO....", "D":"OO.O..",
                       "E":"O..O..", "F":"OOO...", "G":"OOOO..", "H":"O.OO..",
                       "I":".OO...", "J":".OOO..", "K":"O...O.", "L":"O.O.O.",
@@ -93,7 +94,6 @@ def english_translator(message: str) -> str:
 
         else:
 
-
             if number_read and braille_to_english[current_substring] != 'space':
                 # If number_follows was read previously and a space has not
                 # been encountered yet, call the braille_to_nums dict
@@ -128,7 +128,9 @@ if len(sys.argv) > 1:
 if "." in input_message:
     # Use Braille -> English translator in this case
     message = english_translator(input_message)
-    print(message)
+    message = message.replace("\n", "")
+    print(message.strip())
 else:
     message = braille_translator(input_message)
-    print(message)
+    message = message.replace("\n", "")
+    print(message.strip())
