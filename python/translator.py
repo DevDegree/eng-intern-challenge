@@ -112,14 +112,17 @@ def translator(input_string):
             # a space
             elif current_letter == 'number follows':
                 number = True
+            # if we have a space, the turn "number" to false
+            # make sure we check for space first because otherwise, if we check "number" first
+            # it is going to be true due to previous letters being number, but then we 
+            # would be indexing index 1 of a string, which is out of bound 
+            elif current_letter == ' ':
+                number = False
+                translated = translated + current_letter
             # if number is True, then we should get the number element in the tuple, since
             # that same tuple also contain an english letter that has the same braille string
             elif number:
                 translated = translated + current_letter[1]
-            # if we have a space, the turn "number" to false
-            elif current_letter == ' ':
-                number = False
-                translated = translated + current_letter
             # if cap is true, then we capitalize the current letter. THen turn cap to false
             elif cap:
                 translated = translated + current_letter[0].capitalize()
@@ -137,12 +140,18 @@ def translator(input_string):
 
 def main():
     parser = argparse.ArgumentParser(description="A command-line app that translate between English and Braille.")
-    parser.add_argument("input_string", type=str, help="The string to be translated")
+
+    # Accept multiple input strings
+    parser.add_argument("input_string", nargs='+', type=str, help="The strings to be translated")
     args = parser.parse_args()
 
-    # Pass the input string to the function and print the result
-    result = translator(args.input_string)
-    print(f"{result}")
+    # Join all input strings into one, separated by spaces
+    combined_input = ' '.join(args.input_string)
+    print(f"Combined input: {combined_input}")
+    result = translator(combined_input)
+    print(result)
+    return result
+
 
 
 if __name__ == "__main__":
