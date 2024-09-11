@@ -1,4 +1,4 @@
-const ENGLISH_LETTERS_SYMBOLS = {
+const ENGLISH_LETTERS = {
   A: "O.....",
   B: "O.O...",
   C: "OO....",
@@ -25,18 +25,6 @@ const ENGLISH_LETTERS_SYMBOLS = {
   X: "OO..OO",
   Y: "OO.OOO",
   Z: "O..OOO",
-  ".": "..OO.O",
-  ",": "..O...",
-  "?": "..O.OO",
-  "!": "..OOO.",
-  ":": "..OO..",
-  ";": "..O.O.",
-  "-": "....OO",
-  "/": ".O..O.",
-  "<": ".OO..O",
-  ">": "O..OO.",
-  "(": "O.O..O",
-  ")": ".O.OO.",
   " ": "......",
 };
 
@@ -53,7 +41,7 @@ const ENGLISH_NUMBERS = {
   0: ".OOO..",
 };
 
-const BRAILLE_LETTERS_SYMBOLS = {
+const BRAILLE_LETTERS = {
   "O.....": "a",
   "O.O...": "b",
   "OO....": "c",
@@ -80,18 +68,6 @@ const BRAILLE_LETTERS_SYMBOLS = {
   "OO..OO": "x",
   "OO.OOO": "y",
   "O..OOO": "z",
-  "..OO.O": ".",
-  "..O...": ",",
-  "..O.OO": "?",
-  "..OOO.": "!",
-  "..OO..": ":",
-  "..O.O.": ";",
-  "....OO": "-",
-  ".O..O.": "/",
-  ".OO..O": "<",
-  "O..OO.": ">",
-  "O.O..O": "(",
-  ".O.OO.": ")",
   "......": " ",
 };
 
@@ -109,7 +85,6 @@ const BRAILLE_NUMBERS = {
 };
 
 const CAP = ".....O";
-const DEC = ".O...O";
 const NUM = ".O.OOO";
 const SPACE = "......";
 
@@ -142,18 +117,13 @@ function convertToBraille() {
     }
     if (char === " ") {
       numFlag = false;
-      convertedString += ENGLISH_LETTERS_SYMBOLS[char];
-      return;
-    }
-    if (char === ".") {
-      convertedString += DEC;
-      convertedString += ENGLISH_LETTERS_SYMBOLS[char];
+      convertedString += ENGLISH_LETTERS[char];
       return;
     }
     if (char === char.toUpperCase() && char !== char.toLowerCase()) {
       convertedString += CAP;
     }
-    convertedString += ENGLISH_LETTERS_SYMBOLS[char.toUpperCase()];
+    convertedString += ENGLISH_LETTERS[char.toUpperCase()];
   });
 }
 
@@ -171,25 +141,22 @@ function convertToEnglish() {
       numFlag = true;
       return;
     }
-    if (brailleCharacter == DEC) {
-        return;
-    }
     if (capFlag) {
       convertedString +=
-        BRAILLE_LETTERS_SYMBOLS[brailleCharacter].toUpperCase();
+        BRAILLE_LETTERS[brailleCharacter].toUpperCase();
       capFlag = false;
       return;
     }
     if (numFlag) {
       if (brailleCharacter == SPACE) {
         numFlag = false;
-        convertedString += BRAILLE_LETTERS_SYMBOLS[brailleCharacter];
+        convertedString += BRAILLE_LETTERS[brailleCharacter];
         return;
       }
       convertedString += BRAILLE_NUMBERS[brailleCharacter];
       return;
     }
-    convertedString += BRAILLE_LETTERS_SYMBOLS[brailleCharacter];
+    convertedString += BRAILLE_LETTERS[brailleCharacter];
   });
 }
 
