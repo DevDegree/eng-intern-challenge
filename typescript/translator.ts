@@ -27,12 +27,13 @@ const BRAILLE_TO_ENGLISH: { [brailleCharacter: string]: string } = {
   "OO.OOO": "y",
   "O..OOO": "z",
   "......": " ",
-  ".....O": "capital",
-  ".O.OOO": "number",
+  ".....O": "capitalPrefix",
+  ".O.OOO": "numberPrefix",
 };
 
 const ENGLISH_TO_BRAILLE = generateEnglishToBraille();
-const INDEX_TO_BRAILLE = generateIndexToBraille();
+const NUMBER_TO_BRAILLE = generateNumberToBraille();
+const BRAILLE_TO_NUMBER = generateBrailleToNumber();
 
 function generateEnglishToBraille() {
   const brailleToEnglish: { [englishCharacter: string]: string } = {};
@@ -45,14 +46,24 @@ function generateEnglishToBraille() {
   return brailleToEnglish;
 }
 
-function generateIndexToBraille() {
-  const charsWithNumberTranslation = "jabcdefghi";
-  const brailleToNumber = [];
+function generateNumberToBraille() {
+  const brailleNumberChars = "jabcdefghi";
+  const numberToBraille = [];
 
-  for (let idx = 0; idx < charsWithNumberTranslation.length; idx += 1) {
-    const currentChar = charsWithNumberTranslation[idx];
-    brailleToNumber.push(ENGLISH_TO_BRAILLE[currentChar]);
+  for (let idx = 0; idx < brailleNumberChars.length; idx += 1) {
+    const currentChar = brailleNumberChars[idx];
+    numberToBraille.push(ENGLISH_TO_BRAILLE[currentChar]);
   }
+
+  return numberToBraille;
+}
+
+function generateBrailleToNumber() {
+  const brailleToNumber: { [number: string]: string } = {};
+
+  NUMBER_TO_BRAILLE.forEach((letter, index) => {
+    brailleToNumber[letter] = String(index);
+  });
 
   return brailleToNumber;
 }
@@ -81,7 +92,7 @@ function translateEnglishToBraille(englishText: string) {
     const character = englishText[idx];
 
     if (isUppercaseCharacter(character)) {
-      translation += ENGLISH_TO_BRAILLE["capital"];
+      translation += ENGLISH_TO_BRAILLE["capitalPrefix"];
       translation += ENGLISH_TO_BRAILLE[character.toLowerCase()];
       continue;
     }
@@ -89,15 +100,14 @@ function translateEnglishToBraille(englishText: string) {
     if (isNumericCharacter(character)) {
       if (!numberMode) {
         numberMode = true;
-        translation += ENGLISH_TO_BRAILLE["number"];
+        translation += ENGLISH_TO_BRAILLE["numberPrefix"];
       }
-      translation += INDEX_TO_BRAILLE[Number(character)];
+
+      translation += NUMBER_TO_BRAILLE[Number(character)];
       continue;
     }
 
-    if (character === " ") {
-      numberMode = false;
-    }
+    if (character === " ") numberMode = false;
 
     translation += ENGLISH_TO_BRAILLE[character];
   }
@@ -105,23 +115,75 @@ function translateEnglishToBraille(englishText: string) {
   return translation;
 }
 
+function splitBrailleStringByLetter(brailleText: string) {
+  const result = [];
+
+  for (let idx = 0; idx < brailleText.length; idx += BRAILLE_CHARACTER_LENGTH) {
+    const brailleChar = brailleText.slice(idx, idx + BRAILLE_CHARACTER_LENGTH);
+    result.push(brailleChar);
+  }
+
+  return result;
+}
+
+function translateBrailleToEnglish(brailleText: string) {
+  const splitBrailleLetters = splitBrailleStringByLetter(brailleText);
+  let numberMode = false;
+  let uppercaseMode = false;
+  let result = "";
+
+  for (let idx = 0; idx < splitBrailleLetters.length; idx += 1) {
+    const currentCharInBraille = splitBrailleLetters[idx];
+    const currentLetterInEnglish = BRAILLE_TO_ENGLISH[currentCharInBraille];
+
+    if (currentLetterInEnglish === "capitalPrefix") {
+      uppercaseMode = true;
+      continue;
+    }
+
+    if (currentLetterInEnglish === "numberPrefix") {
+      numberMode = true;
+      continue;
+    }
+
+    if (currentLetterInEnglish === " ") {
+      numberMode = false;
+      result += currentLetterInEnglish;
+      continue;
+    }
+
+    if (numberMode) {
+      const currentNumberInEnglish = BRAILLE_TO_NUMBER[currentCharInBraille];
+      result += currentNumberInEnglish;
+      continue;
+    }
+
+    if (uppercaseMode) {
+      result += currentLetterInEnglish.toUpperCase();
+      uppercaseMode = false;
+      continue;
+    }
+
+    result += currentLetterInEnglish;
+  }
+
+  return result;
+}
+
 const commandLineInput = process.argv.slice(STARTING_INDEX_OF_ARGS);
 const formattedInput = commandLineInput.join(" ");
 
+let result;
+
 if (isValidEnglish(formattedInput)) {
-  const brailleResult = translateEnglishToBraille(formattedInput);
-  console.log(brailleResult);
-  console.log(
-    ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.." +
-      "......" +
-      ".O.OOOOO.O..O.O..." ===
-      brailleResult
-  );
+  result = translateEnglishToBraille(formattedInput);
 } else if (isValidBraille(formattedInput)) {
-  console.log("Braille:", formattedInput);
+  result = translateBrailleToEnglish(formattedInput);
 } else {
   console.log("Error, invalid input");
 }
+
+console.log(result);
 /*
 node version: 18.20.4
 
@@ -159,4 +221,8 @@ Notes:
       - divide the string into each character into an array of strings that are 6 chars
       - translate each braille character to english character
     - return translation
+
+  TODO:
+  [ ] braille to english translation
+  [ ] separate legends into another module
   - */
