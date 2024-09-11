@@ -102,7 +102,6 @@ if (isBraille()) {
 
 console.log(convertedString);
 
-// -----------FUNCTIONS-----------
 function convertToBraille() {
   let numFlag = false;
 
@@ -141,12 +140,6 @@ function convertToEnglish() {
       numFlag = true;
       return;
     }
-    if (capFlag) {
-      convertedString +=
-        BRAILLE_LETTERS[brailleCharacter].toUpperCase();
-      capFlag = false;
-      return;
-    }
     if (numFlag) {
       if (brailleCharacter == SPACE) {
         numFlag = false;
@@ -156,11 +149,14 @@ function convertToEnglish() {
       convertedString += BRAILLE_NUMBERS[brailleCharacter];
       return;
     }
+    if (capFlag) {
+      convertedString += BRAILLE_LETTERS[brailleCharacter].toUpperCase();
+      capFlag = false;
+      return;
+    }
     convertedString += BRAILLE_LETTERS[brailleCharacter];
   });
 }
-
-// -----------HELPERS-----------
 
 function isBraille() {
   let isBraille = true;
