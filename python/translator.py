@@ -52,13 +52,19 @@ def translate_to_english(braille_text):
         elif braille_char == braille_number:
             number_mode = True
         else:
-            char = english_alphabet[braille_char]
-            if capital_mode:
-                char = char.upper()
-                capital_mode = False  # Only capitalize the next character
-            if number_mode and char.isalpha():
-                char = str(ord(char) - ord('a') + 1)  # Convert to number (1-9)
-                number_mode = False  # Reset number mode after translation
+            if number_mode:
+                # Numbers are encoded as 'a' to 'j' -> '1' to '0'
+                char = english_alphabet[braille_char]
+                if char in 'abcdefghij':
+                    char = str(ord(char) - ord('a') + 1)  # Convert 'a' to '1', 'b' to '2', ..., 'j' to '0'
+                    if char == '10':  # Adjust 'j' for '0'
+                        char = '0'
+            else:
+                char = english_alphabet[braille_char]
+                if capital_mode:
+                    char = char.upper()
+                    capital_mode = False  # Only capitalize the next character
+
             english_translation.append(char)
         i += 6
     return ''.join(english_translation)
