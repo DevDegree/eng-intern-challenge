@@ -1,14 +1,16 @@
 /**
  * Developer: Florence Yuen 
+ * Language: TypeScript
  * Project name: Braille Translator 
- * Description: Determines if arguments passed into program (string) should be translated to English or Braille
- * 
+ * Description: Determines if arguments passed into program at runtime (input string) is a valid Braille, where each Braille symbol is a 6 character string consisting of 'O' and '.' reading left to right, or English string.
+ * Translates and outputs the string into English or Braille respectively. Able to translate all letters a through z, including capitalization (using a 'capital follows' symbol) as well as other special characters.
+ * Braille Alphabet translation also includes the numbers 0 throgh 9, as well as spaces for multiple word translation.
 */
 
 // Declare index signature for braille
 type Braille = { [key: string]: string };
 
-// Declare constant of all letters mapping to braille values
+// Declare constant of all letters and symbols mapping to corresponding braille values for English to Braille translation
 const LettersToBraille: Braille = {
     a: "0.....",
     b: "0.0...",
@@ -50,10 +52,7 @@ const LettersToBraille: Braille = {
     ' ': "......"
 };
 
-// Declare special Braille cases
-const capitalFollows = ".....0";
-const numberFollows = ".0.000";
-
+// Declare constant of all numbers mapping to corresponding Braille values for English to Braille Translation
 const NumbersToBraille: Braille = {
     1: "0.....",
     2: "0.0...",
@@ -67,84 +66,61 @@ const NumbersToBraille: Braille = {
     0: ".000.."
 }
 
+// Declare special Braille cases
+const capitalFollows = ".....0";
+const numberFollows = ".0.000";
+
+// Each Braille symbol is a character string with size 6
 const BRAILLE_CHAR_SIZE = 6;
 
-// Creates reverse map for mapping the braille into letters
+// Creates reverse map for mapping the braille into corresponding letters and symbols for Braille to English translation
 const BrailleToLetters = Object.fromEntries(
     Object.entries(LettersToBraille).map(([key, value]) => [value, key])
 );
 
+// Creates reverse map for mapping the braille into numbers for Braille to English translation
 const BrailleToNumbers = Object.fromEntries(
     Object.entries(NumbersToBraille).map(([key, value]) => [value, key])
 );
-// Object.fromEntries(reverseLettersToBraille);
 
-// const for getting command line argument input string
-const inputString = process.argv.slice(2).join(' ');
-
-// Set whether to convert to braille or english 
-function setTranslationType(stringToTranslate: string){
+/**
+ * Determines whether to convert to braille or english and outputs the translated output
+ * @param stringToTranslate input string value
+ */ 
+function setTranslationType(stringToTranslate: string): string{
     if (isBraille(stringToTranslate)){
-        console.log("Translating from braille to english");
-        console.log (brailleToEnglish(stringToTranslate));
+        return brailleToEnglish(stringToTranslate);
     }
     else{
-        console.log("Translating from english to braille");
-        console.log(englishToBraille(stringToTranslate));
+        return englishToBraille(stringToTranslate);
     }
 }
 
-// /**
-//  * @param stringToTranslate: input string to be determined if is in braille or english
-//  * Iterates through and determines if original string is in english or braille (if string only contains '.' or '0')
-//  */
-// function isBraille(stringToTranslate: string): Boolean{
-//     let splitString = stringToTranslate.split(' ');
-//     console.log(splitString);
-
-//     // Use RegExp test() function to test if string matches '.' or '0'
-//     let regexp: RegExp = /^[0.]{6}$/; // If matches any of the enclosed characters (0 or .) and is 6 characters long, $: to the end of the input
-
-//     // Iterate through each group of letters to test if matches pattern
-//     // Returns true if every substring contains 6 '.' or '0' 
-//     return splitString.every(word => regexp.test(word));
-// }
-
 /**
- * @param stringToTranslate: input string to be determined if is in braille or english
- * @return: True if input follows value Braille pattern every substring contains 6 '.' or '0'. Else returns false
- * @abstract: Iterates through and determines if original string is in english or braille (if string only contains '.' or '0') 
+ * Iterates through and determines if original string is in english or braille (if string only contains '.' or '0') 
+ * @param stringToTranslate input string to be determined if is in braille or english
+ * @return True if input follows value Braille pattern every substring contains 6 '.' or '0'. Else returns false 
  */
 function isBraille(stringToTranslate: string): Boolean{
     // Check that input string will only be composed of 6 character long substrings to be Braille
     if((stringToTranslate.length % BRAILLE_CHAR_SIZE) != 0){
-        console.log("Not multiple of 6 " + stringToTranslate.length);
         return false;
     }
 
-    console.log ("Valid string length: " + stringToTranslate + "\n");
     // Use RegExp test() function to test if string matches '.' or '0'
     let regexp: RegExp = /^[0.]+$/; // If matches any of the enclosed characters (0 or .), $: to the end of the input
     return regexp.test(stringToTranslate);
-
-    // Iterate through each group of letters to test if matches pattern
-    // Returns true if every substring contains 6 '.' or '0' 
-    // return splitString.every(word => regexp.test(word));
 }
 
-    // // Determine if original string is in english or braille (if corresponding value found in braille values map)
-    // iterate through all keys for braille values to see if original string is in english or braille
-    // LettersToBraille.forEach(element => {
-        
-    // });
-
-// Convert original string into braille
+/**
+ * Converts the original string into braille
+ * @param stringToTranslate input string to be translated into braille
+*/
 function englishToBraille(stringToTranslate: string){
     let translatedString = "";
     let isNumber = false;
     let char;
 
-    // let splitString = stringToTranslate.split(" ");
     // Split input string into substring with length of BRAILLE_CHAR_SIZE (6)
     for( let i = 0; i < stringToTranslate.length; i ++ ){
         char = stringToTranslate[i];
@@ -152,7 +128,7 @@ function englishToBraille(stringToTranslate: string){
         // If character is a number, set to use the numbers map and add 'number follows' symbol
         if (char >= '0' && char <='9'){
             // Use BrailleToNumbers Map
-            // Add 'number follows' symbol for the only at the beginning of the sequence
+            // Add 'number follows' symbol only if at the beginning of the number sequence
             if (!isNumber){
                 translatedString += numberFollows;
                 isNumber = true;
@@ -161,12 +137,12 @@ function englishToBraille(stringToTranslate: string){
             continue;
         }
 
+        // Ends the number sequence if the next character is a space
         if (char === " "){
             isNumber = false;
         }
         // If character is a capital letter, add 'capital follows' symbol and the translated character in braille
         else if (char === char.toUpperCase()){
-            // console.log(char, capitalFollows);
             translatedString += capitalFollows;
             char = char.toLowerCase();
         }
@@ -177,6 +153,10 @@ function englishToBraille(stringToTranslate: string){
     return translatedString;
 }
 
+/**
+ * Converts the original string from Braille into English
+ * @param stringToTranslate input string to be translated into English
+*/
 function brailleToEnglish(stringToTranslate: string){
     let useCharMap = true;
     let capitalize = false;
@@ -188,27 +168,24 @@ function brailleToEnglish(stringToTranslate: string){
         splitString.push(stringToTranslate.slice(i, i + BRAILLE_CHAR_SIZE));
     }
 
-    // console.log ("Input string: " + splitString + "\n");
-
     // Iterate through each substring (which represents an English character), search for matching value in map, and convert into english
     splitString.forEach(brailleSymbol => 
         {
             switch (brailleSymbol){
                 // If 'number follows' symbol is read, assume all following symbols are numbers until the next 'space' symbol
-                case numberFollows:
-                    // Use BrailleToNumbers Map
-                    useCharMap = false;
+                case numberFollows: 
+                    useCharMap = false; // Use BrailleToNumbers Map
                     return;
                 // If 'capital follows' symbol is read, the next symbol should be capitalized
                 case capitalFollows:
-                    // Capitalize next character
-                    capitalize = true;
+                    capitalize = true; // Capitalize next character
                     return;
                 case ' ':
                     useCharMap = true;
                     return;
                 default:
                     let char;
+
                     // Get corresponding translated symbol for either Letters or Numbers map
                     if(useCharMap){
                         char = BrailleToLetters[brailleSymbol];
@@ -232,29 +209,35 @@ function brailleToEnglish(stringToTranslate: string){
     return translatedString;
 }
 
-// function main(){
+function main(){
+    // const for getting command line argument input string
+    const inputString = process.argv.slice(2).join(' ');
+
+    // return error if input string is missing or invalid
+    if(!inputString){
+        console.error("Invalid input");
+        return
+    }
+    
+    // Get the translation and output the translated string
+    console.log (setTranslationType(inputString));
+}
+
+main();
+
+/**
+ * Other input values used for testing
+ */
+function testInputValues(){
     const validBrailleInput = ".....00.....0.0...00...........0.0000.....0.0...00....";
     const englishInput = "Hello 000...";
     const invalidBrailleInput = "0.000000 .0";
     const inputTest = "Abc 123 xYz";
+    const numberInput = "42";
 
-    if(!inputString){
-        console.error("Invalid input");
-    }
-    else{
-        console.log("String input is: " + inputString + "\n");
-        setTranslationType(inputString);
-    }
-
-    console.log("\nInput 2: " + englishInput + "\n");
     setTranslationType(englishInput);
-
-    console.log("\nInput 3: " + validBrailleInput + "\n");
     setTranslationType(validBrailleInput);
-
-    console.log ("\nInput 4: " + invalidBrailleInput + "\n");
     setTranslationType(invalidBrailleInput);
-
-    console.log("\nInput 5: " + inputTest + "\n");
     setTranslationType(inputTest);
-// }
+    setTranslationType(numberInput);
+}
