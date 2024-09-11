@@ -63,7 +63,27 @@ def translate_braille_to_english(braille_str):
 
 
 def translate_english_to_braille(english_str):
-    pass
+    braille_output = []
+    in_number_mode = False
+
+    for char in english_str:
+        if char.isdigit() and not in_number_mode:
+            braille_output.append(english_to_braille["num"])
+            in_number_mode = True
+
+        if char.isalpha():
+            in_number_mode = False
+            if char.isupper():
+                braille_output.append(english_to_braille["cap"])
+                braille_output.append(english_to_braille[char.lower()])
+            else:
+                braille_output.append(english_to_braille[char])
+        elif char.isdigit():
+            braille_output.append(english_to_braille[char])
+        elif char == " ":
+            braille_output.append(english_to_braille[" "])
+
+    return "".join(braille_output)
 
 
 def main():
