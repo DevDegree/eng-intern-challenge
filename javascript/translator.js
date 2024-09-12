@@ -60,6 +60,7 @@ const engToBrl = (str) => {
         // If the character is a space append a 'braille' space to result.
         if(char === ' ') {
             result += brailleChars.space;
+            isNumber
         } else if (upperCase.test(char)) { //check if it is an uppercase;
             // So check if the characters 
             result += brailleChars.capital + brailleChars[char.toLowerCase()];
@@ -70,7 +71,8 @@ const engToBrl = (str) => {
             }
             result += brailleChars[char]
         } else {
-            result += brailleChars[char];
+            result += brailleChars[char]; //  for default
+            isNumber = false;
         }
     }
 
@@ -98,6 +100,7 @@ console.log(engToBrl("Good Morning!"));
 // .....OO.OO......OO..O.......OO.O.O......OO.O.O......OO.OO.
 // .....OO.OO.O..O..O.O.O.O.O.O.O.OO............O.OOO.OO.OO.O.OOO.O.O.O.OO.O..
 // O.....O.O...OO...........O.OOOO.....O.O...OO....
+//O.....O.O...OO.... ...... .O.OOOO.....O.O...OO....OO.O..
 // .....OOOOO..O.OO.O.OO.OO.O.............OOO..O.O.OO.O.OOO.OO.OO..OO...OO.OO.OOOO..undefined
 
 
