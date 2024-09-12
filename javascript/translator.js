@@ -116,5 +116,5 @@ console.log(translateEngToBraille('Hello Erika 1.2 a.@'));
     //use map() method to map over all the segments and follow logic in function above
     //use join() method to concatenate all characters into a string
 
-//function to detect language (English or braille), then convert to opposite language with one of the correspoding two functions below.
+    //function to detect language (English or braille), then convert to opposite language with one of the correspoding two functions below.
     //maybe detect if language is only in O and . using a regex.
