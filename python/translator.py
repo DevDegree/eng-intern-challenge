@@ -12,7 +12,11 @@ def get_str_from_args() -> str:
 # checks if the text is in english or braille
 # the way it checks is to see if there are any characters besides 'O' and '.'
 def check_if_english(text: str) -> bool: 
-    return True 
+    for char in text: 
+        if not (char == 'O' or char == '.'): # detected a character that is not in braille
+            return True 
+    return False 
+
 
 # if it is in english, convert the text to braille 
 def convert_to_braille(text: str) -> str: 
@@ -30,7 +34,5 @@ def main():
     else: 
         print(convert_to_english(text))
 
-# if __name__ == "__main__": 
-#     main()
-
-print(get_str_from_args())
+if __name__ == "__main__": 
+    main()
