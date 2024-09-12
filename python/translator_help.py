@@ -33,19 +33,7 @@ english_to_braille_char = {
         'w': [2,3,4,6], 
         'x': [1,2,5,6], 
         'y': [1,2,4,5,6], 
-        'z': [1,4,5,6],
-        '.': [3,4,6], 
-        ',': [3], 
-        '?': [3,5,6], 
-        '!': [3,4,5], 
-        ':': [3,4], 
-        ';': [3,5], 
-        '-': [5,6], 
-        '/': [2,5], 
-        '<': [2,3,6], 
-        '>': [1,4,5], 
-        '(': [1,3,6], 
-        ')': [2,4,5]
+        'z': [1,4,5,6]
     }
 
 number_to_braille_char = {
@@ -84,3 +72,7 @@ def number_to_braille_code(raised_dots: list) -> str:
 braille_to_english_char = {number_to_braille_code(value): key for key, value in english_to_braille_char.items()}
 
 braille_to_number_char = {number_to_braille_code(value): key for key, value in number_to_braille_char.items()} 
+
+capital_follows_braille = ".....O" # braille code for capital follows 
+
+number_follows_braille = ".O.OOO" # braille code for number follows 

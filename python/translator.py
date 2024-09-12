@@ -17,7 +17,6 @@ def check_if_english(text: str) -> bool:
             return True 
     return False 
 
-
 # if it is in english, convert the text to braille 
 def convert_to_braille(text: str) -> str: 
     return text
