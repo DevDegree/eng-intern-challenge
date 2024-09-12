@@ -92,4 +92,4 @@ if __name__ == "__main__":
         sys.exit(1)
     
     input_string = ' '.join(sys.argv[1:])
-    print(translate(input_string))
+    print(translate(input_string)) 
