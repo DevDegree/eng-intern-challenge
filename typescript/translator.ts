@@ -41,3 +41,18 @@ const brailleAlphabet: BrailleAlphabet = {
   cap: ".....O",
   num: ".O.OOO",
 };
+
+/**
+ * Translates an input string between English and Braille.
+ * @param {string} input - The string to be translated. Can be either an English phrase or Braille.
+ * @returns {string} The translated string, either Braille or English, depending on the input.
+ */
+const translate = (input: string): string => {
+  return input;
+};
+
+// Get the user input
+const input = process.argv.slice(2).join(" ");
+
+// Output the translation
+console.log(translate(input));
