@@ -9,10 +9,8 @@ const braille = {
     "0": ".OOO..", " ": "......", "CAPITAL": ".....O", "NUMBER": ".O.OOO"
 };
 
-const english = {};
-for (let key in braille) {
-    english[braille[key]] = key;
-}
+const english = Object.fromEntries(Object.entries(braille).map(([key, value]) => [value, key]));
+
 
 function englishToBraille(englishText) {
 
