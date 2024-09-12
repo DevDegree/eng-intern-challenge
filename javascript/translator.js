@@ -54,7 +54,13 @@ const engToBrailleChars = {
     ')': '.O.OO.'
 }
 
-const brailleToEngChars = {}
+let brailleToEngChars = {}
+
+//flip the original object to make it english.
+const flip = (data) => {
+    const flip = Object.entries(data).map(([key, value]) => [value, key]);
+    brailleToEngChars = Object.fromEntries(flip);
+}
 
 //Check if the sequence is braille
 const isBraille = (str) => {
@@ -97,9 +103,7 @@ const engToBrl = (eng) => {
     return result;
 }
 
-const engToBrlChars = {
-  
-}
+
 
 const brlToEng = (braille) => {
     
@@ -110,6 +114,10 @@ const brlToEng = (braille) => {
         
     }
 }
+
+
+flip(engToBrailleChars);
+console.log(brailleToEngChars)
 
 // Test isBraille
 // console.log(isBraille("O....."));      // should be true 'a' 
@@ -122,16 +130,17 @@ const brlToEng = (braille) => {
 // console.log(isBraille("O..... O...."));        // f 'space in middle'
 
 // Test engToBrl function
-console.log(engToBrl("hello")); 
-console.log(engToBrl("HELLO")); 
-console.log(engToBrl("Hello World")); 
-console.log(engToBrl("abc 123"));
-console.log(engToBrl("Good Morning!"));
+// console.log(engToBrl("hello")); 
+// console.log(engToBrl("HELLO")); 
+// console.log(engToBrl("Hello World")); 
+// console.log(engToBrl("abc 123"));
+// console.log(engToBrl("Good Morning!"));
 // O.OO..O..O..O.O.O.O.O.O.O..OO.
 // .....OO.OO.......OO..O.......OO.O.O......OO.O.O......OO..OO.
 // .....OO.OO..O..O..O.O.O.O.O.O.O..OO............O.OOO.OO..OO.O.OOO.O.O.O.OO.O..
 // O.....O.O...OO...........O.OOOO.....O.O...OO....
 // .....OOOOO..O..OO.O..OO.OO.O.............OOO..O.O..OO.O.OOO.OO.OO..OO...OO.OO.OOOO..undefined
+
 
 
 
