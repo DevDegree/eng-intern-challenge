@@ -183,4 +183,19 @@ function isBraille(string) {
   }
 }
 
-console.log(isBraille("hello "));
+function translate(stringToTranslate) {
+  if (isBraille(stringToTranslate)) {
+    console.log(stringToTranslate);
+  } else {
+    const engChars = stringToTranslate.split("");
+    let brailleStr = "";
+
+    engChars.forEach((engChar) => {
+      const charObj = alphabet.find((char) => char.en === engChar);
+      brailleStr += charObj.br;
+    });
+    console.log(brailleStr);
+  }
+}
+
+translate("hello world");
