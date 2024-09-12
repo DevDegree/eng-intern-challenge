@@ -4,27 +4,24 @@
  * Shopify eng-intern-challenge
  */
 
-const toEnglish = require('./translators/toEnglish');
-const toBraille = require('./translators/toBraille');
-const readline = require('readline-sync');
+const toEnglish = require('./functions/toEnglish');
+const toBraille = require('./functions/toBraille');
+const isEnglish = require('./functions/isEnglish');
 
-const isEnglish = (input) => {
-    // TO DO
-    return true;
-}
-
-const parseInput = (input) => {
-    if (isEnglish(input)) {
-        return toBraille(input);
-    }
-
-    return toEnglish(input);
+const validateInput = (input, isEnglishString) => {
+    if (/[^A-Za-z0-9 .]/.test(input)) { throw new Error('Invalid input.'); }
+    if (!isEnglishString && (input.length % 6 !== 0)) { throw new Error('Invalid input.'); }
+    return input;
 }
 
 function main() {
-    const input = readline.question('Input: ');
-    // TO DO: type checking for input
+    if (process.argv.length < 3) { return }
+    
+    const input = process.argv.slice(2).join(' ');
+    const isEnglishString = isEnglish(input);
+    validateInput(input, isEnglishString);
 
-    console.log(`Output: ${parseInput(input)}`);
+    const output = isEnglish(input) ? toBraille(input) : toEnglish(input);
+    console.log(output);
 }
 main();

@@ -20,7 +20,7 @@ const toBraille = (input) => {
 }
 
 const parseEnglish = (char) => {
-    
+
     // 'w' and 'W' are special cases
     if (char === 'w') { return W_BRAILLE; }
     if (char === 'W') { return CAPITAL_FOLLOWS + W_BRAILLE; }
@@ -43,8 +43,7 @@ const parseEnglish = (char) => {
     if (isUpperCase) {
         result += CAPITAL_FOLLOWS;
     }
-
-
+    
     const charIndex = ALPHABET.indexOf(char.toLowerCase());
     const column = charIndex % 10;
     const row = Math.trunc(charIndex / 10);

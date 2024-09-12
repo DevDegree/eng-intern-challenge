@@ -1,5 +1,5 @@
-const { BRAILLE_TO_ROW: ROWS, BRAILLE_TO_COLUMN: COLUMNS, ALPHABET, 
-    W_BRAILLE, CAPITAL_FOLLOWS, NUMBER_FOLLOWS, SPACE } = require('./keys');
+const { BRAILLE_TO_ROW: ROWS, BRAILLE_TO_COLUMN: COLUMNS, 
+    ALPHABET, W_BRAILLE, CAPITAL_FOLLOWS, NUMBER_FOLLOWS, SPACE } = require('./keys');
 
 const BRAILLE_CHAR_LEN = 6;
 let CAPITAL_FLAG = false, NUMBER_FLAG = false;
@@ -42,7 +42,7 @@ const parseBraille = (char) => {
     if (CAPITAL_FLAG) {
         CAPITAL_FLAG = false;
         return letter.toUpperCase();
-    }
+    } 
 
     return letter;
 }
