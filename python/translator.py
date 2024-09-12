@@ -103,10 +103,8 @@ def main():
     parser.add_argument("input", nargs='+')  # Accepts multiple words
     args = parser.parse_args()
 
-    # Join all arguments into a single string (in case of multiple words)
     input_string = ' '.join(args.input)
 
-    # Perform the translation
     translation_result = translate(input_string)
     print(translation_result)
 
