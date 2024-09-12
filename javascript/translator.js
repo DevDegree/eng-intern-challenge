@@ -1,3 +1,4 @@
+// The character mappings from English to Braille.
 const brailleChars = {
     a: 'O.....',
     b: 'O.O...', 
@@ -39,3 +40,17 @@ const brailleChars = {
     capital: '.....O', 
     number: '.O.OOO'
 }
+
+function isBraille(input) {
+    return /^[O.]+$/.test(input);
+}
+
+// Test isBraille
+console.log(isBraille("O....."));      // should be true 'a' 
+console.log(isBraille("OO.O.."));      // true 'd'
+console.log(isBraille("O.OO.. "));     // f 'space 
+console.log(isBraille("O.....1"));     // f there is a 1
+console.log(isBraille("abc.OOO"));     // f 'abc'
+console.log(isBraille("O.....X"));     // f 'X'
+console.log(isBraille(".....O.O...OOO.OOO"));  // t
+console.log(isBraille("O..... O...."));        // f 'space in middle'
