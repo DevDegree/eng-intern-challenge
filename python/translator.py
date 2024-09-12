@@ -10,16 +10,20 @@ english_to_braille_letters = {
     'z': 'O..OOO', ' ': '......'
 }
 
+# Dictionary to map English numbers to Braille
 english_to_braille_numbers = {
     '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..',
     '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', 
     '0': '.OOO..'
 }
 
+# Dictionary to map Braille letters to English
 braille_to_english_letters = {v: k for k, v in english_to_braille_letters.items()}
 
+# Dictionary to map Braille numbers to English
 braille_to_english_numbers = {v: k for k, v in english_to_braille_numbers.items()}
 
+# Constants
 SPACE = '......'
 CAPITAL_FOLLOWS = '.....O'
 NUMBER_FOLLOWS = '.O.OOO'
@@ -32,7 +36,8 @@ def english_to_braille_translate(s):
     """Translates English string to Braille."""
     braille = []
     i = 0
-    while i < len(s):
+    n = len(s)
+    while i < n:
         char = s[i]
         if char == ' ' or char.islower(): # if character is a space or a lowercase letter 
             braille.append(english_to_braille_letters[char])
@@ -44,10 +49,10 @@ def english_to_braille_translate(s):
         elif char.isnumeric(): # if character is a number
             braille.append(NUMBER_FOLLOWS)
             braille.append(english_to_braille_numbers[s[i]])
-            while (i + 1 < len(s) and s[i + 1].isnumeric()):
+            while (i + 1 < n and s[i + 1].isnumeric()):
                 braille.append(english_to_braille_numbers[s[i + 1]])
                 i += 1
-            if i + 1 < len(s) and s[i + 1].isalpha():
+            if i + 1 < n and s[i + 1].isalpha():
                 braille.append(SPACE)
             i += 1
     return ''.join(braille)
@@ -58,7 +63,8 @@ def braille_to_english_translate(s):
     # Split Braille string into chunks of 6 characters
     braille_chars = [s[i:i + 6] for i in range(0, len(s), 6)]
     i = 0
-    while i < len(braille_chars):
+    n = len(braille_chars)
+    while i < n:
         char = braille_chars[i]
         if char == CAPITAL_FOLLOWS:
             english_char = braille_to_english_letters[braille_chars[i + 1]]
@@ -67,7 +73,7 @@ def braille_to_english_translate(s):
         elif char == NUMBER_FOLLOWS:
             i += 1
             english.append(braille_to_english_numbers[braille_chars[i]])
-            while (i + 1 < len(braille_chars) and braille_chars[i + 1] != SPACE):
+            while (i + 1 < n and braille_chars[i + 1] != SPACE):
                 english.append(braille_to_english_numbers[braille_chars[i + 1]])
                 i += 1
             i += 1
