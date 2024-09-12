@@ -16,7 +16,7 @@ braille_special = [CAPITAL_BRAILLE, NUMBER_BRAILLE, DECIMAL_BRAILLE, SPACE_BRAIL
 #For letters, the lowercase ASCII value is stored
 #special characters are pre-stored
 braille_to_ascii = {
-    "..OO.O": ord("."), #decimal
+    "..OO.O": ord("."), #period
     "..O...": ord(","), #comma
     "...OOO": ord("?"), #question mark
     "..OOO.": ord("!"), #exclamation mark
@@ -53,7 +53,6 @@ def isEnglish(string: str) -> bool:
     for idx in range(0, len(string), 6):
         substring = string[idx: idx+6]
         if substring not in braille_to_ascii and substring not in braille_special:
-            print(substring)
             return True
         
     return False
@@ -69,8 +68,8 @@ def main(string):
 
             if ord("0") <= ord(char) <= ord("9"):
                 if not start_number:
-                    res += NUMBER_BRAILLE
                     start_number = True
+                    res += NUMBER_BRAILLE
 
             if start_number and char == ".":
                 res += DECIMAL_BRAILLE
@@ -104,8 +103,6 @@ def main(string):
                 if substring == ZERO:
                     res += "0"
                 else:
-                    print(braille_to_ascii[substring] - TO_NUMBER)
-                    print(chr(braille_to_ascii[substring] - TO_NUMBER))
                     res += chr(braille_to_ascii[substring] - TO_NUMBER)
             elif capital:
                 res += chr(braille_to_ascii[substring] + CAPITAL)
