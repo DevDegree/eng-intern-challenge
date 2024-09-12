@@ -10,14 +10,14 @@ const toEnglish = (brailleString) => {
     for (let i = 0; i < brailleString.length; i += BRAILLE_CHAR_LEN) {
         const brailleChar = brailleString.substring(i, i + BRAILLE_CHAR_LEN);
 
-        if (brailleChar === CAPITAL_FOLLOWS) { 
+        if (brailleChar === CAPITAL_FOLLOWS) { // Raises capital flag.
             CAPITAL_FLAG = true; 
-        } else if (brailleChar === NUMBER_FOLLOWS) {
+        } else if (brailleChar === NUMBER_FOLLOWS) { // Raises number flag.
              NUMBER_FLAG = true; 
-        } else if (brailleChar === SPACE) {
+        } else if (brailleChar === SPACE) { // Adds a space. If capital flag is raised, removes capital flag as well.
             if (NUMBER_FLAG) { NUMBER_FLAG = false }
             result += " ";
-        } else { 
+        } else { // Convert alphanumeric Braille character to English. 
             result += parseBraille(brailleChar); 
         }
     }
@@ -27,16 +27,23 @@ const toEnglish = (brailleString) => {
 
 const parseBraille = (char) => {    
 
-    // 'w' is a special case
+    // 'w' is a special case.
     if (char === W_BRAILLE) { return 'w'; } 
     
-    const row = ROWS[char.substring(4, 6)];
+    // The row is represented by the bottom two dots.
+    const row = ROWS[char.substring(4, BRAILLE_CHAR_LEN)];
+
+    // The column is represented by the upper four dpts.
     const column = COLUMNS[char.substring(0, 4)];
     
     if (NUMBER_FLAG) {
-        return `${(column + 1)}`;
+        return `${(column + 1)}`; // A number is equivalent to its column.
     }
-    
+
+    /**
+     * Once row and column have been obtained,
+     * the integer value of the character is calculated.
+     */
     const letter = ALPHABET.charAt(column + (row * 10))
     
     if (CAPITAL_FLAG) {

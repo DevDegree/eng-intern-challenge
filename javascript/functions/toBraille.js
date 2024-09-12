@@ -1,7 +1,7 @@
 const { ROW_TO_BRAILLE: ROWS, COLUMN_TO_BRAILLE: COLUMNS, 
     ALPHABET, W_BRAILLE, CAPITAL_FOLLOWS, NUMBER_FOLLOWS, SPACE } = require('./keys');
 
-let NUMERIC_FLAG = false;
+let NUMBER_FLAG = false;
 
 const toBraille = (input) => {
     let result = '';
@@ -29,15 +29,15 @@ const parseEnglish = (char) => {
 
     const isNumber = !ALPHABET.includes(char) && !ALPHABET.includes(char.toLowerCase());
     if (isNumber) {
-        if (!NUMERIC_FLAG) {
+        if (!NUMBER_FLAG) {
             result += NUMBER_FOLLOWS;
         }
 
-        NUMERIC_FLAG = true;
+        NUMBER_FLAG = true;
         return result + `${COLUMNS[char - 1]}${ROWS[0]}`;
     }
 
-    NUMERIC_FLAG = false;
+    NUMBER_FLAG = false;
 
     const isUpperCase = !ALPHABET.includes(char); 
     if (isUpperCase) {
