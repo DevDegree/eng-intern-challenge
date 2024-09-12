@@ -47,7 +47,7 @@ const parseBraille = (char) => {
     const letter = ALPHABET.charAt(column + (row * 10))
     
     if (CAPITAL_FLAG) {
-        CAPITAL_FLAG = false;
+        CAPITAL_FLAG = false; // Remove capital flag, flag is only for one character.
         return letter.toUpperCase();
     } 
 
