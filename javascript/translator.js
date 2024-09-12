@@ -8,3 +8,31 @@ const brailleMap = {
   
   const englishMap = Object.fromEntries(Object.entries(brailleMap).map(([key, value]) => [value, key]));
   
+
+function translate(input) {
+    let result = '', capMode = false, numMode = false, isBraille = /^[O.\s]+$/.test(input);
+  
+    if (isBraille) {
+      for (let i = 0; i < input.length; i += 6) {
+        const brailleChar = input.slice(i, i + 6);
+        if (brailleChar === brailleMap['cap']) capMode = true;
+        else if (brailleChar === brailleMap['num']) numMode = true;
+        else {
+          let char = englishMap[brailleChar];
+          if (capMode) char = char.toUpperCase(), capMode = false;
+          if (numMode && /[a-j]/.test(char)) char = (char.charCodeAt(0) - 'a'.charCodeAt(0) + 1) % 10, numMode = false;
+          result += char;
+        }
+      }
+    } else {
+      for (const char of input) {
+        if (/[0-9]/.test(char)) {
+          if (!numMode) result += brailleMap['num'], numMode = true;
+          result += brailleMap[char];
+        } else if (/[A-Z]/.test(char)) result += brailleMap['cap'] + brailleMap[char.toLowerCase()], numMode = false;
+        else result += brailleMap[char], numMode = false;
+      }
+    }
+  
+    return result;
+  }
