@@ -146,6 +146,25 @@ def braille_to_english(braille_text):
     return english_text
 
 
+# Returns true if it is braille text, false otherwise
+def is_braille_text(text):
+    # If there is less than 6 characters, then it can't be braille since every character uses 6 symbols
+    if len(text) < 6:
+        return False
+
+    is_braille = False
+
+    # Iterate over the first 6 characters, if any contain '.' (which isn't included in the valid character set
+    # for English) then it is braille. Every braille character contains at least 1 '.', so it will be in the first 6
+    # guaranteed if it is braille
+    for c in text[:6]:
+        if c == '.':
+            is_braille = True
+            break
+
+    return is_braille
+
+
 def main():
     # Generate the english to braille lookup
     generate_braille_to_english_lookup()
@@ -153,8 +172,11 @@ def main():
     # Retrieve the input from the arguments
     original_text = get_argument_input()
 
-    translated_text = braille_to_english(original_text)
-    # translated_text = english_to_braille(original_text)
+    # Run the correct translation depending on the type of text
+    if is_braille_text(original_text):
+        translated_text = braille_to_english(original_text)
+    else:
+        translated_text = english_to_braille(original_text)
 
     print(translated_text)
 
