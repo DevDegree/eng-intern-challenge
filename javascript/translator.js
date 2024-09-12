@@ -1,22 +1,16 @@
 /**
  * Neil Dominic V. Torres
  * neildominictorres@gmail.com
+ * 
+ * September 11, 2024
+ * 
  * Shopify eng-intern-challenge
  */
 
 const toEnglish = require('./functions/toEnglish');
 const toBraille = require('./functions/toBraille');
 const isEnglish = require('./functions/isEnglish');
-
-const validateInput = (input) => {
-    // Program only supports alphanumeric, ., and space characters.
-    if (/[^A-Za-z0-9 .]/.test(input)) { throw new Error('Invalid input.'); } 
-}
-
-const validateBrailleInputLength = (input) => {
-    // A Braille input must be divisible by 6.
-    if (input.length % 6 !== 0) { throw new Error('Invalid input.'); }
-}
+const { validateInput, validateBrailleInputLength } = require('./functions/validators');
 
 function main() {
     if (process.argv.length < 3) { return }
