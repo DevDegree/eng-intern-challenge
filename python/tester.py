@@ -49,3 +49,4 @@ if __name__ == '__main__':
     tester([".....OO.OO...O.OOOOO..........O............O.OOOOO.O..O.O..."], "H3 a 42")
     tester(["a", "42"], "O............O.OOOOO.O..O.O...")
     tester(["O............O.OOOOO.O..O.O..."], "a 42")
+    tester([" "], "......")

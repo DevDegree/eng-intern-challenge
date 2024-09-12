@@ -32,9 +32,10 @@ def main() -> None:
             translateEnglish(args[i])
             
             if i != len(args) - 1:
-                print(engToBraileDict[" "], end='')
+                print(engToBraileDict[" "], end="")
 
 
+# Translates a word in Braile -> English
 def translateBraile(word : str) -> None:
     # Ensure Braile input is valid
     assert(len(word) % 6 == 0)
@@ -63,12 +64,12 @@ def translateBraile(word : str) -> None:
 
         # Handle printing of the word
         if numFollowState:
-            print(letterToNumDict[braileToEngDict[word]], end='')
+            print(letterToNumDict[braileToEngDict[word]], end="")
         elif capFollowState:
-            print(braileToEngDict[word].upper(), end='')
+            print(braileToEngDict[word].upper(), end="")
             capFollowState = False
         else:
-            print(braileToEngDict[word], end='')
+            print(braileToEngDict[word], end="")
 
 
 # Converts number to their associated number ordering
@@ -76,6 +77,7 @@ def numToLetter(num : str) -> str:
     return numToLetterDict[num]
 
 
+# Translates a word in English -> Braile
 def translateEnglish(word : str) -> None:
     # Number follows state
     numState = False
@@ -84,17 +86,17 @@ def translateEnglish(word : str) -> None:
     for char in word:
         # Print uppercase and number follows Braile if needed
         if char.isupper():
-            print(engToBraileDict["capitalFollows"], end='')
+            print(engToBraileDict["capitalFollows"], end="")
             char = char.lower()
         elif (not numState) and char.isnumeric():
             numState = True
-            print(engToBraileDict["numberFollows"], end='')
+            print(engToBraileDict["numberFollows"], end="")
 
         if char.isnumeric():  
             char = numToLetter(char)
 
         # Print the character directly translated to Braile
-        print(engToBraileDict[char], end='')
+        print(engToBraileDict[char], end="")
 
 
 if __name__ == "__main__":
