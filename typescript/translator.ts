@@ -1,30 +1,30 @@
 const args = process.argv.slice(2);
 const message = args.join(' ');
 
-const braille = {
+const braille: { [key: string]: string } = {
     a: 'O.....', b: 'O.O...', c: 'OO....', d: 'OO.O..', e: 'O..O..', f: 'OOO...', g: 'OOOO..', h: 'O.OO..',
     i: '.OO...', j: '.OOO..', k: 'O...O.', l: 'O.O.O.', m: 'OO..O.', n: 'OO.OO.', o: 'O..OO.', p: 'OOO.O.',
     q: 'OOOOO.', r: 'O.OOO.', s: '.OO.O.', t: '.OOOO.', u: 'O...OO', v: 'O.O.OO', w: '.OOO.O', x: 'OO..OO',
     y: 'OO.OOO', z: 'O..OOO', '.': '..OO.O', ' ': '......',
 };
 
-const functions = {
+const functions: { [key: string]: string } = {
     capital: '.....O',
     number: '.O.OOO',
 };
 
 const alphabet: { [key: string]: string } = {};
 Object.keys(braille).forEach((key) => {
-    const brailleSymbol = braille[key]; 
-    alphabet[brailleSymbol] = key; 
+    const brailleSymbol = braille[key];
+    alphabet[brailleSymbol] = key;
 });
 
-const numberMap = {
+const numberMap: { [key: string]: string } = {
     '1': 'a', '2': 'b', '3': 'c', '4': 'd', '5': 'e',
     '6': 'f', '7': 'g', '8': 'h', '9': 'i', '0': 'j'
 };
 
-const reverseNumberMap = {
+const reverseNumberMap: { [key: string]: string } = {
     a: '1', b: '2', c: '3', d: '4', e: '5', f: '6',
     g: '7', h: '8', i: '9', j: '0'
 };
@@ -44,10 +44,10 @@ const englishToBraille = (text: string) => {
                 brailleOutput.push(functions.number);
                 isNumber = true;
             }
-            brailleOutput.push(braille[numberMap[char]]); 
-        } else if (char === ' ') { 
-            brailleOutput.push(braille[' ']); 
-            isNumber = false; 
+            brailleOutput.push(braille[numberMap[char]]);
+        } else if (char === ' ') {
+            brailleOutput.push(braille[' ']);
+            isNumber = false;
         } else {
             brailleOutput.push(braille[char] || braille[' ']);
         }
