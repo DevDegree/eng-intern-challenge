@@ -244,7 +244,7 @@ def TranslateBraille(braille: str, num: bool):
             brailleVal =  -3
         case _:
             brailleVal =  -4
-    if(num and (not ("1"<=brailleVal<="9") or brailleVal==" " or brailleVal==-2)):
+    if(num and (not ("1"<=brailleVal<="9") and brailleVal!=" " and brailleVal!=-2)):
         return -4
     else: return brailleVal
     
