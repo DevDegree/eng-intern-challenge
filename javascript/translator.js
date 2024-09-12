@@ -90,7 +90,7 @@ function brailleToEnglish(brailleText) {
 }
 
 function ifBraille(text) {
-    return text.length % 6 === 0 && text.split('').every(char => char === 'O' || char === '.');
+    return text.length % 6 === 0 && /^[O.]+$/.test(text);
 }
 
 function translator() {
@@ -105,3 +105,5 @@ function translator() {
 }
 
 translator()
+
+
