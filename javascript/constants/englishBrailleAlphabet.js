@@ -26,6 +26,6 @@ export const englishBrailleAlphabet = {
   "OO.OOO": ["y"],
   "O..OOO": ["z"],
   ".....O": ["capital follows"],
-  ".O.OOO": ["numbers follows"],
+  ".O.OOO": ["number follows"],
   "......": [" "],
 };

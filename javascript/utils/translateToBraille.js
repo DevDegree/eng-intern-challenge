@@ -10,7 +10,7 @@ export const translateToBraille = (inputString) => {
   const findKeyByValue = (value) => brailleEnglishAlphabet.get(value) || "";
 
   for (let char of inputString) {
-    //  Add uppercase letter
+    //  Add uppercase letters
     if (/[A-Z]/.test(char)) {
       result += findKeyByValue(CAPITAL_FOLLOWS);
       char = char.toLowerCase();
