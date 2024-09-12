@@ -1,8 +1,8 @@
 import sys
 
 # A dictionary mapping English keys to Braile values
-# white circle -> .
-# black circle -> O  
+# White circle -> .
+# Black circle -> O
 engToBraileDict = {
     "a" : "O.....", "b" : "O.O...", "c" : "OO....", "d" : "OO.O..", "e" : "O..O..",
     "f" : "OOO...", "g" : "OOOO..", "h" : "O.OO..", "i" : ".OO...", "j" : ".OOO..", 
@@ -77,7 +77,7 @@ def numToLetter(num : str) -> str:
 
 
 def translateEnglish(word : str) -> None:
-    # number follows state
+    # Number follows state
     numState = False
     
     # Translate each character at a time
