@@ -168,3 +168,19 @@ const alphabet = [
     en: " ",
   },
 ];
+
+function isBraille(string) {
+  if (string.length % 6 !== 0) {
+    return false;
+  } else {
+    for (const char of string) {
+      if (!(char === "O" || char === ".")) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  }
+}
+
+console.log(isBraille("hello "));
