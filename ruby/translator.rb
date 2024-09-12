@@ -52,8 +52,7 @@ def braille_to_english(text)
     is_number_mode = false
     capitalize_next = false
     index = 0
-    while index < text.length
-        char = text[index, 6]
+    text.scan(/.{6}/) do |char|
         index += 6
         if (char === CAPITAL_SYMBOL)
             capitalize_next = true
