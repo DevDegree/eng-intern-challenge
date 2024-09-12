@@ -1,19 +1,21 @@
-let capitalFlag = false, numberFlag = false;
+const { BRAILLE_TO_ROW: ROWS, BRAILLE_TO_COLUMN: COLUMNS, ALPHABET, 
+    W_BRAILLE, CAPITAL_FOLLOWS, NUMBER_FOLLOWS, SPACE } = require('./keys');
+
+const BRAILLE_CHAR_LEN = 6;
+let CAPITAL_FLAG = false, NUMBER_FLAG = false;
 
 const toEnglish = (brailleString) => {
     let result = "";
 
-    const BRAILLE_CHAR_LEN = 6;
-
     for (let i = 0; i < brailleString.length; i += BRAILLE_CHAR_LEN) {
         const brailleChar = brailleString.substring(i, i + BRAILLE_CHAR_LEN);
 
-        if (brailleChar === '.....O') { 
-            capitalFlag = true; 
-        } else if (brailleChar === '.O.OOO') {
-             numberFlag = true; 
-        } else if (brailleChar === '......') {
-            if (numberFlag) { numberFlag = false }
+        if (brailleChar === CAPITAL_FOLLOWS) { 
+            CAPITAL_FLAG = true; 
+        } else if (brailleChar === NUMBER_FOLLOWS) {
+             NUMBER_FLAG = true; 
+        } else if (brailleChar === SPACE) {
+            if (NUMBER_FLAG) { NUMBER_FLAG = false }
             result += " ";
         } else { 
             result += parseBraille(brailleChar); 
@@ -23,40 +25,22 @@ const toEnglish = (brailleString) => {
     return result;
 }
 
-// TO DO: Ensure that argument is indeed alphanumeric
 const parseBraille = (char) => {    
-    if (char === '.OOO.O') { return 'w'; } // 'w' is a pesky special value
 
-    const rowValues = {
-        '..' : 0,
-        'O.' : 1,
-        'OO' : 2
-    }
+    // 'w' is a special case
+    if (char === W_BRAILLE) { return 'w'; } 
     
-    const columnValues = {
-        'O...' : 0,
-        'O.O.' : 1,
-        'OO..' : 2,
-        'OO.O' : 3,
-        'O..O' : 4,
-        'OOO.' : 5,
-        'OOOO' : 6,
-        'O.OO' : 7,
-        '.OO.' : 8,
-        '.OOO' : 9,
-    }
+    const row = ROWS[char.substring(4, 6)];
+    const column = COLUMNS[char.substring(0, 4)];
     
-    row = rowValues[char.substring(4, 6)];
-    column = columnValues[char.substring(0, 4)];
-    
-    if (numberFlag) {
+    if (NUMBER_FLAG) {
         return `${(column + 1)}`;
     }
     
-    const letter = 'abcdefghijklmnopqrstuvxyz'.charAt(column + (row * 10)) // Does not contain 'w'!
+    const letter = ALPHABET.charAt(column + (row * 10))
     
-    if (capitalFlag) {
-        capitalFlag = false;
+    if (CAPITAL_FLAG) {
+        CAPITAL_FLAG = false;
         return letter.toUpperCase();
     }
 

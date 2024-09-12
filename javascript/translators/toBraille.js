@@ -1,7 +1,5 @@
-const ALPHABET = 'abcdefghijklmnopqrstuvxyz';
-
-const ROW = ['..', 'O.', 'OO'];
-const COLUMN = ['O...', 'O.O.', 'OO..', 'OO.O', 'O..O', 'OOO.', 'OOOO', 'O.OO', '.OO.','.OOO'];
+const { ROW_TO_BRAILLE: ROWS, COLUMN_TO_BRAILLE: COLUMNS, 
+    ALPHABET, W_BRAILLE, CAPITAL_FOLLOWS, NUMBER_FOLLOWS, SPACE } = require('./keys');
 
 let NUMERIC_FLAG = false;
 
@@ -12,7 +10,7 @@ const toBraille = (input) => {
         const char = input[i];
 
         if (char === ' ') {
-            result += '......';
+            result += SPACE;
         } else {
             result += parseEnglish(char);
         }
@@ -22,26 +20,28 @@ const toBraille = (input) => {
 }
 
 const parseEnglish = (char) => {
-    if (char === 'w') { return '.OOO.O'; }
-    if (char === 'W') { return '.....O' + '.OOO.O'; }
+    
+    // 'w' and 'W' are special cases
+    if (char === 'w') { return W_BRAILLE; }
+    if (char === 'W') { return CAPITAL_FOLLOWS + W_BRAILLE; }
 
     let result = '';
 
     const isNumber = !ALPHABET.includes(char) && !ALPHABET.includes(char.toLowerCase());
     if (isNumber) {
         if (!NUMERIC_FLAG) {
-            result += '.O.OOO';
+            result += NUMBER_FOLLOWS;
         }
 
         NUMERIC_FLAG = true;
-        return result + `${COLUMN[char - 1]}${ROW[0]}`;
+        return result + `${COLUMNS[char - 1]}${ROWS[0]}`;
     }
 
     NUMERIC_FLAG = false;
 
     const isUpperCase = !ALPHABET.includes(char); 
     if (isUpperCase) {
-        result += '.....O';
+        result += CAPITAL_FOLLOWS;
     }
 
 
@@ -49,7 +49,7 @@ const parseEnglish = (char) => {
     const column = charIndex % 10;
     const row = Math.trunc(charIndex / 10);
 
-    return result + `${COLUMN[column]}${ROW[row]}`;
+    return result + `${COLUMNS[column]}${ROWS[row]}`;
 }
 
 module.exports = toBraille;
