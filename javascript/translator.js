@@ -1,6 +1,7 @@
 // Take CLI arguments
 const userInput = process.argv.slice(2);
 
+// braille letters and prefixes
 const brailleCharacters = {
   // Letters
   "a": "O.....",
@@ -38,6 +39,7 @@ const brailleCharacters = {
   "CAP": ".....O",  // Capital follows
 };
 
+// braille numbers
 const brailleNumbers = {
   // Numbers (same as letters a-j with number sign prefix)
   "1": "O.....",
@@ -62,6 +64,7 @@ const languageType = (language) => {
   }
 };
 
+// split the braille characters for each 6 symbols
 const splitBrailleCharacters = (braille) => {
   return braille.match(/.{1,6}/g);
 }
@@ -69,6 +72,7 @@ const splitBrailleCharacters = (braille) => {
 let capitalize = false;
 let isNums = false;
 
+// translate individual Braille characters
 const brailleCharacterTranslate = (character) => {
   if (character === '......') {
     isNums = false;
@@ -103,6 +107,7 @@ const brailleCharacterTranslate = (character) => {
   }
 }
 
+// construct the English sentence from Braille input
 const brailleToEnglish = (brailleArray) => {
   let outputString = '';
   for (const character of brailleArray) {
@@ -114,6 +119,7 @@ const brailleToEnglish = (brailleArray) => {
 
 let firstTimeNum = true;
 
+// translate individual English characters
 const englishCharacterTranslate = (character, isNumber) => {
   let output = '';
   if (!isNumber) {
@@ -140,6 +146,7 @@ const englishCharacterTranslate = (character, isNumber) => {
   }
 }
 
+// construct the Braille sentence from English input
 const englishToBraille = (sentence) => {
   let outputString = '';
   for (const letter of sentence) {
