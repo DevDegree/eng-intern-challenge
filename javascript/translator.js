@@ -50,25 +50,39 @@ function brailleToEnglish(brailleText) {
     for (let i = 0; i < brailleText.length; i += 6) {
         let brailleChar = brailleText.slice(i, i + 6);
 
-        if (brailleChar === braille["CAPITAL"]) {
-            isCaptial = true;
-            continue;
-        }
+
         if (brailleChar === braille["NUMBER"]) {
             isNumber = true;
             continue;
         }
-        let englishChar = english[brailleChar]
+        if (brailleChar === braille["CAPITAL"]) {
+            isCaptial = true;
+            continue;
+        }
+
+        let englishChar = english[brailleChar] || '';
 
         if (isNumber) {
-            englishChar = englishChar ? englishChar : '';
-            isNumber = false;
-        } else if (isCaptial) {
-            englishChar = englishChar ? englishChar.toUpperCase() : '';
+            if (brailleChar === braille["1"]) englishChar = "1";
+            else if (brailleChar === braille["2"]) englishChar = "2";
+            else if (brailleChar === braille["3"]) englishChar = "3";
+            else if (brailleChar === braille["4"]) englishChar = "4";
+            else if (brailleChar === braille["5"]) englishChar = "5";
+            else if (brailleChar === braille["6"]) englishChar = "6";
+            else if (brailleChar === braille["7"]) englishChar = "7";
+            else if (brailleChar === braille["8"]) englishChar = "8";
+            else if (brailleChar === braille["9"]) englishChar = "9";
+            else if (brailleChar === braille["0"]) englishChar = "0";
+            else isNumber = false; 
+        }
+
+        if (isCaptial) {
+            englishChar = englishChar.toUpperCase();
             isCaptial = false;
         }
 
-        convertedText += englishChar || "";
+        convertedText += englishChar;
+
     }
 
     return convertedText;
