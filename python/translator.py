@@ -1,19 +1,31 @@
+"""Instructions
+Fork this repo to your personal Github Account
+Clone your forked repo to begin working on the challenge locally.
+Create a new Branch in your repo where you will be pushing your code to.
+Choose which programming language you wish to complete the challenge with.
+Navigate to the folder of that programming language and complete your work in the translator file found inside. ie: ruby/translator.rb
+Do not edit the test file in the folder. Tests will only work as intended after you have submitted a PR.
+You'll find a separate README.md in that folder with language specific instructions.
+Ensure your application is executable from the command-line by running your translator file.
+Feel free to run the test found in your language folder to ensure your code is correct
+Your application must output only the Braille/English string.
+ie: O..... not The Braille text is: O.....
 
+Your Github email must match the email you submitted your Application with (if your Github email is different, we recommend creating a new Github profile with the email you created your application with)
+Have your email set to public on your Github Profile
+Do not apply any labels on your PR. We will mark your PR as reviewed with a label when it has been so. Marking this yourself will cause your PR to be skipped.
+This repo is designed to run a unit test against your work to ensure the correct string is outputted to the console when executing your code.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Examples
+Launching your application with English or Braille:
+ruby translator.rb Hello world
+ruby translator.rb .....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..
+Input: Hello world
+Output: .....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..
+Input: 42
+Output: .O.OOOOO.O..O.O...
+Input: .....OO.....O.O...OO...........O.OOOO.....O.O...OO....
+Output: Abc 123
 
 '''Hello and welcome to my braille translator program! :) Something that I find helps when I'm coding
 is writing step-by-step instructions to myself on how to build it. In a general circumstance,
