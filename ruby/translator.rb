@@ -64,15 +64,19 @@ class BrailleTranslator
   
     def text_to_braille
       result = []
+      number_mode = false
       @input.each_char do |char|
         if char.match?(/[A-Z]/)
           result << CHAR_TO_BRAILLE['capital']
           char.downcase!
         elsif char.match?(/\d/)
-          result << CHAR_TO_BRAILLE['number'] # Change this line
+          result << CHAR_TO_BRAILLE['number'] unless number_mode
+          number_mode = true
           char = ('a'.ord + char.to_i - 1).chr
+        else
+          number_mode = false
         end
-    
+
         result << (char == ' ' ? '......' : CHAR_TO_BRAILLE[char])
       end
       result.join
