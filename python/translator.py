@@ -14,8 +14,18 @@ braille_dict = {
 # Reverse mapping from Braille to English
 reverse_braille_dict = {v: k for k, v in braille_dict.items()}
 
+# function to detect if input is Braille or English and translate accordingly
+def detect_and_translate(input_string):
+    # Detect if input is Braille or English based on presence of 'O' and '.' or normal letters/numbers
+    if all(c in 'O.' for c in input_string):
+        # translate input to English
+        return "English"
+    else:
+        # translate input to Braille
+        return "Braille"
+
 if __name__ == "__main__":
     # Take the input from the command line arguments
     input_text = input("Enter the text you want to translate (English or Braille): ")
-    
-    print(input_text)
+    output_text = detect_and_translate(input_text)
+    print(output_text)
