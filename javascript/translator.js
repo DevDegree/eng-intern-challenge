@@ -94,7 +94,8 @@ function ifBraille(text) {
 }
 
 function translator() {
-    const input = process.argv[2];
+
+    const input = process.argv.slice(2).join(' ');
 
     if (ifBraille(input)) {
         console.log(brailleToEnglish(input));
