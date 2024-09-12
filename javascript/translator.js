@@ -1,5 +1,3 @@
-//**note that the braille alphabet for the letter O and the > symbol are the same. find a solution after your basic code works./ 
-
 //English characters to braille object
 const brailleDict = {
     'a': 'O.....',
@@ -100,8 +98,6 @@ function translateEngToBraille(input) {
     .join('');
 }
 
-//console.log(translateEngToBraille('Hello Erika 1.2 a.@'));
-
 //function to translate braille to English
 function translateBrailleToEng(input) {
     let capitalize = false;
@@ -149,8 +145,6 @@ function translateBrailleToEng(input) {
         .join('');
 }
 
-//console.log(translateBrailleToEng(".O.OOOO.....O.O.........O.....111111"));
-
 //function to detect language (English or braille), and translate to opposite
 
 function detectLanguageAndTranslate(input) {
@@ -166,4 +160,17 @@ function detectLanguageAndTranslate(input) {
     }
 }
 
-console.log(detectLanguageAndTranslate('OO..OO.'))
+//execute in command line
+if (require.main === module) {
+    const args = process.argv.slice(2);
+
+    if (args.length < 1) {
+        console.error('Input on command line required');
+        process.exit(1);
+    }
+
+    const input = args.join(' ');
+    const result = detectLanguageAndTranslate(input);
+
+    console.log(result)
+}
