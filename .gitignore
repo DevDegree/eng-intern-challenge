@@ -3,3 +3,17 @@ node_modules
 yarn.lock
 package-lock.json
 Gemfile.lock
+__pycache__/
+*.py[cod]
+*$py.class
+env/
+venv/
+.venv/
+ENV/
+.env
+.env.*
+.vscode/
+.idea/
+*.cache
+*.pytest_cache/
+*.log
