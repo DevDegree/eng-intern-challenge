@@ -1,5 +1,3 @@
-import sys
-
 # this file contains all the dictionaries and variables needed for translating between braille and English
 
 # the format for english_to_braille_char and number_to_braille is as follows: 
@@ -86,5 +84,3 @@ def number_to_braille_code(raised_dots: list) -> str:
 braille_to_english_char = {number_to_braille_code(value): key for key, value in english_to_braille_char.items()}
 
 braille_to_number_char = {number_to_braille_code(value): key for key, value in number_to_braille_char.items()} 
-
-print(braille_to_number_char)
