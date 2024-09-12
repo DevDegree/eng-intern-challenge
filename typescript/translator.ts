@@ -1,7 +1,10 @@
 // note about braille:
 // O = raised dot
 // . = flat (empty) space
-const romanToBraille: Record<string, string> = {
+
+type Dictionary = Record<string, string>;
+
+const romanToBraille: Dictionary = {
   0: ".OOO..",
   1: "O.....",
   2: "O.O...",
@@ -14,7 +17,7 @@ const romanToBraille: Record<string, string> = {
   9: ".OO...",
 };
 
-const englishToBraille: Record<string, string> = {
+const englishToBraille: Dictionary = {
   a: "O.....",
   b: "O.O...",
   c: "OO....",
@@ -49,9 +52,7 @@ const CONTROL_SEQUENCE = {
   NUMBER_FOLLOWS: ".O.OOO",
 } as const;
 
-const reverseKeyValueMapping = (
-  obj: Record<string, string>
-): Record<string, string> =>
+const reverseKeyValueMapping = (obj: Dictionary): Dictionary =>
   Object.fromEntries(Object.entries(obj).map(([key, value]) => [value, key]));
 
 const isEnglishText = (text: string) => /^[a-zA-Z\d\s]+$/.test(text);
