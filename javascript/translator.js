@@ -5,8 +5,62 @@
 //*consider making seperate objects for alphabet characters and letters for better readability and reuseability. 
 //**note that the braille alphabet for the letter O and the > symbol are the same. find a solution after your basic code works./ 
 
-//function to detect language (English or braille), then convert to opposite language with one of the correspoding two functions below.
-    //maybe detect if language is only in O and . using a regex.
+const brailleDict = {
+    'a': 'O.....',
+    'b': 'O.O...',
+    'c': 'OO....',
+    'd': 'OO.O..',
+    'e': 'O..O..',
+    'f': 'OOO...',
+    'g': 'OOOO..',
+    'h': 'O.OO..',
+    'i': '.OO...',
+    'j': '.OOO..',
+    'k': 'O....O',
+    'l': 'O.O.O.',
+    'm': 'OO..O.',
+    'n': 'OO.OO.',
+    'o': 'O..OO.',
+    'p': 'OOO.O.',
+    'q': 'OOOOO.',
+    'r': 'O.OOO.',
+    's': '.OO.O.',
+    't': '.OOOO.',
+    'u': 'O...OO',
+    'v': 'O.O.OO',
+    'w': '.OOO.O',
+    'x': 'OO..OO',
+    'y': 'OO.OOO',
+    'z': 'O..OOO',
+    '.': '..OO.O',
+    ',': '..O...',
+    '?': '..O.OO',
+    '!': '..OOO.',
+    ':': '..OO..',
+    '-': '....OO',
+    '<': '.OO..O',
+    '>': 'O..OO.',
+    '(': 'O.O..O',
+    ')': '.O.OO.',
+    ' ': '......'
+}
+
+const brailleNums = {
+    '1': 'O.....',
+    '2': 'O.O...',
+    '3': 'OO....',
+    '4': 'OO.O..',
+    '5': 'O..O..',
+    '6': 'OOO...',
+    '7': 'OOOO..',
+    '8': 'O.OO..',
+    '9': '.OO...',
+    '0': '.OOO..',
+}
+
+const capitalNext = '.....O';
+const numberNext = '.O.OOO';
+const decimalNext = '.O...O';
 
 //function to tranlate English to braille
     //use split() method to split the string into individual characters.
@@ -18,6 +72,42 @@
             //if decimal is used, add braille indicator for decimal follows before the corresponding braille symbol, else print braille symbol for period. 
         //return all characters
     //use join() method to concatenate all characters into a string 
+
+function translateEngToBraille(input) {
+    let capitalize = false;
+    let inNumberMode = false;
+
+    return input
+    .split('')
+    .map((char) => {
+        if (char === char.toUpperCase() && char !== char.toLowerCase()) {
+            capitalize = true;
+        }
+
+        if (capitalize) {
+            capitalize = false;
+            return capitalNext + brailleDict[char.toLowerCase()] || 'ERROR';
+        }
+
+        if (/^\d$/.test(char)) {
+            inNumberMode = true;
+            return numberNext + brailleNums[char] || 'ERROR'
+        }
+
+        if (char === '.' && inNumberMode) {
+            return decimalNext + brailleDict[char] || 'ERROR';
+        }
+
+        if (char === ' ' && inNumberMode) {
+            inNumberMode = false;
+        }
+
+        return brailleDict[char] || 'ERROR'
+    })
+    .join('');
+}
+
+console.log(translateEngToBraille('Hello Erika 1.2 a.@'));
     
 
 //function to translate braille to English
@@ -25,3 +115,6 @@
     //use regex and match() method to split the braille into 6-chacter segments
     //use map() method to map over all the segments and follow logic in function above
     //use join() method to concatenate all characters into a string
+
+//function to detect language (English or braille), then convert to opposite language with one of the correspoding two functions below.
+    //maybe detect if language is only in O and . using a regex.
