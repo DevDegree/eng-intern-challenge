@@ -319,9 +319,9 @@ def solve(val: str):
         return EnglishToBraille(val)
     return ans
 
-if __name__ == '__main__':
-    args = sys.argv[1:]
-    print(solve(' '.join(args)))
+
+args = sys.argv[1:]
+print(solve(' '.join(args)))
 
 
     
