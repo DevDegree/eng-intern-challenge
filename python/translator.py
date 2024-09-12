@@ -301,7 +301,7 @@ def EnglishToBraille(val: str):
             ans += TranslateLetter(i)
         elif i =="." and num:
             ans += ".O...O"
-        elif i ==" ":
+        elif i == " ":
             ans += TranslateLetter(i)
             num = False#number follows is toggled off when reaching a space
         else: 
@@ -321,7 +321,7 @@ def solve(val: str):
 
 if __name__ == '__main__':
     args = sys.argv[1:]
-    print(solve(''.join(args)))
+    print(solve(' '.join(args)))
 
 
     
