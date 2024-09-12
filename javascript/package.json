@@ -4,7 +4,8 @@
   "description": "",
   "main": "translator.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "node translator.js"
   },
   "author": "",
   "license": "ISC",
