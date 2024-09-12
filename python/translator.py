@@ -94,9 +94,12 @@ def guess_language(input_string: str) -> Language:
     """
     return Language.BRAILLE if len(input_string) % 6 == 0 and all(char in 'O.' for char in input_string) else Language.ENGLISH
 
+
 def translate_braille(input_string: str):
     """
-    
+    Greedily loops through each chunk of 6 characters, and tries to parse as Braille.
+
+    If parsing fails, then we raise ValueError.
     """
 
     chunk_idx = 0
@@ -105,7 +108,9 @@ def translate_braille(input_string: str):
     translation = ""
 
     while chunk_idx * 6 < len(input_string):
+        # get current chunk of 6 characters
         chunk = input_string[chunk_idx*6:(chunk_idx+1) * 6]
+
         try:
             # First handle all control cases
             if control == BrailleControlType.NUMBER:
@@ -113,6 +118,8 @@ def translate_braille(input_string: str):
                 if chunk == char_to_braille['symbols'][' ']:
                     control = None
                     translation += ' '
+                # If we are reading numbers and see a decimal follows, add the decimal
+                # but continue reading numbers
                 elif chunk == char_to_braille['controls'][BrailleControlType.DECIMAL]:
                     translation += '.'
                 else:
@@ -124,11 +131,14 @@ def translate_braille(input_string: str):
                 
             else:
                 # If no control flag is set, try getting chunk as each type of char 
-                if chunk in braille_to_control:
+
+                # First we see if it is a control (not decimal follows, which should only
+                # appear while reading numbers)
+                if chunk in braille_to_control and braille_to_control[chunk] != BrailleControlType.DECIMAL:
+                    # Update control but don't append anything to translation
                     control = braille_to_control[chunk]
                     chunk_idx += 1
                     continue
-
                 elif chunk in braille_to_alphabet:
                     translation += braille_to_alphabet[chunk]
                 else:
@@ -145,24 +155,37 @@ def translate_braille(input_string: str):
 
 
 def translate_english(input_string: str):
+    """
+    Converts each english character to Braille, adding controls when necessary.
+
+    Assuming input_string contains only valid characters, this function should never fail.
+    """
     chars = list(input_string)
     is_num_sequence = False
 
     braille = ''
 
     for char in chars:
+        # Condition on the type of char seen
         if char.isdigit():
+            # Add number control before the sequence of numbers
             if not is_num_sequence:
                 braille += char_to_braille['controls'][BrailleControlType.NUMBER]
                 is_num_sequence = True
 
             braille += char_to_braille['numbers'][char]
+
+        # Checking for decimals
         elif is_num_sequence and char == '.':
             braille += char_to_braille['controls'][BrailleControlType.DECIMAL]
+
         elif char == ' ':
+            # Whenever space is seen, any existing sequence of numbers ends
             is_num_sequence = False
             braille += char_to_braille['symbols'][' ']
+
         elif char.isalpha():
+            # Add capital control whenever char is capitalised
             if char.isupper():
                 braille += char_to_braille['controls'][BrailleControlType.CAPITAL]
 
@@ -179,12 +202,14 @@ def translate_english(input_string: str):
 def main():
     input_string = " ".join(sys.argv[1:])
 
+    if not input_string:
+        print("Usage: python translator.py <word1> [word2] [word3] ...")
+
     language = guess_language(input_string)
     if language == Language.BRAILLE:
         try: 
             translation = translate_braille(input_string)
-        except ValueError as e:
-            print(e)
+        except ValueError:
             # If translating braille returns an error, then the language was not braille
             # So translate english instead
             translation = translate_english(input_string)
