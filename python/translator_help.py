@@ -76,3 +76,5 @@ braille_to_number_char = {number_to_braille_code(value): key for key, value in n
 capital_follows_braille = ".....O" # braille code for capital follows 
 
 number_follows_braille = ".O.OOO" # braille code for number follows 
+
+space_braille = "......" # braille code for space 
