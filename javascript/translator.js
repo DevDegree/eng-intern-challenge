@@ -149,8 +149,21 @@ function translateBrailleToEng(input) {
         .join('');
 }
 
-console.log(translateBrailleToEng(".O.OOOO.....O.O.........O.....111111"));
+//console.log(translateBrailleToEng(".O.OOOO.....O.O.........O.....111111"));
 
-//PSEUDOCODE
-//function to detect language (English or braille), then convert to opposite language with one of the correspoding two functions below.
-    //maybe detect if language is only in O and . using a regex.
+//function to detect language (English or braille), and translate to opposite
+
+function detectLanguageAndTranslate(input) {
+    const braillePattern = /^[O.]+$/
+    const brailleSegmentPattern = /^([O.]{6})+$/
+
+    const isBraille = brailleSegmentPattern.test(input) && braillePattern.test(input);
+
+    if (isBraille) {
+        return translateBrailleToEng(input)
+    } else {
+        return translateEngToBraille(input)
+    }
+}
+
+console.log(detectLanguageAndTranslate('OO..OO.'))
