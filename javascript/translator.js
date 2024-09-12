@@ -64,7 +64,13 @@ function flipCypher(cypher) {
 
 // Check if the input is braille
 function isBraille(input) {
-    return /^[.O]+$/.test(input) && input.length % BRAILLE_CHAR_LENGTH === 0;
+    if (!/^[.O]+$/.test(input)) {
+        return false;
+    }
+    if (input.length % BRAILLE_CHAR_LENGTH !== 0) {
+        throw new Error('Invalid Braille input length.');
+    }
+    return true;
 }
 
 // Convert braille to English
@@ -83,11 +89,11 @@ function brailleToEnglish(input) {
                         result += ' ';
                         flag = '';
                     } else {
-                        result += brailleCypher.number[brailleChar] || ' ';
+                        result += brailleCypher.number[brailleChar] || '?';
                     }
                     break;
                 case "CAP": // capital
-                    result += (brailleCypher.alpha[brailleChar] || ' ').toUpperCase();
+                    result += (brailleCypher.alpha[brailleChar] || '?').toUpperCase();
                     flag = '';
                     break;
             }
@@ -103,7 +109,7 @@ function brailleToEnglish(input) {
                     result += ' ';
                     break;
                 default: // letter
-                    result += brailleCypher.alpha[brailleChar] || ' ';
+                    result += brailleCypher.alpha[brailleChar] || '?';
             }
         }
     }
@@ -127,16 +133,16 @@ function englishToBraille(input) {
                     result += alphaCypher.special.NUM;
                     numFlag = true;
                 }
-                result += alphaCypher.number[char] || ' ';
+                result += alphaCypher.number[char] || '';
                 break;
             case /[a-z]/i.test(char): // lowercase letter
                 if (char !== lowerChar) {
                     result += alphaCypher.special.CAP;
                 }
-                result += alphaCypher.alpha[lowerChar] || ' ';
+                result += alphaCypher.alpha[lowerChar] || '';
                 break;
             default: // not found in cypher
-                result += ' ';
+                result += '';
                 break;
         }
     }
@@ -154,11 +160,15 @@ function main() {
         return;
     }
 
-    // Determine the translation direction based on the input
-    const result = isBraille(input) ? brailleToEnglish(input) : englishToBraille(input);
+    try {
+        // Determine the translation direction based on the input
+        const result = isBraille(input) ? brailleToEnglish(input) : englishToBraille(input);
 
-    // Output the result
-    console.log(result);
+        // Output the result
+        console.log(result);
+    } catch (error) {
+        console.error(error.message);
+    }
 }
 
 main();
