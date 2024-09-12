@@ -49,6 +49,22 @@ english_to_braille_lookup = {
 }
 
 
+# These lookups are generated using the english to braille lookup. This is currently done at runtime, although could
+# easily be instead done beforehand and saved in a similar format to above
+braille_to_english_lookup_alpha = {}
+braille_to_english_lookup_numeric = {}
+
+
+# Take the english to braille lookup and create lookups from braille to english by reversing the key value pairs.
+# Split into alphabet characters and numeric characters since they share symbols
+def generate_braille_to_english_lookup():
+    for english, braille in english_to_braille_lookup.items():
+        if english.isnumeric():
+            braille_to_english_lookup_numeric[braille] = english
+        else:
+            braille_to_english_lookup_alpha[braille] = english
+
+
 # Returns a string built using the command line arguments
 def get_argument_input():
     arg_input = ""
@@ -84,6 +100,9 @@ def english_to_braille(english_text):
 
 
 def main():
+    # Generate the english to braille lookup
+    generate_braille_to_english_lookup()
+
     # Retrieve the input from the arguments
     original_text = get_argument_input()
 
