@@ -10,12 +10,121 @@
 // boolean for number? 
 
 // create translator reference as an OBJECT
+const engToBraille = {
+    'a': 'O.....',
+    'b': 'O.O...',
+    'c': 'OO....',
+    'd': 'OO.O..',
+    'e': 'O..O..',
+    'f': 'OOO...',
+    'g': 'OOOO..',
+    'h': 'O.OO..',
+    'i': '.OO...',
+    'j': '.OOO..',
+    'k': 'O...O.',
+    'l': 'O.O.O.',
+    'm': 'OO..O.',
+    'n': 'OO.OO.',
+    'o': 'O..OO.',
+    'p': 'OOO.O.',
+    'q': 'OOOOO.',
+    'r': 'O.OOO.',
+    's': '.OO.O.',
+    't': '.OOOO.',
+    'u': 'O...OO',
+    'v': 'O.O.OO',
+    'w': '.OOO.O',
+    'x': 'OO..OO',
+    'y': 'OO.OOO',
+    'z': 'O..OOO',
+    '.': '..OO.O',
+    ',': '..O...',
+    '?': '..O.OO',
+    '!': '..OOO.',
+    ':': '..OO..',
+    ';': '..O.O.',
+    '-': '....OO',
+    '/': '.O..O.',
+    '<': '.OO..O',
+    '>': 'O..OO.',
+    '(': 'O.O..O',
+    ')': '.O.OO.',
+    ' ': '......',
+}
 
+const brailleToEng = inverse(engToBraille);
+
+const engToBrailleNums = {
+    '1': 'O.....',
+    '2': 'O.O...',
+    '3': 'OO....',
+    '4': 'OO.O..',
+    '5': 'O..O..',
+    '6': 'OOO...',
+    '7': 'OOOO..',
+    '8': 'O.OO..',
+    '9': '.OO...',
+    '0': '.OOO..'
+}
+
+const brailleToEngNums = inverse(engToBrailleNums);
+
+const capitalSign = '.....O';
+const decimalSign = '.O...O';
+const numberSign = '.O.OOO';
+const spaceSign = '......';
+let resultString = "";
+let isCapital = false;
+let isNumber = false;
 
 // create a FUNCTION to translate input string
 
 // determine if string is english or braille 
 // if string contains ONLY . & Os, then it is braille
+const userInput = ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..";
+let brStrings = [];
+
+// if it is braille, then split string into substrings of 6
+if(isBraille(userInput)){
+    for(let i = 0; i < userInput.length; i+=6){
+        brStrings.push(userInput.substring(i, i+6));
+    }
+
+    for(const cluster of brStrings){
+        if(cluster === spaceSign){
+            isNumber = false;
+        }
+        if(cluster === capitalSign || cluster === decimalSign || cluster === numberSign){
+            switch(cluster){
+                case capitalSign: isCapital = true;
+                break;
+                case decimalSign: isNumber= true;
+                break;
+                case numberSign: isNumber = true;
+                break;
+                default: break;
+            }
+        }
+        else{
+            if(isCapital){
+                let capitalChar = brailleToEng[cluster];
+                resultString += capitalChar.toUpperCase();
+                isCapital = false;
+            }
+            else if(isNumber){
+               resultString += brailleToEngNums[cluster];
+            } else {
+                resultString += brailleToEng[cluster];
+            }
+        }
+
+    }
+    
+    console.log(resultString);
+}
+
+
+
 
 // if braille, split string into substrings of 6 characters (or arrays?)
 // each string of 6 characters will be translated into English/symbols/numbers
@@ -35,3 +144,20 @@
 
 
 // IF it matches decimal, append the next symbol
+
+
+// checks if string is Braille
+// returns true/false
+function isBraille(input){
+    const brailleRegex = /^[O.]+/;
+    return brailleRegex.test(input);
+}
+
+// inverse function to create reverse map of english-braille map
+function inverse(obj){
+    const inverseObj = {};
+    for (const entry in obj){
+        inverseObj[obj[entry]]= entry;
+    }
+    return inverseObj;
+}
