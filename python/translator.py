@@ -34,12 +34,55 @@ def english_to_braille(text):
         braille_output += braille_dict[char]
     return braille_output
 
+# function to convert braille to english
+def braille_to_english(braille):
+    english_output = ""
+    i = 0
+    is_capital = False
+    is_number = False
+    
+    while i < len(braille):
+        
+        symbol = braille[i:i+6]
+        # checking capital follow indicator
+        if symbol == braille_dict['capital']:
+            is_capital = True
+            i += 6
+            continue
+        # checking number follow indicator
+        elif symbol == braille_dict['number']:
+            is_number = True
+            i += 6
+            continue
+        # checking space
+        elif symbol == braille_dict[' ']:
+            is_number = False
+            english_output += reverse_braille_dict[symbol]
+            i += 6
+            continue
+        
+        # storing number or character
+        if is_number and symbol in reverse_braille_dict:
+            number = reverse_braille_dict[symbol]
+            english_output += number
+            
+            
+        elif not is_number and symbol in reverse_braille_dict:
+            char = reverse_braille_dict[symbol]
+            
+            english_output += char.upper() if is_capital else char
+            
+            is_capital = False
+        i += 6
+        
+    return english_output
+
 # function to detect if input is Braille or English and translate accordingly
 def detect_and_translate(input_string):
     # Detect if input is Braille or English based on presence of 'O' and '.' or normal letters/numbers
     if all(c in 'O.' for c in input_string):
         # translate input to English
-        return "English"
+        return braille_to_english(input_string)
     else:
         # translate input to Braille
         return english_to_braille(input_string)
