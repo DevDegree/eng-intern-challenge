@@ -69,12 +69,47 @@ def english_to_braille(english_string):
     return braille_result
 
 
+# braille_to_english(braille_string) translates the braille_string to english and returns the result
+# Note: Assuming that braille_string does not contain any encodings of special characters other than SPACE, CAPITAL_FOLLOWS or NUMBER_FOLLOWS
+def braille_to_english(braille_string):
+    english_result = ""
+    is_capital_next = False # true when the translator is assuming a capital letter as the next char
+    is_number_next = False # true when the translator is assuming a digit as the next char
+
+    for i in range(0, len(braille_string), 6):
+        braille_char = braille_string[i:i+6]
+
+        if braille_char == SPACE:
+            is_number_next = False
+            english_result += " "
+        
+        elif braille_char == CAPITAL_FOLLOWS:
+            is_capital_next = True
+        
+        elif braille_char == NUMBER_FOLLOWS:
+            is_number_next = True
+        
+        elif is_capital_next: # assuming that braille_char is an alphabetical character
+            english_result += BRAILLE_TO_ALPHABET[braille_char].upper()
+            is_capital_next = False
+        
+        elif is_number_next: # assuming that braille_char is a number
+            english_result += BRAILLE_TO_NUMBER[braille_char]
+        
+        else: # braille_char is a lowercase alphabet character
+            english_result += BRAILLE_TO_ALPHABET[braille_char]
+    
+    return english_result
+
 
 
 
 # Assuming that the input string can have length 0 and the program will return an empty string if that occurs
 if __name__ == "__main__":
-    input_string = " ".join(sys.argv[1:]) # join the arguments when the script is run as the input string separated by spaces        
+    input_string = " ".join(sys.argv[1:]) # join the arguments when the program is run as the input string separated by spaces        
 
-    if not is_braille(input_string):
+    if is_braille(input_string):
+        print(braille_to_english(input_string))
+    
+    else:
         print(english_to_braille(input_string))
