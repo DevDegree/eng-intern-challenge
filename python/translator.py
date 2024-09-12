@@ -1,3 +1,20 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 '''Hello and welcome to my braille translator program! :) Something that I find helps when I'm coding
 is writing step-by-step instructions to myself on how to build it. In a general circumstance,
 I would take these out and leave simple comments for functionality, but I figured that it might let you
