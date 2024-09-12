@@ -11,7 +11,7 @@ class BrailleTranslator
       'O...O.' => 'k', 'O.O.O.' => 'l', 'OO..O.' => 'm', 'OO.OO.' => 'n', 'O..OO.' => 'o',
       'OOO.O.' => 'p', 'OOOOO.' => 'q', 'O.OOO.' => 'r', '.OO.O.' => 's', '.OOOO.' => 't',
       'O...OO' => 'u', 'O.O.OO' => 'v', '.OOO.O' => 'w', 'OO..OO' => 'x', 'OO.OOO' => 'y',
-      'O..OOO' => 'z', '..OOOO' => 'number', '.....O' => 'capital'
+      'O..OOO' => 'z', '.O.OOO' => 'number', '.....O' => 'capital'  # Changed 'number' representation
     }.freeze
   
     CHAR_TO_BRAILLE = BRAILLE_TO_CHAR.invert.freeze
