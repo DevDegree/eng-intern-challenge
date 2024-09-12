@@ -1,16 +1,7 @@
 import sys
 import re
 
-# For english words, insert a space between each argument
-inputString = ' '.join(sys.argv[1:])
-
-# First verify if the given string is braille or english and run the corresponding function
-def translator(inputString):
-    if (re.match('^[O.]+$', inputString)):
-        brailleToEnglish(inputString)
-    else: 
-        englishToBraille(inputString)
-
+# Map letters an symbols to their braille equivalent
 englishBrailleDict = {
     "a": "O.....",
     "b": "O.O...",
@@ -55,6 +46,7 @@ englishBrailleDict = {
 charList = list(englishBrailleDict.keys())
 brailleList = list(englishBrailleDict.values())
 
+# Since numbers share the same braille as letters, have a separate dictionary
 numberDict = {
     1: "O.....",
     2: "O.O...",
@@ -115,8 +107,8 @@ def englishToBraille(input):
         elif input[i].isnumeric():
             # append the number marker but loop through the rest of the input until a space is encountered
             brailleString += ".O.OOO"
-            while (input[i] != "......" and i < len(input)):
-                brailleString += numberDict[input[i]]
+            while (i < len(input) and input[i] != " "):
+                brailleString += numberDict[int(input[i])]
                 i += 1
         else: 
             brailleString += englishBrailleDict[input[i]]
@@ -124,4 +116,15 @@ def englishToBraille(input):
 
     print(brailleString)
 
-translator("Hello world")
+# For english words, insert a space between each argument
+inputString = ' '.join(sys.argv[1:])
+
+# First verify if the given string is braille or english and run the corresponding function
+def translator(inputString):
+    if (re.match('^[O.]+$', inputString)):
+        brailleToEnglish(inputString)
+    else: 
+        englishToBraille(inputString)
+
+translator(inputString)
+
