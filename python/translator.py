@@ -12,7 +12,7 @@ def text_to_braille(text):
         '0': '.OOO..', '.': 'O.O.OO', ',': 'O.....', ';': 'O.O...', ':': 'OO....',
         '?': 'OO.O..', '!': 'O..O..', '(': 'OOO...', ')': 'OOOO..', '-': 'O.OO..', 
         '/': '.OO...', '<': '.OO..O', '>': 'O..OO.', 'capital-follows': '.....O', 
-        'number-follows': '....OO', 'decimal-follows': '.O...O', 'space': '......'
+        'number-follows': '.O.OOO', 'decimal-follows': '.O...O', 'space': '......'
     }
     
     braille_eq = ''
@@ -32,40 +32,38 @@ def text_to_braille(text):
     
     return braille_eq
 
-
 def braille_to_text(braille):
-    braille_dict = {
-        'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd', 'O..O..': 'e', 
-        'OOO...': 'f', 'OOOO..': 'g', 'O.OO..': 'h', '.OO...': 'i', '.OOO..': 'j',
-        'O...O.': 'k', 'O.O.O.': 'l', 'OO..O.': 'm', 'OO.OO.': 'n', 'O..OO.': 'o', 
-        'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't',
-        'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y', 
-        'O..OOO': 'z', '.....O': 'capital-follows', '....OO': 'number-follows', 
-        '.O...O': 'decimal-follows', '......': 'space'
-    }
-    
+    braille_dict ={
+    'O.....': ['a', '1'], 'O.O...': ['b', '2'], 'OO....': ['c', '3'], 'OO.O..': ['d', '4'], 
+    'O..O..': ['e', '5'], 'OOO...': ['f', '6'], 'OOOO..': ['g', '7'], 'O.OO..': ['h', '8'], 
+    '.OO...': ['i', '9'], '.OOO..': ['j', '0'], 'O...O.': ['k'], 'O.O.O.': ['l'], 
+    'OO..O.': ['m'], 'OO.OO.': ['n'], 'O..OO.': ['o'], 'OOO.O.': ['p'], 
+    'OOOOO.': ['q'], 'O.OOO.': ['r'], '.OO.O.': ['s'], '.OOOO.': ['t'], 
+    'O...OO': ['u'], 'O.O.OO': ['v'], '.OOO.O': ['w'], 'OO..OO': ['x'], 
+    'OO.OOO': ['y'], 'O..OOO': ['z'], '.....O': 'capital-follows', '.O.OOO': 'number-follows'
+    , '......': 'space'}   
+    default=0 
     text = ''
     i = 0
     while i < len(braille):
         char = braille[i:i+6]
-        if char == '.....O':
-            i += 6
-            char = braille[i:i+6]
-            text += braille_dict[char].upper()
-        elif char == '....OO':
-            i += 6
-            char = braille[i:i+6]
-            text += braille_dict[char]
-        elif char == '......':
-            text += ' '
-        else:
-            text += braille_dict[char]
+        if(braille_dict[char]=='capital-follows'):#Capital follows
+            i+=6
+            text+=braille_dict[braille[i:i+6]][default].upper()#add the letter in upper case
+        elif(braille_dict[char]=='number-follows'):#Number follows
+            i+=6
+            default=1
+            text+=braille_dict[braille[i:i+6]][default]#add the letter 
+        elif(braille_dict[char]=='space'):#space
+            default=0
+            text+=' '
+        else: #NO indicator before it
+            text+=braille_dict[char][default]# lowercase character
         i += 6
-    
     return text
 
 def detect_and_translate(input_text):
-    if all(char in 'O. ' for char in input_text)and len(input_text.replace(' ', '')) % 6 == 0:
+    if all(char in 'O.' for char in input_text)and len(input_text.replace(' ', '')) % 6 == 0:
         return braille_to_text(input_text)
     else:
         return text_to_braille(input_text)
