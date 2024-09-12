@@ -14,6 +14,26 @@ braille_dict = {
 # Reverse mapping from Braille to English
 reverse_braille_dict = {v: k for k, v in braille_dict.items()}
 
+# function to convert english to braille
+def english_to_braille(text):
+    braille_output = ""
+    is_number = False
+    for char in text:
+        # checking and storing number follow indicator
+        if char.isdigit() and not is_number:
+            braille_output += braille_dict['number']
+            is_number = True
+        # checking and storing capital follow indicator
+        elif char.isalpha() and char.isupper():
+            braille_output += braille_dict['capital']  
+            char = char.lower()
+            is_number = False
+        # checking and storing space
+        elif char == ' ':
+            is_number = False
+        braille_output += braille_dict[char]
+    return braille_output
+
 # function to detect if input is Braille or English and translate accordingly
 def detect_and_translate(input_string):
     # Detect if input is Braille or English based on presence of 'O' and '.' or normal letters/numbers
@@ -22,7 +42,7 @@ def detect_and_translate(input_string):
         return "English"
     else:
         # translate input to Braille
-        return "Braille"
+        return english_to_braille(input_string)
 
 if __name__ == "__main__":
     # Take the input from the command line arguments
