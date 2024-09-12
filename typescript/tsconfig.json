@@ -3,7 +3,8 @@
       "target": "es6",
       "module": "commonjs",
       "lib": ["es6"],
-      "types": ["node"], // Add this line
+      "types": ["node", "jest"],
+      
       "outDir": "./dist"
     }
   }
