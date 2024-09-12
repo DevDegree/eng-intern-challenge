@@ -32,7 +32,7 @@ class Translator:
         for char in english:
             if char.isdigit() and not is_number:
                 # Set flag if the current character is a digit and it is not set
-                braille += BrailleTranslator.NUMBER_FOLLOWS
+                braille += Translator.NUMBER_FOLLOWS
                 is_number = True
             elif char.isalpha() and is_number:
                 # Reset flag at end of number sequence
@@ -41,15 +41,15 @@ class Translator:
             # Convert alphabetic character to Braille
             if char.isalpha():
                 if char.isupper():
-                    braille += BrailleTranslator.CAPITAL_FOLLOWS
+                    braille += Translator.CAPITAL_FOLLOWS
                     char = char.lower()
-                braille += BrailleTranslator.ENGLISH_TO_BRAILLE.get(char, '?')
+                braille += Translator.ENGLISH_TO_BRAILLE.get(char, '?')
             # Convert numeric character to Braille
             elif is_number:
-                braille += BrailleTranslator.NUMBERS_TO_BRAILLE.get(char, '?')
+                braille += Translator.NUMBERS_TO_BRAILLE.get(char, '?')
             # Convert punctuation or other available characters to Braille
-            elif char in BrailleTranslator.ENGLISH_TO_BRAILLE:
-                braille += BrailleTranslator.ENGLISH_TO_BRAILLE.get(char, '?')
+            elif char in Translator.ENGLISH_TO_BRAILLE:
+                braille += Translator.ENGLISH_TO_BRAILLE.get(char, '?')
 
         return braille
 
@@ -63,11 +63,11 @@ class Translator:
         braille_chars = [braille[i: i + 6] for i in range(0, len(braille), 6)]
 
         for char in braille_chars:
-            if char == BrailleTranslator.CAPITAL_FOLLOWS:
+            if char == Translator.CAPITAL_FOLLOWS:
                 # Set flag to capitalize the next letter
                 is_capital = True
                 continue
-            elif char == BrailleTranslator.NUMBER_FOLLOWS:
+            elif char == Translator.NUMBER_FOLLOWS:
                 # Set flag to indicate that the following characters are numbers
                 is_number = True
                 continue
@@ -79,10 +79,10 @@ class Translator:
 
             if is_number:
                 # Translate Braille number to English digit
-                english += BrailleTranslator.BRAILLE_TO_NUMBERS.get(char, '?')
+                english += Translator.BRAILLE_TO_NUMBERS.get(char, '?')
             else:
                 # Translate Braille character to English letter
-                letter = BrailleTranslator.BRAILLE_TO_ENGLISH.get(char, '?')
+                letter = Translator.BRAILLE_TO_ENGLISH.get(char, '?')
                 if is_capital:
                     english += letter.upper()
                     is_capital = False
