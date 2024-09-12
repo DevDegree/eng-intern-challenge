@@ -92,9 +92,9 @@ def main():
     input = ' '.join(sys.argv[1:])
 
     if is_braille(input):
-        sys.stdout.write(convert_to_english(input))
+        print(convert_to_english(input))
     else:
-        sys.stdout.write(convert_to_braille(input))
+        print(convert_to_braille(input))
 
 if __name__ == "__main__":
     main()
