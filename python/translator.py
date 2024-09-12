@@ -1,8 +1,11 @@
 import sys
-
-from pprint import pprint
 import textwrap
 
+
+# Two dictionaries:
+# eng_to_braille maps english characters to braille
+# braille_to_eng maps braille characters to a list of possible english characters
+# braille_to_eng is to be initialized in generate_dictionaries()
 eng_to_braille = {
     'a': 'O.....',
     'b': 'O.O...',
@@ -59,29 +62,23 @@ eng_to_braille = {
 }
 braille_to_eng = {}
 
-def generate_dictionaries():
-    
+def generate_dictionaries() -> None: 
+    """
+    Initializes the braille_to_eng dicitionary.
+    """
     for character, braille in eng_to_braille.items():
         if braille in braille_to_eng.keys():
-            braille_to_eng[braille].append(character)
+            braille_to_eng[braille].append(character) # add to the list if the braille symbol is there
         else:
-            braille_to_eng[braille] = [character]
-
-    # Debugging
-    # len_eng_to_braille = O
-    # for value in braille_to_eng.values():
-    #     print(value)
-    #     len_eng_to_braille += len(value)
-
-    # assert len(eng_to_braille) == len_eng_to_braille
+            braille_to_eng[braille] = [character] # otherwise create a mapping
 
 
 def translate(input: str) -> str:
     """
-    Check if the input contains any non-braille characters
-    Check if the input length divides 6
-    If both conditions pass, check if the characters are valid braille
-    If there's a decimal
+    Translates the input.
+    If at any point the translator detects that the input is not braille,
+    it translates from english to braille.
+    Otherwise, it proceeds with translating to english.
     """
 
     # Check if the input contains any non-braille characters
@@ -89,7 +86,7 @@ def translate(input: str) -> str:
         if c != 'O' and c != '.':
             return translate_english_to_braille(input)
     
-    # Check if the input divides 6
+    # Check if the input divides 6. If not, this is not valid braille.
     if len(input) % 6 != 0:
         return translate_english_to_braille(input)
     
@@ -103,9 +100,10 @@ def translate(input: str) -> str:
     for braille_symbol in braille_symbols:
         try:
             translation_list = braille_to_eng[braille_symbol]
-        except KeyError: # Invalid 
+        except KeyError: # Invalid braille
             return translate_english_to_braille(input)
 
+        # Handles all the special braille characters
         if translation_list[0] == 'capital follows':
             is_capital = True
         
@@ -137,6 +135,9 @@ def translate(input: str) -> str:
 
 
 def translate_english_to_braille(input: str) -> str:
+    """
+    Function to translate from english to braille
+    """
     is_number = False
     answer = ''
     for idx, char in enumerate(input):
