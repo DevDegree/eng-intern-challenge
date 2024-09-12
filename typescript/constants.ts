@@ -1,7 +1,6 @@
 type TranslationMap = {
 	characters: { [key: string]: string };
 	digits: { [key: string]: string };
-	special: { [key: string]: string };
 };
 
 // The braille alphabet is a mapping of english characters and numbers to their corresponding braille dots
@@ -46,11 +45,6 @@ export const ENGLISH_TO_BRAILLE_MAP: TranslationMap = {
 		"9": ".OO...",
 		"0": ".OOO..",
 	},
-	special: {
-		capitalFollows: ".....O",
-		numberFollows: ".O.OOO",
-		space: "......", // Space is represented by 6 dots (empty matrix)
-	},
 };
 
 // Create a reverse map of the ENGLISH_TO_BRAILLE_MAP
@@ -61,7 +55,10 @@ export const BRAILLE_TO_ENGLISH_MAP: TranslationMap = {
 	digits: Object.fromEntries(
 		Object.entries(ENGLISH_TO_BRAILLE_MAP.digits).map(([k, v]) => [v, k]),
 	),
-	special: Object.fromEntries(
-		Object.entries(ENGLISH_TO_BRAILLE_MAP.special).map(([k, v]) => [v, k]),
-	),
+};
+
+export const SPECIAL_BRAILLE_INDICATORS = {
+	capitalFollows: ".....O",
+	numberFollows: ".O.OOO",
+	space: "......", // Space is represented by 6 dots (empty matrix)
 };
