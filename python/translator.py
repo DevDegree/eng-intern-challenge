@@ -34,6 +34,9 @@ class Translator:
                 # Set flag if the current character is a digit and it is not set
                 braille += Translator.NUMBER_FOLLOWS
                 is_number = True
+            elif char == ' ' and is_number:
+                # Reset flag at end of number sequence
+                is_number = False
             elif char.isalpha() and is_number:
                 # Reset flag at end of number sequence
                 is_number = False
