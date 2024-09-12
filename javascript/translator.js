@@ -86,7 +86,7 @@ function translateEnglishToBraille(input) {
 	}
 	return output;
 }
-console.log(englishToBraille("translator"));
+console.log(englishToBraille());
 
 // Translate Braille to English
 function translateBrailleToEnglish(input) {
@@ -121,5 +121,26 @@ function translateBrailleToEnglish(input) {
 	}
 	return output;
 }
+console.log(brailleToEnglish());
 
+// Main traslator function
 
+function mainTranslator() {
+	const commandInput = process.argv.slice(2); //  slicing the first two arguments to command line argument
+	const input = commandInput.join(" ");
+	let output = "";
+
+	if (isBraille(input)) {
+		if (input.length % 6 === 0) {
+			output = translateBrailleToEnglish(input);
+		} else {
+			output = "Error: incorrect Braille patterns";
+		}
+	} else {
+		output = translateEnglishToBraille(input);
+	}
+
+	console.log(output);
+}
+
+mainTranslator();
