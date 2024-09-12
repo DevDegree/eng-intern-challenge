@@ -178,5 +178,7 @@ def translator(lst):
         lst_index += 1
                     
     return trans_res
-
-print(translator(sys.argv[1:]))
+    
+if __name__ == '__main__':
+    output = translator(sys.argv[1:])
+    print(output)
