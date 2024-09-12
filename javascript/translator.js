@@ -81,7 +81,8 @@ let isNumber = false;
 
 // determine if string is english or braille 
 // if string contains ONLY . & Os, then it is braille
-const userInput = ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..";
+// const userInput = ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..";
+const userInput = "Hello World!";
 let brStrings = [];
 
 // if it is braille, then split string into substrings of 6
@@ -121,6 +122,31 @@ if(isBraille(userInput)){
     }
     
     console.log(resultString);
+} else {
+    for(letter of userInput){
+        let capitalRegex = /^[A-Z]*$/;
+        let digitRegex = /^[0-9]*$/
+
+        if(letter === " "){
+            resultString += spaceSign;
+            isNumber = false;
+        } else if(isNumber){
+            resultString += engToBrailleNums[letter];
+        } else if(letter.match(capitalRegex)){
+            resultString +=capitalSign;
+            resultString += engToBraille[letter.toLowerCase()]
+        } else if(letter.match(digitRegex)){
+            resultString += numberSign;
+            resultString += engToBrailleNums[letter];
+            isNumber = true;
+        } else{
+            resultString += engToBraille[letter];
+
+        }
+    
+    }
+    console.log(resultString);
+    
 }
 
 
@@ -149,7 +175,7 @@ if(isBraille(userInput)){
 // checks if string is Braille
 // returns true/false
 function isBraille(input){
-    const brailleRegex = /^[O.]+/;
+    const brailleRegex = /^[O.]+$/;
     return brailleRegex.test(input);
 }
 
