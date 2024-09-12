@@ -1,3 +1,5 @@
+import sys
+
 # this file contains all the dictionaries and variables needed for translating between braille and English
 
 # the format for english_to_braille_char and number_to_braille is as follows: 
@@ -60,3 +62,29 @@ number_to_braille_char = {
     '9': [2,3],
     '0': [2,3,4]
 }
+
+# this helper function changes list of numbers above into O and . for hashability in the following dictionaries
+def number_to_braille_code(raised_dots: list) -> str: 
+    raised = [False] * 6
+    for dot in raised_dots: 
+        try:
+            raised[dot - 1] = True
+        except: 
+            print("Out of index when trying to convert list of numbers into braille code")
+    result_braille = ""
+    for i in range(6): 
+        if raised[i]: 
+            result_braille += 'O'
+        else: 
+            result_braille += '.'
+    assert(len(result_braille) == 6)
+    return result_braille
+
+# braille_to_english_char and braille_to_number_char are the reverses of the two dictionaries above, 
+# but then the keys would be changed into O and . for hashability
+
+braille_to_english_char = {number_to_braille_code(value): key for key, value in english_to_braille_char.items()}
+
+braille_to_number_char = {number_to_braille_code(value): key for key, value in number_to_braille_char.items()} 
+
+print(braille_to_number_char)
