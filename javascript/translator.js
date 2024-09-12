@@ -9,7 +9,7 @@ const brailleAlphabet = {
     "1": "O.....", "2": "O.O...", "3": "OO....", "4": "OO.O..", "5": "O..O..", 
     "6": "OOO...", "7": "OOOO..", "8": "O.OO..", "9": ".OO...", "0": ".OOO..", 
     "#": ".O.OOO",  // Number follows
-    "capital": "..O..."  // Capital follows
+    "capital": ".....O"  // Capital follows
 };
 
 
@@ -21,7 +21,7 @@ const englishAlphabet = {
     "O...OO": "u", "O.O.OO": "v", ".OOO.O": "w", "OO..OO": "x", "OO.OOO": "y", 
     "O..OOO": "z", "......": " ", 
     ".O.OOO": "#",  // Number follows
-    "..O...": "capital"  // Capital follows
+    ".....O": "capital"  // Capital follows
 };
 
 // Function to determine if input is Braille
@@ -71,14 +71,15 @@ function brailleToEnglish(input) {
 }
 
 // Function to convert English to Braille
+// Function to convert English to Braille
 function englishToBraille(input) {
     let result = '';
     let isNumber = false;
 
     for (let char of input) {
-        if (!isNaN(char) && char !== ' ') {  
+        if (!isNaN(char) && char !== ' ') {  // Check if character is a number
             if (!isNumber) {
-                result += brailleAlphabet["#"];  
+                result += brailleAlphabet["#"];  // Add number sign
                 isNumber = true;
             }
             // Convert numbers to Braille (1-0 -> a-j)
@@ -91,7 +92,7 @@ function englishToBraille(input) {
             if (char === char.toUpperCase() && char !== ' ') {
                 result += brailleAlphabet["capital"];  // Add capital letter prefix
             }
-            result += brailleAlphabet[char.toLowerCase()] || brailleAlphabet[" "];  
+            result += brailleAlphabet[char.toLowerCase()] || brailleAlphabet[" "];  // Handle space
         }
     }
     return result;
