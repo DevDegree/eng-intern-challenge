@@ -96,7 +96,7 @@ const isBraille = (input: string): boolean => /^[O.]+$/.test(input);
  * The function handles special Braille symbols for capitalization and numbers.
  *
  * @param {string} braille - The Braille string to translate.
- * @returns {string} - The English translation of the Braille input.
+ * @returns {string} The English translation of the Braille input.
  */
 const translateToEnglish = (braille: string): string => {
   let isCapital = false;
@@ -137,6 +137,36 @@ const translateToEnglish = (braille: string): string => {
 };
 
 /**
+ * Translates an English string into its corresponding Braille representation using reduce.
+ *
+ * The English input can include letters, numbers, spaces, and capitalization.
+ * This function adds the appropriate Braille indicators for capitalization and numbers.
+ *
+ * @param {string} english - The English string to translate.
+ * @returns {string} The Braille translation of the English input.
+ */
+const translateToBraille = (english: string): string => {
+  let isNumberMode = false;
+
+  return [...english].reduce((result, char) => {
+    const lowerChar = char.toLowerCase();
+
+    if (char !== lowerChar) {
+      result += brailleAlphabet["cap"];
+    }
+
+    if (/[0-9]/.test(char) && !isNumberMode) {
+      result += brailleAlphabet["num"];
+      isNumberMode = true;
+    } else if (!/[0-9]/.test(char)) {
+      isNumberMode = false;
+    }
+
+    return result + (brailleAlphabet[lowerChar] || "");
+  }, "");
+};
+
+/**
  * Translates an input string between English and Braille.
  * @param {string} input - The string to be translated. Can be either an English phrase or Braille.
  * @returns {string} The translated string, either Braille or English, depending on the input.
@@ -146,7 +176,7 @@ const translate = (input: string): string => {
     return translateToEnglish(input);
   }
 
-  return input;
+  return translateToBraille(input);
 };
 
 // Get the user input
