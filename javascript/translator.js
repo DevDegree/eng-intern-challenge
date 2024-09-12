@@ -4,15 +4,21 @@ const userInput = process.argv.slice(2);
 // determine if given arguments are English or Braille
 const languageType = (language) => {
   // Braille will ALWAYS include a period .
-  if (language.includes('.')) {
-    console.log("Braille");
+  if (language[0].includes('.')) {
+    let brailleArray = splitBrailleCharacters(language[0]);
+    console.log(brailleArray);
+    return;
   } else {
-    console.log("English");
+    console.log('English');
+    return;
   }
-  return;
 };
 
-languageType(userInput[0]);
+const splitBrailleCharacters = (braille) => {
+  return braille.match(/.{1,6}/g);
+}
+
+languageType(userInput);
 
 
 
