@@ -26,7 +26,7 @@ brailleToDigit = {j: i for i, j in engToBraille.items() if i.isdigit()}
 
 # Params: s: the input string
 # Output: true if the string is of valid Braille syntax, false otherwise
-# Logic: all brailles have length as multiples of 6 and are strictly within the regex: O*.*
+# Logic: all brailles have length as multiples of 6 and all chars are in "O."
 def isBraille(s):
     if (s == SIX_O): # edge case OOOOOO is not valid Braile but valid english
         return False
