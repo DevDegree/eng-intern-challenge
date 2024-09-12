@@ -89,13 +89,61 @@ const englishAlphabet: Alphabet = Object.fromEntries(
 const isBraille = (input: string): boolean => /^[O.]+$/.test(input);
 
 /**
+ * Translates a Braille string into its corresponding English representation using reduce.
+ *
+ * The Braille input is expected to be a series of 6-character Braille cells
+ * (each represented by 'O' for raised dots and '.' for flat dots).
+ * The function handles special Braille symbols for capitalization and numbers.
+ *
+ * @param {string} braille - The Braille string to translate.
+ * @returns {string} - The English translation of the Braille input.
+ */
+const translateToEnglish = (braille: string): string => {
+  let isCapital = false;
+  let isNumberMode = false;
+
+  return (
+    braille.match(/.{6}/g)?.reduce((result, brailleChar) => {
+      if (brailleChar === brailleAlphabet["cap"]) {
+        isCapital = true;
+        return result;
+      }
+
+      if (brailleChar === brailleAlphabet["num"]) {
+        isNumberMode = true;
+        return result;
+      }
+
+      const englishChar = englishAlphabet[brailleChar] || "";
+
+      if (isNumberMode) {
+        if (englishChar === " ") {
+          isNumberMode = false; // Turn off number mode after a space
+        } else if (/[a-j]/.test(englishChar)) {
+          // Translate letters 'a' to 'j' as numbers '1' to '0'
+          const number = "1234567890"["abcdefghij".indexOf(englishChar)];
+          return result + number;
+        }
+      }
+
+      if (isCapital) {
+        isCapital = false;
+        return result + englishChar.toUpperCase();
+      }
+
+      return result + englishChar;
+    }, "") || ""
+  );
+};
+
+/**
  * Translates an input string between English and Braille.
  * @param {string} input - The string to be translated. Can be either an English phrase or Braille.
  * @returns {string} The translated string, either Braille or English, depending on the input.
  */
 const translate = (input: string): string => {
   if (isBraille(input)) {
-    return input;
+    return translateToEnglish(input);
   }
 
   return input;
