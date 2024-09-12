@@ -52,28 +52,21 @@ const englishToBraille = {};
 // Loop over each entry in the brailleToEnglish object
 Object.entries(brailleToEnglishAlph).forEach(([braille, char]) => {
 	// Handle for uppercase and lowercase letters
-	if (char.length === 1 && char !== " ") {
-		englishToBraille[char.toLowerCase()] = braille;
-
-		// Mapping for uppercase
-		if (char.toUpperCase() === char) {
-			//Check
-			englishToBraille[char] = capital + braille;
-		} else {
-			console.log("error: unrecognizable character");
-		}
-	}
+	
+    //Add lowercase letter
+    englishToBraille[char] = braille;
+    englishToBraille[char.toUpperCase()] = capital + braille;
+    
 });
+
 
 // Handle numbers
 Object.entries(brailleToEnglishNum).forEach(([braille, char]) => {
-	if (!isNaN(char)) {
-		englishToBraille[char] = number + braille;
-	}
+		englishToBraille[char] = braille;
+	
 });
 
 // Space character mapping
-
 englishToBraille[" "] = space;
 
 console.log(englishToBraille);
@@ -83,20 +76,33 @@ function isBraille(input) {
 	return /^[O.]+$/.test(input);
 }
 
+function isNumber(char) {
+    return /\d/.test(char);
+}
+
 // Translate English to Braille
 function translateEnglishToBraille(input) {
 	let output = "";
+    let numMode = false;
+
 	for (let i = 0; i < input.length; i++) {
 		const char = input[i];
-		if (englishToBraille[char]) {
-			output += englishToBraille[char];
-		} else {
-			console.log("Error: Character does not have a Braille equivalent");
-		}
+        if (isNumber(char) && !numMode) {
+            output += number + englishToBraille[char]
+            numMode = true
+        } else if  (isNumber(char) && numMode) {
+            output += englishToBraille[char]
+        } else {
+            numMode = false
+            output += englishToBraille[char]
+        }
 	}
 	return output;
 }
-//console.log(englishToBraille());
+
+input = "Abc 123"
+console.log("English to braille")
+console.log(translateEnglishToBraille(input));
 
 // Translate Braille to English
 function translateBrailleToEnglish(input) {
@@ -116,7 +122,7 @@ function translateBrailleToEnglish(input) {
 		} else if (currentSymbol === space) {
 			output += " "; // to account for space
 			isNumber = false;
-		} else if (brailleToEnglishAlph[currentSymbol]) {
+		} else if (brailleToEnglishAlph[currentSymbol]) { //check
 			let char = brailleToEnglishAlph[currentSymbol];
 			if (isCapital) {
 				output += char.toUpperCase();
@@ -132,7 +138,6 @@ function translateBrailleToEnglish(input) {
 	}
 	return output;
 }
-//console.log(brailleToEnglish());
 
 // Main traslator function
 
@@ -156,7 +161,7 @@ function mainTranslator() {
 
 //mainTranslator();
 
-input = "O.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..";
+input = ".O.OOOOO.O..O.O...";
 // input = "hello world";
 
 console.log(translateBrailleToEnglish(input));
