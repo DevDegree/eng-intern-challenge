@@ -40,18 +40,18 @@ braille = {
     'capital_follows': '.....O',
     'decimal_follows': '.O...O',
     'number_follows': '.O.OOO',
-    '.': '..OO.O',
-    ',': '..O.OO',
-    '!': '..OOO.',
-    ':': '..O.O.',
-    ';': '..O.O.',
-    '-': '....OO',
-    '/': '.O..O.',
-    '<': '.OO..O',
-    '>': 'O..OO.',
-    '(': 'O.O..O',
-    ')': '.O.OO.',
-    ' ': '......'
+    # '.': '..OO.O',
+    # ',': '..O.OO',
+    # '!': '..OOO.',
+    # ':': '..O.O.',
+    # ';': '..O.O.',
+    # '-': '....OO',
+    # '/': '.O..O.',
+    # '<': '.OO..O',
+    # '>': 'O..OO.',
+    # '(': 'O.O..O',
+    # ')': '.O.OO.',
+    # ' ': '......'
 }
 
 # Defining some functions!
@@ -68,19 +68,22 @@ def check_braille(string):
 # for value in braille.values():
 #     assert check_braille(value)
 
+# *********************************
 # Skipping file name
 text = sys.argv[1:]
 
 # Passed argument is English, to be translated into braille
-if len(text) > 1 or check_braille(value) is False:
-    for char in text.join(' '):
+if len(text) > 1 or check_braille(text[0]) is False:
+    for char in ' '.join(text):
         if char.isupper():
-            sys.stdout.write(braille[capital_follows])
+            sys.stdout.write(braille['capital_follows'])
             sys.stdout.write(braille[char])
-            sys.stdout.flush()
+        elif char.isdigit():
+            sys.stdout.write(braille['number_follows'])
+            sys.stdout.write(braille[char])
         else:
             sys.stdout.write(braille[char])
 
 # Passed argument is a braille text, to be translated into English
 else:
-    print('test')
+    pass
