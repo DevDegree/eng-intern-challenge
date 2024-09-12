@@ -14,19 +14,20 @@ def text_to_braille(text):
         '/': '.OO...', '<': '.OO..O', '>': 'O..OO.', 'capital-follows': '.....O', 
         'number-follows': '.O.OOO', 'decimal-follows': '.O...O', 'space': '......'
     }
-    
+    first_number=True
     braille_eq = ''
     for char in text:
         if char.isupper():
             braille_eq += braille_dict['capital-follows']
             braille_eq += braille_dict[char.lower()]
-        elif char == '.':
-            braille_eq += braille_dict['decimal-follows']
         elif char.isdigit():
-            braille_eq += braille_dict['number-follows']
+            if(first_number):
+                braille_eq += braille_dict['number-follows']#just for the first number
             braille_eq += braille_dict[char]
+            first_number=False
         elif char == ' ':
             braille_eq += braille_dict['space']
+            first_number=True
         else:
             braille_eq += braille_dict[char]
     
@@ -71,3 +72,11 @@ def detect_and_translate(input_text):
 if __name__ == "__main__":
     input_text = " ".join(sys.argv[1:])
     print(detect_and_translate(input_text))
+# OOO......O.OOOO.O....O.OOOOO..........OO..OO.....OOO.OOOO..OOO
+# OOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO
+#My output
+#.....OO.....O.O...OO...........O.OOOO......O.OOOO.O....O.OOOOO..........OO..OO.....OOO.OOOO..OOO
+#Capita|a    |b   |c    |sp    |nm   |1    |                    
+# expected
+#.....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO
+#Capita|  a |b    |c    |space|  nu |1     |2    |3    |space|
