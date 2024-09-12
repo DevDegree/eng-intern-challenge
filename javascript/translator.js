@@ -183,6 +183,16 @@ function isBraille(string) {
   }
 }
 
+const isNumeric = (char) => /\d/.test(char);
+const isUppercase = (char) => /[A-Z]/.test(char);
+// function isUppercase(char) {
+//   if (isAlpha(char) && char === char.toUpperCase()) {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// }
+
 function translate(stringToTranslate) {
   if (isBraille(stringToTranslate)) {
     console.log(stringToTranslate);
@@ -190,12 +200,37 @@ function translate(stringToTranslate) {
     const engChars = stringToTranslate.split("");
     let brailleStr = "";
 
-    engChars.forEach((engChar) => {
-      const charObj = alphabet.find((char) => char.en === engChar);
-      brailleStr += charObj.br;
+    engChars.forEach((engChar, i) => {
+      if (isNumeric(engChar)) {
+        if (!isNumeric(engChars[i - 1])) {
+          brailleStr += ".O.OOO";
+        } else {
+          brailleStr += "";
+        }
+        const numObj = alphabet.find((char) => char.num == engChar);
+        brailleStr += numObj.br;
+      } else {
+        if (isUppercase(engChar)) {
+          brailleStr += ".....O";
+        } else {
+          brailleStr += "";
+        }
+        const charObj = alphabet.find(
+          (char) => char.en === engChar.toLowerCase()
+        );
+        brailleStr += charObj.br;
+      }
     });
-    console.log(brailleStr);
+
+    console.log(brailleStr, brailleStr.length);
   }
 }
 
-translate("hello world");
+// translate("Hello, (good) morning");
+// translate("123");
+// translate("12 ");
+// translate("heLlO 2");
+// translate("  2 fg4");
+// translate("hello");
+// translate("Hello");
+// translate("HELLO");
