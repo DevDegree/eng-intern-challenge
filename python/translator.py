@@ -13,13 +13,33 @@ def get_str_from_args() -> str:
 # the way it checks is to see if there are any characters besides 'O' and '.'
 def check_if_english(text: str) -> bool: 
     for char in text: 
-        if not (char == 'O' or char == '.'): # detected a character that is not in braille
+        if not (char == 'O' or char == '.'): # detected a character that is not in braille, must be in English
             return True 
     return False 
 
 # if it is in english, convert the text to braille 
 def convert_to_braille(text: str) -> str: 
-    return text
+    result_string = "" # keeps adding onto this string to be returned at the end 
+    use_number = False # sees if the current and upcoming chars, until the next space, should be false 
+    for char in text: 
+        if char == ' ': 
+            result_string += space_braille 
+            use_number = False # resets to english character if it was looking at numbers 
+            continue 
+        # here, we check if the character is a number, then we should set the is_number variable to be true  
+        if char.isnumeric(): 
+            if not use_number: # if it is the first time the number has appeared in the word, put in number follows braille
+                result_string += number_follows_braille
+                use_number = True
+        # adds in the corresponding braille code of the character based on whether it is a number or an English letter
+        if use_number: 
+            result_string += number_to_braille_code(number_to_braille_char[char])
+        else:
+            if char.isupper(): # if the character is an uppercase english letter then add in braille code for capital follows
+                result_string += capital_follows_braille
+            result_string += number_to_braille_code(english_to_braille_char[char.lower()])
+        
+    return result_string 
 
 # if it is in braille, convert the text to english 
 def convert_to_english(text: str) -> str: 
