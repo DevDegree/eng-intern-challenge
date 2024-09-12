@@ -14,6 +14,10 @@ braille_dict = {
 # Reverse mapping from Braille to English
 reverse_braille_dict = {v: k for k, v in braille_dict.items()}
 
+# Change: Numbers to Letters Mapping since braille_dict contains identical dictionary value for [a, j] and [0, 9]
+number_to_letter = {'1': 'a', '2': 'b', '3': 'c', '4': 'd', '5': 'e',
+                    '6': 'f', '7': 'g', '8': 'h', '9': 'i', '0': 'j'}
+
 # function to convert english to braille
 def english_to_braille(text):
     braille_output = ""
@@ -70,7 +74,10 @@ def braille_to_english(braille):
         elif not is_number and symbol in reverse_braille_dict:
             char = reverse_braille_dict[symbol]
             
-            english_output += char.upper() if is_capital else char
+            if char in number_to_letter:
+                english_output += number_to_letter[char].upper() if is_capital else number_to_letter[char]
+            else: 
+                english_output += char.upper() if is_capital else char
             
             is_capital = False
         i += 6
