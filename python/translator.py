@@ -1,3 +1,5 @@
+import sys
+
 engTobraille = {"a":"O.....", "b":"O.O...", "c":"OO....", "d":"OO.O..", "e":"O..O..", "f":"OOO...", 
                 "g":"OOOO..", "h":"O.OO..", "i":".OO...", "j":".OOO..", "k":"O...O.", "l":"O.O.O.", "m":"OO..O.",
                 "n":"OO.OO.", "o":"O..OO.", "p":"OOO.O.", "q":"OOOOO.", "r":"O.OOO.", "s":".OO.O.", "t":".OOOO.", 
@@ -104,6 +106,10 @@ def translateToenglish(braille):
 
     return english
 
-# Execute Here
-word = 'Abc 123 xYz'
-print(translateTo(word))
+if __name__ == '__main__':
+    
+    if len(sys.argv) != 2:
+        print("Format: python translator.py \"Your text here\"")
+    else:
+        text = translateTo(sys.argv[1]) 
+        print(text)  
