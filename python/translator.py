@@ -10,3 +10,6 @@ braille_dict = {
     '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..',
     'capital': '.....O', 'number': '.O.OOO'
 }
+
+# Reverse mapping from Braille to English
+reverse_braille_dict = {v: k for k, v in braille_dict.items()}
