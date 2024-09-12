@@ -13,17 +13,19 @@ const english = Object.fromEntries(Object.entries(braille).map(([key, value]) =>
 
 
 function englishToBraille(englishText) {
-
+    
     let convertedText = '';
     let isNumber = false;
 
     for (let char of englishText) {
-        if (char >= 'A' && char <= 'Z') {
+        if (char === ' ') {
+            convertedText += braille[' '];
+        } else if (char >= 'A' && char <= 'Z') {
             convertedText += braille['CAPITAL'];
             char = char.toLowerCase();
-        }
+            convertedText += braille[char] || '......';
 
-        if (char >= '0' && char <= '9') {
+        } else if (char >= '0' && char <= '9') {
             if (!isNumber) {
                 convertedText += braille['NUMBER'];
                 isNumber = true;
