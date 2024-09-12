@@ -73,7 +73,7 @@ def generate_dictionaries() -> None:
             braille_to_eng[braille] = [character] # otherwise create a mapping
 
 
-def translate(input: str) -> str:
+def translate(user_input: str) -> str:
     """
     Translates the input.
     If at any point the translator detects that the input is not braille,
@@ -82,16 +82,16 @@ def translate(input: str) -> str:
     """
 
     # Check if the input contains any non-braille characters
-    for c in input:
+    for c in user_input:
         if c != 'O' and c != '.':
-            return translate_english_to_braille(input)
+            return translate_english_to_braille(user_input)
     
     # Check if the input divides 6. If not, this is not valid braille.
-    if len(input) % 6 != 0:
-        return translate_english_to_braille(input)
+    if len(user_input) % 6 != 0:
+        return translate_english_to_braille(user_input)
     
     # Split the potential braille characters and ensure they are valid
-    braille_symbols = textwrap.wrap(input, 6)
+    braille_symbols = textwrap.wrap(user_input, 6)
 
     answer = ''
     is_number = False
@@ -101,7 +101,7 @@ def translate(input: str) -> str:
         try:
             translation_list = braille_to_eng[braille_symbol]
         except KeyError: # Invalid braille
-            return translate_english_to_braille(input)
+            return translate_english_to_braille(user_input)
 
         # Handles all the special braille characters
         if translation_list[0] == 'capital follows':
@@ -134,13 +134,13 @@ def translate(input: str) -> str:
     return answer
 
 
-def translate_english_to_braille(input: str) -> str:
+def translate_english_to_braille(user_input: str) -> str:
     """
     Function to translate from english to braille
     """
     is_number = False
     answer = ''
-    for idx, char in enumerate(input):
+    for idx, char in enumerate(user_input):
         # If the character is an uppercase
         if char.isupper():
             answer += eng_to_braille['capital follows']
@@ -160,7 +160,7 @@ def translate_english_to_braille(input: str) -> str:
         
         elif char == '.':
             try:
-                if input[idx + 1] in {'1','2','3','4','5','6','7','8','9','0'}:
+                if user_input[idx + 1] in {'1','2','3','4','5','6','7','8','9','0'}:
                     answer += eng_to_braille['decimal follows']
                 else:
                     answer += eng_to_braille['.']
@@ -174,7 +174,7 @@ def translate_english_to_braille(input: str) -> str:
     return answer
 
 args = sys.argv[1:]
-input = " ".join(args)
+translator_input = " ".join(args)
 generate_dictionaries()
 
-print(translate(input))
+print(translate(translator_input))
