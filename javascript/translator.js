@@ -72,8 +72,7 @@ const languageType = (language) => {
     let brailleArray = splitBrailleCharacters(language[0]);
     return brailleToEnglish(brailleArray);
   } else {
-    console.log('English');
-    return;
+    return englishToBraille(language.join(' '));
   }
 };
 
@@ -108,6 +107,27 @@ const brailleToEnglish = (brailleArray) => {
     outputString += brailleCharacterTranslate(character);
   }
   console.log(outputString);
+}
+
+const englishCharacterTranslate = (character) => {
+  let output = '';
+  for (const char in brailleCharacters) {
+    if (character === char || character === char.toUpperCase()) {
+      if (character === character.toUpperCase() && char !== ' ') {
+        output += brailleCharacters["CAP"]
+      }
+      output += brailleCharacters[char];
+      return output;
+    }
+  }
+}
+
+const englishToBraille = (sentence) => {
+  let outputString = '';
+  for (const letter of sentence) {
+    outputString += englishCharacterTranslate(letter);
+  }
+  return outputString;
 }
 
 languageType(userInput);
