@@ -1,5 +1,5 @@
 import sys
-
+from enum import Enum
 
 # Special braille characters that don't visually appear but have special meanings
 braille_uppercase = '.....O'
@@ -55,6 +55,13 @@ braille_to_english_lookup_alpha = {}
 braille_to_english_lookup_numeric = {}
 
 
+# Store the state when reading in braille
+class BrailleState(Enum):
+    LOWERCASE = 0
+    NUMBER = 1
+    UPPERCASE = 2
+
+
 # Take the english to braille lookup and create lookups from braille to english by reversing the key value pairs.
 # Split into alphabet characters and numeric characters since they share symbols
 def generate_braille_to_english_lookup():
@@ -99,6 +106,46 @@ def english_to_braille(english_text):
     return braille_text
 
 
+# Takes braille text and returns that text in english
+def braille_to_english(braille_text):
+    english_text = ""
+
+    # Start in the lowercase state, since no symbol has yet been read to require switching
+    state = BrailleState.LOWERCASE
+
+    # Look through the text in increments of 6, retrieving the corresponding block of braille
+    for i in range(0, len(braille_text), 6):
+        braille_character = braille_text[i:i+6]
+
+        # If reading a braille capital or number follows symbol, switch to the corresponding state
+        # Otherwise run the logic to add an english character
+        if braille_character == braille_uppercase:
+            state = BrailleState.UPPERCASE
+        elif braille_character == braille_number_symbol:
+            state = BrailleState.NUMBER
+        else:
+            # If outputting a space, switch back to the lowercase state so that this and future characters are letters
+            if braille_character == english_to_braille_lookup[' ']:
+                state = BrailleState.LOWERCASE
+
+            # If within the influence of a number follows character, add from the list of number characters
+            # Otherwise add from the list of alphabet characters, converting to uppercase if necessary
+            if state == BrailleState.NUMBER:
+                english_text += braille_to_english_lookup_numeric[braille_character]
+            else:
+                english_character = braille_to_english_lookup_alpha[braille_character]
+
+                # If the preceding character was an uppercase follows character, switch to uppercase and reset the state
+                if state == BrailleState.UPPERCASE:
+                    english_character = english_character.upper()
+                    state = BrailleState.LOWERCASE
+
+                # Add the character to the text
+                english_text += english_character
+
+    return english_text
+
+
 def main():
     # Generate the english to braille lookup
     generate_braille_to_english_lookup()
@@ -106,7 +153,8 @@ def main():
     # Retrieve the input from the arguments
     original_text = get_argument_input()
 
-    translated_text = english_to_braille(original_text)
+    translated_text = braille_to_english(original_text)
+    # translated_text = english_to_braille(original_text)
 
     print(translated_text)
 
