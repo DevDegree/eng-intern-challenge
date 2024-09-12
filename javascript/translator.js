@@ -30,26 +30,12 @@ const brailleCharacters = {
   "y": "OO.OOO",
   "z": "O..OOO",
 
-  // Symbols
-  ",": "O.....",
-  ";": "O.O...",
-  ":": "OO....",
-  ".": "OO.O..",
-  "!": "O..O..",
-  "?": "OOO...",
-  "(": "OOOO..",
-  ")": "O.OO..",
-  "'": ".OO...",
-  "-": "O....O",
-  "/": ".O...O",
-
   // Space
   " ": "......",
 
   // Prefixes
   "#": ".O.OOO",  // Number follows
   "CAP": ".....O",  // Capital follows
-  "DEC": "..O.O.",  // Decimal follows
 };
 
 const brailleNumbers = {
@@ -81,7 +67,6 @@ const splitBrailleCharacters = (braille) => {
 }
 
 let capitalize = false;
-let isNumber = false;
 
 const brailleCharacterTranslate = (character) => {
   for (const char in brailleCharacters) {
@@ -107,17 +92,32 @@ const brailleToEnglish = (brailleArray) => {
     outputString += brailleCharacterTranslate(character);
   }
   console.log(outputString);
+  return outputString;
 }
 
-const englishCharacterTranslate = (character) => {
+let firstTimeNum = true;
+const englishCharacterTranslate = (character, isNumber) => {
   let output = '';
-  for (const char in brailleCharacters) {
-    if (character === char || character === char.toUpperCase()) {
-      if (character === character.toUpperCase() && char !== ' ') {
-        output += brailleCharacters["CAP"]
+  if (!isNumber) {
+    for (const char in brailleCharacters) {
+      if (character === char || character === char.toUpperCase()) {
+        if (character === character.toUpperCase() && char !== ' ' && !isNumber) {
+          output += brailleCharacters["CAP"]
+        }
+        output += brailleCharacters[char];
+        return output;
       }
-      output += brailleCharacters[char];
-      return output;
+    }
+  } else {
+    for (const num in brailleNumbers) {
+      if (character === num) {
+        if (firstTimeNum) {
+          output += brailleCharacters["#"];
+          firstTimeNum = false;
+        }
+        output += brailleNumbers[character];
+        return output;
+      }
     }
   }
 }
@@ -125,8 +125,13 @@ const englishCharacterTranslate = (character) => {
 const englishToBraille = (sentence) => {
   let outputString = '';
   for (const letter of sentence) {
-    outputString += englishCharacterTranslate(letter);
+    if (isNaN(letter) || letter === ' ') {
+      outputString += englishCharacterTranslate(letter, false);
+    } else {
+      outputString += englishCharacterTranslate(letter, true);
+    }
   }
+  console.log(outputString);
   return outputString;
 }
 
