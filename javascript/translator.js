@@ -61,23 +61,11 @@ engDict = Object.fromEntries(Object.entries(brailleDict).map(([key, value]) => (
 //Braille to English numbers object
 engNums = Object.fromEntries(Object.entries(brailleNums).map(([key, value]) => ([value, key])));
 
-const capitalNext = '.....O';
-const numberNext = '.O.OOO';
-const decimalNext = '.O...O';
-
-//PSEUDOCODE
+const capitalNextIndicator = '.....O';
+const numberNextIndicator = '.O.OOO';
+const decimalNextIndicator = '.O...O';
 
 //function to tranlate English to braille
-    //use split() method to split the string into individual characters.
-    //use map() method to map over all characters.
-        //if alphabet letter is capitalized, add braille indicator for capital follows before the corresponding braille sympbol. 
-            //ensure only the character that follows the braille indicator for capital follows is capitalized. maybe use boolean here. 
-        //if character is a number, add braille indicator for number follows before the corresponding braille symbol.
-            //ensure all characters that follow the braille indicator for number follows are numbers until the use hits space bar. maybe use boolean here. 
-            //if decimal is used, add braille indicator for decimal follows before the corresponding braille symbol, else print braille symbol for period. 
-        //return all characters
-    //use join() method to concatenate all characters into a string 
-
 function translateEngToBraille(input) {
     let capitalize = false;
     let inNumberMode = false;
@@ -91,16 +79,16 @@ function translateEngToBraille(input) {
 
         if (capitalize) {
             capitalize = false;
-            return capitalNext + brailleDict[char.toLowerCase()] || 'ERROR';
+            return capitalNextIndicator + brailleDict[char.toLowerCase()] || 'ERROR';
         }
 
         if (/^\d$/.test(char)) {
             inNumberMode = true;
-            return numberNext + brailleNums[char] || 'ERROR'
+            return numberNextIndicator + brailleNums[char] || 'ERROR'
         }
 
         if (char === '.' && inNumberMode) {
-            return decimalNext + brailleDict[char] || 'ERROR';
+            return decimalNextIndicator + brailleDict[char] || 'ERROR';
         }
 
         if (char === ' ' && inNumberMode) {
@@ -112,14 +100,57 @@ function translateEngToBraille(input) {
     .join('');
 }
 
-console.log(translateEngToBraille('Hello Erika 1.2 a.@'));
-    
+//console.log(translateEngToBraille('Hello Erika 1.2 a.@'));
 
 //function to translate braille to English
-    //since braille segements follow a six dot pattern, create a regex for 6 characters
-    //use regex and match() method to split the braille into 6-chacter segments
-    //use map() method to map over all the segments and follow logic in function above
-    //use join() method to concatenate all characters into a string
+function translateBrailleToEng(input) {
+    let capitalize = false;
+    let inNumberMode = false;
+    const regex = /.{6}/g
+    const brailleSegments = input.match(regex)
 
-    //function to detect language (English or braille), then convert to opposite language with one of the correspoding two functions below.
+    return brailleSegments
+        .map((brailleSegment) => {
+            if (brailleSegment === capitalNextIndicator) {
+                capitalize = true;   
+                return '';         
+            }
+
+            if (brailleSegment === decimalNextIndicator) {
+                return '.';
+
+            }
+
+            if (brailleSegment === numberNextIndicator) {
+                inNumberMode = true;
+                return '';
+            }
+
+            let charNum = engNums[brailleSegment] || 'ERROR';
+
+            if (inNumberMode) {
+                if (brailleSegment === '......') {
+                    inNumberMode = false;
+                    return ' ';
+                }
+                return charNum;
+            }
+
+            let char = engDict[brailleSegment] || 'ERROR';
+
+            if (char) {
+                if(capitalize) {
+                    capitalize = false;
+                    return char.toUpperCase();
+                }
+                return char;
+            }
+        })
+        .join('');
+}
+
+console.log(translateBrailleToEng(".O.OOOO.....O.O.........O.....111111"));
+
+//PSEUDOCODE
+//function to detect language (English or braille), then convert to opposite language with one of the correspoding two functions below.
     //maybe detect if language is only in O and . using a regex.
