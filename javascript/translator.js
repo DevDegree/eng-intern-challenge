@@ -1,4 +1,5 @@
 // Because the symbol ">" and the letter "o" have the same pattern in Braille, the ">" and "<" are assumed to be used to compare numbers only. It is assuemd those operators are in between numbers and there are no spaces between the numbers and the operators.
+
 // VARIABLES
 const engToBraille = {
   a: "O.....",
@@ -67,16 +68,11 @@ let resultString = "";
 let isCapital = false;
 let isNumber = false;
 let isDecimal = false;
-
-// create a FUNCTION to translate input string
-
-// determine if string is english or braille
-// if string contains ONLY . & Os, then it is braille
-// const userInput = ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..";
-const userInput = "Hello World!";
 let brStrings = [];
 
-// if it is braille, then split string into substrings of 6
+const userInput = process.argv.slice(2).join(" ");
+
+// Checks to see if Braille or English then proceeds to translate
 if (isBraille(userInput)) {
   for (let i = 0; i < userInput.length; i += 6) {
     brStrings.push(userInput.substring(i, i + 6));
@@ -132,12 +128,11 @@ if (isBraille(userInput)) {
       resultString += spaceSign;
       isNumber = false;
     } else if (isNumber) {
-        if(letter === "."){
-            resultString += decimalSign;
-        } else{
-            resultString += engToBrailleNums[letter];
-        }
-      
+      if (letter === ".") {
+        resultString += decimalSign;
+      } else {
+        resultString += engToBrailleNums[letter];
+      }
     } else if (letter.match(capitalRegex)) {
       resultString += capitalSign;
       resultString += engToBraille[letter.toLowerCase()];
@@ -152,13 +147,7 @@ if (isBraille(userInput)) {
   console.log(resultString);
 }
 
-// dealing with capital, decimal, number follows & spaces
-// IF substring matches capital pattern, then append the next letter with ToUpperCase
-
-// IF it matches number, use numbers object until SPACE is reached using a while loop
-
-// IF it matches decimal, append the next symbol
-
+// HELPER FUNCTIONS
 // checks if string is Braille
 // returns true/false
 function isBraille(input) {
