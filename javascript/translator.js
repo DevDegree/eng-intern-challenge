@@ -1,10 +1,6 @@
-//PSEUDOCODE
-
-//create English to braille object*
-//create braille to English object*
-//*consider making seperate objects for alphabet characters and letters for better readability and reuseability. 
 //**note that the braille alphabet for the letter O and the > symbol are the same. find a solution after your basic code works./ 
 
+//English characters to braille object
 const brailleDict = {
     'a': 'O.....',
     'b': 'O.O...',
@@ -45,6 +41,7 @@ const brailleDict = {
     ' ': '......'
 }
 
+//English numbers to braille object
 const brailleNums = {
     '1': 'O.....',
     '2': 'O.O...',
@@ -58,9 +55,17 @@ const brailleNums = {
     '0': '.OOO..',
 }
 
+//Braille to English characters object
+engDict = Object.fromEntries(Object.entries(brailleDict).map(([key, value]) => ([value,key])));
+
+//Braille to English numbers object
+engNums = Object.fromEntries(Object.entries(brailleNums).map(([key, value]) => ([value, key])));
+
 const capitalNext = '.....O';
 const numberNext = '.O.OOO';
 const decimalNext = '.O...O';
+
+//PSEUDOCODE
 
 //function to tranlate English to braille
     //use split() method to split the string into individual characters.
