@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "translator.js",
+  "bin": {
+    "translator": "./translator.js"
+  },
   "scripts": {
     "test": "jest"
   },
