@@ -37,11 +37,11 @@ def text_to_braille(text):
             converted += letters_to_braille_dict[char.lower()]
         elif char == ' ':
             converted += letters_to_braille_dict[char]
-            prev_number = False
+            is_number= False
         elif char.isdigit() and not is_number:
             converted += number_sign
             converted += digit_to_braille_dict[char]
-            prev_number = True
+            is_number = True
         elif char.isdigit():
             converted += digit_to_braille_dict[char]
         else:
