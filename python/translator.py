@@ -24,22 +24,27 @@ class BrailleTranslator:
 
     def is_braille(self, text):
         if text is None:
-            print("Your input is null. Please enter a valid text.")
-            return False
+            return "Your input is null. Please enter a valid text."
         return all(char in 'O.' for char in text.replace('\n', '').replace(' ', ''))
 
     def english_to_braille(self, text):
+        # Wrap the input text in quotes if not already quoted
+        if (text.startswith('"') and text.endswith('"')) or (text.startswith("'") and text.endswith("'")):
+            text = text  # Already quoted
+        else:
+            text = f'"{text}"'  # Wrap in double quotes
+
         if text is None:
-            print("Your input is null. Please enter a valid text.")
-            return ""
+            return "Your input is null. Please enter a valid text."
         
         if not isinstance(text, str):
-            print("Input text must be a string.")
-            return ""
+            return "Input text must be a string."
 
+        # Remove the surrounding quotes for processing
+        text = text.strip('"\'')
+        
         if len(text) == 0:
-            print("Input text is empty. Please enter some text.")
-            return ""
+            return "Input text is empty. Please enter some text."
 
         braille_text = ''
         is_number = False
@@ -64,23 +69,20 @@ class BrailleTranslator:
                 braille_text += self.BRAILLE_DICT[char]
                 is_number = False
             else:
-                print(f"Character '{char}' not found in Braille dictionary. Skipping.")
+                braille_text += f"Character '{char}' not found in Braille dictionary. Skipping."
         
         return braille_text.strip()
 
     def braille_to_english(self, text):
         if text is None:
-            print("Your input is null. Please enter a valid text.")
-            return ""
+            return "Your input is null. Please enter a valid text."
 
         if not isinstance(text, str):
-            print("Input text must be a string.")
-            return ""
+            return "Input text must be a string."
         
         cleaned_text = text.replace('\n', '').replace(' ', '')
         if not self._is_valid_braille_length(cleaned_text):
-            print("Braille text length must be a multiple of 6 characters.")
-            return ""
+            return "Braille text length must be a multiple of 6 characters."
         
         braille_chars = [cleaned_text[i:i+6] for i in range(0, len(cleaned_text), 6)]
         reversed_braille_dict = {v: k for k, v in self.BRAILLE_DICT.items()}
@@ -139,35 +141,50 @@ class BrailleTranslator:
             if braille in reversed_braille_dict:
                 english_text += reversed_braille_dict[braille]
             else:
-                print(f"Braille pattern '{braille}' not found in dictionary. Skipping.")
+                english_text += f"Braille pattern '{braille}' not found in dictionary. Skipping."
         
         return english_text.strip()
 
     def translate(self, text):
         if text is None:
-            print("Your input is null. Please enter a valid text.")
-            return ""
+            return "Your input is null. Please enter a valid text."
         
         if not isinstance(text, str):
-            print("Input text must be a string.")
-            return ""
+            return "Input text must be a string."
         
         if len(text) == 0:
-            print("Input text is empty. Please enter some text.")
-            return ""
+            return "Input text is empty. Please enter some text."
         
         if self.is_braille(text):
             return self.braille_to_english(text)
         else:
             return self.english_to_braille(text)
 
+def list_to_string(input_value):
+    if isinstance(input_value, list):
+        return ' '.join(map(str, input_value))
+    else:
+        return "Error: Input is not a list"
+
+def handle_input(*args):
+    if len(args) == 1 and isinstance(args[0], str):
+        # Single string input
+        return args[0]
+    else:
+        # Multiple string inputs
+        combined_string = ' '.join(args)
+        return combined_string
+
 def main():
-    input_text = sys.argv[1]
+    # Ensure you handle index errors if no arguments are provided
+    if len(sys.argv) > 1:
+        input_text = handle_input(*sys.argv[1:])
+    else:
+        input_text = ""  
 
     translator = BrailleTranslator()
     translated_text = translator.translate(input_text)
     print(translated_text)
-    return translated_text
 
 if __name__ == "__main__":
     main()

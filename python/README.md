@@ -37,9 +37,9 @@ Deployed Web Application on Hugging Face Spaces
 Google Colab Notebook
 `https://colab.research.google.com/drive/1W0CYFKUmurPZXcaNftj7qMP0zjvaQpsB?authuser=0#scrollTo=rzCg4XTTntuZ`
 
-## Requirements
-Python3
-No external libraries are required.
+## Python Instructions
+Note that the Python version used is 3.8
 
 ## Author
 Created by **Nooshin Bahador**. For any questions or issues, please contact `nooshin.bah@gmail.com`.
+
