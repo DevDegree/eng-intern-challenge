@@ -95,13 +95,9 @@ function detectStringType(inputStr) {
 	return "braille";
 }
 
-console.log(detectStringType("help"), detectStringType("O.OO.."));
-
 function splitStringEverySixChars(inputStr) {
 	let result = [];
-	// Loop through the string and take 6 characters at a time
 	for (let i = 0; i < inputStr.length; i += 6) {
-		// Push a substring of 6 characters into the result array
 		result.push(inputStr.slice(i, i + 6));
 	}
 	return result;
@@ -109,7 +105,6 @@ function splitStringEverySixChars(inputStr) {
 
 function brailleToEnglish(str) {
 	let brailleArray = splitStringEverySixChars(str);
-	console.log("Braille Array:", brailleArray); // Debugging print
 	let isCapitalized = false;
 	let isDigitMode = false;
 	let result = [];
@@ -118,44 +113,96 @@ function brailleToEnglish(str) {
 		let braille = brailleArray[i];
 
 		if (braille === ".....O") {
-			// Capitalization marker, set the flag to capitalize the next letter
 			isCapitalized = true;
-			continue; // Skip to the next item
+			continue;
 		}
 
 		if (braille === ".O.OOO") {
-			// Digit mode marker, switch to interpreting digits
 			isDigitMode = true;
-			continue; // Skip to the next item
+			continue;
 		}
 
 		if (isDigitMode) {
-			// If we are in digit mode, look for digits in the brailleDigits object
 			if (braille === "......") {
-				// End of digit mode if we encounter a space
 				isDigitMode = false;
 			} else {
-				// Push digit or keep the original if not found in the brailleDigits
 				let digitChar = brailleDigits[braille] || braille;
 				result.push(digitChar);
 			}
 		} else {
-			// Regular conversion mode (letters or symbols)
-			let convertedChar = brailleAlphabet[braille] || braille; // Convert to English
+			let convertedChar = brailleAlphabet[braille] || braille;
 
 			if (isCapitalized) {
-				// Capitalize the next character if flag is set
 				convertedChar = convertedChar.toUpperCase();
-				isCapitalized = false; // Reset capitalization flag
+				isCapitalized = false;
 			}
 
 			result.push(convertedChar);
 		}
 	}
 
-	return result.join(""); // Join result array into a final string
+	return result.join("");
 }
 
-console.log(
-	brailleToEnglish(".....OO.....O.O...OO...........O.OOOO.....O.O...OO....")
-);
+function englishToBraille(str) {
+	let englishArray = str.split("");
+	let isDigitMode = false;
+	let result = [];
+
+	for (let i = 0; i < englishArray.length; i++) {
+		let englishChar = englishArray[i];
+
+		if (!isNaN(englishChar) && englishChar !== " ") {
+			if (!isDigitMode) {
+				result.push(".O.OOO");
+				isDigitMode = true;
+			}
+			result.push(englishDigits[englishChar]);
+			continue;
+		}
+
+		if (englishChar === " ") {
+			result.push("......");
+			isDigitMode = false;
+			continue;
+		}
+
+		if (isDigitMode && isNaN(englishChar)) {
+			isDigitMode = false;
+		}
+
+		if (englishChar === englishChar.toUpperCase() && isNaN(englishChar)) {
+			result.push(".....O");
+			englishChar = englishChar.toLowerCase();
+		}
+
+		result.push(englishAlphabet[englishChar] || "......");
+	}
+
+	return result.join("");
+}
+
+function translator(str) {
+	let type = detectStringType(str);
+
+	if (type === "string") {
+		console.log(englishToBraille(str));
+	} else if (type === "braille") {
+		console.log(brailleToEnglish(str));
+	} else {
+		console.log("error occurred: please input a proper string");
+	}
+}
+
+module.exports = {
+	detectStringType,
+	englishToBraille,
+	brailleToEnglish,
+	translator,
+};
+
+if (require.main === module) {
+	const args = process.argv.slice(2);
+	const input = args.join(" ");
+	translator(input);
+}
