@@ -45,7 +45,7 @@ const brailleToEnglishMapping = {
     ".0.00.": ")",
     "......": " "
 };
-
+//braille to english mapping for numbers
 const numberBrailleToEnglish = {
     "O.....": "1",
     "O.O...": "2",
@@ -124,7 +124,6 @@ const brailleToEnglish = (args) => {
 
     for (let i = 0; i < args.length; i += 6) {
         const chunk = args.slice(i, i + 6);
-        //console.log(chunk);  // Outputs each 6-character chunk
         if(chunk === ".O.OOO") {
             isNumMode = true;
             continue;
@@ -136,27 +135,13 @@ const brailleToEnglish = (args) => {
             isNumMode = false;
         }
         if(isNumMode === false) {
-            //things I still needa do:
-            //1
-            //When a Braille number follows symbol is read, 
-            //assume all following symbols are numbers until the next space symbol.
-            //PARTICULARLY THE DETECTING THE SPACE SYMBOL TO THEN GO BACK TO REGULAR BRAILLE
-
-            //2
-            //ADD DECIMAL FOLLOWS LOGIC (OPTIONAL)
-
             if(chunk in brailleToEnglishMapping) {
-                // if(isNumMode === true) {
-    
-                // }
                 if(isUpperMode === true) {
                     resultList.push(brailleToEnglishMapping[chunk].toUpperCase());
                     isUpperMode = false;
                 }
                 else {
-                    //console.log(chunk);
                     resultList.push(brailleToEnglishMapping[chunk]);
-                    //console.log(brailleToEnglishMapping[chunk]);
                 }
             }
         }
@@ -180,8 +165,6 @@ const englishToBraille = (args) => {
         if(charSearch in englishToBrailleMapping) {
             if(char === char.toUpperCase() && /^[a-zA-Z]$/.test(char) && isNaN(char)) {
                 resultList.push(englishToBrailleMapping["capital"]);
-                //console.log(englishToBrailleMapping["capital"]);
-                //console.log(resultList);
             }
             if(!isNaN(char) && char !== ' ' && isNum !== true) {
                 isNum = true;
@@ -190,25 +173,21 @@ const englishToBraille = (args) => {
             if(char === "." && char !== ' ') {
                 resultList.push(englishToBrailleMapping["decimal"]);
             }
-            //console.log(`${char} matches a property in the object, value: ${englishToBrailleMapping[char]}`);
             resultList.push(englishToBrailleMapping[charSearch]);
-            //console.log(resultList);
         }
     }
     const resultString = resultList.join('');
     return resultString;
 };
 
-
 //take arguments from input
 const args = process.argv.slice(2).join(' ');
-
 
 //detect if string input is English or Braille
 const isBraille = (str) => /^[.O]+$/.test(str);
 const response = isBraille(args);
 
-//
+//output correct translation to console
 if(response == true) {
     const resultEnglish = brailleToEnglish(args);
     console.log(resultEnglish);
