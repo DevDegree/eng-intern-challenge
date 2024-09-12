@@ -67,20 +67,37 @@ const splitBrailleCharacters = (braille) => {
 }
 
 let capitalize = false;
+let isNums = false;
 
 const brailleCharacterTranslate = (character) => {
-  for (const char in brailleCharacters) {
-    if (brailleCharacters[char] === character) {
-      if (char === 'CAP') {
-        capitalize = true;
-        return '';
-      }
+  if (character === '......') {
+    isNums = false;
+  }
+  if (!isNums) {
+    for (const char in brailleCharacters) {
+      if (brailleCharacters[char] === character) {
+        if (char === 'CAP') {
+          capitalize = true;
+          return '';
+        }
 
-      if (capitalize) {
-        capitalize = false;
-        return char.toUpperCase();
-      } else {
-        return char;
+        if (char === '#') {
+          isNums = true;
+          return '';
+        }
+
+        if (capitalize) {
+          capitalize = false;
+          return char.toUpperCase();
+        } else {
+          return char;
+        }
+      }
+    }
+  } else {
+    for (const num in brailleNumbers) {
+      if (brailleNumbers[num] === character) {
+        return num;
       }
     }
   }
@@ -96,6 +113,7 @@ const brailleToEnglish = (brailleArray) => {
 }
 
 let firstTimeNum = true;
+
 const englishCharacterTranslate = (character, isNumber) => {
   let output = '';
   if (!isNumber) {
