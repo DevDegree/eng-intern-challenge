@@ -107,7 +107,7 @@ def translateToBraille(msg) :
 
         elif char in swappedDecimals :
             translation.append(swappedBrail['decimal'])
-            translation.append(swappedBrail[char])
+            translation.append(swappedDecimals[char])
 
         elif char in swappedNumbers :
             if not lastIsNum :
@@ -119,6 +119,6 @@ def translateToBraille(msg) :
             translation.append(swappedBrail['space'])
             lastIsNum = False
         
-        print(''.join(translation))
+    print(''.join(translation))
     
 receiveMessage()
