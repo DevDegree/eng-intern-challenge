@@ -1,3 +1,4 @@
+import sys
 # Braille representations using 'O' for raised dots and '.' for flat dots
 braille_dict = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
@@ -95,7 +96,9 @@ def detect_and_translate(input_string):
         return english_to_braille(input_string)
 
 if __name__ == "__main__":
+    # Take the input from the user
+    # input_text = input("Enter the text you want to translate (English or Braille): ")
     # Take the input from the command line arguments
-    input_text = input("Enter the text you want to translate (English or Braille): ")
+    input_text = " ".join(sys.argv[1:])
     output_text = detect_and_translate(input_text)
     print(output_text)
