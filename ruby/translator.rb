@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-# Braille Translator
-# Author: [Your Name]
+# Braille to English Translator
+# Author: Abror Kamalov
 # Date: September 11, 2024
 
 class BrailleTranslator
