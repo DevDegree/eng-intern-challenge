@@ -1,4 +1,5 @@
 import sys
+# dictionaries
 alphaToBrailleDict = {
     "a": "O.....", "b": "O.O...", "c": "OO....", "d": "OO.O..", "e": "O..O..", "f": "OOO...", "g": "OOOO..", "h": "O.OO..", "i": ".OO...", "j": ".OOO..", "k": "O...O.",
     "l": "O.O.O.", "m": "OO..O.", "n": "OO.OO.", "o": "O..OO.", "p": "OOO.O.", "q": "OOOOO.", "r": "O.OOO.", "s": ".OO.O.", "t": ".OOOO.", "u": "O...OO",
@@ -15,6 +16,7 @@ brailToNumDict = {
     "OOO...": "6","OOOO..": "7","O.OO..": "8",".OO...": "9"
 }
 
+# English to Braille function
 def alphaToBraille(rawText):
     translatedText = ''
     isNumber = False
@@ -29,6 +31,7 @@ def alphaToBraille(rawText):
         translatedText = translatedText + alphaToBrailleDict.get(char.lower())
     print(translatedText)
 
+# Braille to English function
 def brailleToAlpha(rawText):
     translatedText = ''
     isNumber = False
@@ -56,6 +59,7 @@ def brailleToAlpha(rawText):
         rawText = rawText[6:]
     print(translatedText)
 
+# getting the rawText (input) from the command line arguments
 rawText = ''
 for n in range(1, len(sys.argv)):
     if n == 1:
@@ -63,6 +67,7 @@ for n in range(1, len(sys.argv)):
     else:
         rawText = rawText + " " + sys.argv[n]
         
+# finding which translation to make        
 if len(rawText) == rawText.count(".") + rawText.count("O"):
     brailleToAlpha(rawText)
 else:
