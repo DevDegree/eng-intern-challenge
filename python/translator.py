@@ -15,5 +15,5 @@ def isBraille(string):
     return 1
 
 text = input("String: ")
-print(text)
 x = isBraille(text[0:9])
+print(x)
