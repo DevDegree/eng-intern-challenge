@@ -25,8 +25,8 @@ func ToUpper(s rune) rune {
 }
 
 func ToLower(s rune) rune {
-	if s >= 'a' && s <= 'z' {
-		return s - 'a' + 'A'
+	if s >= 'A' && s <= 'Z' {
+		return s - 'A' + 'a'
 	}
 	return s
 }
