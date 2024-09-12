@@ -43,11 +43,26 @@ const brailleAlphabet: BrailleAlphabet = {
 };
 
 /**
+ * Determines if the given input string is written in Braille.
+ *
+ * Braille is represented by a series of 'O' (for raised dots) and '.' (for flat dots).
+ * This function checks if the input consists only of these characters.
+ *
+ * @param {string} input - The input string to check.
+ * @returns {boolean} Returns true if the input is a Braille string (only contains 'O' and '.'), otherwise false.
+ */
+const isBraille = (input: string): boolean => /^[O.]+$/.test(input);
+
+/**
  * Translates an input string between English and Braille.
  * @param {string} input - The string to be translated. Can be either an English phrase or Braille.
  * @returns {string} The translated string, either Braille or English, depending on the input.
  */
 const translate = (input: string): string => {
+  if (isBraille(input)) {
+    return input;
+  }
+
   return input;
 };
 
