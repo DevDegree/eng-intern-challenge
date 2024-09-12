@@ -1,5 +1,5 @@
 // The character mappings from English to Braille.
-const brailleChars = {
+const engToBrailleChars = {
     a: 'O.....',
     b: 'O.O...', 
     c: 'OO....', 
@@ -37,9 +37,24 @@ const brailleChars = {
     '9': '.OO...', 
     '0': '.OOO..',
     space: '......', 
-    capital: '.....O', 
-    number: '.O.OOO'
+    capital: '.....O',
+    decimal: '.O...O',  
+    number: '.O.OOO',
+    '.': '..OO.O',
+    ',': '..O...',
+    '?': '..O.OO',
+    '!': '..OOO.',
+    ':': '..OO..',
+    ';': '..O.O.',
+    '-': '....OO',
+    '/': '.O..O.',
+    '<': '.OO..O',
+    '>': 'O..OO.',
+    '(': 'O.O..O',
+    ')': '.O.OO.'
 }
+
+const brailleToEngChars = {}
 
 //Check if the sequence is braille
 const isBraille = (str) => {
@@ -48,37 +63,53 @@ const isBraille = (str) => {
 
 //Translate English to Braille
 //reversing the mappings should have been done first but doesnt make a difference in the end
-const engToBrl = (str) => {
+const engToBrl = (eng) => {
     let result = '';
     let upperCase = /[A-Z]/;
     let numbers = /[0-9]/;
     let isNumber = false; //boolean to see if its a number
 
     //Loop through each char of 'str' and perform a check to see which mappings are appropriate.
-    for(let char of str) {
-        
+    for(let char of eng) {
         // If the character is a space append a 'braille' space to result.
         if(char === ' ') {
-            result += brailleChars.space;
-            
+            result += brailleChars.space; 
         } else if (upperCase.test(char)) { //check if it is an uppercase;
-            // So check if the characters 
             result += brailleChars.capital + brailleChars[char.toLowerCase()];
         } else if(numbers.test(char)) {
-            if(!isNumber) {
+            if(!isNumber) { // if it isnt a number make it a number
                 result += brailleChars.number; //prefix
                 isNumber = true;
             }
-            result += brailleChars[char]
+            result += brailleChars[char]; // append the character
+        } else if(char === '.') { // check if it is a period or a decimal
+            if(isNumber) {
+                result += brailleChars.decimal;
+            } else {
+                result += brailleChars[char];
+            }
         } else {
-            result += brailleChars[char]; //  for default
             isNumber = false;
+            result += brailleChars[char]; //  for default
         }
     }
 
     return result;
 }
 
+const engToBrlChars = {
+  
+}
+
+const brlToEng = (braille) => {
+    
+
+    for(let i = 0; i < braille.length; i+=6) { //in chunks of 6
+        const symbol = braille.substr(i,i + 6);
+
+        
+    }
+}
 
 // Test isBraille
 // console.log(isBraille("O....."));      // should be true 'a' 
@@ -96,11 +127,12 @@ console.log(engToBrl("HELLO"));
 console.log(engToBrl("Hello World")); 
 console.log(engToBrl("abc 123"));
 console.log(engToBrl("Good Morning!"));
-// O.OO.O..O..O.O.O.O.O.O.O.OO.
-// .....OO.OO......OO..O.......OO.O.O......OO.O.O......OO.OO.
-// .....OO.OO.O..O..O.O.O.O.O.O.O.OO............O.OOO.OO.OO.O.OOO.O.O.O.OO.O..
+// O.OO..O..O..O.O.O.O.O.O.O..OO.
+// .....OO.OO.......OO..O.......OO.O.O......OO.O.O......OO..OO.
+// .....OO.OO..O..O..O.O.O.O.O.O.O..OO............O.OOO.OO..OO.O.OOO.O.O.O.OO.O..
 // O.....O.O...OO...........O.OOOO.....O.O...OO....
-// .....OOOOO..O.OO.O.OO.OO.O.............OOO..O.O.OO.O.OOO.OO.OO..OO...OO.OO.OOOO..undefined
+// .....OOOOO..O..OO.O..OO.OO.O.............OOO..O.O..OO.O.OOO.OO.OO..OO...OO.OO.OOOO..undefined
+
 
 
 
