@@ -69,11 +69,10 @@ class BrailleTranslator
           result << CHAR_TO_BRAILLE['capital']
           char.downcase!
         elsif char.match?(/\d/)
-          result << CHAR_TO_BRAILLE['number'] unless result.last == CHAR_TO_BRAILLE['number']
           char = NUMBER_MAP.key(char)
         end
-  
-        result << (char == ' ' ? ' ' * 6 : CHAR_TO_BRAILLE[char])
+    
+        result << (char == ' ' ? '......' : CHAR_TO_BRAILLE[char])
       end
       result.join
     end
