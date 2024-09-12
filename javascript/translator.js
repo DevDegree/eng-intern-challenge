@@ -69,33 +69,33 @@ function translateEngToBraille(input) {
     let inNumberMode = false;
 
     return input
-    .split('')
-    .map((char) => {
-        if (char === char.toUpperCase() && char !== char.toLowerCase()) {
-            capitalize = true;
-        }
+        .split('')
+        .map((char) => {
+            if (char === char.toUpperCase() && char !== char.toLowerCase()) {
+                capitalize = true;
+            }
 
-        if (capitalize) {
-            capitalize = false;
-            return capitalNextIndicator + brailleDict[char.toLowerCase()] || 'ERROR';
-        }
+            if (capitalize) {
+                capitalize = false;
+                return capitalNextIndicator + brailleDict[char.toLowerCase()] || 'ERROR';
+            }
 
-        if (/^\d$/.test(char)) {
-            inNumberMode = true;
-            return numberNextIndicator + brailleNums[char] || 'ERROR'
-        }
+            if (/^\d$/.test(char)) {
+                inNumberMode = true;
+                return numberNextIndicator + brailleNums[char] || 'ERROR'
+            }
 
-        if (char === '.' && inNumberMode) {
-            return decimalNextIndicator + brailleDict[char] || 'ERROR';
-        }
+            if (char === '.' && inNumberMode) {
+                return decimalNextIndicator + brailleDict[char] || 'ERROR';
+            }
 
-        if (char === ' ' && inNumberMode) {
-            inNumberMode = false;
-        }
+            if (char === ' ' && inNumberMode) {
+                inNumberMode = false;
+            }
 
-        return brailleDict[char] || 'ERROR'
-    })
-    .join('');
+            return brailleDict[char] || 'ERROR'
+        })
+        .join('');
 }
 
 //function to translate braille to English
@@ -114,7 +114,6 @@ function translateBrailleToEng(input) {
 
             if (brailleSegment === decimalNextIndicator) {
                 return '.';
-
             }
 
             if (brailleSegment === numberNextIndicator) {
