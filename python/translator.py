@@ -136,10 +136,10 @@ def modify_english_result(result_arr):
 
 def main():
     user_input = input()
-    if is_braille(user_input):
-        print(modify_english_result(convert_braille_to_english(user_input)))
+    if is_braille(user_input=user_input):
+        print(modify_english_result(result_arr=convert_braille_to_english(user_input=user_input)))
     else:
-        print(convert_english_to_braille(user_input))
+        print(convert_english_to_braille(user_input=user_input))
 
 if __name__ == '__main__':
     main()
