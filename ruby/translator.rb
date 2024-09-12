@@ -69,6 +69,7 @@ class BrailleTranslator
           result << CHAR_TO_BRAILLE['capital']
           char.downcase!
         elsif char.match?(/\d/)
+          result << '.O.OOO' 
           char = ('a'.ord + char.to_i - 1).chr
         end
     
