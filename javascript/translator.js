@@ -41,9 +41,17 @@ const brailleChars = {
     number: '.O.OOO'
 }
 
-function isBraille(input) {
+//Check if the sequence is braille
+const isBraille = (str) => {
     return /^[O.]+$/.test(input);
 }
+
+//Translate English to Braille
+//reversing the mappings should have been done first but doesnt make a difference in the end
+const engToBrl = (str) => {
+
+}
+
 
 // Test isBraille
 console.log(isBraille("O....."));      // should be true 'a' 
