@@ -75,7 +75,7 @@ if len(text) > 1 or check_braille(text[0]) is False:
             sys.stdout.write(braille['capital_follows'])
             sys.stdout.write(braille[char.lower()].upper())
         elif char.isdigit():
-            if write_numbers is True and braille_numbers[char] != ' ':
+            if write_numbers is True:
                 sys.stdout.write(braille_numbers[char])
             else:
                 write_numbers = True
@@ -88,7 +88,7 @@ if len(text) > 1 or check_braille(text[0]) is False:
 # Braille -> English
 else:
     text = text[0]
-    # Flip dictionnaries
+    # 'Flip' dictionnaries
     braille = {braille: letter for letter, braille in braille.items()}
     braille_numbers = {braille: letter for letter, braille in braille_numbers.items()}
     # Writing numbers state
@@ -116,5 +116,3 @@ else:
 
         a += 6
         b += 6
-            
-
