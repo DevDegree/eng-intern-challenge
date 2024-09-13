@@ -25,10 +25,12 @@ Object.keys(NUM_TO_BRAILLE).forEach((key) => {
 const CAP = ".....O";
 const NUM = ".O.OOO";
 
+// returns true if input is braille otherwise returns false
 function isBraille(input) {
     return /^[O.]+$/.test(input);
 }
 
+// translate english input to braille
 function englishToBraille(input) {
     let output = "";
     let numberFollows = false;
@@ -54,6 +56,7 @@ function englishToBraille(input) {
     return output;
 }
 
+// translate braille input to english
 function brailleToEnglish(input) {
     let output = "";
     let numberFollows = false;
@@ -88,7 +91,7 @@ function brailleToEnglish(input) {
 }
 
 function main() {
-    const input = process.argv[2];
+    const input = process.argv.slice(2).join(" ");
 
     if (isBraille(input)) {
         console.log(brailleToEnglish(input));
@@ -98,8 +101,3 @@ function main() {
 }
 
 main();
-
-
-
-
-
