@@ -140,7 +140,7 @@ class Translator:
 
 def main():
     
-    if len(sys.argv < 2):
+    if len(sys.argv) < 2:
         print('Please provide a string to translate')
     else:
         input_string = " ".join(sys.argv[1:])
