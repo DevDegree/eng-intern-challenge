@@ -1,3 +1,5 @@
+import sys
+
 # maps for translation
 braille_to_english_charmp = {
     # letters
@@ -93,6 +95,17 @@ def is_braille(inp_text: str):
     return is_valid_braille
 
 
+"""
+Convert English text to Braille.
+
+Args:
+    text (str): The English text to convert.
+
+Returns:
+    str: A string representing the text in Braille.
+"""
+
+
 def convert_english_to_braille(inp_text: str):
     result = ""
     num_lock = False
@@ -125,11 +138,25 @@ def convert_english_to_braille(inp_text: str):
     return result.upper()
 
 
+"""
+Convert Braille to English.
+
+Args:
+    text (str): The braille text to convert.
+
+Returns:
+    str: A string representing the text in English.
+"""
+
+
 def convert_braille_to_english(inp_text: str):
     # special symbol controller
     caps_on = False
     num_on = False
     dec_on = False
+
+    space = english_to_braille_symblmp[" "]
+    decimal_follows = english_to_braille_specialmp["DEC"]
 
     result = ""
     for i in range(0, len(inp_text), 6):
@@ -143,9 +170,9 @@ def convert_braille_to_english(inp_text: str):
                 dec_on = False
             else:
                 # assume we don't have decimals
-                if curr_pattern != ".o...o" and curr_pattern != "......":
+                if curr_pattern != decimal_follows and curr_pattern != space:
                     curr_char = braille_to_english_numbermp[curr_pattern]
-                elif curr_pattern == "......":
+                elif curr_pattern == space:
                     result += " "
                     num_on = False
                     dec_on = False
@@ -181,19 +208,26 @@ def convert_braille_to_english(inp_text: str):
 def convertText(inp_text: str):
     if is_braille(inp_text):
         braille_text = inp_text.lower()
-        print(convert_braille_to_english(braille_text))
+        result = convert_braille_to_english(braille_text)
     else:
-        print("Invalid braille")
+        result = convert_english_to_braille(inp_text)
+
+    return result
+
+
+def main():
+    setup_reversed_mps()
+
+    # get the text from command line and clean text
+    text = " ".join(sys.argv[1:])
+    text = text.strip()
+
+    # convert text to appropriate format
+    converted_text = convertText(text)
+
+    print(converted_text)
 
 
 # main guard
 if __name__ == "__main__":
-    setup_reversed_mps()
-    braille_text = ".O.OOOOO.....O...O..OO.OO.....OO.O..O.O...........OO.O.....OO.OO.."
-    test = convert_english_to_braille("3.142 .H")
-    print("e2b: " + test)
-    t2 = convert_braille_to_english(braille_text.lower())
-    print("b2e: " + t2)
-    # print(test == t2)
-    # convertText(
-    #     ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO")
+    main()
