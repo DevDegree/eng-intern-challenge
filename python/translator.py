@@ -205,6 +205,6 @@ if __name__ == "__main__":
     if braille:
         s = SPACE.join(sys.argv[1:])
     else:
-        s = "".join(sys.argv[1:])
+        s = " ".join(sys.argv[1:])
     print(return_output(s))
     
