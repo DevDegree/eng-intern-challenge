@@ -32,7 +32,7 @@ class Translator:
         ' ': '......'
     }
 
-    # English to brail mapping for numbers
+    # English to braille mapping for numbers
     ENGLISH_TO_BRAILLE_NUMS = {
         '0': '.OOO..',
         '1': 'O.....',
@@ -74,7 +74,7 @@ class Translator:
                 if not num_mode:
                     num_mode = True
                     result += self.NUMBER
-                # Return the char from the dictionary, return an empty char as default if char is not unexpected
+                # Return the char from the dictionary, return an empty char as default if char is unexpected
                 result += self.ENGLISH_TO_BRAILLE_NUMS.get(char, '')
             else:
                 # Reset number mode when switching to letters
@@ -142,7 +142,7 @@ class Translator:
             str: The translated text.
         """
 
-        # Check if the input is Braille (all chars are either '.' or '0')
+        # Check if the input is Braille (all chars are either '.' or 'O')
         if all(char in 'O.' for char in input):
             if len(input) % 6 == 0:
                 return self.braille_to_english(input)
