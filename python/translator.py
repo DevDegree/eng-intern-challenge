@@ -28,25 +28,131 @@ TESTING = True
 # define constants for braille -> english and english -> braille
 # also need states for the following: capital follows, decimal follows, number follows
 
-def braille_translate(braille):
-    pass
+braille_to_eng = {
+  "O.....": "a",
+  "O.O...": "b",
+  "OO....": "c",
+  "OO.O..": "d",
+  "O..O..": "e",
+  "OOO...": "f",
+  "OOOO..": "g",
+  "O.OO..": "h",
+  ".OO...": "i",
+  ".OOO..": "j",
+  "O...O.": "k",
+  "O.O.O.": "l",
+  "OO..O.": "m",
+  "OO.OO.": "n",
+  "O..OO.": "o",
+  "OOO.O.": "p",
+  "OOOOO.": "q",
+  "O.OOO.": "r",
+  ".OO.O.": "s",
+  ".OOOO.": "t",
+  "O...OO": "u",
+  "O.O.OO": "v",
+  ".OOO.O": "w",
+  "OO..OO": "x",
+  "OO.OOO": "y",
+  "O..OOO": "z",
+}
 
+braille_to_nums = {
+  "O.....": "1",
+  "O.O...": "2",
+  "OO....": "3",
+  "OO.O..": "4",
+  "O..O..": "5",
+  "OOO...": "6",
+  "OOOO..": "7",
+  "O.OO..": "8",
+  ".OO...": "9",
+  ".OOO..": "0",
+}
+
+# need to construct a "reversed" dictionary for translation from english to braille
+# in O(1) lookup
+
+eng_to_braille = {value: key for key, value in braille_to_eng.items()}
+nums_to_braille = {value: key for key, value in braille_to_nums.items()}
+
+# lastly, define constants for number and capital follows, and space
+
+NUMBER = ".O.OOO"
+CAPITAL = ".....O"
+SPACE = "......"
+
+# translation under the assumption the input is valid braille
+def braille_translate(braille):
+    output = ""
+    current = ""
+    cap = False
+    num = False
+    i = 0
+    while i < len(braille):
+        # iterate 6 at a time.
+        current = ""
+        for _ in range(6):
+            current += braille[i]
+            i += 1
+        # now have current text
+        # cases: capital, num, space, other
+        if current == CAPITAL:
+            cap = True
+        elif current == NUMBER:
+            num = True
+        elif current == SPACE:
+            current += " "
+            # reset num status
+            num = False
+        elif num:
+            # number
+            output += braille_to_nums[current]
+        elif cap:
+            # capital character
+            output += braille_to_eng[current].upper()
+            # reset
+            cap = False
+        else:
+            # lowercase character
+            output += braille_to_eng[current]
+    return output
+
+# translation under the assumption that input is valid english
 def english_translate(text):
-    pass
+    # cases: space, number, capital, lowercase
+    output = ""
+    for letter in text:
+        if letter in nums_to_braille:
+            output += (NUMBER + nums_to_braille[letter])
+        elif letter == " ":
+            output += SPACE
+        elif letter.isupper():
+            # uppercase letter
+            output += (CAPITAL + eng_to_braille[letter.lower()])
+        else:
+            # lowercase
+            output += eng_to_braille[letter]
+    return output
 
 # determines whether it's braille or not.
-def is_braille(input):
+def is_braille(inp):
     l = len(input)
-    os = input.count("O")
-    dots = input.count(".")
+    os = inp.count("O")
+    dots = inp.count(".")
     # checking according to the conditions at the top of the file
     if (l % 6) * 6 == l and os + dots == l and dots > 0:
         return True
+    else:
+        return False
 
 # wrapper function that returns the output to the main execution.
 # allows for testing using a test harness
-def return_output(input):
-    pass
+def return_output(inp):
+    if is_braille:
+        return braille_translate(inp)
+    else:
+        return english_translate(inp)
 
 # will be commented out for submission
 def test_harness():
