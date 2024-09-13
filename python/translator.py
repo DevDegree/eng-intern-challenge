@@ -80,7 +80,7 @@ def main():
     reverse_braille_map = load_yaml_file('braille_map.yaml')['braille_to_eng']
 
     # Read the input from the command line arguments
-    input_string = ' '.join(sys.argv[1:])
+    input_string = sys.argv[1]
 
     # Determine input type and translate accordingly
     if find_input_type(input_string) == 'english':
