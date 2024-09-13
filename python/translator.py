@@ -80,14 +80,20 @@ text = sys.argv[1:]
 
 # English -> Braille
 if len(text) > 1 or check_braille(text[0]) is False:
+    write_numbers = False
     for char in ' '.join(text):
         if char.isupper():
             sys.stdout.write(braille['capital_follows'])
             sys.stdout.write(braille[char.lower()].upper())
         elif char.isdigit():
-            sys.stdout.write(braille['number_follows'])
-            sys.stdout.write(braille_numbers[char])
+            if write_numbers is True and braille_numbers[char] != ' ':
+                sys.stdout.write(braille_numbers[char])
+            else:
+                write_numbers = True
+                sys.stdout.write(braille['number_follows'])
+                sys.stdout.write(braille_numbers[char])
         else:
+            write_numbers = False
             sys.stdout.write(braille[char])
 
 # Braille -> English
