@@ -27,16 +27,7 @@ const charToBraille = {
   x: 'OO..OO',
   y: 'OO.OOO',
   z: 'O..OOO',
-  1: 'O.....',
-  2: 'O.O...',
-  3: 'OO....',
-  4: 'OO.O..',
-  5: 'O..O..',
-  6: 'OOO...',
-  7: 'OOOO..',
-  8: 'O.OO..',
-  9: '.OO...',
-  0: '.OOO..',
+
   cap: '.....O',
   dec: '.O...O',
   num: '.O.OOO',
@@ -54,11 +45,30 @@ const charToBraille = {
   space: '......',
 };
 
+numToBraille = {
+  1: 'O.....',
+  2: 'O.O...',
+  3: 'OO....',
+  4: 'OO.O..',
+  5: 'O..O..',
+  6: 'OOO...',
+  7: 'OOOO..',
+  8: 'O.OO..',
+  9: '.OO...',
+  0: '.OOO..',
+};
+
 let brailleToChar = Object.fromEntries(
   Object.entries(charToBraille).map(([char, braille]) => [braille, char])
 );
 
+let brailleToNum = Object.fromEntries(
+  Object.entries(numToBraille).map(([char, braille]) => [braille, char])
+);
+
+//DEBUG REMOVE
 console.log(brailleToChar);
+console.log(brailleToNum);
 
 const translate = (str) => {
   let isBraille = undefined;
