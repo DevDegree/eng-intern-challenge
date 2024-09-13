@@ -86,7 +86,7 @@ const translate = (str) => {
         result.push(brailleMap[dec] + brailleMap[char]);
       }
       //handle lower case
-      if (char != char.toUpper()) {
+      if (char == char.toLowerCase()) {
         result.push(brailleMap[char]);
         prevCharNum = false;
       }
@@ -100,5 +100,16 @@ const translate = (str) => {
 
   //translate from braille to english
   else {
+    //state for cap or num preceeding braille
+    let isCap = false;
+    let isNum = false;
+
+    //chunk string into 6 char segments
+    let chunkedString = [];
+    let index = 0;
+    while (index < str.length) {
+      chunkedString.push(str.slice(index, index + 6));
+      index += 6;
+    }
   }
 };
