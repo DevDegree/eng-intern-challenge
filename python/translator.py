@@ -2,10 +2,136 @@ import sys
 import yaml
 import os
 
-def load_yaml_file(file_path):
-    """Loads the YAML file and returns the contents"""
-    with open(file_path, 'r') as file:
-        return yaml.safe_load(file)
+
+braille_data = '''
+eng_to_braille:
+  # Letters
+  a: "O....."
+  b: "O.O..."
+  c: "OO...."
+  d: "OO.O.."
+  e: "O..O.."
+  f: "OOO..."
+  g: "OOOO.."
+  h: "O.OO.."
+  i: ".OO..."
+  j: ".OOO.."
+  k: "O...O."
+  l: "O.O.O."
+  m: "OO..O."
+  n: "OO.OO."
+  o: "O..OO."
+  p: "OOO.O."
+  q: "OOOOO."
+  r: "O.OOO."
+  s: ".OO.O."
+  t: ".OOOO."
+  u: "O...OO"
+  v: "O.O.OO"
+  w: ".OOO.O"
+  x: "OO..OO"
+  y: "OO.OOO"
+  z: "O..OOO"
+
+  # Numbers (with number follows indicator required)
+  "1": "O....."
+  "2": "O.O..."
+  "3": "OO...."
+  "4": "OO.O.."
+  "5": "O..O.."
+  "6": "OOO..."
+  "7": "OOOO.."
+  "8": "O.OO.."
+  "9": ".OO..."
+  "0": ".OOO.."
+
+  # Symbols
+  ".": "..OO.O"
+  ",": "..O..."
+  "?": "..O.OO"
+  "!": "..OOO."
+  ":": "..OO.."
+  ";": "..O.O."
+  "-": "....OO"
+  "/": ".O..O."
+  "<": ".OO..O"
+  ">": "O..OO."
+  "(": "O.O..O"
+  ")": ".O.OO."
+
+  # Special control characters
+  CAPITAL: ".....O"   # Capital follows
+  DECIMAL: ".O...O"   # Decimal follows
+  NUMBER: ".O.OOO"    # Number follows
+  SPACE: "......"     # Space
+
+braille_to_eng:
+  # Letters
+  "O.....": "a"
+  "O.O...": "b"
+  "OO....": "c"
+  "OO.O..": "d"
+  "O..O..": "e"
+  "OOO...": "f"
+  "OOOO..": "g"
+  "O.OO..": "h"
+  ".OO...": "i"
+  ".OOO..": "j"
+  "O...O.": "k"
+  "O.O.O.": "l"
+  "OO..O.": "m"
+  "OO.OO.": "n"
+  "O..OO.": "o"
+  "OOO.O.": "p"
+  "OOOOO.": "q"
+  "O.OOO.": "r"
+  ".OO.O.": "s"
+  ".OOOO.": "t"
+  "O...OO": "u"
+  "O.O.OO": "v"
+  ".OOO.O": "w"
+  "OO..OO": "x"
+  "OO.OOO": "y"
+  "O..OOO": "z"
+
+  # Numbers (with number follows indicator)
+  "numbers":
+    "O.....": "1"
+    "O.O...": "2"
+    "OO....": "3"
+    "OO.O..": "4"
+    "O..O..": "5"
+    "OOO...": "6"
+    "OOOO..": "7"
+    "O.OO..": "8"
+    ".OO...": "9"
+    ".OOO..": "0"
+
+  # Symbols
+
+  "..OO.O": "."
+  "..O...": ","
+  "..O.OO": "?"
+  "..OOO.": "!"
+  "..OO..": ":"
+  "..O.O.": ";"
+  "....OO": "-"
+  ".O..O.": "/"
+  ".O..O.": "<"
+  "O..OO.": ">"
+  "O.O..O": "("
+  ".O.OO.": ")"
+
+  # Special control characters
+  ".....O": "CAPITAL"   # Capital follows
+  ".O.OOO": "NUMBER"    # Number follows
+  "......": "SPACE"     # Space
+  ".O...O": "DECIMAL"
+'''
+
+def load_yaml_data():
+    """Loads the YAML data from the embedded string."""
+    return yaml.safe_load(braille_data)
     
 def find_input_type(input_string):
     """Determines if the input string is in English or Braille."""
@@ -77,10 +203,9 @@ def braille_to_english(braille_string, braille_map, reverse_braille_map):
 
 def main():
     # Load the mappings from YAML files
-    yaml_file_path = os.path.join(os.path.dirname(__file__), 'braille_map.yaml')
-    print(yaml_file_path)
-    braille_map = load_yaml_file(yaml_file_path)['eng_to_braille']
-    reverse_braille_map = load_yaml_file(yaml_file_path)['braille_to_eng']
+    yaml_data = load_yaml_data()
+    braille_map = yaml_data['eng_to_braille']
+    reverse_braille_map = yaml_data['braille_to_eng']
 
     # Read the input from the command line arguments
     input_string = ' '.join(sys.argv[1:]) if len(sys.argv) > 1 else ''
