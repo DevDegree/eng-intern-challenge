@@ -6,9 +6,10 @@
   "scripts": {
     "test": "jest"
   },
-  "author": "",
+  "author": "Eason",
   "license": "ISC",
   "dependencies": {
+    "javascript": "file:",
     "jest": "^29.7.0"
   }
 }
