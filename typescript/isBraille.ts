@@ -1,3 +1,13 @@
 export default function isBraille(str: string): boolean {
-    return false
+  if (str.length !== 6) {
+    return false;
+  }
+
+  for (let char of str) {
+    if (!(char == "o" || char == ".")) {
+      return false;
+    }
+  }
+
+  return true;
 }
