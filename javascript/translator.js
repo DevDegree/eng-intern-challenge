@@ -1,6 +1,3 @@
-const input = process.argv.slice(2).join(' ');
-console.log(`Input: ${input}`);
-
 const brailleToEnglish = {
     // ALPHABET
     'O.....': 'a',
@@ -29,7 +26,7 @@ const brailleToEnglish = {
     'OO..OO': 'x',
     'OO.OOO': 'y',
     'O..OOO': 'z',   
-    
+
     //NUMBERS
     'O.....': '1',
     'O.O...': '2',
@@ -43,65 +40,63 @@ const brailleToEnglish = {
     '.OOO..': '0',
 
     // SYMBOLS
-        //NUMBERS
-        '..OO..': '.',
-        '..O...': ',',
-        '..O.OO': '?',
-        '..OOO.': '!',
-        '..OO..': ':',
-        '..O.O.': ';',
-        '....OO': '-',
-        '.O..O.': '/',
-        '.OO..O': '<',
-        'O..OO.': '>',
-        'O.O..O': '(',
-        '.O.OO.': ')',
-        '......': ' '
+    '..OO..': '.',
+    '..O...': ',',
+    '..O.OO': '?',
+    '..OOO.': '!',
+    '..OO..': ':',
+    '..O.O.': ';',
+    '....OO': '-',
+    '.O..O.': '/',
+    '.OO..O': '<',
+    'O..OO.': '>',
+    'O.O..O': '(',
+    '.O.OO.': ')',
+    '......': ' '
 };
 
 const englishToBraille = {
-// ALPHABET
-'a': 'O.....',
-'b': 'O.O...',
-'c': 'OO....',
-'d': 'OO.O..',
-'e': 'O..O..',
-'f': 'OOO...',
-'g': 'OOOO..',
-'h': 'O.OO..',
-'i': '.OO...',
-'j': '.OOO..',
-'k': 'O...O.',
-'l': 'O.O.O.',
-'m': 'OO..O.',
-'n': 'OO.OO.',
-'o': 'O..OO.',
-'p': 'OOO.O.',
-'q': 'OOOOO.',
-'r': 'O.OOO.',
-'s': '.OO.O.',
-'t': '.OOOO.',
-'u': 'O...OO',
-'v': 'O.O.OO',
-'w': '.OOO.O',
-'x': 'OO..OO',
-'y': 'OO.OOO',
-'z': 'O..OOO',   
+    // ALPHABET
+    'a': 'O.....',
+    'b': 'O.O...',
+    'c': 'OO....',
+    'd': 'OO.O..',
+    'e': 'O..O..',
+    'f': 'OOO...',
+    'g': 'OOOO..',
+    'h': 'O.OO..',
+    'i': '.OO...',
+    'j': '.OOO..',
+    'k': 'O...O.',
+    'l': 'O.O.O.',
+    'm': 'OO..O.',
+    'n': 'OO.OO.',
+    'o': 'O..OO.',
+    'p': 'OOO.O.',
+    'q': 'OOOOO.',
+    'r': 'O.OOO.',
+    's': '.OO.O.',
+    't': '.OOOO.',
+    'u': 'O...OO',
+    'v': 'O.O.OO',
+    'w': '.OOO.O',
+    'x': 'OO..OO',
+    'y': 'OO.OOO',
+    'z': 'O..OOO',   
 
-//NUMBERS
-'1': 'O.....',
-'2':'O.O...',
-'3':'OO....',
-'4':'OO.O..',
-'5':'O..O..',
-'6':'OOO...',
-'7':'OOOO..',
-'8':'O.OO..',
-'9':'.OO...',
-'0':'.OOO..',
-
-// SYMBOLS
     //NUMBERS
+    '1': 'O.....',
+    '2':'O.O...',
+    '3':'OO....',
+    '4':'OO.O..',
+    '5':'O..O..',
+    '6':'OOO...',
+    '7':'OOOO..',
+    '8':'O.OO..',
+    '9':'.OO...',
+    '0':'.OOO..',
+
+    // SYMBOLS
     '.': '..OO..' ,
     ',': '..O...',
     '?': '..O.OO',
@@ -115,5 +110,33 @@ const englishToBraille = {
     '(': 'O.O..O',
     ')': '.O.OO.',
     ' ': '......'
-    // Add more letters, numbers, and symbols here
 };
+
+function translateBrailleToEnglish(braille) {
+    let translated = '';
+    const brailleCharacters = braille.match(/.{1,6}/g);
+    for (let char of brailleCharacters) {
+        translated += brailleToEnglish[char] || '?';
+    }
+    return translated;
+}
+
+function translateEnglishToBraille(english) {
+    let translated = '';
+    for (let char of english) {
+        translated += englishToBraille[char.toLowerCase()] || '......';
+    }
+    return translated;
+}
+
+function isBraille(input) {
+    return /^[O.]+$/.test(input);
+}
+
+const input = process.argv.slice(2).join(' ');
+
+if (isBraille(input)) {
+    console.log(translateBrailleToEnglish(input));
+} else {
+    console.log(translateEnglishToBraille(input));
+}
