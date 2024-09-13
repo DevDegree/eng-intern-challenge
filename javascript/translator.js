@@ -1,6 +1,6 @@
 #!/usr/bin/env node
+const input = process.argv.slice(2).join(" ");
 
-//Arrays for character conversion & testing
 const alphabet = [
   {
     br: "O.....",
@@ -169,82 +169,19 @@ const alphabet = [
     en: " ",
   },
 ];
-const testStrings = [
-  {
-    en: "Hello World",
-    br: ".....OO.OO..O..O..O.O.O.O.O.O.O..OO............O.OOO.OO..OO.O.OOO.O.O.O.OO.O..",
-  },
-  {
-    en: "1234 abc",
-    br: ".O.OOOO.....O.O...OO....OO.O........O.....O.O...OO....",
-  },
-  {
-    en: "Giv3 it a try",
-    br: ".....OOOOO...OO...O.O.OO.O.OOOOO...........OO....OOOO.......O............OOOO.O.OOO.OO.OOO",
-  },
-  {
-    en: "Zebra123",
-    br: ".....OO..OOOO..O..O.O...O.OOO.O......O.OOOO.....O.O...OO....",
-  },
-  {
-    en: "TEST case",
-    br: ".....O.OOOO......OO..O.......O.OO.O......O.OOOO.......OO....O......OO.O.O..O..",
-  },
-  {
-    en: "code 2024",
-    br: "OO....O..OO.OO.O..O..O.........O.OOOO.O....OOO..O.O...OO.O..",
-  },
-  {
-    en: "No Braille Here",
-    br: ".....OOO.OO.O..OO............OO.O...O.OOO.O......OO...O.O.O.O.O.O.O..O.............OO.OO..O..O..O.OOO.O..O..",
-  },
-  {
-    en: "A1B2C3D4",
-    br: ".....OO......O.OOOO..........OO.O....O.OOOO.O........OOO.....O.OOOOO.........OOO.O...O.OOOOO.O..",
-  },
-  {
-    en: "A1b2c3D4",
-    br: ".....OO......O.OOOO.....O.O....O.OOOO.O...OO.....O.OOOOO.........OOO.O...O.OOOOO.O..",
-  },
-  {
-    en: "thisIsALongString",
-    br: ".OOOO.O.OO...OO....OO.O......O.OO....OO.O......OO..........OO.O.O.O..OO.OO.OO.OOOO.......O.OO.O..OOOO.O.OOO..OO...OO.OO.OOOO..",
-  },
-  {
-    en: "The time is 1234 PM",
-    br: ".....O.OOOO.O.OO..O..O.........OOOO..OO...OO..O.O..O.........OO....OO.O........O.OOOO.....O.O...OO....OO.O.............OOOO.O......OOO..O.",
-  },
-  {
-    en: "123 apples and 456 oranges",
-    br: ".O.OOOO.....O.O...OO..........O.....OOO.O.OOO.O.O.O.O.O..O...OO.O.......O.....OO.OO.OO.O.........O.OOOOO.O..O..O..OOO.........O..OO.O.OOO.O.....OO.OO.OOOO..O..O...OO.O.",
-  },
-  {
-    en: "A12B3 has 50 items in total",
-    br: ".....OO......O.OOOO.....O.O........OO.O....O.OOOOO..........O.OO..O......OO.O........O.OOOO..O...OOO.........OO....OOOO.O..O..OO..O..OO.O........OO...OO.OO........OOOO.O..OO..OOOO.O.....O.O.O.",
-  },
-  {
-    en: "I live at 1234 Elm St, Apt 5A",
-    br: ".....O.OO.........O.O.O..OO...O.O.OOO..O........O......OOOO........O.OOOO.....O.O...OO....OO.O.............OO..O..O.O.O.OO..O............O.OO.O..OOOO...O..............OO.....OOO.O..OOOO........O.OOOO..O.......OO.....",
-  },
-  {
-    en: "Numbers 10 20 30 appear here",
-    br: ".....OOO.OO.O...OOOO..O.O.O...O..O..O.OOO..OO.O........O.OOOO......OOO.........O.OOOO.O....OOO.........O.OOOOO.....OOO........O.....OOO.O.OOO.O.O..O..O.....O.OOO.......O.OO..O..O..O.OOO.O..O..",
-  },
-];
 
-//Helper functions & RegExps for checking language, character type
+//Helper functions to check language of string rec'd as input
 function isBraille(string) {
   for (const char of string) if (!(char === "O" || char === ".")) return false;
 
   if (string.length % 6 !== 0) {
-    console.error("Corrupt input. Unable to translate to English.");
     return false;
   } else return true;
 }
+const isEnglish = (char) => /\w|\s[[:punct:]]|/.test(char);
 const isNumeric = (char) => /\d/.test(char);
 const isLetter = (char) => /[a-zA-Z]/.test(char);
 const isUppercase = (char) => /[A-Z]/.test(char);
-const isEnglish = (char) => /\w|\s[[:punct:]]|/.test(char);
 
 //Translate English <---> Braille
 function translate(string) {
@@ -276,16 +213,14 @@ function translate(string) {
         enString += brCharObj.en;
       }
     });
-    console.log(brString, brString.length, enString, enString.length);
+    console.log(enString);
   } else {
     let enStr = string;
     let brStr = "";
     const engChars = enStr.split("");
 
     engChars.forEach((engChar, i) => {
-      if (!isEnglish(engChar)) {
-        console.error("Unknown language, unable to translate.", error);
-      } else if (isNumeric(engChar)) {
+      if (isNumeric(engChar)) {
         if (isLetter(engChars[i - 1]) || engChars[i - 1] === " ")
           brStr += ".O.OOO";
         const numObj = alphabet.find((char) => char.num == engChar);
@@ -301,7 +236,4 @@ function translate(string) {
     console.log(brStr);
   }
 }
-
-testStrings.forEach((testString) => {
-  translate(testString.br);
-});
+translate(input);
