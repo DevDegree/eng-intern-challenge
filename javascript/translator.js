@@ -81,7 +81,7 @@ const isBraille = (str) => {
 //reversing the mappings should have been done first but doesnt make a difference in the end
 const englishToBraille = (eng) => {
     let result = '';
-    let numberSequence = false; //boolean to see if its a number
+    let numberSequence = false; //boolean to see if its a number sequence
 
     //Loop through each char of 'str' and perform a check to see which mappings are appropriate.
     for(let char of eng) {
@@ -108,11 +108,38 @@ const englishToBraille = (eng) => {
 
 
 
-const brlToEng = (braille) => {
-    
+const brailleToEnglish = (braille) => {
+    let result = '';
+    let capitalSequence = false; // For handling Capital sequences
+    let numberSequence = false; // for handling number like before
+
+    // Trim and remove any extra spaces between symbols
+    braille = braille.replace(/\s+/g, '').trim();
 
     for(let i = 0; i < braille.length; i+=6) { //in chunks of 6
-        const symbol = braille.substr(i,i + 6);
+        const symbol = braille.substr(i,i + 6); // The full 6 digit braille character
+
+        // Check if it is a number sequence.
+        if(symbol === brailleSpecial.number) {
+            numberSequence = true; // In number sequence mode!
+            continue; //Go to next iteration and see what the next character is
+        }
+
+        // Check if it is Capital letter
+        if(symbol === brailleSpecial.capital){
+            capitalSequence = true; // Captial sequence activated.
+            continue;
+        }
+
+        // Check for space character.
+        if(symbol === brailleSpecial.space) {
+            result += ' '; // Add space
+            capitalSequence = false;
+            numberSequence = false; // Turn off both sequences as space will end a sequence.
+        }
+
+   
+
 
         
     }
