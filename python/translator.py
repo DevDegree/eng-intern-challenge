@@ -98,7 +98,7 @@ def main() -> None:
     args: str = ' '.join(sys.argv[1:])
     translator = Translator(args)
     translated_text: str = translator.translate()
-    print(f"{translated_text}")
+    print(translated_text)
 
 
 if __name__ == '__main__':
