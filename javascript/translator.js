@@ -1,5 +1,5 @@
 // The character mappings from English to Braille.
-const engToBrailleChars = {
+const brailleLetters = {
     a: 'O.....',
     b: 'O.O...', 
     c: 'OO....', 
@@ -26,6 +26,10 @@ const engToBrailleChars = {
     x: 'OO..OO', 
     y: 'OO.OOO', 
     z: 'O..OOO', 
+}
+
+//Baille Numbers
+const brailleNumbers = {
     '1': 'O.....', 
     '2': 'O.O...', 
     '3': 'OO....', 
@@ -36,10 +40,14 @@ const engToBrailleChars = {
     '8': 'O.OO..', 
     '9': '.OO...', 
     '0': '.OOO..',
+};
+
+//Special braille characters
+const brailleSpecial = {
     space: '......', 
     capital: '.....O',
-    decimal: '.O...O',  
     number: '.O.OOO',
+    decimal: '.O...O',  
     '.': '..OO.O',
     ',': '..O...',
     '?': '..O.OO',
@@ -52,7 +60,7 @@ const engToBrailleChars = {
     '>': 'O..OO.',
     '(': 'O.O..O',
     ')': '.O.OO.'
-}
+};
 
 let brailleToEngChars = {}
 
