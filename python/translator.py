@@ -31,17 +31,6 @@ braille = {
     'decimal_follows': '.O...O',
     'number_follows': '.O.OOO',
     ' ': '......',
-    # '.': '..OO.O',
-    # ',': '..O.OO',
-    # '!': '..OOO.',
-    # ':': '..O.O.',
-    # ';': '..O.O.',
-    # '-': '....OO',
-    # '/': '.O..O.',
-    # '<': '.OO..O',
-    # '>': 'O..OO.',
-    # '(': 'O.O..O',
-    # ')': '.O.OO.',
 }
 
 braille_numbers = {
@@ -58,7 +47,7 @@ braille_numbers = {
     ' ': '......',
 }
 
-# Defining some functions!
+# Defining some functions
 def check_braille(string):
     '''Check if given string is a braille text'''
     symbols = {'.', 'O'}
@@ -75,7 +64,7 @@ def check_braille(string):
 #     assert check_braille(value)
 
 # *********************************
-# Skipping file name
+# Skip file name
 text = sys.argv[1:]
 
 # English -> Braille
@@ -98,17 +87,17 @@ if len(text) > 1 or check_braille(text[0]) is False:
 
 # Braille -> English
 else:
-    # Flip dictionnary
     text = text[0]
+    # Flip dictionnaries
     braille = {braille: letter for letter, braille in braille.items()}
-    braille_numbers = {braille: letter for letter, braille in braille.items()}
+    braille_numbers = {braille: letter for letter, braille in braille_numbers.items()}
     # Writing numbers state
     write_numbers = False
     a = 0
     b = 6
-    while b < len(text):
+    while b <= len(text):
         braille_string = text[a:b]
-        # Numbers
+        # Checking for numbers
         if write_numbers is True:
             output = braille_numbers[braille_string]
             sys.stdout.write(braille_numbers[braille_string])
@@ -117,11 +106,11 @@ else:
         # Checking for number_follows
         elif braille[braille_string] == 'number_follows':
             write_numbers = True
+        # Checking for capitals
         elif braille[braille_string] == 'capital_follows':
             a += 6
             b += 6
-            sys.stdout.write(braille[text[a:b]])
-            continue
+            sys.stdout.write(braille[text[a:b]].upper())
         else:
             sys.stdout.write(braille[braille_string])
 
