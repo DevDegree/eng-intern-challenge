@@ -6,9 +6,15 @@
   "scripts": {
     "test": "jest"
   },
-  "author": "",
+  "author": "Drashti Patel",
   "license": "ISC",
   "dependencies": {
+    "javascript": "file:",
     "jest": "^29.7.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.4",
+    "babel-jest": "^29.7.0"
   }
 }
