@@ -1,48 +1,48 @@
 const englishToBrailleDictionary = {
-  a: "0.....",
-  b: "0.0...",
-  c: "00....",
-  d: "00.0..",
-  e: "0..0..",
-  f: "000...",
-  g: "0000..",
-  h: "0.00..",
-  i: ".00...",
-  j: ".000..",
-  k: "0...0.",
-  l: "0.0.0.",
-  m: "00..0.",
-  n: "00.00.",
-  o: "0..00.",
-  p: "000.0.",
-  q: "00000.",
-  r: "0.000.",
-  s: ".00.0.",
-  t: ".0000.",
-  u: "0...00",
-  v: "0.0.00",
-  w: ".000.0",
-  x: "00..00",
-  y: "00.000",
-  z: "0..000",
+  a: "O.....",
+  b: "O.O...",
+  c: "OO....",
+  d: "OO.O..",
+  e: "O..O..",
+  f: "OOO...",
+  g: "OOOO..",
+  h: "O.OO..",
+  i: ".OO...",
+  j: ".OOO..",
+  k: "O...O.",
+  l: "O.O.O.",
+  m: "OO..O.",
+  n: "OO.OO.",
+  o: "O..OO.",
+  p: "OOO.O.",
+  q: "OOOOO.",
+  r: "O.OOO.",
+  s: ".OO.O.",
+  t: ".OOOO.",
+  u: "O...OO",
+  v: "O.O.OO",
+  w: ".OOO.O",
+  x: "OO..OO",
+  y: "OO.OOO",
+  z: "O..OOO",
 };
 
 const numbersToBrailleDictionary = {
-  1: "0.....",
-  2: "0.0...",
-  3: "00....",
-  4: "00.0..",
-  5: "0..0..",
-  6: "000...",
-  7: "0000..",
-  8: "0.00..",
-  9: ".00...",
-  0: ".000..",
+  0: ".OOO..",
+  1: "O.....",
+  2: "O.O...",
+  3: "OO....",
+  4: "OO.O..",
+  5: "O..O..",
+  6: "OOO...",
+  7: "OOOO..",
+  8: "O.OO..",
+  9: ".OO...",
 };
 
-const capitalizeNext = ".....0";
+const capitalizeNext = ".....O";
 
-const numberNext = ".0000.";
+const numberNext = "..OOOO";
 
 const spaceNext = "......";
 
@@ -93,11 +93,45 @@ function englishToBrailleTranslator(input) {
 }
 
 // function to translate Braille to english alphabets & numbers
-function brailleToEnglishTranslator(input) {}
+function brailleToEnglishTranslator(input) {
+  const brailleLetters = input.match(/.{1,6}/g);
+  // console.log(brailleLetters);
+
+  let isCapital = false;
+  let isNumber = false;
+
+  const converted = brailleLetters.map((sequence) => {
+    if (sequence === spaceNext) {
+      return " ";
+    } else if (sequence === capitalizeNext) {
+      isCapital = true;
+      // console.log(isCapital);
+      return "";
+    } else if (sequence === "..OOOO") {
+      isNumber = true;
+      return "";
+    } else {
+      if (isNumber) {
+        if (sequence === spaceNext) {
+          isNumber = false;
+        }
+        return brailleToNumbersDictionary[sequence];
+      } else {
+        if (isCapital) {
+          isCapital = false;
+          return brailleToEnglishDictionary[sequence].toUpperCase();
+        } else {
+          return brailleToEnglishDictionary[sequence];
+        }
+      }
+    }
+  });
+  return converted.join("");
+}
 
 // translator function to check input language and convert it
 function translator(input) {
-  if (input.includes(".") && input.includes("0")) {
+  if (input.includes(".") && input.includes("O")) {
     console.log(brailleToEnglishTranslator(input));
   } else {
     console.log(englishToBrailleTranslator(input));
@@ -105,6 +139,6 @@ function translator(input) {
 }
 
 translator("Hello World 123");
-translator(".....0 0..... ");
-translator("123");
-translator(" ");
+translator("Abc 123");
+translator("42");
+translator(".....OO.....O.O...OO............OOOOO.....O.O...OO....");
