@@ -100,7 +100,8 @@ function englishToBraille(english: string): string {
 
 // Main function
 function main() {
-  const input = process.argv[2]; // Read input argument from command line
+  const args = process.argv.slice(2); // Capture all arguments
+  const input = args.join(" "); // Join the arguments into a single string
 
   if (!input) {
     console.error("No input provided.");
