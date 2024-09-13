@@ -1,6 +1,5 @@
-from utils.constants import (
-    VALID_CHARACTER_SET
-)
+from utils.constants import VALID_CHARACTER_SET
+
 
 def is_braille(input_string):
     return all(c in 'O.' for c in input_string)
