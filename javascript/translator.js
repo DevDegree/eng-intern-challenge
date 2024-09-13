@@ -1,6 +1,6 @@
 //create map for standard char to braille representation
 
-const brailleMap = {
+const charToBraille = {
   a: 'O.....',
   b: 'O.O...',
   c: 'OO....',
@@ -54,6 +54,12 @@ const brailleMap = {
   space: '......',
 };
 
+let brailleToChar = Object.fromEntries(
+  Object.entries(charToBraille).map(([char, braille]) => [braille, char])
+);
+
+console.log(brailleToChar);
+
 const translate = (str) => {
   let isBraille = undefined;
   let result = [];
@@ -73,26 +79,26 @@ const translate = (str) => {
     for (let char of str) {
       //handle spaces
       if (char === ' ') {
-        result.push(brailleMap[space]);
+        result.push(charToBraille[space]);
         prevCharNum = false;
       }
       //handle numbers
       if (numbers.includes(char)) {
-        result.push(brailleMap[num] + brailleMap[char]);
+        result.push(charToBraille[num] + charToBraille[char]);
         prevCharNum = true;
       }
       //handle decimal
       if (char === '.' && prevCharNum) {
-        result.push(brailleMap[dec] + brailleMap[char]);
+        result.push(charToBraille[dec] + charToBraille[char]);
       }
       //handle lower case
       if (char == char.toLowerCase()) {
-        result.push(brailleMap[char]);
+        result.push(charToBraille[char]);
         prevCharNum = false;
       }
       //handle upeprcase
       else {
-        result.push(brailleMap[cap] + brailleMap[char]);
+        result.push(charToBraille[cap] + charToBraille[char]);
         prevCharNum = false;
       }
     }
@@ -110,6 +116,15 @@ const translate = (str) => {
     while (index < str.length) {
       chunkedString.push(str.slice(index, index + 6));
       index += 6;
+    }
+
+    for (let brailleChar of chunkedString) {
+      //handle caps
+      if (brailleChar === charToBraille['cap']) {
+        isCap = true;
+      }
+
+      let;
     }
   }
 };
