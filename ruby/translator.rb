@@ -40,3 +40,28 @@ NUMBERS_TO_BRAILLE = BRAILLE_TO_NUMBERS.invert
 NUMBER_FOLLOWS = '.O.OOO'.freeze
 CAPITAL_FOLLOWS = '.....O'.freeze
 
+def translate_to_braille(text)
+  result = ''
+  number_mode = false
+  text.chars.each do |char|
+    if char.match?(/\d/)
+      unless number_mode
+        result << NUMBER_FOLLOWS
+        number_mode = true
+      end
+      result << NUMBERS_TO_BRAILLE[char]
+    elsif char == ' '
+      result << ENGLISH_TO_BRAILLE[char]
+      number_mode = false
+    else
+
+      result << if char == char.upcase && ENGLISH_TO_BRAILLE[char.downcase]
+                  CAPITAL_FOLLOWS + ENGLISH_TO_BRAILLE[char.downcase]
+                else
+                  ENGLISH_TO_BRAILLE[char]
+                end
+    end
+  end
+  result
+end
+
