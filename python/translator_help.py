@@ -1,3 +1,4 @@
+import sys
 # this file contains all the dictionaries and variables needed for translating between braille and English
 
 # the format for english_to_braille_char and number_to_braille is as follows: 
@@ -57,6 +58,7 @@ def number_to_braille_code(raised_dots: list) -> str:
             raised[dot - 1] = True
         except: 
             print("Out of index when trying to convert list of numbers into braille code")
+            sys.exit(1)
     result_braille = ""
     for i in range(6): 
         if raised[i]: 

@@ -32,12 +32,16 @@ def convert_to_braille(text: str) -> str:
                 result_string += number_follows_braille
                 use_number = True
         # adds in the corresponding braille code of the character based on whether it is a number or an English letter
-        if use_number: 
-            result_string += number_to_braille_code(number_to_braille_char[char])
-        else:
-            if char.isupper(): # if the character is an uppercase english letter then add in braille code for capital follows
-                result_string += capital_follows_braille
-            result_string += number_to_braille_code(english_to_braille_char[char.lower()])
+        try: 
+            if use_number: 
+                result_string += number_to_braille_code(number_to_braille_char[char])
+            else:
+                if char.isupper(): # if the character is an uppercase english letter then add in braille code for capital follows
+                    result_string += capital_follows_braille
+                result_string += number_to_braille_code(english_to_braille_char[char.lower()])
+        except: 
+            print("invalid character detected in text when trying to convert to braille")
+            sys.exit(1)
         
     return result_string 
 
@@ -62,20 +66,29 @@ def convert_to_english(text: str) -> str:
             is_number = False
             is_capital = False 
             result_string += ' '
-        elif braille_code == capital_follows_braille: 
+        elif braille_code == capital_follows_braille: # makes the next character capitalized 
             is_capital = True 
-        elif braille_code == number_follows_braille: 
+        elif braille_code == number_follows_braille: # so that the program knows the next characters are numbers
             is_number = True 
         else: # if the current braille code is either a letter or number
+            
             if is_number: 
-                result_string += braille_to_number_char[braille_code]
+                try: 
+                    result_string += braille_to_number_char[braille_code]
+                except: 
+                    print("invalid braille code detected when trying to do braille to number conversion")
+                    sys.exit(1)
             else: 
                 # if there is a capital follows code before it, capitalize it
-                if is_capital: 
-                    result_string += braille_to_english_char[braille_code].upper()
-                    is_capital = False # to ensure only the current character is capitalized
-                else:
-                    result_string += braille_to_english_char[braille_code]
+                try: 
+                    if is_capital: 
+                        result_string += braille_to_english_char[braille_code].upper()
+                        is_capital = False # to ensure only the current character is capitalized
+                    else:
+                        result_string += braille_to_english_char[braille_code]
+                except: 
+                    print("invalid braille code detected when trying to do braille to English letter conversion")
+                    sys.exit(1)
 
     return result_string
 
