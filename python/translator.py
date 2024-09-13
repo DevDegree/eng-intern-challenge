@@ -1,6 +1,7 @@
 import sys
 
-english_to_braille_conv = {
+#get english to braille dictionary
+english_to_braille_letter_conv = {
     "a": "O.....",
     "b": "O.O...",
     "c": "OO....",
@@ -27,7 +28,10 @@ english_to_braille_conv = {
     "x": "OO..OO",
     "y": "OO.OOO",
     "z": "O..OOO",
+    " ": "......",
+}
 
+english_to_braille_number_conv = {
     "0": ".OOO..",
     "1": "O.....",
     "2": "O.O...",
@@ -38,9 +42,17 @@ english_to_braille_conv = {
     "7": "OOOO..",
     "8": "O.OO..",
     "9": ".OO...",
-
-    " ": "......",
 }
+
+#get braille to english dictionary
+braille_to_english_letter_conv = {}
+braille_to_english_number_conv = {}
+
+for key, value in english_to_braille_letter_conv.items():
+    braille_to_english_letter_conv[value] = key
+
+for key, value in english_to_braille_number_conv.items():
+    braille_to_english_number_conv[value] = key
 
 capitalNext = ".....O"
 numberNext = ".O.O.."
@@ -55,7 +67,42 @@ def isBraille(input):
 #translates to english
 def translateBraille(string):
 
-    return -1
+    englishString = ""
+    charsInString = len(string)
+    print(charsInString)
+    i = 0 #index for translation
+
+    # each group of 6
+    while i < charsInString:
+        #check braille dict for first group
+        group = string[i: i+6]
+
+        #if capital indicator
+        if(group == capitalNext):
+            i += 6
+            group = string[i: i+6]
+            englishString = englishString + (braille_to_english_letter_conv.get(group, '')).upper()
+        #if its a number indicator
+        elif(group == numberNext):
+            i += 6
+            while (i < charsInString): 
+                print(i)
+                group = string[i: i+6]
+
+                if (braille_to_english_letter_conv.get(group, '') == " "):
+                    englishString += " "
+                    break
+
+                englishString += braille_to_english_number_conv.get(group, '')
+                i += 6
+        #just regular lowercase or space
+        else:
+            englishString += braille_to_english_letter_conv.get(group, '')
+
+        #go to next group of characters
+        i += 6
+
+    return englishString
 
 #translates to braille
 def translateEnglish(string):
@@ -65,7 +112,7 @@ def translateEnglish(string):
 def main():
     inputString = sys.argv[1]
     brailleCheck = isBraille(inputString)
-    translatedString = translateBraille() if brailleCheck else translateEnglish()
+    translatedString = translateBraille(inputString) if brailleCheck else translateEnglish(inputString)
     print(translatedString)
     return
 
