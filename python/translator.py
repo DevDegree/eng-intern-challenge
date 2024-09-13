@@ -1,3 +1,5 @@
+import sys
+
 #ETB (english to braille) dictionary with all conversions between english and braille, also including capital follows and number follows
 ETB = {
     "a" : "O.....", "b" : "O.O...", "c" : "OO....", "d" : "OO.O..", "e" : "O..O..", "f" : "OOO...", "g" : "OOOO..", "h" : "O.OO..",
@@ -105,7 +107,7 @@ def isBraille(string):
             return False
     return True
 
-text = input("String: ")
+text = sys.argv
 
 if isBraille(text[0:9]):
     translatedText = brailleToEnglish(text)
@@ -113,4 +115,3 @@ else:
     translatedText = englishToBraille(text)
 
 print(translatedText)
-
