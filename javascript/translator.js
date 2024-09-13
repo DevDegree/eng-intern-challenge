@@ -173,7 +173,18 @@ const brailleToEnglish = (braille) => {
     return result; // output
 }
 
+//Put it all together in a 'main' function 'translate';
+const translate = (input) => {
+    if(isBraille(input)) {
+        return brlToEng(input);
+    } else {
+        return engToBrl(input);
+    }
+}
 
-
-
+if (require.main === module) {
+    const input = process.argv.slice(2).join(' ');  // Get the command-line arguments (Abc 123 xYz)
+    const result = translate(input);  
+    console.log(result);  
+}
 
