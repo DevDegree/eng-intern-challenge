@@ -10,7 +10,6 @@ type modifier string
 
 const (
 	Capital modifier = "capital"
-	Decimal modifier = "decimal"
 	Number  modifier = "number"
 )
 
@@ -137,14 +136,6 @@ func (t *Translator) handleModifier(chunk, splitText string) string {
 			splitText += strings.ToUpper(t.dictionary.Alphabet[chunk])
 		} else {
 			splitText += t.dictionary.Modifiers[string(Capital)] + t.dictionary.Alphabet[chunk]
-		}
-	case Decimal:
-		if val, ok := t.dictionary.Numbers[chunk]; ok {
-			if t.isBraille {
-				splitText += "." + val
-			} else {
-				splitText += t.dictionary.Modifiers[string(Decimal)] + val
-			}
 		}
 	case Number:
 		if val, ok := t.dictionary.Numbers[chunk]; ok {
