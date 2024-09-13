@@ -3,12 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "main": "translator.js",
+  "bin": {
+    "translate": "./translator.js"
+  },
+  "type": "module",
   "scripts": {
     "test": "jest"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "commander": "^12.1.0",
     "jest": "^29.7.0"
   }
 }
