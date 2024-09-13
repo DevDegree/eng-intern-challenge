@@ -45,8 +45,8 @@ def translate_english_to_braille(english_string):
 
 def translate_braille_to_english(braille_string):
     english_string_result = []
-    capitalize_next = False 
-    number_mode = False 
+    is_next_capital = False 
+    in_number_mode = False 
     braille_number_follows = ENGLISH_TO_BRAILLE_SPECIAL_CHARACTERS[NUMBER_FOLLOWS]
     braille_capital_follows = ENGLISH_TO_BRAILLE_SPECIAL_CHARACTERS[CAPITAL_FOLLOWS]
     braille_space_character = ENGLISH_TO_BRAILLE_SPECIAL_CHARACTERS[' ']
@@ -56,36 +56,41 @@ def translate_braille_to_english(braille_string):
         braille_char = braille_string[i:i + BRAILLE_CHARACTER_LENGTH]
 
         if braille_char == braille_number_follows:
-            number_mode = True
+            in_number_mode = True
             i += BRAILLE_CHARACTER_LENGTH
             continue
 
         if braille_char == braille_capital_follows:
-            capitalize_next = True
+            is_next_capital = True
             i += BRAILLE_CHARACTER_LENGTH
             continue
         
         if braille_char == braille_space_character:
             english_string_result.append(' ')
-            number_mode = False
+            in_number_mode = False
             i += BRAILLE_CHARACTER_LENGTH
             continue
 
-        if number_mode:
+        if in_number_mode:
             if braille_char in BRAILLE_TO_ENGLISH_DIGITS:
                 english_string_result.append(BRAILLE_TO_ENGLISH_DIGITS[braille_char])
             else:
                 # If got here, the Braille input is not valid
-                return "Invalid Braille string input."
+                return "Invalid Braille string input. Character is not a number"
         else:
+            # We know that character has to be either a 
             if braille_char in BRAILLE_TO_ENGLISH_ALPHABET:
                 letter = BRAILLE_TO_ENGLISH_ALPHABET[braille_char]
-                if capitalize_next:
+                if is_next_capital:
                     letter = letter.upper()
-                    capitalize_next = False
+                    is_next_capital = False
                 english_string_result.append(letter)
             elif braille_char in BRAILLE_TO_ENGLISH_SPECIAL_CHARACTERS:
                 english_string_result.append(BRAILLE_TO_ENGLISH_SPECIAL_CHARACTERS[braille_char])
+                # need to ensure that a character after special character doesn't get capitalized
+                is_next_capital = False
+            else:
+                return "Invalid Braille string input. Character is not a special character or a letter" 
 
         i += BRAILLE_CHARACTER_LENGTH
 
