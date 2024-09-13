@@ -1,4 +1,3 @@
-
 const brailleLetters = {
     "O.....": "a",
     "O.O...": "b",
@@ -25,8 +24,8 @@ const brailleLetters = {
     ".OOO.O": "w",
     "OO..OO": "x",
     "OO.OOO": "y",
-    "O..OOO": "z"
-}
+    "O..OOO": "z",
+};
 
 const brailleNumbers = {
     "O.....": "1",
@@ -39,7 +38,7 @@ const brailleNumbers = {
     "O.OO..": "8",
     ".OO...": "9",
     ".OOO..": "0"
-}
+};
 
 const brailleSymbols = {
     "..OO.O": ".",
@@ -54,7 +53,7 @@ const brailleSymbols = {
     "O..OO.": ">",
     "O.O..O": "(",
     ".O.OO.": ")",
-}
+};
 
 const brailleSpace = "......";
 const brailleCapitalFollows = ".....O";
@@ -71,21 +70,28 @@ const englishToBraille = (text) => {
             isNumber = false;
             continue;
         }
-
         if (char >= "a" && char <= "z") {
-            brailleText += brailleLetters[`O${char}`];
-            isNumber = false;
+            if (isNumber) {
+                brailleText += brailleNumberFollows;
+                isNumber = false;
+            }
+            brailleText += Object.keys(brailleLetters).find(key => brailleLetters[key] === char);
+        } else if (char >= "A" && char <= "Z") {
+            if (isNumber) {
+                brailleText += brailleNumberFollows;
+                isNumber = false;
+            }
+            brailleText += brailleCapitalFollows + Object.keys(brailleLetters).find(key => brailleLetters[key] === char.toLowerCase());
         } else if (char >= "0" && char <= "9") {
             if (!isNumber) {
                 brailleText += brailleNumberFollows;
                 isNumber = true;
             }
-            brailleText += brailleNumbers[`O${char}`];
+            brailleText += Object.keys(brailleNumbers).find(key => brailleNumbers[key] === char);
         } else {
-            brailleText += brailleSymbols[brailleChar(char)] || "?";
-        }
-    }
-
+            brailleText += brailleSymbols[brailleChar(char)];
+        };
+    };
     return brailleText;
 };
 
@@ -115,25 +121,22 @@ const brailleToEnglish = (braille) => {
     for (let i = 0; i < braille.length; i+= 6) {
         const brailleChar = braille.slice(i, i + 6);
 
-        if (brailleChar === brailleCapitalFollows) {
-            isCapital = true;
-            continue;
-        }
-
-        if (brailleChar === brailleNumberFollows) {
-            isNumber = true;
-            continue;
-        }
-
         if (brailleChar === brailleSpace) {
             englishText += " ";
             isNumber = false;
             continue;
         }
-
+        if (brailleChar === brailleCapitalFollows) {
+            isCapital = true;
+            continue;
+        }
+        if (brailleChar === brailleNumberFollows) {
+            isNumber = true;
+            continue;
+        }
         if (isNumber) {
-            englishText += brailleNumbers[brailleChar]|| "?";
-            isNumber = false;
+            englishText += brailleNumbers[brailleChar];
+            isNumber = true;
         } else {
             if (brailleLetters[brailleChar]) {
                 let char = brailleLetters[brailleChar];
@@ -144,13 +147,11 @@ const brailleToEnglish = (braille) => {
                 englishText += char;
             } else if (brailleSymbols[brailleChar]) {
                 englishText += brailleSymbols[brailleChar];
-            } else {
-                englishText += "?";
-            }
-        }
-    }
+            };
+        };
+    };
     return englishText;
-}
+};
 
 const isBraille = (str) => /^[O.]{6,}$/.test(str);
 
@@ -159,16 +160,8 @@ const translateString = (input) => {
         return brailleToEnglish(input);
     } else {
         return englishToBraille(input);
-    }
+    };
 };
 
-const input = process.argv[2];
-console.log(translateString(input))
-
-// if (!input) {
-//     console.log(translateString(input));
-// } else {
-//     console.error("Please provide a string to translate.");
-// }
-
-// need to fix the number translation, and need to be able to translate without having the string within quotations
+const input = process.argv.slice(2).join(" ");
+console.log(translateString(input));
