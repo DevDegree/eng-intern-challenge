@@ -132,7 +132,7 @@ def translateToEnglish(s) -> str:
             english.append(braille.get(letter))
     return ''.join(english)
 
-def main(input) -> str:
+def main(input):
     if check(input):
         print(translateToBraille(input))
     else:
