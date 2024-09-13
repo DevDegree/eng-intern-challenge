@@ -49,16 +49,13 @@ const brailleToEnglishNum = {
 // Initialize an empty object to store English to Braille mappings
 const englishToBraille = {};
 
-// Loop over each entry in the brailleToEnglish object
+// Loop over each entry in the brailleToEnglish letters object
 Object.entries(brailleToEnglishAlph).forEach(([braille, char]) => {
-	// Handle for uppercase and lowercase letters
-	
-    //Add lowercase letter
+
+// Handle for uppercase letters
     englishToBraille[char] = braille;
     englishToBraille[char.toUpperCase()] = capital + braille;
-    
 });
-
 
 // Handle numbers
 Object.entries(brailleToEnglishNum).forEach(([braille, char]) => {
@@ -69,13 +66,12 @@ Object.entries(brailleToEnglishNum).forEach(([braille, char]) => {
 // Space character mapping
 englishToBraille[" "] = space;
 
-console.log(englishToBraille);
 
 // Check if input is Braille (if input contains only 'O' or '.' characters)
 function isBraille(input) {
 	return /^[O.]+$/.test(input);
 }
-
+// Check if character is number 
 function isNumber(char) {
     return /\d/.test(char);
 }
@@ -85,7 +81,7 @@ function translateEnglishToBraille(input) {
 	let output = "";
     let numMode = false;
 
-	for (let i = 0; i < input.length; i++) {
+	for (let i = 0; i < input.length; i++) {   //handle numbers
 		const char = input[i];
         if (isNumber(char) && !numMode) {
             output += number + englishToBraille[char]
@@ -100,10 +96,6 @@ function translateEnglishToBraille(input) {
 	return output;
 }
 
-input = "Abc 123"
-console.log("English to braille")
-console.log(translateEnglishToBraille(input));
-
 // Translate Braille to English
 function translateBrailleToEnglish(input) {
 	let output = "";
@@ -113,17 +105,15 @@ function translateBrailleToEnglish(input) {
 
 	while (i < input.length) {
 		const currentSymbol = input.slice(i, i + 6); // to account for 6 braille symbols
-		console.log(currentSymbol);
-		if (currentSymbol === capital) {
+		if (currentSymbol === capital) {        //to account for uppercase
 			isCapital = true;
-		} else if (currentSymbol === number) {
+		} else if (currentSymbol === number) { // to account for numbers
 			isNumber = true;
-			console.log("Number detected");
-		} else if (currentSymbol === space) {
-			output += " "; // to account for space
+		} else if (currentSymbol === space) { // to account for space
+			output += " "; 
 			isNumber = false;
-		} else if (brailleToEnglishAlph[currentSymbol]) { //check
-			let char = brailleToEnglishAlph[currentSymbol];
+		} else if (brailleToEnglishAlph[currentSymbol]) { 
+			let char = brailleToEnglishAlph[currentSymbol]; 
 			if (isCapital) {
 				output += char.toUpperCase();
 				isCapital = false;
@@ -140,7 +130,6 @@ function translateBrailleToEnglish(input) {
 }
 
 // Main traslator function
-
 function mainTranslator() {
 	const commandInput = process.argv.slice(2); //  slicing the first two arguments to command line argument
 	const input = commandInput.join(" ");
@@ -159,9 +148,5 @@ function mainTranslator() {
 	console.log(output);
 }
 
-//mainTranslator();
+mainTranslator("Hello world");
 
-input = ".O.OOOOO.O..O.O...";
-// input = "hello world";
-
-console.log(translateBrailleToEnglish(input));
