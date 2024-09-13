@@ -1,5 +1,6 @@
 # This program translates the input to Braille or alphanumeric alphabet.
 
+import sys
 # Variable declaration
 output=""
 nums_lock = False
@@ -77,8 +78,8 @@ braille_specials={
 }
 
 #Prompt
-entered_value = input()
-
+entered_value = sys.argv[1:]
+entered_value = ' '.join(entered_value)
 # Condition if user wants to translate from Braille
 if is_braille(entered_value):
     split = [entered_value[x:x+6] for x in range(0,len(entered_value),6)] # Split the full string into 6-character segments
@@ -100,13 +101,17 @@ if is_braille(entered_value):
                 if value==char:
                     output += key
                 elif char == braille_letters_signs[" "]:
+                    output += " "
                     dec_lock = False
+                    break
         elif nums_lock:
             for key, value in braille_numbers.items():
                 if value==char:
                     output += key
                 elif char == braille_letters_signs[" "]:
+                    output += " "
                     nums_lock = False
+                    break
         else:
             for key, value in braille_letters_signs.items():
                 if value==char:
@@ -116,19 +121,20 @@ if is_braille(entered_value):
 # condition if user wants to translate to Braille
 else:
     for char in entered_value: # loops over each character
-            if char.isdecimal():
-                output += braille_specials["DEC"]
-                output += braille_numbers[char]
-            elif char.isupper():
-                output += braille_specials["CAP"]
-                output += braille_letters_signs[char]
-            elif char.isnumeric():
-                if not nums_lock:
-                    output += braille_specials["NUM"]
-                    nums_lock = True # flag to know the following characters will be numbers
-                output += braille_numbers[char]
-            else :
-                output += braille_letters_signs[char.upper()]
-                if char == " ":
-                    nums_lock = False
+        if char.isnumeric():
+            if not nums_lock:
+                output += braille_specials["NUM"]
+                nums_lock = True # flag to know the following characters will be numbers
+            output += braille_numbers[char]
+        elif char.isdecimal():
+            output += braille_specials["DEC"]
+            output += braille_numbers[char]
+        elif char.isupper():
+            output += braille_specials["CAP"]
+            output += braille_letters_signs[char]
+
+        else :
+            output += braille_letters_signs[char.upper()]
+            if char == " ":
+                nums_lock = False
 print(output)
