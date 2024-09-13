@@ -122,6 +122,6 @@ const englishToBraille = {
   };
   
 
-  const input = process.argv[2];
+  const input = process.argv.slice(2).join(' ');
   
   console.log(translateBrailleOrEnglish(input));
