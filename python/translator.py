@@ -1,6 +1,5 @@
 import sys
 
-#note that this code would be better with error checking, ex. checking number of characters in braille to ensure correct output
 #get english to braille dictionary
 english_to_braille_letter_conv = {
     "a": "O.....",
@@ -56,7 +55,7 @@ for key, value in english_to_braille_number_conv.items():
     braille_to_english_number_conv[value] = key
 
 capitalNext = ".....O"
-numberNext = ".O.O.."
+numberNext = ".O.OOO"
 
 # check whether it is braille using bool
 def isBraille(input):
@@ -70,8 +69,11 @@ def translateBraille(string):
 
     englishString = ""
     charsInString = len(string)
-    print(charsInString)
     i = 0 #index for translation
+
+    #error checking
+    if(charsInString%6 != 0):
+        return "error: braille string is not written correctly"
 
     # each group of 6
     while i < charsInString:
@@ -87,7 +89,6 @@ def translateBraille(string):
         elif(group == numberNext):
             i += 6
             while (i < charsInString): 
-                print(i)
                 group = string[i: i+6]
 
                 if (braille_to_english_letter_conv.get(group, '') == " "):
@@ -96,7 +97,7 @@ def translateBraille(string):
 
                 englishString += braille_to_english_number_conv.get(group, '')
                 i += 6
-        #just regular lowercase or space
+        #just regular lowercase or whitespace
         else:
             englishString += braille_to_english_letter_conv.get(group, '')
 
@@ -107,11 +108,30 @@ def translateBraille(string):
 
 #translates to braille
 def translateEnglish(string):
+    brailleString = ""
+    isNumeric = False
 
-    return -1
+    for char in string:
+        #if char is a capital letter, need to add capital next symbol
+        if (char.isupper()):
+            brailleString += (capitalNext + english_to_braille_letter_conv.get(char.lower(), ''))
+        #if char is a number, need to add number next symbol
+        elif (char.isnumeric()):
+            if(isNumeric is False):
+                brailleString += numberNext
+            isNumeric = True #so that number next indicator is only occuring once with every collection of numbers
+            brailleString += english_to_braille_number_conv.get(char, '')
+        #if char is lowercase letter or whitespace
+        else:
+            isNumeric = False #since this would be where a whitespace would enter
+            brailleString += english_to_braille_letter_conv.get(char, '')
+
+
+    return brailleString
+
 
 def main():
-    inputString = sys.argv[1]
+    inputString = ' '.join(sys.argv[1:]) #to account for whitespaces in string provided
     brailleCheck = isBraille(inputString)
     translatedString = translateBraille(inputString) if brailleCheck else translateEnglish(inputString)
     print(translatedString)
