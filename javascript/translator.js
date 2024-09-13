@@ -1,4 +1,4 @@
-const englishToBraille = {
+const englishToBrailleDictionary = {
   a: "0.....",
   b: "0.0...",
   c: "00....",
@@ -27,7 +27,7 @@ const englishToBraille = {
   z: "0..000",
 };
 
-const numbersToBraille = {
+const numbersToBrailleDictionary = {
   1: "0.....",
   2: "0.0...",
   3: "00....",
@@ -39,3 +39,41 @@ const numbersToBraille = {
   9: ".00...",
   0: ".000..",
 };
+
+const capitalizeNext = ".....0";
+
+const numberNext = ".0000.";
+
+const spaceNext = "......";
+
+// reverse objects key and values to convert braille to alphabets & numbers
+
+const brailleToEnglishDictionary = Object.entries(
+  englishToBrailleDictionary
+).reduce((accumulator, [key, value]) => {
+  accumulator[value] = key;
+  return accumulator;
+}, {});
+console.log(brailleToEnglishDictionary);
+
+const brailleToNumbersDictionary = Object.entries(
+  numbersToBrailleDictionary
+).reduce((accumulator, [key, value]) => {
+  accumulator[value] = key;
+  return accumulator;
+}, {});
+console.log(brailleToNumbersDictionary);
+
+// translator function to check input language and convert it
+function translator(input) {
+  if (input.includes(".") && input.includes("0")) {
+    console.log("Language is Braille", input);
+  } else {
+    console.log("Language is English", input);
+  }
+}
+
+translator("Hello World 123");
+translator(".....0 0..... ");
+translator("123");
+translator(" ");
