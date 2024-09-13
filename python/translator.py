@@ -41,9 +41,45 @@ def convert_to_braille(text: str) -> str:
         
     return result_string 
 
+# helper function for slicing the text in braille code into braille characters, 6 per each
+def get_braille_codes(text: str) -> list: 
+    start_index = 0
+    list_of_braille_codes = []
+    while start_index + 6 <= len(text): 
+        list_of_braille_codes.append(text[start_index: start_index + 6])
+        start_index += 6
+    return list_of_braille_codes
+
 # if it is in braille, convert the text to english 
 def convert_to_english(text: str) -> str: 
-    return text 
+    result_string = ""
+    is_number = False # keeps track of if the next characters until the space would be numbers 
+    is_capital = False # keeps track of if the next character is capitalized 
+    list_of_braille_codes = get_braille_codes(text)
+    
+    for braille_code in list_of_braille_codes:
+        if braille_code == space_braille: 
+            is_number = False
+            is_capital = False 
+            result_string += ' '
+        elif braille_code == capital_follows_braille: 
+            is_capital = True 
+        elif braille_code == number_follows_braille: 
+            is_number = True 
+        else: # if the current braille code is either a letter or number
+            if is_number: 
+                result_string += braille_to_number_char[braille_code]
+            else: 
+                # if there is a capital follows code before it, capitalize it
+                if is_capital: 
+                    result_string += braille_to_english_char[braille_code].upper()
+                    is_capital = False # to ensure only the current character is capitalized
+                else:
+                    result_string += braille_to_english_char[braille_code]
+
+    return result_string
+
+
 
 def main():
     text = get_str_from_args()
