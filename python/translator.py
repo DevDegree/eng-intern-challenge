@@ -1,3 +1,4 @@
+
 # This is my first time ever coding in python, I've used Javascript before so I should really be working in Javascript
 # However this is as good as anytime to learn python so here I am
 
