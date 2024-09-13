@@ -34,7 +34,7 @@ var brailleToAlpha = map[string]string{
 	"OO..OO": "x",
 	"OO.OOO": "y",
 	"O..OOO": "z",
-	"......": "space",
+	"......": " ",
 	".....O": "capital",
 	".O.OOO": "number",
 	".O...O": "decimal",
@@ -80,7 +80,7 @@ func translateToBraille(input string) string {
 			}
 			output += numberToBraille[string(c)]
 		} else {
-			output += alphaToBraille["space"]
+			output += alphaToBraille[" "]
 			numberMode = false
 		}
 	}
@@ -120,7 +120,7 @@ func translateToAlpha(input string) string {
 			englishOutput += letter
 		}
 
-		if brailleChar == alphaToBraille["space"] {
+		if brailleChar == alphaToBraille[" "] {
 			numberMode = false
 		}
 	}
