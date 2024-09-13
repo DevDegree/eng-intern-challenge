@@ -169,6 +169,21 @@ def test_harness():
         ("42", ".O.OOOOO.O..O.O..."),
         (".....OO.....O.O...OO...........O.OOOO.....O.O...OO....", "Abc 123"),
         # my test cases below
+        ("Python 3", CAPITAL + eng_to_braille["p"] + eng_to_braille["y"] + \
+         eng_to_braille["t"] + eng_to_braille["h"] + eng_to_braille["o"] + \
+            eng_to_braille["n"] + SPACE + NUMBER + nums_to_braille["3"]),
+
+        ("Numb3R5 543 999 0 1", CAPITAL + eng_to_braille["n"] + eng_to_braille["u"] + \
+        eng_to_braille["m"] + eng_to_braille["b"] + NUMBER + nums_to_braille["3"] + CAPITAL + \
+        eng_to_braille["r"] + nums_to_braille["5"] + SPACE + NUMBER +  nums_to_braille["5"] +\
+        nums_to_braille["4"] + nums_to_braille["3"] + SPACE + NUMBER +  nums_to_braille["9"] +\
+        nums_to_braille["9"] + nums_to_braille["9"] + SPACE + NUMBER + nums_to_braille["0"] +\
+        SPACE + NUMBER + nums_to_braille["1"]),
+
+        ("AAA3aa2A1 2", CAPITAL + eng_to_braille["a"] + CAPITAL + eng_to_braille["a"] +\
+        CAPITAL + eng_to_braille["a"] + NUMBER + nums_to_braille["3"] + eng_to_braille["a"] +\
+        eng_to_braille["a"] + nums_to_braille["2"] + CAPITAL + eng_to_braille["a"] + \
+        nums_to_braille["1"] + SPACE + NUMBER + nums_to_braille["2"])
     ]
 
     for case in cases:
