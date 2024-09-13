@@ -23,7 +23,7 @@
 
 import sys
 
-TESTING = True
+TESTING = False
 
 # define constants for braille -> english and english -> braille
 # also need states for the following: capital follows, decimal follows, number follows
