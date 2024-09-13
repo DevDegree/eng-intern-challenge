@@ -7,20 +7,21 @@ def eng_to_braille(phrase, eng_braille_dict):
     number_next = ".O.OOO"
     number_flag = False
     for c in phrase:
-        if c == " ":
+        if c == " ":  # Set number_flag to false if reading a space character
             number_flag = False
             s += f"{eng_braille_dict[c]}"
         elif number_flag == True:
-            # Lookup dict with the right letter, by getting the character representation of a digit 1-9 + offset 64, and append
             # If the character is '0', then simply lookup dict with 'J'
+            # Otherwise, lookup dict with the right letter, by getting the character representation of a digit 1-9 + offset 64, and append
             s += f"{eng_braille_dict['J']}" if c == '0' else f"{eng_braille_dict[chr(int(c) + 64)]}"
-        elif c.isnumeric() and number_flag == False:
+        elif c.isnumeric() and number_flag == False:  # Set number_flag to true, append number_next, and then append a digit the same way as above
             number_flag = True
             s += f"{number_next}"
             s += f"{eng_braille_dict['J']}" if c == '0' else f"{eng_braille_dict[chr(int(c) + 64)]}"
         elif c.isupper():
             s += f"{capital_next}{eng_braille_dict[c]}"
         else:
+            # c is a lower-case char in this branch, so take the upper-case form and use it for a lookup
             s += f"{eng_braille_dict[c.upper()]}"
     print(s)
 
@@ -32,13 +33,13 @@ def braille_to_eng(phrase, braille_eng_dict):
     number_flag = False
     capital_flag = False
     for i in range(0, len(phrase), 6):
-        c = phrase[i : i+6]
-        if c == "......":
+        c = phrase[i : i+6]  # Read 6 chars at a time, since a Braille symbol is 6 chars long
+        if c == "......":  # Set number_flag to false when reading a space character in Braille
             number_flag = False
             s += f"{braille_eng_dict[c]}"
         elif number_flag == True:
-            # Subtract offset 64 from the int representation of a letter to get a digit and append.
             # If the letter in Braille corresponds to 'J', then simply append '0'
+            # Otherwise, subtract offset 64 from the int representation of a letter to get a digit and append
             s += "0" if c == ".OOO.." else f"{(ord(braille_eng_dict[c]) - 64)}"
         elif c == number_next:
             number_flag = True
@@ -48,6 +49,8 @@ def braille_to_eng(phrase, braille_eng_dict):
             capital_flag = False
             s += f"{braille_eng_dict[c]}"
         else:
+            # Lookup a character using the current Braille symbol, and append the lower-case form
+            # since no other condition (capital, number) has been met
             s += f"{braille_eng_dict[c]}".lower()
     print(s)
 
