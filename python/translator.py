@@ -2,23 +2,17 @@ import sys
 
 
 def main(input_string):
-    # Check the set to see if O and . are the only characters in the input
+    braille_dict = get_braille_dict()
+
+    # Check if the input string is in English or Braille by checking for number of characters in sets
     if set(input_string) <= set("O."):
-        translation_type = "braille_to_english"
+        print(translate_to_english(input_string, braille_dict))
     else:
-        translation_type = "english_to_braille"
-
-    if translation_type == "braille_to_english":
-        result = translate_to_english(input_string)
-    else:
-        result = translate_to_braille(input_string)
-
-    print(result)
+        print(translate_to_braille(input_string, braille_dict))
 
 
-def get_braille_to_english():
-    # Define the braille dictionary so I don't have to create two separate dictionaries and can inverse mappings
-    braille_to_english = {
+def get_braille_dict():
+    braille_dict = {
         "a": "O.....",
         "b": "O.O...",
         "c": "OO....",
@@ -50,88 +44,65 @@ def get_braille_to_english():
         "space": "......",
     }
 
-    return braille_to_english
+    return braille_dict
 
 
-def translate_to_braille(english_string):
-
-    braille_to_english = get_braille_to_english()
-
-    result = ""
+def translate_to_braille(english_string, braille_dict):
+    result = []
     is_digit = False
-
     for char in english_string:
         if char.isupper():
-            result += braille_to_english["capital follows"]
+            result.append(braille_dict["capital follows"])
             char = char.lower()
 
         if char.isdigit():
             if not is_digit:
-                result += braille_to_english["number follows"]
+                result.append(braille_dict["number follows"])
                 is_digit = True
 
-            # Map numbers 1-9 to 'a'-'i' and 0 to 'j', special way to use ASCII values
-            # so I don't have to create a new dictionary mapping the numbers to braille
+            # Map numbers to Braille using letters (1-9 -> a-i, 0 -> j) to use the ASCII values and some math
+            # to map the digits without using a separate dictionary
             corresponding_letter = chr(ord("a") + int(char) - 1) if char != "0" else "j"
-            result += braille_to_english[corresponding_letter]
-
+            result.append(braille_dict[corresponding_letter])
         elif char == " ":
-            result += braille_to_english["space"]
+            result.append(braille_dict["space"])
             is_digit = False
         else:
-            result += braille_to_english[char]
+            result.append(braille_dict.get(char, "?"))
             is_digit = False
+    return "".join(result)
 
-    return result
 
-
-def translate_to_english(braille_string):
-    braille_dict_letters = get_braille_to_english()
-
-    english_to_braille = {v: k for k, v in braille_dict_letters.items()}
-
-    result = ""
+def translate_to_english(braille_string, braille_dict):
+    # Reverse the dictionary to get the English character for the Braille representation
+    english_dict = {v: k for k, v in braille_dict.items()}
+    result = []
     i = 0
-    capital_mode = False
-    number_mode = False
+    capital_mode = is_digit = False
 
     while i < len(braille_string):
-        current_symbol = braille_string[i : i + 6]
-
-        if current_symbol == braille_dict_letters["capital follows"]:
+        symbol = braille_string[i : i + 6]
+        if symbol == braille_dict["capital follows"]:
             capital_mode = True
-            i += 6
-            continue
-
-        if current_symbol == braille_dict_letters["number follows"]:
-            number_mode = True
-            i += 6
-            continue
-
-        if current_symbol == braille_dict_letters["space"]:
-            result += " "
-            number_mode = False
-            i += 6
-            continue
-
-        if number_mode:
-            # Convert Braille letter (a-j) to digit (1-9, 0) reverse of the mapping in translate_to_braille
-            number_char = english_to_braille[current_symbol]
-            digit = str(ord(number_char) - ord("a") + 1) if number_char != "j" else "0"
-            result += digit
+        elif symbol == braille_dict["number follows"]:
+            is_digit = True
+        elif symbol == braille_dict["space"]:
+            result.append(" ")
+            is_digit = False
+        elif is_digit:
+            letter = english_dict.get(symbol, "?")
+            digit = str(ord(letter) - ord("a") + 1) if letter != "j" else "0"
+            result.append(digit)
         else:
-            if current_symbol in english_to_braille:
-                translated_char = english_to_braille[current_symbol]
-                result += translated_char.upper() if capital_mode else translated_char
-                capital_mode = False
-            else:
-                result += "?"  # Handle unexpected Braille symbols for error checking
-
+            letter = english_dict.get(symbol, "?")
+            result.append(letter.upper() if capital_mode else letter)
+            capital_mode = False
         i += 6
 
-    return result
+    return "".join(result)
 
 
+# This is the main entry point for the script to execute words to translate
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         input_string = " ".join(sys.argv[1:])
@@ -140,3 +111,5 @@ if __name__ == "__main__":
         print(
             "Please provide an input string. Example: python translator.py 'Hello World'"
         )
+
+""
