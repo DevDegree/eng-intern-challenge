@@ -1,7 +1,7 @@
 import sys
 
 class BrailleTranslator:
-    # Braille alphabet and numbers mapping
+    # Braille alphabet and numbers mapping including punctuation and special symbols
     BRAILLE_ALPHABET = {
         'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
         'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..',
@@ -11,7 +11,10 @@ class BrailleTranslator:
         'z': 'O..OOO', ' ': '......',
         'capital': '.....O', 'number': '.O.OOO',
         '0': '.OOOO.', '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..',
-        '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...'
+        '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...',
+        '.': '......', ',': '..O...', '?': '..OO.O', '!': '..OOOO', ';': '..O.O.',
+        ':': '..O.OO', '-': '....O.', '/': '.O.O..', '<': '....OO', '>': '...O.O',
+        '(': '...OO.', ')': '...OOO', 
     }
 
     # Reverse mapping for Braille to English translation
