@@ -100,13 +100,13 @@ def english_to_braille(*texts) -> str:
 
     for char in combined_text:
         if char == " ":
-            result.append(braille_dict_letters[" "])  # Append space Braille
+            result.append(braille_dict_letters[" "])
             number_mode = False  # Reset number mode when encountering a space
         elif char.isdigit():
             if not number_mode:
                 result.append(".O.OOO")  # Start number mode if not already in number mode
                 number_mode = True
-            result.append(braille_dict_numbers.get(char, "?"))  # Append Braille for the number
+            result.append(braille_dict_numbers.get(char, "?"))
         elif char.isalpha():
             if number_mode:
                 result.append(braille_dict_letters[" "])  # Add space Braille to switch from numbers to letters
