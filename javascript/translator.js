@@ -38,6 +38,7 @@ const brailleToEnglish = (text) => {
         let char = "";
 
         if (brailleToAlphabet[braille] === ' ') {
+            // no more numbers if space
             isNum = false;
         }
 
@@ -71,6 +72,7 @@ const englishToBraille = (text) => {
 
     for (const char of text) {
         let brailleChars = "";
+        // check if char is a number
         if (!isNaN(parseInt(char))) {
             if (isNum) {
                 brailleChars = numToBraille[char];
