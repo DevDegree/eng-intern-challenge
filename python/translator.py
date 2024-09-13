@@ -35,18 +35,18 @@ braille_dict = {
     "7": "OOOO..",
     "8": "O.OO..",
     "9": ".OO...",
-    #".": "..OO.O",
-    #",": "..O...",
-    #"?": "..O.OO",
-    #"!": "..OOO.",
-    #":": "..OO..",
-    #";": "..O.O.",
-    #"-": "....OO",
-    #"/": ".O..O.",
-    #"<": ".OO..O",
-    #">": "O..OO.",
-    #"(": "O.O..O",
-    #")": ".O.OO.",
+    ".": "..OO.O",
+    ",": "..O...",
+    "?": "..O.OO",
+    "!": "..OOO.",
+    ":": "..OO..",
+    ";": "..O.O.",
+    "-": "....OO",
+    "/": ".O..O.",
+    "<": ".OO..O",
+    ">": "O..OO.",
+    "(": "O.O..O",
+    ")": ".O.OO.",
     " ": "......",
 }
 
@@ -77,18 +77,18 @@ english_dict = {
     "OO..OO": "x",
     "OO.OOO": "y",
     "O..OOO": "z",
-    #"..OO.O": ".",
-    #"..O...": ",",
-    #"..O.OO": "?",
-    #"..OOO.": "!",
-    #"..OO..": ":",
-    #"..O.O.": ";",
-    #"....OO": "-",
-    #".O..O.": "/",
-    #".OO..O": "<",
-    #"O..OO.": ">",
-    #"O.O..O": "(",
-    #".O.OO.": ")",
+    "..OO.O": ".",
+    "..O...": ",",
+    "..O.OO": "?",
+    "..OOO.": "!",
+    "..OO..": ":",
+    "..O.O.": ";",
+    "....OO": "-",
+    ".O..O.": "/",
+    ".OO..O": "<",
+    "O..OO.": ">",
+    "O.O..O": "(",
+    ".O.OO.": ")",
     "......": " "
 }
 
@@ -101,11 +101,14 @@ def english_to_braille(english):
     braille_output = ""
     is_number = False
     for char in english:
-        if char.isdigit(): #numerical characters
+        if char.isdigit() or char == '>': #numerical characters and '>'
             if not is_number:
                 braille_output += number_follows
                 is_number = True
-            braille_output += braille_dict[char]
+            if char == '>':
+                braille_output += braille_dict[char]
+            else:
+                braille_output += braille_dict[char]
         else:
             if is_number:
                 is_number = False
@@ -120,7 +123,7 @@ def english_to_braille(english):
     return braille_output
 
 def braille_to_english(braille):
-    print(f"Input Braille: {braille}")
+    # print(f"Input Braille: {braille}")
     english_output = ""
     i = 0
     is_number = False
@@ -144,28 +147,27 @@ def braille_to_english(braille):
             char = english_dict[symbol]
             #print(f"Translated to: {char}")
             if is_number:
-                if char in "abcdefghij":
+                if char in "abcdefghij>":
                     if char == 'j':
                         char = '0'
+                    elif char == '>':
+                        char = '>'
                     else:
                         char = str(ord(char) - ord('a') + 1)
-                    #print(f"In number mode, converted to: {char}")
                 elif char == " ":
                     is_number = False
-                    #print("Exiting number mode, space")
                 else:
                     is_number = False
-                    #print("Exiting number mode, non-number character")
             elif capitalize_next:
                 char = char.upper()
                 capitalize_next = False
-                print(f"Capitalized: {char}")
+                # print(f"Capitalized: {char}")
             
             english_output += char
         
         i += 6
     
-    print(f"Final output: {english_output}")
+    #print(f"Final output: {english_output}")
     return english_output
 
 def detect_translation_type(text):
