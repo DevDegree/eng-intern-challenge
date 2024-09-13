@@ -6,32 +6,42 @@
 # braille translator
 
 # notes:
-# step 1: assume that the given input is braille.
-# read from input 6 characters at a time. if a non-braille character is found
-# or the input runs out before reading 6 characters, then we can confirm that
-# the input is actually english.
+# step 1: determine whether the input is braille.
+# it's braille if the length is divisible by 6 and contains only Os and .s
+# edge case: english input that only contains Os. then we know it's english
+# since no braille character contains only Os.
 
-# if it's determined that the input is english, restart the process, this time
-# knowing that it's an english character. 
-
-# special notes: the letter o has the same braille symbol as >.
-# since instructions were not given to handle this case, i'll assume that
-# the symbol in a numerical context is a >, otherwise it's an O.
-
-# it's possible that an english test case contains only O's and .'s. that's why
-# my method of verifying the validity of each braille character will properly
-# determine whether it's braille or english.
+# step 2: use the appropriate translation method, and print the output.
 
 # also note: in python, the first command line arg (index 0) is always the 
 # name of the file. simply parse from index 1 onwards.
 
+# in the instructions, it says that the braille alphabet used will contain 
+# letters a-z and nums 0-9, with caps, and spaces. 
+# I will assume that this means that for both english and braille input,
+# only these characters will be represented, i.e english input won't contain symbols.
+
 import sys
+
+TESTING = True
+
+# define constants for braille -> english and english -> braille
+# also need states for the following: capital follows, decimal follows, number follows
 
 def braille_translate(braille):
     pass
 
 def english_translate(text):
     pass
+
+# determines whether it's braille or not.
+def is_braille(input):
+    l = len(input)
+    os = input.count("O")
+    dots = input.count(".")
+    # checking according to the conditions at the top of the file
+    if (l % 6) * 6 == l and os + dots == l and dots > 0:
+        return True
 
 # wrapper function that returns the output to the main execution.
 # allows for testing using a test harness
@@ -42,9 +52,19 @@ def return_output(input):
 def test_harness():
     cases = [
         # start with given cases
-
+        ("Hello World", ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."),
+        ("42", ".O.OOOOO.O..O.O..."),
+        (".....OO.....O.O...OO...........O.OOOO.....O.O...OO....", "Abc 123"),
+        # my test cases below
     ]
+
+    for case in cases:
+        assert(return_output(case[1]) == case[2])
+    
+    print("testing mode: assertions passed.")
 
 if __name__ == "__main__":
     # main execution
-    pass
+    if TESTING:
+        test_harness()
+    
