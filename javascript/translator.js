@@ -149,37 +149,29 @@ const brailleToEnglish = (braille) => {
             }
         }
 
+        // if it is still capitalizing
+        if (isCapital && translated) {
+            translated = translated.toUpperCase();
+            isCapital = false; 
+        }
 
+        // if it isnt translated it must be a special character
+        if (!translated) {
+            translated = flippedBrailleSpecial[symbol];
+        }
+
+        // For undefined entries 
+        if (!translated) {
+            console.error(`Unrecognized Braille symbol: '${symbol}'`);
+            continue;
+        }
+
+        result += translated; //When the dust settles append the translated character!
         
     }
+
+    return result; // output
 }
-
-
-flip(engToBrailleChars);
-console.log(brailleToEngChars)
-
-// Test isBraille
-// console.log(isBraille("O....."));      // should be true 'a' 
-// console.log(isBraille("OO.O.."));      // true 'd'
-// console.log(isBraille("O.OO.. "));     // f 'space 
-// console.log(isBraille("O.....1"));     // f there is a 1
-// console.log(isBraille("abc.OOO"));     // f 'abc'
-// console.log(isBraille("O.....X"));     // f 'X'
-// console.log(isBraille(".....O.O...OOO.OOO"));  // t
-// console.log(isBraille("O..... O...."));        // f 'space in middle'
-
-// Test engToBrl function
-// console.log(engToBrl("hello")); 
-// console.log(engToBrl("HELLO")); 
-// console.log(engToBrl("Hello World")); 
-// console.log(engToBrl("abc 123"));
-// console.log(engToBrl("Good Morning!"));
-// O.OO..O..O..O.O.O.O.O.O.O..OO.
-// .....OO.OO.......OO..O.......OO.O.O......OO.O.O......OO..OO.
-// .....OO.OO..O..O..O.O.O.O.O.O.O..OO............O.OOO.OO..OO.O.OOO.O.O.O.OO.O..
-// O.....O.O...OO...........O.OOOO.....O.O...OO....
-// .....OOOOO..O..OO.O..OO.OO.O.............OOO..O.O..OO.O.OOO.OO.OO..OO...OO.OO.OOOO..undefined
-
 
 
 
