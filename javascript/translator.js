@@ -1,5 +1,4 @@
 //create map for standard char to braille representation
-
 const charToBraille = {
   a: 'O.....',
   b: 'O.O...',
@@ -27,7 +26,6 @@ const charToBraille = {
   x: 'OO..OO',
   y: 'OO.OOO',
   z: 'O..OOO',
-
   cap: '.....O',
   dec: '.O...O',
   num: '.O.OOO',
@@ -70,6 +68,8 @@ let brailleToNum = Object.fromEntries(
 console.log(brailleToChar);
 console.log(brailleToNum);
 
+let inputString = process.argv.slice(2);
+
 const translate = (str) => {
   let isBraille = undefined;
   let result = [];
@@ -94,7 +94,7 @@ const translate = (str) => {
       }
       //handle numbers
       if (numbers.includes(char)) {
-        result.push(charToBraille[num] + charToBraille[char]);
+        result.push(charToBraille[num] + numToBraille[char]);
         prevCharNum = true;
       }
       //handle decimal
@@ -130,11 +130,34 @@ const translate = (str) => {
 
     for (let brailleChar of chunkedString) {
       //handle caps
-      if (brailleChar === charToBraille['cap']) {
-        isCap = true;
+
+      if (brailleChar === charToBraille['num']) {
+        isNum = true;
+        continue;
       }
 
-      let;
+      if (isNum) {
+        result.push(brailleToNum[brailleChar]);
+        isNum = false;
+        continue;
+      }
+
+      if (brailleChar === charToBraille['cap']) {
+        isCap = true;
+        continue;
+      }
+
+      let char = brailleToChar[brailleChar];
+      if (isCap) {
+        char = char.toUpperCase();
+        isCap = false;
+      }
+
+      result.push(char);
     }
   }
+  console.log(result.join(''));
+  return result.join('');
 };
+
+console.log(translate(inputString));
