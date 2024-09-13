@@ -108,12 +108,19 @@ def isBraille(string):
     return True
 
 def main():
-    text = sys.argv[1:]
+    text = ""
+    for i in range(1, len(sys.argv)):
+        text += sys.argv[i]
+        text += " "
+    
+    text = text.strip(" ")
 
-    if isBraille(text[0:9]):
+    if isBraille(text):
         translatedText = brailleToEnglish(text)
     else:
         translatedText = englishToBraille(text)
+
+    print(translatedText)
 
 if __name__ == "__main__":
     main()
