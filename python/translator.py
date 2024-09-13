@@ -91,7 +91,6 @@ def translate_braille_to_english(braille_string):
 
     return ''.join(english_string_result)
 
-import re
 
 def main():
     if len(sys.argv) < 2:
