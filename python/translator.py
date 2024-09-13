@@ -24,10 +24,10 @@ def english_to_braille(english_string, braille_map):
                 result += braille_map["NUMBER"]
             is_number = True
 
-        if char == '.' and is_number:
-            result += braille_map["DECIMAL"]
-            is_number = True # Continue number mode after a decimal point
-            continue
+        # if char == '.' and is_number:
+        #     result += braille_map["DECIMAL"]
+        #     is_number = True # Continue number mode after a decimal point
+        #     continue
 
         if char == ' ':
             char = "SPACE"
@@ -57,10 +57,10 @@ def braille_to_english(braille_string, braille_map, reverse_braille_map):
             is_number = False  # Reset number state after space
             continue
 
-        if is_number and braille_char==braille_map["DECIMAL"]:
-            result += "."
-            is_number = True
-            continue
+        # if is_number and braille_char==braille_map["DECIMAL"]:
+        #     result += "."
+        #     is_number = True
+        #     continue
 
         # Normal Braille characters
         if is_number:
@@ -80,7 +80,7 @@ def main():
     reverse_braille_map = load_yaml_file('braille_map.yaml')['braille_to_eng']
 
     # Read the input from the command line arguments
-    input_string = sys.argv[1]
+    input_string = ' '.join(sys.argv[1:]) if len(sys.argv) > 1 else ''
 
     # Determine input type and translate accordingly
     if find_input_type(input_string) == 'english':
