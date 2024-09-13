@@ -8,7 +8,8 @@ from utils.constants import (
     BRAILLE_TO_ENGLISH_DIGITS, 
     BRAILLE_TO_ENGLISH_SPECIAL_CHARACTERS,
     CAPITAL_FOLLOWS,
-    NUMBER_FOLLOWS
+    NUMBER_FOLLOWS,
+    BRAILLE_CHARACTER_LENGTH
 )
 from utils.helpers import does_have_unsupported_english_characters, is_braille
 
@@ -52,22 +53,22 @@ def translate_braille_to_english(braille_string):
 
     i = 0
     while i < len(braille_string):
-        braille_char = braille_string[i:i + 6]
+        braille_char = braille_string[i:i + BRAILLE_CHARACTER_LENGTH]
 
         if braille_char == braille_number_follows:
             number_mode = True
-            i += 6
+            i += BRAILLE_CHARACTER_LENGTH
             continue
 
         if braille_char == braille_capital_follows:
             capitalize_next = True
-            i += 6
+            i += BRAILLE_CHARACTER_LENGTH
             continue
         
         if braille_char == braille_space_character:
             english_string_result.append(' ')
             number_mode = False
-            i += 6
+            i += BRAILLE_CHARACTER_LENGTH
             continue
 
         if number_mode:
@@ -86,7 +87,7 @@ def translate_braille_to_english(braille_string):
             elif braille_char in BRAILLE_TO_ENGLISH_SPECIAL_CHARACTERS:
                 english_string_result.append(BRAILLE_TO_ENGLISH_SPECIAL_CHARACTERS[braille_char])
 
-        i += 6 
+        i += BRAILLE_CHARACTER_LENGTH
 
     return ''.join(english_string_result)
 
@@ -102,7 +103,7 @@ def main():
     input_string = ' '.join(sys.argv[1:])
 
     if is_braille(input_string):
-        if (len(input_string) % 6 != 0):
+        if (len(input_string) % BRAILLE_CHARACTER_LENGTH != 0):
             print("Incorrect input. Passed Braille string is malformed, incorrect number of characters")
             return
 
