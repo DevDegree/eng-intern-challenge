@@ -109,7 +109,6 @@ Returns:
 def convert_english_to_braille(inp_text: str):
     result = ""
     num_lock = False
-    dec = False
     for char in inp_text:
         mp_char = char.lower()
         original_char = char
@@ -128,7 +127,6 @@ def convert_english_to_braille(inp_text: str):
         else:
             if mp_char == " ":
                 num_lock = False
-                dec = False
             elif mp_char == "." and num_lock:
                 curr_braille += english_to_braille_specialmp["DEC"]
             curr_braille += english_to_braille_symblmp[mp_char]
