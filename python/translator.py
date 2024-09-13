@@ -32,11 +32,9 @@ braille_dict_letters = {
    "y": "OO.OOO",
    "z": "O..OOO",
 
-
    # Capital letter prefix
    "capital": ".....O",
 }
-
 
 braille_dict_numbers = {
    "1": "O.....",
@@ -98,9 +96,6 @@ def braille_to_English(text) -> str:
 
 
    return ''.join(result)
-
-
-
 
 def english_to_braille(*texts) -> str:
    # Combine all input strings with a single space between them
