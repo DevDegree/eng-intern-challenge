@@ -1,6 +1,8 @@
 # dieter whittingham
 # sep 12 2024
 
+# email: whittinghamdieter@gmail.com
+
 # braille translator
 
 # notes:
