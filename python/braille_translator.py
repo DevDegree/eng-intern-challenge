@@ -16,6 +16,7 @@ english_to_braille = {
 }
 
 class BrailleTranslator:
+    """A translator class for converting between English and Braille"""
     def __init__(self):
         self.english_to_braille_dict = english_to_braille
         self.braille_to_letter = {v: k for k, v in english_to_braille.items() if k.isalpha()}
@@ -24,7 +25,14 @@ class BrailleTranslator:
         self.number_sign = self.english_to_braille_dict['NUMBER']
         self.space_sign = self.english_to_braille_dict[' ']
 
-    def translate_to_braille(self, english_text):
+    def translate_to_braille(self, english_text: str) -> str:
+        """
+        translates English text to Braille
+        args:
+            english_text (str): The English text to translate
+        returns:
+            str: The translated Braille text
+        """
         braille_output = []
         number_mode = False
         for c in english_text:
@@ -49,7 +57,14 @@ class BrailleTranslator:
                     braille_output.append(braille_char)
         return ''.join(braille_output)
 
-    def translate_to_english(self, braille_text):
+    def translate_to_english(self, braille_text: str) -> str:
+        """
+        translates Braille text to English.
+        args:
+            braille_text (str): The Braille text to translate.
+        returns:
+            str: The translated English text.
+        """
         english_output = []
         index = 0
         capital_mode = False
