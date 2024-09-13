@@ -139,7 +139,12 @@ class Translator:
   
 
 def main():
-    input_string = " ".join(sys.argv[1:])
+    
+    if len(sys.argv < 2):
+        print('Please provide a string to translate')
+    else:
+        input_string = " ".join(sys.argv[1:])
+
     translator = Translator(input_string)
     if translator.is_braille():
         result = translator.transalte_braille_to_english()
