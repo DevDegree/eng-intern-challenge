@@ -43,12 +43,28 @@ NUMBER_TO_BRAILLE = {
     '0': '.OOO..',
 }
 
+SPECIAL_CHAR_TO_BRAILLE = {
+    '.': '..OO.O',
+    ',': '..O...',
+    '?': '..O.OO',
+    '!': '..OOO.',
+    ':': '..OO..',
+    ';': '..O.O.',
+    '-': '....OO',
+    '/': '.O..O.',
+    '<': '.OO..O',
+    '>': 'O..OO.',
+    '(': 'O.O..O',
+    ')': '.O.OO.',
+}
+
 SPACE = '......'
 CAPITAL_FOLLOWS = '.....0'
 NUMBER_FOLLOWS = '.0.000'
 
 BRAILLE_TO_ENGLISH = {v: k for k, v in ENGLISH_TO_BRAILLE.items()}
 BRAILLE_TO_NUMBER = {v: k for k, v in NUMBER_TO_BRAILLE.items()}
+BRAILLE_TO_SPECIAL_CHAR = {v: k for k, v in SPECIAL_CHAR_TO_BRAILLE.items()}
 
 def isBraille(str):
     return len(str) % 6 == 0 and all(c in 'O.' for c in str)
@@ -66,6 +82,8 @@ def translateToEnglish(str):
             num_mode = True
         elif br == SPACE:
             res.append(' ')
+        elif br in BRAILLE_TO_SPECIAL_CHAR:
+            res.append(BRAILLE_TO_SPECIAL_CHAR[br])
         else:
             if cap_mode:
                 res.append(BRAILLE_TO_ENGLISH[br].upper())
@@ -75,7 +93,6 @@ def translateToEnglish(str):
                 num_mode = False
             else:
                 res.append(BRAILLE_TO_ENGLISH[br])
-
 
     return ''.join(res)
 
@@ -91,11 +108,12 @@ def translateToBraille(str):
             res.append(NUMBER_TO_BRAILLE[c])
         elif c == ' ':
             res.append(SPACE)
+        elif not c.isalnum():
+            res.append(SPECIAL_CHAR_TO_BRAILLE[c])
         else:
             res.append(ENGLISH_TO_BRAILLE[c.lower()])
 
     return ''.join(res)
-
 
 if __name__ == '__main__':
     input_str = ' '.join(sys.argv[1:])
