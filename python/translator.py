@@ -34,3 +34,21 @@ NUMBER_PREFIX = '.O.OOO'   # Marks that the following characters are numbers
 #to dtermine if input is english or braille
 def is_braille(input_str):
     return all(c in 'O.' for c in input_str)
+
+# Translate English to Braille
+def english_to_braille(text):
+    result = []
+    for char in text:
+        if char.isupper():
+            result.append(CAPITAL_PREFIX)  # Add the capital prefix
+            char = char.lower()
+
+        if char in BRAILLE_ALPHABET:
+            result.append(BRAILLE_ALPHABET[char])
+
+        elif char.isdigit():
+            result.append(NUMBER_PREFIX)  # Start number mode
+            result.append(BRAILLE_NUMBERS[char])
+    return ''.join(result)
+
+# Translate Braille to English
