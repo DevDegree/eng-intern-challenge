@@ -99,11 +99,8 @@ const translatorEngToBraille = (userInputList) => {
     res.push(replaceAlphabetAndNumber(input));
   });
   res = res.join(specialChars.space);
-  console.log(
-    res,
-    res ==
-      ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
-  );
+  console.log(res);
+  return res;
 };
 
 const getAllBrailleChars = (text) => {
