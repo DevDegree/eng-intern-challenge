@@ -118,13 +118,21 @@ function toChar(input) {
     return input
         .match(/.{6}/g)
         .map(braile => braileToChar[braile] || "?")
-        .join("/n");
+        .join("");
 }
 
 function main() {
     const args = process.argv.slice(2); // Skip the first two arguments (node and script path)
+    console.log(args);
     const input = args.join(' '); // Join all arguments into a single string
-    console.log(toBraile(input)); // Convert the input string to Braille and print it
+    
+    // Check if the input is a sequence of O and . characters
+    if (input.match(/^[O.]+$/)) {
+        console.log(toChar(input));
+    }
+    else {
+        console.log(toBraile(input));
+    }
 }
 
 main();
