@@ -54,8 +54,51 @@ const brailleMap = {
   space: '......',
 };
 
-//Parse if input string is braille or char string
+const translate = (str) => {
+  let isBraille = undefined;
+  let result = [];
+  let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+  //Parse if input string is braille or char string
+  for (let char of str) {
+    if (char !== '.' && char !== 'O') {
+      isBraille = false;
+      break;
+    } else {
+      isBraille = true;
+    }
+  }
+  //translate from english to braille
+  if (!isBraille) {
+    let prevCharNum = undefined;
+    for (let char of str) {
+      //handle spaces
+      if (char === ' ') {
+        result.push(brailleMap[space]);
+        prevCharNum = false;
+      }
+      //handle numbers
+      if (numbers.includes(char)) {
+        result.push(brailleMap[num] + brailleMap[char]);
+        prevCharNum = true;
+      }
+      //handle decimal
+      if (char === '.' && prevCharNum) {
+        result.push(brailleMap[dec] + brailleMap[char]);
+      }
+      //handle lower case
+      if (char != char.toUpper()) {
+        result.push(brailleMap[char]);
+        prevCharNum = false;
+      }
+      //handle upeprcase
+      else {
+        result.push(brailleMap[cap] + brailleMap[char]);
+        prevCharNum = false;
+      }
+    }
+  }
 
-//based on this either
-//A) Loop through the char string, determining if each letter is uppercase, lowercase, number, decimal, appending the correct leading braille representation to translation. push the appropriate braille representation to array. join array and log/return in console
-//B) As above but inverted. Create method for detecting capital preceeding braille rep and modify char accordingly before pushing to array
+  //translate from braille to english
+  else {
+  }
+};
