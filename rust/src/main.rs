@@ -10,7 +10,7 @@ fn main() -> Result<()> {
         .collect_tuple()
         .context("expected 1 argument: the string to translate")?;
 
-    let output = format!("TODO: translate {input}");
+    let output = translate::english_to_braille(&input)?;
     println!("{}", output);
 
     Ok(())

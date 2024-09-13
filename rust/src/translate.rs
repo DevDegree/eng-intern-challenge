@@ -1,3 +1,26 @@
+use anyhow::{bail, Result};
+
+pub fn english_to_braille(s: &str) -> Result<String> {
+    let mut out = String::new();
+
+    for c in s.chars() {
+        if c.is_ascii_lowercase() {
+            out.push_str(&lower_alpha_to_braille(c));
+        } else if c.is_ascii_uppercase() {
+            out.push_str(CAPITAL_FOLLOWS);
+            out.push_str(&lower_alpha_to_braille(c.to_ascii_lowercase()));
+        } else if c == ' ' {
+            out.push_str(SPACE);
+        } else if c.is_ascii_digit() {
+            todo!("handle digits");
+        } else {
+            bail!("don't know how to convert from English to Braille: {c:?}");
+        }
+    }
+
+    Ok(out)
+}
+
 fn lower_alpha_to_braille(c: char) -> &'static str {
     match c {
         'a' => ".OOOOO",
