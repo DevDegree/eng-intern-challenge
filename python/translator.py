@@ -1,20 +1,16 @@
-# Function: main
-#    Input: input_string
+def main(input_string):
+    # Check the set to see if O and . are the only characters in the input
+    if set(input_string) <= set("O."):
+        translation_type = "braille_to_english"
+    else:
+        translation_type = "english_to_braille"
 
-#    # Step 1: Check if input is Braille or English
-#    If input_string contains only "O" and ".":
-#       translation_type = "braille_to_english"
-#    Else:
-#       translation_type = "english_to_braille"
+    if translation_type == "braille_to_english":
+        result = translate_to_english(input_string)
+    else:
+        result = translate_to_braille(input_string)
 
-#    # Step 2: Call the appropriate translator
-#    If translation_type == "braille_to_english":
-#       result = translate_to_english(input_string)
-#    Else:
-#       result = translate_to_braille(input_string)
-
-#    # Step 5: Output the result
-#    print(result)
+    return result
 
 
 # 2. Function: translate_to_braille(english_string)
