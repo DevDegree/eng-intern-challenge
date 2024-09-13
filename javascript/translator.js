@@ -42,9 +42,6 @@ const charToBraile = {
     '9': '.O.O..',
 
 };
-//O.....O.O...OO.... lowercase abc
-// .....OO.....O.O...OO.... uppercase ABC
-
 
 const braileToChar = {
     "O.....": "a",
@@ -97,18 +94,23 @@ function toBraile(input) {
     let isNum = false;
     //check if the character is uppercase, if so add the capital letter to the result
     for (let i = 0; i < input.length; i++) {
+        // Check if the character is uppercase, if so add the capital letter to the result
         let char = input[i];
         if (char === char.toUpperCase() && char !== char.toLowerCase()) {
             result += charToBraile["capital"];
             char = char.toLowerCase();
         }
+        // Check if the character is a number, if so add the number to the result
         if (char >= '0' && char <= '9') {
             if (!isNum) {
                 result += charToBraile["number"];
                 isNum = true;
             }
+            // Add the number to the result
             result += charToBraile[char];
-        } else {
+        } 
+        // Add the character to the result
+        else {
             isNum = false;
             result += charToBraile[char] || charToBraille[' '];;
         }
@@ -117,16 +119,21 @@ function toBraile(input) {
 }
 
 function toChar(input) {
+    // Split the input into an array of 6 characters
     let result = "";
     let isNum = false;
     let isCapital = false;
     let wordArray = input.match(/.{1,6}/g);
     for (word in wordArray) {
+        // Check if the word is a capital letter or a number
         if (wordArray[word] === charToBraile["capital"]) {
             isCapital = true;
-        } else if (wordArray[word] === charToBraile["number"]) {
+        } 
+        else if (wordArray[word] === charToBraile["number"]) {
             isNum = true;
-        } else if (isCapital) {
+        } 
+        // Check if the word is a capital letter or a number, if so add the capital letter to the result or the number
+        else if (isCapital) {
             result += braileToChar[wordArray[word]].toUpperCase();
             isCapital = false;
         }
@@ -135,7 +142,9 @@ function toChar(input) {
             if (wordArray[word] + 1 === charToBraile[" "]) {
                 isNum = false;
             }
-        } else {
+        } 
+        // Add the character to the result
+        else {
             result += braileToChar[wordArray[word]];
         }
     }
