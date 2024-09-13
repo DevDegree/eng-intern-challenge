@@ -62,13 +62,15 @@ const brailleSpecial = {
     ')': '.O.OO.'
 };
 
-let brailleToEngChars = {}
-
-//flip the original object to make it english.
+//function to flip a maps keys and values.
 const flip = (data) => {
-    const flip = Object.entries(data).map(([key, value]) => [value, key]);
-    brailleToEngChars = Object.fromEntries(flip);
+    return Object.entries(data).map(([key, value]) => [value, key]);
 }
+
+//Flip all three mappings above.
+const flippedBrailleLetters = flip(brailleLetters);
+const flippedBrailleNumbers = flip(brailleNumbers);
+const flippedBrailleSpecial = flip(brailleSpecial);
 
 //Check if the sequence is braille
 const isBraille = (str) => {
