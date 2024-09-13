@@ -33,23 +33,29 @@ def brailleToEnglish(string):
                 numFollows = False
                 translated += " "
             else:
-                #iterates through the dictionary of numbers until it finds matching value
+                #iterates through the dictionary of numbers until it finds matching value, that number is added
                 for key, value in DTB.items():
                     if value == brailleList[i]:
                         translated += key
                         break
+        #if not a number
         else:
+            #iterates through ETB dictionary
             for key, value in ETB.items():
                 if value == brailleList[i]:
+                    #next character will be capitalized
                     if key == "cap":
                         capFollows = True
+                    #next character will be a number
                     elif key == "num":
                         numFollows = True
                     else:
+                        #if a capital letter follows, it will capitalize the next letter and turn itself to false
                         if capFollows:
                             translated += key.upper()
                             capFollows = False
                             break
+                        #adds an uncapitlized letter
                         else:
                             translated += key
                             break
@@ -58,7 +64,39 @@ def brailleToEnglish(string):
 
 #converts english to braille, returns string
 def englishToBraille(string):
-    return 0
+    translated = ""
+    chars = []
+    firstDigit = True
+
+    #populates list with each character of the string
+    for i in range(len(string)):
+        chars.append(string[i])
+
+    #iterate through list of characters
+    for i in range(len(chars)):
+        #if digit
+        if chars[i].isdigit():
+            #if its the first digit, add the num follows signifier
+            if firstDigit:
+                firstDigit = False
+                translated += ETB.get("num")
+                translated += DTB.get(chars[i])                
+            else:
+                translated += DTB.get(chars[i])
+        #if space
+        elif chars[i] == " ":
+            #if following a number, then reset firstDigit, allows for the signifier to be placed again
+            if firstDigit == False:
+                firstDigit = True
+            translated += ETB.get(chars[i])
+        #if character
+        else:
+            #if uppercase, add the capital follows signifier
+            if chars[i].isupper():
+                translated += ETB.get("cap")
+            translated += ETB.get(chars[i].lower())
+
+    return translated
 
 #checks if inputted string is already braille or not, returns boolean
 def isBraille(string):
