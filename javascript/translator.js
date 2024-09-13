@@ -161,7 +161,7 @@ function textToBraille(textInput) {
     return result.split('').map(bit => bit === '1' ? 'O' : '.').join('');
 }
 
-function transateBrailleOrText(input) {
+function translateBrailleOrText(input) {
     // Ensure input is a string
     if (typeof input !== 'string') {
       throw new TypeError('Input must be a string');
