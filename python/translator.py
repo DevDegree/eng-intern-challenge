@@ -17,7 +17,7 @@ REVERSE_BRAILLE_ALPHABET = {
     'O...O.': 'k', 'O.O.O.': 'l', 'OO..O.': 'm', 'OO.OO.': 'n', 'O..OO.': 'o',
     'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't',
     'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y', 'O..OOO': 'z',
-    '......': ' '  # Space mapping
+    '......': ' ' , # Space mapping
 }
 REVERSE_BRAILLE_NUMBERS = {
     'O.....': '1', 'O.O...': '2', 'OO....': '3', 'OO.O..': '4', 'O..O..': '5',
@@ -52,3 +52,70 @@ def english_to_braille(text):
     return ''.join(result)
 
 # Translate Braille to English
+def braille_to_english(braille_text):
+    result = []
+    # Split Braille into 6-character chunks
+    braille_chars = [braille_text[i:i+6] for i in range(0, len(braille_text), 6)]
+    
+    capitalize_next = False
+    number_mode = False
+    
+    for braille_char in braille_chars:
+        # Skip incomplete chunks
+        if len(braille_char) < 6:
+            continue
+        
+        
+        # Handle capital letter prefix
+        if braille_char == CAPITAL_PREFIX:
+            capitalize_next = True
+            continue  # Move to the next character after the capital indicator
+        
+        # Handle number mode prefix
+        elif braille_char == NUMBER_PREFIX:
+            number_mode = True
+            continue  # Move to the next character after number mode indicator
+        
+        # Handle space
+        elif braille_char == '......':
+            result.append(' ')
+            number_mode = False  # Exit number mode after a space
+            capitalize_next = False  # Exit capitalization mode after a space
+            continue  # Move to the next character after the space
+        
+        # Handle numbers in number mode
+        if number_mode:
+            letter = REVERSE_BRAILLE_NUMBERS.get(braille_char, '?')
+            if letter == '?':
+                print(f"Error: Unknown number Braille: {braille_char}")
+            else:
+                result.append(letter)
+            number_mode = False    
+            continue  # Continue to the next character
+        
+        # Handle normal letters
+        else:
+            letter = REVERSE_BRAILLE_ALPHABET.get(braille_char, '?')
+            if letter == '?':
+                print(f"Error: Unknown letter Braille: {braille_char}")
+                continue
+            if capitalize_next:
+                letter = letter.upper()
+                capitalize_next = False
+            result.append(letter)
+
+    return ''.join(result)
+
+def main():
+    if len(sys.argv) < 2:  # Check if at least one argument is passed
+        print("Error: No input provided. Please pass a string to translate.")
+        sys.exit(1)
+
+    input_str = sys.argv[1]  # Read the first argument from the command line
+    if is_braille(input_str):
+        print(braille_to_english(input_str))
+    else:
+        print(english_to_braille(input_str))
+
+if __name__ == "__main__":
+    main()
