@@ -199,6 +199,12 @@ if __name__ == "__main__":
     # main execution
     if TESTING:
         test_harness()
-    for arg in sys.argv[1:]:
-        print(return_output(arg))
+    # assume that if first argument is english, all arguments will be
+    braille = is_braille(sys.argv[1])
+    s = ""
+    if braille:
+        s = SPACE.join(sys.argv[1:])
+    else:
+        s = "".join(sys.argv[1:])
+    print(return_output(s))
     
