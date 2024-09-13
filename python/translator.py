@@ -70,4 +70,4 @@ def main():
         print(translate_to_braille(input_str))
 
 if _name_ == "_main_":
-    main()
+    main()
