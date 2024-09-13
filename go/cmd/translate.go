@@ -50,25 +50,19 @@ var rootCmd = &cobra.Command{
 	Use:   "translator",
 	Short: "Translator is a tool to translate between text and braille",
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) == 1 && isBraille(args[0]) {
-			translated, err := translateToEnglish(args[0])
+		output := []string{}
+
+		for _, arg := range args {
+			translated, err := translate(arg, len(args) == 1 && isBraille(args[0]))
 			if err != nil {
 				fmt.Println("Error:", err)
-				return
+				continue
 			}
-			fmt.Println(translated)
-		} else {
-			var output []string
-			for _, arg := range args {
-				translated, err := translateToBraille(arg)
-				if err != nil {
-					fmt.Println("Error:", err)
-					continue
-				}
-				output = append(output, translated)
-			}
-			fmt.Println(strings.Join(output, dictionary.Symbols[" "]))
+
+			output = append(output, translated)
 		}
+
+		fmt.Println(strings.Join(output, dictionary.Symbols[" "]))
 	},
 }
 
@@ -79,94 +73,94 @@ func Execute() {
 	}
 }
 
-func translateToEnglish(text string) (string, error) {
+func translate(text string, isBraille bool) (string, error) {
 	var splitText, modifier string
-	reversedDictionary := dictionary.Reverse()
+	increment := 1
+	if isBraille {
+		increment = 6
+		dictionary = dictionary.Reverse()
+	}
 
-	for i := 0; i < len(text); i += 6 {
-		if i+6 > len(text) {
-			return "", fmt.Errorf("text length is not a multiple of 6")
-		}
-		chunk := text[i : i+6]
+	for i := 0; i < len(text); i += increment {
+		chunk := text[i : i+increment]
 
 		if modifier != "" {
-			switch modifier {
-			case "capital":
-				splitText += strings.ToUpper(reversedDictionary.Alphabet[chunk])
-			case "decimal":
-				if val, ok := reversedDictionary.Numbers[chunk]; ok {
-					splitText += fmt.Sprintf("%s.", val)
-				}
-			case "number":
-				if " " == reversedDictionary.Symbols[chunk] {
-					splitText += " "
-				} else if val, ok := reversedDictionary.Numbers[chunk]; ok {
-					splitText += val
-					continue
-				}
-			}
+			splitText += handleModifier(chunk, modifier, isBraille)
 			modifier = ""
 			continue
 		}
 
-		if val, ok := reversedDictionary.Alphabet[chunk]; ok {
-			splitText += val
-		} else if val, ok := reversedDictionary.Symbols[chunk]; ok {
-			splitText += val
-		} else if val, ok := reversedDictionary.Modifiers[chunk]; ok {
-			modifier = val
-		} else {
-			return "", fmt.Errorf("braille character %s not found in dictionary", chunk)
+		val, found := handleChunk(chunk, isBraille, &modifier)
+		if !found {
+			return "", fmt.Errorf("character %s not found in dictionary", chunk)
 		}
+		splitText += val
 	}
 
 	return splitText, nil
 }
 
-func translateToBraille(text string) (string, error) {
-	var splitText, modifier string
-
-	for i := 0; i < len(text); i++ {
-		chunk := text[i : i+1]
-
-		if modifier != "" {
-			switch modifier {
-			case "capital":
-				splitText += dictionary.Modifiers["capital"] + dictionary.Alphabet[chunk]
-				i += 6
-			case "decimal":
-				if val, ok := dictionary.Numbers[chunk]; ok {
-					splitText += dictionary.Modifiers["decimal"] + val
-				}
-			case "number":
-				if " " == chunk {
-					splitText += dictionary.Symbols[" "]
-				} else if val, ok := dictionary.Numbers[chunk]; ok {
-					splitText += val
-					continue
-				}
+func handleModifier(chunk, modifier string, isBraille bool) string {
+	switch modifier {
+	case "capital":
+		if isBraille {
+			return strings.ToUpper(dictionary.Alphabet[chunk])
+		}
+		return dictionary.Modifiers["capital"] + dictionary.Alphabet[chunk]
+	case "decimal":
+		if val, ok := dictionary.Numbers[chunk]; ok {
+			if isBraille {
+				return "." + val
 			}
-			modifier = ""
-			continue
+			return dictionary.Modifiers["decimal"] + val
+		}
+	case "number":
+		if val, ok := dictionary.Numbers[chunk]; ok {
+			return val
+		}
+	}
+	return dictionary.Symbols[chunk]
+}
+
+func handleChunk(chunk string, isBraille bool, modifier *string) (string, bool) {
+	handlers := map[string]func(string) (string, bool){
+		"Alphabet": func(chunk string) (string, bool) { val, ok := dictionary.Alphabet[chunk]; return val, ok },
+		"Symbols":  func(chunk string) (string, bool) { val, ok := dictionary.Symbols[chunk]; return val, ok },
+		"Modifiers": func(chunk string) (string, bool) {
+			val, ok := dictionary.Modifiers[chunk]
+			if ok {
+				*modifier = val
+			}
+			return "", ok
+		},
+	}
+
+	if !isBraille {
+		handlers["Lowercase"] = func(chunk string) (string, bool) {
+			val, ok := dictionary.Alphabet[strings.ToLower(chunk)]
+			if ok {
+				*modifier = "capital"
+				return dictionary.Modifiers["capital"] + val, true
+			}
+			return "", false
 		}
 
-		if val, ok := dictionary.Alphabet[chunk]; ok {
-			splitText += val
-		} else if val, ok := dictionary.Alphabet[strings.ToLower(chunk)]; ok {
-			splitText += dictionary.Modifiers["capital"] + val
-		} else if val, ok := dictionary.Numbers[chunk]; ok {
-			splitText += dictionary.Modifiers["number"] + val
-			modifier = "number"
-		} else if val, ok := dictionary.Symbols[chunk]; ok {
-			splitText += val
-		} else if val, ok := dictionary.Modifiers[chunk]; ok {
-			modifier = val
-		} else {
-			return "", fmt.Errorf("braille character %s not found in dictionary", chunk)
+		handlers["Numbers"] = func(chunk string) (string, bool) {
+			val, ok := dictionary.Numbers[chunk]
+			if ok {
+				*modifier = "number"
+				return dictionary.Modifiers["number"] + val, true
+			}
+			return "", false
 		}
 	}
 
-	return splitText, nil
+	for _, handler := range handlers {
+		if val, ok := handler(chunk); ok {
+			return val, true
+		}
+	}
+	return "", false
 }
 
 func reverseMap(m map[string]string) map[string]string {
