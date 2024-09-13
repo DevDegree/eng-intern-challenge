@@ -22,7 +22,7 @@ class Translator:
         Function to check if the given input is in braille or not
         
         '''
-        if len(self.input_string) == 6 and all(char in '0.' for char in self.input_string):
+        if len(self.input_string) % 6==0 and all(char in 'O.' for char in self.input_string):
             return True
         else:
             return False
@@ -55,8 +55,7 @@ class Translator:
     def transalte_braille_to_english(self):
         english = []
         index=0
-        upper_case = False
-        is_number=False
+        combined_dict = {**self.braille_to_english,**self.braille_to_special_char}
         
         while index <= len(self.input_string)-6:
             current_br_str = self.input_string[index:index+6]
@@ -67,32 +66,48 @@ class Translator:
 
                 current_braille_to_eng = self.braille_to_indicator[current_br_str]
                 if current_braille_to_eng == 'Capital':
-                    upper_case = True 
+                    index+=6
+                    next_br_str  =  self.input_string[index:index+6]
+                    next_braille_to_eng = self.braille_to_english[next_br_str]
+                    english.append(next_braille_to_eng.upper())
+                
                 elif current_braille_to_eng == 'Number':
-                    is_number =True  
-                else: 
-                    english.append('.')              
+                    index+=6
 
-            if is_ind == True:
-                index+=6
-                current_br_str = self.input_string[index:index+6]
+                    while index <= len(self.input_string)-6 :
+                        next_br_str = self.input_string[index:index+6]
+                        
+                        if next_br_str in self.braille_to_number.keys():
+                            english.append(self.braille_to_number[next_br_str])
+                        elif next_br_str in self.braille_to_special_char.keys():
+                            english.append(self.braille_to_special_char[next_br_str])
+                            break
+                        else:
+                            pass
+                        index+=6
+                elif  current_braille_to_eng == 'Decimal':
+                    index+=6
+                    english.append(self.braille_to_special_char[next_br_str])
+                else:
+                    pass
+                         
 
-            if current_br_str in self.braille_to_english.keys():
-                current_braille_to_eng = self.braille_to_english[current_br_str]
-                if upper_case == True:
-                    english.append(current_braille_to_eng.upper())
-                    upper_case=False
-
-            elif current_br_str in self.braille_to_special_char.keys():
-                english.append(current_braille_to_eng)
-
+            else:
+                if current_br_str in self.braille_to_english:
+                    english.append(self.braille_to_english[current_br_str])
+                else:
+                    english.append(self.braille_to_special_char[current_br_str])
+                  
             index+=6
-
+        return "".join(english)
   
 def main():
     input_string = " ".join(sys.argv[1:])
     translator = Translator(input_string)
-    result = translator.translate_english_to_braille()
+    if translator.is_braille():
+        result = translator.transalte_braille_to_english()
+    else:
+        result = translator.translate_english_to_braille()
     print(result)
 if __name__ == "__main__":
     main()
