@@ -14,7 +14,6 @@ ENGLISH_TO_BRAILLE = {
 }
 BRAILLE_TO_ENGLISH = {j: i for i, j in ENGLISH_TO_BRAILLE.items() if not i.isdigit()}
 BRAILLE_TO_DIGIT = {j: i for i, j in ENGLISH_TO_BRAILLE.items() if i.isdigit()}
-
 CAPITAL = "cap"
 NUM = "num"
 SPACE = " "
@@ -49,22 +48,22 @@ class Translator:
     def _translate_braille_to_english(self) -> str:
         translated_chars: List[str] = []
         cap_next: bool = False
-        num_next: bool = False
+        number_next: bool = False
 
         for i in range(0, len(self.text), 6):
             braille_char: str = self.text[i:i + 6]
 
             if braille_char in BRAILLE_TO_DIGIT:
-                if num_next:
+                if number_next:
                     translated_chars.append(BRAILLE_TO_DIGIT[braille_char])
                     continue
             if braille_char in BRAILLE_TO_ENGLISH:
                 if braille_char == ENGLISH_TO_BRAILLE[CAPITAL]:
                     cap_next = True
                 elif braille_char == ENGLISH_TO_BRAILLE[NUM]:
-                    num_next = True
+                    number_next = True
                 elif braille_char == ENGLISH_TO_BRAILLE[SPACE]:
-                    num_next = False
+                    number_next = False
                     translated_chars.append(SPACE)
                 else:
                     if cap_next:
@@ -76,7 +75,23 @@ class Translator:
         return ''.join(translated_chars)
 
     def _translate_english_to_braille(self) -> str:
-        pass
+        translated_chars: List[str] = []
+        is_number: bool = False
+
+        for char in self.text:
+
+            if char.isdigit():
+                if not is_number:
+                    is_number = True
+                    translated_chars.append(ENGLISH_TO_BRAILLE[NUM])
+            elif char.isupper():
+                translated_chars.append(ENGLISH_TO_BRAILLE[CAPITAL])
+            if not char.isdigit():
+                is_number = False
+
+            translated_chars.append(ENGLISH_TO_BRAILLE[char.lower()])
+
+        return ''.join(translated_chars)
 
 
 def main() -> None:
