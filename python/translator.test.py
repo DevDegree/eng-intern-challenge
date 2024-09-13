@@ -11,11 +11,34 @@ class TestTranslator(unittest.TestCase):
         result = subprocess.run(command, capture_output=True, text=True)
         
         # Expected output without the newline at the end
-        print("r: ", result.stdout)
         expected_output = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
-        print("e:  ", expected_output)
         
         # Strip any leading/trailing whitespace from the output and compare
+        self.assertEqual(result.stdout.strip(), expected_output)
+
+    def test_braille_to_english(self):
+        command = ["python3", "translator.py", ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"]
+        result = subprocess.run(command, capture_output=True, text=True)
+        expected_output = "Abc 123 xYz"
+        self.assertEqual(result.stdout.strip(), expected_output)
+
+    def test_examples(self):
+        # Test case 1: Input: "Hello world"
+        command = ["python3", "translator.py", "Hello", "world"]
+        result = subprocess.run(command, capture_output=True, text=True)
+        expected_output = ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."
+        self.assertEqual(result.stdout.strip(), expected_output)
+
+        # Test case 2: Input: "42"
+        command = ["python3", "translator.py", "42"]
+        result = subprocess.run(command, capture_output=True, text=True)
+        expected_output = ".O.OOOOO.O..O.O..."
+        self.assertEqual(result.stdout.strip(), expected_output)
+
+        # Test case 3: Input: ".....OO.....O.O...OO...........O.OOOO.....O.O...OO...."
+        command = ["python3", "translator.py", ".....OO.....O.O...OO...........O.OOOO.....O.O...OO...."]
+        result = subprocess.run(command, capture_output=True, text=True)
+        expected_output = "Abc 123"
         self.assertEqual(result.stdout.strip(), expected_output)
 
     def test_detect_language(self):
