@@ -51,26 +51,47 @@ const ENGLISH_TO_BRAILLE = [
 ]
 
 const CAPITAL_MODIFIER = '.....O';
-const DECIMAL_MODIFIER = '.O...O';
 const NUMBER_MODIFIER = '.O.OOO';
 const BRAILLE_REGEX = /^[\.O]+$/;
 const CAPITAL_REGEX = /[A-Z]/;
-const NUNBER_REGEX = /[0-9]/;
+const NUMBER_REGEX = /[0-9]/;
 const TEXT_STATE = 'TEXT_STATE';
 const NUMBER_STATE = 'NUMBER_STATE';
-const LOWERCASE_CHARACTER = 'LOWERCASE_CHARACTER';
+const OTHER_CHARACTER = 'OTHER_CHARACTER';
 const UPPERCASE_CHARACTER = 'UPPERCASE_CHARACTER';
 const NUMBER_CHARACTER = 'NUMBER_CHARACTER';
 
 function translate(text) {
     let result = '';
     if (BRAILLE_REGEX.test(text)) {
-        return 'Braille';
+        let state = TEXT_STATE;
+        for (let i = 0; i < text.length; i += 6) {
+            let brailleCharacter = text.substring(i, i + 6);
+            switch (brailleCharacter) {
+                case CAPITAL_MODIFIER: {
+                    state = TEXT_STATE;
+                    i += 6;
+                    let nextBrailleCharacter = text.substring(i, i + 6);
+                    result += brailleToEnglish(nextBrailleCharacter, OTHER_CHARACTER).toUpperCase();
+                    break;
+                }
+                case NUMBER_MODIFIER: {
+                    state = NUMBER_STATE;
+                    break;
+                }
+                default: {
+                    if (brailleCharacter === englishToBraille(' ')) state = TEXT_STATE;
+                    if (state === NUMBER_STATE) result += brailleToEnglish(brailleCharacter, NUMBER_CHARACTER);
+                    else result += brailleToEnglish(brailleCharacter, OTHER_CHARACTER);
+
+                }
+            }
+        }
     } else {
         let state = TEXT_STATE;
         for (let character of text) {
             switch (testEnglishCharacter(character)) {
-                case LOWERCASE_CHARACTER: {
+                case OTHER_CHARACTER: {
                     state = TEXT_STATE;
                     result += englishToBraille(character);
                     break;
@@ -97,16 +118,16 @@ function translate(text) {
 
 function testEnglishCharacter(character) {
     if (CAPITAL_REGEX.test(character)) return UPPERCASE_CHARACTER;
-    else if (NUNBER_REGEX.test(character)) return NUMBER_CHARACTER;
-    else return LOWERCASE_CHARACTER;
+    else if (NUMBER_REGEX.test(character)) return NUMBER_CHARACTER;
+    else return OTHER_CHARACTER;
 }
 
 function englishToBraille(characterToFind) {
     return ENGLISH_TO_BRAILLE.find(([character]) => character === characterToFind)[1];
 }
 
-function brailleToEnglish(characterToFind) {
-    return ENGLISH_TO_BRAILLE.find(([_, character]) => character === characterToFind)[0];
+function brailleToEnglish(characterToFind, characterType) {
+    return ENGLISH_TO_BRAILLE.find(([englishCharacter, brailleCharacter]) => brailleCharacter === characterToFind && testEnglishCharacter(englishCharacter) === characterType)[0];
 }
 
 let input = '';
