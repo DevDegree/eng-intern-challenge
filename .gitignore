@@ -3,3 +3,8 @@ node_modules
 yarn.lock
 package-lock.json
 Gemfile.lock
+
+# Go specific
+**/bin/
+**/vendor/
+
