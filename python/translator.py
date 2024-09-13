@@ -1,3 +1,8 @@
+# main file for translator between braille code and English 
+# assumptions here that I implied from the requirements: 
+# 1. when going from english to braille, the numbers only come at the end of each word 
+# 2. the braille code does not have any spaces in between
+
 import sys 
 from translator_help import *
 
@@ -63,8 +68,8 @@ def convert_to_english(text: str) -> str:
     
     for braille_code in list_of_braille_codes:
         if braille_code == space_braille: 
-            is_number = False
-            is_capital = False 
+            is_number = False # reset is_number so that it looks for english characters
+            is_capital = False # resets capitalization
             result_string += ' '
         elif braille_code == capital_follows_braille: # makes the next character capitalized 
             is_capital = True 
