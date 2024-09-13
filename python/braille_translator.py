@@ -1,4 +1,3 @@
-
 english_to_braille = {
     "a": "O.....", "b": "O.O...", "c": "OO....", "d": "OO.O..", "e": "O..O..",
     "f": "OOO...", "g": "OOOO..", "h": "O.OO..", "i": ".OO...", "j": ".OOO..",
@@ -11,19 +10,40 @@ english_to_braille = {
     ".": "..OO.O", ",": "..O...", "?": "..O.OO", "!": "..OOO.", ":": "..OO..",
     ";": "..O.O.", "-": "....OO", "/": ".O..O.", "<": ".OO..O", ">": "O..OO.",
     "(": "O.O..O", ")": ".O.OO.", " ": "......",
-    "CAPITAL": ".....O", "DECIMAL": ".O...O", "NUMBER": ".O.OOO"
+    "DECIMAL": ".O...O",
+    "CAPITAL": ".....O",  
+    "NUMBER": ".O.OOO" 
 }
 
-
-# simply reverse english_to_braille
 braille_to_english = {v: k for k, v in english_to_braille.items()}
 
 class BrailleTranslator:
-    def __init__():
-        pass
+    def __init__(self):
+        self.english_to_braille_dict = english_to_braille
+        self.braille_to_english_dict = braille_to_english
 
-    def english_to_braille(english_text):
-        pass
+    def translate_to_braille(self, english_text):
+        braille_output = []
+        number_mode = False
+        for c in english_text:
+            if c == ' ':
+                braille_output.append(self.english_to_braille_dict[' '])
+                number_mode = False 
+                continue
+            if c.isdigit():
+                if not number_mode:
+                    braille_output.append(self.english_to_braille_dict['NUMBER'])
+                    number_mode = True
+                braille_char = self.english_to_braille_dict[c]
+                braille_output.append(braille_char)
+            else:
+                if number_mode:
+                    number_mode = False
+                if c.isupper():
+                    braille_output.append(self.english_to_braille_dict['CAPITAL'])
+                    c = c.lower()
+                braille_char = self.english_to_braille_dict.get(c)
+                if braille_char:
+                    braille_output.append(braille_char)
+        return ''.join(braille_output)
 
-    def braille_to_english(braille_text):
-        pass
