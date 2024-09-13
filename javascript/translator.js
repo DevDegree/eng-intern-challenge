@@ -30,7 +30,7 @@ const charToBraile = {
     "number": ".O.OOO",
     "capital": ".....O",
     ' ': '......',
-    '0': '.....O',
+    '0': '.OO...',
     '1': 'O.....',
     '2': 'O.O...',
     '3': 'OO....',
@@ -76,7 +76,10 @@ const braileToChar = {
     ".O.OOO": "number",
     ".....O": "capital",
     '......': ' ',
-    '.....O': '0',
+};
+
+const braileToNum = {
+    '.OO...': '0',
     'O.....': '1',
     'O.O...': '2',
     'OO....': '3',
@@ -86,7 +89,7 @@ const braileToChar = {
     'OOOO..': '7',
     'O.OO..': '8',
     '.O.O..': '9',
-};
+}
 
 
 function toBraile(input) {
@@ -107,7 +110,6 @@ function toBraile(input) {
             result += charToBraile[char];
         } else {
             isNum = false;
-            console.log(char);
             result += charToBraile[char] || charToBraille[' '];;
         }
     }
@@ -115,15 +117,33 @@ function toBraile(input) {
 }
 
 function toChar(input) {
-    return input
-        .match(/.{6}/g)
-        .map(braile => braileToChar[braile] || "?")
-        .join("");
+    let result = "";
+    let isNum = false;
+    let isCapital = false;
+    let wordArray = input.match(/.{1,6}/g);
+    for (word in wordArray) {
+        if (wordArray[word] === charToBraile["capital"]) {
+            isCapital = true;
+        } else if (wordArray[word] === charToBraile["number"]) {
+            isNum = true;
+        } else if (isCapital) {
+            result += braileToChar[wordArray[word]].toUpperCase();
+            isCapital = false;
+        }
+        else if (isNum) {
+            result += braileToNum[wordArray[word]];
+            if (wordArray[word] + 1 === charToBraile[" "]) {
+                isNum = false;
+            }
+        } else {
+            result += braileToChar[wordArray[word]];
+        }
+    }
+    return result; 
 }
 
 function main() {
     const args = process.argv.slice(2); // Skip the first two arguments (node and script path)
-    console.log(args);
     const input = args.join(' '); // Join all arguments into a single string
     
     // Check if the input is a sequence of O and . characters
