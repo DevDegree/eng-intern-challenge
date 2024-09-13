@@ -330,20 +330,26 @@ def get_mapping(braille_symbol, mapping):
     
     Parameters
     ----------
-        braille_symbol : str
-            input partition to be translated to english
-        
-        mapping : bool
-            boolean to determine which mapping dictionary to use
-            if mapping = True, use the digit mapping
-            if mapping = False, use the character mapping
+    braille_symbol : str
+        input partition to be translated to english
+    
+    mapping : bool
+        boolean to determine which mapping dictionary to use
+        if mapping = True, use the digit mapping
+        if mapping = False, use the character mapping
+            
+    Returns
+    -------
+    translation : str
+        translated mapping from braille to english
     """
     if mapping:
         mapper = INVERSE_MAPPING_DIGITS
     else:
         mapper = INVERSE_MAPPING_LETTERS_SC
-        
-    return mapper[braille_symbol]
+    
+    translation = mapper[braille_symbol]
+    return translation
 
 #main method
 def main():
