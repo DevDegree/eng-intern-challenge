@@ -64,11 +64,7 @@ let brailleToNum = Object.fromEntries(
   Object.entries(numToBraille).map(([char, braille]) => [braille, char])
 );
 
-//DEBUG REMOVE
-// console.log(brailleToChar);
-// console.log(brailleToNum);
-
-let inputString = process.argv.slice(2)[0];
+let inputString = process.argv.slice(2).join(' ');
 
 console.log(inputString);
 
@@ -85,24 +81,30 @@ const translate = (str) => {
       isBraille = true;
     }
   }
+
   //translate from english to braille
   if (!isBraille) {
-    let prevCharNum = undefined;
+    let prevCharNum = false;
     for (let char of str) {
-      //handle spaces
-      if (char === ' ') {
-        result.push(charToBraille[space]);
-        prevCharNum = false;
-      }
+      // //handle spaces
+      // if (char === ' ') {
+      //   result.push(charToBraille[' ']);
+      //   prevCharNum = false;
+      // }
       //handle numbers
-      if (numbers.includes(char)) {
-        result.push(charToBraille[num] + numToBraille[char]);
-        prevCharNum = true;
+      if (numbers.includes(parseInt(char))) {
+        if (!prevCharNum) {
+          result.push(charToBraille['num'] + numToBraille[char]);
+          prevCharNum = true;
+        } else {
+          result.push(numToBraille[char]);
+        }
       }
-      //handle decimal
+      // handle decimal
       if (char === '.' && prevCharNum) {
         result.push(charToBraille[dec] + charToBraille[char]);
       }
+
       //handle lower case
       if (char == char.toLowerCase()) {
         result.push(charToBraille[char]);
@@ -118,11 +120,11 @@ const translate = (str) => {
 
   //translate from braille to english
   else {
-    //state for cap or num preceeding braille
+    // state for cap or num preceding braille
     let isCap = false;
     let isNum = false;
 
-    //chunk string into 6 char segments
+    // chunk string into 6-character segments
     let chunkedString = [];
     let index = 0;
     while (index < str.length) {
@@ -131,34 +133,44 @@ const translate = (str) => {
     }
 
     for (let brailleChar of chunkedString) {
-      //handle caps
-
+      // handle numbers
       if (brailleChar === charToBraille['num']) {
         isNum = true;
         continue;
       }
 
-      if (isNum) {
+      // process numbers
+      if (isNum && brailleToNum[brailleChar]) {
         result.push(brailleToNum[brailleChar]);
+        continue;
+      }
+
+      //reset to characters after space as per example number strings only need one prefacing number follows braille char indicator.
+      if (brailleChar === '......') {
+        result.push(brailleToChar[brailleChar]);
         isNum = false;
         continue;
       }
 
+      // handle capitalization
       if (brailleChar === charToBraille['cap']) {
         isCap = true;
+        isNum = false;
         continue;
       }
 
+      // translate braille to char
       let char = brailleToChar[brailleChar];
       if (isCap) {
         char = char.toUpperCase();
         isCap = false;
+        isNum = false;
       }
 
       result.push(char);
     }
   }
-  // console.log(result.join(''));
+
   return result.join('');
 };
 
