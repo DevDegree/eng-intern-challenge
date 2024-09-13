@@ -5,6 +5,8 @@
 2. **Have your email set to public on your Github Profile**
 3. **Do not apply any labels on your PR. We will mark your PR as `reviewed` with a label when it has been so. Marking this yourself will cause your PR to be skipped.**
 
+**If you have any questions, please reach out to `internprogram@shopify.com`**
+
 ---
 
 ## Braille Translator
