@@ -54,7 +54,7 @@ const brailleToEnglishDictionary = Object.entries(
   accumulator[value] = key;
   return accumulator;
 }, {});
-console.log(brailleToEnglishDictionary);
+// console.log(brailleToEnglishDictionary);
 
 const brailleToNumbersDictionary = Object.entries(
   numbersToBrailleDictionary
@@ -62,14 +62,45 @@ const brailleToNumbersDictionary = Object.entries(
   accumulator[value] = key;
   return accumulator;
 }, {});
-console.log(brailleToNumbersDictionary);
+// console.log(brailleToNumbersDictionary);
+
+// function to translate english alphabets & numbers to Braille
+function englishToBrailleTranslator(input) {
+  const arr = input.split("");
+
+  let capitalSeries = false;
+  let numberSeries = false;
+
+  const converted = arr.map((letter) => {
+    if (letter === " ") {
+      return spaceNext;
+    } else if (isNaN(letter) && letter === letter.toUpperCase()) {
+      capitalSeries = true;
+      // numberSeries = false;
+      return capitalizeNext + englishToBrailleDictionary[letter.toLowerCase()];
+    } else if (letter >= "0" && letter <= "9") {
+      if (numberSeries === false) {
+        numberSeries = true;
+        return numberNext + numbersToBrailleDictionary[letter];
+      } else {
+        return numbersToBrailleDictionary[letter];
+      }
+    } else {
+      return englishToBrailleDictionary[letter];
+    }
+  });
+  return converted.join("");
+}
+
+// function to translate Braille to english alphabets & numbers
+function brailleToEnglishTranslator(input) {}
 
 // translator function to check input language and convert it
 function translator(input) {
   if (input.includes(".") && input.includes("0")) {
-    console.log("Language is Braille", input);
+    console.log(brailleToEnglishTranslator(input));
   } else {
-    console.log("Language is English", input);
+    console.log(englishToBrailleTranslator(input));
   }
 }
 
