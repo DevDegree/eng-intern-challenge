@@ -1,10 +1,8 @@
 import argparse
 
-
 # Dictionaries for Braille representations
 braille_dict_letters = {
    " ": "......",  # Blank space
-
 
    # Letters a to z (lowercase)
    "a": "O.....",
@@ -151,16 +149,13 @@ def process_input(input_str):
    else:
        return "Unknown input type"
 
-
 def main():
    parser = argparse.ArgumentParser(description="Convert between English and Braille.")
    parser.add_argument('texts', nargs='+', type=str, help="Text to convert. Use 'O' and '.' for Braille input.")
    args = parser.parse_args()
-   # Combining the input strings into one string with spaces for the test case
    combined_text = ' '.join(args.texts).strip()
    result = english_to_braille(*args.texts)
    print(result)
-
 
 if __name__ == "__main__":
    main()
