@@ -54,7 +54,6 @@ const brailleToEnglishDictionary = Object.entries(
   accumulator[value] = key;
   return accumulator;
 }, {});
-// console.log(brailleToEnglishDictionary);
 
 const brailleToNumbersDictionary = Object.entries(
   numbersToBrailleDictionary
@@ -62,7 +61,6 @@ const brailleToNumbersDictionary = Object.entries(
   accumulator[value] = key;
   return accumulator;
 }, {});
-// console.log(brailleToNumbersDictionary);
 
 // function to translate english alphabets & numbers to Braille
 function englishToBrailleTranslator(input) {
@@ -76,7 +74,6 @@ function englishToBrailleTranslator(input) {
       return spaceNext;
     } else if (isNaN(letter) && letter === letter.toUpperCase()) {
       capitalSeries = true;
-      // numberSeries = false;
       return capitalizeNext + englishToBrailleDictionary[letter.toLowerCase()];
     } else if (letter >= "0" && letter <= "9") {
       if (numberSeries === false) {
@@ -95,7 +92,6 @@ function englishToBrailleTranslator(input) {
 // function to translate Braille to english alphabets & numbers
 function brailleToEnglishTranslator(input) {
   const brailleLetters = input.match(/.{1,6}/g);
-  // console.log(brailleLetters);
 
   let isCapital = false;
   let isNumber = false;
@@ -105,7 +101,6 @@ function brailleToEnglishTranslator(input) {
       return " ";
     } else if (sequence === capitalizeNext) {
       isCapital = true;
-      // console.log(isCapital);
       return "";
     } else if (sequence === "..OOOO") {
       isNumber = true;
@@ -138,7 +133,6 @@ function translator(input) {
   }
 }
 
-translator("Hello World 123");
-translator("Abc 123");
-translator("42");
-translator(".....OO.....O.O...OO............OOOOO.....O.O...OO....");
+// Read input from command line arguments
+const input = process.argv.slice(2).join(" ");
+translator(input);
