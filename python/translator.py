@@ -90,7 +90,11 @@ def decode(i: str):
             while BRAILLE_TO_CHAR[c] != ' ':
                 decoded_c = BRAILLE_TO_CHAR[c]
                 # map a->j to 1-0
-                decoded_msg += str(ord(decoded_c) - ord('a'))
+                if decoded_c == 'j':
+                    decoded_c = '0'
+                else:
+                    decoded_c = str(ord(decoded_c) - ord('a') + 1)
+                decoded_msg += decoded_c
                 c = next(chars)
             if BRAILLE_TO_CHAR[c] == ' ':
                 decoded_msg += ' '
@@ -111,7 +115,11 @@ def encode(i: str):
         if word.isdigit():  # number case
             encoded_msg += CHAR_TO_BRAILLE['NUMBER']
             for c in word:
-                encoded_msg += CHAR_TO_BRAILLE[chr(ord('a') + int(c))]
+                if c == '0':
+                    c = 'j'
+                else:
+                    c = chr(ord('a') + int(c) - 1)
+                encoded_msg += CHAR_TO_BRAILLE[c]
             encoded_msg += CHAR_TO_BRAILLE[' ']
             continue
         for c in word:
