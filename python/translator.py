@@ -42,10 +42,16 @@ class Translator(ABC):
 
     @abstractmethod
     def run(self, input_str: str) -> str:
+        '''
+        Run the translation
+        '''
         pass
 
     @abstractmethod
     def translate_by_rules(self, symbol) -> str:
+        '''
+        Translate the alphabet symbol, or keys in the hashtable, by corresponding rules
+        '''
         pass
 
 
@@ -83,41 +89,36 @@ class BraileTranslator(Translator):
     def update_mark(self, mark: str) -> None:
         self.mark = mark
         
-    def translate_by_rules(self, symbol: BraileSymbol) -> str:
-        output = 'Not found'
-        if symbol.rule:
-            self.update_mark(symbol.rule)
-            if self.mark == 'decimal follows':
-                output = '.'
-            else:
-                output = ''
-        else:
-            if self.mark == 'default':  
-                output = symbol.letter if symbol.letter else symbol.special if symbol.special else symbol.number
-            elif self.mark == 'capital follows':
-                output = symbol.letter.upper()
-                self.reset_mark()
-            else: # number or decimal follows as marked
-                if symbol.special == ' ':
-                    output = symbol.special
-                    self.reset_mark()
-                else:
-                    output = symbol.number
-        return output
+    def translate_by_rules(self, symbol: str) -> str:
+
+        output = self.braile_to_eng[symbol]
+
+        if output.rule:
+            self.update_mark(output.rule)
+            return '.' if output.rule == 'decimal follows' else ''
+        
+        if self.mark == 'default':
+            return output.letter or output.special or output.number
+        
+        if self.mark == 'capital follows':
+            self.reset_mark()
+            return output.letter.upper()
+        
+        if output.special == ' ':
+            self.reset_mark() # reset mark for number
+            return output.special
+        
+        return output.number
 
     def run(self, input_str: str) -> str:
         output = ''
         for i in range(0, len(input_str), 6):
             chunk = input_str[i:i+6]
             if chunk in self.braile_to_eng:
-                symbol = self.braile_to_eng[chunk]
-                output += self.translate_by_rules(symbol)
+                output += self.translate_by_rules(chunk)
             else:
                 raise ValueError(f"Invalid Braille chunk: {chunk}")
             
-        # group by 6 characters
-        # check for rule marks
-        # translate to english
         return output
     
 class EnglishTranslator(Translator):
@@ -130,7 +131,7 @@ class EnglishTranslator(Translator):
         for char in input_str:
             output += self.translate_by_rules(char)
         return output
-
+    
     def translate_by_rules(self, symbol: str) -> str:
         if symbol.isupper():
             return self.CAPITAL_FOLLOWS + self.eng_to_braile[symbol.lower()]
@@ -146,10 +147,12 @@ class EnglishTranslator(Translator):
                 return self.DECIMAL_FOLLOWS
             else:    
                 return self.eng_to_braile[symbol]
-        elif symbol == ' ' and self.is_number:
-            self.is_number = False
-
-        return self.eng_to_braile[symbol]
+        elif symbol == ' ':
+            if self.is_number:
+                self.is_number = False
+            return self.eng_to_braile[symbol]
+        else:
+            return self.eng_to_braile[symbol]
         
 
 class TranslatorFactory:
