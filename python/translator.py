@@ -78,8 +78,8 @@ def braille_to_english(braille_string, braille_map, reverse_braille_map):
 def main():
     # Load the mappings from YAML files
     yaml_file_path = os.path.join(os.path.dirname(__file__), 'braille_map.yaml')
-    braille_map = load_yaml_file('braille_map.yaml')['eng_to_braille']
-    reverse_braille_map = load_yaml_file('braille_map.yaml')['braille_to_eng']
+    braille_map = load_yaml_file(yaml_file_path)['eng_to_braille']
+    reverse_braille_map = load_yaml_file(yaml_file_path)['braille_to_eng']
 
     # Read the input from the command line arguments
     input_string = ' '.join(sys.argv[1:]) if len(sys.argv) > 1 else ''
