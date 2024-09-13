@@ -42,7 +42,7 @@ const numbersToBrailleDictionary = {
 
 const capitalizeNext = ".....O";
 
-const numberNext = "..OOOO";
+const numberNext = ".O.OOO";
 
 const spaceNext = "......";
 
@@ -102,7 +102,7 @@ function brailleToEnglishTranslator(input) {
     } else if (sequence === capitalizeNext) {
       isCapital = true;
       return "";
-    } else if (sequence === "..OOOO") {
+    } else if (sequence === numberNext) {
       isNumber = true;
       return "";
     } else {
