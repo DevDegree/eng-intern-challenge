@@ -144,9 +144,9 @@ function mainTranslator() {
 	} else {
 		output = translateEnglishToBraille(input);
 	}
-
 	console.log(output);
 }
 
-mainTranslator("Hello world");
+mainTranslator();
+
 
