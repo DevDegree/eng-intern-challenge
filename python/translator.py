@@ -69,6 +69,7 @@ def translator(string):
     #Braile Conditions
     if string.find(".O") != -1 and len(string) % 6 == 0:
 
+        # Split string into 6 symbol sets
         for index in range(0,len(string) // 6):
             braille = string[index*6:(index+1)*6]
             alpha = generalDict.get(braille)
@@ -76,6 +77,7 @@ def translator(string):
             if alpha == " ":
                 cond = ""
 
+            # Conditions to set the next symbol to number or capital
             if cond != "":
                 if cond == "c" and isinstance(alpha, str):
                     alpha = alpha.capitalize()
@@ -84,6 +86,7 @@ def translator(string):
                 if cond == "n":
                     alpha = numberDict.get(braille)
                     
+            # sets the condition for the next symbol
             if isinstance(alpha, str) and len(alpha) > 1:
                 if alpha == "capital":
                     cond = "c"
@@ -104,6 +107,7 @@ def translator(string):
 
             char = string[i]
             
+            # number conditions
             if '0' <= char <= '9':
                 for key, value in numberDict.items():
                     if char == value:
@@ -111,6 +115,7 @@ def translator(string):
                         active_number = 1
                         break
 
+            # Capital letters
             elif 'A' <= char <= 'Z':
                 char = char.lower()
                 for key, value in generalDict.items():
@@ -118,6 +123,7 @@ def translator(string):
                         t_char =  ".....O" + key
                         break
 
+            # normal letters
             else:
                 for key, value in generalDict.items():
                     if char == value:
