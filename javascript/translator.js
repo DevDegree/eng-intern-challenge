@@ -185,17 +185,21 @@ function isBraille(string) {
 
 const isNumeric = (char) => /\d/.test(char);
 const isUppercase = (char) => /[A-Z]/.test(char);
-// function isUppercase(char) {
-//   if (isAlpha(char) && char === char.toUpperCase()) {
-//     return true;
-//   } else {
-//     return false;
-//   }
-// }
 
-function translate(stringToTranslate) {
-  if (isBraille(stringToTranslate)) {
-    console.log(stringToTranslate);
+function translate(string) {
+  if (isBraille(string)) {
+    const brChars = [];
+    // console.log(brChars);
+    let brString = string;
+
+    while (brString.length > 0) {
+      brChars.push(brString.slice(0, 6));
+      brString = brString.slice(6);
+    }
+    // console.log(brChars);
+    brChars.forEach((brChar) => {
+      console.log(brChar);
+    });
   } else {
     const engChars = stringToTranslate.split("");
     let brailleStr = "";
@@ -222,15 +226,10 @@ function translate(stringToTranslate) {
       }
     });
 
-    console.log(brailleStr, brailleStr.length);
+    console.log(brailleStr);
   }
 }
 
-// translate("Hello, (good) morning");
-// translate("123");
-// translate("12 ");
-// translate("heLlO 2");
-// translate("  2 fg4");
-// translate("hello");
-// translate("Hello");
-// translate("HELLO");
+translate(
+  ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."
+);
