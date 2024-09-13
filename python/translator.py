@@ -107,7 +107,7 @@ def isBraille(string):
             return False
     return True
 
-text = sys.argv
+text = sys.argv[1]
 
 if isBraille(text[0:9]):
     translatedText = brailleToEnglish(text)
