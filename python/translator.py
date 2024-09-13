@@ -9,6 +9,13 @@ class Translator:
         self.special_char_to_braille =special_char_to_braille
         self.indicator_to_braille = indicator_to_braille
         self.number_to_braille = number_to_braille
+
+
+        self.braille_to_english = {br:char for char, br in english_to_braille.items()}
+        self.braille_to_number = {br:num for num, br in number_to_braille.items()}
+        self.braille_to_indicator = {br:ind for ind, br in indicator_to_braille.items()}
+        self.braille_to_special_char = {br:spec for spec, br in special_char_to_braille.items()}
+    
     
     def is_braille(self):
         '''
@@ -44,7 +51,44 @@ class Translator:
                 braille.append(self.english_to_braille[character])
         
         return "".join(braille)
+    
+    def transalte_braille_to_english(self):
+        english = []
+        index=0
+        upper_case = False
+        is_number=False
+        
+        while index <= len(self.input_string)-6:
+            current_br_str = self.input_string[index:index+6]
+          
+            
+            
+            if current_br_str in self.braille_to_indicator.keys():
 
+                current_braille_to_eng = self.braille_to_indicator[current_br_str]
+                if current_braille_to_eng == 'Capital':
+                    upper_case = True 
+                elif current_braille_to_eng == 'Number':
+                    is_number =True  
+                else: 
+                    english.append('.')              
+
+            if is_ind == True:
+                index+=6
+                current_br_str = self.input_string[index:index+6]
+
+            if current_br_str in self.braille_to_english.keys():
+                current_braille_to_eng = self.braille_to_english[current_br_str]
+                if upper_case == True:
+                    english.append(current_braille_to_eng.upper())
+                    upper_case=False
+
+            elif current_br_str in self.braille_to_special_char.keys():
+                english.append(current_braille_to_eng)
+
+            index+=6
+
+  
 def main():
     input_string = " ".join(sys.argv[1:])
     translator = Translator(input_string)
