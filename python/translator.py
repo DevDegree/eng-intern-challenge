@@ -32,7 +32,7 @@ reverse_braille_alphabet = {v: k for k, v in braille_alphabet.items()}
 reverse_braille_numbers = {v: k for k, v in braille_numbers.items()}
 
 def is_braille(input_str):
-    """ Determine if the input string is Braille (contains only 'O' and '.') """
+    """ Determine if input string is Braille (contains only 'O' and '.') """
     return all(char in "O." for char in input_str)
 
 def validate_braille_input(braille_str):
