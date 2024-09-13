@@ -1,5 +1,4 @@
 
-// character maps > store Braille symbols as a 6 character string reading left to right, line by line, starting at the top left
 const brailleLetters = {
     "O.....": "a",
     "O.O...": "b",
@@ -62,3 +61,114 @@ const brailleCapitalFollows = ".....O";
 const brailleDecimalFollows = ".O...O";
 const brailleNumberFollows = ".O.OOO";
 
+const englishToBraille = (text) => {
+    let brailleText = "";
+    let isNumber = false;
+
+    for (const char of text) {
+        if (char === " ") {
+            brailleText += brailleSpace;
+            isNumber = false;
+            continue;
+        }
+
+        if (char >= "a" && char <= "z") {
+            brailleText += brailleLetters[`O${char}`];
+            isNumber = false;
+        } else if (char >= "0" && char <= "9") {
+            if (!isNumber) {
+                brailleText += brailleNumberFollows;
+                isNumber = true;
+            }
+            brailleText += brailleNumbers[`O${char}`];
+        } else {
+            brailleText += brailleSymbols[brailleChar(char)] || "?";
+        }
+    }
+
+    return brailleText;
+};
+
+const brailleChar = (char) => {
+    const symbols = {
+        '.': "..OO.O",
+        ',': "..O...",
+        '?': "..O.OO",
+        '!': "..OOOO",
+        ':': "..OO..",
+        ';': "..O.O.",
+        '-': "....OO",
+        '/': ".O..O.",
+        '<': ".OO..O",
+        '>': "O..OO.",
+        '(': "O.O..O",
+        ')': ".O.OO."
+    };
+    return symbols[char] || "";
+};
+
+const brailleToEnglish = (braille) => {
+    let englishText = "";
+    let isNumber = false;
+    let isCapital = false;
+
+    for (let i = 0; i < braille.length; i+= 6) {
+        const brailleChar = braille.slice(i, i + 6);
+
+        if (brailleChar === brailleCapitalFollows) {
+            isCapital = true;
+            continue;
+        }
+
+        if (brailleChar === brailleNumberFollows) {
+            isNumber = true;
+            continue;
+        }
+
+        if (brailleChar === brailleSpace) {
+            englishText += " ";
+            isNumber = false;
+            continue;
+        }
+
+        if (isNumber) {
+            englishText += brailleNumbers[brailleChar]|| "?";
+            isNumber = false;
+        } else {
+            if (brailleLetters[brailleChar]) {
+                let char = brailleLetters[brailleChar];
+                if (isCapital) {
+                    char = char.toUpperCase();
+                    isCapital = false;
+                }
+                englishText += char;
+            } else if (brailleSymbols[brailleChar]) {
+                englishText += brailleSymbols[brailleChar];
+            } else {
+                englishText += "?";
+            }
+        }
+    }
+    return englishText;
+}
+
+const isBraille = (str) => /^[O.]{6,}$/.test(str);
+
+const translateString = (input) => {
+    if (isBraille(input)) {
+        return brailleToEnglish(input);
+    } else {
+        return englishToBraille(input);
+    }
+};
+
+const input = process.argv[2];
+console.log(translateString(input))
+
+// if (!input) {
+//     console.log(translateString(input));
+// } else {
+//     console.error("Please provide a string to translate.");
+// }
+
+// need to fix the number translation, and need to be able to translate without having the string within quotations
