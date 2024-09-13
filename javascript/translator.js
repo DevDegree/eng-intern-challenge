@@ -138,7 +138,16 @@ const brailleToEnglish = (braille) => {
             numberSequence = false; // Turn off both sequences as space will end a sequence.
         }
 
-   
+        let translated; //A character that can potentially be translated from the 3 mappings.
+        
+        // If we are in a number sequence.
+        if(isNumber) {
+            translated = flippedBrailleNumbers[symbol];
+            if(translated){ //To check for undefines or valid translations
+                result += translated;
+                continue; // Go out of the loop and check for next symbol.
+            }
+        }
 
 
         
