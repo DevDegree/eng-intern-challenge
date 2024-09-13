@@ -14,7 +14,7 @@ class BrailleTranslator:
         '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...',
         '.': '......', ',': '..O...', '?': '..OO.O', '!': '..OOOO', ';': '..O.O.',
         ':': '..O.OO', '-': '....O.', '/': '.O.O..', '<': '....OO', '>': '...O.O',
-        '(': '...OO.', ')': '...OOO', 
+        '(': '...OO.', ')': '...OOO'
     }
 
     # Reverse mapping for Braille to English translation
@@ -33,9 +33,13 @@ class BrailleTranslator:
                 braille_output.append(self.BRAILLE_ALPHABET['capital'])
                 braille_output.append(self.BRAILLE_ALPHABET[char.lower()])
             elif char.isdigit():
-                braille_output.append(self.BRAILLE_ALPHABET['number'])
+                if not self.number_mode:
+                    braille_output.append(self.BRAILLE_ALPHABET['number'])
+                    self.number_mode = True
                 braille_output.append(self.BRAILLE_ALPHABET[char])
             else:
+                if self.number_mode:
+                    self.number_mode = False
                 braille_output.append(self.BRAILLE_ALPHABET.get(char, ''))
         return ''.join(braille_output)
 
@@ -69,10 +73,8 @@ class BrailleTranslator:
             return ' '
 
         char = self.ENGLISH_ALPHABET.get(symbol, '')
-        if self.number_mode and char.isalpha():
-            # Convert a-j to 1-9 and 0 respectively
-            number = str(ord(char) - ord('a'))
-            return '0' if number == '-1' else number
+        if self.number_mode and char.isdigit():
+            return char
 
         if self.capitalize_next:
             char = char.upper()
@@ -90,7 +92,7 @@ def main():
     translator = BrailleTranslator()
 
     # Determine if the input is Braille or English by checking for valid Braille characters
-    if is_braille(input_text):
+    if all(c in 'O.' for c in input_text.replace(' ', '')):
         translated_text = translator.translate_to_english(input_text)
     else:
         translated_text = translator.translate_to_braille(input_text)
