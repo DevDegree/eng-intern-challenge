@@ -1,102 +1,82 @@
-import sys
-
-# Diccionarios para letras, números y caracteres especiales
-lettersList = {
-    "a": "O.....", "b": "O.O...", "c": "OO....", "d": "OO.O..", "e": "O..O..", "f": "OOO...",
-    "g": "OOOO..", "h": "O.OO..", "i": ".OO...", "j": ".OOO..", "k": "O..O.", "l": "O.O.O.",
-    "m": "OO..O.", "n": "OO.OO.", "o": "O..OO.", "p": "OOO.O.", "q": "OOOOO.", "r": "O.OOO.",
-    "s": ".OO.O.", "t": ".OOOO.", "u": "O...OO", "v": "O.O.OO", "w": ".OOO.O", "x": "OO..OO",
-    "y": "OO.OOO", "z": "O..OOO", "CAP": ".....O", "NUM": ".O.OOO", ".": "..OO.O", " ": "......"
-}
-
-numbersList = {
-    '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..', '6': 'OOO...',
-    '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..'
-}
-
-specialList = {
-    '.': '..OO.O', ',': '..O...', '?': '..O.OO', '!': '..OOO.', ':': '..OO..', ';': '..O.O.',
-    '-': '....OO', '/': '.O..O.', '<': '.OO..O', '>': 'O..OO.', '(': 'O.O..O', ')': '.O.OO.'
-}
-
-braillEnglishList = {
+# Diccionarios de Braille a Inglés
+braille_to_english = {
     "O.....": "a", "O.O...": "b", "OO....": "c", "OO.O..": "d", "O..O..": "e", "OOO...": "f",
     "OOOO..": "g", "O.OO..": "h", ".OO...": "i", ".OOO..": "j", "O..O.": "k", "O.O.O.": "l",
     "OO..O.": "m", "OO.OO.": "n", "O..OO.": "o", "OOO.O.": "p", "OOOOO.": "q", "O.OOO.": "r",
     ".OO.O.": "s", ".OOOO.": "t", "O...OO": "u", "O.O.OO": "v", ".OOO.O": "w", "OO..OO": "x",
-    "OO.OOO": "y", "O..OOO": "z", ".....O": "CAP", ".O.OOO": "NUM", "......": " ", ".O...O": "."
+    "OO.OOO": "y", "O..OOO": "z", ".....O": "CAPS", ".O.OOO": "NUM", "......": " ", ".O...O": "."
 }
 
-numberStart = ".O.OOO"
-capitalLetterStart = ".....O"
-space = "......"
+# Diccionario de Braille para números
+braille_to_number = {
+    "O.....": "1", "O.O...": "2", "OO....": "3", "OO.O..": "4", "O..O..": "5", "OOO...": "6",
+    "OOOO..": "7", "O.OO..": "8", ".OO...": "9", ".OOO..": "0", "..OO.O": ".", "..O...": ","
+}
 
-# Función para traducir de texto inglés a Braille
-def english_to_braille(text):
-    braille_output = ""
+# Diccionario de Inglés a Braille
+english_to_braille = {
+    "a": "O.....", "b": "O.O...", "c": "OO....", "d": "OO.O..", "e": "O..O..", "f": "OOO...",
+    "g": "OOOO..", "h": "O.OO..", "i": ".OO...", "j": ".OOO..", "k": "O..O.", "l": "O.O.O.",
+    "m": "OO..O.", "n": "OO.OO.", "o": "O..OO.", "p": "OOO.O.", "q": "OOOOO.", "r": "O.OOO.",
+    "s": ".OO.O.", "t": ".OOOO.", "u": "O...OO", "v": "O.O.OO", "w": ".OOO.O", "x": "OO..OO",
+    "y": "OO.OOO", "z": "O..OOO", "CAPS": ".....O", "NUM": ".O.OOO", ".": "..OO.O", " ": "......"
+}
+
+
+# Traducción de inglés a Braille
+def english_to_braille_translator(text):
+    result = ""
     num_state = False
 
     for char in text:
         if char.isdigit():
             if not num_state:
-                braille_output += lettersList["NUM"]
+                result += english_to_braille["NUM"]
                 num_state = True
-            braille_output += numbersList[char]
+            result += english_to_braille[char]
         else:
             if num_state:
                 num_state = False
             if char.isupper():
-                braille_output += lettersList["CAP"]
-            braille_output += lettersList[char.lower()]
+                result += english_to_braille["CAPS"]
+            result += english_to_braille[char.lower()]
 
-    return braille_output
+    return result
 
-# Función para traducir de Braille a texto inglés
-def braille_to_english(text):
-    text_output = ""
-    capital = False
+
+# Traducción de Braille a inglés
+def braille_to_english_translator(braille_text):
+    result = ""
+    capital_state = False
     num_state = False
 
-    for i in range(0, len(text), 6):
-        symbol = text[i:i + 6]
+    for i in range(0, len(braille_text), 6):
+        symbol = braille_text[i:i + 6]
 
-        if symbol == lettersList["CAP"]:
-            capital = True
+        if symbol == english_to_braille["CAPS"]:
+            capital_state = True
             continue
-        elif symbol == lettersList["NUM"]:
+        elif symbol == english_to_braille["NUM"]:
             num_state = True
             continue
 
         if num_state:
-            text_output += numbersList.get(symbol, "?")
+            result += braille_to_number.get(symbol, "?")
             if symbol == " ":
                 num_state = False
         else:
-            if capital:
-                text_output += braillEnglishList.get(symbol, "?").upper()
-                capital = False
+            if capital_state:
+                result += braille_to_english.get(symbol, "?").upper()
+                capital_state = False
             else:
-                text_output += braillEnglishList.get(symbol, "?")
+                result += braille_to_english.get(symbol, "?")
 
-    return text_output
+    return result
 
-# Función principal para detectar el formato y traducir
-def translate(input_string):
-    if all(char in 'O.' for char in input_string):  # Si solo contiene 'O' y '.'
-        return braille_to_english(input_string)
+
+# Función de traducción según el input
+def translate(text):
+    if all(c in "O." for c in text):
+        return braille_to_english_translator(text)
     else:
-        return english_to_braille(input_string)
-
-
-def main():
-    """
-    The main function
-    """
-
-    input_strings = sys.argv[1:]  # This captures all arguments after the script name
-    for input_string in input_strings:
-        result = translate(input_string)
-
-
-if __name__ == "__main__":
-    main()
+        return english_to_braille_translator(text)
