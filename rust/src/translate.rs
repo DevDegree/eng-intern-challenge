@@ -1,9 +1,14 @@
-use anyhow::{bail, Result};
+use anyhow::{bail, ensure, Result};
 
 pub fn english_to_braille(s: &str) -> Result<String> {
+    ensure!(s.is_ascii());
     let mut out = String::new();
 
-    for c in s.chars() {
+    let n = s.len();
+    let mut i = 0;
+    while i < n {
+        let c = s.as_bytes()[i] as char;
+
         if c.is_ascii_lowercase() {
             out.push_str(&lower_alpha_to_braille(c));
         } else if c.is_ascii_uppercase() {
@@ -12,10 +17,25 @@ pub fn english_to_braille(s: &str) -> Result<String> {
         } else if c == ' ' {
             out.push_str(SPACE);
         } else if c.is_ascii_digit() {
-            todo!("handle digits");
+            // Handle a group of consecutive digits all at once.
+            out.push_str(NUMBER_FOLLOWS);
+            while i < n && (s.as_bytes()[i] as char).is_ascii_digit() {
+                out.push_str(digit_to_braille(s.as_bytes()[i] as char));
+                i += 1;
+            }
+
+            // Insert a ' ' to reset the "context" from digits to letters, if
+            // needed.
+            if i < n && (s.as_bytes()[i] as char).is_ascii_alphabetic() {
+                out.push_str(SPACE);
+            }
+
+            continue;
         } else {
-            bail!("don't know how to convert from English to Braille: {c:?}");
+            bail!("don't know how to convert {c:?} from English to Braille");
         }
+
+        i += 1
     }
 
     Ok(out)
@@ -23,41 +43,60 @@ pub fn english_to_braille(s: &str) -> Result<String> {
 
 fn lower_alpha_to_braille(c: char) -> &'static str {
     match c {
-        'a' => ".OOOOO",
-        'b' => ".O.OOO",
-        'c' => "..OOOO",
-        'd' => "..O.OO",
-        'e' => ".OO.OO",
-        'f' => "...OOO",
-        'g' => "....OO",
-        'h' => ".O..OO",
-        'i' => "O..OOO",
-        'j' => "O...OO",
-        'k' => ".OOO.O",
-        'l' => ".O.O.O",
-        'm' => "..OO.O",
+        'a' => "O.....",
+        'b' => "O.O...",
+        'c' => "OO....",
+        'd' => "OO.O..",
+        'e' => "O..O..",
+        'f' => "OOO...",
+        'g' => "OOOO..",
+        'h' => "O.OO..",
+        'i' => ".OO...",
+        'j' => ".OOO..",
+        'k' => "O...O.",
+        'l' => "O.O.O.",
+        'm' => "OO..O.",
 
-        'n' => "..O..O",
-        'o' => ".OO..O",
-        'p' => "...O.O",
-        'q' => ".....O",
-        'r' => ".O...O",
-        's' => "O..O.O",
-        't' => "O....O",
-        'u' => ".OOO..",
-        'v' => ".O.O..",
-        'w' => "O...O.",
-        'x' => "..OO..",
-        'y' => "..O...",
-        'z' => ".OO...",
+        'n' => "OO.OO.",
+        'o' => "O..OO.",
+        'p' => "OOO.O.",
+        'q' => "OOOOO.",
+        'r' => "O.OOO.",
+        's' => ".OO.O.",
+        't' => ".OOOO.",
+        'u' => "O...OO",
+        'v' => "O.O.OO",
+        'w' => ".OOO.O",
+        'x' => "OO..OO",
+        'y' => "OO.OOO",
+        'z' => "O..OOO",
 
         _ => panic!("not lower alpha: {c:?}"),
     }
 }
 
-const CAPITAL_FOLLOWS: &str = "OOOOO.";
-const NUMBER_FOLLOWS: &str = "O.O...";
-const SPACE: &str = "OOOOOO";
+/// Note that the braille characters for `1234567890` overlap with `abcdefghij`.
+fn digit_to_braille(c: char) -> &'static str {
+    let alpha = match c {
+        '1' => 'a',
+        '2' => 'b',
+        '3' => 'c',
+        '4' => 'd',
+        '5' => 'e',
+        '6' => 'f',
+        '7' => 'g',
+        '8' => 'h',
+        '9' => 'i',
+        '0' => 'j',
+        _ => panic!("not a digit: {c:?}"),
+    };
+
+    lower_alpha_to_braille(alpha)
+}
+
+const CAPITAL_FOLLOWS: &str = ".....O";
+const NUMBER_FOLLOWS: &str = ".O.OOO";
+const SPACE: &str = "......";
 
 #[cfg(test)]
 mod tests {
@@ -70,13 +109,13 @@ mod tests {
     #[test]
     fn test_lower_alpha_to_braille() {
         let expected = &[
-            b".O  .O  ..  ..  .O  ..  ..  .O  O.  O.  .O  .O  ..",
-            b"OO  .O  OO  O.  O.  .O  ..  ..  .O  ..  OO  .O  OO",
-            b"OO  OO  OO  OO  OO  OO  OO  OO  OO  OO  .O  .O  .O",
+            b"O.  O.  OO  OO  O.  OO  OO  O.  .O  .O  O.  O.  OO",
+            b"..  O.  ..  .O  .O  O.  OO  OO  O.  OO  ..  O.  ..",
+            b"..  ..  ..  ..  ..  ..  ..  ..  ..  ..  O.  O.  O.",
             b"                                                  ",
-            b"..  .O  ..  ..  .O  O.  O.  .O  .O  O.  ..  ..  .O",
-            b"O.  O.  .O  ..  ..  .O  ..  OO  .O  ..  OO  O.  O.",
-            b".O  .O  .O  .O  .O  .O  .O  ..  ..  O.  ..  ..  ..",
+            b"OO  O.  OO  OO  O.  .O  .O  O.  O.  .O  OO  OO  O.",
+            b".O  .O  O.  OO  OO  O.  OO  ..  O.  OO  ..  .O  .O",
+            b"O.  O.  O.  O.  O.  O.  O.  OO  OO  .O  OO  OO  OO",
         ];
 
         // "Pretty-print" the braille patterns for `a..=z`.
