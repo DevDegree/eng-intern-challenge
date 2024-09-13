@@ -112,6 +112,8 @@ const englishToBraille = {
     ' ': '......'
 };
 
+// FUNCTION TO CONVERT ENGLISH TO BRAILLE AND BRAILLE TO ENGLISH
+
 function translateBrailleToEnglish(braille) {
     let translated = '';
     const brailleCharacters = braille.match(/.{1,6}/g);
