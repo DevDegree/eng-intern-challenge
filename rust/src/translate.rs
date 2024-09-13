@@ -1,36 +1,40 @@
-fn upper_alpha_to_braille(c: char) -> &'static str {
+fn lower_alpha_to_braille(c: char) -> &'static str {
     match c {
-        'A' => ".OOOOO",
-        'B' => ".O.OOO",
-        'C' => "..OOOO",
-        'D' => "..O.OO",
-        'E' => ".OO.OO",
-        'F' => "...OOO",
-        'G' => "....OO",
-        'H' => ".O..OO",
-        'I' => "O..OOO",
-        'J' => "O...OO",
-        'K' => ".OOO.O",
-        'L' => ".O.O.O",
-        'M' => "..OO.O",
+        'a' => ".OOOOO",
+        'b' => ".O.OOO",
+        'c' => "..OOOO",
+        'd' => "..O.OO",
+        'e' => ".OO.OO",
+        'f' => "...OOO",
+        'g' => "....OO",
+        'h' => ".O..OO",
+        'i' => "O..OOO",
+        'j' => "O...OO",
+        'k' => ".OOO.O",
+        'l' => ".O.O.O",
+        'm' => "..OO.O",
 
-        'N' => "..O..O",
-        'O' => ".OO..O",
-        'P' => "...O.O",
-        'Q' => ".....O",
-        'R' => ".O...O",
-        'S' => "O..O.O",
-        'T' => "O....O",
-        'U' => ".OOO..",
-        'V' => ".O.O..",
-        'W' => "O...O.",
-        'X' => "..OO..",
-        'Y' => "..O...",
-        'Z' => ".OO...",
+        'n' => "..O..O",
+        'o' => ".OO..O",
+        'p' => "...O.O",
+        'q' => ".....O",
+        'r' => ".O...O",
+        's' => "O..O.O",
+        't' => "O....O",
+        'u' => ".OOO..",
+        'v' => ".O.O..",
+        'w' => "O...O.",
+        'x' => "..OO..",
+        'y' => "..O...",
+        'z' => ".OO...",
 
-        _ => panic!("not upper alpha: {c:?}"),
+        _ => panic!("not lower alpha: {c:?}"),
     }
 }
+
+const CAPITAL_FOLLOWS: &str = "OOOOO.";
+const NUMBER_FOLLOWS: &str = "O.O...";
+const SPACE: &str = "OOOOOO";
 
 #[cfg(test)]
 mod tests {
@@ -38,10 +42,10 @@ mod tests {
 
     use super::*;
 
-    /// The code for `upper_alpha_to_braille` is prone to typos, so let's
+    /// The code for `lower_alpha_to_braille` is prone to typos, so let's
     /// double-check it here.
     #[test]
-    fn test_upper_alpha_to_braille() {
+    fn test_lower_alpha_to_braille() {
         let expected = &[
             b".O  .O  ..  ..  .O  ..  ..  .O  O.  O.  .O  .O  ..",
             b"OO  .O  OO  O.  O.  .O  ..  ..  .O  ..  OO  .O  OO",
@@ -52,12 +56,12 @@ mod tests {
             b".O  .O  .O  .O  .O  .O  .O  ..  ..  O.  ..  ..  ..",
         ];
 
-        // "Pretty-print" the braille patterns for `A..=Z`.
+        // "Pretty-print" the braille patterns for `a..=z`.
         let mut out = vec![vec![b' '; expected[0].len()]; expected.len()];
 
-        for (i, chars) in ['A'..='M', 'N'..='Z'].into_iter().enumerate() {
+        for (i, chars) in ['a'..='m', 'n'..='z'].into_iter().enumerate() {
             for (j, c) in chars.enumerate() {
-                let braille = upper_alpha_to_braille(c);
+                let braille = lower_alpha_to_braille(c);
                 assert_eq!(braille.len(), 6);
 
                 let offsets = [(0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1)];
