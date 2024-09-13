@@ -57,7 +57,6 @@ def text_to_braille(text):
         else:
             if number_mode and char != ' ':
                 number_mode = False
-                result.append(text_to_braille_dict[' ']) #In case theres a letter after a number add space to preserve text content.
             result.append(text_to_braille_dict[char])
     
     return ''.join(result)
