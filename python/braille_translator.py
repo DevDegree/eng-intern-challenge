@@ -12,15 +12,17 @@ english_to_braille = {
     "(": "O.O..O", ")": ".O.OO.", " ": "......",
     "DECIMAL": ".O...O",
     "CAPITAL": ".....O",  
-    "NUMBER": ".O.OOO" 
+    "NUMBER": ".O.OOO"
 }
-
-braille_to_english = {v: k for k, v in english_to_braille.items()}
 
 class BrailleTranslator:
     def __init__(self):
         self.english_to_braille_dict = english_to_braille
-        self.braille_to_english_dict = braille_to_english
+        self.braille_to_letter = {v: k for k, v in english_to_braille.items() if k.isalpha()}
+        self.braille_to_digit = {v: k for k, v in english_to_braille.items() if k.isdigit()}
+        self.capital_sign = self.english_to_braille_dict['CAPITAL']
+        self.number_sign = self.english_to_braille_dict['NUMBER']
+        self.space_sign = self.english_to_braille_dict[' ']
 
     def translate_to_braille(self, english_text):
         braille_output = []
@@ -28,7 +30,7 @@ class BrailleTranslator:
         for c in english_text:
             if c == ' ':
                 braille_output.append(self.english_to_braille_dict[' '])
-                number_mode = False 
+                number_mode = False
                 continue
             if c.isdigit():
                 if not number_mode:
@@ -47,3 +49,45 @@ class BrailleTranslator:
                     braille_output.append(braille_char)
         return ''.join(braille_output)
 
+    def translate_to_english(self, braille_text):
+        english_output = []
+        index = 0
+        capital_mode = False
+        number_mode = False
+        while index < len(braille_text):
+            braille_char = braille_text[index:index+6]
+            index += 6
+
+            if braille_char == self.space_sign:
+                english_output.append(' ')
+                number_mode = False
+                capital_mode = False
+                continue
+
+            elif braille_char == self.capital_sign:
+                capital_mode = True
+                continue
+
+            elif braille_char == self.number_sign:
+                number_mode = True
+                continue
+
+            else:
+                if number_mode:
+                    char = self.braille_to_digit.get(braille_char, '')
+                    if char:
+                        english_output.append(char)
+                    else:
+                        pass
+                else:
+                    char = self.braille_to_letter.get(braille_char, '')
+                    if char:
+                        if capital_mode:
+                            english_output.append(char.upper())
+                            capital_mode = False
+                        else:
+                            english_output.append(char)
+                    else:
+                        pass
+
+        return ''.join(english_output)
