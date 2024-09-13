@@ -79,36 +79,31 @@ const isBraille = (str) => {
 
 //Translate English to Braille
 //reversing the mappings should have been done first but doesnt make a difference in the end
-const engToBrl = (eng) => {
+const englishToBraille = (eng) => {
     let result = '';
-    let isNumber = false; //boolean to see if its a number
+    let numberSequence = false; //boolean to see if its a number
 
     //Loop through each char of 'str' and perform a check to see which mappings are appropriate.
     for(let char of eng) {
-        // If the character is a space append a 'braille' space to result.
-        if(char === ' ') {
-            result += brailleChars.space; 
-        } else if (/[A-Z]/.test(char)) { //check if it is an uppercase;
-            result += brailleChars.capital + brailleChars[char.toLowerCase()];
+        if(char === ' ') { // for spaces ' '.
+            result += brailleSpecial.space; 
+        } else if (/[A-Z]/.test(char)) { //check if it is an uppercase, add the prefix and character
+            result += brailleSpecial.capital + brailleLetters[char.toLowerCase()];
+        } else if (/[a-z]/.test(char)) { // For lowercase letters
+            result += brailleLetters[char];
         } else if(/[1-9]/.test(char)) {
-            if(!isNumber) { // if it isnt a number make it a number
-                result += brailleChars.number; //prefix
-                isNumber = true;
+            if(!numberSequence) { // if it isnt a number make it a number
+                result += brailleSpecial.number; //prefix
+                numberSequence = true;
             }
-            result += brailleChars[char]; // append the character
-        } else if(char === '.') { // check if it is a period or a decimal
-            if(isNumber) {
-                result += brailleChars.decimal;
-            } else {
-                result += brailleChars[char];
-            }
-        } else {
-            isNumber = false;
-            result += brailleChars[char]; //  for default
+            result += brailleNumbers[char]; // append the character
+        } else if(brailleSpecial[char]) { // Existance check 
+            result += brailleSpecial[char];
+            numberSequence = false; //Exit after you see 
         }
     }
 
-    return result;
+    return result.trim(); // Make sure the output is a clean string.
 }
 
 
