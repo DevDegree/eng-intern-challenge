@@ -102,7 +102,7 @@ def braille_translate(braille):
         elif current == NUMBER:
             num = True
         elif current == SPACE:
-            current += " "
+            output += " "
             # reset num status
             num = False
         elif num:
@@ -122,11 +122,18 @@ def braille_translate(braille):
 def english_translate(text):
     # cases: space, number, capital, lowercase
     output = ""
+    num = False # number state
     for letter in text:
         if letter in nums_to_braille:
-            output += (NUMBER + nums_to_braille[letter])
+            if not num:
+                output += (NUMBER + nums_to_braille[letter])
+            if num:
+                output += nums_to_braille[letter] # don't add number prefix
+            num = True
         elif letter == " ":
             output += SPACE
+            # disable number prefix
+            num = False
         elif letter.isupper():
             # uppercase letter
             output += (CAPITAL + eng_to_braille[letter.lower()])
@@ -137,11 +144,11 @@ def english_translate(text):
 
 # determines whether it's braille or not.
 def is_braille(inp):
-    l = len(input)
+    l = len(inp)
     os = inp.count("O")
     dots = inp.count(".")
     # checking according to the conditions at the top of the file
-    if (l % 6) * 6 == l and os + dots == l and dots > 0:
+    if l % 6 == 0 and os + dots == l and dots > 0:
         return True
     else:
         return False
@@ -149,7 +156,7 @@ def is_braille(inp):
 # wrapper function that returns the output to the main execution.
 # allows for testing using a test harness
 def return_output(inp):
-    if is_braille:
+    if is_braille(inp):
         return braille_translate(inp)
     else:
         return english_translate(inp)
@@ -158,14 +165,18 @@ def return_output(inp):
 def test_harness():
     cases = [
         # start with given cases
-        ("Hello World", ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."),
+        ("Hello world", ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."),
         ("42", ".O.OOOOO.O..O.O..."),
         (".....OO.....O.O...OO...........O.OOOO.....O.O...OO....", "Abc 123"),
         # my test cases below
     ]
 
     for case in cases:
-        assert(return_output(case[1]) == case[2])
+        print(case)
+        s = return_output(case[0])
+        print(s)
+        print(s == case[1])
+        assert(s == case[1])
     
     print("testing mode: assertions passed.")
 
@@ -173,4 +184,6 @@ if __name__ == "__main__":
     # main execution
     if TESTING:
         test_harness()
+    for arg in sys.argv[1:]:
+        print(return_output(arg))
     
