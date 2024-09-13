@@ -1,4 +1,3 @@
-
 import sys
 
 # This code pretends that memory is limited so, instead of using 2 dictionaries, the use of unicode is privileged
@@ -19,8 +18,29 @@ def translate(string_to_translate: str):
         return translate_to_english(string_to_translate)
     return translate_to_braille(string_to_translate)
 
-def translate_to_braille(string_to_translate: str):         
-    return "translated_string"
+def translate_to_braille(string_to_translate: str):
+    dictionary_keys = list(dictionary.keys())
+    translated_string = ""
+    numbers_follows = False
+    for i in string_to_translate:
+        unicode_code = ord(i)
+        if i == ' ':
+            numbers_follows = False
+            translated_string += space_marker
+        elif unicode_code < 65: #unicode smaller that the unicode of "A" which means it's a decimal
+            if not numbers_follows:
+                numbers_follows = True
+                translated_string += number_marker
+            if unicode_code == 48: # unicode of 0
+                translated_string += dictionary_keys[9]
+            else:
+                translated_string += dictionary_keys[unicode_code - 49]
+        else:
+            if ord(i) < 97: #unicode smaller that the unicode of "a" which means it's a capital letter
+                translated_string += capital_marker
+                unicode_code += 32 # convert to its smaller case 
+            translated_string += dictionary_keys[unicode_code - 97]            
+    return translated_string
 
 def translate_to_english(string_to_translate: str):
     capital_follows = False
