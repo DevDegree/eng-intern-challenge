@@ -6,21 +6,25 @@ import {
 
 /**
  * Determines if the input is in Braille format.
- * @param input - An array of strings to check.
- * @returns True if the input is in Braille format, false otherwise.
+ * @param {string[]} input - An array of strings to check.
+ * @returns {boolean}True if the input is in Braille format, false otherwise.
  */
 function isInputBraille(input: string[]): boolean {
-	if (input.length > 1) return false; // Braille input should be a single element (no spaces)
-	const brailleRegex = new RegExp(/^[.O]+$/); // Braille input should only include '.' and 'O'
+	// Braille input is determined by a single element which includes only '.' and 'O'
+	if (input.length !== 1 || input[0].length === 0) return false;
+	const brailleRegex = /^[.O]+$/;
 	return brailleRegex.test(input[0]);
 }
 
 /**
  * Translates Braille input to English.
- * @param input - A string of Braille characters.
- * @returns The translated English string.
+ * @param {string} input - A string of Braille characters.
+ * @returns {string} The translated English string.
  */
 function translateBraille(input: string): string {
+	if (input.length % 6 !== 0) {
+		throw new Error("Invalid Braille input length.");
+	}
 	const segments = input.match(/.{1,6}/g) || []; // Convert the input string to an array of 6-character segments
 	const { characters, digits } = BRAILLE_TO_ENGLISH_MAP;
 	let translation = "";
@@ -38,12 +42,10 @@ function translateBraille(input: string): string {
 			numberMode = true;
 			continue;
 		}
-		// Handle space indicator - this is the indicator for the end of a word
+		// Handle space indicator - this is the indicator for the end of a word and number sequence
 		if (segment === SPECIAL_BRAILLE_INDICATORS.space) {
-			if (!numberMode) {
-				translation += " ";
-			}
 			numberMode = false;
+			translation += " ";
 			continue;
 		}
 
@@ -69,21 +71,21 @@ function translateBraille(input: string): string {
 
 /**
  * Translates English input to Braille.
- * @param input - An array of English words.
- * @returns The translated Braille string.
+ * @param {string[]} input - An array of English words.
+ * @returns {string} The translated Braille string.
  */
 function translateEnglish(input: string[]): string {
 	const { characters, digits } = ENGLISH_TO_BRAILLE_MAP;
 	let translation = "";
-	let numberMode = false;
 
-	for (let i = 0; i < input.length; i++) {
+	for (let i = 0, inputLength = input.length; i < inputLength; i++) {
 		const word = input[i];
+		let numberMode = false;
 		for (let j = 0; j < word.length; j++) {
 			const char = word[j];
 
+			// Handle numbers
 			if (char.match(/[0-9]/)) {
-				// Handle numbers
 				if (!numberMode) {
 					// Add number indicator if not already in number mode
 					numberMode = true;
@@ -94,11 +96,13 @@ function translateEnglish(input: string[]): string {
 			}
 
 			// Handle alphabetic characters
+			if (!char.match(/[A-Za-z]/)) {
+				throw new Error(`Unsupported character: '${char}'`);
+			}
 
+			// Exit number mode due to encountering a non-numeric character
 			if (numberMode) {
-				// Exit number mode since we encountered an alphabetic character
 				numberMode = false;
-				// Add a space to indicate the end of a number sequence, unless it's the last number in the word
 				translation += SPECIAL_BRAILLE_INDICATORS.space;
 			}
 
@@ -113,10 +117,9 @@ function translateEnglish(input: string[]): string {
 			}
 		}
 		// Add space indicator between words, except for the last word
-		if (i !== input.length - 1) {
+		if (i !== inputLength - 1) {
 			translation += SPECIAL_BRAILLE_INDICATORS.space;
 		}
-		numberMode = false; // Reset number mode after each word (because space is the indicator for the end of a number sequence)
 	}
 
 	return translation;
@@ -124,6 +127,7 @@ function translateEnglish(input: string[]): string {
 
 /**
  * Main function to handle input, translation, and output.
+ * @returns {string | undefined} The translation result or undefined if an error occurs.
  */
 function main(): string | undefined {
 	try {
@@ -136,7 +140,7 @@ function main(): string | undefined {
 		return translation;
 	} catch (error) {
 		if (error instanceof Error) {
-			console.error("Translation error: ", error.message);
+			console.error("Translation error:", error.message);
 		} else {
 			console.error("An unknown error occurred", error);
 		}
