@@ -9,3 +9,8 @@ install:
 	@go mod vendor
 	@go mod tidy
 	@go mod download
+
+test:
+	@make
+	@go clean -testcache
+	@go test -v ./...
