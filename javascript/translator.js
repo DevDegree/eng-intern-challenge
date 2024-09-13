@@ -40,7 +40,7 @@ const charToBraille = {
   '>': 'O..OO.',
   '(': 'O.O..O',
   ')': '.O.OO.',
-  space: '......',
+  ' ': '......',
 };
 
 numToBraille = {
@@ -65,10 +65,12 @@ let brailleToNum = Object.fromEntries(
 );
 
 //DEBUG REMOVE
-console.log(brailleToChar);
-console.log(brailleToNum);
+// console.log(brailleToChar);
+// console.log(brailleToNum);
 
-let inputString = process.argv.slice(2);
+let inputString = process.argv.slice(2)[0];
+
+console.log(inputString);
 
 const translate = (str) => {
   let isBraille = undefined;
@@ -108,7 +110,7 @@ const translate = (str) => {
       }
       //handle upeprcase
       else {
-        result.push(charToBraille[cap] + charToBraille[char]);
+        result.push(charToBraille['cap'] + charToBraille[char.toLowerCase()]);
         prevCharNum = false;
       }
     }
@@ -156,7 +158,7 @@ const translate = (str) => {
       result.push(char);
     }
   }
-  console.log(result.join(''));
+  // console.log(result.join(''));
   return result.join('');
 };
 
