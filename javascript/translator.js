@@ -81,8 +81,6 @@ const isBraille = (str) => {
 //reversing the mappings should have been done first but doesnt make a difference in the end
 const engToBrl = (eng) => {
     let result = '';
-    let upperCase = /[A-Z]/;
-    let numbers = /[0-9]/;
     let isNumber = false; //boolean to see if its a number
 
     //Loop through each char of 'str' and perform a check to see which mappings are appropriate.
@@ -90,9 +88,9 @@ const engToBrl = (eng) => {
         // If the character is a space append a 'braille' space to result.
         if(char === ' ') {
             result += brailleChars.space; 
-        } else if (upperCase.test(char)) { //check if it is an uppercase;
+        } else if (/[A-Z]/.test(char)) { //check if it is an uppercase;
             result += brailleChars.capital + brailleChars[char.toLowerCase()];
-        } else if(numbers.test(char)) {
+        } else if(/[1-9]/.test(char)) {
             if(!isNumber) { // if it isnt a number make it a number
                 result += brailleChars.number; //prefix
                 isNumber = true;
