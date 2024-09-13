@@ -65,3 +65,43 @@ def translate_to_braille(text)
   result
 end
 
+def translate_to_english(braille)
+  result = ''
+  number_mode = false
+  capital_follows = false
+  braille.scan(/.{6}/).each do |braille_char|
+    if braille_char == CAPITAL_FOLLOWS
+      capital_follows = true
+      next
+    end
+    if braille_char == NUMBER_FOLLOWS
+      number_mode = true
+      next
+    end
+    if !number_mode
+      result << if capital_follows
+                  BRAILLE_TO_ENGLISH[braille_char].upcase
+                else
+                  BRAILLE_TO_ENGLISH[braille_char]
+                end
+      capital_follows = false
+    elsif braille_char == '......'
+      number_mode = false
+      result << BRAILLE_TO_ENGLISH[braille_char]
+    else
+      result << BRAILLE_TO_NUMBERS[braille_char]
+    end
+  end
+  result
+end
+
+def main(input)
+  if input.match(/[O.]/)
+    puts translate_to_english(input)
+  else
+    puts translate_to_braille(input)
+  end
+end
+
+input = ARGV.join(' ')
+main(input)
