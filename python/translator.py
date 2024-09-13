@@ -52,6 +52,8 @@
 #    While i < length of braille_string:
 #       current_symbol = braille_string[i:i+6]
 
+#     Follow logical order of checking for capital, number, space, and then the character itself
+
 #       If current_symbol == braille_dict["capital follows"]:
 #          capital_mode = True
 #          i += 6
