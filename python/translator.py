@@ -1,4 +1,5 @@
-# Description: This script will take a message and convert it to/from braille into plaintext.
+# Description: This script will take a message and convert it to braille from plaintext or vice versa.
+#               Supports A-Z, a-z 0-9 (not mixed with alphabetical chars), and spaces
 
 # Braille mapping. LUT is the most efficient runtime (O(1)) for this problem.
 BRAILLE_TO_CHAR = {
@@ -51,12 +52,11 @@ BRAILLE_LEN = len(next(iter(BRAILLE_TO_CHAR.keys())))
 
 
 # Name:         chunks
-# Purpose:      Yield n number of striped chunks from l
+# Purpose:      Yield chunks of n size from l
 # Parameters:   l - a list
 #               n - an integer
 # Returns:      a generator object of n number of striped chunks from l
 def chunks(l, n):
-    """Yield n number of striped chunks from l."""
     for i in range(0, len(l), n):
         yield l[i:i+n]
 
@@ -68,9 +68,7 @@ def chunks(l, n):
 def decode(i: str):
     decoded_msg = str()
     chars = chunks(i, BRAILLE_LEN)
-    # print(BRAILLE_LEN)
-    # print(list(chars))
-    # exit(1)
+    # flags for capital chars/number words
     isCapital = False
     isNumber = False
     for c in chars:
@@ -81,8 +79,8 @@ def decode(i: str):
         if decoded_c == 'NUMBER':
             isNumber = True
             continue
-        if decoded_c == 'DECIMAL':
-            continue
+        # if decoded_c == 'DECIMAL':
+        #     continue
 
         if isCapital:
             decoded_c = decoded_c.upper()
@@ -110,20 +108,20 @@ def encode(i: str):
     # break the input into words
     words = i.split(' ')
     for idx, word in enumerate(words):
-        if word.isdigit():
+        if word.isdigit():  # number case
             encoded_msg += CHAR_TO_BRAILLE['NUMBER']
             for c in word:
                 encoded_msg += CHAR_TO_BRAILLE[chr(ord('a') + int(c))]
             encoded_msg += CHAR_TO_BRAILLE[' ']
             continue
         for c in word:
-            if c.isupper():
+            if c.isupper():  # uppercase case
                 encoded_msg += CHAR_TO_BRAILLE['CAPITAL']
                 c = c.lower()
             encoded_msg += CHAR_TO_BRAILLE[c]
         if idx < len(words) - 1:
-            encoded_msg += CHAR_TO_BRAILLE[' ']
-    return encoded_msg.strip()
+            encoded_msg += CHAR_TO_BRAILLE[' '] # space between words except last word
+    return encoded_msg
 
 
 if __name__ == '__main__':
