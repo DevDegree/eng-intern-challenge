@@ -128,7 +128,6 @@ if __name__ == "__main__":
                 result += char_to_braille[" "]
         else:
             result += translate_braile_chars(strings[i])
-            print(result)
             if i < len(strings) - 1:
                 result += " "
     print(result)
