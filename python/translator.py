@@ -1,5 +1,6 @@
 import sys
 
+#note that this code would be better with error checking, ex. checking number of characters in braille to ensure correct output
 #get english to braille dictionary
 english_to_braille_letter_conv = {
     "a": "O.....",
