@@ -1,3 +1,4 @@
+import sys
 
 # Dictionnaries for translation
 brailDict = { 
@@ -23,12 +24,15 @@ numberDict = {
 }
 
 # In charge of receiving a string from the user
-def receiveMessage() :
-    message = str(input(""))
-    if isMessageBraille(message) :
-        translateFromBraille(message)
-    else : 
-        translateToBraille(message)
+def receiveMessage():
+    # Join the command-line arguments into a single string, with spaces between them
+    message = ' '.join(sys.argv[1:])
+    
+    if isMessageBraille(message):
+        return translateFromBraille(message)
+    else:
+        return translateToBraille(message)
+
 
 # Checks if message is Braille or not
 def isMessageBraille(msg) :
@@ -95,7 +99,8 @@ def translateFromBraille(msg):
         decimal_mode = False
 
     # Join the array into a string then return it
-    print(''.join(translation))
+    translated = ''.join(translation)
+    print(translated)
 
 
 # Translates from keys to braille
@@ -137,6 +142,9 @@ def translateToBraille(msg) :
             lastIsNum = False
     
     # Join the array into a string then return it
-    print(''.join(translation))
-    
-receiveMessage()
+    translated = ''.join(translation)
+    print(translated)
+
+# Run the message receiver
+if __name__ == "__main__":
+    receiveMessage()
