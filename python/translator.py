@@ -1,3 +1,5 @@
+import sys
+
 # English to Braille dictionary for letters and punctuation
 ENGLISH_TO_BRAILLE_LETTERS = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
@@ -94,18 +96,18 @@ def detect_input_type(input_str):
         return "english"
 
 def main():
-    # Get input from the user
-    input_str = input()
+    # Check if command-line arguments were passed
+    if len(sys.argv) > 1:
+        # Join the arguments to form the input string
+        input_str = " ".join(sys.argv[1:])
 
     # Detect whether the input is Braille or English
     input_type = detect_input_type(input_str)
 
     if input_type == "braille":
-        # Convert Braille to English
         result = braille_to_english(input_str)
         print(result)
     else:
-        # Convert English to Braille
         result = english_to_braille(input_str)
         print(result)
 
