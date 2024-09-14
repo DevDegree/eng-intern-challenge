@@ -15,7 +15,6 @@ key_list = list(braille.keys())
 value_list = list(braille.values())
 
 
-
 def BrailleEncoder(message: str) -> None: 
 	isNumber: bool = False
 	result: str = ""
