@@ -7,7 +7,7 @@ def main():
     args = sys.argv[1:]
 
     if not args:
-        print("Usage: python3 translator.py <text to translate>")
+        print("Usage: python3 translator.py <text to translate (english/braille)>")
         sys.exit(1)
 
     translator = BrailleTranslator()

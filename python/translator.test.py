@@ -21,6 +21,16 @@ class TestTranslator(unittest.TestCase):
         result = subprocess.run(command, capture_output=True, text=True)
         expected_output = "Abc 123 xYz"
         self.assertEqual(result.stdout.strip(), expected_output)
+        
+        command = ["python3", "translator.py", "O.OO...OO..."]
+        result = subprocess.run(command, capture_output=True, text=True)
+        expected_output = "hi"
+        self.assertEqual(result.stdout.strip(), expected_output)
+
+        command = ["python3", "translator.py", ".....OO......O.OOOO....."]
+        result = subprocess.run(command, capture_output=True, text=True)
+        expected_output = "A1"
+        self.assertEqual(result.stdout.strip(), expected_output)
 
     def test_examples(self):
         # Test case 1: Input: "Hello world"

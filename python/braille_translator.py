@@ -27,7 +27,8 @@ class BrailleTranslator:
 
     def translate_to_braille(self, english_text: str) -> str:
         """
-        translates English text to Braille
+        Translates English text to Braille
+
         args:
             english_text (str): The English text to translate
         returns:
@@ -59,7 +60,8 @@ class BrailleTranslator:
 
     def translate_to_english(self, braille_text: str) -> str:
         """
-        translates Braille text to English.
+        Translates Braille text to English.
+
         args:
             braille_text (str): The Braille text to translate.
         returns:
