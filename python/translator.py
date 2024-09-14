@@ -1,4 +1,5 @@
 import sys
+from typing import Tuple, List
 
 # Braille to English map
 BRAILLE_TO_ENG = {
@@ -49,7 +50,7 @@ BRAILLE_TO_NUMBER = {
 ENG_TO_BRAILLE = {v: k for k,v in BRAILLE_TO_ENG.items()}
 NUMBER_TO_BRAILLE = {v: k for k,v in BRAILLE_TO_NUMBER.items()}
 
-def tokenize_message(message: str) -> tuple[list[str], str]:
+def tokenize_message(message: str) -> Tuple[List[str], str]:
     '''
     Splits a message into a list of tokens and returns the language to which
     it corresponds. If the language is english, it returns the message as a
@@ -69,9 +70,9 @@ def tokenize_message(message: str) -> tuple[list[str], str]:
 
     return (tokens, "braille")
 
-def braille_to_english(tokens: list[str]) -> str:
+def braille_to_english(tokens: List[str]) -> str:
     '''Translates a list of braille tokens to an english string.'''
-    english_text: list[str] = []
+    english_text: List[str] = []
     is_capital = False
     is_number = False
 
@@ -96,9 +97,9 @@ def braille_to_english(tokens: list[str]) -> str:
 
     return "".join(english_text)
 
-def english_to_braille(tokens: list[str]) -> str:
+def english_to_braille(tokens: List[str]) -> str:
     '''Translates a list of english characters to a braille string.'''
-    braille_text: list[str] = []
+    braille_text: List[str] = []
     is_number = False
 
     for char in tokens:
