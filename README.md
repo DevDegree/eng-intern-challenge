@@ -1,5 +1,8 @@
 # Eng Intern Challenge Fall - Winter 2025
 
+Assumptions:
+I followed the provided screenshot of the braille symbols and did not touch the failing translator.test.py file as per the requirements. I used python3 to complete the braille translator
+
 # **Note: In order for our submission automation to function correctly:**
 1. **Your Github email must match the email you submitted your Application with (if your Github email is different, we recommend creating a new Github profile with the email you created your application with)**
 2. **Have your email set to public on your Github Profile**
