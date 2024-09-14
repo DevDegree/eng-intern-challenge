@@ -14,7 +14,7 @@ export function isNumber(str: string) {
 }
 
 export function isBraille(str: string): boolean {
-  if (str.length !== 6) {
+  if (str.length % 6 !== 0) {
     return false;
   }
 
