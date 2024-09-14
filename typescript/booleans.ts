@@ -19,7 +19,7 @@ export function isBraille(str: string): boolean {
   }
 
   for (let char of str) {
-    if (!(char == "o" || char == ".")) {
+    if (!(char == "O" || char == ".")) {
       return false;
     }
   }
