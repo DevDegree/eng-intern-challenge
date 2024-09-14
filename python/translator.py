@@ -1,3 +1,4 @@
+import sys
 
 def braille_translator(wordsInput):
     braille_dict = {
@@ -53,32 +54,42 @@ def braille_translator(wordsInput):
     }
     
     braille_translation = ""
-    numberFound = False;
-    
-   
+    number_mode = False
+
     for letter in wordsInput:
-        if letter.isupper():    # Check for uppercase letter
-            braille_translation += ".....O"  # Add capitalization indicator
-            braille_translation += braille_dict[letter.lower()]  # Add lowercase letter Braille
-            numberFound = False  # End number mode if applicable
+        # Handle uppercase letters
+        if letter.isupper() and not number_mode:
+            braille_translation += ".....O"  # Add capital indicator
+            braille_translation += braille_dict[letter.lower()]  # Add the lowercase letter Braille
 
-        elif letter.isdigit():  # Check for numbers
-            if not numberFound:
-                braille_translation += ".O.OOO"  # Add number indicator
-                numberFound = True  # Start number mode
-            braille_translation += braille_dict[letter]  # Add the Braille digit
+        # Handle digits (in number mode)
+        elif letter.isdigit():
+            if not number_mode:
+                braille_translation += ".O.OOO"  # Add number follows indicator
+                number_mode = True  # Enter number mode
+            braille_translation += braille_dict[letter]  # Add the digit's Braille
 
-        elif letter == '.':  # Check for decimal point
-            braille_translation += ".O...O"  # Add decimal indicator
+        # Handle decimal point (stay in number mode)
+        elif letter == '.':
+            braille_translation += ".O...O"  # Add decimal follows indicator
             braille_translation += braille_dict[letter]  # Add the Braille decimal point
-            numberFound = False  # End number mode after decimal point
+            number_mode = True  # Stay in number mode
 
-        else:  # For lowercase letters, punctuation, or spaces
-            braille_translation += braille_dict[letter]  # Add the Braille equivalent
-            numberFound = False  # End number mode for non-numeric characters
+        # Handle spaces (reset number mode)
+        elif letter == ' ':
+            braille_translation += braille_dict[letter]  # Add space
+            number_mode = False  # Reset number mode
+
+        # Handle punctuation or lowercase letters (only if not in number mode)
+        elif not number_mode:
+            braille_translation += braille_dict[letter]  # Add Braille for punctuation or lowercase letters
+
+    print(braille_translation, end='')
+
+# Command-line interface to handle input from the command
+if __name__ == "__main__":
+    # Combine command-line arguments into a single string
+    args = " ".join(sys.argv[1:])
     
-    print(braille_translation)
-
-wordsInput = input()
-
-braille_translator(wordsInput)
+    # Call the braille_translator function with the arguments
+    braille_translator(args)
