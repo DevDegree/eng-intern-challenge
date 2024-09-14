@@ -1,6 +1,9 @@
 # Note: the technical requirements only asked for alphabet and number translations
 # so I left special character translation out
 
+import sys
+import unittest
+
 braille_to_eng_dict = {
     "O.....": ("a", "1"),
     "O.O...": ("b", "2"),
@@ -127,26 +130,36 @@ def Brail_to_English(inputStr):
         outputStr += tempChar
         #print("Input char: " + inputStr[i:i+6] + "  output char: " + outputStr)
     
-    print(outputStr)
+    print(outputStr, end="")
 
 def English_to_Brail(inputStr):
     outputStr = ""
+    num_follows = False
     
     for char in inputStr:
         if char.isupper():
             outputStr += eng_to_braille_dict.get("CAPITOL_FOLLOWS")
-        elif char.isnumeric():
+        elif (char.isnumeric() and (not num_follows)):
             outputStr += eng_to_braille_dict.get("NUMBER_FOLLOWS")
+            num_follows = True
+        elif (char == " "):
+            num_follows = False
         
         
         outputStr += eng_to_braille_dict.get(char.lower())
         #print("Input char: " + char + "  output char: " + outputStr)
         
-    print(outputStr)
+    print(outputStr, end="")
     
     
 if __name__ == '__main__': 
-    inputStr = input()
+    inputStr = " ".join(sys.argv[1:])
+
+    
+    #if (".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO" == English_to_Brail("Abc 123 xYz")):
+    #    print(True)
+        
+    
     if isEnglish(inputStr):
         English_to_Brail(inputStr)
     else:
