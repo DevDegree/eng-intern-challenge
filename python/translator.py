@@ -83,12 +83,11 @@ def to_english(input: str) -> str:
                 special = 0
                 english.append(' ')
             else:
-                match special:
-                    case 1:
-                        braille = braille.upper()
-                        special = 0
-                    case 2:
-                        braille = BRAILLE_DICT[braille] #translate to num        
+                if special == 1:
+                    braille = braille.upper()
+                    special = 0
+                elif special == 2:
+                    braille = BRAILLE_DICT[braille] #translate to num        
                 english.append(braille)
         else:
             raise ValueError(f"Invalid Braille sequence: {braille}")
@@ -139,11 +138,10 @@ def braille_or_english(input: str) -> None:
         str: The translated string, either from Braille to English or vice versa.
     """
     if (all(char in {'O', '.'} for char in input)):
-        translated = to_english(input)
+        return to_english(input)
     else:
-        translated = to_braille(input)
+        return to_braille(input)
     
-    return translated
 
 def main():
     """
