@@ -108,12 +108,13 @@ def english_to_braille(message: str) -> str:
                 braille_text.append(ENG_TO_BRAILLE['number_follows'])
 
             braille_text.append(NUMBER_TO_BRAILLE[char])
-        elif char.isupper():
-            braille_text.append(ENG_TO_BRAILLE['capital_follows'])
-            braille_text.append(ENG_TO_BRAILLE[char.lower()])
-        else:
+        else:   
+            if char.isupper():
+                braille_text.append(ENG_TO_BRAILLE['capital_follows'])
+                braille_text.append(ENG_TO_BRAILLE[char.lower()])
+            else:
+                braille_text.append(ENG_TO_BRAILLE[char])
             is_number = False
-            braille_text.append(ENG_TO_BRAILLE[char])
 
     return "".join(braille_text)
 
