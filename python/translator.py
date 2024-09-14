@@ -126,9 +126,7 @@ if __name__ == "__main__":
 
     if language == "braille":
         print(braille_to_english(tokens))
-        sys.exit(0)
     else:
         print(english_to_braille(tokens))
-        sys.exit(0)
             
 
