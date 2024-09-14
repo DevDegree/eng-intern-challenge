@@ -1,0 +1,25 @@
+name: PR Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'ruby/**'
+
+jobs:
+  ruby-tests:
+    name: Run Ruby Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+
+      - run: cd ruby && bundle install
+      - run: cd ruby && rspec translator.test.rb
