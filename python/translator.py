@@ -99,11 +99,75 @@ ENGLISH_TO_BRAILLE_SYMBOLS = {
 }
 
 def translate_to_braille(english_string):
-    return "Inside translate to braille"
+    result = []
+    is_number_mode = False
+
+    for char in english_string:
+        if char.isdigit():
+            if not is_number_mode:
+                result.append(
+                    ENGLISH_TO_BRAILLE_SYMBOLS["NUM"]
+                )  # Add number indicator before digits
+                is_number_mode = True
+            result.append(ENGLISH_TO_BRAILLE_NUMS[char])
+        elif char == ".":
+            result.append(
+                ENGLISH_TO_BRAILLE_SYMBOLS["DEC"]
+            )  # Decimal follows indicator
+        elif char.isalpha():
+            if is_number_mode:
+                result.append("......")  # End number mode with space
+                is_number_mode = False
+            if char.isupper():
+                result.append(ENGLISH_TO_BRAILLE_SYMBOLS["CAP"])
+            result.append(ENGLISH_TO_BRAILLE_LOWER[char.lower()])
+        else:
+            result.append(
+                ENGLISH_TO_BRAILLE_SYMBOLS.get(char, "......")
+            )  # Handle other symbols or unknown as space
+            is_number_mode = False  # Reset number mode
+    return "".join(result)
 
 
 def translate_to_english(braille_string):
-    return "Inside translate to english"
+    result = []
+    words = braille_string.split(" ")
+    is_capital = False
+    is_number = False
+
+    for word in words:
+        braille_chars = [word[i : i + 6] for i in range(0, len(word), 6)]
+        for char in braille_chars:
+            if char == ENGLISH_TO_BRAILLE_SYMBOLS["CAP"]:  # Capital indicator
+                is_capital = True
+                continue
+            elif char == ENGLISH_TO_BRAILLE_SYMBOLS["NUM"]:  # Number indicator
+                is_number = True
+                continue
+            elif char == ENGLISH_TO_BRAILLE_SYMBOLS["DEC"]:  # Decimal indicator
+                result.append(".")
+                continue
+
+            if is_number:
+                if char in BRAILLE_TO_ENGLISH_NUMS:
+                    translated_char = BRAILLE_TO_ENGLISH_NUMS[char]
+                    result.append(translated_char)
+                else:
+                    result.append("?")  # Unknown character encountered in number
+            elif char in BRAILLE_TO_ENGLISH_LOWER:
+                translated_char = BRAILLE_TO_ENGLISH_LOWER[char]
+                if is_capital:
+                    translated_char = translated_char.upper()
+                    is_capital = False
+                result.append(translated_char)
+            elif char in BRAILLE_TO_ENGLISH_SYMBOLS:
+                result.append(BRAILLE_TO_ENGLISH_SYMBOLS[char])
+            else:
+                result.append("?")  # Unknown character
+
+        result.append(" ")  # Space between words
+        is_number = False  # Reset number mode after each word
+    return "".join(result).strip()
 
 def main():
     if len(sys.argv) < 2:
