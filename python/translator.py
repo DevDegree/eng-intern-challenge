@@ -112,8 +112,7 @@ def english_to_braille(message: list[str]) -> str:
             braille_text.append(ENG_TO_BRAILLE['capital_follows'])
             braille_text.append(ENG_TO_BRAILLE[char.lower()])
         else:
-            if char == " ":
-                is_number = False
+            is_number = False
             braille_text.append(ENG_TO_BRAILLE[char])
 
     return "".join(braille_text)
