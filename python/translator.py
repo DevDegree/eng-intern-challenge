@@ -1,4 +1,7 @@
-braille_dict = {
+# Note: the technical requirements only asked for alphabet and number translations
+# so I left special character translation out
+
+braille_to_eng_dict = {
     "O.....": ("a", "1"),
     "O.O...": ("b", "2"),
     "OO....": ("c", "3"),
@@ -25,22 +28,53 @@ braille_dict = {
     "OO..OO": ("x", None),
     "OO.OOO": ("y", None),
     "O..OOO": ("z", None),
-    "..OO.O": (".", None),
-    "..O...": (",", None),
-    "..OOO.": ("!", None),
-    "..OO..": (":", None),
-    "..O.O.": (";", None),
-    "....OO": ("-", None),
-    ".O..O.": ("/", None),
-    ".O.O.O": ("<", None),
-    "O..OO.": (">", None),
-    "O.O..O": ("(", None),
-    ".O.OO.": (")", None),
     "......": (" ", " "),
     ".....O": ("CAPITOL_FOLLOWS", None),
-    ".O...O": ("DECIMAL_FOLLOWS", None),
     ".O.OOO": ("NUMBER_FOLLOWS", None)
 }
+
+eng_to_braille_dict = {
+    "a": "O.....",
+    "1": "O.....",
+    "b": "O.O...",
+    "2": "O.O...",
+    "c": "OO....",
+    "3": "OO....",
+    "d": "OO.O..",
+    "4": "OO.O..",
+    "e": "O..O..",
+    "5": "O..O..",
+    "f": "OOO...",
+    "6": "OOO...",
+    "g": "OOOO..",
+    "7": "OOOO..",
+    "h": "O.OO..",
+    "8": "O.OO..",
+    "i": ".OO...",
+    "9": ".OO...",
+    "j": ".OOO..",
+    "0": ".OOO..",
+    "k": "O...O.",
+    "l": "O.O.O.",
+    "m": "OO..O.",
+    "n": "OO.OO.",
+    "o": "O..OO.",
+    "p": "OOO.O.",
+    "q": "OOOOO.",
+    "r": "O.OOO.",
+    "s": ".OO.O.",
+    "t": ".OOOO.",
+    "u": "O...OO",
+    "v": "O.O.OO",
+    "w": ".OOO.O",
+    "x": "OO..OO",
+    "y": "OO.OOO",
+    "z": "O..OOO",
+    " ": "......",
+    "CAPITOL_FOLLOWS": ".....O",
+    "NUMBER_FOLLOWS": ".O.OOO"
+}
+
 
 # go through every letter
 
@@ -75,7 +109,7 @@ def Brail_to_English(inputStr):
             
         # logic if we find a capitol follows 
             # toUpper the char
-        tempChar = braille_dict.get(inputStr[i:i+6])[tuple_index] 
+        tempChar = braille_to_eng_dict.get(inputStr[i:i+6])[tuple_index] 
         
         if capitol_follows:
             tempChar = tempChar.upper()
@@ -91,22 +125,30 @@ def Brail_to_English(inputStr):
             number_follows = False
         
         outputStr += tempChar
-        print("Input char: " + inputStr[i:i+6] + "  output char: " + outputStr)
-        
-        
-        
-        
+        #print("Input char: " + inputStr[i:i+6] + "  output char: " + outputStr)
     
-    #for key in braille_dict:
-    #    print(braille_dict.get(key)[0])
+    print(outputStr)
+
+def English_to_Brail(inputStr):
+    outputStr = ""
     
-    
+    for char in inputStr:
+        if char.isupper():
+            outputStr += eng_to_braille_dict.get("CAPITOL_FOLLOWS")
+        elif char.isnumeric():
+            outputStr += eng_to_braille_dict.get("NUMBER_FOLLOWS")
+        
+        
+        outputStr += eng_to_braille_dict.get(char.lower())
+        #print("Input char: " + char + "  output char: " + outputStr)
+        
+    print(outputStr)
     
     
 if __name__ == '__main__': 
     inputStr = input()
     if isEnglish(inputStr):
-        print("English not done yet")
+        English_to_Brail(inputStr)
     else:
         Brail_to_English(inputStr)
     
