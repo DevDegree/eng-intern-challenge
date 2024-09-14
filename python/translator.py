@@ -2,13 +2,13 @@ import sys
 #!/usr/bin/env python
 
 #Defining English alphabet to Braille
-engToBraille = {'a':'O.....', 'b':'O.O...', 'c':'OO....','d':'OO.O..','e':'O..O..','f':'OOO...','g':'OOOO..','h':'O.OO..','i':'.OO...','j':'.OOO..','k':'O...O.','l':'O.O.O.','m':'OO..O.','n':'OO.OO.','o':'O..OO.','p':'OOO.O.','q':'OOOOO.','r':'O.OOO.','s':'.OO.O.','t':'.OOOO.','u':'O...OO','v':'O.O.OO','w':'.OOO.O','x':'OO..OO','y':'OO.OOO','z':'OO..O.',' ':'......'}
+engToBraille = {'a':'O.....', 'b':'O.O...', 'c':'OO....','d':'OO.O..','e':'O..O..','f':'OOO...','g':'OOOO..','h':'O.OO..','i':'.OO...','j':'.OOO..','k':'O...O.','l':'O.O.O.','m':'OO..O.','n':'OO.OO.','o':'O..OO.','p':'OOO.O.','q':'OOOOO.','r':'O.OOO.','s':'.OO.O.','t':'.OOOO.','u':'O...OO','v':'O.O.OO','w':'.OOO.O','x':'OO..OO','y':'OO.OOO','z':'O..OOO',' ':'......'}
 
 #Defining Numbers to Braille
 numberToBraille = {'1':'O.....','2':'O.O...','3':'OO....','4':'OO.O..','5':'O..O..','6':'OOO...','7':'OOOO..','8':'O.OO..','9':'.OO...','0':'.OOO..'}
 
 #Defining Braille to English alphabet
-brailleToEng = {'O.....':'a','O.O...':'b','OO....':'c','OO.O..':'d','O..O..':'e','OOO...':'f','OOOO..':'g','O.OO..':'h','.OO...':'i','.OOO..':'j','O...O.':'k','O.O.O.':'l','OO..O.':'m','OO.OO.':'n','O..O.':'o','OOO.O.':'p','OOOOO.':'q','O.OOO.':'r','.OO.O.':'s','.OOOO.':'t','O...OO':'u','O.O.OO':'v','.OOO.O':'w','OO..OO':'x','OO.OOO':'y','OO..O.':'z','......':' '}
+brailleToEng = {'O.....':'a','O.O...':'b','OO....':'c','OO.O..':'d','O..O..':'e','OOO...':'f','OOOO..':'g','O.OO..':'h','.OO...':'i','.OOO..':'j','O...O.':'k','O.O.O.':'l','OO..O.':'m','OO.OO.':'n','O..OO.':'o','OOO.O.':'p','OOOOO.':'q','O.OOO.':'r','.OO.O.':'s','.OOOO.':'t','O...OO':'u','O.O.OO':'v','.OOO.O':'w','OO..OO':'x','OO.OOO':'y','O..OOO':'z','......':' '}
 
 #Defining Braille to Numbers
 brailleToNumber = {'O.....':'1','O.O...':'2','OO....':'3','OO.O..':'4','O..O..':'5','OOO...':'6','OOOO..':'7','O.OO..':'8','.OO...':'9','.OOO..':'0'}
@@ -100,6 +100,6 @@ def translate(inputStr):
         return eng_to_braille(inputStr)
 
 if __name__ == "__main__":
-    inputStr = sys.argv[1].strip()  #Removes any spaces in the front or back of the string
+    inputStr = ' '.join(sys.argv[1:])  
     result = translate(inputStr)
     print(result)
