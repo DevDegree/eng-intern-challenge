@@ -163,6 +163,10 @@ def braille_and_english_translator(string):
 if __name__ == '__main__':
     import sys
     input_string = " ".join(sys.argv[1:])
+
+    # Sample Test Cases
+    # input_string = 'hello, world!', expected_output = 'O.OO..O..O..O.O.O.O.O.O.O..OO...O..........OOO.OO..OO.O.OOO.O.O.O.OO.O....OOO.'
+    # input_string = 'O......O.OOOO...........OO.....O.OOOOO..........O..O...O.OOOO..O..', expected_output = 'a1 c3 e5'
     print(braille_and_english_translator(input_string))
 
     
