@@ -160,7 +160,8 @@ def main():
     else:
         user_input = ' '.join(sys.argv[1:])
         try:
-           print(braille_or_english(user_input))
+           result = braille_or_english(user_input)
+           print(result)
         except ValueError as e:
             sys.exit(f"Error: {e}")
 
