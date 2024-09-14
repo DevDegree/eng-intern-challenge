@@ -34,14 +34,19 @@ def eng_to_braille(text):
     result = []
     number_mode = False
     for char in text:
+        # handle capitals
         if char.isupper():
             result.append(braille_map['capital'])
             result.append(braille_map[char.lower()])
+            
+        # handle numbers, only adding number indication on first number
         elif char.isdigit():
             if not number_mode:
                 result.append(braille_map['number'])
                 number_mode = True
             result.append(braille_map[num_map[char]])
+        
+        # exits number mode if in it, handles other characters normally
         else:
             if number_mode:
                 number_mode = False
@@ -54,16 +59,23 @@ def braille_to_eng(braille):
     i = 0
     while i < len(braille):
         symbol = braille[i:i+6]
+        
+        #h andles capitals
         if symbol == braille_map['capital']:
             i += 6
             next_symbol = braille[i:i+6]
             result.append(braille_to_text[next_symbol].upper())
+            
+        # handles number mode toggle
         elif symbol == braille_map['number']:
             number_mode = True
+            
+        # handles spaces and exists number mode
         elif symbol == braille_map[' ']:
             number_mode = False
             result.append(' ')
             
+        # adds numbers if number mode is on, else characters
         else:
             char = braille_to_text[symbol]
             if number_mode:
