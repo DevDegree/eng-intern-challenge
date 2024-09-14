@@ -66,8 +66,6 @@ let brailleToNum = Object.fromEntries(
 
 let inputString = process.argv.slice(2).join(' ');
 
-console.log(inputString);
-
 const translate = (str) => {
   let isBraille = undefined;
   let result = [];
@@ -86,12 +84,6 @@ const translate = (str) => {
   if (!isBraille) {
     let prevCharNum = false;
     for (let char of str) {
-      // //handle spaces
-      // if (char === ' ') {
-      //   result.push(charToBraille[' ']);
-      //   prevCharNum = false;
-      // }
-      //handle numbers
       if (numbers.includes(parseInt(char))) {
         if (!prevCharNum) {
           result.push(charToBraille['num'] + numToBraille[char]);
@@ -100,18 +92,15 @@ const translate = (str) => {
           result.push(numToBraille[char]);
         }
       }
-      // handle decimal
+
       if (char === '.' && prevCharNum) {
         result.push(charToBraille[dec] + charToBraille[char]);
       }
 
-      //handle lower case
       if (char == char.toLowerCase()) {
         result.push(charToBraille[char]);
         prevCharNum = false;
-      }
-      //handle upeprcase
-      else {
+      } else {
         result.push(charToBraille['cap'] + charToBraille[char.toLowerCase()]);
         prevCharNum = false;
       }
@@ -120,11 +109,9 @@ const translate = (str) => {
 
   //translate from braille to english
   else {
-    // state for cap or num preceding braille
     let isCap = false;
     let isNum = false;
 
-    // chunk string into 6-character segments
     let chunkedString = [];
     let index = 0;
     while (index < str.length) {
@@ -133,33 +120,28 @@ const translate = (str) => {
     }
 
     for (let brailleChar of chunkedString) {
-      // handle numbers
       if (brailleChar === charToBraille['num']) {
         isNum = true;
         continue;
       }
 
-      // process numbers
       if (isNum && brailleToNum[brailleChar]) {
         result.push(brailleToNum[brailleChar]);
         continue;
       }
 
-      //reset to characters after space as per example number strings only need one prefacing number follows braille char indicator.
       if (brailleChar === '......') {
         result.push(brailleToChar[brailleChar]);
         isNum = false;
         continue;
       }
 
-      // handle capitalization
       if (brailleChar === charToBraille['cap']) {
         isCap = true;
         isNum = false;
         continue;
       }
 
-      // translate braille to char
       let char = brailleToChar[brailleChar];
       if (isCap) {
         char = char.toUpperCase();
