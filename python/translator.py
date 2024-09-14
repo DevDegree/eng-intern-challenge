@@ -176,5 +176,9 @@ def detect_translation_type(text):
     else:
         return english_to_braille(text)
 
-user_input = input("")
-print(detect_translation_type(user_input))
+def main():
+    user_input = input("")
+    print(detect_translation_type(user_input))
+
+if __name__ == "__main__":
+    main()
