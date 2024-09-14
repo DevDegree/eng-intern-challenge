@@ -2,7 +2,6 @@
 # so I left special character translation out
 
 import sys
-import unittest
 
 braille_to_eng_dict = {
     "O.....": ("a", "1"),
@@ -80,9 +79,7 @@ eng_to_braille_dict = {
 
 
 # go through every letter
-
     # Check if there is a letter other than O or ., as soon as you see one return true otherwise false
-
 def isEnglish(str):
     # find any val that isn't brail
     for elem in str:
@@ -91,7 +88,6 @@ def isEnglish(str):
     return False
 
 def Brail_to_English(inputStr):
-    
     outputStr = ""
     
     if(isEnglish(inputStr)):
@@ -154,11 +150,6 @@ def English_to_Brail(inputStr):
     
 if __name__ == '__main__': 
     inputStr = " ".join(sys.argv[1:])
-
-    
-    #if (".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO" == English_to_Brail("Abc 123 xYz")):
-    #    print(True)
-        
     
     if isEnglish(inputStr):
         English_to_Brail(inputStr)
