@@ -47,3 +47,14 @@ export const utilityMap: Record<Utility, Braille> = {
   number: ".O.OOO",
   space: "......",
 };
+
+export const brailleNumbers = swapKeys<Braille>(numbers);
+export const brailleLetters = swapKeys<Braille>(letters);
+
+function swapKeys<U extends number | string>(obj) {
+  let newObj: Record<U, string> = {} as Record<U, string>;
+  for (let [key, value] of Object.entries<U>(obj)) {
+    newObj[value] = key;
+  }
+  return newObj;
+}

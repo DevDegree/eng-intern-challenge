@@ -1,4 +1,5 @@
 import { isBraille } from "./booleans";
+import brailleTranslator from "./brailleTranslator";
 import englishTranslator from "./englishTranslator";
 
 describe("test isBraille", () => {
@@ -38,5 +39,26 @@ describe("Test English Translator", () => {
   it("Example 2: 3 A2", () => {
     let result = englishTranslator("3 A2");
     expect(result).toBe(".O.OOOOO...............OO......O.OOOO.O...");
+  });
+});
+
+describe("Test Braille Translator", () => {
+  it("Example 1: Hello world", () => {
+    let result = brailleTranslator(
+      ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."
+    );
+    expect(result).toBe("Hello world");
+  });
+
+  it("Example 2: 42", () => {
+    let result = brailleTranslator(".O.OOOOO.O..O.O...");
+    expect(result).toBe("42");
+  });
+
+  it("Example 2: 3 A2", () => {
+    let result = brailleTranslator(
+      ".O.OOOOO...............OO......O.OOOO.O..."
+    );
+    expect(result).toBe("3 A2");
   });
 });
