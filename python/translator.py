@@ -53,7 +53,20 @@ BRAILLE_DICT = {
 }
 ENG_DICT = {value: key for key, value in BRAILLE_DICT.items()}
 
-def to_english(input):
+def to_english(input: str) -> str:
+    """
+    Converts a Braille-encoded string into its corresponding English string.
+
+    Args:
+        input (str): A string of Braille characters (O and .), where each Braille character is 
+                     represented by a 6-character string.
+
+    Returns:
+        str: The corresponding English translation of the input Braille string.
+    
+    Raises:
+        ValueError: If an invalid Braille sequence is encountered.
+    """
     english = []
     special = 0  # 0: none, 1: capital, 2: number
 
@@ -77,10 +90,24 @@ def to_english(input):
                     case 2:
                         braille = BRAILLE_DICT[braille] #translate to num        
                 english.append(braille)
+        else:
+            raise ValueError(f"Invalid Braille sequence: {braille}")
     return ''.join(english)
             
 
-def to_braille(input):
+def to_braille(input: str) -> str:
+    """
+    Converts an English string into its corresponding Braille-encoded string.
+
+    Args:
+        input (str): An English string containing letters, numbers, and punctuation.
+
+    Returns:
+        str: The corresponding Braille translation of the input English string.
+    
+    Raises:
+        ValueError: If a character in the input string cannot be translated to Braille.
+    """
     braille = []
     num = False
 
@@ -95,12 +122,23 @@ def to_braille(input):
             braille.append(ENG_DICT[ENG_DICT[char]])
         else:
             num = False
+            if char not in ENG_DICT:
+                raise ValueError(f"Character '{char}' not found in Braille dictionary.")
             braille.append(ENG_DICT[char])
     return ''.join(braille)
             
 
-def braille_or_english(input):
-    if (all(char in ['O', '.'] for char in input)):
+def braille_or_english(input: str) -> None:
+    """
+    Determines if the input string is in Braille or English, and converts it accordingly.
+
+    Args:
+        input (str): A string in either Braille or English.
+
+    Prints:
+        str: The translated string, either from Braille to English or vice versa.
+    """
+    if (all(char in {'O', '.'} for char in input)):
         translated = to_english(input)
         sys.stdout.write(translated)
     else:
@@ -108,8 +146,20 @@ def braille_or_english(input):
         sys.stdout.write(translated)
 
 if __name__ == '__main__':
+    """
+    Command-line interface for translating between Braille and English.
+    
+    Usage:
+        python script.py <input_string>
+    
+    The script automatically detects whether the input is Braille or English 
+    and performs the corresponding translation.
+    """
     if len(sys.argv) < 2:
         sys.exit("No argument Found")
     else:
-        input = ' '.join(sys.argv[1:])
-        braille_or_english(input)
+        user_input = ' '.join(sys.argv[1:])
+        try:
+            braille_or_english(user_input)
+        except ValueError as e:
+            sys.exit(f"Error: {e}")
