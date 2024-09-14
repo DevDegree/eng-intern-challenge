@@ -2,6 +2,7 @@
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 import sys
+from collections import defaultdict
 
 @dataclass
 class BraileSymbol:
@@ -57,25 +58,16 @@ class Translator(ABC):
 
 class BraileTranslator(Translator):
     def __init__(self) -> None:
-        self.braile_to_eng : dict[str, BraileSymbol] = {}
+        self.braile_to_eng = defaultdict(BraileSymbol)
 
         for letter, braile in self.eng_letters_to_braile.items():
-            if braile not in self.braile_to_eng:
-                self.braile_to_eng[braile] = BraileSymbol(letter=letter) 
-            else:
-                self.braile_to_eng[braile].letter = letter
+            self.braile_to_eng[braile].letter = letter
         
         for number, braile in self.eng_numbers_to_braile.items():
-            if braile not in self.braile_to_eng:
-                self.braile_to_eng[braile] = BraileSymbol(number=number)
-            else:
-                self.braile_to_eng[braile].number = number
+            self.braile_to_eng[braile].number = number
 
         for special, braile in self.eng_special_to_braile.items():
-            if braile not in self.braile_to_eng:
-                self.braile_to_eng[braile] = BraileSymbol(special=special)
-            else:
-                self.braile_to_eng[braile].special = special
+            self.braile_to_eng[braile].special = special
 
         self.braile_to_eng[self.CAPITAL_FOLLOWS] = BraileSymbol(rule='capital follows')
         self.braile_to_eng[self.NUMBER_FOLLOWS] = BraileSymbol(rule = 'number follows')
