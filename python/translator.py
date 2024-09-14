@@ -1,3 +1,5 @@
+import sys
+
 braille_dict = {
     "a": "O.....",
     "b": "O.O...",
@@ -177,7 +179,10 @@ def detect_translation_type(text):
         return english_to_braille(text)
 
 def main():
-    user_input = input("")
+    if len(sys.argv) > 1:
+        user_input = " ".join(sys.argv[1:])
+    else:
+        user_input = input("")
     print(detect_translation_type(user_input))
 
 if __name__ == "__main__":
