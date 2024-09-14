@@ -140,10 +140,10 @@ def braille_or_english(input: str) -> None:
     """
     if (all(char in {'O', '.'} for char in input)):
         translated = to_english(input)
-        sys.stdout.write(translated)
+        print(translated)
     else:
         translated = to_braille(input)
-        sys.stdout.write(translated)
+        print(translated)
 
 if __name__ == '__main__':
     """
