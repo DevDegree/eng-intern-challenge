@@ -85,22 +85,29 @@ def english_to_braille(english_str):
 
     return ''.join(braille_text)  # Return concatenated Braille string
 
-def main():
-    choice = input("Would you like to translate from (1) Braille to English or (2) English to Braille? Enter 1 or 2: ")
-
-    if choice == '1':
-        # Braille to English
-        braille_input = input("Enter the Braille string (use 'O' for raised dots and '.' for empty dots): ")
-        english_output = braille_to_english(braille_input)
-        print(english_output)
-    elif choice == '2':
-        # English to Braille
-        english_input = input("Enter the English string: ")
-        braille_output = english_to_braille(english_input)
-        print(braille_output)
+def detect_input_type(input_str):
+    """Detect whether the input is Braille or English text."""
+    # If the input contains only 'O' and '.', it is Braille
+    if all(c in 'O.' for c in input_str.replace(' ', '')):
+        return "braille"
     else:
-        print("Invalid choice. Please enter 1 or 2.")
+        return "english"
+
+def main():
+    # Get input from the user
+    input_str = input()
+
+    # Detect whether the input is Braille or English
+    input_type = detect_input_type(input_str)
+
+    if input_type == "braille":
+        # Convert Braille to English
+        result = braille_to_english(input_str)
+        print(result)
+    else:
+        # Convert English to Braille
+        result = english_to_braille(input_str)
+        print(result)
 
 if __name__ == '__main__':
     main()
-
