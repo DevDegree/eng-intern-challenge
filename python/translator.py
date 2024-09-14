@@ -140,12 +140,12 @@ def braille_or_english(input: str) -> None:
     """
     if (all(char in {'O', '.'} for char in input)):
         translated = to_english(input)
-        print(translated)
     else:
         translated = to_braille(input)
-        print(translated)
+    
+    return translated
 
-if __name__ == '__main__':
+def main():
     """
     Command-line interface for translating between Braille and English.
     
@@ -160,6 +160,10 @@ if __name__ == '__main__':
     else:
         user_input = ' '.join(sys.argv[1:])
         try:
-            braille_or_english(user_input)
+           print(braille_or_english(user_input))
         except ValueError as e:
             sys.exit(f"Error: {e}")
+
+if __name__ == '__main__':
+    main()
+    
