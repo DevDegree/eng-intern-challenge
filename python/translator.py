@@ -96,7 +96,7 @@ def braille_to_english(tokens: list[str]) -> str:
 
     return "".join(english_text)
 
-def english_to_braille(message: list[str]) -> str:
+def english_to_braille(message: str) -> str:
     '''Translates a list of english characters to a braille string.'''
     braille_text: list[str] = []
     is_number = False
@@ -126,6 +126,6 @@ if __name__ == "__main__":
     if language == "braille":
         print(braille_to_english(tokens))
     else:
-        print(english_to_braille(tokens))
+        print(english_to_braille(input_string))
             
 
