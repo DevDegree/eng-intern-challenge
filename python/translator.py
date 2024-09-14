@@ -1,3 +1,5 @@
+import sys
+
 #Dictionary for braille to numbers
 numbers = {
 'O.....': '1',
@@ -134,9 +136,10 @@ def translateToEnglish(s) -> str:
 
 def main(input):
     if check(input):
-        print(translateToBraille(input))
+        print(translateToBraille(input), end="")
     else:
-        print(translateToEnglish(input))
+        print(translateToEnglish(input), end="")
 
 if __name__ == '__main__':
-    main()
+    inputText = " ".join(sys.argv[1:])
+    main(inputText)
