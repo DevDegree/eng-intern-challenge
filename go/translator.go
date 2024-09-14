@@ -108,14 +108,12 @@ func parseConvertBraille(brailleString string) string {
 		englishChar, ok := brailleToEnglish[brailleChar]
 
 		if !ok {
-			fmt.Fprintf(os.Stderr, "Invalid Braille character 1: %s\n", brailleChar)
 			os.Exit(1)
 		}
 
 		if numbers {
 			englishChar, ok = alphabetToNumber[englishChar]
 			if !ok {
-				fmt.Fprintf(os.Stderr, "Invalid English character: %s\n", englishChar)
 				os.Exit(1)
 			}
 		}
@@ -125,7 +123,6 @@ func parseConvertBraille(brailleString string) string {
 			brailleChar = brailleString[i*6 : (i+1)*6]
 			englishChar, ok = brailleToEnglish[brailleChar]
 			if !ok {
-				fmt.Fprintf(os.Stderr, "Invalid Braille character 2: %s\n", brailleChar)
 				os.Exit(1)
 			}
 			englishChar = string(englishChar[0] - 32)
@@ -172,7 +169,6 @@ func parseConvertANString(ANString string) string {
 		englishChar, ok := englishToBraille[string(char)]
 
 		if !ok {
-			fmt.Fprintf(os.Stderr, "Invalid English character")
 			os.Exit(1)
 		}
 
@@ -183,9 +179,7 @@ func parseConvertANString(ANString string) string {
 }
 
 func main() {
-
 	args := os.Args[1:]
-
 	input := strings.Join(args, " ")
 
 	braillePattern := regexp.MustCompile(`^[.O]+$`)
