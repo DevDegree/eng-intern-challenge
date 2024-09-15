@@ -47,8 +47,6 @@ ENGLISH_TO_BRAILLE = {
 BRAILLE_TO_LETTER = {v: k for k, v in ENGLISH_TO_BRAILLE.items() if not k.isnumeric()}
 BRAILLE_TO_NUMBER = {v: k for k, v in ENGLISH_TO_BRAILLE.items() if k.isnumeric()}
 
-
-
 class Translator:
     def __init__(self, input_text):
         self.input_text = input_text
@@ -56,15 +54,22 @@ class Translator:
 
     # Convert English to Braille
     def to_braille(self) -> str:
+        num_flag = False # Flag to check if we're in number mode
         for char in self.input_text: # Loop through each character in the input text
+            # Manage space
+            if char == " ": 
+                self.output_text += ENGLISH_TO_BRAILLE[char]
+                num_flag = False
+            # Manage number
+            elif char.isnumeric() or num_flag == True:
+                if num_flag == False:
+                    self.output_text += ENGLISH_TO_BRAILLE["num"] # Add the number indicator
+                    num_flag = True
+                self.output_text += ENGLISH_TO_BRAILLE[char]
             # Manage uppercase 
-            if char.isupper(): 
+            elif char.isupper(): 
                 self.output_text += ENGLISH_TO_BRAILLE["cap"]
                 char = char.lower()
-                self.output_text += ENGLISH_TO_BRAILLE[char]
-            # Manage number
-            elif char.isnumeric():
-                self.output_text += ENGLISH_TO_BRAILLE["num"]
                 self.output_text += ENGLISH_TO_BRAILLE[char]
             # Manage normal characters
             else:
@@ -82,9 +87,10 @@ class Translator:
             if char == ENGLISH_TO_BRAILLE[" "]:
                 self.output_text += " "
                 num_flag = False
+                continue
             # Manage uppercase
             if char == ENGLISH_TO_BRAILLE["cap"]:
-                #self.output_text += BRAILLE_TO_LETTER[char].upper()
+                cap_flag = True
                 continue
             # Manage number symbol
             elif char == ENGLISH_TO_BRAILLE["num"]:
@@ -92,14 +98,13 @@ class Translator:
                 continue
             else:
                 # If we're not in number mode, convert to letter
-                if num_flag == False:
-                    self.output_text += BRAILLE_TO_LETTER[char]
-                elif cap_flag == True:
-                    self.output_text += BRAILLE_TO_NUMBER[char].upper()
+                if cap_flag == True and num_flag == False: 
+                    self.output_text += BRAILLE_TO_LETTER[char].upper()
                     cap_flag = False # Reset the flag
-                else: 
+                elif num_flag == True:
                     self.output_text += BRAILLE_TO_NUMBER[char]
-            print(BRAILLE_TO_LETTER[char])
+                else: 
+                    self.output_text += BRAILLE_TO_LETTER[char]
         return self.output_text
 
     
