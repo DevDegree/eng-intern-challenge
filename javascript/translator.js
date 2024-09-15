@@ -1,7 +1,6 @@
 //--BRAILLE CONSTANTS START--
 // letters
 const BRAILLE_A = "O.....";
-
 const BRAILLE_B = "O.O...";
 const BRAILLE_C = "OO....";
 const BRAILLE_D = "OO.O..";
@@ -93,9 +92,6 @@ const ASCII_RIGHT_ANGLE = 62;
 const ASCII_LEFT_BRACKET = 40;
 const ASCII_RIGHT_BRACKET = 41;
 
-const ALPHABET_ASCII_HELPER = ASCII_UPPER_LETTER_START - 1; //64
-//NOTE: ASCII letter values start at 65 with A. A would be the first position in the alphabet, so 1 + 64 will get the ascii value 65 and so on. Thus this helper number is 64 to help with finding which letter is being referred to if you know its position in the alphabet
-
 // --ASCII CONSTANTS END--
 
 // --HELPER METHODS START--
@@ -167,10 +163,10 @@ function isBrailleNumber(block){
 
 function getAlphaLetter(braille, isCapitol){
     // Find the position of the given letter in the alphabet
-    const positionInAlphabet = BRAILLE_ALPHA_LETTERS.indexOf(braille) + 1;
+    const positionInAlphabet = BRAILLE_ALPHA_LETTERS.indexOf(braille);
 
     // Using that position, find the ASCII value
-    const asciiValue = positionInAlphabet + ALPHABET_ASCII_HELPER;
+    const asciiValue = positionInAlphabet + ASCII_UPPER_LETTER_START;
 
     // Convert the ASCII value to the uppercase character
     let alphaValue = String.fromCharCode(asciiValue);
@@ -214,7 +210,15 @@ function getBrailleLetter(asciiValue, isUpperCase){
 
 //Get input from the terminal
 const {argv} = require('node:process');
-const originalMsg = argv[2];
+
+let originalMsg = argv[2];
+for(let index = 3; index < argv.length; index++){
+    // Add a space that has been removed from the splitting of input
+    originalMsg += " ";
+
+    // Add the next part of the input
+    originalMsg += argv[index];
+}
 
 // Determine if the input is Braille
 let isBraille = true;
