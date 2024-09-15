@@ -47,3 +47,42 @@ ENGLISH_TO_BRAILLE = {
 BRAILLE_TO_LETTER = {v: k for k, v in ENGLISH_TO_BRAILLE.items() if not k.isnumeric()}
 BRAILLE_TO_NUMBER = {v: k for k, v in ENGLISH_TO_BRAILLE.items() if k.isnumeric()}
 
+
+
+class Translator:
+    def __init__(self, input_text):
+        self.input_text = input_text
+        self.output_text = ""
+
+    # Convert English to Braille
+    def to_braille(self) -> str:
+        for char in self.input_text: # Loop through each character in the input text
+            # Manage uppercase 
+            if char.isupper(): 
+                self.output_text += ENGLISH_TO_BRAILLE["cap"]
+                char = char.lower()
+                self.output_text += ENGLISH_TO_BRAILLE[char]
+            # Manage number
+            elif char.isnumeric():
+                self.output_text += ENGLISH_TO_BRAILLE["num"]
+                self.output_text += ENGLISH_TO_BRAILLE[char]
+            # Manage normal characters
+            else:
+                self.output_text += ENGLISH_TO_BRAILLE[char]
+        return self.output_text
+
+    # Convert Braille to English
+    def to_english(self) -> str:
+        # Split the input text into 6 character chunks
+        braille_chars = [self.input_text[i:i + 6] for i in range(0, len(self.input_text), 6)]
+        for char in braille_chars:
+            if char == ENGLISH_TO_BRAILLE["cap"]:
+                self.output_text += BRAILLE_TO_LETTER[char].upper()
+            elif char == ENGLISH_TO_BRAILLE["num"]:
+                self.output_text += BRAILLE_TO_NUMBER[braille_chars[braille_chars.index(char) + 1]]
+            else:
+                self.output_text += BRAILLE_TO_LETTER[char]
+        return self.output_text
+
+
+    
