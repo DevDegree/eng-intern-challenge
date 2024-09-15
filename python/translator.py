@@ -140,7 +140,7 @@ def translateToAlphabet(braille):
 
 def main():
     giventext = ' '.join(sys.argv[1:])  # the args at runtime in a str
-    print(translateToAlphabet(translateToBraille('123 456')))
+    # print(translateToAlphabet(translateToBraille('123 456')))
     if isBraille(giventext):
         result = translateToAlphabet(giventext)
     else:
