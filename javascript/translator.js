@@ -1,7 +1,7 @@
 //--BRAILLE CONSTANTS START--
-
 // letters
 const BRAILLE_A = "O.....";
+
 const BRAILLE_B = "O.O...";
 const BRAILLE_C = "OO....";
 const BRAILLE_D = "OO.O..";
@@ -41,7 +41,7 @@ const BRAILLE_9 = ".OO...";
 const BRAILLE_0 = ".OOO..";
 
 // follow indicators
-const BRAILLE_CAPITOL = ".....O";
+const BRAILLE_CAPITAL = ".....O";
 const BRAILLE_DECIMAL = ".O...O";
 const BRAILLE_NUMBER = ".O.OOO";
 
@@ -60,13 +60,43 @@ const BRAILLE_RIGHT_ANGLE = "O..OO.";
 const BRAILLE_LEFT_BRACKET = "O.O..O";
 const BRAILLE_RIGHT_BRACKET = ".O.OO.";
 
-const BRAILLE_ACCEPTED = [BRAILLE_0, BRAILLE_1, BRAILLE_2, BRAILLE_3, BRAILLE_4, BRAILLE_5, BRAILLE_6, BRAILLE_7, BRAILLE_8, BRAILLE_9, BRAILLE_A, BRAILLE_B, BRAILLE_C, BRAILLE_D, BRAILLE_E, BRAILLE_F, BRAILLE_G, BRAILLE_H, BRAILLE_I, BRAILLE_J, BRAILLE_K, BRAILLE_L, BRAILLE_M, BRAILLE_N, BRAILLE_O, BRAILLE_P, BRAILLE_Q, BRAILLE_R, BRAILLE_S, BRAILLE_T, BRAILLE_U, BRAILLE_V, BRAILLE_W, BRAILLE_X, BRAILLE_Y, BRAILLE_Z, BRAILLE_CAPITOL, BRAILLE_DECIMAL, BRAILLE_NUMBER, BRAILLE_SPACE, BRAILLE_PERIOD, BRAILLE_COMMA, BRAILLE_QUESTION, BRAILLE_EXCLAIM, BRAILLE_COLON, BRAILLE_SEMI_COLON, BRAILLE_DASH, BRAILLE_SLASH, BRAILLE_LEFT_ANGLE, BRAILLE_RIGHT_ANGLE, BRAILLE_LEFT_BRACKET, BRAILLE_RIGHT_BRACKET];
+const BRAILLE_ACCEPTED = [BRAILLE_0, BRAILLE_1, BRAILLE_2, BRAILLE_3, BRAILLE_4, BRAILLE_5, BRAILLE_6, BRAILLE_7, BRAILLE_8, BRAILLE_9, BRAILLE_A, BRAILLE_B, BRAILLE_C, BRAILLE_D, BRAILLE_E, BRAILLE_F, BRAILLE_G, BRAILLE_H, BRAILLE_I, BRAILLE_J, BRAILLE_K, BRAILLE_L, BRAILLE_M, BRAILLE_N, BRAILLE_O, BRAILLE_P, BRAILLE_Q, BRAILLE_R, BRAILLE_S, BRAILLE_T, BRAILLE_U, BRAILLE_V, BRAILLE_W, BRAILLE_X, BRAILLE_Y, BRAILLE_Z, BRAILLE_CAPITAL, BRAILLE_DECIMAL, BRAILLE_NUMBER, BRAILLE_SPACE, BRAILLE_PERIOD, BRAILLE_COMMA, BRAILLE_QUESTION, BRAILLE_EXCLAIM, BRAILLE_COLON, BRAILLE_SEMI_COLON, BRAILLE_DASH, BRAILLE_SLASH, BRAILLE_LEFT_ANGLE, BRAILLE_RIGHT_ANGLE, BRAILLE_LEFT_BRACKET, BRAILLE_RIGHT_BRACKET];
 
-const BRAILLE_ALPAH_LETTERS = [BRAILLE_A, BRAILLE_B, BRAILLE_C, BRAILLE_D, BRAILLE_E, BRAILLE_F, BRAILLE_G, BRAILLE_H, BRAILLE_I, BRAILLE_J, BRAILLE_K, BRAILLE_L, BRAILLE_M, BRAILLE_N, BRAILLE_O, BRAILLE_P, BRAILLE_Q, BRAILLE_R, BRAILLE_S, BRAILLE_T, BRAILLE_U, BRAILLE_V, BRAILLE_W, BRAILLE_X, BRAILLE_Y, BRAILLE_Z];
+const BRAILLE_ALPHA_LETTERS = [BRAILLE_A, BRAILLE_B, BRAILLE_C, BRAILLE_D, BRAILLE_E, BRAILLE_F, BRAILLE_G, BRAILLE_H, BRAILLE_I, BRAILLE_J, BRAILLE_K, BRAILLE_L, BRAILLE_M, BRAILLE_N, BRAILLE_O, BRAILLE_P, BRAILLE_Q, BRAILLE_R, BRAILLE_S, BRAILLE_T, BRAILLE_U, BRAILLE_V, BRAILLE_W, BRAILLE_X, BRAILLE_Y, BRAILLE_Z];
 
 const BRAILLE_NUMBERS = [BRAILLE_0, BRAILLE_1, BRAILLE_2, BRAILLE_3, BRAILLE_4, BRAILLE_5, BRAILLE_6, BRAILLE_7, BRAILLE_8, BRAILLE_9];
 
 //--BRAILLE CONSTANTS END--
+
+// --ASCII CONSTANTS START--
+
+const ASCII_UPPER_LETTER_START = 65;
+const ASCII_UPPER_LETTER_END = 90;
+
+const ASCII_LOWER_LETTER_START = 97;
+const ASCII_LOWER_LETTER_END = 122;
+
+const ASCII_NUMBERS_START = 48;
+const ASCII_NUMBERS_END = 57;
+
+const ASCII_SPACE = 32;
+const ASCII_PERIOD = 46;
+const ASCII_COMMA = 44;
+const ASCII_QUESTION = 63;
+const ASCII_EXCLAIM = 33;
+const ASCII_COLON = 58;
+const ASCII_SEMI_COLON = 59;
+const ASCII_DASH = 45;
+const ASCII_SLASH = 47;
+const ASCII_LEFT_ANGLE = 60;
+const ASCII_RIGHT_ANGLE = 62;
+const ASCII_LEFT_BRACKET = 40;
+const ASCII_RIGHT_BRACKET = 41;
+
+const ALPHABET_ASCII_HELPER = ASCII_UPPER_LETTER_START - 1; //64
+//NOTE: ASCII letter values start at 65 with A. A would be the first position in the alphabet, so 1 + 64 will get the ascii value 65 and so on. Thus this helper number is 64 to help with finding which letter is being referred to if you know its position in the alphabet
+
+// --ASCII CONSTANTS END--
 
 // --HELPER METHODS START--
 
@@ -120,7 +150,7 @@ function isBrailleAlphabet(blocks){
 }
 
 function isBrailleLetter(block){
-    if(BRAILLE_ALPAH_LETTERS.includes(block)){
+    if(BRAILLE_ALPHA_LETTERS.includes(block)){
         return true;
     }else{
         return false;
@@ -137,10 +167,10 @@ function isBrailleNumber(block){
 
 function getAlphaLetter(braille, isCapitol){
     // Find the position of the given letter in the alphabet
-    const positionInAlphabet = BRAILLE_ALPAH_LETTERS.indexOf(braille) + 1;
+    const positionInAlphabet = BRAILLE_ALPHA_LETTERS.indexOf(braille) + 1;
 
     // Using that position, find the ASCII value
-    const asciiValue = positionInAlphabet + 64; //NOTE: ASCII letter values start at 65 with A. A would be the first position in the alphabet, so 1 + 64 will get the ascii value 65 and so on
+    const asciiValue = positionInAlphabet + ALPHABET_ASCII_HELPER;
 
     // Convert the ASCII value to the uppercase character
     let alphaValue = String.fromCharCode(asciiValue);
@@ -156,6 +186,27 @@ function getAlphaLetter(braille, isCapitol){
 function getAlphaNumber(braille){
         // Find the position of the given number in the numbers array
         return BRAILLE_NUMBERS.indexOf(braille);
+}
+
+function getBrailleNumber(asciiValue){
+    // Calculate the position of the number by substracting the first ASCII value
+    let indexPosition = asciiValue - ASCII_NUMBERS_START;
+
+    // Return the braille number in that position
+    return BRAILLE_NUMBERS[indexPosition];
+}
+
+function getBrailleLetter(asciiValue, isUpperCase){
+    // Calculate the position of the letter by substracting the first ASCII value (dependent on upper or lower case)
+    let indexPosition = asciiValue;
+    if(isUpperCase){
+        indexPosition -= ASCII_UPPER_LETTER_START;
+    }else{
+        indexPosition -= ASCII_LOWER_LETTER_START;
+    }
+
+    // Return the braille letter in that position
+    return BRAILLE_ALPHA_LETTERS[indexPosition];
 }
 
 // --HELPER METHODS END--
@@ -193,7 +244,7 @@ if(!isBrailleAlphabet(brailleMsg)){
             let currBlock = brailleMsg[index];
 
             // If it is a "follows" indecator, update the relevant booleans
-            if(currBlock === BRAILLE_CAPITOL){
+            if(currBlock === BRAILLE_CAPITAL){
                 isCap = true;
                 isNum = false;
 
@@ -220,15 +271,64 @@ if(!isBrailleAlphabet(brailleMsg)){
                 englishMsg += " ";
             }
 
-            // NOTE: Current requirements do not worry about punctuation characters
-            // NOTE: Current requirement do not worry about the irrational usage of following indicators
+            // NOTE: Current requirements ignore punctuation characters
+            // NOTE: Current requirement ignore the irrational usage of following indicators
         }
 
-        // Print the braille to English message
+        // Print the Braille to English message
         console.log(englishMsg);
 
     }else{
         // This should be English translating to Braille
-        // TODO
-        console.log("i wasn't braille");
+        
+        // Create the placeholder for the braille message
+        let brailleMsg = "";
+
+        // Create a boolean for keeping track of the number following addition
+        let isNumFollowing = false;
+
+        // Loop through the input message and translate
+        for(let index = 0; index < originalMsg.length; index++){
+
+            // Get the ascii code of the current character
+            let currASCII = originalMsg.charCodeAt(index);
+
+            // Check if it is a number
+            if(currASCII >= ASCII_NUMBERS_START && currASCII <= ASCII_NUMBERS_END){
+                // Add a number following braille character if this is the first number in the sequence
+                if(!isNumFollowing){
+                    brailleMsg += BRAILLE_NUMBER;
+                    isNumFollowing = true;
+                }
+
+                // Add the braille number
+                brailleMsg += getBrailleNumber(currASCII);
+            
+            // Check if it is an uppercase letter
+            }else if(currASCII >= ASCII_UPPER_LETTER_START && currASCII <= ASCII_UPPER_LETTER_END){
+                // Add a capital following braille character
+                brailleMsg += BRAILLE_CAPITAL;
+
+                // Add the braille letter
+                brailleMsg += getBrailleLetter(currASCII, true);
+
+            // Check if it is an lowercase letter
+            }else if(currASCII >= ASCII_LOWER_LETTER_START && currASCII <= ASCII_LOWER_LETTER_END){
+                // Add the braille letter
+                brailleMsg += getBrailleLetter(currASCII, false);
+
+            
+            }else if(currASCII === ASCII_SPACE){
+                //Reset the number following boolean to false
+                isNumFollowing = false;
+
+                // Add the braille space character
+                brailleMsg += BRAILLE_SPACE;
+
+                // NOTE: inclusion of other characters not specified in the techinical requirements of the challenge
+            }
+        }
+
+        // Print the English to Braille message
+        console.log(brailleMsg);
     }
