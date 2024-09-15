@@ -94,7 +94,7 @@ function textToBraille(text) {
 
 
 function main() {
-    const input = process.argv[2]; 
+    let input = process.argv.slice(2).join(" ");
 
     if (isBraille(input)) {
         console.log(brailleToText(input));
