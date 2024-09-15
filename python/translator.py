@@ -16,3 +16,24 @@ english_to_braille = {
 
 braille_to_number = {x: y for y, x in number_to_braille.items()}
 braille_to_english = {x: y for y, x in english_to_braille.items()}
+
+def translate_to_braille(text):
+    result = []
+    is_num = False
+
+    for char in text:
+        if char.isupper():
+            result.extend([english_to_braille['capital_follows'], english_to_braille[char.lower()]])
+        elif char.isdigit():
+            if not is_num:
+                is_num = True
+                result.append(english_to_braille['number_follows'])
+            result.append(number_to_braille[char])
+        elif char == ' ':
+            is_num = False
+            result.append(english_to_braille[' '])
+        else:
+            result.append(english_to_braille.get(char, ''))
+
+    return ''.join(result)
+
