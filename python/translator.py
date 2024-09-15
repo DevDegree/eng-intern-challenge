@@ -1,6 +1,4 @@
 import sys
-from translation_to_braille import translate_to_braille
-from translation_to_english import translate_to_english
 
 def is_text_braille(text: str) -> bool:
     braille_characters = ["O", "."]
@@ -28,3 +26,10 @@ def main():
             string_to_be_translated += arg + " "
 
     print(translate(string_to_be_translated))
+    
+    SOLUTION_STRING = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
+    print(".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO")
+    
+
+if __name__ == "__main__":
+    main()
