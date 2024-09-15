@@ -1,4 +1,6 @@
-def englishTokenizer(english_string:str) -> list[str]:
+from typing import List
+
+def englishTokenizer(english_string:str) -> List[str]:
     tokens = [char for char in english_string]
     return tokens
 

@@ -1,4 +1,6 @@
-def brailleTokenizer(braille_string:str) -> list[str]:
+from typing import List
+
+def brailleTokenizer(braille_string:str) -> List[str]:
     tokens = [braille_string[i:i + 6] for i in range(0, len(braille_string), 6)]
     return tokens
 
