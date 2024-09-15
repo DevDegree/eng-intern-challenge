@@ -117,11 +117,14 @@ def translate_to_braille(text):
 
     for char in text:
 
+      #check i next char is in capital letter, a digit or if it's a space
+
         if char.isupper():
             braille_output.append(Braille_capital_follows)
             braille_output.append(English_To_Braille_alph[char.lower()])
 
         elif char.isdigit():
+          #this enables the computer to add the braille_number follows only once 
                 if not number_mode :
                    braille_output.append(Braille_number_follows)
                 if  Braille_number_follows in braille_output:
@@ -129,6 +132,7 @@ def translate_to_braille(text):
                    braille_output.append(English_To_Braille_alph[char])
 
         elif char == ' ':
+          #if the previous braille symbol is already a space, it doesn't add another space symbol
           
             if number_mode:
                 if braille_output and braille_output[-1] != "......":
@@ -155,6 +159,7 @@ def translate_to_english(braille):
      capital_mode = False
      result = []
 
+  # to take braille char in bunch of 6 using python slices
      for i in range(0, len(braille), 6):
         braille_char = braille[i:i+6]
 
@@ -167,12 +172,14 @@ def translate_to_english(braille):
             continue  
 
 
+       #set number mode back to false after detection of space symbol
         if number_mode: 
             if braille_char == "......":
                  number_mode = False
             else:
              result.append(Braille_To_English_numb.get(braille_char, ''))
 
+        #set capital mode back to false after putting a letter in uppercase
         else:
             translated_char = Braille_To_English_alph.get(braille_char, '')
             if capital_mode: 
