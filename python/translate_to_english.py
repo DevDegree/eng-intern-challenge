@@ -8,8 +8,8 @@ from translator_mappings import (
     SPACE_CASE
 )
 
-global iterator_index 
-iterator_index = 0
+global current_text_index 
+current_text_index = 0
 
 def translate_braille_text_to_number(braille_text: list[str]) -> str:
     translate_to_number_array = []
@@ -22,8 +22,8 @@ def translate_braille_text_to_number(braille_text: list[str]) -> str:
 
         translate_to_number_array.append(BRAILLE_TO_NUMBERS_MAPPINGS[braille_char])
 
-        global iterator_index
-        iterator_index += 6
+        global current_text_index
+        current_text_index += 6
     
     return "".join(translate_to_number_array)
 
@@ -34,8 +34,8 @@ def translate_to_english_char(braille_char: str,
 
     if braille_char == CAPITAL_FOLLOWS_CASE:
         character_to_be_capitalized = BRAILLE_TO_ENGLISH_MAPPINGS[braille_text[:6]]
-        global iterator_index
-        iterator_index += 6
+        global current_text_index
+        current_text_index += 6
         return character_to_be_capitalized.upper()
     
     if braille_char == NUMBER_FOLLOWS_CASE:
@@ -49,11 +49,11 @@ def translate_to_english_char(braille_char: str,
 def translate_to_english(text: str) -> str:
     translate_to_english_array = []
 
-    global iterator_index
-    while iterator_index < len(text):
-        braille_char = text[iterator_index : iterator_index + 6]
+    global current_text_index
+    while current_text_index < len(text):
+        braille_char = text[current_text_index : current_text_index + 6]
         translate_to_english_array.append(translate_to_english_char(braille_char,
-                                                                    text[iterator_index + 6:]))
-        iterator_index += 6
+                                                                    text[current_text_index + 6:]))
+        current_text_index += 6
         
     return "".join(translate_to_english_array)
