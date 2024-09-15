@@ -18,22 +18,12 @@ ALPHABET_BRAILLE = {
 # If Braille translation to english, invert the dictionary
 BRAILLE_ALPHABET = ALPHABET_BRAILLE.invert
 
+# If we encounter a number, we convert all following numbers to letters with hashmap
+Braille_number = {
+  'a' => '1', 'b' => '2', 'c' => '3', 'd' => '4', 'e' => '5',
+  'f' => '6', 'g' => '7', 'h' => '8', 'i' => '9', 'j' => '0'
+}
 
-def handleNumber (translation)
-
-    #Convert letters A to J to 1 to 0
-    if translation >= 'a' && translation <= 'j'
-        translation = (translation.ord - 'a'.ord + 1).to_s
-      elsif translation == 'j'
-        translation = '0' # If 'j' is 0
-      end
-      translation
-end
-
-
-def handleCapital(translation)
-    translation.upcase
-end
 
 def braille_english(input)
     fulltranslation = ''
@@ -54,12 +44,13 @@ def braille_english(input)
 
 
             if is_capital
-                translation = handleCapital(translation)
+                translation = translation.upcase
                 is_capital = false
             end
 
             if is_number
-                translation = handleNumber(translation)
+                translation =  Braille_number[translation] || translation
+
 
                 #reset number if encountered space
                 is_number = false if char == '......'
@@ -72,20 +63,28 @@ def braille_english(input)
     fulltranslation
 end
 
+def english_braille(input)
+    result = ''
 
+    input.each_char do |char|
 
+        #UpperCase
+        if char.match?(/[A-Z]/)  
+            result += '.....O'
+            char = char.downcase
+        end
 
+        #Numbers
+        if char.match?(/[0-9]/)
+            result += '.O.OOO'
 
+            #Map 0-9 to a-j (invert the hasmap)
+            char = Braille_number.invert
+        end
 
-#Determine if argument line is in Braille or English
-def translate(input)
-    if input.match?(/[O.]/)
-        braille_english
-    else
-        english_braille
+        #Translation
+        fulltranslation += ALPHABET_BRAILLE[char]
     end
+    fulltranslation
 end
 
-
-
-        
