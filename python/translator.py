@@ -27,6 +27,7 @@ def main():
         else:
             string_to_be_translated += arg + " "
 
+    print("Translating")
     print(translate(string_to_be_translated))
 
 if __name__ == "__main__":
