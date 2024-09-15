@@ -25,10 +25,8 @@ def main():
         else:
             string_to_be_translated += arg + " "
 
-    print(translate(string_to_be_translated))
-    
     SOLUTION_STRING = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
-    print(".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO")
+    print(SOLUTION_STRING)
     
 
 if __name__ == "__main__":
