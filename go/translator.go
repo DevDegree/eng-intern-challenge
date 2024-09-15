@@ -8,7 +8,6 @@ import (
 
 // braille alphabet mapping
 var brailleMap = map[string]string{
-
 	"a": "O.....", "b": "O.O...", "c": "OO....", "d": "OO.O..", "e": "O..O..",
 	"f": "OOO...", "g": "OOOO..", "h": "O.OO..", "i": ".OO...", "j": ".OOO..",
 	"k": "O...O.", "l": "O.O.O.", "m": "OO..O.", "n": "OO.OO.", "o": "O..OO.",
@@ -26,7 +25,7 @@ var brailleMap = map[string]string{
 	"num": ".O.OOO",
 }
 
-var reverseBrailleMap = make(map[string]string)
+var reverseBrailleMap = map[string]string{}
 
 func init() {
 	for k, v := range brailleMap {
@@ -82,6 +81,19 @@ func fromBraille(input string) string {
 		if i+6 <= len(input) {
 			code := input[i : i+6]
 
+			if code == brailleMap["num"] {
+				numMode = true
+				i += 6
+				continue
+			}
+
+			if code == brailleMap[" "] {
+				result.WriteString(" ")
+				numMode = false
+				i += 6
+				continue
+			}
+
 			if code == brailleMap["caps"] {
 				nextChar := input[i+6 : i+12]
 				if letter, ok := reverseBrailleMap[nextChar]; ok {
@@ -91,16 +103,17 @@ func fromBraille(input string) string {
 				continue
 			}
 
-			if code == brailleMap["num"] {
-				numMode = true
-				i += 6
-				continue
-			}
-
 			if letter, ok := reverseBrailleMap[code]; ok {
-				result.WriteString(letter)
-				if !numMode && letter == " " {
-					numMode = false 
+				if numMode {
+					if numLetter, exists := map[string]string{
+						"O.....": "1", "O.O...": "2", "OO....": "3", "OO.O..": "4",
+						"O..O..": "5", "OOO...": "6", "OOOO..": "7", "O.OO..": "8",
+						".OO...": "9", ".OOO..": "0",
+					}[code]; exists {
+						result.WriteString(numLetter)
+					}
+				} else {
+					result.WriteString(letter)
 				}
 			}
 
@@ -125,3 +138,4 @@ func main() {
 		fmt.Println(toBraille(input))
 	}
 }
+
