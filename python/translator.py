@@ -47,11 +47,30 @@ number_braille_map = {
     '0' : letter_braille_map['j']
 }
 
+# 0 -> capital follows, 1 -> number input until space
+modifier_map = {
+    '.....O' : 0,
+    '.O.OOO' : 1 
+}
+
 # braille -> letter
 braille_letter_map = { b : l for l, b in letter_braille_map.items()}
 
 # braille -> number
 braille_number_map = { b : n for n, b in number_braille_map.items()}
 
+'''
+checks if a given input string is in braille or not.
+assuming all input is correct and something like "OOOOOO" is not given as input
+
+TODO: check for multiple of 6, validate each chunk of 6 to see if it exists in braille library
+'''
+def is_braille(str):
+    for c in str:
+        if not (c in ['.', 'O']):
+            return False
+    return True
+
 input_str = ' '.join(sys.argv[1:])
 
+print(is_braille(input_str))
