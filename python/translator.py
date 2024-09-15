@@ -81,21 +81,23 @@ def translate(stringList):
 
     check = ""
     res = ""
-    check1 = True
+    check1 = False
     numCheck = False
-   
     c = " ".join(stringList)
-    if "O." in c:
-        check1 = False
+    for key in letterDict:
+        if "O." in c:
+            break
+        elif key in c:
+            check1 = True
     
-    
+    print(check1)
     if check1:
         for i in c:
             if i in letterDict:
                 if i == " ":
                     numCheck = False
                 res+=letterDict[i]
-            elif i in numberDict:
+            elif i in numberDict and numCheck == False:
                 numCheck = True
                 res+=".O.OOO"
             if numCheck:
@@ -127,7 +129,6 @@ def translate(stringList):
             
             check+=i
         res+=list(letterDict.keys())[list(letterDict.values()).index(check)]
-  
     return res
     
 def main(c):
