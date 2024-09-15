@@ -1,46 +1,46 @@
-#Create a dictionary that defines the mapping of each letter to Braille
+#Create a dictionary that defines the mapping of each letter/digits to Braille representations
 ALPHABET_BRAILLE = {
-  'a' => 'O.....', 'b' => 'O.O...', 'c' => 'OO....', 'd' => 'OO.O..',  'e' => 'O..O..', 
-  'f' => 'OOO...', 'g' => 'OOOO..', 'h' => 'O.OO..', 'i' => '.OO...', 'j' => '.OOO..', 
-  'k' => 'O...O.', 'l' => 'O.O.O.', 'm' => 'OO..O.', 'n' => 'OO.OO.', 'o' => 'O..OO.', 
-  'p' => 'OOO.O.', 'q' => 'OOOOO.', 'r' => 'O.OOO.', 's' => '.OO.O.', 't' => '.OOOO.', 
-  'u' => 'O...OO', 'v' => 'O.O.OO', 'w' => '.OOO.O', 'x' => 'OO..OO', 'y' => 'OO.OOO', 'z' => 'O..OOO'
-
-  #Space -> Braille Empty
-  ' ' => '......', 
-
-  #Numbers
-  '0' => '.....O', '1' => 'O.....', '2' => 'O.O...', '3' => 'OO....', '4' => 'OO.O..', 
-  '5' => 'O..O..', '6' => 'OOO...', '7' => 'OOOO..', '8' => 'O.OO..', '9' => '.OO...' 
+  'a' => 'O.....', 'b' => 'O.O...', 'c' => 'OO....', 'd' => 'OO.O..', 'e' => 'O..O..',
+  'f' => 'OOO...', 'g' => 'OOOO..', 'h' => 'O.OO..', 'i' => '.OO...', 'j' => '.OOO..',
+  'k' => 'O...O.', 'l' => 'O.O.O.', 'm' => 'OO..O.', 'n' => 'OO.OO.', 'o' => 'O..OO.',
+  'p' => 'OOO.O.', 'q' => 'OOOOO.', 'r' => 'O.OOO.', 's' => '.OO.O.', 't' => '.OOOO.',
+  'u' => 'O...OO', 'v' => 'O.O.OO', 'w' => '.OOO.O', 'x' => 'OO..OO', 'y' => 'OO.OOO', 'z' => 'O..OOO',
+  
+  #Space for empty braille
+  ' ' => '......'
 }
 
-
-# If Braille translation to english, invert the dictionary
+# Invert dictionary to translate Braille to English
 BRAILLE_ALPHABET = ALPHABET_BRAILLE.invert
 
-# If we encounter a number, we convert all following numbers to letters with hashmap
-Braille_number = {
+#Number representations uses letters from 'a' to 'j'
+ALPHABET_NUMBER = {
   'a' => '1', 'b' => '2', 'c' => '3', 'd' => '4', 'e' => '5',
   'f' => '6', 'g' => '7', 'h' => '8', 'i' => '9', 'j' => '0'
 }
 
+#Map 0-9 to a-j (invert the hashmap to map digits to letter in Braille)
+NUMBER_ALPHABET = ALPHABET_NUMBER.invert
 
+
+#Function translates Braille to English
 def braille_english(input)
     fulltranslation = ''
     is_capital = false
     is_number = false
 
-    #Split each Braille string individually and process in chunks of 6
-    braille.chars.each_slice(6) do |char|
+    #Split each Braille in chunks of 6 characters [2 x 3 matrix]
+    input.chars.each_slice(6) do |char|
         char = char.join
-        if char == '.....O'   #Indication of cpaital letter
+
+        if char == '.....O'   #Indication of capital letter
             is_capital = true
         
         elsif char == '.O.OOO'   #Indication of number
             is_number = true
         
         else
-            translation = BRAILLE_TO_ENGLISH[char]  #No capital/number = call dictionary
+            translation = BRAILLE_ALPHABET[char]  #Look up braille characters in dictionary
 
 
             if is_capital
@@ -49,42 +49,68 @@ def braille_english(input)
             end
 
             if is_number
-                translation =  Braille_number[translation] || translation
-
-
+                translation =  ALPHABET_NUMBER[translation] || translation #Map to digit or keep as is (nil cases)
+                
                 #reset number if encountered space
-                is_number = false if char == '......'
+                if char == '......'
+                    is_number = false
+                end
             end
 
             fulltranslation += translation
+
+
         end
     end
     
     fulltranslation
 end
 
+
+#Function translates English to Braille
 def english_braille(input)
-    result = ''
+    fulltranslation = ''
+    is_number = false
 
     input.each_char do |char|
 
-        #UpperCase
         if char.match?(/[A-Z]/)  
-            result += '.....O'
+            fulltranslation += '.....O'   #Indicates capital letter
             char = char.downcase
+            is_number = false
         end
 
-        #Numbers
+        #Indicates Numbers
         if char.match?(/[0-9]/)
-            result += '.O.OOO'
+            unless is_number
+                fulltranslation += '.O.OOO'
+                is_number = true
+            end
 
-            #Map 0-9 to a-j (invert the hasmap)
-            char = Braille_number.invert
+            char = NUMBER_ALPHABET[char]
+        else
+            is_number = false
         end
 
         #Translation
-        fulltranslation += ALPHABET_BRAILLE[char]
+        fulltranslation += ALPHABET_BRAILLE[char] || char #Braille translation or keep as is (handles nil cases)
     end
     fulltranslation
 end
 
+#Determine if argument line is in Braille or English
+def translate(input)
+    if input.match?(/[O.]/)
+        braille_english(input)
+    else
+        english_braille(input)
+    end
+end
+
+
+
+#Handle command line input
+if __FILE__ == $0
+    input = ARGV.join(' ')
+    puts translate(input)
+end
