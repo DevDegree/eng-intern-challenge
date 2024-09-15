@@ -35,6 +35,12 @@ function brailleToText(braille) {
     let result = '';
     let isCapital = false;
     let isNumberMode = false;
+
+    // Braille numbers are based on Braille letters A-J
+    const brailleNumbers = {
+        'O.....': '1', 'O.O...': '2', 'OO....': '3', 'OO.O..': '4', 'O..O..': '5',
+        'OOO...': '6', 'OOOO..': '7', 'O.OO..': '8', '.OO...': '9', '.OOO..': '0'
+    };
     
     for (let i = 0; i < braille.length; i += 6) {
         const chunk = braille.slice(i, i + 6);
@@ -46,13 +52,15 @@ function brailleToText(braille) {
             result += ' ';
             isNumberMode = false;  // Reset number mode on space
         } else {
-            const letter = brailleToEnglish[chunk];
+            let letter = brailleToEnglish[chunk];
             if (isNumberMode) {
-                result += letter;
-            } else {
-                result += isCapital ? letter.toUpperCase() : letter;
+                // Translate Braille letters a-j into numbers
+                letter = brailleNumbers[chunk] || letter;
+            } else if (isCapital) {
+                letter = letter ? letter.toUpperCase() : '';
+                isCapital = false;
             }
-            isCapital = false;
+            result += letter || '';
         }
     }
     
@@ -73,7 +81,7 @@ function textToBraille(text) {
             brailleOutput += englishToBraille[char];
         } else if (char === ' ') {
             brailleOutput += englishToBraille[' '];
-            isNumberMode = false;  // Reset number mode after a space
+            isNumberMode = false;  
         } else {
             if (isNumberMode) {
                 isNumberMode = false;
