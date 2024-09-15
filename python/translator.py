@@ -84,5 +84,28 @@ class Translator:
                 self.output_text += BRAILLE_TO_LETTER[char]
         return self.output_text
 
+    
+    # Check if the input text is Braille and valid Braille
+    def is_braille(self) -> bool:
+        for char in self.input_text:
+            if char != '.' or char != 'O':
+                return False
+        
+        # Now make sure the input text is valid
+        braille_chars = [self.input_text[i:i + 6] for i in range(0, len(self.input_text), 6)]
+         # Check if the input text is valid
+        for char in braille_chars:
+            if char not in BRAILLE_TO_LETTER or char not in BRAILLE_TO_NUMBER:
+                return False
+        return True
+    
+    # Check if the input text is English and valid English
+    def is_english(self) -> bool:
+        # Make all characters lowercase since the dictionary is lowercase
+        input_copy = self.input_text.lower()
+        for char in input_copy:
+            if char not in ENGLISH_TO_BRAILLE:
+                return False
+        return True
 
     
