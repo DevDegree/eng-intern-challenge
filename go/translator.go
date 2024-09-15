@@ -74,7 +74,6 @@ var capitals = make(map[string]string, 26)
 // english -> braille map
 var english = make(map[string]string, 52)
 
-
 func initMaps() {
 	// initialize remaining maps from existing pseudo-constant ones
 	for k, v := range braille {
@@ -98,7 +97,7 @@ func engToBraille(args []string) {
 	for i, word := range args {
 
 		// spaces exist between the indices (words)
-        // specifically, output a space before each word except the first
+		// specifically, output a space before each word except the first
 		if i != 0 {
 			fmt.Print(english[" "])
 		}
@@ -109,7 +108,7 @@ func engToBraille(args []string) {
 		for _, c := range word {
 			switch {
 			// handle different types of characters (numbers, capitals) by ASCII value
-            // these cases require additional braille symbols to be outputted before the visible english character
+			// these cases require additional braille symbols to be outputted before the visible english character
 			case (c-'0' >= 0 && c-'0' < 10): // current character is a number
 				if !numberMode {
 					numberMode = true
@@ -121,7 +120,7 @@ func engToBraille(args []string) {
 			}
 
 			var letter string
-            // handle mode-specific character overrides
+			// handle mode-specific character overrides
 			// - distinguish between . (period) and . (decimal point)
 			if c == '.' && numberMode {
 				letter = "deci"
@@ -138,7 +137,6 @@ func brailleToEng(args []string) {
 	var capMode bool
 
 	for _, word := range args {
-	readSymbol:
 		for i := 0; i < len(word); i += 6 {
 			s := word[i : i+6] // split the braille into 6-character-long symbols
 
@@ -146,10 +144,10 @@ func brailleToEng(args []string) {
 			case s == english["caps"]:
 				currentMap = capitals // set the map to use capitals, which should reset after the next symbol is printed
 				capMode = true
-				continue readSymbol
+				continue
 			case s == english["nums"]:
 				currentMap = numbers // set the map to use numbers, which shoul reset at the end of a word
-				continue readSymbol
+				continue
 			case s == english[" "]: // at the end of a word, reset the map to default
 				currentMap = braille
 			}
