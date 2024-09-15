@@ -96,6 +96,13 @@ const ASCII_RIGHT_BRACKET = 41;
 
 // --HELPER METHODS START--
 
+/**
+ * isBrailleFormat is a function that will check that the input contains only O and . and that the total amount of characters is divisible by 6.
+ * 
+ * @param {string}      text 
+ * 
+ * @returns {boolean}
+ */
 function isBrailleFormat(text){
     const pattern = /[^O.]/;
     if(pattern.test(text)){
@@ -112,6 +119,13 @@ function isBrailleFormat(text){
     }
 }
 
+/**
+ * makeBrailleBlocks is a function that will parcel out the input text into 6 character Strings and make them into an array that contains all of these strings in the order they appear in the original text.
+ * 
+ * @param {string}      text 
+ * 
+ * @returns {String[]}
+ */
 function makeBrailleBlocks(text){
     // Create the array to hold the braille input
     const brailleBlocks = [];
@@ -132,6 +146,13 @@ function makeBrailleBlocks(text){
     return brailleBlocks;
 }
 
+/**
+ * isBrailleAlphabet is a function that checks that each block of 6 character strings in a given array match with one of the defined values of a Braille charcter.
+ * 
+ * @param {String[]}      blocks 
+ * 
+ * @returns {boolean}
+ */
 function isBrailleAlphabet(blocks){
     
     for(let index = 0; index < blocks.length; index++){
@@ -141,10 +162,17 @@ function isBrailleAlphabet(blocks){
         }
     }
 
-    // Looped through the entire message with no braille conterfits
+    // Looped through the entire message with no braille counterfits
     return true;
 }
 
+/**
+ * isBrailleLetter is a function that checks is the provided block matches one of the Braille letters
+ * 
+ * @param {string}      block 
+ * 
+ * @returns {boolean}
+ */
 function isBrailleLetter(block){
     if(BRAILLE_ALPHA_LETTERS.includes(block)){
         return true;
@@ -153,6 +181,13 @@ function isBrailleLetter(block){
     }
 }
 
+/**
+ * isBrailleNumber is a function that checks is the provided block matches one of the Braille numbers
+ * 
+ * @param {string}      block 
+ * 
+ * @returns {boolean}
+ */
 function isBrailleNumber(block){
     if(BRAILLE_NUMBERS.includes(block)){
         return true;
@@ -161,7 +196,15 @@ function isBrailleNumber(block){
     }
 }
 
-function getAlphaLetter(braille, isCapitol){
+/**
+ * getAlphaLetter is a function that retrieves the corresponding English letter of the given braille. Capitalization is determined by the isCapital input.
+ * 
+ * @param {string}      braille
+ * @param {boolean}     isCapital 
+ * 
+ * @returns {string}
+ */
+function getAlphaLetter(braille, isCapital){
     // Find the position of the given letter in the alphabet
     const positionInAlphabet = BRAILLE_ALPHA_LETTERS.indexOf(braille);
 
@@ -172,18 +215,32 @@ function getAlphaLetter(braille, isCapitol){
     let alphaValue = String.fromCharCode(asciiValue);
     
     // Return the upper or lower case character as appropriate
-    if(isCapitol){
+    if(isCapital){
         return alphaValue;
     }else{
         return alphaValue.toLowerCase();
     }
 }
 
+/**
+ * getAlphaNumber is a function that retrieves the corresponding English number of the given braille.
+ * 
+ * @param {string}      braille
+ * 
+ * @returns {int}
+ */
 function getAlphaNumber(braille){
         // Find the position of the given number in the numbers array
         return BRAILLE_NUMBERS.indexOf(braille);
 }
 
+/**
+ * getBrailleNumber is a function that retrieves the corresponding Braille block to the number represented by the given ASCII value.
+ * 
+ * @param {int}      asciiValue
+ * 
+ * @returns {string}
+ */
 function getBrailleNumber(asciiValue){
     // Calculate the position of the number by substracting the first ASCII value
     let indexPosition = asciiValue - ASCII_NUMBERS_START;
@@ -192,6 +249,14 @@ function getBrailleNumber(asciiValue){
     return BRAILLE_NUMBERS[indexPosition];
 }
 
+/**
+ * getBrailleLetter is a function that retrieves the corresponding Braille block to the letter represented by the given ASCII value, regardless of whether ths ASCII value represents the upper or lower case letter.
+ * 
+ * @param {int}      asciiValue
+ * @param {boolean}  isUpperCase 
+ * 
+ * @returns {string}
+ */
 function getBrailleLetter(asciiValue, isUpperCase){
     // Calculate the position of the letter by substracting the first ASCII value (dependent on upper or lower case)
     let indexPosition = asciiValue;
