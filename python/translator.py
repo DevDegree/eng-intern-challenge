@@ -1,4 +1,8 @@
 import sys
+sys.path.append("/translator_mappings.py")
+sys.path.append("/translate_to_braille.py")    
+sys.path.append("/translate_to_english.py")
+
 from translate_to_braille import translate_to_braille
 from translate_to_english import translate_to_english
 
