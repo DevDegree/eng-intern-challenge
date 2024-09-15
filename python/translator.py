@@ -1,3 +1,4 @@
+#Author: Ali Lezzeik; alilezzeik1@gmail.com
 import re
 import sys
 engchar_to_braille = {
@@ -14,12 +15,13 @@ digits_to_braille = {
 capital_flag = ".....O"
 number_flag = ".O.OOO"
 
+# Reverse dictionary to get braille to char/digit mapping
 braille_to_engchar = {v: k for k, v in engchar_to_braille.items()}
 braille_to_digits = {v: k for k, v in digits_to_braille.items()}
 
 
 def valid_braille_value(braille):
-    braille_list = list(braille_to_engchar.keys()) + list(braille_to_digits.keys())
+    braille_list = list(braille_to_engchar.keys()) + list(braille_to_digits.keys()) #valid braille list
     if braille in braille_list:
         return True
     return False
