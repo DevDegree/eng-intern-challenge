@@ -95,10 +95,11 @@ if is_braille(input_str):
                 output_str += braille_letter_map[chunk].upper()
                 modifier = -1 # remove the modifier
             elif modifier == 1:
-                if chunk == '......':
+                if not (chunk in braille_number_map):
                     modifier = -1
-                    output_str += ' '
-                output_str += braille_number_map[chunk]
+                    output_str += braille_letter_map[chunk]
+                else: 
+                    output_str += braille_number_map[chunk]
             else:
                 output_str += braille_letter_map[chunk]
 else:
@@ -112,7 +113,7 @@ else:
             else:
                 # no longer printing numbers
                 is_nums = False
-                output_str += letter_braille_map[' '] # append space? See explanation above
+                output_str += letter_braille_map[char] # append space? See explanation above
         else:
             if char.isupper():
                 output_str += rev_modifier_map[0] # capital follows modifier
@@ -121,6 +122,7 @@ else:
             elif char.isdecimal():
                 is_nums = True
                 output_str += rev_modifier_map[1] # numbers follow
+                output_str += number_braille_map[char]
             else:
                 output_str += letter_braille_map[char] # everything other case should be fine here
 
