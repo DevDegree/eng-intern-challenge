@@ -78,30 +78,33 @@ def translate_braille_to_english(braille):
             continue 
         english += english_dict[braille_char] 
     return english 
- 
-def translate_english_to_braille(english): 
-    braille = "" 
-    for char in english: 
-        if char.isupper(): 
-            braille += braille_dict["capital_next"] 
-            char = char.lower() 
-        if char.isdigit(): 
-            braille += braille_dict["number_next"] 
+
+def translate_english_to_braille(english):
+    braille = ""
+    for char in english:
+        if char.isupper():
+            braille += braille_dict["capital_next"]
+            braille += braille_dict[char.lower()]
+            continue
+        if char.isdigit():
+            braille += braille_dict["number_next"]
+            braille += braille_dict[char]
+            continue
         if char == " ":
-            braille += braille_dict["space"] 
-            braille += braille_dict[char] 
-        return braille 
- 
-def main(): 
-    if len(sys.argv) < 2: 
-        print("Usage: python translator.py <string>") 
-        sys.exit(1) 
-    string = sys.argv[1] 
-    if "." in string: 
-        print(translate_braille_to_english(string)) 
-    else: 
-        print(translate_english_to_braille(string)) 
+            braille += braille_dict["space"]
+            continue
+        braille += braille_dict[char]
+    return braille
+
+
+def main():
+    # Check if the input is Braille or English
+    input_text = " ".join(sys.argv[1:])
+    # Check if the input is Braille or English
+    if "O" in input_text or input_text.startswith("."):
+        print(translate_braille_to_english(input_text))
+    else:
+        print(translate_english_to_braille(input_text))
  
 if __name__ == "__main__": 
     main()
-...
