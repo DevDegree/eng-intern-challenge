@@ -206,8 +206,8 @@ def en_to_br(inp):
 user_inp = input()
 
 if(user_inp == ""):
-    quit()
-if len(user_inp) == user_inp.count("O") + user_inp.count(".") and len(user_inp) % 6 == 0:
+    print("")
+elif len(user_inp) == user_inp.count("O") + user_inp.count(".") and len(user_inp) % 6 == 0:
     print(br_to_en(user_inp))
 else:
     print(en_to_br(user_inp))
