@@ -300,7 +300,7 @@ if(!isBrailleAlphabet(brailleMsg)){
     isBraille = false;
 }
 
-    // Translate avvordingly
+    // Translate accordingly
     if(isBraille){
         // Proceed to translate to English
         let englishMsg = "";
@@ -341,7 +341,7 @@ if(!isBrailleAlphabet(brailleMsg)){
             }
 
             // NOTE: Current requirements ignore punctuation characters
-            // NOTE: Current requirement ignore the irrational usage of following indicators
+            // NOTE: Current requirements ignore the irrational usage of following indicators
         }
 
         // Print the Braille to English message
