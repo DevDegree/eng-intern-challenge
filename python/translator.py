@@ -12,7 +12,6 @@ def is_text_braille(text: str) -> bool:
     return True
 
 def translate(text: str) -> str:
-    print(" we are in here")
     if not is_text_braille(text):
         return translate_to_braille(text)
     
@@ -29,6 +28,3 @@ def main():
             string_to_be_translated += arg + " "
 
     print(translate(string_to_be_translated))
-
-if __name__ == "__main__":
-    main()
