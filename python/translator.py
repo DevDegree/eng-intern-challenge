@@ -18,9 +18,9 @@ braille_to_number = {x: y for y, x in number_to_braille.items()}
 braille_to_english = {x: y for y, x in english_to_braille.items()}
 
 def translate_to_braille(text):
-    result = []
     is_num = False
 
+    result = []
     for char in text:
         if char.isupper():
             result.extend([english_to_braille['capital_follows'], english_to_braille[char.lower()]])
@@ -39,10 +39,10 @@ def translate_to_braille(text):
 
 
 def translate_to_english(text):
-    result = []
     is_num = False
-
     i = 0
+    
+    result = []
     while i < len(text):
         curr = text[i:i+6]
 
@@ -64,6 +64,7 @@ def translate_to_english(text):
         i += 6
 
     return ''.join(result)
+
 
 def main():
     text = ' '.join(sys.argv[1:])
