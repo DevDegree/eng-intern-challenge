@@ -37,3 +37,41 @@ def translate_to_braille(text):
 
     return ''.join(result)
 
+
+def translate_to_english(text):
+    result = []
+    is_num = False
+
+    i = 0
+    while i < len(text):
+        curr = text[i:i+6]
+
+        if curr == english_to_braille['capital_follows']:
+            i += 6
+            curr = text[i:i+6]
+            result.append(braille_to_english[curr].upper())
+        elif curr == english_to_braille['number_follows']:
+            is_num = True
+        elif curr == english_to_braille[' ']:
+            is_num = False
+            result.append(' ')
+        else:
+            if is_num:
+                result.append(braille_to_number[curr])
+            else:
+                result.append(braille_to_english[curr])
+
+        i += 6
+
+    return ''.join(result)
+
+def main():
+    text = ' '.join(sys.argv[1:])
+
+    if all(char in 'O.' for char in text):
+        print(translate_to_english(text))
+    else:
+        print(translate_to_braille(text))
+
+if __name__ == '__main__':
+    main()
