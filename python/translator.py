@@ -4,10 +4,6 @@ import character #python file that contains all character mappings. Braille to E
 import sys
 import subprocess
 
-def install_bidict()->None:
-
-    command = ["python3", "-m", "pip", "install", "bidict"]
-    subprocess.run(command, capture_output=True, text=True)
 
 def check_is_braille(value: str) -> bool:
 
@@ -98,7 +94,6 @@ def translate_statement_to_braille(value:str) -> str:
 def main():
    
     if len(sys.argv) > 1:
-        install_bidict()
         translated_parts = []
         is_braille = False
 
