@@ -1,4 +1,3 @@
-
 import sys
 
 English_To_Braille_alph = { 'a': "O.....", 
@@ -123,9 +122,9 @@ def translate_to_braille(text):
             braille_output.append(English_To_Braille_alph[char.lower()])
 
         elif char.isdigit():
-               
+                if not number_mode :
                    braille_output.append(Braille_number_follows)
-              
+                if  Braille_number_follows in braille_output:
                    number_mode=True
                    braille_output.append(English_To_Braille_alph[char])
 
@@ -182,13 +181,18 @@ if __name__ == "__main__":
         braille_text = translate_to_braille(text)
         print(braille_text)
 
+# !!!! when entering " python3 translator.py Abc 123 xYz" through the command,
+#  the output has extra space symbols after the number because o the space between Abc 123 and xYz 
+# since it also reads the space in between each block of characters  !!!!
+
+
 
 
 
 #TEST
-english_text = "(12c78"
-braille_text = translate_to_braille(english_text)
-print(braille_text) 
+#english_text = "(12c78"
+#braille_text = translate_to_braille(english_text)
+#print(braille_text) 
 
-translated_back = translate_to_english(braille_text)
-print(translated_back) 
+#translated_back = translate_to_english(braille_text)
+#print(translated_back) 
