@@ -158,6 +158,21 @@ class Translator:
             print(self.convert_braille_to_english())
 
 
-if __name__ == "__main__":
+def main():
+    """
+    @args None
+
+    @returns None
+
+    @description Runs translation by checking whether the current input_text is braille or english
+    and running the corresponding conversion method accordingly before outputting result.
+    """
     translator = Translator()
-    translator.run()
+    if translator.is_english_text():
+        print(translator.convert_english_to_braille())
+    else:
+        print(translator.convert_braille_to_english())
+
+
+if __name__ == "__main__":
+    main()
