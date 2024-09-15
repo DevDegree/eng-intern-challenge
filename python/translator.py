@@ -118,7 +118,6 @@ def is_brail(text):
             return False
     return True
 
-
 text = ' '.join(sys.argv[1:])
 if is_brail(text):
     print(braille_to_english(text))

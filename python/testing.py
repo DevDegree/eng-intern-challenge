@@ -19,7 +19,6 @@ english_sentences = [
     "M1 xed CASE2 sentence3 with4 numbers",
 ]
 
-
 def test_translation(sentences):
     passedAll = True
     for sentence in sentences:
