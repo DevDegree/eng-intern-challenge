@@ -62,6 +62,10 @@ const BRAILLE_RIGHT_BRACKET = ".O.OO.";
 
 const BRAILLE_ACCEPTED = [BRAILLE_0, BRAILLE_1, BRAILLE_2, BRAILLE_3, BRAILLE_4, BRAILLE_5, BRAILLE_6, BRAILLE_7, BRAILLE_8, BRAILLE_9, BRAILLE_A, BRAILLE_B, BRAILLE_C, BRAILLE_D, BRAILLE_E, BRAILLE_F, BRAILLE_G, BRAILLE_H, BRAILLE_I, BRAILLE_J, BRAILLE_K, BRAILLE_L, BRAILLE_M, BRAILLE_N, BRAILLE_O, BRAILLE_P, BRAILLE_Q, BRAILLE_R, BRAILLE_S, BRAILLE_T, BRAILLE_U, BRAILLE_V, BRAILLE_W, BRAILLE_X, BRAILLE_Y, BRAILLE_Z, BRAILLE_CAPITOL, BRAILLE_DECIMAL, BRAILLE_NUMBER, BRAILLE_SPACE, BRAILLE_PERIOD, BRAILLE_COMMA, BRAILLE_QUESTION, BRAILLE_EXCLAIM, BRAILLE_COLON, BRAILLE_SEMI_COLON, BRAILLE_DASH, BRAILLE_SLASH, BRAILLE_LEFT_ANGLE, BRAILLE_RIGHT_ANGLE, BRAILLE_LEFT_BRACKET, BRAILLE_RIGHT_BRACKET];
 
+const BRAILLE_ALPAH_LETTERS = [BRAILLE_A, BRAILLE_B, BRAILLE_C, BRAILLE_D, BRAILLE_E, BRAILLE_F, BRAILLE_G, BRAILLE_H, BRAILLE_I, BRAILLE_J, BRAILLE_K, BRAILLE_L, BRAILLE_M, BRAILLE_N, BRAILLE_O, BRAILLE_P, BRAILLE_Q, BRAILLE_R, BRAILLE_S, BRAILLE_T, BRAILLE_U, BRAILLE_V, BRAILLE_W, BRAILLE_X, BRAILLE_Y, BRAILLE_Z];
+
+const BRAILLE_NUMBERS = [BRAILLE_0, BRAILLE_1, BRAILLE_2, BRAILLE_3, BRAILLE_4, BRAILLE_5, BRAILLE_6, BRAILLE_7, BRAILLE_8, BRAILLE_9];
+
 //--BRAILLE CONSTANTS END--
 
 // --HELPER METHODS START--
@@ -102,6 +106,61 @@ function makeBrailleBlocks(text){
     return brailleBlocks;
 }
 
+function isBrailleAlphabet(blocks){
+    
+    for(let index = 0; index < blocks.length; index++){
+        // If the block is found in the accepted braille library ignore, otherwise return false
+        if(!BRAILLE_ACCEPTED.includes(blocks[index])){
+            return false;
+        }
+    }
+
+    // Looped through the entire message with no braille conterfits
+    return true;
+}
+
+function isBrailleLetter(block){
+    if(BRAILLE_ALPAH_LETTERS.includes(block)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+function isBrailleNumber(block){
+    if(BRAILLE_NUMBERS.includes(block)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+function getAlphaLetter(braille, isCapitol){
+    // Find the position of the given letter in the alphabet
+    const positionInAlphabet = BRAILLE_ALPAH_LETTERS.indexOf(braille) + 1;
+
+    // Using that position, find the ASCII value
+    const asciiValue = positionInAlphabet + 64; //NOTE: ASCII letter values start at 65 with A. A would be the first position in the alphabet, so 1 + 64 will get the ascii value 65 and so on
+
+    // Convert the ASCII value to the uppercase character
+    let alphaValue = String.fromCharCode(asciiValue);
+    
+    // Return the upper or lower case character as appropriate
+    if(isCapitol){
+        return alphaValue;
+    }else{
+        return alphaValue.toLowerCase();
+    }
+}
+
+function getAlphaNumber(braille){
+        // Find the position of the given number in the numbers array
+        return BRAILLE_NUMBERS.indexOf(braille);
+}
+
+// --HELPER METHODS END--
+
+
 //Get input from the terminal
 const {argv} = require('node:process');
 const originalMsg = argv[2];
@@ -112,9 +171,57 @@ if(isBrailleFormat(originalMsg)){
     
     // Get the individual braille letters
     const brailleMsg = makeBrailleBlocks(originalMsg);
-    console.log(brailleMsg);
 
+    // Check that all the blocks are proper braille, otherwise this is really weird non-sensical English
+    if(isBrailleAlphabet(brailleMsg)){
+        // Proceed to translate to English
+        let englishMsg = "";
 
+        let isCap = false;
+        let isNum = false;
+
+        for(let index = 0; index < brailleMsg.length; index++){
+            // Get the current block
+            let currBlock = brailleMsg[index];
+
+            // If it is a "follows" indecator, update the relevant booleans
+            if(currBlock === BRAILLE_CAPITOL){
+                isCap = true;
+                isNum = false;
+
+            }else if(currBlock === BRAILLE_NUMBER){
+                isCap = false;
+                isNum = true;
+                
+            // If it is a letter, add it to the message
+            }else if(isBrailleLetter(currBlock) && !isNum){
+                englishMsg += getAlphaLetter(currBlock, isCap);
+
+                // there should no longer be a capitalize indicator
+                isCap = false;
+
+            // If it is a number, add it to the message
+            }else if(isBrailleNumber(currBlock) && !!isNum){
+                englishMsg += getAlphaNumber(currBlock);
+            
+            // If it is a space, add a space character and reset following booleans to false
+            }else if(currBlock === BRAILLE_SPACE){
+                isCap = false;
+                isNum = false;
+                englishMsg += " ";
+            }
+
+            // NOTE: Current requirements do not worry about punctuation characters
+        }
+
+        // Print the braille to English
+        console.log(englishMsg);
+
+    }else{
+        // This should be English translating to Braille
+        // TODO
+        console.log("i wasn't braille");
+    }
 
 }else{
     // TODO: transtlate msg to Braille
