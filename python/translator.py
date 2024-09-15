@@ -23,10 +23,13 @@ reverse_braille_dict = {v: k for k, v in braille_dict.items()}
 def to_braille(text):
     # Initialize variables
     braille_translation = ""
+    number_sequence_started = False
     
     # Loop through each character in the text
     for char in text:
         if char.isalpha():
+            # Reset the number sequence flag when letters appear
+            number_sequence_started = False
             # Check if the character is uppercase
             if char.isupper():
                 braille_translation += ".....O"
@@ -34,10 +37,16 @@ def to_braille(text):
             braille_translation += braille_dict[char.lower()]
         
         elif char.isdigit():
-            braille_translation += ".O.OOO" + braille_dict[char]
+            # Add the number marker only if the sequence hasn't started
+            if not number_sequence_started:
+                braille_translation += ".O.OOO"
+                number_sequence_started = True
+            braille_translation += braille_dict[char]
         
         elif char == ' ':
             braille_translation += braille_dict[char]
+            # Reset the number sequence flag when a space appears
+            number_sequence_started = False
     
     return braille_translation
 
@@ -45,7 +54,6 @@ def to_braille(text):
 def to_english(braille_text):
     # Initialize variables
     english_translation = ""
-    in_letter_sequence = False
     in_number_sequence = False
     capital_next = False
 
@@ -98,3 +106,4 @@ def text_analysis(input_text):
 if __name__ == "__main__":
     input_text = ' '.join(sys.argv[1:])
     print(text_analysis(input_text))
+
