@@ -9,5 +9,5 @@ def translate(input_string:str) -> str:
         translated = englishTranslator(input_string)
     return(translated)
 
-print(translate(" ".join(sys.argv[1:])))
+sys.stdout.write(translate(" ".join(sys.argv[1:])))
 
