@@ -21,36 +21,22 @@ reverse_braille_dict = {v: k for k, v in braille_dict.items()}
 
 # Function to translate English text to Braille with markers
 def to_braille(text):
-    # Convert text to lowercase to match dictionary keys
-    text = text.lower()
-    
     # Initialize variables
     braille_translation = ""
-    in_letter_sequence = False
-    in_number_sequence = False
     
     # Loop through each character in the text
     for char in text:
         if char.isalpha():
-            # Check if its starting a new letter sequence
-            if not in_letter_sequence:
+            # Check if the character is uppercase
+            if char.isupper():
                 braille_translation += ".....O"
-                in_letter_sequence = True
-                in_number_sequence = False
-            braille_translation += braille_dict[char]
+            # Convert the character to lowercase for lookup in braille_dict
+            braille_translation += braille_dict[char.lower()]
         
         elif char.isdigit():
-            # Check if its starting a new number sequence
-            if not in_number_sequence:
-                braille_translation += ".O.OOO"
-                in_number_sequence = True
-                in_letter_sequence = False
-            braille_translation += braille_dict[char]
+            braille_translation += ".O.OOO" + braille_dict[char]
         
         elif char == ' ':
-            # Reset sequences on space
-            in_letter_sequence = False
-            in_number_sequence = False
             braille_translation += braille_dict[char]
     
     return braille_translation
@@ -61,22 +47,21 @@ def to_english(braille_text):
     english_translation = ""
     in_letter_sequence = False
     in_number_sequence = False
+    capital_next = False
 
     # Split the Braille text into Braille characters (6 dots each)
     i = 0
     while i < len(braille_text):
         char = braille_text[i]
 
-        # Check for markers ".....O" (letters) and ".O.OOO" (numbers)
-        if char == ".....O":
-            in_letter_sequence = True
-            in_number_sequence = False
-            i += 1
+        # Check for markers ".....O" (capital letters) and ".O.OOO" (numbers)
+        if braille_text[i:i+6] == ".....O":
+            capital_next = True
+            i += 6
             continue
-        elif char == ".O.OOO":
+        elif braille_text[i:i+6] == ".O.OOO":
             in_number_sequence = True
-            in_letter_sequence = False
-            i += 1
+            i += 6
             continue
         
         # Extract the next 6-dot Braille character
@@ -87,10 +72,12 @@ def to_english(braille_text):
             translated_char = reverse_braille_dict[braille_char]
             if in_number_sequence and translated_char.isalpha():
                 # If we are in a number sequence and the character is a letter, convert to digit
-                # Only applies if the character is one of the 'a' to 'j' mapped to 1-9,0
                 number_map = {'a': '1', 'b': '2', 'c': '3', 'd': '4', 'e': '5', 
                               'f': '6', 'g': '7', 'h': '8', 'i': '9', 'j': '0'}
                 translated_char = number_map.get(translated_char, translated_char)
+            elif capital_next:
+                translated_char = translated_char.upper()
+                capital_next = False
             english_translation += translated_char
         
         # Move to the next Braille character (6 dots)
@@ -111,4 +98,3 @@ def text_analysis(input_text):
 if __name__ == "__main__":
     input_text = ' '.join(sys.argv[1:])
     print(text_analysis(input_text))
-
