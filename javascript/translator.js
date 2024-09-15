@@ -49,11 +49,10 @@ function brailleToText(braille) {
             isNumberMode = true;
         } else if (chunk === '......') {
             result += ' ';
-            isNumberMode = false;  // Reset number mode on space
+            isNumberMode = false;  
         } else {
             let letter = brailleToEnglish[chunk];
             if (isNumberMode) {
-                // Translate Braille letters a-j into numbers
                 letter = brailleNumbers[chunk] || letter;
             } else if (isCapital) {
                 letter = letter ? letter.toUpperCase() : '';
