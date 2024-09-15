@@ -36,7 +36,6 @@ function brailleToText(braille) {
     let isCapital = false;
     let isNumberMode = false;
 
-    // Braille numbers are based on Braille letters A-J
     const brailleNumbers = {
         'O.....': '1', 'O.O...': '2', 'OO....': '3', 'OO.O..': '4', 'O..O..': '5',
         'OOO...': '6', 'OOOO..': '7', 'O.OO..': '8', '.OO...': '9', '.OOO..': '0'
@@ -66,8 +65,6 @@ function brailleToText(braille) {
     
     return result;
 }
-
-
 function textToBraille(text) {
     let brailleOutput = '';
     let isNumberMode = false;
@@ -87,7 +84,7 @@ function textToBraille(text) {
                 isNumberMode = false;
             }
             if (/[A-Z]/.test(char)) {
-                brailleOutput += englishToBraille['capital']; 
+                brailleOutput += englishToBraille['capital'];
             }
             brailleOutput += englishToBraille[char.toLowerCase()];
         }
