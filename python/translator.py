@@ -12,7 +12,7 @@ class Constants:
     CAPITAL_FOLLOWS: str = ".....O"
     NUMBER_FOLLOWS: str = ".O.OOO"
 
-    ENGLISH_TO_BRAILLE: dict[str, str] = {
+    ENGLISH_TO_BRAILLE: dict = {
         "a": "O.....",
         "b": "O.O...",
         "c": "OO....",
@@ -52,12 +52,8 @@ class Constants:
         " ": "......",
     }
 
-    BRAILLE_TO_ENGLISH_ALPHABET: dict[str, str] = {
-        value: key for key, value in ENGLISH_TO_BRAILLE.items() if not key.isdigit()
-    }
-    BRAILLE_TO_ENGLISH_NUMBERS: dict[str, str] = {
-        value: key for key, value in ENGLISH_TO_BRAILLE.items() if key.isdigit()
-    }
+    BRAILLE_TO_ENGLISH_ALPHABET: dict = {value: key for key, value in ENGLISH_TO_BRAILLE.items() if not key.isdigit()}
+    BRAILLE_TO_ENGLISH_NUMBERS: dict = {value: key for key, value in ENGLISH_TO_BRAILLE.items() if key.isdigit()}
 
 
 class Translator:
@@ -142,20 +138,6 @@ class Translator:
             j += 1
 
         return english_text
-
-    def run(self) -> None:
-        """
-        @args None
-
-        @returns None
-
-        @description Checks whether the current input_text is braille or english and
-        runs the corresponding conversion method accordingly before outputting result.
-        """
-        if self.is_english_text():
-            print(self.convert_english_to_braille())
-        else:
-            print(self.convert_braille_to_english())
 
 
 def main():
