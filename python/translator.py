@@ -1,6 +1,6 @@
 import sys
-# from translate_to_braille import translate_to_braille
-# from translate_to_english import translate_to_english
+from translation_to_braille import translate_to_braille
+from translation_to_english import translate_to_english
 
 def is_text_braille(text: str) -> bool:
     braille_characters = ["O", "."]
@@ -27,8 +27,7 @@ def main():
         else:
             string_to_be_translated += arg + " "
 
-    print("Translating")
-    # print(translate(string_to_be_translated))
+    print(translate(string_to_be_translated))
 
 if __name__ == "__main__":
     main()
