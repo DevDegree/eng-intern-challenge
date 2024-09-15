@@ -13,3 +13,6 @@ english_to_braille = {
     'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO',
     'z': 'O..OOO', ' ': '......', 'capital_follows': '.....O', 'number_follows': '.O.OOO'
 }
+
+braille_to_number = {x: y for y, x in number_to_braille.items()}
+braille_to_english = {x: y for y, x in english_to_braille.items()}
