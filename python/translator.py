@@ -1,7 +1,7 @@
 import re
 import sys
 
-# Braille dictionary: English letters to Braille dots
+# Braille dictionary
 braille_dict = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..',
     'e': 'O..O..', 'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..',
@@ -16,7 +16,7 @@ braille_dict = {
     '9': '.OO...', '0': '.OOO..'
 }
 
-# Reverse Braille dictionary: Braille dots to English letters
+# Reverse Braille dictionary
 reverse_braille_dict = {v: k for k, v in braille_dict.items()}
 
 # Function to translate English text to Braille with markers
@@ -32,7 +32,7 @@ def to_braille(text):
     # Loop through each character in the text
     for char in text:
         if char.isalpha():
-            # Check if we're starting a new letter sequence
+            # Check if its starting a new letter sequence
             if not in_letter_sequence:
                 braille_translation += ".....O"
                 in_letter_sequence = True
@@ -40,7 +40,7 @@ def to_braille(text):
             braille_translation += braille_dict[char]
         
         elif char.isdigit():
-            # Check if we're starting a new number sequence
+            # Check if its starting a new number sequence
             if not in_number_sequence:
                 braille_translation += ".O...O"
                 in_number_sequence = True
@@ -109,8 +109,5 @@ def text_analysis(input_text):
 
 # Run the script with command-line arguments
 if __name__ == "__main__":
-    # Join all arguments passed to the script into a single string
     input_text = ' '.join(sys.argv[1:])
-    # Call text_analysis with the input text
     print(text_analysis(input_text))
-
