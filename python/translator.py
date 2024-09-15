@@ -63,11 +63,15 @@ braille_number_map = { b : n for n, b in number_braille_map.items()}
 checks if a given input string is in braille or not.
 assuming all input is correct and something like "OOOOOO" is not given as input
 
-TODO: check for multiple of 6, validate each chunk of 6 to see if it exists in braille library
+TODO: check for multiple of 6, validate each chunk of 6 to see if it exists in braille set
 '''
-def is_braille(str):
-    for c in str:
-        if not (c in ['.', 'O']):
+def is_braille(string):
+    if len(string) % 6 != 0:
+        return False
+    chunks = (string[0+i : 6 + i] for i in range(0, len(string), 6))
+    for chunk in chunks:
+        # 6 character chunk does not exist in the braille set
+        if not (chunk in letter_braille_map.values()):
             return False
     return True
 
