@@ -34,7 +34,7 @@ def to_braille(text):
         if char.isalpha():
             # Check if its starting a new letter sequence
             if not in_letter_sequence:
-                braille_translation += "OO..OO"
+                braille_translation += ".....O"
                 in_letter_sequence = True
                 in_number_sequence = False
             braille_translation += braille_dict[char]
@@ -67,8 +67,8 @@ def to_english(braille_text):
     while i < len(braille_text):
         char = braille_text[i]
 
-        # Check for markers ".....O" (letters) and ".O...O" (numbers)
-        if char == "OO..OO":
+        # Check for markers ".....O" (letters) and ".O.OOO" (numbers)
+        if char == ".....O":
             in_letter_sequence = True
             in_number_sequence = False
             i += 1
@@ -111,3 +111,4 @@ def text_analysis(input_text):
 if __name__ == "__main__":
     input_text = ' '.join(sys.argv[1:])
     print(text_analysis(input_text))
+
