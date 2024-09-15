@@ -120,7 +120,7 @@ const translateEnglishToBraille = (english) => {
 
 // function to determine if the input is Braille or English and translate accordingly.
 const translate = () => {
-  const input = process.argv[2]; // get the input string from command line arguments
+  const input = process.argv.slice(2).join(" "); // get the input string from command line arguments
 
   // determine if the input is Braille (consisting of only 'O' and '.') or English
   if (/^[O.]+$/.test(input)) {
