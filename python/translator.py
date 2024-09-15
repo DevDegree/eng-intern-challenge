@@ -75,27 +75,49 @@ class Translator:
     def to_english(self) -> str:
         # Split the input text into 6 character chunks
         braille_chars = [self.input_text[i:i + 6] for i in range(0, len(self.input_text), 6)]
+        num_flag = False
+        cap_flag = False
         for char in braille_chars:
+            # Manage space
+            if char == ENGLISH_TO_BRAILLE[" "]:
+                self.output_text += " "
+                num_flag = False
+            # Manage uppercase
             if char == ENGLISH_TO_BRAILLE["cap"]:
-                self.output_text += BRAILLE_TO_LETTER[char].upper()
+                #self.output_text += BRAILLE_TO_LETTER[char].upper()
+                continue
+            # Manage number symbol
             elif char == ENGLISH_TO_BRAILLE["num"]:
-                self.output_text += BRAILLE_TO_NUMBER[braille_chars[braille_chars.index(char) + 1]]
+                num_flag = True
+                continue
             else:
-                self.output_text += BRAILLE_TO_LETTER[char]
+                # If we're not in number mode, convert to letter
+                if num_flag == False:
+                    self.output_text += BRAILLE_TO_LETTER[char]
+                elif cap_flag == True:
+                    self.output_text += BRAILLE_TO_NUMBER[char].upper()
+                    cap_flag = False # Reset the flag
+                else: 
+                    self.output_text += BRAILLE_TO_NUMBER[char]
+            print(BRAILLE_TO_LETTER[char])
         return self.output_text
 
     
     # Check if the input text is Braille and valid Braille
     def is_braille(self) -> bool:
         for char in self.input_text:
-            if char != '.' or char != 'O':
+            if char == '.' or char == 'O':
+                continue
+            else:
                 return False
-        
+            
         # Now make sure the input text is valid
         braille_chars = [self.input_text[i:i + 6] for i in range(0, len(self.input_text), 6)]
-         # Check if the input text is valid
-        for char in braille_chars:
-            if char not in BRAILLE_TO_LETTER or char not in BRAILLE_TO_NUMBER:
+        
+        # Check if the input text is valid
+        for braille in braille_chars:
+            # Only need to check b to l dict which contains all combos
+            if braille not in BRAILLE_TO_LETTER: 
                 return False
         return True
     
@@ -126,5 +148,15 @@ def translate(input_text: str) -> str:
     else:
         return "Invalid input"
 
-
+def main():
+    if len(argv) < 2:
+        print("Please provide a string to translate")
+        return
     
+    input_text = " ".join(argv[1:])
+
+    # Translate and print the input
+    print(translate(input_text))
+
+if __name__ == "__main__":
+    main()
