@@ -90,7 +90,6 @@ def translate(stringList):
         elif key in c:
             check1 = True
     
-    print(check1)
     if check1:
         for i in c:
             if i in letterDict:
