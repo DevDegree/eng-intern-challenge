@@ -165,15 +165,23 @@ function getAlphaNumber(braille){
 const {argv} = require('node:process');
 const originalMsg = argv[2];
 
-// Determine if the code is Braille
-if(isBrailleFormat(originalMsg)){
-    // TODO: translate msg to English
-    
-    // Get the individual braille letters
-    const brailleMsg = makeBrailleBlocks(originalMsg);
+// Determine if the input is Braille
+let isBraille = true;
 
-    // Check that all the blocks are proper braille, otherwise this is really weird non-sensical English
-    if(isBrailleAlphabet(brailleMsg)){
+// Determine if the input is in Braille formatting
+if(!isBrailleFormat(originalMsg)){
+    isBraille = false;
+}
+// As it is braille formatting, get the individual braille letters
+const brailleMsg = makeBrailleBlocks(originalMsg);
+
+// Check that all the blocks are proper braille, otherwise this is really weird non-sensical English
+if(!isBrailleAlphabet(brailleMsg)){
+    isBraille = false;
+}
+
+    // Translate avvordingly
+    if(isBraille){
         // Proceed to translate to English
         let englishMsg = "";
 
@@ -203,8 +211,9 @@ if(isBrailleFormat(originalMsg)){
             // If it is a number, add it to the message
             }else if(isBrailleNumber(currBlock) && !!isNum){
                 englishMsg += getAlphaNumber(currBlock);
+                isCap = false;
             
-            // If it is a space, add a space character and reset following booleans to false
+            // If it is a space, add a space character and reset "following" booleans to false
             }else if(currBlock === BRAILLE_SPACE){
                 isCap = false;
                 isNum = false;
@@ -212,9 +221,10 @@ if(isBrailleFormat(originalMsg)){
             }
 
             // NOTE: Current requirements do not worry about punctuation characters
+            // NOTE: Current requirement do not worry about the irrational usage of following indicators
         }
 
-        // Print the braille to English
+        // Print the braille to English message
         console.log(englishMsg);
 
     }else{
@@ -222,11 +232,3 @@ if(isBrailleFormat(originalMsg)){
         // TODO
         console.log("i wasn't braille");
     }
-
-}else{
-    // TODO: transtlate msg to Braille
-    console.log(originalMsg);
-}
-
-// // Current output is just whether msg is braille or not
-// console.log(isBraille(originalMsg))
