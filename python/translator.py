@@ -34,7 +34,7 @@ def to_braille(text):
         if char.isalpha():
             # Check if its starting a new letter sequence
             if not in_letter_sequence:
-                braille_translation += ".....O"
+                braille_translation += "OO..OO"
                 in_letter_sequence = True
                 in_number_sequence = False
             braille_translation += braille_dict[char]
@@ -42,7 +42,7 @@ def to_braille(text):
         elif char.isdigit():
             # Check if its starting a new number sequence
             if not in_number_sequence:
-                braille_translation += ".O...O"
+                braille_translation += ".O.OOO"
                 in_number_sequence = True
                 in_letter_sequence = False
             braille_translation += braille_dict[char]
@@ -68,12 +68,12 @@ def to_english(braille_text):
         char = braille_text[i]
 
         # Check for markers ".....O" (letters) and ".O...O" (numbers)
-        if char == ".....O":
+        if char == "OO..OO":
             in_letter_sequence = True
             in_number_sequence = False
             i += 1
             continue
-        elif char == ".O...O":
+        elif char == ".O.OOO":
             in_number_sequence = True
             in_letter_sequence = False
             i += 1
