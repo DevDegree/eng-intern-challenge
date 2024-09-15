@@ -1,13 +1,8 @@
 # Eng Intern Challenge Fall - Winter 2025
 
-# **Note: In order for our submission automation to function correctly:**
-1. **Your Github email must match the email you submitted your Application with (if your Github email is different, we recommend creating a new Github profile with the email you created your application with)**
-2. **Have your email set to public on your Github Profile**
-3. **Do not apply any labels on your PR. We will mark your PR as `reviewed` with a label when it has been so. Marking this yourself will cause your PR to be skipped.**
+## Submission Details
 
-**If you have any questions, please reach out to `internprogram@shopify.com`**
-
----
+Please see [go/README.md](go/README.md) for more information.
 
 ## Braille Translator
 In this coding challenge you will create a terminal / command-line application that can translate Braille to English and vice versa. 
