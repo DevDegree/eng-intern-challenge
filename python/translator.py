@@ -108,4 +108,23 @@ class Translator:
                 return False
         return True
 
+# Determine the type of input
+def type_of_input(input_text: str) -> str:
+    if Translator(input_text).is_braille():
+        return "braille"
+    elif Translator(input_text).is_english():
+        return "english"
+    else:
+        return "invalid"
+    
+# Translate the input text
+def translate(input_text: str) -> str:
+    if type_of_input(input_text) == "english":
+        return Translator(input_text).to_braille()
+    elif type_of_input(input_text) == "braille":
+        return Translator(input_text).to_english()
+    else:
+        return "Invalid input"
+
+
     
