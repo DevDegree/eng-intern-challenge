@@ -3,6 +3,7 @@ import subprocess
 
 class TestTranslator(unittest.TestCase):
     def test_output_english_to_braille(self):
+        self.maxDiff = None
         # Command to run translator.py script
         command = ["python3", "translator.py", "Abc", "123", "xYz"]
         
