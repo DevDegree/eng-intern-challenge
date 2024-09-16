@@ -85,7 +85,7 @@ braille_to_english = {
     '.O.OOO': 'nf',
     '..OO.O': '.',
     '..O...': ',',
-    '..O.OO': '?',
+    '..O.OO': '?', # use \ before the question mark when using it in the inputs.
     '..OOO.': '!',
     '..OO..': ':',
     '..O.O.': ';',
@@ -95,7 +95,7 @@ braille_to_english = {
     'O.O..O': '(',
     '......': ' '
 }
-braille_to_englsh_numbers = {
+braille_to_english_numbers = {
     'O.....': '1',
     'O.O...': '2', 
     'OO....': '3',
@@ -134,7 +134,7 @@ def braille_to_english_translator(braille):
     elif braille_to_english[segments[index]] == 'nf':
       numberMode = True
       index += 1
-      
+
     # To exit number mode if a space is encountered and add charachters accordingly.
     elif numberMode:
       if braille_to_english[segments[index]] == ' ':
@@ -173,7 +173,6 @@ def english_to_braille_translator(english):
 
     else:
       braille += english_to_braille[char]
-  
   return braille
     
 def translator(argument):
