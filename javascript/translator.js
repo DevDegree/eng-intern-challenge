@@ -5,9 +5,6 @@ const ENGLISH_LETTER_TO_BRAILLE = {
   'i': '.OO...', 'j': '.OOO..', 'k': 'O...O.', 'l': 'O.O.O.', 'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.', 'p': 'OOO.O.',
   'q': 'OOOOO.', 'r': 'O.OOO.', 's': '.OO.O.', 't': '.OOOO.', 'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO',
   'y': 'OO.OOO', 'z': 'O..OOO', 
-
-  // Spaces
-  ' ': '......',
 };
 
 const NUMBER_TO_BRAILLE = {
@@ -66,36 +63,33 @@ function englishToBraille(text) {
   for(const char of text) {
     const lowerChar = char.toLowerCase();
 
-    if(lowerChar in ENGLISH_LETTER_TO_BRAILLE | lowerChar in NUMBER_TO_BRAILLE) {
-      // Close `number follow` 
-      if(isNum & !isNumber(char)) {
-        result += ".O.OOO";
-        isNum = false;
-      }
-
-      // Handle `number follow`
-      if(isNumber(char)) {
-        if(!isNum) {
-          result += ".O.OOO";
-        }
-        isNum = true;
-        result += NUMBER_TO_BRAILLE[char];
-      }      
-      // Handle `capital follow`
-      else if(isCapitalized(char)) {
-        result += ".....O";
-        result += ENGLISH_LETTER_TO_BRAILLE[lowerChar];
-      }
-      else {
-        result += ENGLISH_LETTER_TO_BRAILLE[char];
-      }
-    }
-    else {
-      console.log(`ERROR: ${char} is not an alphanumerical character!`);
+    if(!lowerChar in ENGLISH_LETTER_TO_BRAILLE | !lowerChar in NUMBER_TO_BRAILLE) {
       return `ERROR: ${char} is not an alphanumerical character!`;
     }
+
+    // Handle `number follow`
+    if(isNumber(char)) {
+      if(!isNum) {
+        result += ".O.OOO";
+      }
+      result += NUMBER_TO_BRAILLE[char];
+      isNum = true;
+    }      
+    // Handle `capital follow`
+    else if(isCapitalized(char)) {
+      result += ".....O";
+      result += ENGLISH_LETTER_TO_BRAILLE[lowerChar];
+    }
+    // Handle spaces
+    else if(char.match(` `)) {
+      result += "......";
+      isNum = false;
+    }
+    else {
+      result += ENGLISH_LETTER_TO_BRAILLE[char];
+    }
+    
   }
-  console.log(result);
   return result;
 }
 
@@ -118,12 +112,15 @@ function brailleToEnglish(text) {
     }
     // Handle `numbers follow`
     else if(chunk === ".O.OOO") {
-      isNum = !isNum;
+      isNum = true;
+      continue;
+    }
+    else if(chunk === "......") {
+      isNum = false;
       continue;
     }
     else {
       if(!chunk in BRAILLE_TO_ENGLISH_LETTER | !chunk in BRAILLE_TO_NUMBER){
-        console.log(`ERROR: ${chunk} is not a valid Braille character`);
         return `ERROR: ${chunk} is not a valid Braille character`
       }
       else{
@@ -140,8 +137,6 @@ function brailleToEnglish(text) {
       }    
     }
   }
-
-  console.log(result);
   return result;
 }
 
@@ -154,16 +149,10 @@ function brailleToEnglish(text) {
  */
 function translate(text) {
   if(isBraille(text)){
-    const brailleToEnglishText = brailleToEnglish(text);
-
-    console.log(brailleToEnglishText);
-    return brailleToEnglishText;
+    console.log(brailleToEnglish(text));
   }
   else {
-    const englishToBrailleText = englishToBraille(text);
-
-    console.log(englishToBrailleText);
-    return englishToBrailleText;
+    console.log(englishToBraille(text));
   }
 }
 
