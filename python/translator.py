@@ -106,7 +106,8 @@ braille_alphabet_numbers = {
     'OOOO..': '7',
     'O.OO..': '8', 
     '.OO...': '9', 
-    '.OOO..': '0', }
+    '.OOO..': '0',
+    '......': ' ' }
 
 def braille_translator(braille):
   segments = []
@@ -116,25 +117,29 @@ def braille_translator(braille):
     segments.append(segment)
   
   index = 0
+  numbermode = False
   while index < len(segments):
     if braille_alphabet[segments[index]] == 'cf':
       if index + 1 < len(segments):
           word += braille_alphabet[segments[index + 1]].upper()
           index += 2 
-      else:
-          index += 1
 
     elif braille_alphabet[segments[index]] == 'nf':
-      if index + 1 < len(segments):
-        word += braille_alphabet_numbers[segments[index + 1]]
-        index += 2 
+      numbermode = True
+      index += 1
+      
+    elif numbermode:
+      if braille_alphabet[segments[index]] == ' ':
+        numbermode = False
+        word += ' '
       else:
-        index += 1
-
+        word += braille_alphabet_numbers[segments[index]]
+      index += 1
     else:
       word += braille_alphabet[segments[index]]
       index += 1
   print(word)
+  print(len(braille))
   return
 
 def word_translator(string):
