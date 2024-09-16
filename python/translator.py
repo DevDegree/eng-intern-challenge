@@ -40,8 +40,15 @@ def braille_to_english(braille):
     i = 0
     capitalize_next = False
     number_mode = False
-    while i<len(braille):
+
+    number_map = {
+        '.000..':'0','0.....': 'a', '0.0...': 'b', '00....': 'c', '00.0..': 'd', '0..0..': '5',
+        '000...': '6', '0000..': '7', '0.00..': '8', '.00...': '9' 
+    }
+
+    while i < len(braille):
         chunk = braille[i:i+6]
+
         if chunk == braille_map['cap']:
             capitalize_next = True
             i+=6
@@ -54,9 +61,14 @@ def braille_to_english(braille):
         if chunk in english_map:
             char = english_map[chunk]
             if number_mode:
-                char = english_map[chunk]
-                if not char.isdigit():
+               if chunk in number_map:
+                   char = number_map[chunk]
+               else:
                     number_mode = False
+                    char = english_map[chunk]
+            else:
+                number_mode = False
+
             if capitalize_next:
                 char = char.upper()
                 capitalize_next=False
@@ -69,7 +81,7 @@ def braille_to_english(braille):
 
 def main():
     if len(sys.argv) != 2:
-        print("Usage: python braille_translator.py <text")
+        print("Usage: python braille_translator.py <text>")
         return
     
     input_string = sys.argv[1]
