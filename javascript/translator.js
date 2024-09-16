@@ -35,3 +35,48 @@ function isCapitalized(char) {
 function isNumber(char) {
   return /^\d$/.test(char);
 }
+
+function englishToBraille(text) {
+  let result = "";
+  let isNum = false;
+
+  for(const char of text) {
+    const lowerChar = char.toLowerCase();
+
+    if(lowerChar in ENGLISH_LETTER_TO_BRAILLE | lowerChar in NUMBER_TO_BRAILLE) {
+      // Close number follow 
+      if(isNum & !isNumber(char)) {
+        result += ".O.OOO";
+        isNum = false;
+      }
+
+      // Handle number follow
+      if(isNumber(char)) {
+        if(!isNum) {
+          result += ".O.OOO";
+        }
+        isNum = true;
+        result += NUMBER_TO_BRAILLE[char];
+      }      
+      // Handle capital follow
+      else if(isCapitalized(char)) {
+        result += ".....O";
+        result += ENGLISH_LETTER_TO_BRAILLE[lowerChar];
+      }
+      else {
+        result += ENGLISH_LETTER_TO_BRAILLE[char];
+      }
+    }
+    else {
+      console.log(`ERROR: ${char} is not an alphanumerical character!`);
+      return(`ERROR: ${char} is not an alphanumerical character!`);
+    }
+  }
+  console.log(result);
+  return result;
+}
+
+
+console.log(englishToBraille("Hello world") === ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..");
+console.log(englishToBraille("42") === ".O.OOOOO.O..O.O...");
+console.log(englishToBraille("Abc 123") === ".....OO.....O.O...OO...........O.OOOO.....O.O...OO....");
