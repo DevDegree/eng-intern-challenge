@@ -1,3 +1,4 @@
+// CONSTANTS 
 const ENGLISH_LETTER_TO_BRAILLE = {
   // Letters
   'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..', 'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..',
@@ -23,6 +24,8 @@ const BRAILLE_TO_ENGLISH_LETTER = Object.fromEntries(
 const BRAILLE_TO_NUMBER = Object.fromEntries(
   Object.entries(NUMBER_TO_BRAILLE).map(([key, value]) => [value, key])
 );
+
+// HELPER FUNCTIONS
 
 function isBraille(input) {
   return /^[O.]+$/.test(input) && input.length % 6 == 0;
@@ -76,7 +79,7 @@ function englishToBraille(text) {
   return result;
 }
 
-function brailledToEnglish(text) {
+function brailleToEnglish(text) {
   const brailleChunk = text.match(/.{1,6}/g);
   let result = "";
   let isNum = false;
@@ -117,6 +120,29 @@ function brailledToEnglish(text) {
   return result;
 }
 
-console.log(brailledToEnglish(".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..") === "Hello world");
-console.log(brailledToEnglish(".O.OOOOO.O..O.O...") === "42");
-console.log(brailledToEnglish(".....OO.....O.O...OO...........O.OOOO.....O.O...OO....") === "Abc 123");
+// MAIN FUNCTION
+function translate(text) {
+  if(isBraille(text)){
+    const brailleToEnglishText = brailleToEnglish(text);
+
+    console.log(brailleToEnglishText);
+    return brailleToEnglishText;
+  }
+  else {
+    const englishToBrailleText = englishToBraille(text);
+
+    console.log(englishToBrailleText);
+    return englishToBrailleText;
+  }
+}
+
+// TERMINAL FUNCTION CALL
+// Assume function call is `node translator.js`
+const inputText = process.argv.slice(2);
+
+if (!inputText) {
+  console.error("Please provide text to translate.");
+  process.exit(1);  
+}
+
+translate(inputText.join(` `));
