@@ -21,7 +21,7 @@ english_to_braille_main_dict = {
 
 # Separate dictionary because of the redundancy with letters.
 english_to_braille_numbers_dict = {
-    '0': '.OOO..','1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O.O..', '6': 'OOO...',
+    '0': '.OOO..','1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..', '6': 'OOO...',
     '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...'
 }
 
@@ -33,20 +33,17 @@ braille_alphabet = ['O','.']
 
 def translator(*args):
     input = ' '.join(args)
-    try:
-        if is_English(input):
-            result = english_to_braille(input)
-        else:
-            result = braille_to_english(input)
-    except Exception as e:
-        result = f"An error occurred: {e}"
+    if is_English(input):
+        result = english_to_braille(input)
+    else:
+        result = braille_to_english(input)
     print(result)
 
 def is_English(text):
     # The logic here is that '.' are not allowed in English as per the current Braille alphabet.
     # Furthermore, every Braille character contains at least one '.'. This verification keeps
     # the language verification O(1).
-    if text[:6].contains('.'):
+    if '.' in text[:6]:
         return False
         
     return True
