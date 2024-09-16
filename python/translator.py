@@ -14,8 +14,6 @@ BRAILLE_MAP = {
     ';': '..O.O.', '-': '....OO', '/': '.O..O.', '<': '.OO..O', '>': 'O..OO.',
     '(': 'O.O..O', ')': '.O.OO.'
 }
-# "12.34 5.678"
-# .O.OOOOO....OO.O.........O.OOOO..O....OO.O.O.OOOOOO...OOOO..O.OO..
 
 # Reverse mapping from Braille to English letters
 ENGLISH_MAP = {v: k for k, v in BRAILLE_MAP.items() if k.isalpha() or k == ' '}
@@ -36,39 +34,37 @@ def english_to_braille(text):
     """Translate English text to Braille."""
     braille_output = []
     number_mode = False
-    for char in text:
+    i = 0
+    while i < len(text):
+        char = text[i]
         if char.isupper():
-            # Append capital symbol before the letter
             braille_output.append(CAPITAL_SYMBOL)
             char = char.lower()
-            if char in BRAILLE_MAP:
-                braille_output.append(BRAILLE_MAP[char])
-            else:
-                # Unsupported character
-                pass
-            number_mode = False  # Exiting number mode if previously in it
-        elif char.isdigit():
+        
+        if char.isdigit():
             if not number_mode:
-                # Enter number mode by appending number symbol
                 braille_output.append(NUMBER_SYMBOL)
                 number_mode = True
-            if char in BRAILLE_MAP:
-                braille_output.append(BRAILLE_MAP[char])
+            braille_output.append(BRAILLE_MAP[char])
+        elif char == '.':
+            if number_mode and i + 1 < len(text) and text[i+1].isdigit():
+                # It's a decimal point
+                braille_output.append(DECIMAL_SYMBOL)
             else:
-                # Unsupported digit
-                pass
+                # It's a period (end of sentence or standalone)
+                braille_output.append(BRAILLE_MAP['.'])
+                number_mode = False
         elif char == ' ':
-            # Append space and exit number mode
             braille_output.append(BRAILLE_MAP[' '])
             number_mode = False
         elif char.lower() in BRAILLE_MAP:
             if number_mode:
-                # Exiting number mode upon encountering a letter
                 number_mode = False
             braille_output.append(BRAILLE_MAP[char.lower()])
         else:
             # Unsupported character
             pass
+        i += 1
     return ''.join(braille_output)
 
 def braille_to_english(braille):
@@ -78,45 +74,49 @@ def braille_to_english(braille):
     capital_next = False
     number_mode = False
 
-    for block in blocks:
+    i = 0
+    while i < len(blocks):
+        block = blocks[i]
         if block == CAPITAL_SYMBOL:
             capital_next = True
-            continue
-        if block == NUMBER_SYMBOL:
+        elif block == NUMBER_SYMBOL:
             number_mode = True
-            continue
-        if block == BRAILLE_MAP[' ']:
+        elif block == BRAILLE_MAP[' ']:
             english_output.append(' ')
             number_mode = False
-            continue
-        if number_mode:
+        elif number_mode:
             if block == DECIMAL_SYMBOL:
-                english_output.append('.')
-                continue
-            if block in DIGIT_MAP:
-                digit = DIGIT_MAP[block]
-                english_output.append(digit)
+                if i + 1 < len(blocks) and blocks[i+1] in DIGIT_MAP:
+                    # It's a decimal point
+                    english_output.append('.')
+                else:
+                    # It's likely the end of a sentence
+                    english_output.append('.')
+                    number_mode = False
+            elif block in DIGIT_MAP:
+                english_output.append(DIGIT_MAP[block])
             else:
                 # If the block isn't a digit, exit number mode and interpret as letter
                 number_mode = False
                 if block in ENGLISH_MAP:
                     mapped_char = ENGLISH_MAP[block]
-                    if capital_next:
-                        english_output.append(mapped_char.upper())
-                        capital_next = False
-                    else:
-                        english_output.append(mapped_char)
+                    english_output.append(mapped_char.upper() if capital_next else mapped_char)
+                    capital_next = False
         else:
             if block in ENGLISH_MAP:
                 mapped_char = ENGLISH_MAP[block]
-                if capital_next:
-                    english_output.append(mapped_char.upper())
-                    capital_next = False
-                else:
-                    english_output.append(mapped_char)
+                english_output.append(mapped_char.upper() if capital_next else mapped_char)
+                capital_next = False
+            elif block in BRAILLE_MAP.values():
+                # Handle punctuation and other symbols
+                for char, braille_code in BRAILLE_MAP.items():
+                    if braille_code == block:
+                        english_output.append(char)
+                        break
             else:
                 # Unsupported Braille block
                 pass
+        i += 1
 
     return ''.join(english_output)
 
