@@ -178,7 +178,7 @@ def english_to_braille_translator(english):
     
 def translator(argument):
     braille_char = ['.', 'O']
-    # To check whether the input(argument) is braille or english and run functions accordingly.
+    # To check whether the input(argument) is braille or english and run according function.
     if all(char in braille_char for char in argument) and len(argument) >= 6:
         return braille_to_english_translator(argument) 
     else:
