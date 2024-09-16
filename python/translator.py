@@ -44,7 +44,7 @@ def english_to_braille(sentence):
                     result.append(braille_dict[char.upper()])
             if char.isnumeric():
                 result.append(braille_numbers_dict[char])
-            if char in braille_dict:
+            if char in braille_dict and not char.isalpha():
                 result.append(braille_dict[char])
             elif char in braille_special_dict:
                 result.append(braille_special_dict[char])
@@ -61,13 +61,11 @@ def braille_to_english(sentence):
     reverse_braille_dict = reverse_dict(braille_dict)
     reverse_braille_numbers_dict = reverse_dict(braille_numbers_dict)
     reverse_braille_special_dict = reverse_dict(braille_special_dict)
-    reverse_braille_indication_dict = reverse_dict(braille_indication_dict)
     
     result = []
     capital_mode = False
     number_mode = False
     words = [sentence[i:i+6] for i in range(0, len(sentence), 6)]
-    print(words)
 
     for word in words:
         # Check for Braille special indicators
