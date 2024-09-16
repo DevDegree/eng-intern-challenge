@@ -1,92 +1,96 @@
 import sys
 
-# Unified Braille to English and English to Braille mappings
+# Braille to English mappings
 brailleToEnglish = {
     'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd', 'O..O..': 'e',
     'OOO...': 'f', 'OOOO..': 'g', 'O.OO..': 'h', '.OO...': 'i', '.OOO..': 'j',
     'O...O.': 'k', 'O.O.O.': 'l', 'OO..O.': 'm', 'OO.OO.': 'n', 'O..OO.': 'o',
     'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't',
-    'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y', 
+    'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y',  # Corrected mapping
     'O..OOO': 'z', '..OO.O': '.', '..O...': ',', '..O.OO': '?', '..OOO.': '!',
     '..OO..': ':', '..O.O.': ';', '....OO': '-', '.O..O.': '/', 'O.O..O': '(',
     '.O.OO.': ')'
 }
 
-# dictionary for both conversions
-englishToBraille = {v: k for k, v in brailleToEnglish.items()}
+# English to Braille mappings
+englishToBraille = {
+    'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
+    'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..',
+    'k': 'O...O.', 'l': 'O.O.O.', 'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.',
+    'p': 'OOO.O.', 'q': 'OOOOO.', 'r': 'O.OOO.', 's': '.OO.O.', 't': '.OOOO.',
+    'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO',  # Corrected mapping
+    'z': 'O..OOO', '.': '..OO.O', ',': '..O...', '?': '..O.OO', '!': '..OOO.',
+    ':': '..OO..', ';': '..O.O.', '-': '....OO', '/': '.O..O.', '(': 'O.O..O',
+    ')': '.O.OO.'
+}
 
 # Numbers and their Braille equivalents
-brailleNumbers = {
+convertNums = {
     'O.....': '1', 'O.O...': '2', 'OO....': '3', 'OO.O..': '4', 'O..O..': '5',
-    'OOO...': '6', 'OOOO..': '7', 'O.OO..': '8', '.OO...': '9', '.OOO..': '0'
+    'OOO...': '6', 'OOOO..': '7', 'O.OO..': '8', '.OO...': '9', '.OOO..': '0',
+    '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
+    '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..'
 }
-englishNumbers = {v: k for k, v in brailleNumbers.items()}
 
-# Special signs
-number_sign = '.O.OOO'  # Number sign
-capital_sign = '.....O'  # Capitalization sign
-space_sign = '......'  # Braille space
+# Check if input is Braille
+def isBraille(inputText):
+    for c in inputText:
+        if (c != '.') and (c != 'O'):
+            return False
+    return True
 
-# Check if input is Braille (all O and . characters)
-def is_braille(input_text):
-    return all(c in 'O.' for c in input_text.replace(' ', ''))
-
-# Convert Braille to English with number and capitalization handling
-def convert_braille_to_english(input_text):
-    translation = []
+# Convert Braille to English
+def convertBraille(inputText):
+    full = inputText
+    translation = ''
     numbers = False
-    capitalize = False
-    input_text = input_text.strip()
-
-    while input_text:
-        braille_char = input_text[:6]
-        input_text = input_text[6:]
-
-        if braille_char == space_sign:
-            translation.append(' ')
-            numbers = False  # Reset number mode after space
-        elif braille_char == number_sign:
+    cap = False
+    while(full != ''):
+        temp = full[:6]
+        full = full[6:]
+        if (temp == '......'):  # Space
+            numbers = False
+            translation += ' '
+        elif (temp == '.....O'):  # Capitalization sign
+            cap = True
+        elif (temp == '.O.OOO'):  # Number sign
             numbers = True
-        elif braille_char == capital_sign:
-            capitalize = True
-        elif numbers:
-            translation.append(brailleNumbers.get(braille_char, '?'))
+        elif (numbers == True):
+            translation += convertNums.get(temp, 'error')
+        elif (cap == True):
+            translation += brailleToEnglish.get(temp, 'error').upper()
+            cap = False
         else:
-            char = brailleToEnglish.get(braille_char, '?')
-            if capitalize:
-                translation.append(char.upper())
-                capitalize = False
-            else:
-                translation.append(char)
-    
-    return ''.join(translation)
+            translation += brailleToEnglish.get(temp, 'error')    
+    return translation
 
-# Convert English to Braille with number and capitalization handling
-def convert_english_to_braille(input_text):
-    translation = []
+# Convert English to Braille
+def convertEnglish(inputText):
+    full = inputText
+    translation = ''
     numbers = False
-
-    for char in input_text:
-        if char == ' ':
-            translation.append(space_sign)
-            numbers = False  # Reset number mode after space
-        elif char.isdigit():
-            if not numbers:
-                translation.append(number_sign)  # Add number sign only once
+    while (full != ''):
+        temp = full[:1]
+        full = full[1:]
+        if (temp == ' '):
+            numbers = False
+            translation += '......'  # Braille for space
+        elif (temp.isnumeric()):
+            if (numbers == False):
                 numbers = True
-            translation.append(englishNumbers[char])
-        elif char.isupper():
-            translation.append(capital_sign + englishToBraille[char.lower()])
-            numbers = False
+                translation += '.O.OOO'  # Number sign
+            translation += convertNums.get(temp, 'error')
+        elif (temp.isupper()):
+            translation += '.....O' + englishToBraille.get(temp.lower(), 'error')  # Other capital letters
         else:
-            translation.append(englishToBraille[char])
-            numbers = False
+            translation += englishToBraille.get(temp, 'error')  # Lowercase letters
+    return translation
 
-    return ''.join(translation)
 
-# added some manual test cases, to just check before running the unit test
+
+
 def main():
-    if len(sys.argv) < 2:
+    if (len(sys.argv) < 2):
         print("No input detected. Running manual tests...")
 
         # Manual test cases
@@ -103,10 +107,10 @@ def main():
             expected = case["expected"]
 
             # Detect if input is Braille or English
-            if is_braille(input_text):
-                result = convert_braille_to_english(input_text)
+            if isBraille(input_text):
+                result = convertBraille(input_text)
             else:
-                result = convert_english_to_braille(input_text)
+                result = convertEnglish(input_text)
 
             print(f"Input: {input_text}")
             print(f"Expected: {expected}")
@@ -115,13 +119,15 @@ def main():
             print("-" * 40)
 
     else:
-        input_text = ' '.join(sys.argv[1:])
-        
-        # Detect whether input is Braille or English and convert accordingly
-        if is_braille(input_text):
-            print(convert_braille_to_english(input_text))
+        args = sys.argv[1:]
+
+        # Check if input is Braille
+        if isBraille(args[0]):
+            translationText = '......'.join(args)  # Join args for Braille input
+            print(convertBraille(translationText))
         else:
-            print(convert_english_to_braille(input_text))
+            translationText = ' '.join(args)  # Join args for English input
+            print(convertEnglish(translationText))
 
 if __name__ == "__main__":
     main()
