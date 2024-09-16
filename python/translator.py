@@ -81,16 +81,6 @@ braille_alphabet = {
     'OO..OO': 'x',
     'OO.OOO': 'y',
     'O..OOO': 'z',
-    'O.....': '1',
-    'O.O...': '2', 
-    'OO....': '3',
-    'OO.O..': '4',
-    'O..O..': '5',
-    'OOO...': '6',
-    'OOOO..': '7',
-    'O.OO..': '8', 
-    '.OO...': '9', 
-    '.OOO..': '0', 
     '.....O': 'cf',
     '.O...O': 'df',
     '.O.OOO': 'nf',
@@ -106,7 +96,17 @@ braille_alphabet = {
     'O.O..O': '(',
     '......': ' '
 }
-
+braille_alphabet_numbers = {
+    'O.....': '1',
+    'O.O...': '2', 
+    'OO....': '3',
+    'OO.O..': '4',
+    'O..O..': '5',
+    'OOO...': '6',
+    'OOOO..': '7',
+    'O.OO..': '8', 
+    '.OO...': '9', 
+    '.OOO..': '0', }
 
 def braille_translator(braille):
   segments = []
@@ -119,10 +119,18 @@ def braille_translator(braille):
   while index < len(segments):
     if braille_alphabet[segments[index]] == 'cf':
       if index + 1 < len(segments):
-        word += braille_alphabet[segments[index + 1]].upper()
+          word += braille_alphabet[segments[index + 1]].upper()
+          index += 2 
+      else:
+          index += 1
+
+    elif braille_alphabet[segments[index]] == 'nf':
+      if index + 1 < len(segments):
+        word += braille_alphabet_numbers[segments[index + 1]]
         index += 2 
       else:
         index += 1
+
     else:
       word += braille_alphabet[segments[index]]
       index += 1
