@@ -120,13 +120,12 @@ class BrailleTranslator:
             return self._translate_english_to_braille(sentence)
 
 
-if __name__ == "__main__":
-    sentence = None
-    if len(sys.argv) > 1:
-        sentence = " ".join(sys.argv[1:]).strip()
+sentence = None
+if len(sys.argv) > 1:
+    sentence = " ".join(sys.argv[1:]).strip()
 
-    if not sentence:
-        sys.exit(1)
-    print(sentence, file=sys.stderr)
-    translator = BrailleTranslator()
-    print(translator.translate(sentence), file=sys.stdout)
+if not sentence:
+    sys.exit(1)
+print(sentence, file=sys.stderr)
+translator = BrailleTranslator()
+print(translator.translate(sentence), file=sys.stdout)
