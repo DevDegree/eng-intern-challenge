@@ -34,10 +34,10 @@ function englishToBraille(input) {
         }
     }
 
-    console.log(result)
+    return result
 };
 
-function translateBrailleToEnglish(input) {
+function brailleToEnglish(input) {
     let result = '';
     let capitalMode = false;
     let numberMode = false;
@@ -66,7 +66,7 @@ function translateBrailleToEnglish(input) {
             result += translatedChar;
         }
     }
-    console.log(result)
+
     return result;
 }
 
@@ -92,5 +92,15 @@ function splitBraille(braille, size) {
  */
 const input = process.argv.slice(2).join(' ')
 
-// return englishToBraille(input)
-return translateBrailleToEnglish(input)
+// determine which translator to use by seeing what the input consists of
+function transaltor(input) {
+    if (input.match(/^[.O\s]+$/)) {
+        // Input seems to be Braille
+        console.log(brailleToEnglish(input))
+    } else {
+        // Input seems to be English
+        console.log(englishToBraille(input))
+    }
+}
+
+return transaltor(input)

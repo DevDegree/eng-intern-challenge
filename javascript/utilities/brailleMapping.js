@@ -1,4 +1,4 @@
-{
+const ENG_TO_BRAILLE_DICTIONARY = {
     "a": "O.....", 
     "b": "O.O...", 
     "c": "OO....", 
@@ -35,8 +35,18 @@
     "8": "O.OO..", 
     "9": ".OO...", 
     "0": ".OOO..",
-    "space": "......",
+    " ": "......",
     "capital": ".....O", 
     "decimal": ".O...O",
     "number": ".O.OOO"
+}
+
+const BRAILLE_TO_ENGLISH_DICTIONARY = Object.entries(ENG_TO_BRAILLE_DICTIONARY).reduce((acc, [key, value]) => {
+    acc[value] = key;
+    return acc;
+}, {});
+
+module.exports = {
+    ENG_TO_BRAILLE_DICTIONARY,
+    BRAILLE_TO_ENGLISH_DICTIONARY
 }
