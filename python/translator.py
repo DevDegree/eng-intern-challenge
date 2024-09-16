@@ -72,7 +72,10 @@ def braille_to_english(braille):
             previous_was_number = False
 
         else:
-            english_translation.append(braille_to_letter(braille[i:i+6]).lower())
+            letter = braille_to_letter(braille[i:i+6])
+            if letter == '':
+                raise Exception("Invalid input. Braille segment '{}' not found in dictionary.".format(braille[i:i+6]))
+            english_translation.append(letter.lower())
             previous_was_number = False
 
         i += 6
