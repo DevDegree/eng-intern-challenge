@@ -45,7 +45,7 @@ class BrailleTranslator:
         "O.OO..": "8",
         ".OO...": "9",
         ".OOO..": "0",
-        "......": " "
+        "......": " ",
     }
 
     NUM_TO_BRAILLE = {value: key for key, value in BRAILLE_TO_NUM.items()}
@@ -101,7 +101,7 @@ class BrailleTranslator:
                     translate += self.NUM_TO_BRAILLE[letter]
 
             if not inputting_numbers:
-                if letter.islower()or letter == ' ':
+                if letter.islower() or letter == " ":
                     translate += self.LETTER_TO_BRAILLE[letter]
                 elif letter.isupper():
                     translate += self.CAPITAL_FOLLOWS
@@ -120,12 +120,12 @@ class BrailleTranslator:
             return self._translate_english_to_braille(sentence)
 
 
-sentence = None
-if len(sys.argv) > 1:
-    sentence = " ".join(sys.argv[1:]).strip()
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        sentence = " ".join(sys.argv[1:]).strip()
+    else:
+        sys.exit(1)
 
-if not sentence:
-    sys.exit(1)
-print(sentence, file=sys.stderr)
-translator = BrailleTranslator()
-print(translator.translate(sentence), file=sys.stdout)
+    print('HELLO')
+    translator = BrailleTranslator()
+    print(translator.translate(sentence), file=sys.stdout)
