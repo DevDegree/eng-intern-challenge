@@ -1,7 +1,5 @@
 import unittest
 import subprocess
-
-
 class TestTranslator(unittest.TestCase):
     def test_output(self):
         # Command to run translator.py script
@@ -15,7 +13,5 @@ class TestTranslator(unittest.TestCase):
 
         # Strip any leading/trailing whitespace from the output and compare
         self.assertEqual(result.stdout.strip(), expected_output)
-
-
 if __name__ == '__main__':
     unittest.main()
