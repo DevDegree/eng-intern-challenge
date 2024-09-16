@@ -1,79 +1,55 @@
-# Eng Intern Challenge Fall - Winter 2025
 
-# **Note: In order for our submission automation to function correctly:**
-1. **Your Github email must match the email you submitted your Application with (if your Github email is different, we recommend creating a new Github profile with the email you created your application with)**
-2. **Have your email set to public on your Github Profile**
-3. **Do not apply any labels on your PR. We will mark your PR as `reviewed` with a label when it has been so. Marking this yourself will cause your PR to be skipped.**
 
-**If you have any questions, please reach out to `internprogram@shopify.com`**
+# Braille Translator
+## Overview
+The **Braille Translator** is a Python application that converts English text to Braille code and back. It automatically detects the type of input provided—whether it's English or Braille—and performs the appropriate translation. The program effectively handles letters, numbers, capitalization, spaces, and some punctuation marks.
 
----
+This application is designed for ease of use and efficiency, utilizing mapping dictionaries for quick and accurate translations. It runs smoothly from the command line and maintains optimal performance even with long input strings.
 
-## Braille Translator
-In this coding challenge you will create a terminal / command-line application that can translate Braille to English and vice versa. 
+## How it Works
+### Input Detection
+The translator begins by determining the input type:
 
-The string to translate will be passed into your application as an argument at runtime. Your application must be smart enough to determine if the string given to it is either Braille or English and automatically convert it to the appropriate opposite. 
+- Braille Input: If the input string consists solely of the characters 'O', '.', and spaces, it is considered Braille code.
+- English Input: If the input contains any other characters, it is treated as English text.
+### English to Braille Conversion
+When translating from English to Braille, the application processes each character in the input:
 
-For the purposes of this challenge Braille must be displayed as `O` and `.` where `O` represents a raised dot. You must include the entire English alphabet, the ability to `capitalize` letters, add `spaces`, and the numbers `0` through `9` as well. 
+- Letters: Each letter is converted to its corresponding Braille pattern using a lookup dictionary.
+  - Uppercase Letters: A Braille capitalization sign is added before the letter's Braille code.
+- Numbers: When a digit is encountered:
+  - A Braille number sign is inserted.
+  - The digit is converted to a Braille pattern that represents numbers.
+  - Spaces: Translated directly to the Braille space character.
+  - Punctuation: Supported punctuation marks are converted to their Braille equivalents.
 
-After conversion, output the translated string--and nothing else--to the terminal. 
+### Braille to English Conversion
+For Braille to English translation, the application processes the Braille input as follows:
 
-## What is Braille?
-Braille (*/breɪl/ **BRAYL***) is a tactile writing system used by people who are visually impaired. Braille characters are formed using a combination of six raised dots arranged in a 3 × 2 matrix, called the braille cell. The number and arrangement of these dots distinguishes one character from another. ([via Wikipedia](https://en.wikipedia.org/wiki/Braille))
+- Chunking: The input is divided into chunks of six characters, each representing a Braille cell.
+- Special Signs:
+    - Capitalization Sign: When encountered, the next letter is capitalized.
+    - Number Sign: Activates number mode, affecting subsequent characters until the mode is turned off.
+- Braille Cells: Each cell is mapped to its corresponding English character or digit using a reverse lookup dictionary.
+- Spaces: Braille spaces are translated back to English spaces.
+### Mode Handling
+- Capital Mode: Triggered by a capitalization sign; affects only the next character.
+- Number Mode: Triggered by a number sign; remains active until a non-number character or space is encountered.
 
-<p align='center'>
-  <img src='./braille.jpg' alt='Braille Alphabet' />
-</p>
-<p align='center'>
-  <em style='font-size:xx-small;'>Black dots represent raised areas</em>
-</p>
+## Usage
+### Requirements
+- Python 3.8+
+- No additional libraries are required.
 
-## Technical Requirements
-- Translator
-  - Given arguments passed into the program at runtime, determine if the given string should be translated to English or Braille.
-  - For Braille, each character is stored as a series of `O` (the letter O) or `.` (a period).
-  - Store Braille symbols as a 6 character string reading left to right, line by line, starting at the top left. See examples below.
-  - When a Braille `capital follows` symbol is read, assume only the next symbol should be capitalized. 
-  - When a Braille `number follows` symbol is read, assume all following symbols are numbers until the next `space` symbol.
-- Braille Alphabet
-  - Letters `a` through `z`
-    - The ability to capitalize letters
-  - Numbers `0` through `9`
-  - The ability to include `spaces` ie: multiple words
+## Running the Application
+- Navigate to the Project Directory:
 
-## Examples
-- Launching your application with English or Braille:
-  - `ruby translator.rb Hello world`
-  - `ruby translator.rb .....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..`
----
-- Input: `Hello world`
-- Output: `.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..`
----
-- Input: `42`
-- Output: `.O.OOOOO.O..O.O...`
----
-- Input: `.....OO.....O.O...OO...........O.OOOO.....O.O...OO....`
-- Output: `Abc 123`
+Open your terminal and navigate to the directory containing translator.py.
 
-## Instructions
-1. Fork this repo to your personal Github Account
-1. Clone your forked repo to begin working on the challenge locally.
-2. Create a new Branch in your repo where you will be pushing your code to.
-3. Choose which programming language you wish to complete the challenge with.
-    - Navigate to the folder of that programming language and complete your work in the `translator` file found inside. ie: `ruby/translator.rb`
-    - **Do not** edit the test file in the folder. Tests will only work as intended after you have submitted a PR.
-    - You'll find a separate `README.md` in that folder with language specific instructions.
-4. Ensure your application is executable from the command-line by running your `translator` file.
-5. Feel free to run the test found in your language folder to ensure your code is correct
-6. Your application must output ***only*** the Braille/English string.
-    - ie: `O.....` ***not*** `The Braille text is: O.....`
+- Run the Translator:
 
-## Submission
-Upon completion of the challenge, create a PR of your work and compare it against the original Assessment Repo's main branch. Submit a link to your PR in the "Take Home Submission Link" which was included in the Technical Challenge email instructions.
-
-**Note: In order for our submission automation to function correctly:**
-- Your Github email must match the email you submitted your Application with (if your Github email is different, we recommend creating a new Github profile with the email you created your application with)
-- Have your email set to public on your Github Profile
-- Do not apply any labels on your PR. We will mark your PR as `reviewed` with a label when it has been so. Marking this yourself will cause your PR to be skipped.
-
-This repo is designed to run a unit test against your work to ensure the correct string is outputted to the console when executing your code. 
+` 
+  python3 translator.py "<input_text>"
+`
+- Replace <input_text> with the English text or Braille code you wish to translate.
+- Enclose the input in quotes to handle spaces and special characters.
