@@ -7,6 +7,8 @@ import sys
 # 2. There is a number follows character for braille, but there is no letter follows.
 #    Using the current Braille alphabet, it would be impossible to translate some strings.
 #    For example, "123abc" can't be translated from neither language using the current rules.
+# 3. Exception handling was not specified, so I just raised an exception when an error occurred
+#    and printed the relevant error message.
 
 # This script translates between English text and Braille.
 # It includes functions to convert Braille to English and English to Braille.
