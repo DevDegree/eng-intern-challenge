@@ -148,7 +148,7 @@ def brailletoEnglish(braille):
     print(toEnglish)
 
 
-def main():
+def main(): #main
 
 
     if(len(sys.argv)<2):
