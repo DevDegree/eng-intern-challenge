@@ -1,4 +1,3 @@
-const readline = require('readline');
 
 // Braille Alphabet Mapping
 const brailleMap = {
@@ -72,20 +71,19 @@ function brailleToEnglish(input) {
     return english;
 }
 
-// Start terminal interface for input
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
 
-rl.question('Enter text (Braille or English): ', (input) => {
-    let result;
-    if (isBraille(input)) {
-        result = brailleToEnglish(input);
-    } else {
-        result = englishToBraille(input);
-    }
+const input = process.argv.slice(2).join(' ');
 
-    console.log(result);
-    rl.close();
-});
+if (!input){
+    console.error("No input provided. Please enter a string to translate.");
+    process.exit(1);
+}
+
+let result
+if (isBraille(input)) {
+    result = brailleToEnglish(input);
+} else {
+    result = englishToBraille(input);
+}
+
+console.log(result);
