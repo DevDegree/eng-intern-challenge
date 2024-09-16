@@ -55,8 +55,6 @@ translationNumbers = {"1": "0.....",
 # braile is in segments of 6, so any braille code would be in segments of 6
 # unsure if the sys.argv = 2 is just bc of how im testing my logic here
 
-if (isBraille(sys.argv[1])):
-    print('braille ok')
 if (len(sys.argv[1]) % 6) == 0 and isBraille(sys.argv[1]):
     ans = ""
     braille = list(translation.values())
