@@ -119,7 +119,7 @@ function translate(args) {
     }
   }
 
-  console.error(returnString);
+  console.log(returnString);
 }
 
 translate(args);
