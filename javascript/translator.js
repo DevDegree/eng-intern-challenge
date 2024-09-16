@@ -180,7 +180,7 @@ const translateTextToBraille = (input) => {
       } else {
         braille += mapOfCharToBraille[char]
       }
-      1 = false
+      isNumber = false
       continue
     }
   }
