@@ -14,6 +14,7 @@ alphabet = {
 numbers = {
     '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
     '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..',
+
 }
 
 '''
@@ -98,9 +99,10 @@ def braille_to_english(braille):
     
     return ''.join(english)
 
-user_input = sys.argv[1]
+if __name__ == "__main__":
+    user_input = sys.argv[1:]
 
-if all(char in 'O.' for char in user_input):
-    print(braille_to_english(user_input))
-else:
-    print(english_to_braille(user_input))
+    if all(char in 'O.' for char in user_input):
+        print(braille_to_english(user_input))
+    else:
+        print(english_to_braille(user_input))
