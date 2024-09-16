@@ -6,7 +6,7 @@ import sys
 #    Using the current Braille alphabet, it would be impossible to translate some strings.
 #    For example, "123abc" can't be translated from neither language without ambiguity using the current rules.
 # 2. Exception handling was not specified, so I just raised an exception when an error occurred
-#    and printed the relevant error message.
+#    and gave it the relevant error message.
 
 # This script translates between English text and Braille.
 # It includes functions to convert Braille to English and English to Braille.
