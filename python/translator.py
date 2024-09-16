@@ -132,7 +132,7 @@ def braille_to_english_translator(braille):
 
     # To enter number mode.
     elif braille_to_english[segments[index]] == 'nf':
-      number_mode = True
+      numberMode = True
       index += 1
       
     # To exit number mode if a space is encountered and add charachters accordingly.
