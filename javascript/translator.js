@@ -27,3 +27,11 @@ const BRAILLE_TO_NUMBER = Object.fromEntries(
 function isBraille(input) {
   return /^[O.]+$/.test(input) && input.length % 6 == 0;
 }
+
+function isCapitalized(char) {
+  return /^[A-Z]$/.test(char);
+}
+
+function isNumber(char) {
+  return /^\d$/.test(char);
+}
