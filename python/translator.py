@@ -72,11 +72,41 @@ class BrailleTranslator:
 
         return ''.join(eng)
 
+    def to_braille(self, s):
+        """
+        Translate english to braille
+        Input: string
+        Returns: string
+        """
+        braille = []
+        num_follows = False
+
+        for ch in s:
+            if ch.isupper():
+                braille.append(self.map_to_braille['cap'])
+                ch = ch.lower()
+            if ch.isdigit() and not num_follows:
+                braille.append(self.map_to_braille['num'])
+                num_follows = True
+            elif not ch.isdigit():
+                num_follows = False
+
+            braille_ch = self.map_to_braille.get(ch, '')
+            if not braille_ch:
+                # English input is not valid
+                return ""
+
+            braille.append(braille_ch)
+
+        return ''.join(braille)
+
 def main():
     translator = BrailleTranslator()
     sentence = " ".join(sys.argv[1:])
     if translator.is_braille(sentence):
         print(translator.to_eng(sentence))
+    else:
+        print(translator.to_braille(sentence))
 
 if __name__ == "__main__":
     main()
