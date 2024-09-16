@@ -1,4 +1,5 @@
 import sys
+from unittest import addModuleCleanup
 
 
 class BrailleTranslator:
@@ -120,12 +121,15 @@ class BrailleTranslator:
             return self._translate_english_to_braille(sentence)
 
 
-if __name__ == "__main__":
+
+def main():
     if len(sys.argv) > 1:
         sentence = " ".join(sys.argv[1:]).strip()
     else:
         sys.exit(1)
 
-    print('HELLO')
     translator = BrailleTranslator()
     print(translator.translate(sentence), file=sys.stdout)
+
+if __name__ == "__main__":
+    main()  
