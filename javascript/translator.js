@@ -12,3 +12,8 @@ const ENGLISH_TO_BRAILLE = {
   // Spaces
   ' ': '......',
 };
+
+const BRAILLE_TO_ENGLISH = Object.fromEntries(
+  Object.entries(ENGLISH_TO_BRAILLE).map(([key, value]) => [value, key])
+);
+
