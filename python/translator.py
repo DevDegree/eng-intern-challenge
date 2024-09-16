@@ -1,4 +1,3 @@
-
 import sys
 
 english_to_braille = {
@@ -155,6 +154,7 @@ def braille_to_english_translator(braille):
 def english_to_braille_translator(english):
   braille = ''
   number_mode = False
+  
   for char in english:
 
     if char.isupper():
@@ -188,4 +188,3 @@ if __name__ == '__main__':
   argument = ' '.join(sys.argv[1:])
   result = translator(argument)
   print(result)
-  
