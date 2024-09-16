@@ -113,7 +113,7 @@ def braille_to_english_translator(braille):
   segments = []
   english = ''
 
-  # Loop to break braille into 6-charachter segments.
+  # Loop to break the initial input(braille) into 6-charachter segments.
   for i in range(0, len(braille), 6):
     segment = braille[i:i + 6]
     segments.append(segment)
