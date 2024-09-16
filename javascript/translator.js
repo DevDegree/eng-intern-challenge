@@ -14,7 +14,6 @@ const NUMBER_TO_BRAILLE = {
   // Numbers
   '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..',
   '8': 'O.OO..', '9': '.OO...', '0': '.O....', 
-
 }
 
 const BRAILLE_TO_ENGLISH_LETTER = Object.fromEntries(
@@ -27,18 +26,39 @@ const BRAILLE_TO_NUMBER = Object.fromEntries(
 
 // HELPER FUNCTIONS
 
+/**
+ * Check if it is Braille.
+ * @param {String} input String
+ * @returns true if it only composed of `.` and `O`, 
+ *          and if the length of the input is divisible by 6 to match braile alphabet.
+ */
 function isBraille(input) {
   return /^[O.]+$/.test(input) && input.length % 6 == 0;
 }
 
+/**
+ * Check if it is a capitalized letter
+ * @param {String} char single character
+ * @returns true it if character is part of the capitalized letter [A-Z].
+ */
 function isCapitalized(char) {
   return /^[A-Z]$/.test(char);
 }
 
+/**
+ * Check if it is a number
+ * @param {String} char single character
+ * @returns true if character is a number [0-9].
+ */
 function isNumber(char) {
   return /^\d$/.test(char);
 }
 
+/**
+ * Translate English to Braille
+ * @param {String} text in English
+ * @returns and print the Braille translation of an English text.
+ */
 function englishToBraille(text) {
   let result = "";
   let isNum = false;
@@ -79,6 +99,11 @@ function englishToBraille(text) {
   return result;
 }
 
+/**
+ * Translate Braille to English
+ * @param {String} text in Braille
+ * @returns and print the English translation of an English text.
+ */
 function brailleToEnglish(text) {
   const brailleChunk = text.match(/.{1,6}/g);
   let result = "";
@@ -121,6 +146,12 @@ function brailleToEnglish(text) {
 }
 
 // MAIN FUNCTION
+
+/**
+ * Translate from English to Braille or vice-versa
+ * @param {String} text to be translated, can be English or Braille
+ * @returns the translated text in the other language.
+ */
 function translate(text) {
   if(isBraille(text)){
     const brailleToEnglishText = brailleToEnglish(text);
@@ -137,6 +168,7 @@ function translate(text) {
 }
 
 // TERMINAL FUNCTION CALL
+
 // Assume function call is `node translator.js`
 const inputText = process.argv.slice(2);
 
