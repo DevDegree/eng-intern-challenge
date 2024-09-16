@@ -1,3 +1,4 @@
+import sys
 import string 
 
 #dictionary that stores english characters and their corresponding braille sequences
@@ -66,7 +67,7 @@ def translate(phrase):
     return output
 
 def main():
-    phrase = str(input(""))
+    phrase = " ".join(sys.argv[1:])
     print(translate(phrase))
 
 
