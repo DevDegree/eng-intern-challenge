@@ -1,5 +1,4 @@
 import sys
-from unittest import addModuleCleanup
 
 
 class BrailleTranslator:
@@ -56,7 +55,7 @@ class BrailleTranslator:
 
     SPACE = "......"
 
-    def _split_braille_into_words(self, line: str) -> list[str]:
+    def _split_braille_into_words(self, line: str):
         split_string = [line[i : i + 6] for i in range(0, len(line), 6)]
         return split_string
 
@@ -122,7 +121,7 @@ class BrailleTranslator:
 
 
 
-def main():
+if __name__ == "__main__":
     if len(sys.argv) > 1:
         sentence = " ".join(sys.argv[1:]).strip()
     else:
@@ -130,6 +129,3 @@ def main():
 
     translator = BrailleTranslator()
     print(translator.translate(sentence), file=sys.stdout)
-
-if __name__ == "__main__":
-    main()  
