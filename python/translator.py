@@ -119,7 +119,7 @@ def braille_to_english_translator(braille):
   
   index = 0
   # Number mode is used to track if numbers are being translated.
-  number_mode = False
+  numberMode = False
 
   # Loop through segments to translate each one.
   while index < len(segments):
@@ -136,9 +136,9 @@ def braille_to_english_translator(braille):
       index += 1
       
     # To exit number mode if a space is encountered and add charachters accordingly.
-    elif number_mode:
+    elif numberMode:
       if braille_to_english[segments[index]] == ' ':
-        numbermode = False
+        numberMode = False
         english += braille_to_english[segments[index]]
       else:
         english += braille_to_english_numbers[segments[index]]
@@ -153,7 +153,7 @@ def braille_to_english_translator(braille):
 
 def english_to_braille_translator(english):
   braille = ''
-  number_mode = False
+  numberMode = False
   
   for char in english:
 
@@ -162,14 +162,14 @@ def english_to_braille_translator(english):
       braille += english_to_braille[char.lower()]
 
     elif char.isdigit():
-      if not number_mode:
+      if not numberMode:
         braille += english_to_braille['nf']
-        number_mode = True
+        numberMode = True
       braille += english_to_braille[char]
 
     elif char == ' ':
       braille += english_to_braille[' ']
-      number_mode = False
+      numberMode = False
 
     else:
       braille += english_to_braille[char]
