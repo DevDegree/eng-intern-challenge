@@ -125,8 +125,8 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         sentence = " ".join(sys.argv[1:]).strip()
 
-    # if not sentence:
-    #     sys.exit(1)
-
+    if not sentence:
+        sys.exit(1)
+    print(sentence, file=sys.stderr)
     translator = BrailleTranslator()
-    print(translator.translate(sentence))
+    print(translator.translate(sentence), file=sys.stdout)
