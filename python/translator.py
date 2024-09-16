@@ -46,14 +46,18 @@ def translate_english_to_braille(english_string):
         if char.isupper():
             braille_output.append(capital_prefix)
             braille_output.append(braille_alphabet[char.lower()])
+            # Reset is_number flag if we're back to letters
             is_number = False 
         elif char.isdigit():
             if not is_number:
+                # Add number prefix once
                 braille_output.append(number_prefix)
+                # Ensure that subsequent digits are treated as numbers
                 is_number = True
             braille_output.append(braille_numbers[char])
         else:
             braille_output.append(braille_alphabet.get(char, ''))
+            # Reset is_number flag for non-digit characters
             is_number = False
     return ''.join(braille_output)
 
