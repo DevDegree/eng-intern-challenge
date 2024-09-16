@@ -20,6 +20,7 @@ letter_braille_map = {
     'm' : 'OO..O.',
     'n' : 'OO.OO.',
     'o' : 'O..OO.',
+    'p' : 'OOO.O.',
     'q' : 'OOOOO.',
     'r' : 'O.OOO.',
     's' : '.OO.O.',
