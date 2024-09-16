@@ -1,0 +1,11 @@
+[package]
+name = "rust"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.88"
+itertools = "0.13.0"
+
+[dev-dependencies]
+test-case = "3.3.1"
