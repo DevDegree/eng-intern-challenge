@@ -42,6 +42,7 @@ english_to_braille_dict = {
     "number": ".O.OOO"
 }
 
+# create braille to english dictionary
 braille_to_english_alphabet = dict((v, k) for (k, v) in english_to_braille_dict.items() if not k.isdigit())
 braille_to_english_number = dict((v, k) for (k, v) in english_to_braille_dict.items() if k.isdigit())
 braille_to_english_number["......"] = " "
@@ -50,6 +51,7 @@ def braille_to_english(str) -> str:
   english = ""
   get_numbers = False
   capitalize = False
+  # iterate through the string in 6 character braille alphabet 
   for i in range(0, len(str), 6):
     braille = str[i:i+6]
     if (not get_numbers):
@@ -94,9 +96,13 @@ def is_braille(str):
       return False
   return True
 
+def main():
+  input = " ".join(sys.argv[1:])
+  if (is_braille(input)):
+    print(braille_to_english(input))
+  else:
+    print(english_to_braille(input))
 
-input = " ".join(sys.argv[1:])
-if (is_braille(input)):
-  print(braille_to_english(input))
-else:
-  print(english_to_braille(input))
+
+if __name__ == "__main__":
+  main() 
