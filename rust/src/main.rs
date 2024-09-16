@@ -1,17 +1,13 @@
 use std::env;
 
-use anyhow::{Context, Result};
+use anyhow::Result;
 use itertools::Itertools;
 
 mod translate;
 
 fn main() -> Result<()> {
-    let (_prog_name, input) = env::args()
-        .collect_tuple()
-        .context("expected 1 argument: the string to translate")?;
-
+    let input = env::args().skip(1).join(" ");
     let output = translate::detect_and_translate(&input)?;
     println!("{}", output);
-
     Ok(())
 }
