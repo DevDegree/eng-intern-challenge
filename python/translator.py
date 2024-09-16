@@ -4,8 +4,8 @@ import sys
 braille_to_english_letters = {
     "O.....": 'a', "O.O...": 'b', "OO....": 'c', "OO.O..": 'd', "O..O..": 'e', "OOO...": 'f',
     "OOOO..": 'g', "O.OO..": 'h', ".OO...": 'i', ".OOO..": 'j', "O...O.": 'k', "O.O.O.": 'l',
-    "OO..O.": 'm', "OO.OO.": 'n', "O..OO.": 'o', "OOOO.O": 'p', "OOOOO.": 'q', "O.OOO.": 'r',
-    ".OO.O.": 's', ".OOOO.": 't', "O...OO": 'u', "O.O.OO": 'v', ".OOO.O": 'w', "OOO.OO": 'x',
+    "OO..O.": 'm', "OO.OO.": 'n', "O..OO.": 'o', "OOO.O.": 'p', "OOOOO.": 'q', "O.OOO.": 'r',
+    ".OO.O.": 's', ".OOOO.": 't', "O...OO": 'u', "O.O.OO": 'v', ".OOO.O": 'w', "OO..OO": 'x',
     "OO.OOO": 'y', "O..OOO": 'z'
 }
 
@@ -16,8 +16,8 @@ braille_to_english_numbers = {
 
 braille_to_english_symbols = {
     "..O.OO": 'capital', "..O..O": 'number', "......": ' ', 
-    "OO..OO": '.', "OO.OO.": ',', "O..O.O": '?', "O.O.O.": '!', "O..O.O": ':', "O..OO.": ';',
-    "O..O..": '-', "....O.": '/', "....OO": '<', ".....O": '>', "O.O...": '(', "O.OO..": ')'
+    "..OO.O": '.', "..O...": ',', "..O.OO": '?', "..OOO.": '!', "..OO..": ':', "..O.O.": ';',
+    "....OO": '-', ".O..O.": '/', ".OO..O": '<', "O..OO.": '>', "O.O..O": '(', ".O.OO.": ')'
 }
 
 english_to_braille_letters = {v: k for k, v in braille_to_english_letters.items()}
