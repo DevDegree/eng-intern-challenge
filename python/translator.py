@@ -7,7 +7,7 @@ def main():
     '''
     
     # Get the argument from the command line
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2:
         print("Usage: python translator.py <input_string>")
         sys.exit(1)
         
@@ -25,12 +25,12 @@ def main():
     
 def is_braille(string):
     '''
-    Checks if the input string is Braille containing only '0' and '.'
+    Checks if the input string is Braille containing only 'O' and '.'
     Input: String
     Output: Boolean: True if the input is Braille, else, returns False
     '''
     
-    return all(char in '0.' for char in string)
+    return all(char in 'O.' for char in string)
 
 
 def translate_english_to_braille(english_string):
@@ -58,7 +58,47 @@ def translate_braille_to_english(braille_string):
     Input: String in Braille
     Output: English translation of the input string
     '''
-    return
+    english_output = []
+    i = 0
+    while i < len(braille_string):
+        if braille_string[i:i+6] == capital_prefix:
+            i += 6
+            letter = get_letter_from_braille(braille_string[i:i+6]).upper()
+        elif braille_string[i:i+6] == number_prefix:
+            i += 6
+            letter = get_number_from_braille(braille_string[i:i+6])
+        elif braille_string[i:i+6] == '......':
+            letter = ' '
+        else:
+            letter = get_letter_from_braille(braille_string[i:i+6])
+        
+        english_output.append(letter)
+        i += 6
+    
+    return ''.join(english_output)
+
+
+def get_letter_from_braille(braille_char):
+    '''
+    Get the English letter from a Braille Character
+    Input: 6-character Braille string
+    Output: corresponding English letter or an empty string if not found
+    '''
+    for letter, braille in braille_alphabet.items():
+        if braille == braille_char:
+            return letter
+    return ''
+
+def get_number_from_braille(braille_char):
+    '''
+    Get the number corresponding to a Braille character
+    Input: 6-character Braille string
+    Output: Corresponding number as a string or an empty string if not found
+    '''
+    for number, braille in braille_numbers.items():
+        if braille == braille_char:
+            return number
+    return ''
 
 # Braille mapping for lowercase English letters
 braille_alphabet = {
