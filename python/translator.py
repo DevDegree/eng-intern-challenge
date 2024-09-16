@@ -106,12 +106,11 @@ braille_alphabet_numbers = {
     'OOOO..': '7',
     'O.OO..': '8', 
     '.OO...': '9', 
-    '.OOO..': '0',
-    '......': ' ' }
+    '.OOO..': '0'}
 
 def braille_translator(braille):
   segments = []
-  word = ''
+  string = ''
   for i in range(0, len(braille), 6):
     segment = braille[i:i + 6]
     segments.append(segment)
@@ -121,7 +120,7 @@ def braille_translator(braille):
   while index < len(segments):
     if braille_alphabet[segments[index]] == 'cf':
       if index + 1 < len(segments):
-          word += braille_alphabet[segments[index + 1]].upper()
+          string += braille_alphabet[segments[index + 1]].upper()
           index += 2 
 
     elif braille_alphabet[segments[index]] == 'nf':
@@ -131,51 +130,49 @@ def braille_translator(braille):
     elif numbermode:
       if braille_alphabet[segments[index]] == ' ':
         numbermode = False
-        word += ' '
+        string += braille_alphabet[segments[index]]
       else:
-        word += braille_alphabet_numbers[segments[index]]
+        string += braille_alphabet_numbers[segments[index]]
       index += 1
     else:
-      word += braille_alphabet[segments[index]]
+      string += braille_alphabet[segments[index]]
       index += 1
-  print(word)
-  print(len(braille))
-  return
 
-def word_translator(string):
+  return string
+
+def string_translator(string):
   braille = ''
   first_number = False
-  for letter in string:
+  for char in string:
 
-    if letter.isupper():
+    if char.isupper():
       braille += alphabet['cf']
-      braille += alphabet[letter.lower()]
+      braille += alphabet[char.lower()]
 
-    elif letter.isdigit():
+    elif char.isdigit():
       if not first_number:
         braille += alphabet['nf']
         first_number = True
-      braille += alphabet[letter]
+      braille += alphabet[char]
 
-    elif letter == ' ':
+    elif char == ' ':
       braille += alphabet[' ']
       first_number = False
 
     else:
-      braille += alphabet[letter]
-  print(string)
-  print(braille)
-  print(len(braille))
+      braille += alphabet[char]
+  
   return braille
     
 def translator(argument):
     braille_char = ['.', 'O']
-    if all(letter in braille_char for letter in argument):
+    if all(char in braille_char for char in argument) and len(argument) >= 6:
         return braille_translator(argument) 
     else:
-        return word_translator(argument)
-
+        return string_translator(argument)
     
 if __name__ == '__main__':
   argument = ' '.join(sys.argv[1:])
-  translator(argument)
+  result = translator(argument)
+  print(result)
+  
