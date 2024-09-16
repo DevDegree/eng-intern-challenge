@@ -4,10 +4,9 @@
 2) As per the Technical Requirements, numbers are expected to follow a 
     "Number Follows" symbol and will continue to be interpreted as numbers 
     until a space is encountered, at which point the number mode resets.
+
 */
-str=process.argv[2];
-let output= translator(str);
-console.log(output);
+
 
 function translator(str) {
     if (isBraille(str))
@@ -16,25 +15,14 @@ function translator(str) {
        return alphaToBraille(str); // Convert English to Braille
 }
 
-// Function to check if input is Braille or not
 function isBraille(str) {
-    // Braille Strings must be a multiple of 6 characters
-    if (str.length % 6 !== 0) {
-        return false;
-    }
+    // Check if the string length is a multiple of 6 and consists only of 'O' and '.'
+    return (str.length % 6 === 0) && /^[O.]*$/.test(str);
+}
 
-    // Count occurrences of 'O' and '.', return false if a character other than 'O' and '.' is found
-    let dotCount = 0, oCount = 0;
-    for (let ch of str) {
-        if (ch == '.')
-            dotCount++;
-        else if (ch == 'O')
-            oCount++;
-        else
-            return false;
-    }
-
-    return ((dotCount + oCount) == str.length); // Validates if the string consists of 'O' and '.' only
+function isEnglish(str) {
+    // English Strings must consist only of letters, numbers, and spaces
+    return /^[a-zA-Z0-9\s]+$/.test(str);
 }
 
 // Function to set mappings for the HashMaps (for brailleAlpha and brailleNum)
@@ -192,4 +180,27 @@ function alphaToBraille(str) {
     return output; // Braille Translation
 }
 
-module.exports = translator;
+// Main function to read input and call translator
+function main() {
+
+      // Join all command-line arguments after the first two into a single string
+      const input = process.argv.slice(2).join(' ');
+
+      if(!input)
+        {
+            console.error("Please enter the string to translate");
+            process.exit(1);
+        }
+          // Translate the input and print the result
+    try {
+        const result = translator(input);
+        console.log(result);
+    } 
+    catch (error) {
+        console.error(`Error: ${error.message}`);
+        process.exit(1);
+    }
+    }
+
+
+main();
