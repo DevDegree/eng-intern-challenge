@@ -17,3 +17,17 @@ const BRAILLE_TO_ENGLISH = Object.fromEntries(
   Object.entries(ENGLISH_TO_BRAILLE).map(([key, value]) => [value, key])
 );
 
+function isBraille(input) {
+  return /^[O.]+$/.test(input) && input.length % 6 == 0;
+}
+
+// Test by running node translator.js
+console.log(isBraille("")); // Expect false
+console.log(isBraille(" ")); // Expect false
+console.log(isBraille(".")); // Expect false
+console.log(isBraille("O")); // Expect false
+console.log(isBraille(".O")); // Expect false
+console.log(isBraille("42")); // Expect false
+console.log(isBraille("Hello world")); // Expect false
+console.log(isBraille("Hello world.")); // Expect false
+console.log(isBraille(".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..")); // Expect true
