@@ -79,7 +79,7 @@ class BrailleTranslator:
             elif reading_numbers:
                 if word == self.SPACE:
                     reading_numbers = False
-                    translated += self.SPACE
+                    translated += " "
                 else:
                     translated += self.BRAILLE_TO_NUM[word]
             else:
