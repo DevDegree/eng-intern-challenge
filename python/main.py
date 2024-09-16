@@ -7,6 +7,7 @@ class converter:
         self.BLANK_DOT = '.'
         self.output = ""
 
+ # Function to check whether the input string is braille or english
     def checker(self, inp_string):
         if self.RAISE_DOT not in inp_string or self.BLANK_DOT not in inp_string:
             return True
@@ -72,6 +73,7 @@ class converter:
         # Use list comprehension for more efficiency
         return [inp_string[i:i+6] for i in range(0, len(inp_string), 6)]
 
+# Function to convert a English string into Braille text
     def english_to_braille(self, inp_string):
         # Flag to track whether the previous character was not a number
         number_flag = True
