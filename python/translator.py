@@ -40,15 +40,21 @@ def translate_english_to_braille(english_string):
     Output: Braille translation of the input string
     '''
     braille_output = []
+    is_number = False
+    
     for char in english_string:
         if char.isupper():
             braille_output.append(capital_prefix)
             braille_output.append(braille_alphabet[char.lower()])
+            is_number = False 
         elif char.isdigit():
-            braille_output.append(number_prefix)
+            if not is_number:
+                braille_output.append(number_prefix)
+                is_number = True
             braille_output.append(braille_numbers[char])
         else:
-            braille_output.append(braille_alphabet[char])
+            braille_output.append(braille_alphabet.get(char, ''))
+            is_number = False
     return ''.join(braille_output)
 
 
