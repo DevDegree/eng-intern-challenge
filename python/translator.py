@@ -100,7 +100,7 @@ def braille_to_english(braille):
     return ''.join(english)
 
 if __name__ == "__main__":
-    user_input = sys.argv[1:]
+    user_input = ' '.join(sys.argv[1:])
 
     if all(char in 'O.' for char in user_input):
         print(braille_to_english(user_input))
