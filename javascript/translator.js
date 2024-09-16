@@ -1,5 +1,8 @@
 // Create a translation dictionary for char to braille
-const charToBrailleDict = require('./utilities/characterToBrailleDictionary.json')
+const {
+    ENG_TO_BRAILLE_DICTIONARY,
+    BRAILLE_TO_ENGLISH_DICTIONARY
+} = require('./utilities/brailleMapping')
 
 // Function to translate English to Braille
 function englishToBraille(input) {
@@ -11,28 +14,70 @@ function englishToBraille(input) {
     for (let char of input) {
         //Check for capital
         if (letterCheck.test(char)) {
-            if(char === char.toUpperCase()) result += charToBrailleDict['capital']
+            if(char === char.toUpperCase()) result += ENG_TO_BRAILLE_DICTIONARY['capital']
             char = char.toLowerCase();
-            result += charToBrailleDict[char]
+            result += ENG_TO_BRAILLE_DICTIONARY[char]
         }
         //Check for number
         if (numberCheck.test(char)) {
             if (!inNumberMode) {
-                result += charToBrailleDict['number']
+                result += ENG_TO_BRAILLE_DICTIONARY['number']
                 inNumberMode = true;
             }
-            result += charToBrailleDict[char]
+            result += ENG_TO_BRAILLE_DICTIONARY[char]
         } else {
             inNumberMode = false;
         }
         //Check for spaces
         if(char === ' ') {
-            result += charToBrailleDict['space']
+            result += ENG_TO_BRAILLE_DICTIONARY[" "]
         }
     }
 
     console.log(result)
 };
+
+function translateBrailleToEnglish(input) {
+    let result = '';
+    let capitalMode = false;
+    let numberMode = false;
+
+    const brailleChars = splitBraille(input, 6) //each braille string is length 6
+
+    for (const brailleChar of brailleChars) {
+        // Check for Capital
+        if (brailleChar === ENG_TO_BRAILLE_DICTIONARY['capital']) capitalMode = true;
+        // Check for Numbers
+        else if (brailleChar === ENG_TO_BRAILLE_DICTIONARY['number']) numberMode = true;
+        // Check for space, if there is a space while in numberMode set it to false
+        else if (BRAILLE_TO_ENGLISH_DICTIONARY[brailleChar] === ' ') {
+            result += ' ';
+            numberMode = false;
+        } else {
+            let translatedChar = BRAILLE_TO_ENGLISH_DICTIONARY[brailleChar];
+            // if in number mode and the letters are a - j, convert it to 1 - 9,0
+            if (numberMode && translatedChar.match(/[a-j]/)) {
+                translatedChar = (translatedChar.charCodeAt(0)  - "a".charCodeAt(0) + 1) % 10
+            }
+            if (capitalMode) {
+                translatedChar = translatedChar.toUpperCase();
+                capitalMode = false;
+            }
+            result += translatedChar;
+        }
+    }
+    console.log(result)
+    return result;
+}
+
+// split braille into 6 length chars
+function splitBraille(braille, size) {
+    const brailleArr = []
+    for(let i = 0; i < braille.length; i += size)
+        brailleArr.push(braille.slice(i, i + size))
+
+    return brailleArr
+}
 
 /**
  * The first item (argv[0]) will be the path to node itself, and the second item (argv[1]) will be the path to your script code.
@@ -47,4 +92,5 @@ function englishToBraille(input) {
  */
 const input = process.argv.slice(2).join(' ')
 
-return englishToBraille(input)
+// return englishToBraille(input)
+return translateBrailleToEnglish(input)
