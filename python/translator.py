@@ -79,3 +79,5 @@ if __name__ == "__main__":
                 answer += '......'
             answer += e_b(input)
     print(answer)
+
+#written by jay patel
