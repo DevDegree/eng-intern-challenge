@@ -48,6 +48,10 @@ capital_sign = '.....O'
 number_sign = '.O.OOO'
 space_sign = '......'
 
+# Reverse mappings for decoding
+braille_to_letter = {v: k for k, v in braille_letters.items()}
+braille_to_digit = {v: k for k, v in braille_nums.items()}
+
 def main():
     print("main")
 
