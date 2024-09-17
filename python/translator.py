@@ -52,6 +52,13 @@ REVERSE_BRAIL_VALUES = {v: k for k, v in BRAIL_VALUES.items()}
 REVERSE_BRAIL_NUMBERS = {v: k for k, v in BRAIL_NUMBERS.items()}
 
 def decode_brail(code: str) -> str:
+    '''
+    Decode the given Braille code to English
+    
+    :param code: Braille code to decode
+    
+    :return: English code
+    '''
     # get every 6 characters from code
     code_list = re.findall('.{6}', code)
     string_list = []
@@ -88,6 +95,13 @@ def decode_brail(code: str) -> str:
     return ''.join(string_list)
 
 def decode_eng(code: str) -> str:
+    '''
+    Decode the given English code to Braille
+    
+    :param code: English code to decode
+    
+    :return: Braille code
+    '''
     code_list = list(code)
     string_list = []
     
@@ -122,7 +136,7 @@ def decode_eng(code: str) -> str:
 def main():
     args = sys.argv[1:]
     code = ' '.join(args)
-    flag = 0
+    flag = 0 # 0 for Braille, 1 for English
     
     if len(code) < 6:
         flag = 1
