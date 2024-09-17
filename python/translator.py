@@ -1,6 +1,46 @@
 import sys
 
-#english to braille map
+#Braille to English mappings
+braille_to_english = {
+    'O.....': 'a',
+    'O.O...': 'b',
+    'OO....': 'c',
+    'OO.O..': 'd',
+    'O..O..': 'e',
+    'OOO...': 'f',
+    'OOOO..': 'g',
+    'O.OO..': 'h',
+    '.OO...': 'i',
+    '.OOO..': 'j',
+    'O...O.': 'k',
+    'O.O.O.': 'l',
+    'OO..O.': 'm',
+    'OO.OO.': 'n',
+    'O..OO.': 'o',
+    'OOO.O.': 'p',
+    'OOOOO.': 'q',
+    'O.OOO.': 'r',
+    '.OO.O.': 's',
+    '.OOOO.': 't',
+    'O...OO': 'u',
+    'O.O.OO': 'v',
+    '.OOO.O': 'w',
+    'OO..OO': 'x',
+    'OO.OOO': 'y',
+    'O..OOO': 'z',
+    '..OO.O': '.',
+    '..O...': ',',
+    '..O.OO': '?',
+    '..OOO.': '!',
+    '..OO..': ':',
+    '..O.O.': ';',
+    '....OO': '-',
+    '.O..O.': '/',
+    'O.O..O': '(',
+    '.O.OO.': ')'
+}
+
+#English to Braille mappings
 english_to_braille = {
     'a': 'O.....',
     'b': 'O.O...',
@@ -28,86 +68,96 @@ english_to_braille = {
     'x': 'OO..OO',
     'y': 'OO.OOO',
     'z': 'O..OOO',
-
-    'capital': '.....O',
-    'decimal': '.0...0',
-    'number': '.O.OOO',
-
-    ' ': '......',
+    '.': '..OO.O',
     ',': '..O...',
-    ';': '..O.O.',
+    '?': '..O.OO',
+    '!': '..OOO.',
     ':': '..OO..',
-    '.': '..00.0',
-    '!': '..OO.O',
-    '(': '0.0..0',
-    ')': '.0.00.',
-    '?': '..0.00',
-    '-': '....O0',
-    '/': '.0..0.',
-    '<': '.00..0',
-    '>': '0..00.',
+    ';': '..O.O.',
+    '-': '....OO',
+    '/': '.O..O.',
+    '(': 'O.O..O',
+    ')': '.O.OO.'
 }
 
-#numbers to letters map
-NUMBERS_TO_LETTERS = {
-    '1': 'a',
-    '2': 'b',
-    '3': 'c',
-    '4': 'd',
-    '5': 'e',
-    '6': 'f',
-    '7': 'g',
-    '8': 'h',
-    '9': 'i',
-    '0': 'j',
+#Numbers and their Braille equivalents
+convert_nums = {
+    'O.....': '1',
+    'O.O...': '2',
+    'OO....': '3',
+    'OO.O..': '4',
+    'O..O..': '5',
+    'OOO...': '6',
+    'OOOO..': '7',
+    'O.OO..': '8',
+    '.OO...': '9',
+    '.OOO..': '0',
+    '1': 'O.....',
+    '2': 'O.O...',
+    '3': 'OO....',
+    '4': 'OO.O..',
+    '5': 'O..O..',
+    '6': 'OOO...',
+    '7': 'OOOO..',
+    '8': 'O.OO..',
+    '9': '.OO...',
+    '0': '.OOO..'
 }
 
-#mapping braille patterns to english letters
-braille_to_english_map = {braille: letter for letter, braille in english_to_braille.items()}
+def is_braille(text):
+    return all(c in '.O' for c in text)
 
-#reverse mapping for braille digits to numeric characters
-braille_to_number_map = {braille_letter: digit for digit, braille_letter in NUMBERS_TO_LETTERS.items()}
-
-def isBraille(inputString):
-
-    if len(inputString) % 6 != 0:
-        return False
- 
-
-    #split input into substring of length 6
-    braille_chars = [inputString[i:i+6] for i in range(0, len(inputString), 6)]
+def braille_to_english_conversion(braille):
+    translation = ''
+    numbers = False
+    cap = False
+    
+    while braille:
+        temp, braille = braille[:6], braille[6:]
         
-    #check if each substring only consists of braille characters
-    return all(char in valid_braille_patterns for char in braille_chars)
-
-
-def braille_to_english(inputString):
-    translated_text = ''
-
-    braille_chars = [inputString[i:i+6] for i in range(0, len(inputString), 6)]
-   
+        if temp == '......':
+            numbers = False
+            translation += ' '
+        elif temp == '.....O':
+            cap = True
+        elif temp == '.O.OOO':
+            numbers = True
+        elif numbers:
+            translation += convert_nums.get(temp, 'error')
+        elif cap:
+            translation += braille_to_english.get(temp, 'error').upper()
+            cap = False
+        else:
+            translation += braille_to_english.get(temp, 'error')
     
-    for braille_char in braille_chars:
-            translated_text += braille_to_english_map[braille_char]
-    
-    return translated_text
+    return translation
 
-def english_to_braille(inputString):
-    translated_text = ''
+def english_to_braille_conversion(text):
+    translation = ''
+    numbers = False
     
-    for char in inputString:
-        translated_text += english_to_braille[char] + ' '
+    for char in text:
+        if char == ' ':
+            numbers = False
+            translation += '......'
+        elif char.isnumeric():
+            if not numbers:
+                numbers = True
+                translation += '.O.OOO'
+            translation += convert_nums.get(char, 'error')
+        elif char.isupper():
+            translation += '.....O' + english_to_braille.get(char.lower(), 'error')
+        else:
+            translation += english_to_braille.get(char, 'error')
     
-    return translated_text.strip()
-
+    return translation
 
 def main():
 
-    inputString = ' '.join(sys.argv[1:])
+    args = sys.argv[1:]
+    input_text = ' '.join(args) if not is_braille(args[0]) else '......'.join(args)
+    conversion_func = braille_to_english_conversion if is_braille(input_text) else english_to_braille_conversion
+    print(conversion_func(input_text))
 
-    if isBraille(inputString):
-        result = braille_to_english(inputString)
-    else:
-        result = english_to_braille(inputString)
-
-    print(result)
+if __name__ == "__main__":
+    main()
