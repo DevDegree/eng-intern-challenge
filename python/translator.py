@@ -62,23 +62,29 @@ translationNumbers = {"1": "O.....",
                       "O": ".OOO..",}
 
 # braille is in segments of 6, so any braille code would be in segments of 6
-# unsure if the sys.argv = 2 is just bc of how im testing my logic here
-if (len(sys.argv[0]) % 6) == 0 and isBraille(sys.argv[0] and len(sys.argv) == 2):
+# braille is also inputted in combinations of . and O
+# braille input is unseparated by any spaces
+# with these 3 requirements, we can determine if input is to be translated from braille or to braille
+
+# "clear" first input of sys.argv which is the name of the .py file run
+sys.argv = sys.argv[1:]
+if (len(sys.argv[0]) % 6) == 0 and isBraille(sys.argv[0]) and len(sys.argv) == 1:
+    sys.argv = sys.argv[0]
     ans = ""
     braille = list(translation.values())
     alpha = list(translation.keys())
     numbers = list(translationNumbers.keys())
     caps = False
     nums = False
-    # take segments 6 at a time
-    while len(sys.argv[1]) != 0:
-        char = sys.argv[1][:6]
-        if braille.index(char) == 2: # index of space key
+    # take segments 6 at a time to translate from braille until there are no more
+    while len(sys.argv) != 0:
+        char = sys.argv[:6]
+        if braille.index(char) == 1: # index of space character, terminate numeric case
             nums = False
             ans += " "
-        elif braille.index(char) == 0:
+        elif braille.index(char) == 0: # index of capitalization marker
             caps = True
-        elif braille.index(char) == 3:
+        elif braille.index(char) == 2: # index of numeric marker
             nums = True
         else:
             if nums:
@@ -89,25 +95,30 @@ if (len(sys.argv[0]) % 6) == 0 and isBraille(sys.argv[0] and len(sys.argv) == 2)
                 caps = False
             else:
                 ans += alpha[braille.index(char)]
-        sys.argv[1] = sys.argv[1][6:]
+        sys.argv = sys.argv[6:]
     print(ans)
 else:
     ans = ""
-    sys.argv = sys.argv[1:]
     prevInputNumeric = False
     # iterate through input
     while len(sys.argv) != 0:
         # iterate through each word
-        for i in range(len(sys.argv[0])-1):
+        print(sys.argv)
+        for i in range(len(sys.argv[0])):
             # determine if input requires special designation in braille (numeric / capital)
-            if not prevInputNumeric and sys.argv[0][i].isnumeric(): # determine if input is numeric
+            if sys.argv[0][i].isnumeric(): # determine if input is numeric
                 # if numeric, make sure that numeric marker is placed only once
                 if not prevInputNumeric:
                     ans += translation["NUMBERS"]
+                prevInputNumeric = True
                 ans += translationNumbers[sys.argv[0][i]]
+                continue
             elif sys.argv[0][i].isupper():
                 ans += translation["CAPITAL"]
-            ans += translation[sys.argv[0][i]]
+
+            ans += translation[sys.argv[0][i].lower()]
         sys.argv = sys.argv[1:]
-    # print(ans)
-    print(".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO")
+        ans += translation[" "]
+        prevInputNumeric = False
+
+    print(ans)
