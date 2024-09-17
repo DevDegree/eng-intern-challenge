@@ -9,6 +9,10 @@ class TestTranslator(unittest.TestCase):
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
         
+        # Debugging: print stdout and stderr
+        print(f"STDOUT: {result.stdout}")
+        print(f"STDERR: {result.stderr}")
+        
         # Expected output without the newline at the end
         expected_output = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
         
