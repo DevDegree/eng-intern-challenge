@@ -6,14 +6,14 @@ def olocs_to_braille(olocs):
     positions = ['.'] * 6
     if len(olocs) > 0:
         for loc in olocs:
-            positions[loc - 1] = 'O' # -1 to match indexes
+            positions[loc - 1] = 'O' # -1 to match index
     return ''.join(positions)
 
 def braille_to_olocs(braille):
     positions = []
     for i, char in enumerate(braille):
         if char == 'O':
-            positions.append(i)
+            positions.append(i + 1) # + 1 to add index
     return positions
 
 def english_to_braille(input_string):
@@ -54,6 +54,7 @@ def braille_to_english(input_string):
     input_length = len(input_string)
     number_mode = False
     capital_mode = False
+    prev_tri_bracket = False
     while i < input_length:
         if input_string[i] == ' ': # handling the weird case where braille would be inputed as two separate arguments
             i += 1
@@ -73,7 +74,14 @@ def braille_to_english(input_string):
                 output += find_keys_by_value(numbers, find_keys_by_value(alphabets, braille_to_olocs(braille_char)))
             else:
                 result_punct = find_keys_by_value(puncuations, braille_to_olocs(braille_char))
-                if result_punct: # there arent any empty strings or False or 0, so its okay to just use if result
+                # there arent any empty strings or False or 0, so its okay to just use if result_punct
+                # assume the closing triangular bracket '>' will only come after a opening one '<'
+                # if the bracket was not opened previously, consider it the alphabet 'o'
+                if (result_punct and result_punct != '>') or (result_punct and result_punct == '>' and prev_tri_bracket):
+                    if (result_punct == '<'):
+                        prev_tri_bracket = True
+                    if (result_punct == '>'):
+                        prev_tri_bracket = False
                     output += result_punct
                 else:
                     result_alphabet = find_keys_by_value(alphabets, braille_to_olocs(braille_char))
