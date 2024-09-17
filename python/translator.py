@@ -3,7 +3,6 @@ from mappings import alphabets, numbers, puncuations, capital_follows, decimal_f
 
 # Olocs = location of 'O's (bumps)
 def olocs_to_braille(olocs):
-    print(olocs)
     positions = ['.'] * 6
     if len(olocs) > 0:
         for loc in olocs:
@@ -18,7 +17,6 @@ def english_to_braille(input_string):
     number_mode = False
     # loop and catch case by case
     for char in input_string:
-        print(f"char: {char}")
         if char == ' ':
             output += olocs_to_braille(puncuations[' '])
             number_mode = False
