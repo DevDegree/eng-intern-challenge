@@ -53,3 +53,14 @@ const brailleAlphabet = {
   "(": "O.O..O", 
   ")": ".O.OO."
 };
+
+// Function to translate between braille and normal text
+const translate = (input) => {
+  const isBraille = input.split('').every(char => ['O', '.'].includes(char));
+
+  if (isBraille) {
+    // return brailleToText(input);
+  } else {
+    // return textToBraille(input);
+  }
+}
