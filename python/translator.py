@@ -2,12 +2,11 @@ import sys
 
 def main():
     is_braille = True
-    # if len(sys.argv) == 1:
-    #     return ''
-    # else:
-    #     s = ' '.join(sys.argv[1:])
-    #     is_braille = check_is_braille(s)
-    s = '.....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO'
+    if len(sys.argv) == 1:
+        return ''
+    else:
+        s = ' '.join(sys.argv[1:])
+        is_braille = check_is_braille(s)
     
     output = ''
     if is_braille:
