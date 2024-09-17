@@ -26,7 +26,7 @@ def english_to_braille(input_string):
                 number_mode = True
             output += olocs_to_braille(alphabets[numbers[char]])
         # im aware punctuations are not necessary, but still for fun :)
-        elif char in {'.', ',', '?', '!', '(', ')', '-', '/', '<', '>'}: # use a set for that very minor time efficiency
+        elif char in {'.', ',', '?', '!', ':', ';', '(', ')', '-', '/', '<', '>'}: # use a set for that very minor time efficiency
             number_mode = False # if it was true, it was still true by accident. turn it off
             output += olocs_to_braille(puncuations[char])
         else:
