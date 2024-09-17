@@ -128,16 +128,21 @@ def translate_to_braille(text):
             braille_result += braille_dict['capital_follows']
             braille_result += braille_dict[letter.lower()]
         else:
-            if(not number_next and braille_dict[letter] in braille_numbers.values()):
+            if(number_next and letter == ' '):
+                number_next = False
+                braille_result += braille_dict[letter]
+            elif((not number_next) and letter in braille_numbers.keys()):
                 number_next = True
                 braille_result += braille_dict['number_follows']
-            if(braille_dict[letter] == ' '):
-                number_next = False
-            braille_result += braille_dict[letter]
+                braille_result += braille_numbers[letter]
+            elif(number_next):
+                braille_result += braille_numbers[letter]
+            else:
+                braille_result += braille_dict[letter]
         
     return braille_result
 
-def translator():
+def main():
     """
     Translates the given text to either English or Braille based on the presence of certain characters.
 
@@ -166,4 +171,5 @@ def translator():
         result = translate_to_braille(text)
     print(result)
 
-translator()
+if __name__ == "__main__":
+    main()
