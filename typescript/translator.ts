@@ -1,6 +1,7 @@
-// collect input, with "node" and file/path removed
+export{}
+
+// collect input, with node and file/path removed
 const input = process.argv.slice(2);
-console.log("input:", input);
 
 // establish a string to return to user
 let output = "";
@@ -9,114 +10,142 @@ const notBraile = /[^\.O]/
 
 // handle no input
 if (!input.length) {
-  console.error("Error: Please add an input of either Braile or English");
+  console.error("Error: Please add a valid input of either Braile or English");
   process.exit(1);
 }
 
 // determine if input is braile or English
 function isItBraile() {
   // only uses . and O characters
-  if (notBraile.test(input[0])) {
-    console.log("Contains non-Braile characters:", notBraile.exec(input[0]));
-    return false;
-  }
+  if (notBraile.test(input[0])) return false;
   // should only be one string
-  if (input.length > 1) {
-    // add note to user not to use spaces when entering braile?
-    console.log("Too long:", input.length);
-    return false;
-  }
+  if (input.length > 1) return false; // add note to user not to use spaces when entering braile?
   // should be evenly divisible by 6 (no spaces)
-  if (input[0].length % 6 != 0) {
-    // add note to user to check all their braile characters are complete?
-    console.log("Not divisible by 6:", input[0].length % 6);
-    return false;
-  }
-  return true;
+  if (input[0].length % 6 != 0) return false; // add note to user to check all their braile characters are complete?
+  else return true;
 }
 
-const translator = {
-  // letters
-  a: "O.....",  // ⠁
-  b: "OO....",  // ⠃
-  c: "O.O...",  // ⠉
-  d: "O..O..",  // ⠙
-  e: "O..OO.",  // ⠑
-  f: "OO.O..",  // ⠋
-  g: "O..OOO",  // ⠛
-  h: "OOO...",  // ⠓
-  i: ".O.O..",  // ⠊
-  j: ".O..O.",  // ⠚
-  k: "O...O.",  // ⠅
-  l: "OO..O.",  // ⠇
-  m: "O.O.O.",  // ⠍
-  n: "O..OO.",  // ⠝
-  o: "O..O.O",  // ⠕
-  p: "OO.O.O",  // ⠏
-  q: "O..OOO",  // ⠟
-  r: "OOO.O.",  // ⠗
-  s: ".OO.O.",  // ⠎
-  t: ".O..OO",  // ⠞
-  u: "O...OO",  // ⠥
-  v: "OO..OO",  // ⠧
-  w: ".O..OO",  // ⠺
-  x: "O.O.OO",  // ⠭
-  y: "O..OOO",  // ⠽
-  z: "O..O.O",  // ⠵
-  // numbers
-  "0": ".O..O.",  // ⠚ (same as "j")
-  "1": "O.....",  // ⠁
-  "2": "OO....",  // ⠃
-  "3": "O.O...",  // ⠉
-  "4": "O..O..",  // ⠙
-  "5": "O..OO.",  // ⠑
-  "6": "OO.O..",  // ⠋
-  "7": "O..OOO",  // ⠛
-  "8": "OOO...",  // ⠓
-  "9": ".O.O..",  // ⠊
-  // punctuation
-  ".": "OOO...",  // Period ⠲
-  ",": "OO....",  // Comma ⠂
-  "?": ".O.O.O",  // Question Mark ⠦
-  "!": ".O..OO",  // Exclamation Mark ⠖
-  ":": "OO.O.O",  // Colon ⠒
-  ";": "OO.O..",  // Semicolon ⠆
-  "-": ".O..O.",  // Dash ⠤
-  "/": ".O.OOO",  // Slash ⠌
-  "<": "O.OO..",  // Less than ⠣
-  ">": "O..O.O",  // Greater than ⠜
-  "(": ".O.O.O",  // Left parenthesis ⠶
-  ")": "OOO..O",  // Right parenthesis ⠶
-  // instructions
-  " ": "......", // space
+const instructions: { [key: string]: string } = {
   "capital follows": ".....O",
-  "decimal follows": ".O...O",
   "number follows": ".O.OOO",
-};
+}
+
+const numbers: { [key: string]: string } = {
+  // (same as a-j)
+  "1": "O.....",
+  "2": "O.O...",
+  "3": "OO....",
+  "4": "OO.O..",
+  "5": "O..O..",
+  "6": "OOO...",
+  "7": "OOOO..",
+  "8": "O.OO..",
+  "9": ".OO...",
+  "0": ".OOO..",
+}
+
+const letters: { [key: string]: string } = {
+  a: "O.....",
+  b: "O.O...",
+  c: "OO....",
+  d: "OO.O..",
+  e: "O..O..",
+  f: "OOO...",
+  g: "OOOO..",
+  h: "O.OO..",
+  i: ".OO...",
+  j: ".OOO..",
+  k: "O...O.",
+  l: "O.O.O.",
+  m: "OO..O.",
+  n: "OO.OO.",
+  o: "O..OO.",
+  p: "OOO.O.",
+  q: "OOOOO.",
+  r: "O.OOO.",
+  s: ".OO.O.",
+  t: ".OOOO.",
+  u: "O...OO",
+  v: "O.O.OO",
+  w: ".OOO.O",
+  x: "OO..OO",
+  y: "OO.OOO",
+  z: "O..OOO",
+  " ": "......", // space
+}
+
+// establish regex to identify letters or numbers
+const capital = /[A-Z]/;
+const number = /[0-9]/;
+// establish variables to hold modifier status
+let capsLock = true;
+let numLock = false;
 
 function braileToEnglish() {
   let english = "";
-  // break into strings of six characters
+  // break input into strings of six characters
+  let characters: string[] = [];
+  const braileLetters = input[0].matchAll(/[O\.]{6}/g);
+  for(let match of braileLetters) characters.push(match[0]);
   // parse each character into english, allowing for "x follows" modifiers
-  // (if character is a space, end "number follows" modifier)
+    characters.forEach((char) => {
+    // if character is a space, end "number follows" modifier and add space
+    if (char == letters[" "]) {
+      numLock = false;
+      english += " ";
+      return;
+    }
+    // if it's "number follows", set numLock to true
+    if (char == instructions["number follows"]) numLock = true;
+    // if it's "capital follows", set capsLock to true (otherwise reset to false)
+    if (char == instructions["capital follows"]) capsLock = true;
+    // if numLock is true, translate from number definitions
+    if (numLock) {
+      // let number: string = "";
+      for(let n in numbers) if (char == numbers[n]) english += n;
+      // english += number;
+    } else {
+      // otherwise, translate from letter definitions
+      // let letter: string = "";
+      for (let l in letters) {
+        if (char == letters[l]) {
+          if (capsLock) {
+            english += l.toUpperCase();
+            capsLock = false;
+          } else english += l;
+        }
+      }
+      // english += letter;
+    }
+  });
   return english;
 }
 
 function englishToBraile() {
-  const singleString = input.join(" ");
-  const characters = singleString.split("");
+  // convert input into array of individual characters
+  const characters = input.join(" ").split("");
+  // create an empty string to return;
   let braile = "";
   // check if next character is a capital or a number, add appropriate braile
-  const capital = /[A-Z]/;
-  const number = /[0-9]/;
-  let numLock = false;
-  // parse each character into braile
   characters.forEach((character) => {
     // if character is a space, turn off numLock
     if (character == " ") numLock = false;
     // if character is a number, and numLock is false add "numbers follows";
-    // if character is a capital, add "capital follows";
-    // shift character from characters array and save
+    if (number.test(character)) {
+      if (!numLock) {
+        braile += instructions["number follows"];
+        numLock = true;
+      }
+      // parse the number into braile
+      braile += numbers[character];
+    }
+    else {
+      // if character is a capital, add "capital follows";
+      if (capital.test(character)) braile += instructions["capital follows"];
+      // parse the character into braile
+      if (letters[character.toLowerCase()] !== undefined) braile += letters[character.toLowerCase()];
+      // add a flag for undefined characters (e.g. punctuation)
+    }
   })
   return braile;
 }
@@ -124,5 +153,5 @@ function englishToBraile() {
 if (isItBraile()) output = braileToEnglish();
 else output = englishToBraile();
 
-console.log(`${ isItBraile() ? "Braile to English" : "English to Braile"}`, output);
-// process.exit(0);
+console.log(output);
+process.exit(0);
