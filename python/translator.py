@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+terminal braille to text and text to braille translator that self determines direction of translation. completed for Shopify 2025W SWE GitHub Challenge
+@author: Elizabeth Wong (GitHub: e-lizabethwong)
+"""
+
 import sys
    
 def isBraille(line):
@@ -43,7 +49,8 @@ def fromBraille(line):
     # take segments 6 at a time to translate from braille until there are no more
     while len(line) != 0:
         char = line[:6]
-        if braille.index(char) == 1: # index of space character, terminate numeric case
+        # if structure checks for unique cases before translating (numeric, capitalized)
+        if braille.index(char) == 1: # index of space character, terminate numeric input case
             nums = False
             ans += " "
         elif braille.index(char) == 0: # index of capitalization marker
@@ -162,7 +169,7 @@ sys.argv = sys.argv[1:]
 
 # braille is in segments of 6, so any braille code would be in segments of 6
 # braille is also inputted in combinations of . and O
-# braille input is unseparated by any spaces
+# braille input is unseparated by any spaces, so the number of arguments must be 1
 # with these 3 requirements, we can determine if input is to be translated from braille or to braille
 if (len(sys.argv[0]) % 6) == 0 and isBraille(sys.argv[0]) and len(sys.argv) == 1:
     print(fromBraille(sys.argv[0]))
