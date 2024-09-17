@@ -52,6 +52,57 @@ space_sign = '......'
 braille_to_letter = {v: k for k, v in braille_letters.items()}
 braille_to_digit = {v: k for k, v in braille_nums.items()}
 
+def braille_to_english(braille_text):
+    """
+    Translates Braille text to English.
+    """
+    output = ''
+    number_mode = False  # Indicates if we're currently in number mode
+    capital_next = False  # Indicates if the next letter should be capitalized
+
+    braille_chars = [braille_text[i:i+6] for i in range(0, len(braille_text), 6)]
+
+    i = 0
+    while i < len(braille_chars):
+        symbol = braille_chars[i]
+        if symbol == space_sign:
+            # Add space and reset modes
+            output += ' '
+            number_mode = False
+            capital_next = False
+            i += 1
+        elif symbol == capital_sign:
+            # Next letter should be capitalized
+            capital_next = True
+            i += 1
+        elif symbol == number_sign:
+            # Enter number mode
+            number_mode = True
+            i += 1
+        else:
+            if number_mode:
+                # In number mode, symbols correspond to digits
+                if symbol in braille_to_digit:
+                    output += braille_to_digit[symbol]
+                else:
+                    pass # Invalid
+
+            else:
+                # Symbols correspond to letters
+                if symbol in braille_to_letter:
+                    letter = braille_to_letter[symbol]
+
+                    if capital_next:
+                        letter = letter.upper()
+                        capital_next = False
+
+                    output += letter
+                else:
+                    pass # Invalid
+            i += 1
+
+    return output
+
 def is_braille(text):
     """
     Determines if the input text is Braille.
@@ -66,10 +117,12 @@ def main():
 
     if is_braille(input_text):
         # Convert Braille to English
-        print("English")
+        output_text = braille_to_english(input_text)
     else:
         # Convert English to Braille
         print("Braille")
+
+    print(output_text)
 
 if __name__ == '__main__':
     main()
