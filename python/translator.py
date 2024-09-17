@@ -147,7 +147,7 @@ def english_to_braille(text):
         # handle ending number sequence
         if num_sequence and char not in braille_nums:
             num_sequence = False
-            res += "......"
+            # res += "......"
         
         # handle space
         if char == " ":
