@@ -8,7 +8,8 @@
 # eg, a = [1]
 
 # using dictionaries for fast look ups for key -> value
-# not using additional dictionary for value -> key look up, just save on space and show both ways
+# not using additional dictionary for value -> key look up, just save on space and show both ways of doing things
+# but i do understand it may be better to use the very little space and save on computation / time
 alphabets = {
     'a': [1],
     'b': [1, 3],
