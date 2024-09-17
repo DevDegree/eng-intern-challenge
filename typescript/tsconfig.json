@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "Node16",
+    "lib": ["ES2022"],
+    "useDefineForClassFields": true,
+
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+  },
+  "include": ["./"]
+}
