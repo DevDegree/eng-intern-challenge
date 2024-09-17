@@ -82,13 +82,38 @@ const brailleToText = (brailleStr) => {
       i += 6;
       continue;
     }
-
-    if (brailleChar = brailleAlphabet['NF']) {
+    
+    if (brailleChar === brailleAlphabet['NF']) {
       isNumber = true;
       i += 6;
       continue;
     }
+
+    // conditionally checks if the character should check in alpha or number object
+    let char = isNumber ? reverseBrailleNumbers[brailleChar] : reverseBrailleAlphabet[brailleChar];
+    
+    if (isCapital) {
+      char = char.toUpperCase();
+      isCapital = false;
+    }
+
+    if (isNumber) {
+      if (char >= '0' && char <= '9') {
+        output.push(char);
+      } else if (char === 'DF') {
+        output.push('.')
+      } else {
+        isNumber = false;
+        output.push(' ');
+      }
+    } else {
+      output.push(char);
+    }
+
+    i += 6;
   }
+
+  return output.join('');
 }
 
 // Function to translate between braille and normal text
@@ -96,8 +121,21 @@ const translate = (input) => {
   const isBraille = input.split('').every(char => ['O', '.'].includes(char));
 
   if (isBraille) {
-    // return brailleToText(input);
+    return brailleToText(input);
   } else {
     // return textToBraille(input);
   }
 }
+
+// Input: Hello world
+// Output: .....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..
+
+// Input: 42
+// Output: .O.OOOOO.O..O.O...
+
+// Input: .....OO.....O.O...OO...........O.OOOO.....O.O...OO....
+// Output: Abc 123
+console.log(translate('.....OO.....O.O...OO...........O.OOOO.....O.O...OO....'))
+
+// 166.66 aa
+console.log(translate('.O.OOOO.....OOO...OOO....O...OOOO...OOO.........O.....O.....'))
