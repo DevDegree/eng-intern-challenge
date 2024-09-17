@@ -26,19 +26,8 @@ const brailleAlphabet = {
   "x": "OO..OO", 
   "y": "OO.OOO", 
   "z": "O..OOO", 
-  "1": "O.....", 
-  "2": "O.O...", 
-  "3": "OO....", 
-  "4": "OO.O..", 
-  "5": "O..O..", 
-  "6": "OOO...", 
-  "7": "OOOO..", 
-  "8": "O.OO..", 
-  "9": ".OO...", 
-  "0": ".OOO..", 
   "CF": ".....O", // Capital letter follows
   "NF": ".O.OOO", // Number follows
-  "DF": ".O...O", // Decimal follows
   " ": "......",  // Space
   ".": "..OO.O", 
   ",": "..O...", 
@@ -53,6 +42,20 @@ const brailleAlphabet = {
   "(": "O.O..O", 
   ")": ".O.OO."
 };
+
+const brailleNumbers = {
+  "1": "O.....", 
+  "2": "O.O...", 
+  "3": "OO....", 
+  "4": "OO.O..", 
+  "5": "O..O..", 
+  "6": "OOO...", 
+  "7": "OOOO..", 
+  "8": "O.OO..", 
+  "9": ".OO...", 
+  "0": ".OOO..", 
+  "DF": ".O...O", // Decimal follows
+}
 
 // reverse braille alphabet key and value for braille text conversion
 const reverseBrailleAlphabet = Object.fromEntries(
