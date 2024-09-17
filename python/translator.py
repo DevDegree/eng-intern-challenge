@@ -47,7 +47,6 @@ def braille_to_english(braille):
 
     while i < len(braille):
         chunk = braille[i:i+6]
-        """print(f"Processing chunk: {chunk}")"""
 
         if chunk == braille_map['cap']:
             capitalize_next = True
