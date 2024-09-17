@@ -7,15 +7,19 @@ braille_map = {
         'p': '000.0.', 'q': '00000.', 'r': '0.000.', 's': '.00.0.', 't': '.0000.',
         'u': '0...00', 'v': '0.0.00', 'w': '.000.0', 'x': '00..00', 'y': '00.000', 'z': '0..000',
         ' ': '......',
+        '.' : '.....0',
+        ',': '....0.',
         'cap': '.....0',
-        'num': '.0.000'
+        'num': '.0.000'  
+
 }
 
 english_map = { v: k for k,v in braille_map.items()}
 
 for i, letter in enumerate('abcdefghij'):
     braille_map[str(i)] = braille_map[letter]
-    english_map[braille_map[letter]] = str(i)
+    
+english_map[braille_map[letter]] = str(i)
 
 def is_braille(input_string):
     return all(char in '0.' for char in input_string)
@@ -41,13 +45,9 @@ def braille_to_english(braille):
     capitalize_next = False
     number_mode = False
 
-    number_map = {
-        '.000..':'0','0.....': 'a', '0.0...': 'b', '00....': 'c', '00.0..': 'd', '0..0..': '5',
-        '000...': '6', '0000..': '7', '0.00..': '8', '.00...': '9' 
-    }
-
     while i < len(braille):
         chunk = braille[i:i+6]
+        """print(f"Processing chunk: {chunk}")"""
 
         if chunk == braille_map['cap']:
             capitalize_next = True
@@ -58,25 +58,24 @@ def braille_to_english(braille):
             i+=6
             continue
 
-        if chunk in english_map:
-            char = english_map[chunk]
-            if number_mode:
-               if chunk in number_map:
-                   char = number_map[chunk]
-               else:
-                    number_mode = False
-                    char = english_map[chunk]
-            else:
+        if number_mode:
+            if chunk in english_map:
+                char = english_map[chunk]
+                english.append(char)
                 number_mode = False
-
-            if capitalize_next:
-                char = char.upper()
-                capitalize_next=False
-            
-            english.append(char)
+            else:
+                raise ValueError(f"Unsupported Braille chunk in number mode: {chunk}")
         else:
-            raise ValueError(f"Unsupported Braille chunk: {chunk}")
-        i+=6
+            if chunk in english_map:
+                char = english_map[chunk]
+                if capitalize_next:
+                    char = char.upper()
+                    capitalize_next = False
+                english.append(char)
+            else:
+                raise ValueError(f"Unsupported Braille Chunk: {chunk}")
+        i += 6
+
     return ''.join(english)
 
 def main():
