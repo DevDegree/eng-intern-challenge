@@ -14,6 +14,10 @@ change_braille = {
     '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..',
     '8': 'O.OO..', '9': '.OO...', '0': '.OOO..',
     'cap': '.....O', 'num': '.O.OOO', ' ': '......',
+    '.': '..OO.O', ',': '..O...', '?': '...OOO',
+    '!': '..OOO.', ':': '..OO..', ';': '..O.O.',
+    '-': '....OO', '/': '.O..O.', '<': '.OO..O',
+    '>': 'O..OO.', '(': 'O.O..O', ')': '.O.OO.',
 }
 #define english dictonary.
 change_english = {v: k for k, v in change_braille.items()}
