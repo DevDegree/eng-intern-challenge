@@ -10,8 +10,10 @@ jobs:
     name: Run Python Tests
     runs-on: ubuntu-latest
     steps:
+      # you probably would want to use a higher version
       - uses: actions/checkout@v2
 
+      # uses set-output which is deprecated
       - id: changes
         uses: jitterbit/get-changed-files@v1
 
