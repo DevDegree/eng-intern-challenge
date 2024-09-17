@@ -1,3 +1,5 @@
+import sys
+
 brailleToNumber = {
 	"O....." : "1",
 	"O.O..." : "2",
@@ -72,61 +74,64 @@ brailleToChar = {
 }
 
 charToBraille = {
-	"a" : "O.....",
-	"b" : "O.O...",
-	"c" : "OO....",
-	"d" : "OO.O..",
-	"e" : "O..O..",
-	"f" : "OOO...",
-	"g" : "OOOO..",
-	"h" : "O.OO..",
-	"i" : ".OO...",
-	"j" : ".OOO..",
-	"k" : "O...O.",
-	"l" : "O.O.O.",
-	"m" : "OO..O.",
-	"n" : "OO.OO.",
-	"o" : "O..OO.",
-	"p" : "OOO.O.",
-	"q" : "OOOOO.",
-	"r" : "O.OOO.",
-	"s" : ".OO.O.",
-	"t" : ".OOOO.",
-	"u" : "O...OO",
-	"v" : "O.O.OO",
-	"w" : ".OOO.O",
-	"x" : "OO..OO",
-	"y" : "OO.OOO",
-	"z" : "O..OOO",
+	'a' : "O.....",
+	'b' : "O.O...",
+	'c' : "OO....",
+	'd' : "OO.O..",
+	'e' : "O..O..",
+	'f' : "OOO...",
+	'g' : "OOOO..",
+	'h' : "O.OO..",
+	'i' : ".OO...",
+	'j' : ".OOO..",
+	'k' : "O...O.",
+	'l' : "O.O.O.",
+	'm' : "OO..O.",
+	'n' : "OO.OO.",
+	'o' : "O..OO.",
+	'p' : "OOO.O.",
+	'q' : "OOOOO.",
+	'r' : "O.OOO.",
+	's' : ".OO.O.",
+	't' : ".OOOO.",
+	'u' : "O...OO",
+	'v' : "O.O.OO",
+	'w' : ".OOO.O",
+	'x' : "OO..OO",
+	'y' : "OO.OOO",
+	'z' : "O..OOO",
 
 	"capital" : ".....O",
 	"decimal" : ".O...O",
 	"number" : ".O.OOO",
 
-	"." : "..OO.O",
-	"," : "..O...",
-	"?" : "..O.OO",
-	"!" : "..OOO.",
-	":" : "..OO..",
-	";" : "..O.O.",
-	"-" : "....OO",
-	"/" : ".O..O.",
-	"<" : ".OO..O",
-	">" : "O..OO.",
-	"(" : "O.O..O",
-	")" : ".O.OO.",
-	" " : "......"
+	'.' : "..OO.O",
+	',' : "..O...",
+	'?' : "..O.OO",
+	'!' : "..OOO.",
+	':' : "..OO..",
+	';' : "..O.O.",
+	'-' : "....OO",
+	'/' : ".O..O.",
+	'<' : ".OO..O",
+	'>' : "O..OO.",
+	'(' : "O.O..O",
+	')' : ".O.OO.",
+	' ' : "......"
 }
 
-def main(input):
-	print(input)
-	if isBraille(input):
-		brailleStrings = splitBraille(input)
-		return translateBrailleStringsToEnglish(brailleStrings)
+def __main__():
+	args = sys.argv[1:]
+	inputPhrase = ""
+	for arg in args:
+		inputPhrase = inputPhrase + arg + " "
+	inputPhrase = inputPhrase[:len(inputPhrase) - 1]
+	if isBraille(inputPhrase):
+		brailleStrings = splitBraille(inputPhrase)
+		print(translateBrailleStringsToEnglish(brailleStrings))
 	else:
-		englishChars = list(input)
-		return(englishChars)
-			
+		englishChars = list(inputPhrase)
+		print(translateEnglishCharsToBraille(englishChars))
 
 def isBraille(input):
 	for c in input:
@@ -136,7 +141,6 @@ def isBraille(input):
 
 def splitBraille(input):
 	return splitBrailleTail(input, [])
-
 
 def splitBrailleTail(input, output):
 	if len(input) == 0:
@@ -180,8 +184,26 @@ def translateBrailleStringsToEnglish(brailleStrings):
 
 	return translatedSentence
 
+def translateEnglishCharsToBraille(englishChars):
+	translatedString = ""
+	activeNumber = False
 
+	for char in englishChars:
+		if char == ' ': # Acknowledge the end of any number
+			activeNumber = False
+		
+		if (activeNumber): # Continuing a current number
+			translatedString += numberToBraille[char]
+		elif(not activeNumber and char.lower() not in charToBraille): # Start of new number
+			activeNumber = True
+			translatedString += charToBraille["number"]
+			translatedString += numberToBraille[char]
+		elif (char != char.lower()): # Capital letter
+			translatedString += charToBraille["capital"]
+			translatedString += charToBraille[char.lower()]
+		else: # Other (normal) character
+			translatedString += charToBraille[char]
+	
+	return translatedString
 
-print(main(".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"))
-
-
+__main__()
