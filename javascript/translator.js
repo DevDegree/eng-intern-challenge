@@ -62,6 +62,11 @@ const reverseBrailleAlphabet = Object.fromEntries(
   Object.entries(brailleAlphabet).map(([key, value]) => [value, key])
 );
 
+// reverse braille alphabet key and value for braille text conversion
+const reverseBrailleNumbers = Object.fromEntries(
+  Object.entries(brailleNumbers).map(([key, value]) => [value, key])
+);
+
 // Helper function - braille to text
 const brailleToText = (brailleStr) => {
   const output = [];
