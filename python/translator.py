@@ -103,7 +103,6 @@ else:
     # iterate through input
     while len(sys.argv) != 0:
         # iterate through each word
-        print(sys.argv)
         for i in range(len(sys.argv[0])):
             # determine if input requires special designation in braille (numeric / capital)
             if sys.argv[0][i].isnumeric(): # determine if input is numeric
@@ -118,7 +117,8 @@ else:
 
             ans += translation[sys.argv[0][i].lower()]
         sys.argv = sys.argv[1:]
-        ans += translation[" "]
+        if len(sys.argv) != 0:
+            ans += translation[" "]
         prevInputNumeric = False
 
     print(ans)
