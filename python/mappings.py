@@ -67,5 +67,5 @@ puncuations = {
 
 # commands
 capital_follows = [6]
-decimal_follows = [2, 6]
+# decimal_follows = [2, 6]
 number_follows = [2, 4, 5, 6]

@@ -1,5 +1,5 @@
 import sys
-from mappings import alphabets, numbers, puncuations, capital_follows, decimal_follows, number_follows
+from mappings import alphabets, numbers, puncuations, capital_follows, number_follows
 
 # Olocs = location of 'O's (bumps)
 def olocs_to_braille(olocs):
@@ -25,9 +25,12 @@ def english_to_braille(input_string):
                 output += olocs_to_braille(number_follows)
                 number_mode = True
             output += olocs_to_braille(alphabets[numbers[char]])
+        # im aware punctuations are not necessary, but still for fun :)
+        elif char in {'.', ',', '?', '!', '(', ')', '-', '/', '<', '>'}: # use a set for that very minor time efficiency
+            number_mode = False # if it was true, it was still true by accident. turn it off
+            output += olocs_to_braille(puncuations[char])
         else:
-            if number_mode:
-                number_mode = False
+            number_mode = False # if it was true, it was still true by accident. turn it off
             if char.isupper():
                 output += olocs_to_braille(capital_follows)
                 char = char.lower()
