@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-terminal braille to text and text to braille translator that self determines direction of translation. completed for Shopify 2025W SWE GitHub Challenge
+braille to text and text to braille translator that self determines direction of translation at runtime via args passed into program at runtime
+completed for Shopify 2025W SWE GitHub Challenge
 @author: Elizabeth Wong (GitHub: e-lizabethwong)
 """
 
@@ -60,7 +61,7 @@ def fromBraille(line):
         else:
             if nums:
                 # search in nums list
-                ans += numbers[braille.index(char)-3]
+                ans += numbers[braille.index(char)-3] # -3 for displacement in translationNumbers compared to translation dict
             elif caps:
                 ans += alpha[braille.index(char)].upper()
                 caps = False
@@ -138,19 +139,7 @@ translation = {"CAPITAL": ".....O",
                "w": ".OOO.O",
                "x": "OO..OO",
                "y": "OO.OOO",
-               "z": "O..OOO",
-               ".": "..OO.O",
-               ",": "..O...",
-               "?": "..O.OO",
-               "!": "..OOO.",
-               ":": "..OO..",
-               ";": "..O.O.",
-               "-": "....OO",
-               "/": ".O..O.",
-               "<": ".OO..O",
-               ">": "O..OO.",
-               "(": "O.O..O",
-               ")": ".O.OO.",
+               "z": "O..OOO"
 }
 
 translationNumbers = {"1": "O.....",
@@ -162,9 +151,9 @@ translationNumbers = {"1": "O.....",
                       "7": "OOOO..",
                       "8": "O.OO..",
                       "9": ".OO...",
-                      "O": ".OOO..",}
+                      "0": ".OOO..",}
 
-# "clear" first input of sys.argv which is the name of the .py file run
+# "clear" first input of sys.argv which is the name of the .py file
 sys.argv = sys.argv[1:]
 
 # braille is in segments of 6, so any braille code would be in segments of 6
