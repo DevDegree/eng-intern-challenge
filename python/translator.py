@@ -52,8 +52,24 @@ space_sign = '......'
 braille_to_letter = {v: k for k, v in braille_letters.items()}
 braille_to_digit = {v: k for k, v in braille_nums.items()}
 
+def is_braille(text):
+    """
+    Determines if the input text is Braille.
+    """
+    return all(c in ('O', '.') for c in text) and len(text) % 6 == 0
+
 def main():
-    print("main")
+    if len(sys.argv) < 2:
+        print('Usage: python translator.py <text>')
+        sys.exit(1)
+    input_text = ' '.join(sys.argv[1:])
+
+    if is_braille(input_text):
+        # Convert Braille to English
+        print("English")
+    else:
+        # Convert English to Braille
+        print("Braille")
 
 if __name__ == '__main__':
     main()
