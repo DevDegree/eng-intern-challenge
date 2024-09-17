@@ -1,9 +1,8 @@
-#Get user input
-phrase = str(input())
+import sys
 
-#Initialize dictionary to store braille to character mapping
+# Initialize dictionary to store braille to character mapping
 braille_dict = {
-    #letters
+    # letters
     'a': "O.....", 
     'b': "O.O...", 
     'c': "OO....", 
@@ -30,7 +29,7 @@ braille_dict = {
     'x': "OO..OO", 
     'y': "OO.OOO", 
     'z': "O..OOO", 
-    #numbers
+    # numbers
     '1': "O.....", 
     '2': "O.O...", 
     '3': "OO....", 
@@ -41,7 +40,7 @@ braille_dict = {
     '8': "O.OO..", 
     '9': ".OO...", 
     '0': ".OOO..", 
-    #punctuation
+    # punctuation
     '.': "..OO.O", 
     ',': "..O...", 
     '?': "..O.OO", 
@@ -54,25 +53,24 @@ braille_dict = {
     '>': ".OO..O", 
     '(': "OO...O", 
     ')': "OO.OOO", 
-    #misc
+    # misc
     'capital': ".....O", 
     'decimal': "..O..O", 
     'number': ".O.OOO", 
     ' ': "......"
 }
 
-#Initialize key and value dictionaries for indexing
+# Initialize key and value dictionaries for indexing
 Braille = list(braille_dict.values())
 Characters = list(braille_dict.keys())
 
-
 def Braille_to_English(braille):
-    #Initialize resulting translation as an array
+    # Initialize resulting translation as an array
     translation = []
     upper = False
     number_follows = False
 
-    #Splitting into Braille code
+    # Splitting into Braille code
     mapped_chars = [braille[i:i+6] for i in range(0, len(braille), 6)]
     
     for chars in mapped_chars:
@@ -91,7 +89,7 @@ def Braille_to_English(braille):
             pos = Braille.index(chars)
 
             if number_follows:
-                #Check first 9 letters to see which number corresponds with it
+                # Check first 9 letters to see which number corresponds with it
                 if Characters[pos] in 'abcdefghi': 
                     number = str(ord(Characters[pos]) - ord('a') + 1)
                     translation.append(number)
@@ -99,7 +97,7 @@ def Braille_to_English(braille):
                     translation.append('0')
                 continue
             
-            #Gets value of the character index
+            # Gets value of the character index
             value = Characters[pos]
             if upper:
                 translation.append(value.upper())
@@ -107,15 +105,15 @@ def Braille_to_English(braille):
             else:
                 translation.append(value)
 
-    return print(''.join(translation))
+    print(''.join(translation))
 
 def English_to_Braille(sentence):
-    #Initialize resulting translation as an array
+    # Initialize resulting translation as an array
     translation = []
     sentence = list(sentence)
     number_follows = False
 
-    #Checking for uppercase and digit cases
+    # Checking for uppercase and digit cases
     for char in sentence:
         if char.isupper():
             translation.append(braille_dict['capital'])
@@ -130,18 +128,15 @@ def English_to_Braille(sentence):
             number_follows = False
             translation.append(braille_dict[char])
 
-    return print(''.join(translation))
+    print(''.join(translation))
 
-#Check if the input is in English or Braille
-if set(phrase).issubset(set('O. ')) and len(list(phrase))>=6:
-    Braille_to_English(braille=phrase)
-else:
-    English_to_Braille(sentence=phrase)
-    
-
-
-
-
-
-
-
+# Check if the input is in English or Braille
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        phrase = " ".join(sys.argv[1:])
+        if set(phrase).issubset(set('O. ')) and len(list(phrase)) >= 6:
+            Braille_to_English(braille=phrase)
+        else:
+            English_to_Braille(sentence=phrase)
+    else:
+        print("No input provided :( ")
