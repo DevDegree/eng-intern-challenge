@@ -59,7 +59,29 @@ const reverseBrailleAlphabet = Object.fromEntries(
   Object.entries(brailleAlphabet).map(([key, value]) => [value, key])
 );
 
-console.log(reverseBrailleAlphabet['O.O..O'])
+// Helper function - braille to text
+const brailleToText = (brailleStr) => {
+  const output = [];
+  let isCapital = false;
+  let isNumber = false;
+  let i = 0;
+
+  while (i < brailleStr.length) {
+    let brailleChar = brailleStr.slice(i, i + 6);
+
+    if (brailleChar === brailleAlphabet['CF']) {
+      isCapital = true;
+      i += 6;
+      continue;
+    }
+
+    if (brailleChar = brailleAlphabet['NF']) {
+      isNumber = true;
+      i += 6;
+      continue;
+    }
+  }
+}
 
 // Function to translate between braille and normal text
 const translate = (input) => {
