@@ -109,6 +109,7 @@ def convToEnglish(input)
 
 end
 
+input = ARGV.join(' ')
 def main(input)
     if(isBraille(input)) 
         puts convToEnglish(input)
