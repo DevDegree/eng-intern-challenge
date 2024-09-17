@@ -1,9 +1,7 @@
 name: self test
 
 on:
-  push:
-    branches:
-      - '**'  # just run on any branch, im only gonna be working from one anyway
+  workflow_dispatch:
 
 jobs:
   python-tests:
