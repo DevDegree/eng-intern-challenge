@@ -36,10 +36,10 @@ const brailleAlphabet = {
   "8": "O.OO..", 
   "9": ".OO...", 
   "0": ".OOO..", 
-  "CF": ".....O", 
-  "NF": ".O.OOO", 
-  "DF": ".O...O", 
-  " ": "......", 
+  "CF": ".....O", // Capital letter follows
+  "NF": ".O.OOO", // Number follows
+  "DF": ".O...O", // Decimal follows
+  " ": "......",  // Space
   ".": "..OO.O", 
   ",": "..O...", 
   "?": "..O.OO", 
