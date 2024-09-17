@@ -115,7 +115,7 @@ def translate_eng_to_braille(input_text):
     while i < len(input_text):
         char = input_text[i]
         if char == ' ':
-            # Change: Represent space with an empty Braille cell ('......')
+            # Represent space with an empty Braille cell ('......')
             output.append('......')
             i += 1
             continue
@@ -147,19 +147,26 @@ def translate_braille_to_eng(input_text):
     capitalize_next = False
     cells = []
     i = 0
-    # Change: Process the input in chunks of 6 characters (Braille cells)
-    while i + 6 <= len(input_text):
-        cell = input_text[i:i+6]
-        cells.append(cell)
-        i += 6
-    # Handle any remaining characters (if incomplete Braille cell)
-    if i < len(input_text):
-        cell = input_text[i:]
-        if len(cell) == 6:
-            cells.append(cell)
+    # Process the input, handling spaces appropriately
+    while i < len(input_text):
+        if input_text[i] == ' ':
+            # If we encounter a space character, add it to the cells list
+            cells.append(' ')
+            i += 1
+        else:
+            if i + 6 <= len(input_text):
+                cell = input_text[i:i+6]
+                cells.append(cell)
+                i += 6
+            else:
+                # Not enough characters for a Braille cell
+                break
     for cell in cells:
-        if cell == '......':
-            # Change: Interpret '......' as a space in English output
+        if cell == ' ':
+            output.append(' ')
+            number_mode = False  # Reset number mode after a space
+        elif cell == '......':
+            # Interpret '......' as a space in English output
             output.append(' ')
             number_mode = False  # Reset number mode after a space
         else:
@@ -197,9 +204,10 @@ def main():
     args = sys.argv[1:]
     if not args:
         return
-    input_text = ''.join(args)
-    # Change: Exclude spaces from the Braille detection check
-    is_braille = all(c in ('O', '.') for c in input_text)
+    # Join arguments with spaces to preserve spaces between words
+    input_text = ' '.join(args)
+    # Include space character in Braille detection check
+    is_braille = all(c in ('O', '.', ' ') for c in input_text)
     if is_braille:
         output = translate_braille_to_eng(input_text)
     else:
