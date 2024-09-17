@@ -127,7 +127,7 @@ const textToBraille = (textStr) => {
       output.push(brailleAlphabet['CF']);
       char = char.toLowerCase();
     }
-console.log(char)
+
     if (char >= '0' && char <= '9') {
       if (!isNumber) {
         // start number mode with ''Number Follows (NF)'
@@ -136,7 +136,6 @@ console.log(char)
       }
       output.push(brailleNumbers[char]);
     } else if (char === '.' && isNumber) {
-      console.log('DECIMAL!!!!', brailleNumbers['DF'])
       output.push(brailleNumbers['DF']);
     } else {
       isNumber = false;
@@ -151,6 +150,8 @@ console.log(char)
 
 // Function to translate between braille and normal text
 const translate = (input) => {
+  if (input === null) return 
+  if (input === '') return ''
   const isBraille = input.split('').every(char => ['O', '.'].includes(char));
 
   if (isBraille) {
@@ -160,18 +161,5 @@ const translate = (input) => {
   }
 }
 
-// Input: Hello world
-// Output: .....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..
-console.log(translate('Hello world'));
-// Input: 42
-// Output: .O.OOOOO.O..O.O...
-console.log(translate('42'))
-
-// Input: .....OO.....O.O...OO...........O.OOOO.....O.O...OO....
-// Output: Abc 123
-console.log(translate('.....OO.....O.O...OO...........O.OOOO.....O.O...OO....'))
-
-// 166.66 aa
-// .O.OOOO.....OOO...OOO....O...OOOO...OOO.........O.....O.....
-console.log(translate('.O.OOOO.....OOO...OOO....O...OOOO...OOO.........O.....O.....'))
-console.log(translate('166.66 aa'))
+const result = translate(process.argv.slice(2).join(' '));
+console.log(result);  // Output the translation result
