@@ -115,14 +115,13 @@ def translate_eng_to_braille(input_text):
     while i < len(input_text):
         char = input_text[i]
         if char == ' ':
-            output.append(' ')
+            # Change: Represent space with an empty Braille cell ('......')
+            output.append('......')
             i += 1
             continue
-
         if char.isupper():
             output.append(dots_to_braille_pattern(capital_follows))
             char = char.lower()
-
         if char.isdigit():
             output.append(dots_to_braille_pattern(number_follows))
             while i < len(input_text) and input_text[i].isdigit():
@@ -148,19 +147,19 @@ def translate_braille_to_eng(input_text):
     capitalize_next = False
     cells = []
     i = 0
-    while i < len(input_text):
-        if input_text[i] == ' ':
-            cells.append(' ')
-            i += 1
-        else:
-            if i + 6 <= len(input_text):
-                cell = input_text[i:i+6]
-                cells.append(cell)
-                i += 6
-            else:
-                break  # Incomplete Braille cell
+    # Change: Process the input in chunks of 6 characters (Braille cells)
+    while i + 6 <= len(input_text):
+        cell = input_text[i:i+6]
+        cells.append(cell)
+        i += 6
+    # Handle any remaining characters (if incomplete Braille cell)
+    if i < len(input_text):
+        cell = input_text[i:]
+        if len(cell) == 6:
+            cells.append(cell)
     for cell in cells:
-        if cell == ' ':
+        if cell == '......':
+            # Change: Interpret '......' as a space in English output
             output.append(' ')
             number_mode = False  # Reset number mode after a space
         else:
@@ -198,8 +197,9 @@ def main():
     args = sys.argv[1:]
     if not args:
         return
-    input_text = ' '.join(args)
-    is_braille = all(c in ('O', '.', ' ') for c in input_text)
+    input_text = ''.join(args)
+    # Change: Exclude spaces from the Braille detection check
+    is_braille = all(c in ('O', '.') for c in input_text)
     if is_braille:
         output = translate_braille_to_eng(input_text)
     else:
@@ -208,4 +208,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
