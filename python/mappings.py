@@ -7,6 +7,8 @@
 # 5 6
 # eg, a = [1]
 
+# using dictionaries for fast look ups for key -> value
+# not using additional dictionary for value -> key look up, just save on space and show both ways
 alphabets = {
     'a': [1],
     'b': [1, 3],

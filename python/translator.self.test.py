@@ -4,7 +4,7 @@ import subprocess
 # just a little file so i can run some individual tests on my own workflow
 
 class TestTranslator(unittest.TestCase):
-    def test_output(self):
+    def test_english_to_braille(self):
         # Command to run translator.py script
         command = ["python3", "translator.py", "Abc", "123", "xYz", "Hello", "world1", "42", ":)"]
         
@@ -13,6 +13,20 @@ class TestTranslator(unittest.TestCase):
         
         # Expected output without the newline at the end
         expected_output = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO...........OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O...O.OOOO............O.OOOOO.O..O.O...........OO...O.OO."
+        
+        # Strip any leading/trailing whitespace from the output and compare
+        self.assertEqual(result.stdout.strip(), expected_output)
+    
+    def test_braille_to_english(self):
+        # Command to run translator.py script
+        braille_input = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO...........OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O...O.OOOO............O.OOOOO.O..O.O...........OO...O.OO."
+        command = ["python3", "translator.py", braille_input]
+        
+        # Run the command and capture output
+        result = subprocess.run(command, capture_output=True, text=True)
+        
+        # Expected output without the newline at the end
+        expected_output = "Abc 123 xYz Hello world1 42 :)"
         
         # Strip any leading/trailing whitespace from the output and compare
         self.assertEqual(result.stdout.strip(), expected_output)
