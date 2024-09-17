@@ -1,7 +1,6 @@
 import sys
 
 def isBraille(line):
-    print(line)
     for n in range(len(line)):
         if line[n] != "O" and line[n] != ".":
             return False
@@ -9,79 +8,108 @@ def isBraille(line):
 
 
 translation = {"CAPITAL": ".....O",
-               "DECIMAL": ".O...O",
-               "SPACE": "......",
-               "NUMBERS": ".0.000",
-               "a": "0.....",
-               "b": "00....",
-               "c": "00....",
-               "d": "00.0..",
-               "e": "0..0..",
-               "f": "000...",
-               "g": "0000..",
-               "h": "0.00..",
-               "i": ".00...",
-               "j": ".000..",
-               "k": "0...0.",
-               "l": "0...0.",
-               "m": "00..0.",
-               "n": "00.00.",
-               "o": "0..00.",
-               "p": "000.0.",
-               "q": "00000.",
-               "r": "0.000.",
-               "s": ".00.0.",
-               "t": ".0000.",
-               "u": "0...00",
-               "v": "0.0.00",
-               "w": ".000.0",
-               "x": "00..00",
-               "y": "00.000",
-               "z": "0..000",
-
+               " ": "......",
+               "NUMBERS": ".O.OOO",
+               "a": "O.....",
+               "b": "O.O...",
+               "c": "OO....",
+               "d": "OO.O..",
+               "e": "O..O..",
+               "f": "OOO...",
+               "g": "OOOO..",
+               "h": "O.OO..",
+               "i": ".OO...",
+               "j": ".OOO..",
+               "k": "O...O.",
+               "l": "O.O.O.",
+               "m": "OO..O.",
+               "n": "OO.OO.",
+               "o": "O..OO.",
+               "p": "OOO.O.",
+               "q": "OOOOO.",
+               "r": "O.OOO.",
+               "s": ".OO.O.",
+               "t": ".OOOO.",
+               "u": "O...OO",
+               "v": "O.O.OO",
+               "w": ".OOO.O",
+               "x": "OO..OO",
+               "y": "OO.OOO",
+               "z": "O..OOO",
+               ".": "..OO.O",
+               ",": "..O...",
+               "?": "..O.OO",
+               "!": "..OOO.",
+               ":": "..OO..",
+               ";": "..O.O.",
+               "-": "....OO",
+               "/": ".O..O.",
+               "<": ".OO..O",
+               ">": "O..OO.",
+               "(": "O.O..O",
+               ")": ".O.OO.",
 }
 
-translationNumbers = {"1": "0.....",
-                      "2": "00....",
-                      "3": "00....",
-                      "4": "00.0..",
-                      "5": "0..0..",
-                      "6": "000...",
-                      "7": "0000..",
-                      "8": "0.00..",
-                      "9": ".00...",
-                      "0": ".000..",}
+translationNumbers = {"1": "O.....",
+                      "2": "O.O...",
+                      "3": "OO....",
+                      "4": "OO.O..",
+                      "5": "O..O..",
+                      "6": "OOO...",
+                      "7": "OOOO..",
+                      "8": "O.OO..",
+                      "9": ".OO...",
+                      "O": ".OOO..",}
 
 # braile is in segments of 6, so any braille code would be in segments of 6
 # unsure if the sys.argv = 2 is just bc of how im testing my logic here
-
+print(sys.argv)
 if (len(sys.argv[1]) % 6) == 0 and isBraille(sys.argv[1]):
     ans = ""
     braille = list(translation.values())
-    alphanum = list(translation.keys())
-    numbers = list(translationNumbers.values())
+    alpha = list(translation.keys())
+    numbers = list(translationNumbers.keys())
     caps = False
     nums = False
     # take segments 6 at a time
-    while len(sys.argv) != 0:
+    while len(sys.argv[1]) != 0:
         char = sys.argv[1][:6]
-        print(char)
         if braille.index(char) == 2: # index of space key
             nums = False
+            ans += " "
         elif braille.index(char) == 0:
             caps = True
-             # do caps lock here
-            ans += alphanum[braille.index(char)].upper()
-            continue
         elif braille.index(char) == 3:
             nums = True
+        else:
+            if nums:
+                # search in nums list
+                ans += numbers[braille.index(char)-3]
+            elif caps:
+                ans += alpha[braille.index(char)].upper()
+                caps = False
+            else:
+                ans += alpha[braille.index(char)]
+        sys.argv[1] = sys.argv[1][6:]
 
-        if nums:
-            # search in nums list
-            ans += nums[braille.index(char)-4]
+else:
+    ans = ""
+    sys.argv = sys.argv[1:]
+    prevInputNumeric = False
+    # iterate through input
+    while len(sys.argv) != 0:
+        # iterate through each word
+        for i in range(len(sys.argv[0])-1):
+            # determine if input requires special designation in braille (numeric / capital)
+            if not prevInputNumeric and sys.argv[0][i].isnumeric(): # determine if input is numeric
+                # if numeric, make sure that numeric marker is placed only once
+                if not prevInputNumeric:
+                    ans += translation["NUMBERS"]
+                ans += translationNumbers[sys.argv[0][i]]
+            elif sys.argv[0][i].isupper():
+                ans += translation["CAPITAL"]
 
-        ans += alphanum[braille.index(char)]
-        sys.argv = sys.argv[6:]
-
+            ans += translation[sys.argv[0][i]]
+        sys.argv = sys.argv[1:]
     print(ans)
     # print(".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO")
