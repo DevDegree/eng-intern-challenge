@@ -119,24 +119,21 @@ def braille_to_english(braille_text: str) -> str:
     
     return english_output
     
-            
-            
-
 
 if __name__ == '__main__':
 
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2:
         print("Usage: python translator.py <input-string>")
         sys.exit(1)
 
-    input_string = sys.argv[1]
+    input_string = ' '.join(sys.argv[1:])
 
     if is_braille(input_string):
         result = braille_to_english(input_string)
     else:
         result = english_to_braille(input_string)
     
-    print(result)
+    print(result, end ='')
 
 
     
