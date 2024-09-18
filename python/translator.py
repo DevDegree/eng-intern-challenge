@@ -82,9 +82,26 @@ def is_braille(text):
         return False
     return True
 
-def translate_to_braille(text):
-    # TODO: Implement translate to Braille
-    pass
+def translate_to_braille(english_text):
+    does_number_follows = False
+
+    output = ''
+    for char in ' '.join(english_text):
+        if char not in ENGLISH_LETTERS and char.lower() in ENGLISH_LETTERS:
+            output += BRAILLE_ALPHABET_SYMBOLS[CAPITAL_FOLLOWS]
+            output += BRAILLE_ALPHABET_SYMBOLS[char]
+        elif char in ENGLISH_NUMBERS:
+            if not does_number_follows:
+                does_number_follows = True
+                output += BRAILLE_ALPHABET_SYMBOLS[NUMBER_FOLLLOWS]
+            output += BRAILLE_NUMBERS_SYMBOLS[char]
+        elif char == ' ':
+            does_number_follows = False
+            output += BRAILLE_ALPHABET_SYMBOLS[SPACE]
+        else:
+            output += BRAILLE_ALPHABET_SYMBOLS[char.upper()]
+
+    return output
 
 def translate_to_english(text):
     # TODO: Implement translate to English
@@ -101,4 +118,4 @@ if __name__ == "__main__":
     text = argvs[1:]
 
     print(text)
-    translate(text)
+    print(translate(text))
