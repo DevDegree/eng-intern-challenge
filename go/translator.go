@@ -52,6 +52,27 @@ func stringToBraille(str string) {
 	}
 }
 
+func brailleToString(str string) {
+
+}
+
+func isBraille(str string) bool {
+	allowedChars := map[rune]bool{
+		'O': true,
+		'.': true,
+	}
+
+	// Ensure string only contains . and O
+	for _, ch := range str {
+		if !allowedChars[ch] {
+			return false
+		}
+	}
+
+	// Ensure string is a multiple of 6
+	return len(str)%6 == 0
+}
+
 func main() {
 	// Check if there are arguments passed
 	if len(os.Args) < 2 {
@@ -61,5 +82,11 @@ func main() {
 
 	input_text := strings.Join(os.Args[1:], " ")
 
-	stringToBraille(input_text)
+	// Note: This assume that you either get all english or braille arguments
+	// Please deal with mixed cases (e.g. "....OO Hello World")
+	if isBraille(input_text) {
+		brailleToString(input_text)
+	} else {
+		stringToBraille(input_text)
+	}
 }
