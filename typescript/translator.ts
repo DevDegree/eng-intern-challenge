@@ -10,6 +10,7 @@
 // Step 4 return the converted input
 
 // Implementation
+
 // Function to check if the input is Braille
 function isBraille(input: string): boolean {
   // Loop through each character in the input string
@@ -52,42 +53,27 @@ const englishToBraille: { [key: string]: string } = {
   y: "OO.OOO",
   z: "O..OOO",
   " ": ".....O",
-  A: "......O.....",
-  B: "......O.O...",
-  C: "......OO....",
-  D: "......OO.O..",
-  E: "......O..O..",
-  F: "......OOO...",
-  G: "......OOOO..",
   H: "......O.OO..",
   I: ".......OO...",
-  J: ".......OOO..",
-  K: "......O...O.",
-  L: "......O.O.O.",
-  M: "......OO..O.",
-  N: "......OO.OO.",
-  O: "......O..OO.",
-  P: "......OOO.O.",
-  Q: "......OOOOO.",
-  R: "......O.OOO.",
-  S: ".......OO.O.",
-  T: ".......OOOO.",
-  U: "......O...OO",
-  V: "......O.O.OO",
-  W: ".......OOO.O",
-  X: "......OO..OO",
-  Y: "......OO.OOO",
-  Z: "......O..OOO",
-  "1": ".....O.O.....",
-  "2": ".....O.O.O...",
-  "3": ".....OOO....",
-  "4": ".....OO.O..",
-  "5": ".....O..O..",
-  "6": ".....OOO...",
-  "7": ".....OOOO..",
-  "8": ".....O.OO..",
-  "9": "......OO...",
-  "0": ".......OOO..",
+  ".": "..O...",
+};
+
+// Capitalization and number indicators in Braille
+const brailleCapitalIndicator = "......";
+const brailleNumberIndicator = ".O.OO.";
+
+// Number mappings in Braille
+const numbersToBraille: { [key: string]: string } = {
+  "1": "O.....",
+  "2": "O.O...",
+  "3": "OO....",
+  "4": "OO.O..",
+  "5": "O..O..",
+  "6": "OOO...",
+  "7": "OOOO..",
+  "8": "O.OO..",
+  "9": ".OO...",
+  "0": ".OOO..",
 };
 
 // reverse dictionary method to lookup Braille using English and our dictionary
@@ -108,19 +94,61 @@ function createReverseDictionary(original: { [key: string]: string }): {
 
 // use our reverse method for our dictionary to get Braille to English mappings
 const brailleToEnglish = createReverseDictionary(englishToBraille);
-
-// Finally, we just need to implement the translation functions for Eng to Braille, and vice versa
+const brailleToNumbers = createReverseDictionary(numbersToBraille);
 
 // Function to convert Braille to English
 function convertBrailleToEnglish(input: string): string {
   let result = "";
+  // Bool to indicate capitalization
+  let isCapitalized = false;
+  // Bool to indicate number sequence
+  let isNumber = false;
+
   // Braille characters are 6 characters long
   const brailleLength = 6;
+
   // Loop through input in our 6 character chunks
   for (let i = 0; i < input.length; i += brailleLength) {
     const brailleChunk = input.substr(i, brailleLength);
-    // Look up the English character in the reverse dictionary
-    result += brailleToEnglish[brailleChunk] || "unknown";
+
+    // Check for capitalization indicator
+    if (brailleChunk === brailleCapitalIndicator) {
+      isCapitalized = true;
+    }
+
+    // Check for number indicator
+    if (brailleChunk === brailleNumberIndicator) {
+      isNumber = true;
+    }
+
+    // Determine the character
+    let englishChar;
+    if (isNumber) {
+      // If in number mode, use the numbersToBraille reverse dictionary
+      englishChar = brailleToNumbers[brailleChunk] || "";
+      if (!englishChar) {
+        // Invalid number character, exit number mode
+        isNumber = false;
+      }
+    } else {
+      // Look up the English character in the reverse dictionary
+      englishChar = brailleToEnglish[brailleChunk] || "";
+      // Apply capitalization if needed
+      if (isCapitalized && englishChar) {
+        englishChar = englishChar.toUpperCase();
+        isCapitalized = false;
+      }
+    }
+
+    // Append character to the result if it's not empty
+    if (englishChar) {
+      result += englishChar;
+    }
+
+    // Reset isNumber flag after a space to stop number mode
+    if (englishChar === " ") {
+      isNumber = false;
+    }
   }
 
   return result;
@@ -129,15 +157,47 @@ function convertBrailleToEnglish(input: string): string {
 // Function to convert English to Braille
 function convertEnglishToBraille(input: string): string {
   let result = "";
+  // Tracks if we're currently in number mode
+  let inNumberMode = false;
 
   // Loop through each character of the English input string
   for (const char of input) {
-    // Look up the Braille pattern for each character
-    result += englishToBraille[char] || "......"; // Use '......' for unknown characters
+    // Handle capitalization
+    if (char >= "A" && char <= "Z") {
+      // Add the capitalization indicator
+      result += brailleCapitalIndicator;
+      // Convert to lowercase and then to Braille
+      const lowerChar = char.toLowerCase();
+      result += englishToBraille[lowerChar] || "......";
+    }
+    // Handle numbers
+    else if (char >= "0" && char <= "9") {
+      // Add the number indicator before each number sequence if not already in number mode
+      if (!inNumberMode) {
+        result += brailleNumberIndicator;
+        inNumberMode = true;
+      }
+      result += numbersToBraille[char] || "......";
+    }
+    // Handle spaces and reset number mode
+    else if (char === " ") {
+      result += englishToBraille[char];
+      inNumberMode = false;
+    }
+    // Handle punctuation like period
+    else if (char === ".") {
+      result += englishToBraille[char] || "......";
+    }
+    // Normal lowercase letters and other characters
+    else {
+      result += englishToBraille[char] || "......";
+      inNumberMode = false;
+    }
   }
 
   return result;
 }
+
 // Comannd Line Arguments: node translator.ts "Hello World"
 const [, , ...args] = process.argv;
 const input = args.join(" ");
