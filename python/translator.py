@@ -41,18 +41,6 @@ BRAILLE_ALPHABET_SYMBOLS = {
     CAPITAL_FOLLOWS: '.....O',
     DECIMAL_FOLLOWS: '.O...O',
     NUMBER_FOLLLOWS: '.O.OOO',
-    '.': '..OO.O',
-    ',': '..O...',
-    '?': '..O.OO',
-    '!': '..OO.O',
-    ':': '..OO..',
-    ';': '..O.O.',
-    '-': '....OO',
-    '/': '.O..O.',
-    '<': '.OO..O',
-    '>': 'O..OO.',
-    '(': 'O.O..O',
-    ')': '.O.OO.',
     SPACE: '......',
 }
 
