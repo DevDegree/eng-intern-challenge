@@ -1,5 +1,5 @@
 // Braille mappings
-const Braille_dict = {
+const BRAILLE_DICT = {
     'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd', 'O..O..': 'e',
     'OOO...': 'f', 'OOOO..': 'g', 'O.OO..': 'h', '.OO...': 'i', '.OOO..': 'j',
     'O...O.': 'k', 'O.O.O.': 'l', 'OO..O.': 'm', 'OO.OO.': 'n', 'O..OO.': 'o',
@@ -10,9 +10,9 @@ const Braille_dict = {
 };
 
 // Reverse Braille mappings
-const Braille_dict_reverse = {};
-for (let key in Braille_dict) {
-    Braille_dict_reverse[Braille_dict[key]] = key;
+const BRAILLE_DICT_REVERSE = {};
+for (let key in BRAILLE_DICT) {
+    BRAILLE_DICT_REVERSE[BRAILLE_DICT[key]] = key;
 }
 
 // Number mappings
@@ -22,9 +22,9 @@ const NUMBER_MAP = {
 };
 
 // Reverse number mappings
-const NUMBER_MAP_reverse = {};
+const NUMBER_MAP_REVERSE = {};
 for (let key in NUMBER_MAP) {
-    NUMBER_MAP_reverse[NUMBER_MAP[key]] = key;
+    NUMBER_MAP_REVERSE[NUMBER_MAP[key]] = key;
 }
 
 // Function to convert Braille to English
@@ -35,17 +35,17 @@ function brailleToEnglish(braille) {
     for (let i = 0; i < braille.length; i += 6) {
         let bchar = braille.slice(i, i + 6);
         // Check for capital indicator
-        if (bchar === Braille_dict_reverse['CAPITAL']) {
+        if (bchar === BRAILLE_DICT_REVERSE['CAPITAL']) {
             isCapital = true;
             continue;
         }
         // Check for number indicator
-        else if (bchar === Braille_dict_reverse['NUMBER']) {
+        else if (bchar === BRAILLE_DICT_REVERSE['NUMBER']) {
             isNumber = true;
             continue;
         }
         else {
-            let echar = Braille_dict[bchar];
+            let echar = BRAILLE_DICT[bchar];
             // Convert to uppercase if capital indicator was found
             if (isCapital) {
                 echar = echar.toUpperCase();
@@ -68,30 +68,37 @@ function brailleToEnglish(braille) {
 function englishToBraille(eng) {
     let braille = "";
     let bchar = "";
+    let isNumber = false;
     for (const echar of eng) {
         // Check if character is a number
-        if (!isNaN(echar)) {
-            if (echar === " ")
-                bchar = Braille_dict_reverse[" "];
-            else {
-                bchar = Braille_dict_reverse["NUMBER"];
-                bchar += Braille_dict_reverse[NUMBER_MAP_reverse[echar]];
+        if (!isNaN(echar) && echar !== " ") {
+            if (!isNumber) {
+                bchar = BRAILLE_DICT_REVERSE["NUMBER"];
+                isNumber = true;
+            }
+            bchar += BRAILLE_DICT_REVERSE[NUMBER_MAP_REVERSE[echar]];
+        } else {
+            // Reset number mode on encountering a space
+            if (echar === " ") {
+                isNumber = false;
+                bchar = BRAILLE_DICT_REVERSE[" "];
+            } else {
+                // Check if character is uppercase
+                if (echar === echar.toUpperCase()) {
+                    bchar = BRAILLE_DICT_REVERSE["CAPITAL"];
+                    bchar += BRAILLE_DICT_REVERSE[echar.toLowerCase()];
+                } else {
+                    bchar = BRAILLE_DICT_REVERSE[echar];
+                }
+                isNumber = false; // Reset number mode on encountering a non-number character
             }
         }
-        else {
-            // Check if character is uppercase
-            if (echar === echar.toUpperCase()) {
-                bchar = Braille_dict_reverse["CAPITAL"];
-                bchar += Braille_dict_reverse[echar.toLowerCase()];
-            }
-            else {
-                bchar = Braille_dict_reverse[echar];
-            }
-        }
-        braille += bchar;
+        braille += (bchar);
+        bchar = "";
     }
     return braille;
 }
+
 
 // Function to check if text is Braille
 function isBraille(text) {
@@ -108,4 +115,5 @@ function translate(text) {
 const inputText = process.argv.slice(2).join(' ');
 
 // Output the translated text
-console.log(translate(inputText));
+console.log(`${translate(inputText)}`);
+
