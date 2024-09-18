@@ -1,5 +1,6 @@
 import sys
 
+#Mappings
 CAPITAL_PREFIX = '.....O'
 NUMBER_PREFIX = '.O.OOO'
 DECIMAL_PREFIX = '.O..OO'
@@ -22,22 +23,16 @@ ENG_TO_BRAILLE = {value: key for key, value in BRAILLE_TO_ENG.items()}
 BRAILLE_TO_NUMBER = {value: key for key, value in NUMBER_TO_BRAILLE.items()}
 
 
-if len(sys.argv) != 2:
-    print("Usage: python translator.py <input-string>")
-    sys.exit(1)
-
-input_string = sys.argv[1]
-
-
+# Functions
 def is_braille(s: str) -> bool:
     valid_chars = {'O', ',', ' '}
     return all(letter in valid_chars for letter in s)
 
-def english_to_braille(text: str)->str :
+def english_to_braille(english_text: str)->str :
     braille_output =''
     is_number_mode = False
 
-    for char in text:
+    for char in english_text:
         if char.isupper():
             braille_output += CAPITAL_PREFIX
             char = char.lower()
@@ -57,6 +52,73 @@ def english_to_braille(text: str)->str :
                 braille_output  += ENG_TO_BRAILLE.get[char, '']
         
     return braille_output 
+
+
+def braille_to_english(braille_text: str) -> str:
+    english_output = ''
+    i = 0
+    length = len(braille_text)
+    is_number_mode = False
+
+    
+    while i < length:
+        # handle space
+        if braille_text[i] == ' ':
+            english_output += ' '
+            i += 1
+            continue
+
+        braille_char = braille_text[i: i + 6]
+
+        # handle capitals
+        if braille_char == CAPITAL_PREFIX:
+            i+= 6
+            braille_char = braille_text[i: i + 6]
+            english_char = braille_to_english.get(braille_char,'')
+            english_output += english_char.upper()
+        elif braille_char == NUMBER_PREFIX:
+            is_number_mode = True
+            i += 6
+        else:
+            if is_number_mode:
+                char = BRAILLE_TO_ENG.get(braille_char,'')
+
+                is_number_mode = False
+            else:
+                char = BRAILLE_TO_ENG.get(braille_char,'')
+            english_output += char
+        i += 6
+    return english_output
+
+
+if len(sys.argv) != 2:
+    print("Usage: python translator.py <input-string>")
+    sys.exit(1)
+
+input_string = sys.argv[1]
+
+
+
+
+
+
+
+
+                
+            
+
+
+
+
+
+
+
+            
+    
+        
+
+
+
 
 
         
