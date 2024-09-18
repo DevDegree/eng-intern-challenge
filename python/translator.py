@@ -126,8 +126,8 @@ def main():
             is_eng = True
             break
     
-    if is_eng: parse_eng(table, str)
-    else: parse_br(table, str)
+    if is_eng: print(parse_eng(table, str))
+    else: print(parse_br(table, str))
         
 if __name__ == '__main__':
     main()
