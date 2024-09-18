@@ -19,13 +19,19 @@ def is_braille(text):
         return False
     return True
 
+def translate_to_braille(text):
+    # TODO: Implement translate to Braille
+    pass
+
+def translate_to_english(text):
+    # TODO: Implement translate to English
+    pass
+
 def translate(text):
     if is_english(text):
-        # TODO: Translate to Braille
-        pass
+        return translate_to_braille(text)
     elif is_braille(text):
-        # TODO: Translate to English
-        pass
+        return translate_to_english(text)
 
 if __name__ == "__main__":
     argvs = sys.argv
