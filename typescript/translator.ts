@@ -1,17 +1,15 @@
-// We need to Convert Braille to English and English to Braille
+// translator.ts
 
 // Pseudo Code
-// Step 1 check for braille or english by checking if the input has only braille characters
-// and classify the input as braille or english
-// Step 2 convert the input to the other language using a dictionary to lookup the braille to english
-// key value pairs // english to braille key value pairs using a reverse lookup
-// Step 3 ensure lowercase, uppercase, numbers and digits are handled correctly
-// following convention for braille
-// Step 4 return the converted input
+// Step 1: Check for Braille or English by checking if the input has only Braille characters
+// and classify the input as Braille or English.
+// Step 2: Convert the input to the other language using a dictionary to lookup the Braille to English
+// key-value pairs and English to Braille key-value pairs using a reverse lookup.
+// Step 3: Ensure lowercase, uppercase, numbers, and digits are handled correctly
+// following conventions for Braille.
+// Step 4: Return the converted input
 
-// Implementation
-
-// Function to check if the input is Braille
+// Step 1: Function to check if the input is Braille
 function isBraille(input: string): boolean {
   // Loop through each character in the input string
   for (let char of input) {
@@ -24,7 +22,8 @@ function isBraille(input: string): boolean {
   return true;
 }
 
-// Create dictionary to convert English to Braille
+// Step 2: Create dictionaries for conversion
+// Dictionary to convert English to Braille
 const englishToBraille: { [key: string]: string } = {
   a: "O.....",
   b: "O.O...",
@@ -52,17 +51,10 @@ const englishToBraille: { [key: string]: string } = {
   x: "OO..OO",
   y: "OO.OOO",
   z: "O..OOO",
-  " ": ".....O",
-  H: "......O.OO..",
-  I: ".......OO...",
-  ".": "..O...",
+  " ": "......",
 };
 
-// Capitalization and number indicators in Braille
-const brailleCapitalIndicator = "......";
-const brailleNumberIndicator = ".O.OO.";
-
-// Number mappings in Braille
+// Numbers mappings in Braille
 const numbersToBraille: { [key: string]: string } = {
   "1": "O.....",
   "2": "O.O...",
@@ -76,7 +68,11 @@ const numbersToBraille: { [key: string]: string } = {
   "0": ".OOO..",
 };
 
-// reverse dictionary method to lookup Braille using English and our dictionary
+// Capitalization and number indicators in Braille
+const brailleCapitalIndicator = ".....O";
+const brailleNumberIndicator = ".O.OOO";
+
+// Step 2: Reverse dictionary method to look up Braille using English and our dictionaries
 function createReverseDictionary(original: { [key: string]: string }): {
   [key: string]: string;
 } {
@@ -92,11 +88,11 @@ function createReverseDictionary(original: { [key: string]: string }): {
   return reversed;
 }
 
-// use our reverse method for our dictionary to get Braille to English mappings
+// Use our reverse method for our dictionary to get Braille to English mappings
 const brailleToEnglish = createReverseDictionary(englishToBraille);
 const brailleToNumbers = createReverseDictionary(numbersToBraille);
 
-// Function to convert Braille to English
+// Step 3: Function to convert Braille to English
 function convertBrailleToEnglish(input: string): string {
   let result = "";
   // Bool to indicate capitalization
@@ -114,11 +110,13 @@ function convertBrailleToEnglish(input: string): string {
     // Check for capitalization indicator
     if (brailleChunk === brailleCapitalIndicator) {
       isCapitalized = true;
+      continue;
     }
 
     // Check for number indicator
     if (brailleChunk === brailleNumberIndicator) {
       isNumber = true;
+      continue;
     }
 
     // Determine the character
@@ -154,7 +152,7 @@ function convertBrailleToEnglish(input: string): string {
   return result;
 }
 
-// Function to convert English to Braille
+// Step 3: Function to convert English to Braille
 function convertEnglishToBraille(input: string): string {
   let result = "";
   // Tracks if we're currently in number mode
@@ -198,6 +196,7 @@ function convertEnglishToBraille(input: string): string {
   return result;
 }
 
+// Step 4: Command-line input handling
 // Comannd Line Arguments: node translator.ts "Hello World"
 const [, , ...args] = process.argv;
 const input = args.join(" ");
