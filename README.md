@@ -66,7 +66,7 @@ Braille (\*/breɪl/ **BRAYL\***) is a tactile writing system used by people who 
 - Input: `.....OO.....O.O...OO...........O.OOOO.....O.O...OO....`
 - Output: `Abc 123`
 
-## Instructions Test
+## Instructions
 
 1. Fork this repo to your personal Github Account
 1. Clone your forked repo to begin working on the challenge locally.
