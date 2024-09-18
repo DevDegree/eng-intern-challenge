@@ -57,46 +57,46 @@ def braille_to_english(braille_text):
     Translates Braille text to English.
     """
     output = ''
-    number_mode = False  # Indicates if we're currently in number mode
-    capital_next = False  # Indicates if the next letter should be capitalized
+    number_mode = False
+    capital_next = False
 
     braille_chars = [braille_text[i:i+6] for i in range(0, len(braille_text), 6)]
 
-    i = 0
-    while i < len(braille_chars):
-        symbol = braille_chars[i]
+    # Loop through each Braille symbol
+    for symbol in braille_chars:
+        # Translate Braille space sign to English space
         if symbol == space_sign:
-            # Add space and reset modes
             output += ' '
             number_mode = False
             capital_next = False
-            i += 1
-        elif symbol == capital_sign:
-            # Next letter should be capitalized
+            continue
+
+        if symbol == capital_sign:
             capital_next = True
-            i += 1
-        elif symbol == number_sign:
-            # Enter number mode
+            continue
+
+        if symbol == number_sign:
             number_mode = True
-            i += 1
-        else:
-            if number_mode:
-                # In number mode, symbols correspond to digits
-                if symbol in braille_to_digit:
-                    output += braille_to_digit[symbol]
-                else:
-                    pass # Invalid
+            continue
+
+        if number_mode:
+            # Translate Braille digits when in number mode
+            char = braille_to_digit.get(symbol)
+            if char:
+                output += char
             else:
-                # Symbols correspond to letters
-                if symbol in braille_to_letter:
-                    letter = braille_to_letter[symbol]
-                    if capital_next:
-                        letter = letter.upper()
-                        capital_next = False
-                    output += letter
-                else:
-                    pass # Invalid
-            i += 1
+                pass # Invalid
+            continue # Continue to next Braille symbol
+
+        # Translate Braille letters to English letters
+        char = braille_to_letter.get(symbol)
+        if char:
+            if capital_next:
+                char = char.upper()
+                capital_next = False
+            output += char
+        else:
+            pass # Invalid
 
     return output
 
@@ -107,26 +107,34 @@ def english_to_braille(text):
     output = ''
     number_mode = False
 
+    # Loop through each character in the input text
     for char in text:
         if char == ' ':
+            # Translate space to Braille space sign
             output += space_sign
             number_mode = False
-        elif char.isdigit():
-            # If not already in number mode, add number sign
+            continue
+
+        if char.isdigit():
+            # Enter number mode if a digit is encountered
             if not number_mode:
                 output += number_sign
                 number_mode = True
-            # Add Braille code for the digit
             output += braille_nums[char]
-        elif char.isalpha():
+            continue
+
+        if char.isalpha():
+            # Exit number mode when encountering a letter
             if number_mode:
                 number_mode = False
+            # Add capital sign if the letter is uppercase
             if char.isupper():
                 output += capital_sign
-            # Add Braille code for the letter
             output += braille_letters[char.lower()]
-        else:
-            pass # Ignore non-alphanumeric characters
+            continue
+
+        continue # Ignore non-alphanumeric characters
+
     return output
 
 def is_braille(text):
