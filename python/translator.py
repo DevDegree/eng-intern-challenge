@@ -1,5 +1,9 @@
 import sys
 
+ENGLISH_LETTERS = set('abcdefghijklmnopqrstuvwxyz')
+ENGLISH_NUMBERS = set('0123456789')
+ENGLISH_CHARACTERS = ENGLISH_LETTERS.union(ENGLISH_NUMBERS)
+
 def translate(text):
     # TODO: if English then translate to Braille
     # TODO: if Braille then translate to English
