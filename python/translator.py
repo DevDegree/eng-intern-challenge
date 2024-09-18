@@ -98,11 +98,14 @@ def translate_to_braille(english_text):
 
     return output
 
-def translate_to_english(braille_text):
-    symbols = [
+def get_symbols_from_braille(braille_text):
+    return [
         braille_text[i:i + BRAILLE_SYMBOL_LEN]
         for i in range(0, len(braille_text), BRAILLE_SYMBOL_LEN)
     ]
+
+def translate_to_english(braille_text):
+    symbols = get_symbols_from_braille(braille_text)
 
     does_capital_follows = False
     does_number_follows = False
