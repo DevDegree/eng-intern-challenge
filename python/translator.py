@@ -77,12 +77,15 @@ def is_braille(text):
         return False
     return True
 
+def is_letter_upper_case(char):
+    return char not in ENGLISH_LETTERS and char.lower() in ENGLISH_LETTERS
+
 def translate_to_braille(english_text):
     does_number_follows = False
 
     output = ''
     for char in ' '.join(english_text):
-        if char not in ENGLISH_LETTERS and char.lower() in ENGLISH_LETTERS:
+        if is_letter_upper_case(char):
             output += BRAILLE_ALPHABET_SYMBOLS[CAPITAL_FOLLOWS]
             output += BRAILLE_ALPHABET_SYMBOLS[char]
         elif char in ENGLISH_NUMBERS:
