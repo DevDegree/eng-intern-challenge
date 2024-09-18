@@ -56,6 +56,19 @@ BRAILLE_ALPHABET_SYMBOLS = {
     SPACE: '......',
 }
 
+BRAILLE_NUMBERS_SYMBOLS = {
+    '1': 'O.....',
+    '2': 'O.O...',
+    '3': 'OO....',
+    '4': 'OO.O..',
+    '5': 'O..O..',
+    '6': 'OOO...',
+    '7': 'OOOO..',
+    '8': 'O.OO..',
+    '9': '.OO...',
+    '0': '.OOO..',
+}
+
 def is_english(text):
     for word in text:
         if not set(word.lower()).issubset(ENGLISH_CHARACTERS):
