@@ -11,6 +11,51 @@ DECIMAL_FOLLOWS = 'DECIMAL_FOLLOWS'
 NUMBER_FOLLLOWS = 'NUMBER_FOLLLOWS'
 SPACE = 'SPACE'
 
+BRAILLE_ALPHABET_SYMBOLS = {
+    'A': 'O.....',
+    'B': 'O.O...',
+    'C': 'OO....',
+    'D': 'OO.O..',
+    'E': 'O..O..',
+    'F': 'OOO...',
+    'G': 'OOOO..',
+    'H': 'O.OO..',
+    'I': '.OO...',
+    'J': '.OOO..',
+    'K': 'O...O.',
+    'L': 'O.O.O.',
+    'M': 'OO..O.',
+    'N': 'OO.OO.',
+    'O': 'O..OO.',
+    'P': 'OOO.O.',
+    'Q': 'OOOOO.',
+    'R': 'O.OOO.',
+    'S': '.OO.O.',
+    'T': '.OOOO.',
+    'U': 'O...OO',
+    'V': 'O.O.OO',
+    'W': '.OOO.O',
+    'X': 'OO..OO',
+    'Y': 'OO.OOO',
+    'Z': 'O..OOO',
+    CAPITAL_FOLLOWS: '.....O',
+    DECIMAL_FOLLOWS: '.O...O',
+    NUMBER_FOLLLOWS: '.O.OOO',
+    '.': '..OO.O',
+    ',': '..O...',
+    '?': '..O.OO',
+    '!': '..OO.O',
+    ':': '..OO..',
+    ';': '..O.O.',
+    '-': '....OO',
+    '/': '.O..O.',
+    '<': '.OO..O',
+    '>': 'O..OO.',
+    '(': 'O.O..O',
+    ')': '.O.OO.',
+    SPACE: '......',
+}
+
 def is_english(text):
     for word in text:
         if not set(word.lower()).issubset(ENGLISH_CHARACTERS):
