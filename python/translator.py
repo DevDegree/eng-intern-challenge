@@ -6,10 +6,21 @@ ENGLISH_CHARACTERS = ENGLISH_LETTERS.union(ENGLISH_NUMBERS)
 
 BRAILLE_CHARACTERS = set('O.')
 
-def translate(text):
-    # TODO: if English then translate to Braille
-    # TODO: if Braille then translate to English
+def is_english(text):
+    # TODO: Check if text is English or not
     pass
+
+def is_braille(text):
+    # TODO: Check if text is Braille or not
+    pass
+
+def translate(text):
+    if is_english(text):
+        # TODO: Translate to Braille
+        pass
+    elif is_braille(text):
+        # TODO: Translate to English
+        pass
 
 if __name__ == "__main__":
     argvs = sys.argv
