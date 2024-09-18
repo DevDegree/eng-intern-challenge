@@ -23,6 +23,7 @@ var numberMap = map[rune]string{
 	'1': "O.....", '2': "O.O...", '3': "OO....",
 	'4': "OO.O..", '5': "O..O..", '6': "OOO...",
 	'7': "OOOO..", '8': "O.OO..", '9': ".OO...",
+	' ': "......",
 }
 
 const (
@@ -30,30 +31,68 @@ const (
 	NUMBER_BRAILLE  = ".O.OOO"
 )
 
+var brailleToAlphabetMap = reverseMap(alphabetMap)
+var brailleToNumberMap = reverseMap(numberMap)
+
+func reverseMap(m map[rune]string) map[string]rune {
+	result := make(map[string]rune, len(m))
+
+	for k, v := range m {
+		result[v] = k
+	}
+	return result
+}
+
 func stringToBraille(str string) {
-	numCount := 0
+	numberMode := false
 
 	for _, ch := range str {
 		switch {
 		case unicode.IsUpper(ch):
-			fmt.Printf("%s", CAPITAL_BRAILLE)
-			fmt.Printf("%s", alphabetMap[unicode.ToLower(ch)])
-			numCount = 0
+			fmt.Print(CAPITAL_BRAILLE)
+			fmt.Print(alphabetMap[unicode.ToLower(ch)])
+			numberMode = false
 		case unicode.IsDigit(ch):
-			if numCount == 0 {
-				fmt.Printf("%s", NUMBER_BRAILLE)
+			if !numberMode {
+				fmt.Print(NUMBER_BRAILLE)
+				numberMode = true
 			}
-			fmt.Printf("%s", numberMap[ch])
-			numCount++
+			fmt.Print(numberMap[ch])
 		default:
-			fmt.Printf("%s", alphabetMap[ch])
-			numCount = 0
+			fmt.Print(alphabetMap[ch])
+			numberMode = false
 		}
 	}
 }
 
-func brailleToString(str string) {
+func brailleToString(braille string) {
+	if len(braille)%6 != 0 {
+		fmt.Println("Error: Braille string length must be a multiple of 6.")
+		return
+	}
 
+	capitalize := false
+	number := false
+
+	for i := 0; i < len(braille); i += 6 {
+		cell := braille[i : i+6]
+		switch {
+		case cell == CAPITAL_BRAILLE:
+			capitalize = true
+			number = false
+		case capitalize:
+			fmt.Printf("%c", unicode.ToUpper(brailleToAlphabetMap[cell]))
+			capitalize = false
+			number = false
+		case cell == NUMBER_BRAILLE:
+			number = true
+		case number:
+			fmt.Printf("%c", brailleToNumberMap[cell])
+		default:
+			fmt.Printf("%c", brailleToAlphabetMap[cell])
+			number = false
+		}
+	}
 }
 
 func isBraille(str string) bool {
@@ -82,8 +121,6 @@ func main() {
 
 	input_text := strings.Join(os.Args[1:], " ")
 
-	// Note: This assume that you either get all english or braille arguments
-	// Please deal with mixed cases (e.g. "....OO Hello World")
 	if isBraille(input_text) {
 		brailleToString(input_text)
 	} else {
