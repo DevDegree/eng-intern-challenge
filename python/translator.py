@@ -13,8 +13,11 @@ def is_english(text):
     return True
 
 def is_braille(text):
-    # TODO: Check if text is Braille or not
-    pass
+    if len(text) != 1:
+        return False
+    if not set(text[0]).issubset(BRAILLE_CHARACTERS):
+        return False
+    return True
 
 def translate(text):
     if is_english(text):
