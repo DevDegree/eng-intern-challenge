@@ -1,5 +1,5 @@
 # Braille dictionary
-# 2024-09-17
+# 17/09/2024
 # Ashton Sicard
 
 import sys
