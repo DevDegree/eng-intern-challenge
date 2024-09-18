@@ -9,7 +9,7 @@ const {
 } = require('./utils');
 
 // Translate the Braille input to English
-const brailleToEnglishTranslator = (brailleInput) => {
+const translateBrailleToEnglish = (brailleInput) => {
   // track capital char
   let isCapital = false;
   // track number
@@ -51,7 +51,7 @@ const brailleToEnglishTranslator = (brailleInput) => {
 };
 
 // Translate the English input to Braille
-const englishToBrailleTranslator = (englishInput) => {
+const translateEnglishToBraille = (englishInput) => {
   // output
   let result = '';
   // track number
@@ -88,16 +88,16 @@ const englishToBrailleTranslator = (englishInput) => {
   return result;
 };
 
-const translator = (input) => {
-  if (isInputBraille(input)) return brailleToEnglishTranslator(input);
-  else return englishToBrailleTranslator(input);
+const translate = (input) => {
+  if (isInputBraille(input)) return translateBrailleToEnglish(input);
+  else return translateEnglishToBraille(input);
 };
 
 // Parse  the input
 const input = process.argv.slice(2).join(' ');
 
 // Get the output
-const output = translator(input);
+const output = translate(input);
 
 // Log the output
 console.log(output);
