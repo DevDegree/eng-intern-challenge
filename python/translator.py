@@ -64,21 +64,23 @@ BRAILLE_ALPHABET = {value: key for key,
 BRAILLE_NUMBERS = {value: key for key,
                    value in BRAILLE_NUMBERS_SYMBOLS.items()}
 
+
 def is_english(text):
     for word in text:
         if not set(word.lower()).issubset(ENGLISH_CHARACTERS):
             return False
     return True
 
+
 def is_braille(text):
-    if len(text) != 1:
-        return False
-    if not set(text[0]).issubset(BRAILLE_CHARACTERS):
+    if not set(text).issubset(BRAILLE_CHARACTERS):
         return False
     return True
 
+
 def is_letter_upper_case(char):
     return char not in ENGLISH_LETTERS and char.lower() in ENGLISH_LETTERS
+
 
 def translate_to_braille(english_text):
     does_number_follows = False
@@ -101,11 +103,13 @@ def translate_to_braille(english_text):
 
     return output
 
+
 def get_symbols_from_braille(braille_text):
     return [
         braille_text[i:i + BRAILLE_SYMBOL_LEN]
         for i in range(0, len(braille_text), BRAILLE_SYMBOL_LEN)
     ]
+
 
 def translate_to_english(braille_text):
     symbols = get_symbols_from_braille(braille_text)
@@ -135,15 +139,16 @@ def translate_to_english(braille_text):
 
     return output
 
-def translate(text):
-    if is_english(text):
-        return translate_to_braille(text)
-    elif is_braille(text):
-        return translate_to_english(text[0])
+
+def translate(original_text):
+    if is_english(original_text):
+        return translate_to_braille(original_text)
+    elif len(original_text) == 1 and is_braille(original_text[0]):
+        return translate_to_english(original_text[0])
+
 
 if __name__ == "__main__":
     argvs = sys.argv
-    text = argvs[1:]
+    original_text = argvs[1:]
 
-    print(text)
-    print(translate(text))
+    print(translate(original_text))
