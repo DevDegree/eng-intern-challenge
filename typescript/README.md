@@ -1,39 +1,42 @@
 # TypeScript Instructions
 
-1. Set up: install dependencies
+#### Set up:
 
-   ```
-   cd typescript/
-   ```
+```
+cd typescript/
+```
 
-   ```
-   npm i
-   ```
+```
+npm i
+```
 
-2. Run with dev (no build):
+#### Run with ts-node:
 
-   ```
-   npm run dev <input>
-   ```
+```
+npm run dev <input>
+```
 
-   Replace `<input>` with the text or Braille you want to translate.
+Replace `<input>` with the text or Braille you want to translate.
 
-3. To build the project, run:
+#### Javascript Compilation:
 
-   ```
-   npm run build
-   ```
+Run build:
 
-4. Run with compiled javascript (requires build):
+```
+npm run build
+```
 
-   ```
-   npm start <input>
-   ```
+Run with compiled javascript (requires build):
 
-5. To run the tests, execute:
-   ```
-   npm test
-   ```
+```
+npm start <input>
+```
+
+#### To run the tests, execute:
+
+```
+npm test
+```
 
 ## Project Structure
 
