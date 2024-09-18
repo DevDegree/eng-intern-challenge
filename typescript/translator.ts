@@ -8,9 +8,11 @@ import {
   isNumeric
 } from "./translatorUtils";
 
+// ignore first two args, node location and file path
 const args = argv.slice(2);
 
 function translateBrailleToText(brailleInput: string): string {
+  // match splits into 6 char chunks, already validated by regex
   const brailleChars = brailleInput.match(/.{1,6}/g) || [];
   let result = "";
   let isNumber = false;
@@ -43,6 +45,7 @@ function translateBrailleToText(brailleInput: string): string {
 
 function translateTextToBraille(textInput: string[]): string {
   const result: string[] = [];
+  // bool flag simplifies logic, numbers must be followed by space, otherwise interpreted as letter
   let isNumber = false;
 
   for (const string of textInput) {
