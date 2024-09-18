@@ -145,6 +145,7 @@ def translate(original_text):
         return translate_to_braille(original_text)
     elif len(original_text) == 1 and is_braille(original_text[0]):
         return translate_to_english(original_text[0])
+    return ''
 
 
 if __name__ == "__main__":
