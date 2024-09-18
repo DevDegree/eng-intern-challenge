@@ -7,8 +7,10 @@ ENGLISH_CHARACTERS = ENGLISH_LETTERS.union(ENGLISH_NUMBERS)
 BRAILLE_CHARACTERS = set('O.')
 
 def is_english(text):
-    # TODO: Check if text is English or not
-    pass
+    for word in text:
+        if not set(word.lower()).issubset(ENGLISH_CHARACTERS):
+            return False
+    return True
 
 def is_braille(text):
     # TODO: Check if text is Braille or not
