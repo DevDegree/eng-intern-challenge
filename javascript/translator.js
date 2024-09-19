@@ -1,5 +1,5 @@
 // step 1: define alphabet and indicators for uppercase, spaces and numbers
-// step 2: check input to determine wether english or braille
+// step 2: check input to determine whether english or braille
 // step 3: translate input and handle uppercase, spaces and numbers
 // step 4: return and log translated string
 
