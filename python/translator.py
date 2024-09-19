@@ -1,5 +1,4 @@
 import sys
-import re
 
 
 class Translator:
@@ -46,6 +45,12 @@ class Translator:
         }
 
     def _english_mapping(self, letters: str) -> None:
+        """Modify self.english_to_braille_mapping to put in uppercase and
+        lowercase letters
+
+        :param letters: all letters of the English alphabet
+        :return: None
+        """
         # Starting braille code representing "a" in braille
         base_braille_code = 0x2800
 
@@ -74,14 +79,20 @@ class Translator:
             # Letters a to i and numbers 1 to 9 are the same in braille
             if "a" <= letter <= "i":
                 number = f"{offset}"
-                self.english_to_braille_mapping[number] = string_representation
+                new_braille = self.numbers_follows + string_representation
+                self.english_to_braille_mapping[number] = new_braille
 
             elif letter == "j":
                 number = f"{0}"
-                self.english_to_braille_mapping[number] = string_representation
+                new_braille = self.numbers_follows + string_representation
+                self.english_to_braille_mapping[number] = new_braille
 
     def _letter_to_braille(self, character: str) -> str:
+        """Given a character, give the braille string in grid form
 
+        :param character: single character of the English alphabet
+        :return: the Braille string in grid form
+        """
         braille_base = 0x2800  # Starting point for Braille Unicode characters
         return chr(braille_base + self.letter_to_braille_offset[character])
 
@@ -89,28 +100,32 @@ class Translator:
         """Converts given string in English english_text and returns
         Braille text
 
-        :param english_text:
-        :return:
+        :param english_text: a sentence/text in English
+        :return: the text converted to Braille
         """
         braille_string = ""
         numbers = False
         for character in english_text:
             if character.isnumeric() and not numbers:
-                print("character.isnumeric() and not numbers")
-                braille_string += self.numbers_follows
+                braille_string += self.english_to_braille_mapping[character]
+                numbers = True
+
+            elif character.isnumeric() and numbers:
+                braille_string += self.english_to_braille_mapping[character][6:]
                 numbers = True
 
             elif character == "." and numbers:
-                print("character == \".\" and numbers")
                 braille_string += self.decimal_follows
 
+            elif character == " ":
+                braille_string += self.english_to_braille_mapping[character]
+                numbers = False
+
             elif not character.isnumeric() and numbers:
-                print("not character.isnumeric() and numbers")
                 braille_string += self.english_to_braille_mapping[character]
                 numbers = False
 
             else:
-                print("else")
                 braille_string += self.english_to_braille_mapping[character]
 
         return braille_string
@@ -119,10 +134,43 @@ class Translator:
         """Converts given string in Braille braille_text and returns
         English text
 
-        :param braille_text:
-        :return:
+        :param braille_text: a sentence/text in Braille
+        :return: the text converted to English
         """
-        pass
+        english_string = ""
+        is_number = False
+        index = 0
+        while index < len(braille_text) - 5:
+            character = braille_text[index:index + 6]
+            if self.braille_to_english_mapping[character] == "capital":
+                index += 6
+                character += braille_text[index:index + 6]
+                english_string += self.braille_to_english_mapping[character]
+
+            elif self.braille_to_english_mapping[character] == "decimal":
+                if is_number:
+                    english_string += "."
+
+            elif self.braille_to_english_mapping[character] == "numbers":
+                index += 6
+                is_number = True
+                character = self.numbers_follows + braille_text[index:index + 6]
+                english_string += self.braille_to_english_mapping[character]
+
+            elif character == "......":
+                is_number = False
+                english_string += self.braille_to_english_mapping[character]
+
+            elif is_number:
+                character = self.numbers_follows + braille_text[index:index + 6]
+                english_string += self.braille_to_english_mapping[character]
+
+            else:
+                english_string += self.braille_to_english_mapping[character]
+
+            index += 6
+
+        return english_string
 
 
 if __name__ == "__main__":
@@ -141,11 +189,13 @@ if __name__ == "__main__":
     is_braille_text = raised_count + lowered_count == len(string_to_translate)
     length_divides_six = len(string_to_translate) % 6 == 0
 
+    # Use translator class to translate from specified languages
     translator = Translator()
 
-    # Assumption is text will be english
+    # Assumption is text will be english or braille, but nothing else
     if is_braille_text and length_divides_six:
-        current_language = "BRAILLE"
+        translated_string = translator.braille_to_english(string_to_translate)
+        print(translated_string)
     else:
         translated_string = translator.english_to_braille(string_to_translate)
         print(translated_string)
