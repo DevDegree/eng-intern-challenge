@@ -150,6 +150,16 @@ def braille_to_english(user_str: str) -> str:
             consumed_cap = False
             continue
 
+       
+        # Spaces should disable number mode
+        if(braille_char == "......"):
+            number_mode = False
+
+        # If in number mode, need to output numbers instead of A-J
+        if(number_mode):
+            out += str(list((inv_map.keys())).index(braille_char))
+            continue
+        
         out += inv_map[braille_char]
     
     return out
