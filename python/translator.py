@@ -124,7 +124,14 @@ def detect(input: str):
 
 
 def proccess_args():
+    if len(sys.argv) == 1:
+        print("Need to have an argument")
+        return
     input_arg = sys.argv[1]
+    i = 2
+    while i < len(sys.argv):
+        input_arg += " " + sys.argv[i]
+        i += 1
     detect(input_arg)
     return
 
