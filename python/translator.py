@@ -14,18 +14,18 @@
 # 
 # To classify:
 # - Can probably use regex to check if strings match the "O" or "." requirements
-# - Can also assert that inputString.length() % 6 == 0 to match braille length
+# - Can also assert that inputString.length() % 6 == 0 to match Braille length
 # 
 # ===================================================================================
 # 
-# To translate (FROM BRAILLE):
-# - Can tokenize each braille character
-# - Can check the edge cases (capitalize, number, decimal)
+# To translate (FROM Braille):
+# - Can tokenize each Braille character
+# - Can check the edge cases (capitalize, number)
 #       - Handle it
 # - Can reference a dictionary to replace the characters
 # 
 # POTENTIAL EDGE CASE: The string "OOOOOO" passes the regex and length requirement,
-#                      but would still be an English string, because that character isn't in the Braille alphabet.
+#                      but would still be an English string, because that character isn't in the Braille ALPHABET.
 #                      => if token not in Braille dict, translate the input string from English -> Braille
 # 
 # 
@@ -34,7 +34,42 @@
 #       - is number or decimal
 #       - is capital
 # - Apply transformation rules
-# - Replace with braille alphabet entry
+# - Replace with Braille alphabet entry
 # 
 # ===================================================================================
-#
+
+
+
+CAPITAL_FOLLOWS = ".....O"
+NUMBER_FOLLOWS  = ".O.OOO"
+
+ALPHABET = {
+    "j": ".OOO..",  # Value may also be 0
+    "a": "O.....",  # Value may also be 1
+    "b": "O.O...",  # Value may also be 2
+    "c": "OO....",  # Value may also be 3
+    "d": "OO.O..",  # Value may also be 4
+    "e": "O..O..",  # Value may also be 5
+    "f": "OOO...",  # Value may also be 6
+    "g": "OOOO..",  # Value may also be 7
+    "h": "O.OO..",  # Value may also be 8
+    "i": ".OO...",  # Value may also be 9
+    "k": "O...O.",
+    "l": "O.O.O.",
+    "m": "OO..O.",
+    "n": "OO.OO.",
+    "o": "O..OO.",
+    "p": "OOO.O.",
+    "q": "OOOOO.",
+    "r": "O.OOO.",
+    "s": ".OO.O.",
+    "t": ".OOOO.",
+    "u": "O...OO",
+    "v": "O.O.OO",
+    "w": ".OOO.O",
+    "x": "OO..OO",
+    "y": "OO.OOO",
+    "z": "O..OOO",
+    " ": "......"
+}
+
