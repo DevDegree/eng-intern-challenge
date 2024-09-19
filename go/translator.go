@@ -67,7 +67,6 @@ func stringToBraille(str string) {
 
 func brailleToString(braille string) {
 	if len(braille)%6 != 0 {
-		fmt.Println("Error: Braille string length must be a multiple of 6.")
 		return
 	}
 
@@ -115,7 +114,6 @@ func isBraille(str string) bool {
 func main() {
 	// Check if there are arguments passed
 	if len(os.Args) < 2 {
-		fmt.Println("Usage: go run translator.go <param1> <param2> ... <paramN>")
 		return
 	}
 
