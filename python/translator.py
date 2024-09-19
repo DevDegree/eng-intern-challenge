@@ -42,6 +42,9 @@ def braille_to_english(word):
     for braille in groups:
         if(braille == num_follows):
             numturn = True
+        elif(braille == decimal_follows or braille == brailledict["."]):
+            if(braille == decimal_follows):
+                english += '.'
         elif(braille == capital_follows):
             capitalize = True
         elif(numturn == False):
