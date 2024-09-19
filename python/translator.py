@@ -115,7 +115,37 @@ def braille_to_english(user_str: str) -> str:
     inv_map = {v: k for k, v in ALPHABET.items()}    
 
     out = ""
+    consumed_cap = False
+    number_mode = False
+
+    
     # print(tokenized)
+    
+    for braille_char in tokenized:
+        if(braille_char not in inv_map):
+            # braille_char can either be:
+            # NUMBER_FOLLOWS
+            # CAPITAL_FOLLOWS
+            # (or, not valid Braille)
+
+            if(braille_char == NUMBER_FOLLOWS):
+                number_mode = True
+                # Consume this non-printed character
+                continue
+
+            if(braille_char == CAPITAL_FOLLOWS):
+                consumed_cap = True
+                # Consume this non-printed character
+                continue
+
+
+            # Catch edge cases about Braille-like inputs, but with invalid characters -- e.g. (OOOOOO)+
+            return english_to_braille(user_str)
+        
+
+        # Valid Braille / is in the map.
+        out += inv_map[braille_char]
+    
     return out
 
 if __name__ == "__main__":
