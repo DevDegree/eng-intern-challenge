@@ -68,7 +68,10 @@ def english_to_braille(word):
         if char == " ":
             numturn = False
         if char == ".":
-            braille += decimal_follows + (brailledict[char])
+            if numturn == True:
+                braille += decimal_follows
+            else:
+                braille += brailledict[char]
         if char.isupper() == True:
             braille += capital_follows
         if char.lower() in brailledict:
