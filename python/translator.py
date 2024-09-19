@@ -37,14 +37,14 @@ class Translator:
         }
 
         # Assign letters to english to braille mapping
-        self._english_mapping(letters)
+        self.english_mapping(letters)
 
         # Invert english to braille mapping to get braille to english
         self.braille_to_english_mapping = {
             value: key for key, value in self.english_to_braille_mapping.items()
         }
 
-    def _english_mapping(self, letters: str) -> None:
+    def english_mapping(self, letters: str) -> None:
         """Modify self.english_to_braille_mapping to put in uppercase and
         lowercase letters
 
@@ -57,7 +57,7 @@ class Translator:
         for letter in letters:
             # Convert the letter into a braille letter
             offset = ord(letter) - ord("a") + 1
-            braille_letter = self._letter_to_braille(letter)
+            braille_letter = self.letter_to_braille(letter)
 
             # Convert the braille letter into a binary string representation
             unicode_code_point = ord(braille_letter)
@@ -87,7 +87,7 @@ class Translator:
                 new_braille = self.numbers_follows + string_representation
                 self.english_to_braille_mapping[number] = new_braille
 
-    def _letter_to_braille(self, character: str) -> str:
+    def letter_to_braille(self, character: str) -> str:
         """Given a character, give the braille string in grid form
 
         :param character: single character of the English alphabet
