@@ -33,12 +33,12 @@ number_to_braille = {k: ''.join(v) for k, v in braille_to_number.items()}
 
 english_to_braille = {v: ''.join(k) for k, v in braille_to_english.items()}
 
-# Helper function to detect whether input is in English or Braille
 def is_braille(input_string):
+    """Helper function to detect whether input is in English or Braille"""
     return all(char in ('O', '.') for char in input_string)
 
 def translate_braille_to_english(braille_string):
-
+    """This function translates the given braille string to english."""
     if len(braille_string) % 6 != 0:
         raise ValueError("Invalid Braille string. Length must be divisible by 6.")
 
@@ -48,51 +48,39 @@ def translate_braille_to_english(braille_string):
 
     capital_next = False
     number_next = False
-    decimal_next = False
-    space_next = False
 
     for substring in substrings:
         if substring == capital_ahead:
             capital_next = True
-        elif substring == decimal_ahead:
-            decimal_next = True
+            continue
         elif substring == number_ahead:
             number_next = True
+            continue
         elif substring == space_ahead:
-            space_next = True
-
-        if space_next:
             english_output.append(' ')
-            space_next = False
-            if number_next:
-                number_next = False
-
-        if number_next:
-            for key, value in number_to_braille.items():
-                if value == substring:
-                    english_output.append(key)
-
-        elif capital_next:
-            for key, value in english_to_braille.items():
-                if value == substring:
-                    english_output.append(key.upper())
-                    capital_next = False
-
-        elif decimal_next:
+            number_next = False
             continue
 
-        else:
-            for key, value in english_to_braille.items():
-                if value == substring:
-                    english_output.append(key)
+        # Handle numbers
+        if number_next:
+            english_output.append(next(key for key, value in number_to_braille.items() if value == substring))
+            continue
 
+        # Handle capital letters
+        if capital_next:
+            english_output.append(next(key.upper() for key, value in english_to_braille.items() if value == substring))
+            capital_next = False
+            continue
+
+        # Handle regular letters and punctuation
+        english_output.append(next(key for key, value in english_to_braille.items() if value == substring))
 
     return ''.join(english_output)
 
 
 # Translate English to Braille
-# This function processes each English character and translates it into the corresponding Braille pattern.
 def translate_english_to_braille(english_input):
+    """This function processes each English character and translates it into the corresponding Braille pattern."""
     braille_output = []
     in_number_mode = False  # To track if we're currently in a chain of numbers
 
@@ -124,7 +112,9 @@ def translate_english_to_braille(english_input):
 # Main function to handle translation
 # This function first detects if the input is Braille or English and calls the appropriate translation function.
 def braille_translator(input_string):
-    # If the input contains only 'O' and '.', treat it as Braille input. There might be some edge cases that this fails
+    """Main function to handle translation. This function first detects if the input is Braille or English and calls
+    the appropriate translation function. """
+    # If the input contains only 'O' and '.', treat it as Braille input. There might be some edge cases.
     if is_braille(input_string):
         return translate_braille_to_english(input_string)
     else:
