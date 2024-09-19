@@ -36,6 +36,9 @@ def braille_to_english(word):
                 letter = letter.capitalize()
                 capitalize = False
             english += letter
+        elif(braille == "......"):
+            numturn = False
+            english += " "
         else:
             letter = braille_to_numbers[braille]
             english += letter 
