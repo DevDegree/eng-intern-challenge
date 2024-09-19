@@ -76,6 +76,16 @@ ALPHABET = {
 }
 
 def english_to_braille(str: str) -> str:
+    """
+    Converts between alphanumeric characters and Braille, with number and capitalized letter tracking. 
+    
+    This function parses the input string character-by-character,
+    and attempts to reference its entry in the dictionary in order to build the output string.
+
+    It also prepends capital letters with the appropriate Braille sequence,
+    and tracks if we're in "numeric mode" (prepend with numeric string, delimit number sequences with space).
+    """
+    
     # State variable for checking if we're in numeric mode
     numeric_mode = False
 
@@ -108,6 +118,19 @@ def english_to_braille(str: str) -> str:
     
 
 def braille_to_english(user_str: str) -> str:
+    """
+    Converts Braille sequences to English, with "status characters" (capital, number). 
+    
+    This function tokenizes the input string (token length = 6) in order to extract each Braille "character".
+    It also inverts the dictionary for easier keying, since the constant dictionary has no duplicate keys or values.
+    
+    It keeps track of whether we're in number mode (output numbers 0-9 instead of A-J),
+    and whether the character should be capitalized (consume the "capitalize" token, apply to next character).
+
+    If presented with a string that is composed of O's, and is tokenizable into length 6 characters, 
+    but is not a "valid" Braille character, the string is assumed to be English instead, and is properly converted. 
+    """
+
     # Tokenize using list comprehension.
     # We've already asserted that len % 6 == 0 (evenly divisible by 6)
     tokenized = [user_str[i:i+6] for i in range(0, len(user_str), 6)]
@@ -118,11 +141,9 @@ def braille_to_english(user_str: str) -> str:
     out = ""
     consumed_cap = False
     number_mode = False
-
-    
-    # print(tokenized)
     
     for braille_char in tokenized:
+
         if(braille_char not in inv_map):
             # braille_char can either be:
             # NUMBER_FOLLOWS
@@ -170,9 +191,7 @@ if __name__ == "__main__":
 
 
     if(re.fullmatch('^(\\.|O)*$', user_str) and (len(user_str) % 6 == 0)):
-        # print("Potentially Braille\n")
-        print("$" + braille_to_english(user_str) + "$")
+        print(braille_to_english(user_str))
 
     else:
-        # print("Not Braille\n")
         print(english_to_braille(user_str))
