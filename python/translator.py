@@ -144,6 +144,12 @@ def braille_to_english(user_str: str) -> str:
         
 
         # Valid Braille / is in the map.
+        # Depending on capital / number mode, apply modifications
+        if(consumed_cap):
+            out += inv_map[braille_char].capitalize()
+            consumed_cap = False
+            continue
+
         out += inv_map[braille_char]
     
     return out
