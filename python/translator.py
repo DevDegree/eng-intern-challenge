@@ -109,8 +109,6 @@ def translate_english_to_braille(english_input):
     return ''.join(braille_output)
 
 
-# Main function to handle translation
-# This function first detects if the input is Braille or English and calls the appropriate translation function.
 def braille_translator(input_string):
     """Main function to handle translation. This function first detects if the input is Braille or English and calls
     the appropriate translation function. """
