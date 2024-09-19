@@ -80,7 +80,7 @@ def braille_to_eng(braille_input_str: str) -> str:
             eng_output += punct
 
         else:
-            return "error: input contains invalid character(s) " + char
+            return ""
         
     return eng_output
 
@@ -101,7 +101,7 @@ def eng_to_braille(eng_input_str: str) -> str:
             braille_output += PUNCTUATION_BRAILLE_DICT[char]
         
         else:
-            return "error: input contains invalid character(s) " + char
+            return ""
     
     return braille_output
 
