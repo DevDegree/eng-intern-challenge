@@ -51,10 +51,6 @@ const brailleUppercaseIndicator = ".....O";
 const brailleNumberIndicator = ".O.OOO";
 const brailleSpaceIndicator = "......";
 
-// strings for testing in development
-const brailleTest = ".....OO.OO..O..O..O.O.O.O.O.O.O..OO............O.OO.O.O.OO..O..OO.OOO.O..OO...OOO...OO.OOO";
-const englishTest = "Hello Shopify";
-
 // test input for braille or english, set inputLang accordingly
 const args = process.argv.slice(2);
 const inputString = args.join(" ");
