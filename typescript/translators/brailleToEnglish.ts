@@ -1,4 +1,4 @@
-import { brailleToEnglishLetterMap, brailleToEnglishNumberMap } from "../constants/brailletoEnglishMaps";
+import { brailleToEnglishLetterMap, brailleToEnglishNumberMap } from "../constants/brailleToEnglishMaps";
 import { englishToBrailleCharacterizationMap } from "../constants/englishToBrailleMaps";
 import { validateBrailleInput } from "../utils";
 
