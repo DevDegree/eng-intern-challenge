@@ -78,7 +78,15 @@ def english_to_braille(str: str) -> str:
     out = ""
     return out
 def braille_to_english(user_str: str) -> str:
+    # Tokenize using list comprehension.
+    # We've already asserted that len % 6 == 0 (evenly divisible by 6)
+    tokenized = [user_str[i:i+6] for i in range(0, len(user_str), 6)]
+    
+    # Invert the ALPHABET dictionary to make it easier to build output string
+    inv_map = {v: k for k, v in ALPHABET.items()}    
+
     out = ""
+    # print(tokenized)
     return out
 
 if __name__ == "__main__":
