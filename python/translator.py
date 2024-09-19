@@ -177,11 +177,12 @@ def is_braille_or_english(input_string):
     return "Unknown"
 
 def main():
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2:
         print("Usage: python translator.py <input_string>")
         sys.exit(1)
 
-    input_string = sys.argv[1]
+    # Join all arguments into a single string separated by spaces
+    input_string = ' '.join(sys.argv[1:])
     detected_language = is_braille_or_english(input_string)
 
     if detected_language == "Braille":
@@ -194,4 +195,4 @@ def main():
         print("Unknown input type. Please provide valid English or Braille input.")
 
 if __name__ == "__main__":
-        main()
+    main()
