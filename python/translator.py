@@ -1,4 +1,5 @@
 import re  # Access: regex parsing
+import sys  # Access: sys
 
 # High-level idea:
 # 
@@ -165,8 +166,9 @@ def braille_to_english(user_str: str) -> str:
     return out
 
 if __name__ == "__main__":
-    # user_str = input()
-    # print(user_str)
+    user_str = " ".join(sys.argv[1:])
+
+
     if(re.fullmatch('^(\\.|O)*$', user_str) and (len(user_str) % 6 == 0)):
         # print("Potentially Braille\n")
         print("$" + braille_to_english(user_str) + "$")
