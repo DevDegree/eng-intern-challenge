@@ -13,6 +13,20 @@ braille_to_numbers = {
     "O.....": "1", "O.O...": "2", "OO....": "3", "OO.O..": "4", "O..O..": "5","OOO...": "6", "OOOO..": "7", "O.OO..": "8", ".OO...": "9", ".OOO..": "0"
 }
 
+def detect_braille_or_english(word):
+    braille = True
+
+    if(len(word)%6 != 0):
+        braille = False
+
+    for char in word:
+        if char != '.' and char != "O":
+            braille = False
+
+    if(braille == True):
+        return braille_to_english(word)
+    
+    return english_to_braille(word)
 
 def split_into_sixes(word):
     groups = []
@@ -70,6 +84,6 @@ for word in words:
         output += brailledict[" "]
     else:
         first_word = False
-    output += braille_to_english(word)
+    output += detect_braille_or_english(word)
 
 sys.stdout.write(output)
