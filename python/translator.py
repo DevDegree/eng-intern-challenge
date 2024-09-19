@@ -88,12 +88,12 @@ def eng_to_braille(eng_input_str: str) -> str:
     braille_output = ''
 
     for char in eng_input_str:
-        if char in NUMBER_BRAILLE_DICT:
+        if char in LETTER_BRAILLE_DICT:
             if char.isupper():
                 braille_output += CAPITAL_FOLLOWS_FLAG # add capital flag before capitalized letter
             braille_output += LETTER_BRAILLE_DICT.get(char.lower())
 
-        elif char in LETTER_BRAILLE_DICT:
+        elif char in NUMBER_BRAILLE_DICT:
             braille_output += NUMBER_FOLLOWS_FLAG # add number flag before numbers
             braille_output += NUMBER_BRAILLE_DICT[char]
         
