@@ -75,8 +75,37 @@ ALPHABET = {
 }
 
 def english_to_braille(str: str) -> str:
+    # State variable for checking if we're in numeric mode
+    numeric_mode = False
+
     out = ""
+    for c in str:
+        if (c.isdigit()):
+
+            # Toggle numeric mode and prepend with the "number follows"
+            if not numeric_mode:
+                numeric_mode = True
+                out += NUMBER_FOLLOWS
+
+            # Dictionary is ordered such that the "letter" entries are indexed by their numerical counterpart 
+            # j = 0, a = 1, b = 2, ..., i = 9
+            out += ALPHABET[list(ALPHABET)[int(c)]]
+            continue
+        
+        # Space should disable numeric mode
+        if(c == ' '):
+            numeric_mode = False
+
+        # Space should not trigger this -- should also prepend the capital letter with "capital follows"
+        elif(c.capitalize() == c):
+            out += CAPITAL_FOLLOWS
+            c = c.lower()
+
+        out += ALPHABET[c]
+
     return out
+    
+
 def braille_to_english(user_str: str) -> str:
     # Tokenize using list comprehension.
     # We've already asserted that len % 6 == 0 (evenly divisible by 6)
