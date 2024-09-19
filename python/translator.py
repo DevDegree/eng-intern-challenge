@@ -1,7 +1,7 @@
 import sys
 
 # Dictionary for Braille letter representations
-braille_letters = {
+text_to_braille_letters = {
     'a': 'O.....',
     'b': 'O.O...',
     'c': 'OO....',
@@ -31,7 +31,7 @@ braille_letters = {
 }
 
 # Dictionary for Braille punctuation representations
-braille_punctuation = {
+text_to_braille_punctuation = {
     ' ': '......',
     '.': '..OO.O',
     ',': '..O...',
@@ -48,7 +48,7 @@ braille_punctuation = {
 }
 
 # Dictionary for Braille number representations
-braille_numbers = {
+text_to_braille_numbers = {
     '1': 'O.....',
     '2': 'O.O...',
     '3': 'OO....',
@@ -60,6 +60,16 @@ braille_numbers = {
     '9': '.OO...',
     '0': '.OOO..',
 }
+
+# Reversed dictionary for Braille letter representations (Braille to letters)
+braille_to_text_letters = {v: k for k, v in text_to_braille_letters.items()}
+
+# Reversed dictionary for Braille punctuation representations (Braille to punctuation)
+braille_to_text_punctuation = {v: k for k, v in text_to_braille_punctuation.items()}
+
+# Reversed dictionary for Braille number representations (Braille to numbers)
+braille_to_text_numbers = {v: k for k, v in text_to_braille_numbers.items()}
+
 
 # Special Braille rules for capital, number, and decimal indicators
 braille_rules = {
@@ -89,20 +99,20 @@ def convert_text_to_braille(input_text):
             if not is_number:
                 braille_text += braille_rules['number_follows']
                 is_number = True
-            braille_text += braille_numbers[c]
+            braille_text += text_to_braille_numbers[c]
         elif c == '.':
             # Handle decimal points between digits
             if i > 0 and i < len(input_text) - 1 and input_text[i-1].isdigit() and input_text[i+1].isdigit():
                 braille_text += braille_rules['decimal_follows']
             else:
-                braille_text += braille_punctuation[c]  # Standard period punctuation
+                braille_text += text_to_braille_punctuation[c]  # Standard period punctuation
         # Handle letters
-        elif c in braille_letters:
-            braille_text += braille_letters[c]
+        elif c in text_to_braille_letters:
+            braille_text += text_to_braille_letters[c]
             is_number = False  # Exit number mode when encountering a letter
         # Handle punctuation
-        elif c in braille_punctuation:
-            braille_text += braille_punctuation[c]
+        elif c in text_to_braille_punctuation:
+            braille_text += text_to_braille_punctuation[c]
             is_number = False  # Exit number mode after punctuation
 
     return braille_text
@@ -140,26 +150,23 @@ def convert_braille_to_text(input_text):
 
         # Convert numbers if in number mode
         if is_number:
-            for k, v in braille_numbers.items():
-                if v == a_braille:
-                    text.append(k)
-                    break
+            if a_braille in braille_to_text_numbers:
+                text.append(braille_to_text_numbers[a_braille])
+            continue
+
         # Convert letters and punctuation if not in number mode
         else:
             # Convert letters
-            for k, v in braille_letters.items():
-                if v == a_braille:
-                    if is_capital:
-                        text.append(k.upper())
-                        is_capital = False
-                    else:
-                        text.append(k)
-                    break
+            if a_braille in braille_to_text_letters:
+                letter = braille_to_text_letters[a_braille]
+                if is_capital:
+                    letter = letter.upper()
+                    is_capital = False
+                text.append(letter)
             # Convert punctuation
-            for k, v in braille_punctuation.items():
-                if v == a_braille:
-                    text.append(k)
-                    break
+            elif a_braille in braille_to_text_punctuation:
+                text.append(braille_to_text_punctuation[a_braille])
+            is_number = False  # Reset number mode after letter or punctuation
 
     return ''.join(text)
 
