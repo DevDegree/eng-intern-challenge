@@ -9,7 +9,6 @@ const DECIMAL = 'DEC';
 
 const toEnglish = string => {
   let result = '';
-  let numberConvertStarted = false;
   let isCapital = false;
   let isNumber = false;
 
