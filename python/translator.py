@@ -83,13 +83,12 @@ def is_braille(input_string):
     return all(c in 'O.' for c in input_string)
 
 def main():
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2:
         print("")
         return
 
-    input_string = sys.argv[1]
+    input_string = ' '.join(sys.argv[1:])
 
-    
     if is_braille(input_string):
         print(translate_to_english(input_string))
     else:
