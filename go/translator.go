@@ -115,7 +115,7 @@ func isBraille(str string) bool {
 func main() {
 	// Check if there are arguments passed
 	if len(os.Args) < 2 {
-		fmt.Println("Usage: go run main.go <param1> <param2> ... <paramN>")
+		fmt.Println("Usage: go run translator.go <param1> <param2> ... <paramN>")
 		return
 	}
 
