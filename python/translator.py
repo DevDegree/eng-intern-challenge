@@ -1,4 +1,4 @@
-import re  # Access: regex parsing
+import re   # Access: regex parsing
 import sys  # Access: sys
 
 # High-level idea:
