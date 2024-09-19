@@ -1,3 +1,4 @@
+import re  # Access: regex parsing
 
 # High-level idea:
 # 
@@ -73,3 +74,20 @@ ALPHABET = {
     " ": "......"
 }
 
+def english_to_braille(str: str) -> str:
+    out = ""
+    return out
+def braille_to_english(user_str: str) -> str:
+    out = ""
+    return out
+
+if __name__ == "__main__":
+    # user_str = input()
+    # print(user_str)
+    if(re.fullmatch('^(\\.|O)*$', user_str) and (len(user_str) % 6 == 0)):
+        # print("Potentially Braille\n")
+        print("$" + braille_to_english(user_str) + "$")
+
+    else:
+        # print("Not Braille\n")
+        print(english_to_braille(user_str))
