@@ -66,19 +66,27 @@ def english_to_braille(english_text: str)->str :
         if char.isupper():
             braille_output += CAPITAL_PREFIX
             char = char.lower()
-        
-        if char.isdigit():
-            if not is_number_mode:
-                braille_output += NUMBER_PREFIX
-                is_number_mode = True
 
-            braille_output += NUMBER_TO_BRAILLE[char]
-        else:
+        if  char.isdigit():
+            if not is_number_mode:
+                is_number_mode = True
+                braille_output += NUMBER_PREFIX
+            braille_char = NUMBER_TO_BRAILLE.get(char)
+            if braille_char:
+                braille_output += braille_char
+            else:
+                print(f"Warning: Skipping invalid digit: {char}", file = sys.stderr)
+        elif char.isalpha() or char.isspace():
             if is_number_mode:
                 is_number_mode = False
-            braille_output  += ENG_TO_BRAILLE.get(char, '')
-        
-    return braille_output 
+            braille_char = ENG_TO_BRAILLE.get(char)
+            if braille_char:
+                braille_output += braille_char
+            else:
+                print(f"Warning: Skipping unknown character: {char}", file = sys.stderr)
+        else:
+            print(f"Warning: Skpping invalid character: {char}", file = sys.stderr)
+    return braille_output
 
 
 def braille_to_english(braille_text: str) -> str:
