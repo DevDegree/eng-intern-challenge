@@ -5,10 +5,41 @@ brailledict = {"a": "O.....","b": "O.O...","c": "OO....", "d": "OO.O..", "e": "O
 num_follows = ".O.OOO"
 capital_follows = ".....O"
 decimal_follows = ".O...O"
-englishdict = {}
+braille_to_letters = {
+    "O.....": "a", "O.O...": "b", "OO....": "c", "OO.O..": "d", "O..O..": "e", "OOO...": "f", "OOOO..": "g", "O.OO..": "h", ".OO...": "i", ".OOO..": "j","O...O.": "k", "O.O.O.": "l", "OO..O.": "m", "OO.OO.": "n", "O..OO.": "o","OOO.O.": "p", "OOOOO.": "q", "O.OOO.": "r", ".OO.O.": "s", ".OOOO.": "t","O...OO": "u", "O.O.OO": "v", ".OOO.O": "w", "OO..OO": "x", "OO.OOO": "y","O..OOO": "z", "..OO.O": ".", "..O...": ",", "..O.OO": "?", "..OOO.": "!", "..OO..": ":","O..O.O": ";", "....OO": "-", ".O..O.": "/", ".OO.O.": "<", "O..OO.": ">","O.O..O": "(", ".O.OO.": ")", "......": " "
+}
 
-def braille_to_english():
-    return "Hello world"
+braille_to_numbers = {
+    "O.....": "1", "O.O...": "2", "OO....": "3", "OO.O..": "4", "O..O..": "5","OOO...": "6", "OOOO..": "7", "O.OO..": "8", ".OO...": "9", ".OOO..": "0"
+}
+
+
+def split_into_sixes(word):
+    groups = []
+    for i in range(0, len(word), 6):
+        groups.append(word[i:i+6])
+    return groups
+
+def braille_to_english(word):
+    groups = split_into_sixes(word)
+    english = ""
+    numturn = False
+    capitalize = False
+    for braille in groups:
+        if(braille == num_follows):
+            numturn = True
+        elif(braille == capital_follows):
+            capitalize = True
+        elif(numturn == False):
+            letter = braille_to_letters[braille]
+            if(capitalize == True):
+                letter = letter.capitalize()
+                capitalize = False
+            english += letter
+        else:
+            letter = braille_to_numbers[braille]
+            english += letter 
+    return english
 
 def english_to_braille(word):
     braille = ''
@@ -36,6 +67,6 @@ for word in words:
         output += brailledict[" "]
     else:
         first_word = False
-    output += english_to_braille(word)
+    output += braille_to_english(word)
 
 sys.stdout.write(output)
