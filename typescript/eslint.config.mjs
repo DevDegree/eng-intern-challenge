@@ -13,6 +13,8 @@ export default [
   {
     rules: {
       'id-length': 'off',
+      'no-warning-comments': 'off',
+      'quote-props': 'off',
     },
   },
 ];

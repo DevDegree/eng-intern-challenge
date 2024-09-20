@@ -1,6 +1,8 @@
-import {brailleDictionary, modifyiers} from '../utils/constants';
+import {brailleDictionary, modifyiers, numbersDictionary} from '../utils/constants';
 
-export type EnglsihChar = keyof typeof brailleDictionary
+export type NumberChar = keyof typeof numbersDictionary
+
+export type EnglsihChar = keyof typeof brailleDictionary | NumberChar
 
 export type ModifyiersChar = typeof modifyiers [keyof typeof modifyiers]
 
