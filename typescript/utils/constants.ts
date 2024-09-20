@@ -41,6 +41,19 @@ export const brailleDictionary = {
 
 export const modifyiers = {
   capitalFollows: '.....O',
-  decimalFollows: '.O...O',
   numberFollows: '.O.OOO',
+} as const;
+
+export const numbersDictionary = {
+  '1': 'O.....',
+  '2': 'O.O...',
+  '3': 'OO....',
+  '4': 'OO.O..',
+  '5': 'O..O..',
+  '6': 'OOO...',
+  '7': 'OOOO..',
+  '8': 'O.OO..',
+  '9': '.OO...',
+  '0': '.OOO..',
+  '.': '.O...O',
 } as const;
