@@ -1,6 +1,6 @@
+import argparse
 
-
-braille_dict = {  
+braille_dict = {
     "a": "O.....",
     "b": "O.O...",
     "c": "OO....",
@@ -62,7 +62,7 @@ def check_braille(input_string):
 
     input_string (str): input string
     """
-    return input_string.count("O") + input_string.count(".") == len(input)
+    return input_string.count("O") + input_string.count(".") == len(input_string)
 
 
 def braille_to_english(input_string):
@@ -121,11 +121,14 @@ def english_to_braille(input_string):
         if character.isupper():
             output_string += braille_dict['uppercase']
             character = character.lower()
-        
+
         if character.isnumeric():
             if not number:
                 output_string += braille_dict['number']
                 number = True
+        elif character == " ":  # prevents an additional space being added after a number
+            if number:
+                number = False
         elif character.isalpha():
             if number:
                 output_string += braille_dict[' ']  # add space between number and next letter
@@ -135,6 +138,31 @@ def english_to_braille(input_string):
             output_string += braille_dict[character]
         else:
             raise KeyError(f"The character {character} does not exist in braille")
-        
+
     return output_string
 
+
+def main():
+    parser = argparse.ArgumentParser(description="Convert between Braille and English.")
+    parser.add_argument("text", nargs="+", help="The input text to convert (Braille or English).")
+
+    # Parse command-line arguments
+    args = parser.parse_args()
+
+    # If no argument is provided, prompt the user for input
+    if not args.text:
+        input_text = input("Please enter text to convert (Braille or English): ")
+    else:
+        input_text = " ".join(args.text)
+        
+    # Detect whether input is in Braille or English
+    if check_braille(input_text):
+        output = braille_to_english(input_text)
+        print(output)
+    else:
+        output = english_to_braille(input_text)
+        print(output)
+
+
+if __name__ == "__main__":
+    main()
