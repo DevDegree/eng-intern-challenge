@@ -47,7 +47,7 @@ function isBraille(input) {
     if (input.length % 6 !== 0) return false;
 
     // input must only contain O and .
-    return input.match(/^[O.]{$/);
+    return input.match(/^[O.]+$/);
 }
 
 // given an english letter, return its position in the english alphabet
