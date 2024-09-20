@@ -105,9 +105,9 @@ def braille_to_english(input_string):
         else:
             raise ValueError(f"The symbol {symbol} does not exist in Braille")
 
-    return output_string   
+    return output_string
 
-        
+
 def english_to_braille(input_string):
     """
     Translates English string to Braille
@@ -115,4 +115,26 @@ def english_to_braille(input_string):
     input_string (str): input string in Braille to be translated
     """
 
-    
+    output_string = ""
+    number = False
+    for character in input_string:
+        if character.isupper():
+            output_string += braille_dict['uppercase']
+            character = character.lower()
+        
+        if character.isnumeric():
+            if not number:
+                output_string += braille_dict['number']
+                number = True
+        elif character.isalpha():
+            if number:
+                output_string += braille_dict[' ']  # add space between number and next letter
+                number = False
+
+        if character in braille_dict:
+            output_string += braille_dict[character]
+        else:
+            raise KeyError(f"The character {character} does not exist in braille")
+        
+    return output_string
+
