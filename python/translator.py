@@ -156,11 +156,11 @@ def translateFromBrailleToChar(currChar, prevChar):
     return output
 
 def main():
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2:
         sys.exit(1)
-    #check if input is mod 6 = 0, if it is then check if its contains only . and O then its braille FINISH TMR
-    input = sys.argv[1]
-    translatedInput = iterateAndTranslate(input)
+    input = sys.argv[1:]
+    fullInput = " ".join(input)
+    translatedInput = iterateAndTranslate(fullInput)
     print(translatedInput)
 
 if __name__ == "__main__":
