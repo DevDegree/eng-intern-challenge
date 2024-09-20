@@ -1,6 +1,6 @@
 
 # create the hash of braille to english
-braille_hash = {
+BRAILLE_HASH = {
   "a" => 'O.....',
   "b" => 'O.O...',
   "c" => 'OO....',
@@ -29,8 +29,25 @@ braille_hash = {
   "z" => 'O..OOO',
   " " => '......',
 }
+
+# create the hash of english to braille numbers
+BRAILLE_NUMBERS_HASH = {
+  "1" => 'O.....',
+  "2" => 'O.O...',
+  "3" => 'OO....',
+  "4" => 'OO.O..',
+  "5" => 'O..O..',
+  "6" => 'OOO...',
+  "7" => 'OOOO..',
+  "8" => 'O.OO..',
+  "9" => '.OO...',
+  "0" => '.OOO..',
+}
+
+# create the hash of braille to english numbers
+ENGLISH_NUMBERS_HASH = BRAILLE_NUMBERS_HASH.invert
 # create the hash of english to braille
-english_hash = braille_hash.invert
+ENGLISH_HASH = BRAILLE_HASH.invert
 
 # Create an evaluator to determine if english or braille
 def braille_checker?(input_string)
@@ -38,15 +55,46 @@ def braille_checker?(input_string)
 end
 
 # If english, translate to braille
-def english_translator(input_string); end
-# If braille, translate to english
-def braille_translator(input_string); end
+def english_translator(input_string)
 
-# MAKE SURE TO REMEMBER to account for number follows and capital letter follows
+end
+# If braille, translate to english
+def braille_translator(input_string)
+  # MAKE SURE TO REMEMBER to account for number follows and capital letter follows
+  number_follows = false
+  capital_follows = false
+  braille_characters = input_string.scan(/.{6}/)
+
+  english_translation = braille_characters.map do |braille_character|
+    if braille_character == ".....O"
+      capital_follows = braille_character == ".....O"
+      next
+    end
+
+    if braille_character == ".O.OOO"
+      number_follows = true
+      next
+    end
+
+    number_follows = false if braille_character == "......"
+
+    if capital_follows
+      capital_follows = false
+      BRAILLE_HASH.key(braille_character).upcase
+    elsif number_follows
+      BRAILLE_NUMBERS_HASH.key(braille_character)
+    else
+      BRAILLE_HASH.key(braille_character)
+    end
+  end
+
+  english_translation.join
+end
+
 
 # Program must work at runtime
 def run(input_string)
-  braille_checker?(input_string) ? braille_translator(input_string) : english_translator(input_string)
+  puts braille_checker?(input_string) ? braille_translator(input_string) : english_translator(input_string)
 end
 
 run(ARGV.join(" "))
