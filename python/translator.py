@@ -35,7 +35,7 @@ ENG_TO_BR= {
 BR_TO_ENG = {v: k for k, v in ENG_TO_BR.items()}
 
 def translate_br_to_eng(braille) -> str:
-    res = ""
+    english = ""
 
     capitalized = False
     number = False
@@ -50,43 +50,35 @@ def translate_br_to_eng(braille) -> str:
             number = True
         else:
             if capitalized:
-                res += curr_char.upper()
+                english += curr_char.upper()
                 capitalized = False
             elif not capitalized and not number:
-                res += curr_char
+                english += curr_char
             elif number and curr_char != " ":
-                res += str(ord(curr_char) - ord("a") + 1)
+                english += str(ord(curr_char) - ord("a") + 1)
             elif number and curr_char == " ":
-                res += " "
+                english += " "
                 number = False
 
-    return res
+    return english
 
 def translate_en_to_br(english) -> str:
-    res = ""
+    braille = ""
     number = False
     for n in english:
         if n.isupper():
-            res += ENG_TO_BR["cap"]
+            braille += ENG_TO_BR["cap"]
             n = n.lower()
         if n.isdigit():
             if not number:
-                res += ENG_TO_BR["num"]
+                braille += ENG_TO_BR["num"]
                 number = True
             n = chr(ord("a") + int(n) - 1)
         if number and n == " ":
             number = False
-        res += ENG_TO_BR[n]
+        braille += ENG_TO_BR[n]
 
-    return res
-
-
-def main():
-    while True:
-        user_input = input("")
-        isBraile = True
-
-        
+    return braille
 
 def main():
     if len(sys.argv) < 2:
@@ -106,15 +98,15 @@ def main():
             isBraile = False
             break
 
-    res = ""
+    conversion = ""
 
     # Execute appropriate translation
     if isBraile:
-        res = translate_br_to_eng(user_input)
+        conversion = translate_br_to_eng(user_input)
     else:
-        res = translate_en_to_br(user_input)
+        conversion = translate_en_to_br(user_input)
 
-    print(res)
+    print(conversion)
 
 if __name__ == "__main__":
     main()
