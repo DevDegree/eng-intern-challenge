@@ -62,11 +62,11 @@ def braille(str)
             end
 
             if (val > 32)
-                if (!numericS)
+                 if (!numericS)
                     if (capital && val >= 97)
                         outstr += (val - 32).chr
                         capital = false
-                    elsif (!capital && val >= 97)
+                    else
                         outstr += val.chr
                     end
                 else
@@ -102,8 +102,9 @@ def braille(str)
             if (capital && val >= 97)
                 outstr += (val - 32).chr
                 capital = false
-            elsif (!capital && val >= 97)
+            else
                 outstr += val.chr
+                
             end
         else
             val2 = $braille_table_num[checkstr]
@@ -132,7 +133,7 @@ def eng_to_braille(str)
         lowercase = (i <= 122 && i>=97)
         numeric = (i <= 57 && i >= 48)
         dec_fols = (i == 46 && numericS)
-        
+
         if (i >= base_ch && i <= end_ch && !numeric && !dec_fols)
             outr += $braille_sym[i-base_ch]
 
@@ -156,6 +157,7 @@ def eng_to_braille(str)
                 end
             elsif (dec_fols)
                 outr += $braille_wildcards[1]
+                numeric = true
             elsif (lowercase)
                 if (numericS)
                     outr += $braille_sym[0]
