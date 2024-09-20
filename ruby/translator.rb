@@ -52,7 +52,7 @@ def braille(str)
         else
 
             val = $braille_table_splet[checkstr]
-
+            #puts val
             if (val == 0)
                 capital = true
             elsif (val == 1)
@@ -73,7 +73,6 @@ def braille(str)
                     val2 = $braille_table_num[checkstr]
                     outstr += val2.chr
                 end
-
             else
                 if (!numericS)
                     outstr += val.chr
@@ -89,7 +88,7 @@ def braille(str)
     # Extract the last block
 
     val = $braille_table_splet[checkstr]
-
+    #puts val
     if (val == 0)
         capital = true
     elsif (val == 1)
@@ -111,7 +110,7 @@ def braille(str)
             outstr += val2.chr
         end
     else
-        if (!numericS)
+        if (!numericS) 
             outstr += val.chr
         else
         end
@@ -137,7 +136,7 @@ def eng_to_braille(str)
         if (i >= base_ch && i <= end_ch && !numeric && !dec_fols)
             outr += $braille_sym[i-base_ch]
 
-            if (i == 32)
+            if (i == 32 && numericS)
                 outr += $braille_sym[0]
                 numericS = false
             end
