@@ -1,98 +1,119 @@
-// Braille mappings based on the standard representation
-const ENGLISH_TO_BRAILLE = {
+// Braille mappings: English to Braille
+const brailleMapping = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
     'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..',
     'k': 'O...O.', 'l': 'O.O.O.', 'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.',
     'p': 'OOO.O.', 'q': 'OOOOO.', 'r': 'O.OOO.', 's': '.OO.O.', 't': '.OOOO.',
     'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO', 'z': 'O..OOO',
-    '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
-    '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..',
-    ' ': '......'
+    ' ': '......',
+    'capital': '.....O',
+    'number': '.O.OOO'
 };
 
-// Reverse mapping Braille to English
-const BRAILLE_TO_ENGLISH = Object.entries(ENGLISH_TO_BRAILLE).reduce((acc, [letter, braille]) => {
-    acc[braille] = letter;
-    return acc;
-}, {});
+// Numbers 1-9 and 0 are represented by letters "a" to "j"
+const numberMapping = {
+    '1': 'a', '2': 'b', '3': 'c', '4': 'd', '5': 'e',
+    '6': 'f', '7': 'g', '8': 'h', '9': 'i', '0': 'j'
+};
 
-// Add the capital letter and number symbols to the mapping
-const CAPITAL_SYMBOL = '.....O'; // Capital letter indicator
-const NUMBER_SYMBOL = '.O.O..'; // Number indicator
+// Reverse mappings for Braille to English conversion
+const brailleToEnglish = {};
+const numberToEnglish = {};
 
-// Function to detect if input is Braille or English
-function isBraille(input) {
-    return input.includes('O') || input.includes('.');
-}
+Object.keys(brailleMapping).forEach(key => {
+    brailleToEnglish[brailleMapping[key]] = key;
+});
+Object.keys(numberMapping).forEach(num => {
+    numberToEnglish[numberMapping[num]] = num;
+});
 
-// Function to translate English to Braille
-function englishToBraille(input) {
-    let braille = '';
-    for (let char of input) {
-        if (char >= 'A' && char <= 'Z') {
-            braille += CAPITAL_SYMBOL + ENGLISH_TO_BRAILLE[char.toLowerCase()];
-        } else if (char >= '0' && char <= '9') {
-            braille += NUMBER_SYMBOL + ENGLISH_TO_BRAILLE[char];
-        } else {
-            braille += ENGLISH_TO_BRAILLE[char] || '......'; // Handle spaces and undefined characters
+// Convert English text to Braille
+const convertEnglishToBraille = (input) => {
+    let result = "";
+    let inNumberMode = false;
+
+    for (const char of input) {
+        let brailleChar = "";
+
+        // Handle spaces separately
+        if (char === ' ') {
+            result += brailleMapping[' '];
+            inNumberMode = false;
+            continue;
         }
-    }
-    return braille;
-}
 
-// Function to translate Braille to English
-function brailleToEnglish(input) {
-    let english = '';
+        // Handle numbers with a number indicator
+        if (!isNaN(char)) {
+            if (!inNumberMode) {
+                result += brailleMapping['number'];
+                inNumberMode = true;
+            }
+            brailleChar = brailleMapping[numberMapping[char]];
+        } else {
+            // Handle capital letters with a capitalization marker
+            if (char === char.toUpperCase()) {
+                result += brailleMapping['capital'];
+                brailleChar = brailleMapping[char.toLowerCase()];
+            } else {
+                brailleChar = brailleMapping[char];
+            }
+            inNumberMode = false; // Reset number mode for non-numeric characters
+        }
+
+        result += brailleChar;
+    }
+
+    return result;
+};
+
+// Convert Braille text to English
+const convertBrailleToEnglish = (input) => {
+    let result = "";
     let isCapital = false;
     let isNumber = false;
 
-    // Split input by chunks of 6 (representing Braille characters)
     for (let i = 0; i < input.length; i += 6) {
-        let brailleChar = input.substring(i, i + 6);
-        
-        // Debugging: Output the current Braille character being processed
-        console.log(`Processing Braille: ${brailleChar}`);
-        
-        if (brailleChar === CAPITAL_SYMBOL) {
+        const brailleSegment = input.slice(i, i + 6);
+
+        // Handle capitalization and number markers
+        if (brailleSegment === brailleMapping['capital']) {
             isCapital = true;
             continue;
         }
-        if (brailleChar === NUMBER_SYMBOL) {
+        if (brailleSegment === brailleMapping['number']) {
             isNumber = true;
             continue;
         }
-        
-        // Check if brailleChar exists in BRAILLE_TO_ENGLISH
-        let letter = BRAILLE_TO_ENGLISH[brailleChar] || '?'; // Use '?' for unknown Braille sequences
 
-        // Debugging: Output the letter determined for the current Braille character
-        console.log(`Mapped to English letter: ${letter}`);
-        
+        // Handle spaces
+        if (brailleSegment === brailleMapping[' ']) {
+            result += ' ';
+            continue;
+        }
+
+        // Translate based on number mode or normal letters
+        let char = brailleToEnglish[brailleSegment];
         if (isNumber) {
-            letter = BRAILLE_TO_ENGLISH[brailleChar] || '?';
-            isNumber = false; // Reset after number is handled
+            char = numberToEnglish[char] || '?'; // Fallback in case of invalid Braille
+            isNumber = false;
+        } else if (isCapital) {
+            char = char.toUpperCase();
+            isCapital = false;
         }
-        
-        if (isCapital) {
-            letter = letter.toUpperCase();
-            isCapital = false; // Reset after capital letter is handled
-        }
-        
-        english += letter;
+
+        result += char;
     }
-    return english;
-}
+
+    return result;
+};
+
+// Determine if input is Braille
+const detectBraille = (input) => /^[O.]+$/.test(input);
 
 // Main translation function
-function translate(input) {
-    return isBraille(input) ? brailleToEnglish(input) : englishToBraille(input);
-}
+const translate = (input) => detectBraille(input) ? convertBrailleToEnglish(input) : convertEnglishToBraille(input);
 
-// Capture input from command line
-const input = process.argv[2]; // The string passed in from the command line
-if (input) {
-    const output = translate(input);
-    console.log(output);
-} else {
-    console.log('Please provide a string to translate.');
-}
+// Get input from command-line arguments
+const userInput = process.argv.slice(2).join(' ');
+const translation = translate(userInput);
+console.log(translation);
