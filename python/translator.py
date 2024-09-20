@@ -23,7 +23,11 @@ class Braille_Translator():
 
 
     def is_braille(self, input: str) -> bool:
-        pass
+        """
+        A Braille character is a sequence of only characters 'O' and '.', a set is used to find unique characters.
+        """
+        return set(input) == set(['O', '.'])
+
 
 
     def eng_to_braille(self, english: str) -> str:
