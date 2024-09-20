@@ -185,8 +185,13 @@ if (user_argvs.length == 1)
      populate_table()
      puts braille(user_valid)
   else
-     puts eng_to_braille(user_valid)
     end
   
 else
+    outs = ""
+    user_argvs.each do |ind|
+        outs += eng_to_braille(ind) + $braille_sym[0]
+    end
+
+    puts outs
   end
