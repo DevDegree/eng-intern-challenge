@@ -1,3 +1,5 @@
+import sys
+
 ENG_TO_BR= {
     "a": "O.....",
     "b": "O.O...",
@@ -32,7 +34,7 @@ ENG_TO_BR= {
 
 BR_TO_ENG = {v: k for k, v in ENG_TO_BR.items()}
 
-def translate_br_to_eng(braille):
+def translate_br_to_eng(braille) -> str:
     res = ""
 
     capitalized = False
@@ -58,9 +60,9 @@ def translate_br_to_eng(braille):
                 res += " "
                 number = False
 
-    print(res)
+    return res
 
-def translate_en_to_br(english):
+def translate_en_to_br(english) -> str:
     res = ""
     number = False
     for n in english:
@@ -76,11 +78,23 @@ def translate_en_to_br(english):
             number = False
         res += ENG_TO_BR[n]
 
-    print(res)
+    return res
 
 
 def main():
-    user_input = input("")
+    while True:
+        user_input = input("")
+        isBraile = True
+
+        
+
+def main():
+    if len(sys.argv) < 2:
+        sys.exit(1)
+
+    args = sys.argv[1:]
+    user_input = " ".join(args)
+
     isBraile = True
 
     # Determine if the input is in Braille or English
@@ -92,11 +106,15 @@ def main():
             isBraile = False
             break
 
+    res = ""
+
     # Execute appropriate translation
     if isBraile:
-        translate_br_to_eng(user_input)
+        res = translate_br_to_eng(user_input)
     else:
-        translate_en_to_br(user_input)
+        res = translate_en_to_br(user_input)
+
+    print(res)
 
 if __name__ == "__main__":
     main()
