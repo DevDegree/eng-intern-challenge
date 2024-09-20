@@ -6,6 +6,7 @@ is_braille = True
 
 output = []
 
+#hashmap for alphabets to braille
 alphabets = {
     "a": "O.....",
     "b": "O.O...",
@@ -36,7 +37,7 @@ alphabets = {
     " ": "......"
 }
 
-
+#hashmap for numbers to braille
 numbers = {
     "1": "O.....",
     "2": "O.O...",
@@ -49,22 +50,28 @@ numbers = {
     "9": ".OO...",
     "0": ".OOO.."
 }
-
+#hashmap for braille to alphabets
 reverse_alphabets = {}
+#hashmap for braille to numbers
 reverse_numbers = {}
 
+#creating the hashmaps by reversing the original
 for key, val in alphabets.items():
     reverse_alphabets[val] = key
 
 for key, val in numbers.items():
     reverse_numbers[val] = key
 
+#set flags
 isCapital = False
 isNumber = False
 
+#special char
 capital_follows = ".....O"
 number_follows = ".O.OOO"
 
+
+#determine direction of translation
 if (len(text) % 6) != 0:
     is_braille = False
 else:
@@ -73,6 +80,7 @@ else:
             is_braille = False
             break
 
+#braille to english
 if is_braille:
     for i in range(0,len(text),6):
         curr = text[i:i+6]
@@ -91,6 +99,8 @@ if is_braille:
             else:
                 output.append(reverse_alphabets[curr])
 
+
+#english to braille
 isNumber = False
 if not is_braille:
     for char in text:
@@ -107,4 +117,6 @@ if not is_braille:
         else:
             output.append(alphabets[char])
 
+
+#turn output list into string (required format) and print
 print("".join(output))
