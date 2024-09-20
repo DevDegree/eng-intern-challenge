@@ -34,7 +34,8 @@ def translate_braille_to_english(braille_input) -> str:
     translated_text = ""
     capitalize_next = False
     treat_as_number = False
-
+    
+    # translate each braille symbol (set of 6 characters) in the input
     for i in range(0, len(braille_input), 6):
         current_braille = braille_input[i:i+6]
         if current_braille == letters_to_braille['capital_follows']:
@@ -67,8 +68,9 @@ def translate_english_to_braille(english_input) -> str:
     translated_braille = ""
     is_previous_number = False
     
+    # translate each character in the input to braille
     for char in english_input:
-        if char.isupper():
+        if char.isupper(): 
             is_previous_number = False
             translated_braille += letters_to_braille['capital_follows']
             translated_braille += letters_to_braille[char.lower()]
@@ -85,11 +87,14 @@ def translate_english_to_braille(english_input) -> str:
 def main():
     if len(sys.argv) < 2:
         sys.exit(1)
-        
+    
+    # get input from command line arguments
     input_args = sys.argv[1:]
     input_str = " ".join(input_args)
+    
     result = " "
     
+    # check if input is braille or english and translate
     if all(char in ['O', '.'] for char in input_str) and (len(input_str) % 6 == 0):
         res = translate_braille_to_english(input_str)
     else:
