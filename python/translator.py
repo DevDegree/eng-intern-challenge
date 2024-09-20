@@ -1,7 +1,7 @@
 import string
 import sys
 
-phrase = sys.argv[1]
+phrase = " ".join(sys.argv[1:])
 
 def translator(phrase):
     mode = ""
