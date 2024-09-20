@@ -34,7 +34,7 @@ BRAILLE_TO_ENG = {
     '......': ' '
 }
 
-# Braille uses a-j to map numbers 1-0
+# Map numbers 1-0 with a - j
 NUMBER_TO_BRAILLE = {
     '1': 'O.....',  
     '2': 'O.O...', 
@@ -141,7 +141,7 @@ if __name__ == '__main__':
     else:
         result = english_to_braille(input_string)
     
-    print(result, end ='')
+    print(result)
 
 
     
