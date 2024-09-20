@@ -10,4 +10,9 @@ export default [
   pluginJs.configs.recommended,
   ...shopifyEslintPlugin.configs.es5,
   ...tseslint.configs.recommended,
+  {
+    rules: {
+      'id-length': 'off',
+    },
+  },
 ];
