@@ -1,4 +1,6 @@
-import yaml, string
+# Evan Smedley - Shopify Engineering Intern Challenge
+
+import yaml, string, sys
 
 class Braille_Translator():
 
@@ -133,3 +135,13 @@ class Braille_Translator():
         Detect if Braille or English is inputted and translate accordingly.
         """
         return self.braille_to_eng(input) if self.is_braille(input) else self.eng_to_braille(input)
+    
+    
+
+if __name__ == "__main__":
+    braille_translator = Braille_Translator()
+    
+    # Translate contents of command line argument
+    translated_input = braille_translator.translate(sys.argv[1])
+    
+    print(translated_input)
