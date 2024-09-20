@@ -72,11 +72,11 @@ def xFollowsChecker(char, isBraille):
 def translateFromCharToBraille(currChar, prevChar):
     output = ''
     isBraille = 0
-    if(prevChar == '' or prevChar == ' '):
+    if(prevChar == '' or prevChar == ' ' or currChar.isupper()):
         checkedChar = xFollowsChecker(currChar, isBraille)
         output += checkedChar + alphabetAndSymbols[currChar.lower()]
     else:
-        output += alphabetAndSymbols[currChar]
+        output += alphabetAndSymbols[currChar.lower()]
 
     return output
 
@@ -160,6 +160,7 @@ def main():
         sys.exit(1)
     input = sys.argv[1:]
     fullInput = " ".join(input)
+    #print(fullInput)
     translatedInput = iterateAndTranslate(fullInput)
     print(translatedInput)
 
