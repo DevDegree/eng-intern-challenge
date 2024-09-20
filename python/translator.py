@@ -62,18 +62,18 @@ numbers_inverted = {value: key for key, value in numbers.items()}
 
 # Dictionary of symbols mapped to their braille equivalent.
 symbols = {
-    ".": ".O.OOO",
-    ",": ".O....",
-    "?": ".O..OO",
-    "!": ".O.OO.",
-    ":": ".OO...",
-    ";": ".OO...",
-    "-": "..O..O",
-    "/": "..O.O.",
-    "<": "..O..O",
-    ">": "..OO..",
-    "(": ".OO.O.",
-    ")": ".OOO.O"
+    ".": "..OO.O",
+    ",": "..O...",
+    "?": "..O.OO",
+    "!": "..OOO.",
+    ":": "..OO..",
+    ";": "..O.O.",
+    "-": "....OO",
+    "/": ".O..O.",
+    "<": ".OO..O",
+    ">": "O..OO.",
+    "(": "O.O..O",
+    ")": ".O.OO."
 }
 
 # Inverted symbols dictionary with braille as keys
@@ -117,10 +117,16 @@ def braille_to_english(braille: str) -> str:
             # Increment the index to skip the letter on the next iteration.
             index = index + 1
         elif c in braille_number_prefix:  # add number
-            # Get the number from the next character over, as this is the prefix.
-            english += numbers_inverted[braille_list[index + 1]]
-            # Increment the index to skip the number on the next iteration.
+            # Assume all following characters are numbers until we hit a space.
             index = index + 1
+            while index < len(braille_list):
+                if braille_list[index] != braille_space:
+                    english += numbers_inverted[braille_list[index]]
+                    index = index + 1
+                else:
+                    english += " "
+                    break
+
         elif c in symbols_inverted.keys():
             english += symbols_inverted[c]
         elif c == braille_space:
@@ -147,11 +153,22 @@ def english_to_braille(english: str) -> str:
 
     # Looping through all characters of the string passed in
     # and translate accordingly.
-    for c in english:
+    index = 0
+    while index < len(english):
+        c = english[index]  # current character
         if c.isupper():  # add upper prefix + translated value
-            braille += braille_capital_prefix + alphabet[c]
+            braille += braille_capital_prefix + alphabet[c.lower()]
         elif c in numbers.keys():  # add number prefix + translated value
+            # add current number, then assume the rest are all numbers until we hit a space.
             braille += braille_number_prefix + numbers[c]
+            index = index + 1
+            while index < len(english):
+                if english[index] != " ":
+                    braille += numbers[english[index]]
+                    index = index + 1
+                else:
+                    braille += braille_space
+                    break
         elif c in symbols.keys():
             braille += symbols[c]
         elif c == " ":
@@ -159,6 +176,8 @@ def english_to_braille(english: str) -> str:
         else:
             # must be a regular lowercase letter
             braille += alphabet[c]
+
+        index = index + 1
 
     # Return the built braille string.
     return braille
