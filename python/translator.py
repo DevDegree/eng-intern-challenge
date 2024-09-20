@@ -124,3 +124,4 @@ def englishtToBraille(phrase):
             translated_english += reversedSymbols.get(phrase[i], " ")
             i += 1
     return translated_english
+print(translator(phrase))
