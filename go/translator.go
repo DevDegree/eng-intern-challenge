@@ -169,7 +169,7 @@ func englishToBraille(char string) string {
 		brailleSet.WriteString("O.OO..")
 	case "9", "i", "I":
 		brailleSet.WriteString(".OO...")
-	case "10", "j", "J":
+	case "0", "j", "J":
 		brailleSet.WriteString(".OOO..")
 	case "k", "K":
 		brailleSet.WriteString("O...O.")
