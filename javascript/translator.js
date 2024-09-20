@@ -207,6 +207,6 @@ function translate(text) {
 };
 
 // retrieves input from command-line arguments --> this was a learning curve! So cool!
-const inputText = process.argv[2]; // retrieves command-line argument from input
+const inputText = process.argv.slice(2).join(" "); // retrieves command-line argument from input
 const outputText = translate(inputText); // passes command-line argument into main translate function
 console.log(outputText); // logs result
