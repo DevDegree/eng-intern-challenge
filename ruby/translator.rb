@@ -189,8 +189,15 @@ if (user_argvs.length == 1)
   
 else
     outs = ""
+    inx = 0
     user_argvs.each do |ind|
-        outs += eng_to_braille(ind) + $braille_sym[0]
+        outs += eng_to_braille(ind)
+
+        if (inx + 1 < user_argvs.length)
+            $braille_sym[0]
+        else
+        end
+        inx += 1
     end
 
     puts outs
