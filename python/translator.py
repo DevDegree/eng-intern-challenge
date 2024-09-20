@@ -4,6 +4,9 @@
 # This file contains the functions to translate english to braille and braille to english
 # The technical requirements can be found here: https://github.com/michael-han-dev/Shopify-eng-intern-challenge/tree/main
 # Test case file called "MH_test_translator.py" can be found in the same directory as this file
+#
+#
+# translator.test.py was not working but manually inputting the test cases into the terminal worked
 
 import sys
 
