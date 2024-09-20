@@ -56,8 +56,35 @@ end
 
 # If english, translate to braille
 def english_translator(input_string)
+  number_follows = false
+  capital_follows = false
 
+  braille_translation = input_string.chars.map do |character|
+
+    number_follows = false if character == " "
+
+    if character == character.upcase && character.match(/[a-zA-Z]/)
+      capital_follows = true
+      character = character.downcase
+    end
+
+    if character.match(/\d/) && !number_follows
+      number_follows = true
+      ".O.OOO#{BRAILLE_NUMBERS_HASH[character]}"
+    elsif character.match(/\d/) && number_follows
+      BRAILLE_NUMBERS_HASH[character]
+    elsif capital_follows
+      capital_follows = false
+      ".....O#{BRAILLE_HASH[character]}"
+    else
+      BRAILLE_HASH[character]
+    end
+  end
+
+  braille_translation.join
 end
+
+
 # If braille, translate to english
 def braille_translator(input_string)
   # MAKE SURE TO REMEMBER to account for number follows and capital letter follows
@@ -67,7 +94,7 @@ def braille_translator(input_string)
 
   english_translation = braille_characters.map do |braille_character|
     if braille_character == ".....O"
-      capital_follows = braille_character == ".....O"
+      capital_follows = true
       next
     end
 
