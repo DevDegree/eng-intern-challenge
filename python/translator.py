@@ -16,19 +16,7 @@ englishToBrailleNumbers = {v: k for k, v in brailleToEnglishNumbers.items()}
 englishToBrailleInstructions = {v: k for k, v in brailleToEnglishInstructions.items()}
 
 brailleSymbols = ["O", "."]
-letterValues = list(brailleToEnglishLetters.values())
 instructionKeys = list(brailleToEnglishInstructions.keys())
-text = input()
-
-
-def brailleChecker(inputString):
-    for char in inputString:
-        if char not in brailleSymbols:
-            return False
-    return True
-
-
-brailleChecker(text)
 
 
 def brailleToEnglish(text):
@@ -55,9 +43,33 @@ def brailleToEnglish(text):
                 newString += brailleToEnglishNumbers[current]
             else:
                 newString += brailleToEnglishLetters[current]
-    return newString
+    print(newString)
 
 
-print(brailleToEnglish(text))
-# checkString = ""
-# translatedText = ""
+def englishToBraille(text):
+    newString = ""
+    firstNumber = True
+    for i in range(len(text)):
+        current = text[i]
+        if current.isupper():
+            newString += englishToBrailleInstructions["Capital"]
+        if current in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+            if firstNumber:
+                newString += englishToBrailleInstructions["Number"]
+                firstNumber = False
+            newString += englishToBrailleNumbers[current]
+        else:
+            firstNumber = True
+            newString += englishToBrailleLetters[current.lower()]
+    print(newString)
+
+def brailleChecker(inputString):
+    for char in inputString:
+        if char not in brailleSymbols:
+            return englishToBraille(text)
+    return brailleToEnglish(text)
+
+
+text = input()
+brailleChecker(text)
+
