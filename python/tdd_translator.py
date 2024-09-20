@@ -4,6 +4,7 @@ import unittest
 
 from translator import Braille_Translator
 
+
 class BrailleTest(unittest.TestCase):
 
     def test_is_braille(self):
