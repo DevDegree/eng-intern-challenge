@@ -10,7 +10,22 @@ class BrailleTest(unittest.TestCase):
         """
         braille = Braille_Translator()
 
-        self.fail()
+        test_cases = [
+            (".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..", True),
+            ("Hello world", False),
+            ("42", False),
+            (".....OO.....O.O...OO...........O.OOOO.....O.O...OO....", True),
+            ("OOOOOOOOOO", False),
+            ("OOOOOO", False)
+        ]
+
+        for input, expected in test_cases:
+            with self.subTest(input=input, expected=expected):
+                # When
+                actual = braille.is_braille(input)
+
+                # Then
+                self.assertEqual(actual, expected)
 
 
 
@@ -20,7 +35,18 @@ class BrailleTest(unittest.TestCase):
         """
         braille = Braille_Translator()
 
-        self.fail()
+        test_cases = [
+            ("Hello world", ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."),
+            ("42", ".O.OOOOO.O..O.O...")
+        ]
+
+        for input, expected in test_cases:
+            with self.subTest(input=input, expected=expected):
+                # When
+                actual = braille.eng_to_braille(input)
+
+                # Then
+                self.assertEqual(actual, expected)
 
     
 
@@ -30,7 +56,19 @@ class BrailleTest(unittest.TestCase):
         """
         braille = Braille_Translator()
 
-        self.fail()
+        test_cases = [
+            (".....OO.....O.O...OO...........O.OOOO.....O.O...OO....", "Abc 123"),
+            (".O.OOOOO.O..O.O...", "42"),
+            (".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..", "Hello world")
+        ]
+
+        for input, expected in test_cases:
+            with self.subTest(input=input, expected=expected):
+                # When
+                actual = braille.braille_to_eng(input)
+
+                # Then
+                self.assertEqual(actual, expected)
 
 
     
@@ -40,7 +78,20 @@ class BrailleTest(unittest.TestCase):
         """
         braille = Braille_Translator()
 
-        self.fail()
+        test_cases = [
+            (".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..", "Hello world"),
+            ("Hello world", ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."),
+            ("42", ".O.OOOOO.O..O.O..."),
+            (".O.OOOOO.O..O.O...", "42")
+        ]
+
+        for input, expected in test_cases:
+            with self.subTest(input=input, expected=expected):
+                # When
+                actual = braille.translate(input)
+
+                # Then
+                self.assertEqual(actual, expected)
 
 
 
