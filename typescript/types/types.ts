@@ -8,4 +8,5 @@ export type ModifyiersChar = typeof modifyiers [keyof typeof modifyiers]
 
 export type BrailleChar =
 | typeof brailleDictionary [keyof typeof brailleDictionary]
+| typeof numbersDictionary [keyof typeof numbersDictionary]
 | ModifyiersChar
