@@ -124,7 +124,7 @@ const translateEnglishToBraille = (text) => {
             translatedText += englishAlphabet[" "];
             isNumber = false;
             continue;
-        }
+        };
 
         // checks if a character is a number
         if (!isNaN(englishChar) && englishChar !== " ") {
@@ -160,20 +160,20 @@ const translateBrailleToEnglish = (text) => {
         if (brailleChar === englishAlphabet["number"]) {
             isNumber = true;
             continue;
-        }
+        };
 
         // checks for capitalization marker
         if (brailleChar === englishAlphabet["capital"]) {
             isCapital = true;
             continue;
-        }
+        };
 
         // checks for space
         if (brailleChar === englishAlphabet[" "]) {
             translatedText += " ";
             isNumber = false;
             continue;
-        }
+        };
 
         if (isNumber) {
             if (englishChar in reversedNumbers) {
@@ -185,9 +185,9 @@ const translateBrailleToEnglish = (text) => {
                 isCapital = false;
             } else {
                 translatedText += englishChar;
-            }
-        }
-    }
+            };
+        };
+    };
     return translatedText;
 };
 
@@ -207,6 +207,6 @@ function translate(text) {
 };
 
 // retrieves input from command-line arguments --> this was a learning curve! So cool!
-const inputText = process.argv[2];
-const outputText = translate(inputText);
-console.log("The translation is:", outputText);
+const inputText = process.argv[2]; // retrieves command-line argument from iput
+const outputText = translate(inputText); // passes command-line argument into main translate function
+console.log("The translation is:", outputText); // logs result
