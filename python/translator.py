@@ -69,7 +69,6 @@ def brailleChecker(inputString):
             return englishToBraille(text)
     return brailleToEnglish(text)
 
-
 text = input()
 brailleChecker(text)
 
