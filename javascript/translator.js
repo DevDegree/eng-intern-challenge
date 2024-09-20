@@ -2,12 +2,12 @@
 
 /* 
 1. Create a translator that will translate Braille to English or vice-versa
-translator will determine which direction to translate depending on the argument passed
-    - E.g., if the argument is Braille, it will return the English equivalent
+    - Translator will determine which direction to translate depending on the argument passed
+        - E.g., if the argument is Braille, it will return the English equivalent
 
 2. Input: Braille, output: English OR input: English, output: Braille
 
-3. Each Braille character is stored as a serioes of 'O" (letter) or "."
+3. Each Braille character is stored as a series of 'O" (letter) or "."
     - 0 = raised dot
 
 4. Braille alphabet will include:
@@ -18,24 +18,24 @@ translator will determine which direction to translate depending on the argument
 
 5. Keywords:
     - Terminal/command line (CL) application
-    - Translate/convert to appropriate opposite
+    - Translate/convert to the appropriate opposite
     - Argument = string to be translated
         - Therefore this terminal/CL application will have one parameter, string?
 
 6. Notes:
     - Braille is read from left to right
-    - Braille letters A to J are used to indentify numbers in Braille
+    - Braille letters A to J are used to identify numbers in Braille
 
 Steps:
     - Create a dictionary where each character corresponds with its letter equivalent
         - Include marker for capitalization and for numbers
         - Remember Braille numbers have the same raised dots as the first 10 Braille letters
-    - Create dyamic object to reverse map alphabet and numbers
+    - Create dynamic object to reverse map alphabet and numbers
     - Function A will translate English to Braille by:
         - Taking a string (in English) as an argument
         - Checking if a character in the string is capitalized, a number, or has a space
             - If capitalized, a number, or has a space: append marker then append associated character
-                - Note: If capitalized, make sure to return it to lower case before appending
+                - Note: If capitalized, make sure to return it to lowercase before appending
                         since Braille by default is lower case. Marker will indicate if the character
                         immediately following it is capitalized
         - Appending regular (lowercase) characters
@@ -50,7 +50,7 @@ Steps:
             - If present, append space
         - Append characters based on checks
     - Function C will determine if string input is Braille or not
-    = Function D will determine which translator to use based on Function C output
+    = Function D will determine which translator to use based on the output of Function C
 */
 
 const englishAlphabet = {
@@ -98,7 +98,7 @@ const numbers = {
     "0": "j"
 };
 
-// initialize empty objects
+// initializes empty objects
 const reversedCharacters = {};
 const reversedNumbers = {};
 
@@ -136,7 +136,7 @@ const translateEnglishToBraille = (text) => {
         } else {
             // checks if a character is capitalized
             if (englishChar === englishChar.toUpperCase()) {
-                translatedText += englishAlphabet["capital"]; // adds capital letter marker
+                translatedText += englishAlphabet["capital"]; // adds capitalization marker
                 englishChar = englishChar.toLowerCase();
             };
             brailleChar = englishAlphabet[englishChar];
@@ -156,7 +156,7 @@ const translateBrailleToEnglish = (text) => {
         let brailleChar = text.slice(i, i + 6); // extracts Braille characters (6)
         let englishChar = reversedCharacters[brailleChar];
 
-        // check for number marker
+        // checks for number marker
         if (brailleChar === englishAlphabet["number"]) {
             isNumber = true;
             continue;
@@ -197,7 +197,7 @@ const isBraille = (text) => {
     return brailleCheck.test(text);
 };
 
-// main translate function - the Braille check will determine which 
+// main translate function - the Braille check will determine which function to run
 function translate(text) {
     if (isBraille(text)) {
         return translateBrailleToEnglish(text);
@@ -207,6 +207,6 @@ function translate(text) {
 };
 
 // retrieves input from command-line arguments --> this was a learning curve! So cool!
-const inputText = process.argv[2]; // retrieves command-line argument from iput
+const inputText = process.argv[2]; // retrieves command-line argument from input
 const outputText = translate(inputText); // passes command-line argument into main translate function
 console.log("The translation is:", outputText); // logs result
