@@ -62,5 +62,11 @@ class TestTranslatorCustom(unittest.TestCase):
         expected_output = "Abc 123"
         self.assertEqual(result.stdout.strip(), expected_output)
 
+    def test_blank_string(self):
+        command = ["python3", "translator.py", ""]
+        result = subprocess.run(command, capture_output=True, text=True)
+        expected_output = ""
+        self.assertEqual(result.stdout.strip(), expected_output)
+
 if __name__ == '__main__':
     unittest.main()

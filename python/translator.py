@@ -14,7 +14,9 @@ def translator(input) -> str:
     is_braille = "([O.]{6})+"
     is_english_or_num = "[a-z]*[0-9]*[.|,|?|!|:|;|\-|\/|<|>|(|)|]*"
 
-    if re.search(is_braille, input):
+    if input == "":
+        return ""
+    elif re.search(is_braille, input):
         # translate from values to keys in dictionary
         return braille_to_english(input)
     elif re.search(is_english_or_num, input):
