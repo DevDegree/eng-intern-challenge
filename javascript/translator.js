@@ -43,7 +43,11 @@ function translate(input) {
 }
 
 function isBraille(input) {
-    return input.match(/^[O.]{6,}$/);
+    // input must be a multiple of 6
+    if (input.length % 6 !== 0) return false;
+
+    // input must only contain O and .
+    return input.match(/^[O.]{$/);
 }
 
 // given an english letter, return its position in the english alphabet
@@ -112,7 +116,7 @@ function englishToBraille(input) {
     let output = '';
     let isReadingNumbers = false;
 
-    for (letter of input) {
+    for (const letter of input) {
         if (letter.match(/[A-Z]/)) {
             // capital follows
             output += '.....O';
