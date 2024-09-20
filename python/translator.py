@@ -27,16 +27,109 @@ class Braille_Translator():
         A Braille character is a sequence of only characters 'O' and '.', a set is used to find unique characters.
         """
         return set(input) == set(['O', '.'])
-
+    
 
 
     def eng_to_braille(self, english: str) -> str:
-        pass
+        """
+        When converting english to braille, there will be more braille charaters due to state indicators such as capital follows.
+
+        As a result an iterator is used to allow nested loops to continue looping through the same string.
+
+        I wish it was indented less but I hope it is ok :).
+        """
+        braille_output = ""
+        english_iterator = iter(english)
+
+        # Use try/except to catch StopIteration when iterator is exhausted
+        try:
+            while c := next(english_iterator):
+                
+                # Check for capitals
+                if c.isupper():
+                    braille_output += self._capital_follows
+                    braille_output += self._eng_to_braille_alphabet_map[c.lower()]
+
+                # Check for digits
+                elif c in string.digits:
+                    braille_output += self._number_follows
+                    braille_output += self._eng_to_braille_digit_map[c]
+
+                    # Continue looping through digits until a space is found
+                    while True:
+                        c = next(english_iterator)
+                        if c == ' ':
+                            braille_output += self._space
+                            break
+                        braille_output += self._eng_to_braille_digit_map[c]
+
+                # Check for space
+                elif c == ' ':
+                    braille_output += self._space
+
+                # Otherwise, output a lowercase character
+                else:
+                    braille_output += self._eng_to_braille_alphabet_map[c]
+
+        except StopIteration:
+            pass
+
+        return braille_output
+
 
 
     def braille_to_eng(self, braille: str) -> str:
-        pass
+        """
+        Method for converting braille to english.
+        
+        number of braille chars >= number of english chars
+        
+        Flags are used to keep track of state imposed on current chars by previous braille special characters.
+        """
+        output = ""
+        capital_follows_flag = False
+        number_follows_flag = False
+
+        # Split into list of braille characters
+        groups_of_six = [braille[i:i+6] for i in range(0, len(braille), 6)]
+
+        braille_chars_iter = iter(groups_of_six)
+        
+        # Iterate through braille characters until StopIteration is thrown.
+    
+        # Capital follows and number follows flags keep track of state that can affect the next char(s).
+        try:
+            while (braille_char := next(braille_chars_iter)):
+
+                if braille_char == self._capital_follows:
+                    capital_follows_flag = True
+
+                elif braille_char == self._number_follows:
+                    number_follows_flag = True
+
+                elif braille_char == self._space:
+                    capital_follows_flag, number_follows_flag = False, False
+                    output += ' '
+
+                elif capital_follows_flag:
+                    output += self._braille_to_eng_alphabet_map[braille_char].upper()
+                    capital_follows_flag = False
+
+                elif number_follows_flag:
+                    output += self._braille_to_eng_digit_map[braille_char]
+                
+                else:
+                    output += self._braille_to_eng_alphabet_map[braille_char]
+
+        except StopIteration:
+            pass
+
+        return output
+
 
 
     def translate(self, input: str) -> str:
-        pass
+        """
+        Detect if Braille or English is inputted and translate accordingly.
+        """
+        return self.braille_to_eng(input) if self.is_braille(input) else self.eng_to_braille(input)

@@ -37,7 +37,8 @@ class BrailleTest(unittest.TestCase):
 
         test_cases = [
             ("Hello world", ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."),
-            ("42", ".O.OOOOO.O..O.O...")
+            ("42", ".O.OOOOO.O..O.O..."),
+            ("42 ", ".O.OOOOO.O..O.O.........")
         ]
 
         for input, expected in test_cases:
