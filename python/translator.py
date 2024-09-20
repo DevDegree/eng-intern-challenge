@@ -1,6 +1,6 @@
 import sys
 
-# Braille Translator 
+# Braille-English Translator 
 def translator(s: str) -> str:
     """
     Translate Braille to English and vice-versa
