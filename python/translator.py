@@ -1,12 +1,14 @@
 # SHOPIFY ENG INTERN CHALLENGE
 # Divya Vithiyatharan
 
-# Please click the run button or type in the command: python3 translator.py 
+# Please type in the command: python3 translator.py "input string"
 # to run the program. You can write in braille or English characters & 
 # the program will translate appropriately.
 
 # Assume letters and numbers are seperated by spaces.
 # Assume 'o' and '>' have same braille value; braille to english defaults to 'o'.
+
+import sys
 
 # follows flags
 CAPITAL_FOLLOWS_FLAG = '.....O'
@@ -118,11 +120,16 @@ def eng_to_braille(eng_input_str: str) -> str:
     return braille_output
 
 def main():
-    input_str = input("enter value: ")
-    if set(input_str).issubset({'O', '.'}) and len(input_str) % 6 == 0:
-        print(braille_to_eng(input_str))
+    # input_str = input("enter value: ")
+    if len(sys.argv) < 2:
+        print('error: invalid argument')
     else:
-        print(eng_to_braille(input_str))
+        input_str = ' '.join(sys.argv[1:])
+        # check if braille or english input
+        if set(input_str).issubset({'O', '.'}) and len(input_str) % 6 == 0:
+            print(braille_to_eng(input_str))
+        else:
+            print(eng_to_braille(input_str))
 
 if __name__ == '__main__':
     main()
