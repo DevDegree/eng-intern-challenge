@@ -74,10 +74,8 @@ def braille(str)
                     outstr += val2.chr
                 end
             else
-                if (!numericS)
-                    outstr += val.chr
-                else
-                end
+                outstr += val.chr
+
                 numericS = (numericS && val != 32)
             end
             checkstr = i.chr
@@ -111,10 +109,9 @@ def braille(str)
             outstr += val2.chr
         end
     else
-        if (!numericS) 
-            outstr += val.chr
-        else
-        end
+
+        outstr += val.chr
+
         numericS = (numericS && val != 32)
     end
 
