@@ -4,7 +4,6 @@ const {alphabet, numbers, symbols, follows} = require('./brailleMapping');
 // symbols for accessing "follows"
 const CAPITAL = 'CAP';
 const NUMBER = 'NUM';
-const DECIMAL = 'DEC';
 
 const toBraille = string => {
   let result = '';
@@ -12,7 +11,7 @@ const toBraille = string => {
 
   for (let letter of string) {
 
-    if (numberConvertStarted && (!letter.match(/[0-9]/))) {
+    if (numberConvertStarted && (!letter.match(/[.0-9]/))) {
       numberConvertStarted = false;
     }
 

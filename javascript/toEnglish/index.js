@@ -4,7 +4,6 @@ const {alphabet, numbers, symbols, follows} = require('./alphabetMapping');
 // symbols for accessing "follows"
 const CAPITAL = 'CAP';
 const NUMBER = 'NUM';
-const DECIMAL = 'DEC';
 
 
 const toEnglish = string => {
@@ -16,8 +15,9 @@ const toEnglish = string => {
   const brailleArrayString = string.match(/.{1,6}/g);
 
   for (let brailleSymbol of brailleArrayString) {
-    //if number was enabled but nothing matches numbers, then turn of number converter
-    if (isNumber && !numbers[brailleSymbol]) {
+
+    //if number was enabled but nothing matches numbers, and not a dot, then turn of number converter
+    if (isNumber && !numbers[brailleSymbol] && symbols[brailleSymbol] !== '.') {
       isNumber = false;
     }
     // preconditions

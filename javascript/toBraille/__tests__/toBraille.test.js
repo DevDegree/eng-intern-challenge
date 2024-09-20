@@ -17,6 +17,7 @@ describe('toBraille function', () => {
   test('returns true for valid braille numbers', () => {
     expect(toBraille('1')).toBe('.O.OOOO.....'); 
     expect(toBraille('123')).toBe('.O.OOOO.....O.O...OO....');
+    expect(toBraille('12.32')).toBe('.O.OOOO.....O.O.....OO.OOO....O.O...');
     expect(toBraille('123 ')).toBe('.O.OOOO.....O.O...OO..........');
   })
 

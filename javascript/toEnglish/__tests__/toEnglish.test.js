@@ -18,6 +18,7 @@ describe('toEnglish function', () => {
   test('returns true for valid braille numbers', () => {
     expect(toEnglish('.O.OOOO.....')).toBe('1'); 
     expect(toEnglish('.O.OOOO.....O.O...OO....')).toBe('123');
+    expect(toEnglish('.O.OOOO.....O.O.....OO.OOO....')).toBe('12.3');
     expect(toEnglish('.O.OOOO.....O.O...OO..........')).toBe('123 ');
   })
 
