@@ -2,20 +2,17 @@ import re
 import sys
 import json
 
-# notes:
-# O is where the dot is
-# . is where there is no dot
-# read left-to-right from top left
-# capital follows = .....O
-# number follows = .O.OOO
-
 # load dictionary.json
 with open("dictionary.json", "r") as file:
     dictionary = json.loads(file.read())
 
+eng_trans = dictionary["english_to_braille"]
+caps = dictionary["capitalized"]
+nums = dictionary["number_to_braille"]
+
 def translator(input) -> str:
-    is_braille = "^(?:[O.]{6})+$"
-    is_english_or_num = "[a-z]*[0-9]*[.|,|?|!|:|;|-|/|<|>|(|)|]*"
+    is_braille = "([O.]{6})+"
+    is_english_or_num = "[a-z]*[0-9]*[.|,|?|!|:|;|\-|\/|<|>|(|)|]*"
 
     if re.search(is_braille, input):
         # translate from values to keys in dictionary
@@ -41,15 +38,10 @@ def braille_to_english(input) -> str:
             curr_braille += input[i-1]
 
     # iterate through each c in chars and match it to keys in dictionary
-    eng_trans = dictionary["english_to_braille"]
-    caps = dictionary["capitalized"]
-    nums = dictionary["number_to_braille"]
     result = ""
     for c in chars:
         # check if capital follows
-        if c == "......":
-            is_number = False
-        elif c == capital_follows:
+        if c == capital_follows:
             is_capital = True
             continue
         if is_capital:
@@ -62,6 +54,8 @@ def braille_to_english(input) -> str:
             is_capital = False
             continue
         # check if number follows
+        if c == eng_trans[" "]:
+            is_number = False
         if c == number_follows:
             is_number = True
             continue
@@ -86,9 +80,6 @@ def english_to_braille(input) -> str:
     is_capital = False
     is_number = False
     result = ""
-    eng_trans = dictionary["english_to_braille"]
-    caps = dictionary["capitalized"]
-    nums = dictionary["number_to_braille"]
     for c in input:
         # check if capital
         if c in caps.values():
