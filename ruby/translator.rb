@@ -194,7 +194,7 @@ else
         outs += eng_to_braille(ind)
 
         if (inx + 1 < user_argvs.length)
-            $braille_sym[0]
+            outs += $braille_sym[0]
         else
         end
         inx += 1
