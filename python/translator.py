@@ -74,13 +74,16 @@ def englishToBraille(text):
     return newString
 
 def brailleChecker(inputString):
+    english = False
     for char in inputString:
         if char not in brailleSymbols:
-            return englishToBraille(inputString)
-    return brailleToEnglish(inputString)
+            english = True
+            print(englishToBraille(inputString))
+    if not english:
+        print(brailleToEnglish(inputString))
 
 
 if __name__ == "__main__":
     text = input()
-    print(brailleChecker(text))
+    brailleChecker(text)
 
