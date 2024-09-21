@@ -37,6 +37,7 @@ def englishToBraille(input):
                 res += charToBrl[i.lower()]
             else:
                 res += charToBrl[i]
+            continue
         if enterNumber:
             res +=numToBrl[i]
             continue
@@ -80,6 +81,7 @@ def brailleToEnglish(input):
     for i in res:
         if i == space and enterNumber:
             enterNumber = False
+            answer += map[i]
             continue
         if i == numberFollows:
             enterNumber = True
@@ -99,7 +101,6 @@ def brailleToEnglish(input):
 
 
 if __name__ == "__main__":
-    for arg in sys.argv[1:]:
-        output = translator(arg)  
-        print(output) 
-        
+    args = sys.argv[1:]
+    input_string = ' '.join(args)
+    print(translator(input_string))
