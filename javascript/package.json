@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "translator.js",
+  "type": "module",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dev": "node translator.js"
   },
   "author": "",
   "license": "ISC",

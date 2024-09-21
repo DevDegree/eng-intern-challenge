@@ -1,4 +1,4 @@
-import getKeyFromValue from "./getKeyFromValue";
+import getKeyFromValue from "./getKeyFromValue.js";
 
 export const lettersDict = {
   a: "O.....",
@@ -68,6 +68,5 @@ export const numberToBraille = (number) => numbersDict[number];
 export const brailleToNumber = (braille) =>
   getKeyFromValue(numbersDict, braille);
 
-export const modifierToBraille = (modifier) => modifiersDict[modifier];
 export const brailleToModifier = (braille) =>
   getKeyFromValue(modifiersDict, braille);
