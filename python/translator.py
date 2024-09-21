@@ -1,4 +1,5 @@
 import sys
+from itertools import islice
 
 # define dictionaries to store the mappings
 
@@ -50,6 +51,19 @@ english_to_braille_special = {
     "number_follows": ".O.OOO",
 }
 
+numbers_to_braille = {
+    "1": "O.....",
+    "2": "O.O...",
+    "3": "OO....",
+    "4": "OO.O..",
+    "5": "O..O..",
+    "6": "OOO...",
+    "7": "OOOO..",
+    "8": "O.OO..",
+    "9": ".OO...",
+    "0": ".OOO..",
+}
+
 braille_to_english = {
     "O.....": "A",
     "O.O...": "B",
@@ -77,6 +91,13 @@ braille_to_english = {
     "OO..OO": "X",
     "OO.OOO": "Y",
     "O..OOO": "Z",
+    ".....O": "capital_follows",
+    ".O...O": "decimal_follows",
+    ".O.OOO": "number_follows",
+    "......": " ",
+}
+
+braille_to_numbers = {
     "O.....": "1",
     "O.O...": "2",
     "OO....": "3",
@@ -87,9 +108,9 @@ braille_to_english = {
     "O.OO..": "8",
     ".OO...": "9",
     ".OOO..": "0",
-    ".....O": "capital_follows",
-    ".O...O": "decimal_follows",
-    ".O.OOO": "number_follows",
+}
+
+braille_to_english_special = {
     "..OO.O": ".",
     "..O...": ",",
     "..O.OO": "?",
@@ -98,31 +119,11 @@ braille_to_english = {
     "..O.O.": ";",
     "....OO": "-",
     ".O..O.": "/",
-    ".O.O.O": "<",
-    "O.O.O.": ">",
+    ".OO..O": "<",
+    "O..OO.": ">",
     "O.O..O": "(",
     ".O.OO.": ")",
-    "......": " ",
 }
-
-numbers_to_braille = {
-    "1": "O.....",
-    "2": "O.O...",
-    "3": "OO....",
-    "4": "OO.O..",
-    "5": "O..O..",
-    "6": "OOO...",
-    "7": "OOOO..",
-    "8": "O.OO..",
-    "9": ".OO...",
-    "0": ".OOO..",
-}
-
-
-# function to determine input type
-# def is_english(input):
-#     input = input.upper()
-#     return all(i in "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.,?!:;-/<>()" for i in input)
 
 
 def is_braille(input):
@@ -133,12 +134,51 @@ def is_braille(input):
 def translate(input):
 
     if is_braille(input):
+        n = 6
+        symbols = [input[i : i + n] for i in range(0, len(input), n)]
         word = ""
-        for c in input:
-            word += braille_to_english[c]
+        special_char = ".,?!:;-/<>()"
+        count = -1
+        num_found = False
+        for i, s in enumerate(symbols):
+            if num_found and count != 0:
+                count -= 1
+                continue
+
+            count = -1
+            num_found = False
+
+            if braille_to_english[s] == "capital_follows":
+                continue
+            elif braille_to_english[s] == "number_follows":
+                continue
+
+            prev_symbol = braille_to_english[symbols[i - 1]]
+            if prev_symbol == "capital_follows":
+                word += braille_to_english[symbols[i]]
+            elif prev_symbol == "number_follows":
+                while s != "......":
+                    word += braille_to_numbers[symbols[i]]
+                    i += 1
+                    if i >= len(symbols):
+                        return word
+                    s = symbols[i]
+                    count += 1
+                num_found = True
+
+            else:
+                letter_or_symbol = braille_to_english[s]
+                if letter_or_symbol.isalpha():
+                    letter_or_symbol = letter_or_symbol.lower()
+                    word += letter_or_symbol
+                elif letter_or_symbol in special_char:
+                    word += braille_to_english_special[symbols[i]]
+                else:
+                    word += braille_to_english[symbols[i]]
         return word
     else:
         word = ""
+        num_found = False
         for i, c in enumerate(input):
             if c.isupper():
                 word += english_to_braille_special["capital_follows"]
@@ -152,6 +192,9 @@ def translate(input):
                 c = c.upper()
                 word += english_to_braille[c]
             elif c.isdigit():
+                last_char = word[-6:]
+                if last_char in numbers_to_braille.values():
+                    continue
                 word += english_to_braille_special["number_follows"]
                 while c.isdigit():
                     word += numbers_to_braille[c]
