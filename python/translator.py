@@ -40,7 +40,6 @@ def braille_parse(string: str):
             new_str += " "
         else:
             for letter, braille in braille_dict.items():
-                print(f"{letter} \n")
                 if string[i:i+6] == braille:
                     if is_num:
                         if letter.isnumeric():
@@ -59,11 +58,9 @@ def braille_parse(string: str):
 
 
 if len(sys.argv) < 2:
-    print("No argument given")
     exit()
 
 string = " ".join(sys.argv[1:])
-print(string)
 
 if len(string) - (string.count("O") + string.count(".")) > 0:
     print(english_parse(string))
