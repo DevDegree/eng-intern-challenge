@@ -3,8 +3,6 @@ import {modifyiers, brailleDictionary, numbersDictionary} from '../utils/constan
 import getKeyByValue from '../utils/getKeyByValue';
 import splitByNumberOfChar from '../utils/splitByNumberOfChar';
 
-
-// TODO improve types
 export function translateToEnglish(textToTranslate: string) {
   const brailleCharacters = splitByNumberOfChar(textToTranslate, 6) as BrailleChar[];
   let isCapital = false;
@@ -23,15 +21,15 @@ export function translateToEnglish(textToTranslate: string) {
       isStillNumber = false;
     }
     if (isStillNumber) {
-      englishChar = getKeyByValue(numbersDictionary, brailleChar) as EnglsihChar;
+      englishChar = getKeyByValue(numbersDictionary, brailleChar);
     } else {
-      englishChar = getKeyByValue(brailleDictionary, brailleChar) as EnglsihChar;
+      englishChar = getKeyByValue(brailleDictionary, brailleChar);
       if (isCapital) {
-        englishChar = englishChar?.toUpperCase() as EnglsihChar;
+        englishChar = englishChar?.toUpperCase();
         isCapital = false;
       }
     }
-    englishCharacters.push(englishChar);
+    englishCharacters.push(englishChar as EnglsihChar);
   }
   const textInEnglish = englishCharacters.join('');
   return textInEnglish;
