@@ -46,5 +46,5 @@ braille_to_special_characters = {
 
 braille_to_rules = {
     ".....O": "capital_follows",
-    ".O...O": "number_follows",
+    ".O.OOO": "number_follows",
 }
