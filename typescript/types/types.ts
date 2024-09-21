@@ -2,7 +2,9 @@ import {brailleDictionary, modifyiers, numbersDictionary} from '../utils/constan
 
 export type NumberChar = keyof typeof numbersDictionary
 
-export type EnglsihChar = keyof typeof brailleDictionary | NumberChar
+export type NonNumberChar = keyof typeof brailleDictionary
+
+export type EnglsihChar = NonNumberChar | NumberChar
 
 export type ModifyiersChar = typeof modifyiers [keyof typeof modifyiers]
 
