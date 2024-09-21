@@ -17,6 +17,7 @@ def inputToBraille(userInput):
   for char in userInput:
     # if letter
     if char.isalpha():
+      # if capital letter
       if char.isupper():
         brailleOutput += brailleCapitalLetter
       brailleOutput += brailleAlphabetDict[char.lower()]
@@ -31,5 +32,55 @@ def inputToBraille(userInput):
   # print(len(brailleOutput))
   return brailleOutput
 
+def brailleToStrings(userInput):
+  strings = ""
+  isCapital = False
+  isDigit = False
+  
+  # cut userInput into 6 characters
+  for i in range(0, len(userInput), 6):
+    braille_char = userInput[i:i+6]  # braille characters in 6 characters
+    
+    # if capital letter check
+    if braille_char == brailleCapitalLetter:
+      isCapital = True 
+      continue  
+
+    # if digit check
+    if braille_char == brailleDecimal:
+      isDigit = True
+      continue 
+    
+    # if letter
+    if braille_char in brailleAlphabetDict.values() and isDigit == False:
+      for key, value in brailleAlphabetDict.items():
+        if value == braille_char:
+          strings += key.upper() if isCapital else key 
+          isCapital = False  # reset isCapital
+          break
+        
+    # if digit 
+    elif isDigit and braille_char in brailleNumberDict.values():
+      for key, value in brailleNumberDict.items():
+        if value == braille_char:
+          strings += str(key)
+          break
+
+    # if special character
+    elif braille_char in brailleSpecialCharacters.values():
+      for key, value in brailleSpecialCharacters.items():
+        if value == braille_char:
+          strings += key
+          break
+  
+  return strings
+
+# check braile to strings
+#.....00.....0.0...00...........0...00.....0.0...00....
+
+# call function
 userPrompt = input()
-print(inputToBraille(userPrompt))
+if len(userPrompt) % 6 == 0 and all(char in "01." for char in userPrompt):
+  print(brailleToStrings(userPrompt))
+else:
+  print(inputToBraille(userPrompt))
