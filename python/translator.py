@@ -117,16 +117,24 @@ def b_to_e(given):
 
 def e_to_b(given):
     answer = ""
+    num = False
     for char in given:
         if char.isalpha():
+            num = False
             if char.isupper():
                 answer += EXTRA_ENG['capital'] + ENGLISH_TO_BRAILLE[char.lower()]
             else:
                 answer += ENGLISH_TO_BRAILLE[char]
         elif char.isdigit():
-            answer += EXTRA_ENG['number'] + NUMBER_TO_BRAILLE[char]
+            if not num:
+                answer += EXTRA_ENG['number'] + NUMBER_TO_BRAILLE[char]
+                num = True
+            else:
+                answer += NUMBER_TO_BRAILLE[char]
+                num = False
         elif char == " ":
             answer += EXTRA_ENG['space']
+            num = False
     return answer
 
 def main():
@@ -136,7 +144,7 @@ def main():
         print(answer)
     else:
         answer = e_to_b(input_string)
-        print(answer)
+        print(answer.strip())
 
 if __name__ == "__main__":
     main()
