@@ -119,5 +119,5 @@ def main():
         return 0
     return 1
     
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+main()
