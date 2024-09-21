@@ -1,27 +1,101 @@
-# import IO
+import sys
 
-# add maps to convert english to braille
-# reverse the map for braille to english?
+# flags for special cases
+
+braille_capital_flag = '.....O'
+braille_number_flag = '.O.OOO'
+braille_decimal_flag = '.O...O'
+
+# maps to convert english to braille
+
+braille_letters = {
+    ' ': '......'
+    'a': 'O......',
+    'b': 'O.O...',
+    'c': 'OO....',
+    'd': 'OO.O..',
+    'e': 'O..O..',
+    'f': 'OOO...',
+    'g': 'OOOO..',
+    'h': 'O.OO..',
+    'i': '.OO...',
+    'j': '.OOO..',
+    'k': 'O...O.',
+    'l': 'O.O.O.',
+    'm': 'OO..O.',
+    'n': 'OO.OO.',
+    'o': 'O..OO.',
+    'p': 'OOO.O.',
+    'q': 'OOOOO.',
+    'r': 'O.OOO.',
+    's': '.OO.O.',
+    't': '.OOOO.',
+    'u': 'O...OO',
+    'v': 'O.O.OO',
+    'w': '.OOO.O',
+    'x': 'OO..OO',
+    'y': 'OO.OOO',
+    'z': 'O..OOO'
+}
+braille_symbols = {
+    '.': '..OO.O',
+    ',': '..O...',
+    '?': '..O.OO',
+    '!': '..OOO.',
+    ':': '..OO..',
+    ';': '..O.O.',
+    '-': '....OO',
+    '/': '.O..O.',
+    '<': '.OO..O',
+    '>': 'O..OO.',
+    '()': 'O.O..O',
+    ')': '.O.OO.'
+}
+braille_numbers = {
+    '1': 'O.....',
+    '2': 'O.O...',
+    '3': 'OO....',
+    '4': 'OO.O..',
+    '5': 'O..O..',
+    '6': 'OOO...',
+    '7': 'OOOO..',
+    '8': 'O.OO..',
+    '9': '.OO...',
+    '0': '.OOO..'
+}
+
+# reversed maps to convert braille to english
+english_letters = {c: l for l, c in braille_letters.items()}
+english_symbols = {c: l for l, c in braille_symbols.items()}
+english_numbers = {c: l for l, c in braille_numbers.items()}
 
 
-#main function
-'''
-receive string from argument
-determine if string is braille or english
-    braille: if string is all O or .
-    english: else
 
-call one of:
-    braille to english
-    english to braille
-
-print result to terminal
-'''
-
-#braille to english
+# braille to english
+def braille_to_english(text):
+    translated_text=[]
+    return ''
 
 
-#english to braille
+
+# english to braille
+def english_to_braille(text):
+    translated_text=[]
+    for c in text:
+        if c.isupper():
+            # add capital flag
+            # add letter
+        if c in string.punctuation:
+            # ISSUE: may include some chars not in the braille dict given...
+        elif c.isdigit():
+            # add number flag
+            # add number
+        elif c == '.':
+            # special handling for decimal?
+        else:
+            #something
+    return ''.join(translated_text)
+
 
 
 '''
@@ -37,7 +111,7 @@ edge cases
     empty string as argument
         print nothing
     forgetting to put space-flag after numbers conclude (invalid braille to english)
-        treat as usual braille (if letters A to J, translate into numbers - else, invalid)
+        treat as usual braille (if letters A to J, translate into numbers - else, translate as letters/symbols as usual?)
 '''
 
 '''
@@ -48,8 +122,35 @@ other notes: overall
 other notes: english to braille
     use bools to track capitals/numbers/decimals
     slice the string in chunks of 6 (i:i+6)
+    if encounter a . then must check if period or decimal (number flag true?)
 
 other notes: braille to english
     just read in the next char, check for flags in the char (capitals/numbers/decimals)
     append accordingly
+    number flag only matters if next braille letter is A to J (decimal point, symbols unchanged)
 '''
+
+# main function
+'''
+receive string from argument
+determine if string is braille or english
+    braille: if string is all O or .
+    english: else
+
+call one of:
+    braille to english
+    english to braille
+
+print result to terminal
+'''
+def main():
+    translation_input = sys.argv[1]
+    
+    # determine if string is braille or english (ie is it all O or . chars) and call corresponding function
+
+    # braille to english
+    if all(c in '.O' for c in translation_input):
+        print("")
+    # english to braille
+    else:
+        print("")
