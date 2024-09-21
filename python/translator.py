@@ -1,6 +1,6 @@
 import sys
 
-# Mapping from characters to Braille dots (positions 1-6)
+# Mapping from characters to Braille dots (positions 0-5 from left to right, top to bottom)
 char_to_dots = {
     'a': {0},
     'b': {0,2},
@@ -38,12 +38,12 @@ char_to_dots = {
     '-': {4,5},
     '/': {1,4},
     '<': {1,2,5},
-    #'>': {0,3,4},
+    #'>': {0,3,4}, remove since this has a conflict with 'o'
     '(': {0,2,5},
     ')': {1,3,4}
 }
 
-# Digits mapping
+# Digits mapping to characters
 digit_to_char = {
     '1': 'a',
     '2': 'b',
@@ -58,14 +58,6 @@ digit_to_char = {
 }
 
 char_to_digit = {v: k for k, v in digit_to_char.items()}
-
-# Positions mapping to index in the 6-character string
-# Index 0: Dot 1 (top-left)
-# Index 1: Dot 2 (middle-left)
-# Index 2: Dot 3 (bottom-left)
-# Index 3: Dot 4 (top-right)
-# Index 4: Dot 5 (middle-right)
-# Index 5: Dot 6 (bottom-right)
 
 def dots_to_pattern(dots):
     pattern = ['.' for _ in range(6)]
@@ -83,16 +75,14 @@ def pattern_to_dots(pattern):
     return dots
 
 def dot_to_index(dot):
-    # Mapping from Braille dot position to index in the pattern string
     dot_to_index_map = {1:0, 2:1, 3:2, 4:3, 5:4, 6:5}
     return dot_to_index_map[dot]
 
 def index_to_dot(index):
-    # Mapping from index in the pattern string to Braille dot position
     index_to_dot_map = {0:1, 1:2, 2:3, 3:4, 4:5, 5:6}
     return index_to_dot_map[index]
 
-# Special symbols
+
 capital_sign_dots = {5}
 number_sign_dots = {1,3,4,5}
 
@@ -101,7 +91,7 @@ capital_sign_pattern = dots_to_pattern(capital_sign_dots)
 number_sign_pattern = dots_to_pattern(number_sign_dots)
 space_pattern = dots_to_pattern({})
 
-# Pattern to character mapping
+
 pattern_to_char = {}
 for char, dots in char_to_dots.items():
     pattern = dots_to_pattern(dots)
