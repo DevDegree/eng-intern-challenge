@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"regexp"
 	"strings"
 	"unicode"
 )
@@ -139,4 +141,84 @@ func (t *Translator) TranslateToBraille(input string) string {
 		output.WriteString(t.taskMap[taskKey](r))
 	}
 	return output.String()
+}
+
+// Braille --> English
+func (t *Translator) TranslateToAlpha(input string) string {
+	var output strings.Builder
+	var capitalizeNext, numberMode bool
+
+	for i := 0; i < len(input); i += 6 {
+		brailleChar := input[i : i+6]
+
+		switch {
+		case brailleChar == t.Symbols['C']:
+			capitalizeNext = true
+			continue
+
+		case brailleChar == t.Symbols['C']:
+			capitalizeNext = true
+			continue
+
+		case brailleChar == t.Symbols['N']:
+			numberMode = true
+			continue
+
+		}
+		if numberMode {
+			if num, ok := t.NumberB2E[brailleChar]; ok {
+				output.WriteString(string(num))
+				continue
+			}
+		}
+
+		if alpha, ok := t.AlphaB2E[brailleChar]; ok {
+			if capitalizeNext {
+				output.WriteString(strings.ToUpper(string(alpha)))
+				capitalizeNext = false
+			} else {
+				output.WriteString(string(alpha))
+			}
+		} else if punct, ok := t.PunctB2E[brailleChar]; ok {
+			output.WriteString(string(punct))
+		} else {
+			fmt.Printf("[!] Unsupported Braille pattern skipped: %s\n", brailleChar)
+		}
+
+		// Reset number mode after a space (Symbol S)
+		if brailleChar == t.Symbols['S'] {
+			numberMode = false
+		}
+	}
+
+	return output.String()
+}
+
+// Language Detection
+func isBraille(input string) bool {
+	//(O, ., and spaces)
+	re := regexp.MustCompile(`^[O. ]+$`)
+	return re.MatchString(input)
+}
+
+func main() {
+	if len(os.Args) < 2 {
+		fmt.Println("[!] No input no translation.")
+		return
+	}
+
+	input := strings.Join(os.Args[1:], " ")
+	translator := NewTranslator()
+
+	if isBraille(input) {
+		if len(input)%6 != 0 {
+			fmt.Println("[!] Invalid Braille input: Length must be a multiple of 6.")
+			return
+		} else {
+			fmt.Println(translator.TranslateToAlpha(input))
+
+		}
+	} else {
+		fmt.Println(translator.TranslateToBraille(input))
+	}
 }
