@@ -28,36 +28,23 @@ letters_to_braille = {
 }
 
 numbers_to_braille = {
-    0: ".OOO..",
-    1: "O.....",
-    2: "O.O...",
-    3: "OO....",
-    4: "OO.O..",
-    5: "O..O..",
-    6: "OOO...",
-    7: "OOOO..",
-    8: "O.OO..",
-    9: ".OO...",
+    "0": ".OOO..",
+    "1": "O.....",
+    "2": "O.O...",
+    "3": "OO....",
+    "4": "OO.O..",
+    "5": "O..O..",
+    "6": "OOO...",
+    "7": "OOOO..",
+    "8": "O.OO..",
+    "9": ".OO...",
 }
 
 special_characters_to_braille = {
-    ".": "..OO.O",
-    ",": "..O...",
-    "?": "..O.OO",
-    "!": "..OOO.",
-    ":": "..OO..",
-    ";": "..O.O.",
-    "-": "....OO",
-    "/": ".O..O.",
-    "<": ".OO..O",
-    ">": "O..OO.",
-    "(": "O.O..O",
-    ")": ".O.OO.",
     " ": "......",
 }
 
 rules_to_braille = {
     "capital_follows": ".....O",
-    "decimal_follows": ".O...O",
     "number_follows": ".O.OOO",
 }
