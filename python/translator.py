@@ -15,6 +15,12 @@ for key, value in text_to_braille_map.items():
 
 
 def to_english(braille_text):
+    if not braille_text:
+        return "Error: Empty Input"
+
+    if len(braille_text) % 6 != 0:
+        return "Error: Braille input must have length that is a multiple of 6"
+    
     result = []
     i = 0
 
@@ -41,6 +47,8 @@ def to_english(braille_text):
     return ''.join(result)
 
 def to_braille(text):
+    if not text:
+        return "Error: Empty Input"
 
     result = []
     number_mode = False
