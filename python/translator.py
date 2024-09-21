@@ -3,6 +3,7 @@ import sys
 CAPITAL_LETTER = "capital"
 DIGIT = "digit"
 SPACE = " "
+BRAILLE_CHAR_LEN = 6
 
 ENG_TO_BRAILLE = {
     "a": "O.....", "b": "O.O...", "c": "OO....", "d": "OO.O..", "e": "O..O..", "f": "OOO...", "g": "OOOO..", 
@@ -28,12 +29,47 @@ def concatinate_words(inputed_text):
 
 def translate(inputed_phrase):
     if is_braille(inputed_phrase):
-        return "Translate to english"
+        return translate_to_eng(inputed_phrase)
     else:
         return translate_to_braille(inputed_phrase)
 
 def is_braille(inputed_phrase):
     return all(char in "O." for char in inputed_phrase)
+
+
+def translate_to_eng(braille_phrase):
+    eng_translation = ""
+    capitalize_next_letter = False
+    next_is_digit = False
+    for i in range(0, len(braille_phrase), BRAILLE_CHAR_LEN):
+        braille_char = braille_phrase[i:i + BRAILLE_CHAR_LEN]
+
+        if braille_char in REVERSE_SPECIAL_CHARS:
+            eng_translation, capitalize_next_letter, next_is_digit = translate_braille_special_char(braille_char, eng_translation, capitalize_next_letter, next_is_digit)
+        else:
+            if next_is_digit:
+                eng_translation += BRAILLE_TO_DIGITS[braille_char]
+            else:
+                eng_translation, capitalize_next_letter = translate_braille_letter(braille_char, eng_translation, capitalize_next_letter)
+    return eng_translation
+
+def translate_braille_letter(braille_char, eng_translation, capitalize_next_letter):
+    translated_char = BRAILLE_TO_ENG[braille_char]
+    if capitalize_next_letter:
+        translated_char = translated_char.upper()
+        capitalize_next_letter = False
+    eng_translation += translated_char
+    return eng_translation, capitalize_next_letter
+
+def translate_braille_special_char(braille_char, eng_translation, capitalize_next_letter, next_is_digit):
+    if braille_char == SPECIAL_CHARS[CAPITAL_LETTER]:
+        capitalize_next_letter = True
+    elif braille_char == SPECIAL_CHARS[DIGIT]:
+        next_is_digit = True
+    elif braille_char == SPECIAL_CHARS[SPACE]:
+        eng_translation += REVERSE_SPECIAL_CHARS[braille_char]
+        next_is_digit = False
+    return eng_translation, capitalize_next_letter, next_is_digit
 
 
 def translate_to_braille(english_phrase):
