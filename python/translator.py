@@ -1,4 +1,5 @@
 from textwrap import wrap
+import sys
 
 # Dictionaries for all the braille and english letters/numbers/instructions
 brailleToEnglishLetters = {"O.....": "a", "O.O...": "b", "OO....": "c", "OO.O..": "d", "O..O..": "e", "OOO...": "f",
@@ -84,6 +85,6 @@ def brailleChecker(inputString):
 
 
 if __name__ == "__main__":
-    text = input()
-    brailleChecker(text)
+    inputString = " ".join(sys.argv[1:])
+    brailleChecker(inputString)
 
