@@ -30,10 +30,38 @@ def translate(inputed_phrase):
     if is_braille(inputed_phrase):
         return "Translate to english"
     else:
-        return "Translate to braille"
+        return translate_to_braille(inputed_phrase)
 
 def is_braille(inputed_phrase):
     return all(char in "O." for char in inputed_phrase)
+
+
+def translate_to_braille(english_phrase):
+    braille_translation = ""
+    prev_char = ""
+    for c in english_phrase:
+        if c.isalpha():
+            braille_translation += translate_letter(c)
+        elif c.isdigit():
+            braille_translation += translate_digit(c, prev_char)
+        elif c == SPACE:
+            braille_translation += SPECIAL_CHARS[SPACE]
+        prev_char = c
+    return braille_translation
+
+def translate_letter(c):
+    letter = ""
+    if c.isupper():
+        letter += SPECIAL_CHARS[CAPITAL_LETTER]
+    letter += ENG_TO_BRAILLE[c.lower()]
+    return letter
+
+def translate_digit(d, prev_char):
+    digit = ""
+    if not prev_char.isdigit():
+        digit = SPECIAL_CHARS[DIGIT]
+    digit += DIGITS_TO_BRAILLE[d]
+    return digit
 
 
 def main():
