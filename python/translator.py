@@ -1,8 +1,8 @@
+# import IO and testing
 import sys
 import unittest
 
 # flags for special cases
-
 braille_capital_flag = '.....O'
 braille_number_flag = '.O.OOO'
 braille_decimal_flag = '.O...O'
@@ -10,7 +10,6 @@ braille_decimal_flag = '.O...O'
 braille_size = 6
 
 # maps to convert english to braille
-
 braille_letters = {
     '.': '..OO.O',
     ',': '..O...',
@@ -70,9 +69,12 @@ english_letters = {c: l for l, c in braille_letters.items()}
 english_numbers = {c: l for l, c in braille_numbers.items()}
 
 
-# braille to english
+
+# braille to english translator
 def braille_to_english(text):
-    translated_text=[]
+
+    # dict to store translated text and bools to track special states
+    translated_text = []
     is_capital = False
     is_number = False
 
@@ -80,10 +82,14 @@ def braille_to_english(text):
     i = 0
 
     while i < len(text):
+        # check if remaining text is still valid length
+        if len(text[i:]) < braille_size:
+            break
+
         # slice the next 6 chars to translate
         letter = text[i:i+braille_size]
 
-        # check for flags
+        # check for flags for state changes
         if letter == braille_capital_flag:
             is_capital = True
         elif letter == braille_number_flag:
@@ -97,7 +103,7 @@ def braille_to_english(text):
         # explicitly handle the special case of > == o
         elif letter == braille_letters['>'] and is_number: #'O..OO.'
             translated_text.append('>')
-        # if not flag, then the letter should be translated and appended
+        # if c is not a flag, then the letter should be translated and appended
         else:
             # handle numbers (number flag takes precedence over caps)
             if is_number and letter in english_numbers:
@@ -114,15 +120,19 @@ def braille_to_english(text):
         # move to next segment of 6 chars to translate
         i += braille_size
 
+    # return the final translated string
     return ''.join(translated_text)
 
 
 
-# english to braille
+# english to braille translator
 def english_to_braille(text):
-    translated_text=[]
+
+    # dict to store translated text and bool to track special state
+    translated_text = []
     is_number = False
 
+    # iterate through the string char by char
     for c in text:
         # check if a flag needs to be included before the char
         # upper case letter
@@ -141,15 +151,15 @@ def english_to_braille(text):
             # number flag not needed
             translated_text.append(braille_numbers[c])
         # explicitly handle some special cases
-        # space indicates end of number input
+        # end of number input
         elif c == ' ' and is_number:
             is_number = False
             translated_text.append(braille_letters[c])
         # when . is decimal, not period
         elif c == '.' and is_number:
             translated_text.append(braille_decimal_flag)
-        # no special case
-        else:
+        # translate as usual
+        elif c in braille_letters:
             translated_text.append(braille_letters[c])
 
     # return the dict as a string for printing
@@ -157,45 +167,8 @@ def english_to_braille(text):
 
 
 
-'''
-edge cases
-    english encountered in braille string?
-        translate entire string as english
-    incomplete braille letter at end of string
-        ignore trailing 1-5 characters (6 would be another braille letter)
-    inalid braille letter found in string
-        ignore, print nothing for this letter
-    unrecognized/invalid english letter found in string
-        ignore, print nothing for this letter
-    empty string as argument
-        print nothing
-    forgetting to put space-flag after numbers conclude (invalid braille to english)
-        treat as usual braille (if letters A to J, translate into numbers - else, translate as letters/symbols as usual?)
-    decimal . in number vs period . in word
-'''
-
-'''
-other notes: overall
-    global vars for flags (capitals/numbers/decimals) and the chunk size, 6
-    use a dict to append substrings to the end_translation string and then join it all together at the end
-
-other notes: english to braille
-    use bools to track capitals/numbers/decimals
-    slice the string in chunks of 6 (i:i+6)
-    if encounter a . then must check if period or decimal (number flag true?)
-
-other notes: braille to english
-    just read in the next char, check for flags in the char (capitals/numbers/decimals)
-    append accordingly
-    number flag only matters if next braille letter is A to J (decimal point)
-
-> and O have the same dot representation ?
-    need to determine based on context
-    is_number flag?
-'''
-
-
 class TestTranslator(unittest.TestCase):
+    # test english to braille translator
     def test_eng_to_braille(self):
         # empty input, space
         self.assertEqual(english_to_braille(''), '')
@@ -208,6 +181,10 @@ class TestTranslator(unittest.TestCase):
         self.assertEqual(english_to_braille('Hello world'), '.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..')
         self.assertEqual(english_to_braille('42'), '.O.OOOOO.O..O.O...')
         self.assertEqual(english_to_braille('Abc 123'), '.....OO.....O.O...OO...........O.OOOO.....O.O...OO....')
+        # no space after number
+        self.assertEqual(english_to_braille('111zzz'), '.O.OOOO.....O.....O.....O..OOOO..OOOO..OOO')
+        self.assertEqual(english_to_braille('111jzzz'), '.O.OOOO.....O.....O......OOO..O..OOOO..OOOO..OOO')
+        self.assertEqual(english_to_braille('1110zzz'), '.O.OOOO.....O.....O......OOO..O..OOOO..OOOO..OOO')
         # handle > vs o
         self.assertEqual(english_to_braille('1> oa'), '.O.OOOO.....O..OO.......O..OO.O.....')
         # decimal point
@@ -216,7 +193,13 @@ class TestTranslator(unittest.TestCase):
         self.assertEqual(english_to_braille('ja.bc'), '.OOO..O.......OO.OO.O...OO....')
         # can translate 1A2B into braille, but not the other way around
         self.assertEqual(english_to_braille('1A2B'), '.O.OOOO..........OO.....O.O........OO.O...')
+        # invalid input
+        self.assertEqual(english_to_braille('mmm|\"*^%$'), 'OO..O.OO..O.OO..O.')
+        # input braille and almost-all-braille
+        self.assertEqual(english_to_braille('O.....a'), '.....OO..OO...OO.O..OO.O..OO.O..OO.O..OO.OO.....')
+        self.assertEqual(english_to_braille('O.....'), '.....OO..OO...OO.O..OO.O..OO.O..OO.O..OO.O')
 
+    # test braille to english translator
     def test_braille_to_eng(self):
         # empty input, space
         self.assertEqual(braille_to_english(''), '')
@@ -229,6 +212,9 @@ class TestTranslator(unittest.TestCase):
         self.assertEqual(braille_to_english('.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..'), 'Hello world')
         self.assertEqual(braille_to_english('.O.OOOOO.O..O.O...'), '42')
         self.assertEqual(braille_to_english('.....OO.....O.O...OO...........O.OOOO.....O.O...OO....'), 'Abc 123')
+        # no space after number
+        self.assertEqual(braille_to_english('.O.OOOO.....O.....O.....O..OOOO..OOOO..OOO'), '111zzz')
+        self.assertEqual(braille_to_english('.O.OOOO.....O.....O......OOO..O..OOOO..OOOO..OOO'), '1110zzz')
         # handle > vs o
         self.assertEqual(braille_to_english('.O.OOOO.....O..OO.......O..OO.O.....'), '1> oa')
         # decimal point
@@ -238,22 +224,31 @@ class TestTranslator(unittest.TestCase):
         # check if number flag takes precedence over capital flag
         self.assertEqual(braille_to_english('.O.OOOO.....O.....O.O...O.O...'), '1122')
         self.assertEqual(braille_to_english('.O.OOOO..........OO.....O.O........OO.O...'), '1122')
+        # invalid input
+        self.assertEqual(braille_to_english('OO..O.OO..O.OO..O.OO.'), 'mmm')
+
 
 def test_suite():
     unittest.main()
 
+
 def main():
-    translation_input = sys.argv[1]
+    # program was called with empty argument, do nothing
+    if len(sys.argv) < 2:
+        return
+    
+    # read input from argument + handle spaces
+    translation_input = ' '.join(sys.argv[1:])
     
     # determine if string is braille or english (ie is it all O or . chars) and call corresponding function
-    # braille to english
     if all(c in '.O' for c in translation_input):
+        # braille to english
         print(braille_to_english(translation_input))
-    # english to braille
     else:
+        # english to braille
         print(english_to_braille(translation_input))
 
 
 if __name__ == "__main__":
-    #main()
-    test_suite()
+    main()
+    #test_suite()
