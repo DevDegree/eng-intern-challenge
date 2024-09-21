@@ -9,7 +9,7 @@ function translateToEnglish(textToTranslate : string) {
   let englishChar;
   let isCapital = false;
   let isNumber = false;
-  const englishCharacters: string[] = [];
+  const englishCharacters: EnglsihChar[] = [];
   for (const brailleChar of brailleCharacters) {
     if (brailleChar === modifyiers.capitalFollows) {
       isCapital = true;
@@ -18,20 +18,17 @@ function translateToEnglish(textToTranslate : string) {
     if (brailleChar === modifyiers.numberFollows) {
       isNumber = true;
       continue;
+    } else if (brailleChar === brailleDictionary[' ']) {
+      isNumber = false;
     }
-    if (brailleChar === numbersDictionary['.']) { continue; }
     if (isNumber) {
       englishChar = getKeyByValue(numbersDictionary, brailleChar) as EnglsihChar;
-      englishCharacters.push(englishChar);
-      continue;
-    }
-    englishChar = getKeyByValue(brailleDictionary, brailleChar) as EnglsihChar;
-    if (isCapital) {
-      englishChar = englishChar?.toUpperCase() as EnglsihChar;
-      isCapital = false;
-    }
-    if (brailleChar === brailleDictionary[' ']) {
-      isNumber = false;
+    } else {
+      englishChar = getKeyByValue(brailleDictionary, brailleChar) as EnglsihChar;
+      if (isCapital) {
+        englishChar = englishChar?.toUpperCase() as EnglsihChar;
+        isCapital = false;
+      }
     }
     englishCharacters.push(englishChar);
   }
@@ -40,13 +37,18 @@ function translateToEnglish(textToTranslate : string) {
 }
 
 function translateToBraille(textToTranslate : string) {
-  const characters = textToTranslate.split('');
-  const textInBraille = characters.map((character) => {
-    return (convertToBraille(character));
-  }).join();
-  return textInBraille;
+  const englishCharacters = textToTranslate.split('');
+  const isFirstNumber = false;
+  const brailleCharacters : BrailleChar[] = [];
+  for (const englishChar of englishCharacters) {
+    if (isUpperCase) {
+      brailleCharacters.push(modifyiers.capitalFollows);
+      brailleCharacters.push(brailleChar);
+    }
+    const textInBraille = brailleCharacters.join();
+    return textInBraille;
+  }
 }
-
 const textToTranslate = process.argv[2];
 
 if (isBraille(textToTranslate)) {
