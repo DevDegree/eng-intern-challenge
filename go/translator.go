@@ -1,5 +1,11 @@
 package main
 
+import (
+	"fmt"
+	"strings"
+	"unicode"
+)
+
 // Struct to represent translation state
 type Translator struct {
 	AlphaE2B    map[rune]string
@@ -72,4 +78,65 @@ func NewTranslator() *Translator {
 	}
 
 	return t
+}
+
+// Series of scenarios
+func (t *Translator) handleSpace(r rune) string {
+	t.numberMode = false
+	t.capitalMode = false
+	return t.AlphaE2B[' ']
+}
+
+func (t *Translator) handleNumber(r rune) string {
+	if !t.numberMode {
+		t.numberMode = true
+		return t.Symbols['N'] + t.NumberE2B[r]
+	}
+	return t.NumberE2B[r]
+}
+
+func (t *Translator) handleUppercase(r rune) string {
+	return t.Symbols['C'] + t.AlphaE2B[unicode.ToLower(r)]
+}
+
+func (t *Translator) handleLowercase(r rune) string {
+	t.numberMode = false
+	return t.AlphaE2B[r]
+}
+
+func (t *Translator) handlePunctuation(r rune) string {
+	if braille, ok := t.PunctE2B[r]; ok {
+		return braille
+	}
+	fmt.Printf("[!] Unsupported punctuation skipped: %c\n", r)
+	return ""
+}
+
+// English --> Braille
+func (t *Translator) TranslateToBraille(input string) string {
+	var output strings.Builder
+
+	for _, r := range input {
+		var taskKey string
+
+		switch {
+		case unicode.IsSpace(r):
+			taskKey = "space"
+		case unicode.IsDigit(r):
+			taskKey = "number"
+		case unicode.IsUpper(r):
+			taskKey = "uppercase"
+		case unicode.IsLower(r):
+			taskKey = "lowercase"
+		case unicode.IsPunct(r) || strings.ContainsRune(".?!:-;/()", r):
+			taskKey = "punctuation"
+		default:
+			fmt.Printf("[!] Unsupported character skipped: %c\n", r)
+			continue
+		}
+
+		// Use task map to centralize translation logics
+		output.WriteString(t.taskMap[taskKey](r))
+	}
+	return output.String()
 }
