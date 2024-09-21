@@ -9,7 +9,6 @@ braille_dict = {"A": "O.....", "1": "O.....", "B": "O.O...", "2": "O.O...", "C":
                 ",": "..O...", "?": "..O.OO", "!": "..OOO.", ":": "..O.O.", "-": "....OO", "/": ".O..O.",
                 "<": ".OO..O", ">": "O..OO.", "(": "O.O..O", ")": ".O.OO.", " ": "......", ".": "..OO.O"}
 
-print(sys.argv)
 def english_parse(string: str):
     new_str = ""
     is_num = False
