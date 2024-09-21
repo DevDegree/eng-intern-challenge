@@ -12,3 +12,7 @@ python3 translator.py Hello
 
 # Translating from Braille to English
 python3 translator.py .....OO...O..O..O.O..O.O.OO
+```
+
+### Unit Test 
+The unit test does not work with current `translator.test.py` file. Please try running with a modified name like `translator_test.py`.
