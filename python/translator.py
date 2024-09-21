@@ -7,11 +7,13 @@ braille_capital_flag = '.....O'
 braille_number_flag = '.O.OOO'
 braille_decimal_flag = '.O...O'
 
+braille_size = 6
+
 # maps to convert english to braille
 
 braille_letters = {
     ' ': '......',
-    'a': 'O......',
+    'a': 'O.....',
     'b': 'O.O...',
     'c': 'OO....',
     'd': 'OO.O..',
@@ -68,11 +70,48 @@ english_letters = {c: l for l, c in braille_letters.items()}
 english_numbers = {c: l for l, c in braille_numbers.items()}
 
 
-
 # braille to english
 def braille_to_english(text):
     translated_text=[]
-    return ''
+    is_capital = False
+    is_number = False
+
+    # tracker to iterate through the string
+    i = 0
+
+    while i < len(text):
+        # slice the next 6 chars to translate
+        letter = text[i:i+braille_size]
+
+        # check for flags
+        if letter == braille_capital_flag:
+            is_capital = True
+        elif letter == braille_number_flag:
+            is_number = True
+        elif letter == braille_decimal_flag:
+            translated_text.append('.')
+        # check for number state change
+        elif letter == ' ' and is_number:
+            is_number = False
+            translated_text.append(' ')
+        # if not flag, then the letter should be translated and appended
+        else:
+            # handle numbers (number flag takes precedence over caps)
+            if is_number and letter in english_numbers:
+                translated_text.append(english_numbers[letter])
+            # handle capital letters
+            elif is_capital and letter in english_letters:
+                is_capital = False
+                upper_letter = english_letters[letter].upper()
+                translated_text.append(upper_letter)
+            # no special case, just translate the letter/symbol
+            elif letter in english_letters:
+                translated_text.append(english_letters[letter])
+
+        # move to next segment of 6 chars to translate
+        i += braille_size
+
+    return ''.join(translated_text)
 
 
 
@@ -146,17 +185,25 @@ other notes: braille to english
 
 class TestTranslator(unittest.TestCase):
     def test_eng_to_braille(self):
+        self.assertEqual(english_to_braille(''), '')
         self.assertEqual(english_to_braille(' '), '......')
-        self.assertEqual(english_to_braille('maggie is the coolest'), 'OO..O.O......OOOO..OOOO...OO...O..O.........OO....OO.O........OOOO.O.OO..O..O........OO....O..OO.O..OO.O.O.O.O..O...OO.O..OOOO.')
-        self.assertEqual(english_to_braille('mixOfCaps'), 'OO..O..OO...OO..OO.....OO..OO.OOO........OOO....O......OOO.O..OO.O.')
-        self.assertEqual(english_to_braille('CAPSCAPSCAPS'), '.....OOO.........OO...........OOOO.O......O.OO.O......OOO.........OO...........OOOO.O......O.OO.O......OOO.........OO...........OOOO.O......O.OO.O.')
+        self.assertEqual(english_to_braille('maggie is the coolest'), 'OO..O.O.....OOOO..OOOO...OO...O..O.........OO....OO.O........OOOO.O.OO..O..O........OO....O..OO.O..OO.O.O.O.O..O...OO.O..OOOO.')
+        self.assertEqual(english_to_braille('mixOfCaps'), 'OO..O..OO...OO..OO.....OO..OO.OOO........OOO....O.....OOO.O..OO.O.')
+        self.assertEqual(english_to_braille('CAPSCAPSCAPS'), '.....OOO.........OO..........OOOO.O......O.OO.O......OOO.........OO..........OOOO.O......O.OO.O......OOO.........OO..........OOOO.O......O.OO.O.')
         #self.assertEqual(english_to_braille('1234 abcd'), '.O.OOOO.....O.O...OO....OO.O........O.....O.O...OO....OO.O..')
         self.assertEqual(english_to_braille('Hello world'), '.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..')
         self.assertEqual(english_to_braille('42'), '.O.OOOOO.O..O.O...')
+        self.assertEqual(english_to_braille('Abc 123'), '.....OO.....O.O...OO...........O.OOOO.....O.O...OO....')
 
-        #def test_braille_to_eng(self):
-            #self.assertEqual()
-        #unittest.main()
+    def test_braille_to_eng(self):
+        self.assertEqual(braille_to_english(''), '')
+        self.assertEqual(braille_to_english('......'), ' ')
+        self.assertEqual(braille_to_english('OO..O.O.....OOOO..OOOO...OO...O..O.........OO....OO.O........OOOO.O.OO..O..O........OO....O..OO.O..OO.O.O.O.O..O...OO.O..OOOO.'), 'maggie is the coolest')
+        self.assertEqual(braille_to_english('OO..O..OO...OO..OO.....OO..OO.OOO........OOO....O.....OOO.O..OO.O.'), 'mixOfCaps')
+        self.assertEqual(braille_to_english('.....OOO.........OO..........OOOO.O......O.OO.O......OOO.........OO..........OOOO.O......O.OO.O......OOO.........OO..........OOOO.O......O.OO.O.'), 'CAPSCAPSCAPS')
+        self.assertEqual(braille_to_english('.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..'), 'Hello world')
+        self.assertEqual(braille_to_english('.O.OOOOO.O..O.O...'), '42')
+        self.assertEqual(braille_to_english('.....OO.....O.O...OO...........O.OOOO.....O.O...OO....'), 'Abc 123')
 
 def test_suite():
     unittest.main()
