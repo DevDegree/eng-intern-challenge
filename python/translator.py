@@ -38,9 +38,13 @@ def brailleToEnglish(text):
                 newString += (brailleToEnglishLetters[split[i]]).upper()
                 capital = False
             elif number:
-                if current == englishToBrailleLetters[" "] or i == len(split):
+                if current == englishToBrailleLetters[" "]:
                     number = False
-                newString += brailleToEnglishNumbers[current]
+                    newString += brailleToEnglishLetters[current]
+                elif i == len(split):
+                    break
+                else:
+                    newString += brailleToEnglishNumbers[current]
             else:
                 newString += brailleToEnglishLetters[current]
     print(newString)
