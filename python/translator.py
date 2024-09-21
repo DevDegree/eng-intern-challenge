@@ -31,7 +31,7 @@ def translate(inputed_phrase):
     if is_braille(inputed_phrase):
         if (len(inputed_phrase) % 6 != 0):
             print("Please input valid brail text.")
-        sys.exit(1)
+            sys.exit(1)
         return translate_to_eng(inputed_phrase)
     else:
         return translate_to_braille(inputed_phrase)
