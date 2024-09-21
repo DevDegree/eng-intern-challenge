@@ -1,5 +1,6 @@
 from textwrap import wrap
 
+# Dictionaries for all the braille and english letters/numbers/instructions
 brailleToEnglishLetters = {"O.....": "a", "O.O...": "b", "OO....": "c", "OO.O..": "d", "O..O..": "e", "OOO...": "f",
                            "OOOO..": "g", "O.OO..": "h", ".OO...": "i", ".OOO..": "j", "O...O.": "k", "O.O.O.": "l",
                            "OO..O.": "m", "OO.OO.": "n", "O..OO.": "o", "OOO.O.": "p", "OOOOO.": "q", "O.OOO.": "r",
@@ -20,6 +21,8 @@ instructionKeys = list(brailleToEnglishInstructions.keys())
 
 
 def brailleToEnglish(text):
+
+    # Divide the text into strings of 6 characters
     split = wrap(text, 6)
     newString = ""
     capital = False
@@ -27,6 +30,7 @@ def brailleToEnglish(text):
     number = False
     for i in range(len(split)):
         current = split[i]
+        # Check for the instruction characters
         if current == instructionKeys[0]:
             capital = True
         elif current == instructionKeys[1]:
@@ -34,6 +38,7 @@ def brailleToEnglish(text):
         elif current == instructionKeys[2]:
             number = True
         else:
+            # Add a capital or number if specified, otherwise add the corresponding english character
             if capital:
                 newString += (brailleToEnglishLetters[split[i]]).upper()
                 capital = False
@@ -47,9 +52,10 @@ def brailleToEnglish(text):
                     newString += brailleToEnglishNumbers[current]
             else:
                 newString += brailleToEnglishLetters[current]
-    print(newString)
+    return newString
 
 
+# Convert from English to Braille
 def englishToBraille(text):
     newString = ""
     firstNumber = True
@@ -65,7 +71,7 @@ def englishToBraille(text):
         else:
             firstNumber = True
             newString += englishToBrailleLetters[current.lower()]
-    print(newString)
+    return newString
 
 def brailleChecker(inputString):
     for char in inputString:
@@ -74,6 +80,7 @@ def brailleChecker(inputString):
     return brailleToEnglish(text)
 
 
-text = input()
-brailleChecker(text)
+if __name__ == "__main__":
+    text = input()
+    print(brailleChecker(text))
 
