@@ -36,7 +36,7 @@ brailleToEnglish = {
 }
 
 brailleToNums = {
-    # Numbers (0 - 9) - Represented as a-j, requires a number indicator
+    # Numbers (0 - 9) - Represented as a-j as well
     "O.....": "1",  # Same as 'a'
     "O.O...": "2",  # Same as 'b'
     "OO....": "3",  # Same as 'c'
@@ -49,7 +49,7 @@ brailleToNums = {
     ".OOO..": "0"  # Same as 'j'  
 }
 
-# sanme thing as above but are flipping the key and values
+# same thing as above but are flipping the key and values
 englishToBraille = {val: key for key, val in brailleToEnglish.items()}
 numsToBraille = {val: key for key, val in brailleToNums.items()}
 
@@ -149,6 +149,7 @@ def translateToEnglish(input: str) -> str:
             translation += brailleToEnglish[char]
 
     return translation
+
 # ------- main -----------
 if __name__ == "__main__":
     args = sys.argv[1:]     #ignore 0 idx because it is script name
