@@ -104,10 +104,12 @@ class BrailleTranslator(Translator):
         characs = []
         if self._is_braille(text):
             characs = self._split_braille_characters(text)
-            print(self._translate_to_latin(characs))
+            # print(self._translate_to_latin(characs))
+            return self._translate_to_latin(characs)
         else:
             characs = list(text)
-            print(self._translate_to_braille(characs))
+            # print(self._translate_to_braille(characs))
+            return self._translate_to_braille(characs)
 
 def process_argv(argv: list[str]) -> str:
     return ' '.join(argv[1:])
@@ -119,5 +121,5 @@ def main():
         return 0
     return 1
     
-# if __name__ == '__main__':
-main()
+if __name__ == '__main__':
+    main()
