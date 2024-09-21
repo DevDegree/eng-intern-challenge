@@ -131,7 +131,7 @@ def e_to_b(given):
                 num = True
             else:
                 answer += NUMBER_TO_BRAILLE[char]
-                num = False
+                num = True
         elif char == " ":
             answer += EXTRA_ENG['space']
             num = False
