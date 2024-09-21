@@ -14,3 +14,15 @@ brailleCapitalLetter = ".....0"
 brailleDecimal = ".0...0"
 brailleNumber = ".0.000";
 
+def inputToBraille(userInput):
+  brailleOutput = ""
+  for char in userInput:
+    # if letter
+    if char.isalpha():
+      brailleOutput += brailleAlphabetDict[char.lower()]
+
+  print(len(brailleOutput))
+  return brailleOutput
+
+userPrompt = input()
+print(inputToBraille(userPrompt))
