@@ -85,7 +85,7 @@ def get_char(lang, char):
         if char.upper() == 'X':
             return upp + "OO..OO"
         if char.upper() == 'Y':
-            return upp + "OO.O.O"
+            return upp + "OO.OOO"
         if char.upper() == 'Z':
             return upp + "O..OOO"
         if char == '.':
@@ -361,35 +361,31 @@ def trsl_brl(txt):
     return trsl
 
 def main():
-    texts = sys.argv[1:]
+    text = ' '.join(sys.argv[1:])
     result = ""
+    lst = list(text)
 
+    # First, check if less than 6 chars --> If true, then the text is English (saves time)
+    if len(lst) < 6:
+        lst.append(None)
+        result += trsl_eng(lst)
+        
 
-    for text in texts:
+    is_braille = False
+    # Next, check if each character is a '.' or 'O'. If yes, then it is Braille
+    if len(lst) >= 6:
+        for item in lst:
+            if item != '.' and item != 'O':
+                is_braille = False
+                break
+            else:
+                is_braille = True
 
-        lst = list(text.strip())
-
-        # First, check if less than 6 chars --> If true, then the text is English (saves time)
-        if len(lst) < 6:
-            lst.append(None)
-            result += trsl_eng(lst)
-            continue
-
-        is_braille = False
-        # Next, check if each character is a '.' or 'O'. If yes, then it is Braille
-        if len(lst) >= 6:
-            for item in lst:
-                if item != '.' and item != 'O':
-                    is_braille = False
-                    break
-                else:
-                    is_braille = True
-
-        if is_braille:
-            result += trsl_brl(lst)
-        else:
-            lst.append(None)
-            result += trsl_eng(lst)
+    if is_braille:
+        result += trsl_brl(lst)
+    else:
+        lst.append(None)
+        result += trsl_eng(lst)
 
     print(result)
 
