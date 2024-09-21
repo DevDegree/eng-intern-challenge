@@ -24,19 +24,20 @@ eng_to_braille = {value: key for key, value in braille_to_eng.items()}
 eng_to_braille_num = {value: key for key, value in braille_to_eng_num.items()}
 eng_to_braille_inst = {value: key for key, value in braille_to_eng_inst.items()}
 
-input_text_arr = sys.argv[1:]
-print(input_text_arr)
+# input_text_arr = sys.argv[1:]
+# print(input_text_arr)
+#
+# # Determine if input_text is english or braille
+# lang = "braille"
+#
+# if len(input_text_arr) > 1:
+#     lang = "eng"
+#
+# for char in input_text_arr[0]:
+#     if char != "." and char != "O":
+#         lang = "eng"
+#         break
 
-# Determine if input_text is english or braille
-lang = "braille"
-
-if len(input_text_arr) > 1:
-    lang = "eng"
-
-for char in input_text_arr[0]:
-    if char != "." and char != "O":
-        lang = "eng"
-        break
 
 def trans_braille_to_eng(braille_str):
     braille_unit_arr = [braille_str[i:i+6] for i in range(0, len(braille_str), 6)]
@@ -52,16 +53,24 @@ def trans_braille_to_eng(braille_str):
             if braille_to_eng_inst[braille_unit] == "cap":
                 capitalize = "ON"
             elif braille_to_eng_inst[braille_unit] == "dec":
-                decimal = "ON"
-            elif braille_to_eng_inst[barille_unit] == "num":
+                eng_string += "."
+            elif braille_to_eng_inst[braille_unit] == "num":
                 number = "ON"
+        else:
+            # if space, add space to string, change number to "OFF"
+            if braille_to_eng[braille_unit] == " ":
+                eng_string += " "
+                number = "OFF"
+            # if capital switch on
+            elif capitalize == "ON":
+                eng_string += braille_to_eng[braille_unit].upper()
+                capitalize = "OFF"
+            elif number == "ON":
+                eng_string += braille_to_eng_num[braille_unit]
+            else:
+                eng_string += braille_to_eng[braille_unit]
+    print(eng_string)
 
 
-        # if capital_follows, next 6 chars are a capital letter
-
-
-    # if number follows, assume all following are numbers until next space
-
-
-trans_braille_to_eng(input_text_arr[0])
+trans_braille_to_eng(".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..")
 
