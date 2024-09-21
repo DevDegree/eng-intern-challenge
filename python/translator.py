@@ -23,8 +23,26 @@ BRAILLE_TO_ENG = {v: k for k, v in ENG_TO_BRAILLE.items()}
 REVERSE_SPECIAL_CHARS = {v: k for k, v in SPECIAL_CHARS.items()}
 
 
+def concatinate_words(inputed_text):
+    return ' '.join(inputed_text)
+
+def translate(inputed_phrase):
+    if is_braille(inputed_phrase):
+        return "Translate to english"
+    else:
+        return "Translate to braille"
+
+def is_braille(inputed_phrase):
+    return all(char in "O." for char in inputed_phrase)
+
+
 def main():
-    return 0
+    if len(sys.argv) < 2:
+        print("Please input an english or braille text to translate!")
+        sys.exit(1)
+
+    inputed_phrase = concatinate_words(sys.argv[1:])
+    print(translate(inputed_phrase))
 
 if __name__ == "__main__":
     main()
