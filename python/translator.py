@@ -15,6 +15,7 @@ for key, value in text_to_braille_map.items():
 
 
 def to_english(braille_text):
+    # Invalid input checks
     if not braille_text:
         return "Error: Empty Input"
 
@@ -28,6 +29,7 @@ def to_english(braille_text):
     is_capital = False
     is_number = False
 
+    # Goes through the braille text and translates it to English
     while i < len(braille_text):
         symbol = braille_text[i:i+6]
         if symbol == text_to_braille_map['capital']:
@@ -53,6 +55,7 @@ def to_braille(text):
     result = []
     number_mode = False
 
+    # Goes through the text and translates it to Braille
     for char in text:
         if char.isupper():
             result.append(text_to_braille_map['capital'])
