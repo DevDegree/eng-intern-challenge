@@ -4,6 +4,7 @@ import {BrailleChar, EnglsihChar, NonNumberChar, NumberChar} from './types/types
 import {isNumber, isUpperCase} from './utils/checkTypeOfChar';
 import {brailleDictionary, modifyiers, numbersDictionary} from './utils/constants';
 import getKeyByValue from './utils/getKeyByValue';
+import getTextFromTerminal from './utils/getTexrFromTerminal';
 import splitByNumberOfChar from './utils/splitByNumberOfChar';
 
 // TODO improve types
@@ -35,15 +36,15 @@ function translateToEnglish(textToTranslate : string) {
     }
     englishCharacters.push(englishChar);
   }
-  const textInEnglish = englishCharacters.join();
+  const textInEnglish = englishCharacters.join('');
   return textInEnglish;
 }
 
 function translateToBraille(textToTranslate : string) {
-  const englishCharacters = textToTranslate.split('') as EnglsihChar[];
+  const englishCharacters = textToTranslate.split('');
   let isFirstNumber = true;
   const brailleCharacters : BrailleChar[] = [];
-  for (const englishChar of englishCharacters) {
+  for (let englishChar of englishCharacters) {
     let brailleChar;
     if (isNumber(englishChar)) {
       if (isFirstNumber) {
@@ -54,16 +55,17 @@ function translateToBraille(textToTranslate : string) {
     } else {
       if (isUpperCase(englishChar)) {
         brailleCharacters.push(modifyiers.capitalFollows);
+        englishChar = englishChar.toLowerCase();
       }
       brailleChar = brailleDictionary[englishChar as NonNumberChar];
       isFirstNumber = true;
     }
     brailleCharacters.push(brailleChar);
   }
-  const textInBraille = brailleCharacters.join();
+  const textInBraille = brailleCharacters.join('');
   return textInBraille;
 }
-const textToTranslate = process.argv[2];
+const textToTranslate = getTextFromTerminal();
 
 if (isBraille(textToTranslate)) {
   console.log(translateToEnglish(textToTranslate));
