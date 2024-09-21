@@ -139,16 +139,26 @@ def translate(input):
         return word
     else:
         word = ""
-        for c in input:
+        for i, c in enumerate(input):
             if c.isupper():
                 word += english_to_braille_special["capital_follows"]
-                word += english_to_braille[c]
+                while c.isupper():
+                    word += english_to_braille[c]
+                    i += 1
+                    if i >= len(input):
+                        return word
+                    c = input[i]
             elif c.islower():
                 c = c.upper()
                 word += english_to_braille[c]
             elif c.isdigit():
                 word += english_to_braille_special["number_follows"]
-                word += numbers_to_braille[c]
+                while c.isdigit():
+                    word += numbers_to_braille[c]
+                    i += 1
+                    if i >= len(input):
+                        return word
+                    c = input[i]
             else:
                 word += english_to_braille[c]
         return word
