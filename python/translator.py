@@ -38,6 +38,24 @@ def is_braille(inputed_phrase):
 
 
 def translate_to_eng(braille_phrase):
+    """
+    Translates a braille phrase to its corresponding English translation.
+
+    Args:
+        braille_phrase: The braille text to be translated to English.
+    
+    Returns:
+        eng_translation: A string representing the English translation.
+
+    Translatable characters include:
+    - Braille Letters: Each letter (a-z, A-Z)
+    - Braille Digits: Each digit (0-9)
+    - Braille Space
+    
+    Example:
+        Input: ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........O.OOOO....."
+        Output: "Hello 1"
+    """
     eng_translation = ""
     capitalize_next_letter = False
     next_is_digit = False
@@ -73,6 +91,26 @@ def translate_braille_special_char(braille_char, eng_translation, capitalize_nex
 
 
 def translate_to_braille(english_phrase):
+    """
+    Translates an English phrase to its corresponding Braille representation.
+
+    Args:
+        english_phrase: The English text to be translated to Braille.
+    
+    Returns:
+        braille_translation: A string representing the Braille translation, where:
+             - 'O' represents a raised dot.
+             - '.' represents no raised dot.
+
+    Translatable characters include:
+    - Letters: Each letter (a-z, A-Z)
+    - Digits: Each digit (0-9)
+    - Space
+    
+    Example:
+        Input: "Hello 1"
+        Output: ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........O.OOOO....."
+    """
     braille_translation = ""
     prev_char = ""
     for c in english_phrase:
