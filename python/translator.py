@@ -146,8 +146,9 @@ else:
         elif (inputString[i].isupper()):
             convertedString += capital_follows
             convertedString += english_to_braille[inputString[i]]
+            i += 1
         else:
             convertedString += english_to_braille[inputString[i].upper()]
-        i += 1
-        
+            i += 1
+
 print(convertedString)
