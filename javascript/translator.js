@@ -133,8 +133,6 @@ const convertToBraille = (english) => {
     let isNumber = false;
     
     for (let letter of english) {
-        // let char = english[i];
-
         // Check if the character is a number
         if (/\d/.test(letter)) {
             if (!isNumber) {
