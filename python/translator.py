@@ -46,6 +46,8 @@ def trans_braille_to_eng(braille_str):
     decimal = "OFF"
     eng_string = ""
 
+    print(braille_unit_arr)
+
     for braille_unit in braille_unit_arr:
         # If braille_unit is an instruction:
         if braille_unit in braille_to_eng_inst:
@@ -92,6 +94,6 @@ def trans_eng_to_braille(eng_string):
 
     print(braille_str)
 
-trans_braille_to_eng(".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..")
-trans_eng_to_braille("Hello world")
+trans_braille_to_eng(".O.OOOO.......OO.OO.O...")
+trans_eng_to_braille("1.2")
 
