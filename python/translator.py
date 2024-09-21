@@ -2,7 +2,15 @@
 #Jeremy Thummel
 #Braille Translator
 
-entered_text = input()
+import sys
+
+#makes sure there is input in the command line
+if len(sys.argv) >= 2:
+    entered_text = sys.argv[1]
+
+else:
+    entered_text = input()
+
 braille_text_counter = 0
 braille_entered = False
 decoded_string = ""
@@ -125,7 +133,7 @@ for current_char in entered_text:
         braille_text_counter += 1
 
 #Determine if entered text is braille
-if braille_text_counter == len(entered_text):
+if (braille_text_counter == len(entered_text)) and (braille_text_counter % 6 == 0):
     braille_entered = True
 
 if braille_entered:
@@ -141,7 +149,6 @@ if braille_entered:
         current_braille_string2 += current_braille_string
         counter += 1
 
-        print("totalString: "+current_braille_string2)
         if counter == 6:
             english = braille_to_letter[current_braille_string2]
             
