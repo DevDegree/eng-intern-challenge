@@ -39,7 +39,7 @@ const brailleAlphabet = {
   '0': '.OOO..',
   
   // Special symbols
-  space: '......',
+  ' ': '......', //space
   capital: '.....O',
   number: 'O.OOOO',
 
@@ -57,3 +57,33 @@ const brailleAlphabet = {
 	'(': 'O.O..O',
 	')': '.O.OO.'
 };
+
+// 1. Check if its braille (contain only 'O' and '.') OR letters/num/punc
+// 2.
+// 3.
+// 4.
+// 5.
+
+	//check if Braille contains only 'O' and '.'
+function isBraille(input) {
+	for (let i = 0; i < input.length; i++) {
+		const char = input[i];
+		if (char !=='O' && char !== '.') {
+			return false;
+		}
+	}
+
+	//check if its divisible by 6
+	if (input.length % 6 !== 0) {
+		return false;
+	}
+	return true;
+}
+
+const input1 = 'O.....O.OO...O...O....'; 
+const input2 = 'O..O..O.OO..'; 
+const input3 = 'O...X...'; 
+
+console.log(isBraille(input1));
+console.log(isBraille(input2)); 
+console.log(isBraille(input3));
