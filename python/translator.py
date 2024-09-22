@@ -100,14 +100,11 @@ def translate():
                 if idx + 6 <= length:
                     char = str_to_translate[idx:idx + 6]
                     eng_char = braille_to_eng.get(char)
-                    if eng_char:
-                        translation += eng_char.upper()  # convert to uppercase
-                    else:
-                        print(f"Warning: No translation found for '{char}'")
+                    translation += eng_char.upper()  # convert to uppercase
                 idx += 6
 
             # for a decimal follows symbol
-            # assumption that the decimal follows symbol is for numbers only (ie. 123.45 would have a decimal follows symbol after 3 followed by a decimal and then the rest of the numbers)
+            # assumption: the decimal follows symbol is for numbers only (ie. 123.45 would have a decimal follows symbol after the digit '3' followed by a decimal and then the rest of the numbers)
             elif char == ".O...O":
                 idx += 6
                 translation += '.'
