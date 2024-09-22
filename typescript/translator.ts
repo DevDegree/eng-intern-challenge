@@ -89,7 +89,79 @@ function englishToBraille(input: string): string {
   return braille;
 }
 
+// let's create a function to convert braille to english
+function brailleToEnglish(input: string): string {
+  const reverseBrailleMap: { [key: string]: string } = {};
+  for (const [key, value] of Object.entries(brailleMap)) {
+    reverseBrailleMap[value] = key;
+  }
 
+  let english = "";
+  let i = 0;
+  const length = input.length;
+  let capitalizeNext = false;
+  let inNumber = false;
+
+  while (i < length) {
+    const chunk = input.substr(i, 6);
+    if (chunk.length < 6) {
+      // Handle incomplete chunk if necessary
+      break;
+    }
+
+    if (chunk === brailleMap["CAPITAL"]) {
+      capitalizeNext = true;
+      i += 6;
+      continue;
+    }
+
+    if (chunk === brailleMap["NUMBER"]) {
+      inNumber = true;
+      i += 6;
+      continue;
+    }
+
+    if (chunk === brailleMap[" "]) {
+      english += " ";
+      inNumber = false;
+      i += 6;
+      continue;
+    }
+
+    let char = reverseBrailleMap[chunk];
+    if (!char) {
+      // Handle unknown Braille patterns if necessary
+      char = "?";
+    }
+
+    if (inNumber) {
+      // Numbers are represented by letters a-j (1-0)
+      const numberMap: { [key: string]: string } = {
+        a: "1",
+        b: "2",
+        c: "3",
+        d: "4",
+        e: "5",
+        f: "6",
+        g: "7",
+        h: "8",
+        i: "9",
+        j: "0",
+      };
+      char = numberMap[char] || char;
+    } else {
+      if (capitalizeNext) {
+        char = char.toUpperCase();
+        capitalizeNext = false;
+      }
+    }
+
+    english += char;
+    i += 6;
+  }
+
+  return english;
+}
 
 // driver application
 function main() {
@@ -104,12 +176,12 @@ function main() {
   let output: string;
 
   if (isBraille(input)) {
-    // output = brailleToEnglish(input);
+    output = brailleToEnglish(input);
   } else {
     output = englishToBraille(input);
   }
 
-//   console.log(output);
+  console.log(output);
 }
 
 main();
