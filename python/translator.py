@@ -90,7 +90,6 @@ def translate():
             if char_to_translate == ' ':
                 if in_number_mode:
                     in_number_mode = False  # exit number mode
-                    translation += eng_to_braille.get("space")
                 translation += eng_to_braille["space"]
                 idx += 1
 
@@ -98,7 +97,6 @@ def translate():
             elif char_to_translate.isupper():
                 if in_number_mode:
                     in_number_mode = False  # exit number mode
-                    translation += eng_to_braille.get("space")
                 translation += eng_to_braille["capital"]  # add the capital symbol
                 translation += eng_to_braille.get(char_to_translate)  
                 idx += 1
@@ -123,7 +121,6 @@ def translate():
             elif char_to_translate.islower():
                 if in_number_mode:
                     in_number_mode = False  # exit number mode
-                    translation += eng_to_braille.get("space")
                 translation += eng_to_braille.get(char_to_translate.upper())
                 idx += 1
 
@@ -132,7 +129,6 @@ def translate():
                 if char_to_translate in eng_to_punctuation:
                     if in_number_mode:
                         in_number_mode = False  # exit number mode
-                        translation += eng_to_braille.get("space")
                     translation += eng_to_punctuation[char_to_translate]
                 idx += 1
 
@@ -172,11 +168,12 @@ def translate():
                     char = str_to_translate[idx:idx + 6]
                     if char == "......":
                         in_number_mode = False  # exit number mode
+                        translation += braille_to_eng.get(char)
                         idx += 6
                         break
                     elif char == ".O...O":  # handle decimal points while still in number mode
                         idx += 12
-                        translation += '.'
+                        translation += braille_to_punctuation.get(char)
                     else:
                         num_char = braille_to_num.get(char)
                         if num_char:
