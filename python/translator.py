@@ -130,7 +130,6 @@ def is_braille(input):
     return all(i in "O." for i in input)
 
 
-# function to translate input
 def translate(input):
 
     if is_braille(input):
@@ -165,7 +164,6 @@ def translate(input):
                     s = symbols[i]
                     count += 1
                 num_found = True
-
             else:
                 letter_or_symbol = braille_to_english[s]
                 if letter_or_symbol.isalpha():
@@ -179,22 +177,21 @@ def translate(input):
     else:
         word = ""
         num_found = False
+        count_num = -1
         for i, c in enumerate(input):
+            if num_found and count_num != 0:
+                count_num -= 1
+                continue
+            count_num = -1
+            num_found = False
+
             if c.isupper():
                 word += english_to_braille_special["capital_follows"]
-                while c.isupper():
-                    word += english_to_braille[c]
-                    i += 1
-                    if i >= len(input):
-                        return word
-                    c = input[i]
+                word += english_to_braille[c]
             elif c.islower():
                 c = c.upper()
                 word += english_to_braille[c]
             elif c.isdigit():
-                last_char = word[-6:]
-                if last_char in numbers_to_braille.values():
-                    continue
                 word += english_to_braille_special["number_follows"]
                 while c.isdigit():
                     word += numbers_to_braille[c]
@@ -202,6 +199,8 @@ def translate(input):
                     if i >= len(input):
                         return word
                     c = input[i]
+                    count_num += 1
+                num_found = True
             else:
                 word += english_to_braille[c]
         return word
@@ -214,10 +213,7 @@ def main():
         return
 
     input = " ".join(sys.argv[1:])
-    if is_braille(input):
-        print(translate(input))
-    else:
-        print(translate(input))
+    print(translate(input))
 
 
 if __name__ == "__main__":
