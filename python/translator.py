@@ -67,3 +67,21 @@ if __name__ == "__main__":
     import sys
     input_str = sys.argv[1] if len(sys.argv) > 1 else ""
     main(input_str)
+
+def translate_to_braille(text):
+    result = []
+    is_number = False
+    for char in text:
+        if char.isdigit() and not is_number:
+            result.append(english_to_braille["NUM"])
+            is_number = True
+        if char.isalpha() and char.isupper():
+            result.append(english_to_braille["CAP"])
+        if char == ' ':
+            is_number = False  # Reset number flag after a space
+        # Handle unsupported characters
+        braille_char = english_to_braille.get(char.lower(), "......")
+        result.append(braille_char)
+    
+    print("Braille output: ", ''.join(result))  # Add this for debugging
+    return ''.join(result)
