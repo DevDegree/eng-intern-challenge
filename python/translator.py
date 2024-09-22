@@ -67,6 +67,84 @@ braille_to_eng = {value: key for key, value in eng_to_braille.items()}
 braille_to_num = {value: key for key, value in eng_to_num.items()}
 braille_to_punctuation = {value: key for key, value in eng_to_punctuation.items()}
 
+def translate():
+    str_to_translate = input()
+
+    length = len(str_to_translate)
+    idx = 0
+    translation = ""
+
+    if len(str_to_translate) == 0:
+        print('')
+
+    # Convert from English to Braille 
+    elif isEnglish(str_to_translate):
+        # implement
+
+    # Convert from Braille to English
+    else:
+        in_number_mode = False
+        while idx < length:
+            start = idx
+            end = idx + 6
+            char = str_to_translate[start:end]
+
+            # if it's a space
+            if char == "......":
+                translation += ' '
+                idx += 6
+
+            # if it's a capital letter
+            elif char == ".....O":
+                idx += 6
+                if idx + 6 <= length:  # bounds checking
+                    char = str_to_translate[idx:idx + 6]
+                    eng_char = braille_to_eng.get(char)
+                    if eng_char:
+                        translation += eng_char.upper()  # Capital letter
+                    else:
+                        print(f"Warning: No translation found for '{char}'")
+                idx += 6
+
+            # if it's a decimal
+            elif char == ".O...O":
+                idx += 6
+                translation += '.'
+
+            # if it's a number
+            elif char == ".O.OOO":
+                in_number_mode = True  # Enter number mode
+                idx += 6
+                while idx + 6 <= length:
+                    char = str_to_translate[idx:idx + 6]
+                    if char == "......":
+                        in_number_mode = False  # Exit number mode on space
+                        break
+                    elif char == ".O...O":  # Handle decimal points in number mode
+                        translation += '.'
+                        idx += 6
+                    else:
+                        num_char = braille_to_num.get(char)
+                        if num_char:
+                            translation += num_char
+                        idx += 6
+
+            # for regular English letters
+            else:
+                eng_char = braille_to_eng.get(char)
+                if eng_char:
+                    if in_number_mode:
+                        in_number_mode = False  # Exit number mode if letter found
+                    translation += eng_char.lower()  # Convert to lowercase
+                else:
+                    punctuation_char = braille_to_punctuation.get(char)
+                    if punctuation_char:
+                        translation += punctuation_char
+                idx += 6
+    
+    print(translation)
+    return 0
+
 # Check if the string is English or Braille
 def isEnglish(str_to_translate):
     for char in str_to_translate:
