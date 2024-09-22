@@ -1,3 +1,10 @@
+# Author: Robert Thom
+# GitHub username: rthom9
+# Date: 22/09/2024
+# Description: Command-line application to translate Braille to English and English to Braille. Determines if
+# given string is English or Braille and translates appropriately. Submitted for Eng Intern Challenge - Fall - Winter
+# 2025.
+
 import sys
 
 braille_to_eng = {
@@ -26,6 +33,8 @@ eng_to_braille_inst = {value: key for key, value in braille_to_eng_inst.items()}
 
 
 def translate(input_args):
+    """Takes input argument array, determines if provided string is English or Braille and runs appropriate translator
+    function."""
     if len(input_args) > 1:
         eng_str = " ".join(input_args)
         print(trans_eng_to_braille(eng_str))
@@ -36,32 +45,30 @@ def translate(input_args):
 
 
 def trans_braille_to_eng(braille_str):
+    """Accepts a Braille string and returns translated English string."""
     braille_unit_arr = [braille_str[i:i+6] for i in range(0, len(braille_str), 6)]
     capitalize = "OFF"
     number = "OFF"
-    decimal = "OFF"
     eng_string = ""
 
     for braille_unit in braille_unit_arr:
-        # If braille_unit is an instruction:
+        # If braille_unit is an instruction, turn on switch for appropriate interpretation of next braille_unit.
         if braille_unit in braille_to_eng_inst:
             if braille_to_eng_inst[braille_unit] == "cap":
                 capitalize = "ON"
-            # elif braille_to_eng_inst[braille_unit] == "dec":
-            #     eng_string += "."
             elif braille_to_eng_inst[braille_unit] == "num":
                 number = "ON"
         else:
-            # if space, add space to string, change number to "OFF"
+            # If space, add space to string, change number switch to "OFF"
             if braille_to_eng[braille_unit] == " ":
                 eng_string += " "
                 number = "OFF"
-            # if capital switch on
+            # if capital switch on, ensure letter is capitalized, change capitalize switch to "OFF"
             elif capitalize == "ON":
                 eng_string += braille_to_eng[braille_unit].upper()
                 capitalize = "OFF"
             elif number == "ON":
-                # If is a decimal point within a number
+                # For case of decimal point within a number
                 if braille_unit == eng_to_braille["."]:
                     eng_string += braille_to_eng[braille_unit]
                 else:
@@ -73,13 +80,16 @@ def trans_braille_to_eng(braille_str):
 
 
 def trans_eng_to_braille(eng_string):
+    """Accepts an English string and returns translated Braille string."""
     braille_str = ""
     num = "OFF"
 
     for char in eng_string:
+        # If capital letter, add capitalize instruction prior to braille letter
         if char.isupper():
             braille_str += eng_to_braille_inst["cap"]
             braille_str += eng_to_braille[char.lower()]
+        # If digit, insert number instruction only if first digit in number
         elif char.isdigit():
             if num == "OFF":
                 braille_str += eng_to_braille_inst["num"]
@@ -92,6 +102,7 @@ def trans_eng_to_braille(eng_string):
             braille_str += eng_to_braille[char]
 
     return braille_str
+
 
 if __name__ == "__main__":
     input_str = sys.argv[1:]
