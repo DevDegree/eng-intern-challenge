@@ -83,8 +83,56 @@ def braille_decoder(bit_combination):
     letter = chr(ord('A') + pattern_value) # Letter conversion from ascii value
     return letter
 
-bit_string = braille_to_bits(args[0])
-print(f"Bits: {bit_string:06b}")
+def bits_to_braille(bits):
+    braille = ''
+    for i in range(6):
+        braille += 'O' if bits & (1 << i) else '.'
 
-letter = braille_decoder(bit_string)
-print("letter: " + letter)
+    return braille
+
+def braille_encoder(arg):
+
+    # Create the base pattern template for bits 1,2,3,4
+    base_patterns = {
+        0: 0b000001,
+        1: 0b000101,
+        2: 0b000011,
+        3: 0b001011,
+        4: 0b001001,
+        5: 0b000111,
+        6: 0b001111,
+        7: 0b001101,
+        8: 0b000110,
+        9: 0b001110
+    }
+
+    letter = arg.upper()
+    
+    letter_pos = ord(letter) - ord('A')
+
+    if letter_pos < 0 or letter_pos > 25:
+        raise ValueError("Input must be a letter between A and Z")
+    
+    if letter == 'W':
+        letter_pos = 9
+    
+    if letter_pos > 22:
+        letter_pos -= 1
+    
+    bit_pattern = base_patterns[letter_pos % 10 if letter_pos!=0 else 0]
+
+    print(f"{bit_pattern:06b}")
+
+    if letter_pos >= 10 and letter != 'W':
+        bit_pattern |= 0b010000
+
+    if letter_pos >= 20 or letter == 'W':
+        bit_pattern |= 0b100000
+
+    return bits_to_braille(bit_pattern)
+    
+# letter = braille_to_bits(args[0])
+# print("letter: " + letter)
+
+braille_string = braille_encoder(args[0])
+print("Braille: " + braille_string)
