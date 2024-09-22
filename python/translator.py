@@ -44,5 +44,22 @@ def braille_to_bits(arg):
             raise ValueError("Inputted Braille must be either . or O")
     return bits
 
+
+def braille_decoder(bit_combination):
+    base_patterns = {
+        0b000001: 0,
+        0b000011: 1,
+        0b000101: 2,
+        0b001101: 3,
+        0b001001: 4,
+        0b000111: 5,
+        0b001111: 6,
+        0b001101: 7,
+        0b000110: 8,
+        0b001110: 9
+    }
+
+    return 0
+
 bit_string = braille_to_bits(args[0])
 print(f"Bits: {bit_string:06b}")
