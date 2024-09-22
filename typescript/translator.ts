@@ -91,4 +91,25 @@ function englishToBraille(input: string): string {
 
 
 
+// driver application
+function main() {
+  const args = process.argv.slice(2);
+  if (args.length === 0) {
+    console.error("No input provided.");
+    process.exit(1);
+  }
 
+  const input = args.join(" ");
+
+  let output: string;
+
+  if (isBraille(input)) {
+    // output = brailleToEnglish(input);
+  } else {
+    output = englishToBraille(input);
+  }
+
+//   console.log(output);
+}
+
+main();
