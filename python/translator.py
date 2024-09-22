@@ -142,3 +142,4 @@ if __name__ == '__main__':
     Entry point of program. Reads input arguments and prints translated result.
     """
     print(translator(sys.argv))
+
