@@ -2,7 +2,13 @@
 # Eng Intern Challenge Submission
 # Sept 22, 2024
 
-imoprt sys
+import sys
+
+# definne constants for special symbols
+CAPITAL = '.....O'
+DECIMAL = '.O...O'
+NUMBER_FOLLOWS = '.O.OOO'
+SPACE = '......'
 
 eng_to_braille = {
     'A': 'O.....',
@@ -31,10 +37,10 @@ eng_to_braille = {
     'X': 'OO..OO',
     'Y': 'OO.OOO',
     'Z': 'O..OOO',
-    'capital': '.....O',
-    'decimal': '.O...O',
-    'number': '.O.OOO',
-    'space': '......',
+    'capital': CAPITAL,
+    'decimal': DECIMAL,
+    'number': NUMBER_FOLLOWS,
+    'space': SPACE,
 }
 
 eng_to_num = {
@@ -70,15 +76,17 @@ braille_to_num = {value: key for key, value in eng_to_num.items()}
 braille_to_punctuation = {value: key for key, value in eng_to_punctuation.items()}
 
 def translate():
+    # if we have no arguments output a blank statement back to the user
     if len(sys.argv) < 2:
         print('')
         return
 
+    # collect the sentence(s) we will be translating
     str_to_translate = ' '.join(sys.argv[1:])
 
+    # initilize a few starting variables 
     length = len(str_to_translate)
-    idx = 0
-    translation = ""
+    idx, translation, in_number_mode = 0, "", False
 
     # Convert from English to Braille 
     if isEnglish(str_to_translate):
