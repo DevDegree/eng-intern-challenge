@@ -34,12 +34,16 @@ class BrailleEnglishTranslator:
         '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..', ' ': '......'
     }
 
+    # primary function for translations
+    # returns a translated string
     def translate(self, input_str):
         if (self.is_braille(input_str)):
             return self.braille_to_english(input_str)
         else:
             return self.english_to_braille(input_str)
 
+    # checking for valid Braille input 
+    # returns True for valid Braille input and False otherwise
     def is_braille(self, str):
         if (len(str) % self.BRAILLE_CHAR_LEN != 0): # braille must be groupings of 6
             return False
@@ -51,6 +55,8 @@ class BrailleEnglishTranslator:
         
         return True
     
+    # str is a string of Braille character representations
+    # returns a string of the English translation
     def braille_to_english(self, str):
         translated_str = ''
         translate_nums = False
@@ -81,6 +87,8 @@ class BrailleEnglishTranslator:
         
         return translated_str
 
+    # str is a string of English words/numbers
+    # returns a string of the Braille translation
     def english_to_braille(self, str):
         translated_str = ''
         prev_is_number = False # flag for whether or not the previous input was already a number
