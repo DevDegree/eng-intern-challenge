@@ -31,7 +31,7 @@ const brailleMap: { [key: string]: string } = {
   " ": "......",
   // mapping of capital and number indicators
   CAPITAL: ".....O",
-  NUMBER: "..OO..",
+  NUMBER: ".O.OOO",
   // mapping of numbers
   "1": "O.....",
   "2": "O.O...",
