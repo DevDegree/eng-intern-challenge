@@ -1,12 +1,12 @@
 # Arya Patel
 # Eng Intern Challenge Submission
-# Sept 22, 2024
+# Sept 18, 2024
 
 import sys
 
-# definne constants for special symbols
-CAPITAL = '.....O'
-DECIMAL = '.O...O'
+# define constants for special symbols
+CAPITAL_FOLLOWS = '.....O'
+DECIMAL_FOLLOWS = '.O...O'
 NUMBER_FOLLOWS = '.O.OOO'
 SPACE = '......'
 
@@ -37,8 +37,8 @@ eng_to_braille = {
     'X': 'OO..OO',
     'Y': 'OO.OOO',
     'Z': 'O..OOO',
-    'capital': CAPITAL,
-    'decimal': DECIMAL,
+    'capital': CAPITAL_FOLLOWS,
+    'decimal': DECIMAL_FOLLOWS,
     'number': NUMBER_FOLLOWS,
     'space': SPACE,
 }
@@ -71,6 +71,7 @@ eng_to_punctuation = {
     ')': '.O.OO.',
 }
 
+# initilize braille to english converstion dictionaries by reverseing the above dictionaries
 braille_to_eng = {value: key for key, value in eng_to_braille.items()}
 braille_to_num = {value: key for key, value in eng_to_num.items()}
 braille_to_punctuation = {value: key for key, value in eng_to_punctuation.items()}
@@ -101,7 +102,7 @@ def translate():
             # for a capital letter
             elif char_to_translate.isupper():
                 in_number_mode = False
-                translation += CAPITAL + eng_to_braille[char_to_translate]
+                translation += CAPITAL_FOLLOWS + eng_to_braille[char_to_translate]
 
             # for a number
             elif char_to_translate.isdigit():
@@ -113,7 +114,7 @@ def translate():
             # for a decimal point within numbers
             elif char_to_translate == '.':
                 if in_number_mode:
-                    translation += DECIMAL + eng_to_punctuation['.'] # add the decimal follows symbol
+                    translation += DECIMAL_FOLLOWS + eng_to_punctuation['.'] # add the decimal follows symbol
                 else:
                     translation += eng_to_punctuation['.']
 
@@ -129,7 +130,7 @@ def translate():
 
             idx += 1
 
-        # Convert from Braille to English
+    # Convert from Braille to English
     else:
         while idx < length:
             char_to_translate = str_to_translate[idx : idx + 6]
