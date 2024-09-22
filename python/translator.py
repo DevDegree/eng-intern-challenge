@@ -66,3 +66,15 @@ eng_to_punctuation = {
 braille_to_eng = {value: key for key, value in eng_to_braille.items()}
 braille_to_num = {value: key for key, value in eng_to_num.items()}
 braille_to_punctuation = {value: key for key, value in eng_to_punctuation.items()}
+
+# Check if the string is English or Braille
+def isEnglish(str_to_translate):
+    for char in str_to_translate:
+        if char == ' ':
+            continue
+        elif char != 'O' and char != '.':
+            return True
+    return False
+
+if __name__ == "__main__":
+    translate()
