@@ -1,11 +1,12 @@
 import sys
+from typing import Dict
 
 class Braille:
     '''
     Braille class 
     '''
 
-    char_to_braille: dict[str, str] = {
+    char_to_braille: Dict[str, str] = {
         'a': 'O.....',
         'b': 'O.O...',
         'c': 'OO....',
@@ -47,8 +48,8 @@ class Braille:
         ' ': '......',
     }
 
-    braille_to_char: dict[str, str] = {val: key for key, val in char_to_braille.items() if key.isalpha() or key.isspace()}
-    braille_to_nums: dict[str, str] = {val: key for key, val in char_to_braille.items() if key.isdigit()}
+    braille_to_char: Dict[str, str] = {val: key for key, val in char_to_braille.items() if key.isalpha() or key.isspace()}
+    braille_to_nums: Dict[str, str] = {val: key for key, val in char_to_braille.items() if key.isdigit()}
 
     @staticmethod
     def isEncoded(text: str) -> bool:
