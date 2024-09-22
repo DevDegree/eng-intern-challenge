@@ -50,3 +50,45 @@ function isBraille(input: string): boolean {
   return /^[O.]+$/.test(input);
 }
 
+// let's create a function to convert english to braille
+function englishToBraille(input: string): string {
+  let braille = "";
+  let inNumber = false;
+
+  for (let i = 0; i < input.length; i++) {
+    const char = input[i];
+    if (char === " ") {
+      braille += brailleMap[" "];
+      inNumber = false;
+      continue;
+    }
+
+    if (/\d/.test(char)) {
+      if (!inNumber) {
+        braille += brailleMap["NUMBER"];
+        inNumber = true;
+      }
+      braille += brailleMap[char];
+      continue;
+    } else {
+      if (inNumber) {
+        inNumber = false;
+      }
+    }
+
+    if (/[A-Z]/.test(char)) {
+      braille += brailleMap["CAPITAL"];
+      braille += brailleMap[char.toLowerCase()];
+    } else if (/[a-z]/.test(char)) {
+      braille += brailleMap[char];
+    } else {
+      // Handle unsupported characters if necessary
+    }
+  }
+
+  return braille;
+}
+
+
+
+
