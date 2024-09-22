@@ -57,11 +57,11 @@ const allValidBrailleChars = [
 ];
 
 //checks to see if there is a number in the passed input
-function hasNumber(input) {
+function isNumber(input) {
   return /[0-9]/g.test(input);
 }
 //checks to see if there is a capital letter in the passed input
-function hasCapitalLetter(input) {
+function isCapitalLetter(input) {
   return /[A-Z]/.test(input);
 }
 
@@ -131,7 +131,7 @@ function translateToBraille(input) {
     if (char === ' ') {
       translation += specialCharacterToBraille['space'];
       numberSeen = false;
-    } else if (hasNumber(char)) {
+    } else if (isNumber(char)) {
       if (!numberSeen) {
         numberSeen = true;
         translation +=
@@ -139,7 +139,7 @@ function translateToBraille(input) {
       } else {
         translation += numberToBraille[char];
       }
-    } else if (hasCapitalLetter(char)) {
+    } else if (isCapitalLetter(char)) {
       translation +=
         specialCharacterToBraille['capital'] +
         englishLetterToBraille[char.toLowerCase()];
