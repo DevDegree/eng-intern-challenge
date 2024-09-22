@@ -62,3 +62,7 @@ eng_to_punctuation = {
     '(': 'O.O..O',
     ')': '.O.OO.',
 }
+
+braille_to_eng = {value: key for key, value in eng_to_braille.items()}
+braille_to_num = {value: key for key, value in eng_to_num.items()}
+braille_to_punctuation = {value: key for key, value in eng_to_punctuation.items()}
