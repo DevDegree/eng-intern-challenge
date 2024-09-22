@@ -1,1 +1,64 @@
+# Arya Patel
+# Eng Intern Challenge Submission
+# Sept 22, 2024
 
+eng_to_braille = {
+    'A': 'O.....',
+    'B': 'O.O...',
+    'C': 'OO....',
+    'D': 'OO.O..',
+    'E': 'O..O..',
+    'F': 'OOO...',
+    'G': 'OOOO..',
+    'H': 'O.OO..',
+    'I': '.OO...',
+    'J': '.OOO..',
+    'K': 'O...O.',
+    'L': 'O.O.O.',
+    'M': 'OO..O.',
+    'N': 'OO.OO.',
+    'O': 'O..OO.',
+    'P': 'OOO.O.',
+    'Q': 'OOOOO.',
+    'R': 'O.OOO.',
+    'S': '.OO.O.',
+    'T': '.OOOO.',
+    'U': 'O...OO',
+    'V': 'O.O.OO',
+    'W': '.OOO.O',
+    'X': 'OO..OO',
+    'Y': 'OO.OOO',
+    'Z': 'O..OOO',
+    'capital': '.....O',
+    'decimal': '.O...O',
+    'number': '.O.OOO',
+    'space': '......',
+}
+
+eng_to_num = {
+    '1': 'O.....',
+    '2': 'O.O...',
+    '3': 'OO....',
+    '4': 'OO.O..',
+    '5': 'O..O..',
+    '6': 'OOO...',
+    '7': 'OOOO..',
+    '8': 'O.OO..',
+    '9': '.OO...',
+    '0': '.OOO..'
+}
+
+eng_to_punctuation = {
+    ',': '..OO.O',
+    '.': '..O...',
+    '?': '..O.OO',
+    '!': '..OOO.',
+    ':': '..OO..',
+    ';': '..O.O.',
+    '-': '....OO',
+    '/': '.O..O.',
+    '<': '.OO..O',
+    '>': 'O..OO.',
+    '(': 'O.O..O',
+    ')': '.O.OO.',
+}
