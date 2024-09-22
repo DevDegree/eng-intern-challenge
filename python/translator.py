@@ -89,38 +89,39 @@ def translate():
             end = idx + 6
             char = str_to_translate[start:end]
 
-            # if it's a space
+            # for a space
             if char == "......":
                 translation += ' '
                 idx += 6
 
-            # if it's a capital letter
+            # for a capital letter
             elif char == ".....O":
                 idx += 6
-                if idx + 6 <= length:  # bounds checking
+                if idx + 6 <= length:
                     char = str_to_translate[idx:idx + 6]
                     eng_char = braille_to_eng.get(char)
                     if eng_char:
-                        translation += eng_char.upper()  # Capital letter
+                        translation += eng_char.upper()  # convert to uppercase
                     else:
                         print(f"Warning: No translation found for '{char}'")
                 idx += 6
 
-            # if it's a decimal
+            # for a decimal follows symbol
+            # assumption that the decimal follows symbol is for numbers only (ie. 123.45 would have a decimal follows symbol after 3 followed by a decimal and then the rest of the numbers)
             elif char == ".O...O":
                 idx += 6
                 translation += '.'
 
-            # if it's a number
+            # for a number
             elif char == ".O.OOO":
-                in_number_mode = True  # Enter number mode
+                in_number_mode = True  # enter number mode
                 idx += 6
                 while idx + 6 <= length:
                     char = str_to_translate[idx:idx + 6]
                     if char == "......":
-                        in_number_mode = False  # Exit number mode on space
+                        in_number_mode = False  # exit number mode
                         break
-                    elif char == ".O...O":  # Handle decimal points in number mode
+                    elif char == ".O...O":  # handle decimal points while still in number mode
                         translation += '.'
                         idx += 6
                     else:
@@ -134,8 +135,8 @@ def translate():
                 eng_char = braille_to_eng.get(char)
                 if eng_char:
                     if in_number_mode:
-                        in_number_mode = False  # Exit number mode if letter found
-                    translation += eng_char.lower()  # Convert to lowercase
+                        in_number_mode = False  # exit number mode
+                    translation += eng_char.lower()  # convert to lowercase
                 else:
                     punctuation_char = braille_to_punctuation.get(char)
                     if punctuation_char:
