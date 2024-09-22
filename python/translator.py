@@ -90,55 +90,44 @@ def translate():
 
     # Convert from English to Braille 
     if isEnglish(str_to_translate):
-        in_number_mode = False 
         while idx < length:
             char_to_translate = str_to_translate[idx]
 
-            # for a spaces
+            # for spaces
             if char_to_translate == ' ':
-                if in_number_mode:
-                    in_number_mode = False  # exit number mode
-                translation += eng_to_braille["space"]
-                idx += 1
+                in_number_mode = False # if in number mode it will now be false, if we aren't in number mode it stays false
+                translation += SPACE
 
             # for a capital letter
             elif char_to_translate.isupper():
-                if in_number_mode:
-                    in_number_mode = False  # exit number mode
-                translation += eng_to_braille["capital"]  # add the capital symbol
-                translation += eng_to_braille.get(char_to_translate)  
-                idx += 1
+                in_number_mode = False
+                translation += CAPITAL + eng_to_braille[char_to_translate]
 
             # for a number
             elif char_to_translate.isdigit():
                 if not in_number_mode:
-                    in_number_mode = True           # enter number mode
-                    translation += eng_to_braille["number"]  # add number follows symbol
-                translation += eng_to_num.get(char_to_translate)  
-                idx += 1
+                    in_number_mode = True # enter number mode
+                    translation += NUMBER_FOLLOWS # add the number follows symbol
+                translation += eng_to_num[char_to_translate] 
 
             # for a decimal point within numbers
             elif char_to_translate == '.':
                 if in_number_mode:
-                    translation += eng_to_braille.get("decimal") + eng_to_punctuation.get(".")  # add the decimal follows symbol
+                    translation += DECIMAL + eng_to_punctuation['.'] # add the decimal follows symbol
                 else:
-                    translation += eng_to_punctuation.get(".")
-                idx += 1
+                    translation += eng_to_punctuation['.']
 
             # for a lowercase letter
             elif char_to_translate.islower():
-                if in_number_mode:
-                    in_number_mode = False  # exit number mode
-                translation += eng_to_braille.get(char_to_translate.upper())
-                idx += 1
+                in_number_mode = False
+                translation += eng_to_braille[char_to_translate.upper()]
 
             # for a punctuation mark
-            else:
-                if char_to_translate in eng_to_punctuation:
-                    if in_number_mode:
-                        in_number_mode = False  # exit number mode
-                    translation += eng_to_punctuation[char_to_translate]
-                idx += 1
+            elif char_to_translate in eng_to_punctuation:
+                in_number_mode = False  
+                translation += eng_to_punctuation[char_to_translate]
+
+            idx += 1
 
     # Convert from Braille to English
     else:
