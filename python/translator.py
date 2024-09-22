@@ -8,16 +8,18 @@ Plan of Action:
     - if the input string only contains the characters O and . then it is braille
 2. For a Braille to English conversion we can map the set of braille combinations into 6 bit binary values using this matrix:
 
-[1][4]
-[2][5]
-[3][6]
+[1][2]
+[3][4]
+[5][6]
 
 Therefore, if the Braille Letter is O..... Then the 6 bit combination is 0b000001
-From the provided braille to letter combinations, we can see that the letters A-J only use bit positions 1,2,4 and 5.
-We can also see that the letters K-T add the bit position 3 to the same bit patterns as A-J.
+From the provided braille to letter combinations, we can see that the letters A-J only use bit positions 1,2,3 and 4.
+We can also see that the letters K-T add the bit position 5 to the same bit patterns as A-J.
 The same occurs for letters U-Z however adding bit position 6 as well.
 This means we can partition the alphabet into 3 sections and by distinguishing if bit positions 3 and 6 are used we can identify which corresponding letter should be added.
 We can also use ASCII character encodings to transform the binary values of the 6 bit combination into characters.
+
+** After some testing it was found that the letter 'W' does not match the pattern and uses bits 2,4,5 instead of 1,4. An exception in the code will be made which identifies this edge case.
 
 3. Implement logic which identifies if 'capital follows', 'decimal follows' or 'number follows' 6 bit combinations are present
 4. Implement numerical logic so that if 'decimal follows' or 'number follows' 6 bit combination is found then instead of letter combinations, number combinations are used.
@@ -46,11 +48,12 @@ def braille_to_bits(arg):
 
 
 def braille_decoder(bit_combination):
+    # Create the base pattern template for bits 1,2,3,4
     base_patterns = {
         0b000001: 0,
-        0b000011: 1,
-        0b000101: 2,
-        0b001101: 3,
+        0b000101: 1,
+        0b000011: 2,
+        0b001011: 3,
         0b001001: 4,
         0b000111: 5,
         0b001111: 6,
@@ -59,7 +62,29 @@ def braille_decoder(bit_combination):
         0b001110: 9
     }
 
-    return 0
+    # Mask out bits 1 to 4 for pattern matching
+    pattern = bit_combination & 0b1111
+
+    # Gather bits for dot 5 and 6
+    bit_5 = (bit_combination & 0b010000 ) >> 4
+    bit_6 = (bit_combination & 0b100000 ) >> 5
+
+    pattern_value = base_patterns.get(pattern, None) # Gather pattern number using bit pattern as key
+
+    if bit_5:
+        pattern_value += 10
+
+    if bit_6:
+        pattern_value += 10 if bit_5 else 13 # In case a W is present
+
+    if pattern_value > 22: # Adjust for every letter after W
+        pattern_value += 1
+
+    letter = chr(ord('A') + pattern_value) # Letter conversion from ascii value
+    return letter
 
 bit_string = braille_to_bits(args[0])
 print(f"Bits: {bit_string:06b}")
+
+letter = braille_decoder(bit_string)
+print("letter: " + letter)
