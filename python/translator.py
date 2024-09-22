@@ -159,7 +159,7 @@ def translate():
                     char_to_translate = str_to_translate[idx:idx + 6]
                     if char_to_translate == SPACE:
                         in_number_mode = False  
-                        translation += braille_to_eng[char_to_translate]
+                        translation += ' '
                         break
                     # handle decimal points while still in number mode
                     elif char_to_translate == DECIMAL_FOLLOWS: 
@@ -170,7 +170,7 @@ def translate():
                     idx += 6
 
             # for regular English letters
-            elif braille_to_eng[char_to_translate]:
+            elif braille_to_eng.get(char_to_translate):
                 translation += (braille_to_eng[char_to_translate]).lower()
             
             # for punctuation marks
