@@ -87,12 +87,14 @@ func (c char) encode(isNumber bool) (modeToInsert brailleMode, symbol symbol, er
 	switch {
 	case c >= '0' && c <= '9':
 		if !isNumber {
+			// only inserts number follows at the start of a number
 			modeToInsert = brailleModeNumber
 		}
 		symbol, _ = symbolWithDigit.encode(c)
 	case c >= 'A' && c <= 'Z':
 		modeToInsert = brailleModeCapital
 		c = c.toLower()
+		// join the general match after special handling for uppercase letters
 		fallthrough
 	default:
 		if isNumber {
@@ -197,17 +199,17 @@ func NewBrailleTranslator[WR io.Writer](writer WR) BrailleTranslator[WR] {
 	return BrailleTranslator[WR]{Writer: writer}
 }
 
-// writeRune writes the given char to the embedded writer.
-func (bc BrailleTranslator[WR]) writeRune(c char) error {
-	if _, err := bc.Writer.Write([]byte{byte(c)}); err != nil {
-		return fmt.Errorf("failed to write rune '%c': %w", c, err)
+// writeChar writes the given char to the embedded writer.
+func (bt BrailleTranslator[WR]) writeChar(c char) error {
+	if _, err := bt.Writer.Write([]byte{byte(c)}); err != nil {
+		return fmt.Errorf("failed to write char '%c': %w", c, err)
 	}
 	return nil
 }
 
 // writeSymbol writes the given braille symbol to the embedded writer.
-func (bc BrailleTranslator[WR]) writeSymbol(symbol symbol) error {
-	if _, err := bc.Writer.Write([]byte(symbol)); err != nil {
+func (bt BrailleTranslator[WR]) writeSymbol(symbol symbol) error {
+	if _, err := bt.Writer.Write([]byte(symbol)); err != nil {
 		return fmt.Errorf("failed to write string \"%s\": %w", symbol, err)
 	}
 	return nil
@@ -216,7 +218,7 @@ func (bc BrailleTranslator[WR]) writeSymbol(symbol symbol) error {
 // translateBraille translates the given braille to alphanumeric
 // characters/spaces and writes to the embedded writer.
 // Any IO or malformation error will halt the translation.
-func (bc BrailleTranslator[WR]) translateBraille(braille string) (err error) {
+func (bt BrailleTranslator[WR]) translateBraille(braille string) (err error) {
 	mode := brailleModeNone
 	var c char
 
@@ -229,7 +231,7 @@ func (bc BrailleTranslator[WR]) translateBraille(braille string) (err error) {
 		symbol := braille[i : i+6]
 
 		wrapErr := func(e error) error {
-			return fmt.Errorf("failed to convert braille symbol \"%s\" at position %d of \"%s\": %w", symbol, i, braille, e)
+			return fmt.Errorf("failed to translate braille symbol \"%s\" at position %d of \"%s\": %w", symbol, i, braille, e)
 		}
 
 		oldMode := mode
@@ -241,7 +243,7 @@ func (bc BrailleTranslator[WR]) translateBraille(braille string) (err error) {
 		}
 
 		if c, err = mode.decode(symbol); err == nil {
-			err = bc.writeRune(c)
+			err = bt.writeChar(c)
 		}
 
 		if err != nil {
@@ -255,36 +257,35 @@ func (bc BrailleTranslator[WR]) translateBraille(braille string) (err error) {
 // translateAlphanumeric translates the given alphanumeric words
 // into braille and writes to the embedded writer.
 // Any IO or malformation error will halt the translation.
-func (bc BrailleTranslator[WR]) translateAlphanumeric(words ...string) (err error) {
+func (bt BrailleTranslator[WR]) translateAlphanumeric(words ...string) (err error) {
 	for wordIdx, word := range words {
 		// a new word always ends the previous number
 		isNumber := false
 
 		if wordIdx > 0 {
 			// inserts a space before converting any non-first word
-			if err = bc.writeSymbol(symbolWithLetter.encoding[' ']); err != nil {
-				return fmt.Errorf("failed to convert character ' ': %w", err)
+			if err = bt.writeSymbol(symbolWithLetter.encoding[' ']); err != nil {
+				return fmt.Errorf("failed to translate character ' ': %w", err)
 			}
 		}
 
 		for runeOffset, r := range word {
 			c := char(r)
 			wrapErr := func(e error) error {
-				return fmt.Errorf("failed to convert character '%c' at position %d of \"%s\": %w", r, runeOffset, word, e)
+				return fmt.Errorf("failed to translate character '%c' at position %d of \"%s\": %w", r, runeOffset, word, e)
 			}
 			modeToInsert, symbol, err := c.encode(isNumber)
 			if err != nil {
 				return wrapErr(err)
 			}
-			switch modeToInsert {
-			case brailleModeNumber:
-				isNumber = true
-				fallthrough
-			case brailleModeCapital:
-				err = bc.writeSymbol(symbolWithMode.encoding[modeToInsert])
+			if modeToInsert != brailleModeNone {
+				if modeToInsert == brailleModeNumber {
+					isNumber = true
+				}
+				err = bt.writeSymbol(symbolWithMode.encoding[modeToInsert])
 			}
 			if err == nil {
-				err = bc.writeSymbol(symbol)
+				err = bt.writeSymbol(symbol)
 			}
 			if err != nil {
 				return wrapErr(err)
@@ -298,7 +299,7 @@ func (bc BrailleTranslator[WR]) translateAlphanumeric(words ...string) (err erro
 // Translate translates the given strings from braille to words or vice versa
 // and writes the result to the embedded writer based on heuristics.
 // Any IO or malformation error will halt the translation.
-func (bc BrailleTranslator[WR]) Translate(args ...string) error {
+func (bt BrailleTranslator[WR]) Translate(args ...string) error {
 	switch len(args) {
 	case 0:
 		return errors.New("empty input")
@@ -306,18 +307,18 @@ func (bc BrailleTranslator[WR]) Translate(args ...string) error {
 		only := args[0]
 		if strings.Contains(only, ".") {
 			// assume sane input
-			bc.translateBraille(only)
+			bt.translateBraille(only)
 		} else {
-			bc.translateAlphanumeric(args...)
+			bt.translateAlphanumeric(args...)
 		}
 	default:
-		bc.translateAlphanumeric(args...)
+		bt.translateAlphanumeric(args...)
 	}
 
 	return nil
 }
 
 func main() {
-	bc := NewBrailleTranslator(os.Stdout)
-	bc.Translate(os.Args[1:]...)
+	bt := NewBrailleTranslator(os.Stdout)
+	bt.Translate(os.Args[1:]...)
 }
