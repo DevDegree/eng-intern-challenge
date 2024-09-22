@@ -25,14 +25,14 @@ eng_to_braille_num = {value: key for key, value in braille_to_eng_num.items()}
 eng_to_braille_inst = {value: key for key, value in braille_to_eng_inst.items()}
 
 
-def translate(input_str):
-    if len(input_str) > 1:
-        eng_str = " ".join(input_str)
+def translate(input_args):
+    if len(input_args) > 1:
+        eng_str = " ".join(input_args)
         print(trans_eng_to_braille(eng_str))
-    if any(char not in [".", "O"] for char in input_str):
-        print(trans_eng_to_braille(input_str))
+    elif any(char not in [".", "O"] for char in input_args[0]):
+        print(trans_eng_to_braille(input_args[0]))
     else:
-        print(trans_braille_to_eng(input_str))
+        print(trans_braille_to_eng(input_args[0]))
 
 
 def trans_braille_to_eng(braille_str):
@@ -41,8 +41,6 @@ def trans_braille_to_eng(braille_str):
     number = "OFF"
     decimal = "OFF"
     eng_string = ""
-
-    print(braille_unit_arr)
 
     for braille_unit in braille_unit_arr:
         # If braille_unit is an instruction:
