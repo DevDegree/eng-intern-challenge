@@ -159,9 +159,7 @@ def main():
         sys.exit(1)
     
     text = " ".join(sys.argv[1:])
-    
-    print(text)
-    
+        
     result = translate(text)
     
     print(result)
