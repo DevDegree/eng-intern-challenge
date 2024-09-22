@@ -143,12 +143,16 @@ def translate(text):
     else:
         for char in text:
             if char.isnumeric():
-                result += english_to_braille['number']
+                if not next_is_number:
+                    result += english_to_braille['number']
+                    next_is_number = True
                 result += english_to_braille[char]
             elif char.isupper():
                 result += english_to_braille['capital']
                 result += english_to_braille[char.lower()]
             else:
+                if char == " ":
+                    next_is_number = False
                 result += english_to_braille[char]
             
     return result
@@ -161,7 +165,7 @@ def main():
     text = " ".join(sys.argv[1:])
         
     result = translate(text)
-    
+            
     print(result)
     
     return result
