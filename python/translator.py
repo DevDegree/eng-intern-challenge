@@ -1,16 +1,18 @@
+import sys
+
 CAP_FOLLOWS = ".....O"
 NUM_FOLLOWS = ".O.OOO"
 SPACE = "......"
 
 
 def main():
-    string = input()
+    string = " ".join(sys.argv[1:])
+    print(string)
     if string[0].isalpha() or string[0].isnumeric():
         edit = english_to_braille(string)
     else:
         edit = braille_to_english(string)
     print(edit)
-
 
 
 def braille_to_english(string: str) -> str:
@@ -47,9 +49,10 @@ def braille_to_english(string: str) -> str:
                 x = braille_numbers(i)
                 full = full + x
             else:
-                x = braille_alphabet(i)
-                x = x.lower()
-                full = full + x
+                if i is not None:
+                    x = braille_alphabet(i)
+                    x = x.lower()
+                    full = full + x
 
     return full
 
@@ -227,4 +230,3 @@ def num_braille(ch: str) -> str:
 
 
 main()
-
