@@ -135,9 +135,10 @@ def translate_to_english(braille):
         if caps_follows:
             result += braille_to_alphabet[char].upper()
             caps_follows = False
-        elif number_follows:
-            result += braille_to_symbols[char]
         elif decimal_follows:
+            result += braille_to_symbols[char]
+            decimal_follows = False
+        elif number_follows:
             result += braille_to_symbols[char]
         else:
             if char in braille_to_alphabet:
