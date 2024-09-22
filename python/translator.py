@@ -98,20 +98,20 @@ def english_to_braille(text):
 
     return ''.join(result)
 
-def main():
-    # Read input argument (English or Braille text)
-    if len(sys.argv) != 2:
-        print("Usage: python3 translator.py <string>")
-        return
 
-    input_string = sys.argv[1]
+def main():
+    # When there is no arg
+    if len(sys.argv) <= 1:
+       return ""
+
+    text = " ".join(sys.argv[1:]);
 
     # Determine whether the input is Braille or English and convert accordingly
-    if is_braille(input_string):
-        print(braille_to_english(input_string))
+    if is_braille(text):
+        print(braille_to_english(text))
     else:
-        print(english_to_braille(input_string))
+        print(english_to_braille(text))
 
-
+    english_to_braille()
 if __name__ == "__main__":
     main()

@@ -42,6 +42,18 @@ class TestTranslator(unittest.TestCase):
         # Strip any leading/trailing whitespace from the output and compare
         self.assertEqual(result.stdout.strip(), expected_output)
 
+    def test_empty(self):
+        # Command to run translator.py script for Braille to English conversion
+        command = ["python3", "translator.py", ]
+
+        # Run the command and capture output
+        result = subprocess.run(command, capture_output=True, text=True)
+
+        # Expected English output for "Abc 123"
+        expected_output = ""
+
+        # Strip any leading/trailing whitespace from the output and compare
+        self.assertEqual(result.stdout.strip(), expected_output)
 
 if __name__ == '__main__':
     unittest.main()
