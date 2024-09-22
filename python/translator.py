@@ -1,7 +1,8 @@
-# Braille Translator Submission by Frank Siyung Cho
-# 20fsc@queensu.ca
-
 '''
+Braille Translator Submission by Frank Siyung Cho
+20fsc@queensu.ca
+
+
 Plan of Action:
 1. Determine logic for classifying if input string is braille or english
     - if the input string only contains the characters O and . then it is braille
@@ -26,3 +27,22 @@ We can also use ASCII character encodings to transform the binary values of the 
 import sys
 
 args = sys.argv[1:] # Ingest all the inputted text ie, Braille or English into a list where each element is a word
+
+def braille_to_bits(arg):
+    arg = arg.strip()
+    if (len(arg) != 6): # Ensure Braille string is correct length
+        raise ValueError("Braille input must be 6 characters long")
+    
+    bits = 0
+
+    for i, char in enumerate(arg): # Loop through every character in string
+        if char == 'O':
+            bits |= 1 << i # Use bitwise OR operation |= and the Zero fill left shift to add 1 in correct bit position
+        elif char =='.':
+            pass
+        else:
+            raise ValueError("Inputted Braille must be either . or O")
+    return bits
+
+bit_string = braille_to_bits(args[0])
+print(f"Bits: {bit_string:06b}")
