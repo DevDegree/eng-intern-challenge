@@ -24,19 +24,15 @@ eng_to_braille = {value: key for key, value in braille_to_eng.items()}
 eng_to_braille_num = {value: key for key, value in braille_to_eng_num.items()}
 eng_to_braille_inst = {value: key for key, value in braille_to_eng_inst.items()}
 
-# input_text_arr = sys.argv[1:]
-# print(input_text_arr)
-#
-# # Determine if input_text is english or braille
-# lang = "braille"
-#
-# if len(input_text_arr) > 1:
-#     lang = "eng"
-#
-# for char in input_text_arr[0]:
-#     if char != "." and char != "O":
-#         lang = "eng"
-#         break
+
+def translate(input_str):
+    if len(input_str) > 1:
+        eng_str = " ".join(input_str)
+        print(trans_eng_to_braille(eng_str))
+    if any(char not in [".", "O"] for char in input_str):
+        print(trans_eng_to_braille(input_str))
+    else:
+        print(trans_braille_to_eng(input_str))
 
 
 def trans_braille_to_eng(braille_str):
@@ -53,8 +49,8 @@ def trans_braille_to_eng(braille_str):
         if braille_unit in braille_to_eng_inst:
             if braille_to_eng_inst[braille_unit] == "cap":
                 capitalize = "ON"
-            elif braille_to_eng_inst[braille_unit] == "dec":
-                eng_string += "."
+            # elif braille_to_eng_inst[braille_unit] == "dec":
+            #     eng_string += "."
             elif braille_to_eng_inst[braille_unit] == "num":
                 number = "ON"
         else:
@@ -67,10 +63,15 @@ def trans_braille_to_eng(braille_str):
                 eng_string += braille_to_eng[braille_unit].upper()
                 capitalize = "OFF"
             elif number == "ON":
-                eng_string += braille_to_eng_num[braille_unit]
+                # If is a decimal point within a number
+                if braille_unit == eng_to_braille["."]:
+                    eng_string += braille_to_eng[braille_unit]
+                else:
+                    eng_string += braille_to_eng_num[braille_unit]
             else:
                 eng_string += braille_to_eng[braille_unit]
-    print(eng_string)
+
+    return eng_string
 
 
 def trans_eng_to_braille(eng_string):
@@ -92,8 +93,9 @@ def trans_eng_to_braille(eng_string):
         else:
             braille_str += eng_to_braille[char]
 
-    print(braille_str)
+    return braille_str
 
-trans_braille_to_eng(".O.OOOO.......OO.OO.O...")
-trans_eng_to_braille("1.2")
+if __name__ == "__main__":
+    input_str = sys.argv[1:]
+    translate(input_str)
 
