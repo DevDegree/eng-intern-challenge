@@ -1,4 +1,5 @@
-const brailleAlphabetMap = {
+type Alphabet = { [key: string]: string };
+const brailleAlphabetMap: Alphabet = {
   a: "O.....",
   b: "O.O...",
   c: "OO....",
@@ -71,7 +72,7 @@ const translateToBraille = (input: string) => {
 
   return input
     .split("")
-    .map((c) => {
+    .map((c: string) => {
       const detectedChar = charDetection(c);
       switch (detectedChar) {
         case charDetected.upperCase:
@@ -95,6 +96,7 @@ const translateToBraille = (input: string) => {
     })
     .join("");
 };
+
 const translateToEnglish = (input: string) => {
   const alphabetToBrailleMap = Object.fromEntries(
     Object.entries(brailleAlphabetMap)
@@ -143,7 +145,17 @@ const translateToEnglish = (input: string) => {
   }
   return output.join("");
 };
-console.log(
-  translateToEnglish(".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."),
-);
-function translator(input: string): string {}
+
+const input = process.argv.slice(2).join(" ");
+
+console.log(input);
+
+function translator(input: string): string {
+  if (/[O.]/.test(input)) {
+    return translateToEnglish(input);
+  } else {
+    return translateToBraille(input);
+  }
+}
+
+console.log(translator(input));
