@@ -85,7 +85,7 @@ def braille_decoder(bit_combination, number_type):
         0b011010: ")",
         0b000000: " "
     }
-    print(f"{bit_combination:06b}")
+
     if special_patterns.get(bit_combination, False):
         return special_patterns.get(bit_combination)
 
@@ -106,7 +106,7 @@ def braille_decoder(bit_combination, number_type):
     
     if (pattern_value >= 22) and (number_type == False) and bit_5: # Adjust for every letter after W
         pattern_value += 1
-    print(pattern_value)
+
     if (number_type == False):
         braille_value = chr(ord('A') + pattern_value) # Letter conversion from ascii value
     else:
