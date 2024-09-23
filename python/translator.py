@@ -70,6 +70,24 @@ def braille_decoder(bit_combination, number_type):
         0b001110: 9
     }
 
+    special_patterns = {
+        0b101100: ".",
+        0b000100: ",",
+        0b110100: "?",
+        0b011100: "!",
+        0b001100: ":",
+        0b110000: "-",
+        0b010010: "/",
+        0b100110: "<",
+        0b111111: ">", # Ommited because > symbol has same brail combination as o which is a limitation as per instructions
+        0b100101: "(",
+        0b011010: ")",
+        0b000000: " "
+    }
+
+    if special_patterns.get(bit_combination, False):
+        return special_patterns.get(bit_combination)
+
     # Mask out bits 1 to 4 for pattern matching
     pattern = bit_combination & 0b1111
 
@@ -99,16 +117,17 @@ def braille_decoder(bit_combination, number_type):
     return braille_value
 
 def character_type_decoder(arg):
-
-    switch = {
-        0b100000: braille_to_bits(args[1], 1),
-        0b100010: ".",
-        0b111010: braille_to_bits(args[1], 3)
-    }
-
     logic_switch = braille_to_bits(arg, 0)
-    print(f"{logic_switch:06b}")
-    return switch.get(logic_switch, braille_to_bits(args[1], 2))
+
+    character = ""
+
+    match logic_switch:
+        case 0b100000: character = braille_to_bits(args[1], 1)
+        case 0b100010: character = "."
+        case 0b111010: character = braille_to_bits(args[1], 3)
+        case _ : character = braille_to_bits(arg, 2)
+
+    return character
 
 '''
 All logic functions for character encoding from English -> Braille
@@ -161,7 +180,6 @@ def braille_encoder(arg):
         bit_pattern |= 0b100000
 
     return bits_to_braille(bit_pattern)
-    
     
 # letter = braille_to_bits(args[0])
 # print("letter: " + letter)
