@@ -100,8 +100,58 @@ class Translator:
         
         return output
     
-    # def translateToBraille(inputs):
+    def translateToBraille(self, inputs) :
+        '''
+        Translate English input to Braille
+        '''
+        output = ''
+        CAPS = False # Boolean for captialization
         
+        NUMS = False # Boolean for Numeric
+        
+        # iterate through each chr in input string
+        for char in inputs:
+            # identify and encode ' '
+            if (char == ' '):
+                NUMS = False
+                output = output + self.specials['SPACE']
+                continue
+            
+            # identify digits
+            if char.isdigit() :
+                braille = ((int(char) - 1) % 10) + 97 # adjust symbols as 0 has same as 'j'
+                
+                # number follows
+                if not NUMS :
+                    output = output + self.specials['NUMS']
+                    NUMS = True
+                
+                # digit symbol
+                output = output + self.symbolsEnglish[chr(braille)]
+                continue
+            
+            # add required special symbols for capitialization
+            if char.isupper() :
+                output = output + self.specials['CAPS']
+            
+            pos = ord(char.lower()) - ord('a') # identify relative position 'a' as alphabets
+            symbol = '' # braille symbol
+            
+            # identify and assign braille symbol
+            if pos <= 9 :
+                symbol = self.symbolsEnglish[chr(ord('a') + pos)] + '..' # a-j
+            elif pos >= 20 :
+                if pos >= 23 :
+                    symbol = self.symbolsEnglish[chr(ord('a') + pos - 20 - 1)] + 'OO' # xyz
+                elif pos == 22 :
+                    symbol = self.symbolsEnglish[chr(ord('a') + pos - 13)] + '.O' # w
+                else:
+                    symbol = self.symbolsEnglish[chr(ord('a') + pos - 20)] + 'OO' # uv
+            else:
+                symbol = self.symbolsEnglish[chr(ord('a') + pos - 10)] + 'O.' # k-t
+            
+            output = output + symbol # concat to output
+        return output
 
 def isBraille(input):
     '''
@@ -119,17 +169,17 @@ def isBraille(input):
             return False
     return True
 
-def run(inputs):
+def run():
     '''
     Check and convert into input that is valid for translation
     '''
     output = ''
-    # # Check if an argument or input is given for translation
-    # if (len(sys.argv) == 1):
-    #     return
+    # Check if an argument or input is given for translation
+    if (len(sys.argv) == 1):
+        return
     
-    # # Add spaces for english words if required (braille input will have a single input)
-    # inputs =  ' '.join(sys.argv[1:])
+    # Add spaces for english words if required (braille input will have a single input)
+    inputs =  ' '.join(sys.argv[1:])
     
     translator = Translator()
 
@@ -138,9 +188,9 @@ def run(inputs):
         output = translator.translateToEnglish(inputs) # translate to English
     else:
         translator.englishKey()
-        # output = translator.translateToBraille(inputs) # translate to Braille
+        output = translator.translateToBraille(inputs) # translate to Braille
     
     print(output)
 
 if __name__ == "__main__":
-    run('.....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO')
+    run()
