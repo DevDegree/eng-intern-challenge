@@ -41,7 +41,7 @@ const brailleAlphabet = {
 	//condition
 	' ': '......',
   capital: '.....O',
-  number: 'O.OOOO',
+  number: '.O.OOO',
 
 	//punctuation
   '.': '..OO.O',
@@ -74,16 +74,21 @@ function isBraille(input) {
 	return true;
 }
 
+function translate(input) {
+	if (isBraille(input)) {
+		return brailleToText(input);
+	} else {
+		return textToBraille(input);
+	}
+}
 
 function brailleToText(braille) {
 	let result = '';
 	let isNumber = false;
 	let isCapital = false;
-
-	// process each chunk of 6 characters
+	
 	for (let i = 0; i < braille.length; i += 6) {
 		const chunk = braille.slice(i, i + 6);
-		console.log('Processing chuck:', chunk)
 
 		// check for number indicator
 		if (chunk === brailleAlphabet.number) {
@@ -98,60 +103,31 @@ function brailleToText(braille) {
 		}
 
 		for (let key in brailleAlphabet) {
-      if (brailleAlphabet[key] === chunk) {
+			if (brailleAlphabet[key] === chunk) {
 				if (!isNumber && key >= 'a' && key <= 'z') {
 					if (isCapital) {
 						result += key.toUpperCase();
 						isCapital = false;
 					} else {
 						result += key; // add letter if not in number mode TODO not working
-						console.log('add letter:', key);
 					}
-        }	else if (isNumber && key >= '1' && key <= '9' || key === '0') {
-          result += key; // add number if in number mode
-					console.log('add number:', key);
-        }  else if (key === ' ') {
-          result += ' '; // add space
-          isNumber = false; // reset number mode after space
-					console.log('add space');
-        }
-        break; // Stop searching once we find a match
-      }
-    }
+				}	else if (isNumber && key >= '1' && key <= '9' || key === '0') {
+					result += key; // add number if in number mode
+				}  else if (key === ' ') {
+					result += ' '; // add space
+					isNumber = false; // reset number mode after space
+				}
+				// break;
+			}
+		}
 	}
 	return result;
 }
 
-
-//Test cases
-
-// const test2 = 'O.....O.O...';
-// console.log(brailleToText(test2)); // test for 'abc'
-
-// const test4 = '.....OOO..O.OO..O.OO..O.OO..O.......O.OOOOOOOO..O.OO........OO..O.'; // Braille for 'Mmmm 78 m'
-// console.log(brailleToText(test4));
-
-// const test5 = '.....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO';
-// console.log(brailleToText(test5)); //Abc 123 xYz
-
-// const test6 ='.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..';
-// console.log(brailleToText(test6)); //Hello world
-
-// const numTest ='O.OOOOO.....O.O...OO....OO.O..O..O..OOO...OOOO..O.OO...OO....OOO..'
-// console.log(brailleToText(numTest));
-
-
-// A-J not working || has the same pair value with number 0-9
-// const aToJTest ='O.....O.O...OO....OO.O..O..O..OOO...OOOO..O.OO...OO....OOO..'
-// console.log(brailleToText(aToJTest));
-
-
-
 function textToBraille(text) {
+
 	let result = '';
 	let isNumber = false;
-
-	console.log('Initial text input:', text);
 
 	for (let i = 0; i < text.length; i++) {
 		const char = text[i];
