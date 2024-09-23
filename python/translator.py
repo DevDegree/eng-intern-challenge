@@ -77,3 +77,6 @@ def translate_to_braille(string):
         else: translation += english_to_braille[char]
 
     return translation
+
+def check_braille(string):
+    return all(char in 'O.' for char in string)
