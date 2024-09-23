@@ -4,11 +4,12 @@ Email: r2vasude@uwaterloo.ca
 
 Project Overview (Braille Translator):
 This program automatically identifies which language to translate to, performs the translation, and then prints the result to the terminal.
-It also includes exception checking to ensure the code doesn't process input it does not expect.
+It also includes exception handling on the input to mitigate errors.
 
 Assumptions:
 - '>' and 'o' have the same Braille encoding. Therefore, the program will default to choosing 'o' when converting from Braille to English.
-- Any Braille input will not have spaces in it.
+- Braille input will not have spaces.
+- Invalid Braille symbols will not be used in the input.
 - The Braille encoding for "decimal follows" is only added if "number_follows" is active.
 '''
 
