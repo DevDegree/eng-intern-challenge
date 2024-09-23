@@ -30,18 +30,18 @@ def translate_to_braille(text):
     for char in text:
         if char.isdigit():
             if not number_mode:
-                braille += BRAILLE_NUMBER  # Append number mode indicator
+                braille += BRAILLE_NUMBER  
                 number_mode = True
             braille += BRAILLE_NUMBERS.get(char, '')
-        if char == ' ':
-            braille += BRAILLE_LETTERS[' ']  # Append space representation
-            number_mode = False  
+        elif char == ' ':
+            braille += BRAILLE_LETTERS[' ']  
+            number_mode = False
         else:
-            if number_mode:
-                number_mode = False 
+            if number_mode:  
+                number_mode = False
             if char.isupper():
-                braille += BRAILLE_CAPITAL  # Append capital indicator
-            braille += BRAILLE_LETTERS.get(char.lower(), '')
+                braille += BRAILLE_CAPITAL  
+            braille += BRAILLE_LETTERS.get(char.lower(), '')  
     return braille
 
 def translate_to_english(braille_str):
@@ -57,8 +57,8 @@ def translate_to_english(braille_str):
         elif symbol == BRAILLE_NUMBER:
             is_number = True
             continue
-        elif symbol == '......':  # This represents a space in Braille
-            english += ' '  # Append space representation
+        elif symbol == '......':  
+            english += ' '  
             is_capital = False
             is_number = False
             continue
@@ -73,7 +73,7 @@ def translate_to_english(braille_str):
                     english += char
             else:
                 english += char.upper() if is_capital else char
-            is_capital = False  # Reset capital after processing the character
+            is_capital = False 
 
     return english
 
