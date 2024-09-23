@@ -25,8 +25,8 @@ const brailleAlphabet = {
   x: 'OO..OO',
   y: 'OO.OOO',
   z: 'O..OOO',
-  
-  //Numbers(0-9)
+
+	//number
   '1': 'O.....',
   '2': 'O.O...',
   '3': 'OO....',
@@ -37,32 +37,26 @@ const brailleAlphabet = {
   '8': 'O.OO..',
   '9': '.OO...',
   '0': '.OOO..',
-  
-  // Special symbols
-  ' ': '......', //space
+ 
+	//condition
+	' ': '......',
   capital: '.....O',
   number: 'O.OOOO',
 
-	// Punctuation
-	'.': '..OO.O',
-	',': '..O...',
-	'?': '..O.OO',
-	'!': '..OOO.',
-	':': '..OO..',
-	';': '..O.O.',
-	'-': '....OO',
-	'/': '.O..O.',
-	'<': '.OO..O',
-	'>': 'O..OO.',
-	'(': 'O.O..O',
-	')': '.O.OO.'
+	//punctuation
+  '.': '..OO.O',
+  ',': '..O...',
+  '?': '..O.OO',
+  '!': '..OOO.',
+  ':': '..OO..',
+  ';': '..O.O.',
+  '-': '....OO',
+  '/': '.O..O.',
+  '<': '.OO..O',
+  '>': 'O..OO.',
+  '(': 'O.O..O',
+  ')': '.O.OO.'
 };
-
-// 1. Check if its braille (contain only 'O' and '.') OR letters/num/punc
-// 2.
-// 3.
-// 4.
-// 5.
 
 	//check if Braille contains only 'O' and '.'
 function isBraille(input) {
@@ -80,10 +74,108 @@ function isBraille(input) {
 	return true;
 }
 
-const input1 = 'O.....O.OO...O...O....'; 
-const input2 = 'O..O..O.OO..'; 
-const input3 = 'O...X...'; 
 
-console.log(isBraille(input1));
-console.log(isBraille(input2)); 
-console.log(isBraille(input3));
+function brailleToText(braille) {
+	let result = '';
+	let isNumber = false;
+	let isCapital = false;
+
+	// process each chunk of 6 characters
+	for (let i = 0; i < braille.length; i += 6) {
+		const chunk = braille.slice(i, i + 6);
+		console.log('Processing chuck:', chunk)
+
+		// check for number indicator
+		if (chunk === brailleAlphabet.number) {
+			isNumber = true;
+			continue;
+		}
+
+		// check for capital alphabet indicator
+		if (chunk === brailleAlphabet.capital) {
+			isCapital = true;
+			continue;
+		}
+
+		for (let key in brailleAlphabet) {
+      if (brailleAlphabet[key] === chunk) {
+				if (!isNumber && key >= 'a' && key <= 'z') {
+					if (isCapital) {
+						result += key.toUpperCase();
+						isCapital = false;
+					} else {
+						result += key; // add letter if not in number mode TODO not working
+						console.log('add letter:', key);
+					}
+        }	else if (isNumber && key >= '1' && key <= '9' || key === '0') {
+          result += key; // add number if in number mode
+					console.log('add number:', key);
+        }  else if (key === ' ') {
+          result += ' '; // add space
+          isNumber = false; // reset number mode after space
+					console.log('add space');
+        }
+        break; // Stop searching once we find a match
+      }
+    }
+	}
+	return result;
+}
+
+
+//Test cases
+
+// const test2 = 'O.....O.O...';
+// console.log(brailleToText(test2)); // test for 'abc'
+
+// const test4 = '.....OOO..O.OO..O.OO..O.OO..O.......O.OOOOOOOO..O.OO........OO..O.'; // Braille for 'Mmmm 78 m'
+// console.log(brailleToText(test4));
+
+// const test5 = '.....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO';
+// console.log(brailleToText(test5)); //Abc 123 xYz
+
+// const test6 ='.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..';
+// console.log(brailleToText(test6)); //Hello world
+
+// const numTest ='O.OOOOO.....O.O...OO....OO.O..O..O..OOO...OOOO..O.OO...OO....OOO..'
+// console.log(brailleToText(numTest));
+
+
+// A-J not working || has the same pair value with number 0-9
+// const aToJTest ='O.....O.O...OO....OO.O..O..O..OOO...OOOO..O.OO...OO....OOO..'
+// console.log(brailleToText(aToJTest));
+
+
+
+function textToBraille(text) {
+	let result = '';
+	let isNumber = false;
+
+	console.log('Initial text input:', text);
+
+	for (let i = 0; i < text.length; i++) {
+		const char = text[i];
+
+		//check if char is a number
+		if (char >= '0' && char <= '9') {
+			if (!isNumber) {
+				result += brailleAlphabet.number; //add number indicator
+				isNumber = true;
+			}
+			result += brailleAlphabet[char];
+		} else {
+			if (isNumber) {
+				isNumber = false; // reset number mode
+			}
+
+			//check if char is uppercase
+			if (char >= 'A' && char <= 'Z') {
+				result += brailleAlphabet.capital;
+				result += brailleAlphabet[char.toLowerCase()];
+			} else {
+				result += brailleAlphabet[char];
+			}
+		}
+	}
+	return result;
+}
