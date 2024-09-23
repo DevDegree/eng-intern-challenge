@@ -30,7 +30,10 @@ import sys
 
 args = sys.argv[1:] # Ingest all the inputted text ie, Braille or English into a list where each element is a word
 
-def braille_to_bits(arg):
+'''
+All logic functions for character decoding from Braille -> English
+'''
+def braille_to_bits(arg, switch):
     arg = arg.strip()
     if (len(arg) != 6): # Ensure Braille string is correct length
         raise ValueError("Braille input must be 6 characters long")
@@ -44,10 +47,15 @@ def braille_to_bits(arg):
             pass
         else:
             raise ValueError("Inputted Braille must be either . or O")
-    return bits
+        
+    match switch:
+        case 1 : return braille_decoder(bits, number_type=False)
+        case 2 : return braille_decoder(bits, number_type=False).lower()
+        case 3 : return braille_decoder(bits, number_type=True)
+        case _ : return bits
 
 
-def braille_decoder(bit_combination):
+def braille_decoder(bit_combination, number_type):
     # Create the base pattern template for bits 1,2,3,4
     base_patterns = {
         0b000001: 0,
@@ -71,17 +79,40 @@ def braille_decoder(bit_combination):
 
     pattern_value = base_patterns.get(pattern, None) # Gather pattern number using bit pattern as key
 
-    if bit_5:
+    if (bit_5) and (number_type == False):
         pattern_value += 10
 
-    if bit_6:
+    if (bit_6) and (number_type == False):
         pattern_value += 10 if bit_5 else 13 # In case a W is present
 
-    if pattern_value > 22: # Adjust for every letter after W
+    if (pattern_value > 22) and (number_type == False): # Adjust for every letter after W
         pattern_value += 1
 
-    letter = chr(ord('A') + pattern_value) # Letter conversion from ascii value
-    return letter
+    if (number_type == False):
+        braille_value = chr(ord('A') + pattern_value) # Letter conversion from ascii value
+    else:
+        braille_value = pattern_value + 1
+
+        if braille_value == 10:
+            braille_value = 0
+
+    return braille_value
+
+def character_type_decoder(arg):
+
+    switch = {
+        0b100000: braille_to_bits(args[1], 1),
+        0b100010: ".",
+        0b111010: braille_to_bits(args[1], 3)
+    }
+
+    logic_switch = braille_to_bits(arg, 0)
+    print(f"{logic_switch:06b}")
+    return switch.get(logic_switch, braille_to_bits(args[1], 2))
+
+'''
+All logic functions for character encoding from English -> Braille
+'''
 
 def bits_to_braille(bits):
     braille = ''
@@ -131,8 +162,10 @@ def braille_encoder(arg):
 
     return bits_to_braille(bit_pattern)
     
+    
 # letter = braille_to_bits(args[0])
 # print("letter: " + letter)
 
-braille_string = braille_encoder(args[0])
-print("Braille: " + braille_string)
+# braille_string = braille_encoder(args[0])
+# print("Braille: " + braille_string)
+print(character_type_decoder(args[0]))
