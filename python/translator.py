@@ -253,20 +253,22 @@ All logic functions regarding flow control for decoding logic
 
 def translate_english(args):
     translated_text = ''
-
+    number_mode = False  # Flag to check if we're in number mode
+    
     for char in args:
-        char_type = 2
-        logic_switch = character_type_encoder(char)
-
-        if logic_switch == 1:  # Capital character
-            translated_text += ".....O"
-            char_type = 1
-        elif logic_switch == 3:  # Numbers
-            translated_text += ".O.OOO"
+        if char.isdigit():
+            if not number_mode:
+                translated_text += ".O.OOO"  # Number indicator
+                number_mode = True
             char_type = 3
-
+        else:
+            if number_mode:
+                number_mode = False
+            char_type = 2  # Default to lowercase letter
+            if char.isupper():
+                translated_text += ".....O"  # Capital letter indicator
+                char_type = 1
         translated_text += str(braille_encoder(char, char_type))
-
     return translated_text
 
 '''
@@ -281,5 +283,5 @@ def encode_or_decode(args):
             return translate_english(input_string)
     return translate_braille(input_string)
 
-translated_output = encode_or_decode(sys.argv[1:]) # Ingest all the inputted text
-print(translated_output)
+if __name__ == "__main__":
+    print(encode_or_decode(sys.argv[1:]))
