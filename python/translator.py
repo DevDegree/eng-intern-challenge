@@ -79,7 +79,7 @@ def braille_decoder(bit_combination, number_type):
         0b110000: "-",
         0b010010: "/",
         0b100110: "<",
-        0b111111: ">", # Ommited because > symbol has same brail combination as o which is a limitation as per instructions
+        0b111111: ">", # Should be ommited because > symbol has same brail combination as o which is a limitation as per instructions
         0b100101: "(",
         0b011010: ")",
         0b000000: " "
@@ -116,18 +116,9 @@ def braille_decoder(bit_combination, number_type):
 
     return braille_value
 
-def character_type_decoder(arg):
-    logic_switch = braille_to_bits(arg, 0)
-
-    character = ""
-
-    match logic_switch:
-        case 0b100000: character = braille_to_bits(args[1], 1)
-        case 0b100010: character = "."
-        case 0b111010: character = braille_to_bits(args[1], 3)
-        case _ : character = braille_to_bits(arg, 2)
-
-    return character
+def character_type_decoder(chunk):
+    logic_switch = braille_to_bits(chunk, 0)
+    return logic_switch
 
 '''
 All logic functions for character encoding from English -> Braille
@@ -156,6 +147,21 @@ def braille_encoder(arg):
         9: 0b001110
     }
 
+    special_patterns = {
+        ".":0b101100,
+        ",":0b000100,
+        "?":0b110100,
+        "!":0b011100,
+        ":":0b001100,
+        "-":0b110000,
+        "/":0b010010,
+        "<":0b100110,
+        ">":0b111111, # Should be ommited because > symbol has same brail combination as o which is a limitation as per instructions
+        "(":0b100101,
+        ")":0b011010,
+        " ":0b000000
+    }
+
     letter = arg.upper()
     
     letter_pos = ord(letter) - ord('A')
@@ -171,8 +177,6 @@ def braille_encoder(arg):
     
     bit_pattern = base_patterns[letter_pos % 10 if letter_pos!=0 else 0]
 
-    print(f"{bit_pattern:06b}")
-
     if letter_pos >= 10 and letter != 'W':
         bit_pattern |= 0b010000
 
@@ -180,10 +184,58 @@ def braille_encoder(arg):
         bit_pattern |= 0b100000
 
     return bits_to_braille(bit_pattern)
-    
-# letter = braille_to_bits(args[0])
-# print("letter: " + letter)
 
-# braille_string = braille_encoder(args[0])
-# print("Braille: " + braille_string)
-print(character_type_decoder(args[0]))
+'''
+All logic functions regarding flow control for decoding logic
+'''
+
+def chunk_braille(input_braille, chunk_size=6):
+    # Ensure the input length is a multiple of chunk_size
+    if len(input_braille) % chunk_size != 0:
+        raise ValueError(f"Input length must be a multiple of {chunk_size}.")
+
+    return [input_braille[i:i + chunk_size] for i in range(0, len(input_braille), chunk_size)]
+ 
+def translate_braille(args):
+    chunks = chunk_braille(args)
+    translated_text = ''
+    char_type = 2
+
+    for chunk in chunks:
+        character = ""
+        logic_switch = character_type_decoder(chunk)
+
+        match logic_switch:
+            case 0b100000: 
+                char_type = 1 # Capital Letter
+                continue
+            case 0b100010: 
+                continue # '.' Character
+            case 0b111010: 
+                char_type = 3 # Number
+                continue
+            case _ : 
+                character = braille_to_bits(chunk, char_type)
+
+        char_type = 2 # All other characters
+        translated_text += str(character)
+
+    return translated_text
+
+'''
+All logic functions regarding flow control for decoding logic
+'''
+
+
+'''
+All logic functions regarding flow control for entire program
+'''
+
+def encode_or_decode(args):
+    for char in args:
+        if char not in ('O', '.'):
+            return braille_encoder(args)
+    return translate_braille(args)
+
+translated_output = encode_or_decode(args[0])
+print(translated_output)
