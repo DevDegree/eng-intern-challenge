@@ -127,7 +127,7 @@ class Translator:
                     NUMS = True
                 
                 # digit symbol
-                output = output + self.symbolsEnglish[chr(braille)]
+                output = output + self.symbolsEnglish[chr(braille)] + '..'
                 continue
             
             # add required special symbols for capitialization
