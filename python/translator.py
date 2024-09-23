@@ -15,9 +15,7 @@ BRAILLE_NUMBERS = {
 }
 
 BRAILLE_PUNCTUATION = {
-    '.': '..OO.O', ',': '..O...', '?': '..O.OO', '!': '..OOO.', ':': '..OO..',
-    ';': '..O.O.', '-': '....OO', '/': '.O..O.', '<': '.OO..O', '>': 'O..OO.',
-    '(': 'O.O..O', ')': '.O.OO.'
+    '.': '..OO.O'
 }
 
 ENGLISH_ALPHABET = {v: k for k, v in {**BRAILLE_LETTERS, **BRAILLE_PUNCTUATION}.items()}
