@@ -28,8 +28,6 @@ We can also use ASCII character encodings to transform the binary values of the 
 
 import sys
 
-args = sys.argv[1:] # Ingest all the inputted text ie, Braille or English into a list where each element is a word
-
 '''
 All logic functions for character decoding from Braille -> English
 '''
@@ -48,11 +46,14 @@ def braille_to_bits(arg, switch):
         else:
             raise ValueError("Inputted Braille must be either . or O")
         
-    match switch:
-        case 1 : return braille_decoder(bits, number_type=False)
-        case 2 : return braille_decoder(bits, number_type=False).lower()
-        case 3 : return braille_decoder(bits, number_type=True)
-        case _ : return bits
+    if switch == 1:
+        return braille_decoder(bits, number_type=False)
+    elif switch == 2:
+        return braille_decoder(bits, number_type=False).lower()
+    elif switch == 3:
+        return braille_decoder(bits, number_type=True)
+    else:
+        return bits
 
 
 def braille_decoder(bit_combination, number_type):
@@ -225,17 +226,16 @@ def translate_braille(args):
         character = ""
         logic_switch = character_type_decoder(chunk)
 
-        match logic_switch:
-            case 0b100000: 
-                char_type = 1 # Capital Letter
-                continue
-            case 0b100010: 
-                continue # '.' Character
-            case 0b111010: 
-                char_type = 3 # Number
-                continue
-            case _ : 
-                character = braille_to_bits(chunk, char_type)
+        if logic_switch == 0b100000:  # Capital letter
+            char_type = 1
+            continue
+        elif logic_switch == 0b100010:  # '.' character
+            continue
+        elif logic_switch == 0b111010:  # Number
+            char_type = 3
+            continue
+        else:
+            character = braille_to_bits(chunk, char_type)
         
         if char_type != 3:
             char_type = 2 # All other characters
@@ -258,13 +258,12 @@ def translate_english(args):
         char_type = 2
         logic_switch = character_type_encoder(char)
 
-        match logic_switch:
-            case 1 : # Capital character
-                translated_text += ".....O"
-                char_type = 1
-            case 3 : # Numbers
-                translated_text += ".O.OOO"
-                char_type = 3
+        if logic_switch == 1:  # Capital character
+            translated_text += ".....O"
+            char_type = 1
+        elif logic_switch == 3:  # Numbers
+            translated_text += ".O.OOO"
+            char_type = 3
 
         translated_text += str(braille_encoder(char, char_type))
 
@@ -282,5 +281,5 @@ def encode_or_decode(args):
             return translate_english(input_string)
     return translate_braille(input_string)
 
-translated_output = encode_or_decode(args)
+translated_output = encode_or_decode(sys.argv[1:]) # Ingest all the inputted text
 print(translated_output)
