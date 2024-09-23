@@ -1,3 +1,4 @@
+import sys
 
 # conversions
 english_to_braille = {
@@ -7,7 +8,7 @@ english_to_braille = {
     'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO', 'z': 'O..OOO',
     '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..',
     '8': 'O.OO..', '9': '.OO...', '0': '.OOO..',
-    ' ': '......', 'capital': '.....O', 'decimal': '.O...O', 'number': '.O.OOO'
+    ' ': '......', 'capital': '.....O', 'number': '.O.OOO'
 }
 
 braille_to_english = {
@@ -80,3 +81,15 @@ def translate_to_braille(string):
 
 def check_braille(string):
     return all(char in 'O.' for char in string)
+
+def main():
+    if len(sys.argv) < 2:
+        sys.exit(1)
+
+    string = ' '.join(sys.argv[1:])
+
+    if check_braille(string): print(translate_to_english(string))
+    else: print(translate_to_braille(string))
+
+if __name__ == '__main__':
+    main()
