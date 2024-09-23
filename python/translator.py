@@ -2,6 +2,9 @@ import sys
 
 class Translator:
     def __init__(self):
+        '''
+        Initialize special braille symbols
+        '''
         self.specials = {
             "CAPS" : ".....O",
             "NUMS" : ".O.OOO",
@@ -37,28 +40,34 @@ class Translator:
         }
     
     def translateToEnglish(self, input):
+        '''
+        Translate the Braille Input to English
+        '''
         output = ''
         i = 0
-        CAPS = False
-        CAPS_ASCII_DIFF = 0
+        CAPS = False # Boolean for captialization
+        CAPS_ASCII_DIFF = 0 # Used difference in the ASCII chart for captialization
         
-        NUMS = False
+        NUMS = False # Boolean for Numeric
         
         while i < len(input):
             symbol = input[i : (i + 6)] # get the six character for Braille Symbol
-            common = symbol[:4]
+            common = symbol[:4] # get the common symbols as the rest can be found using patterns
             
+            # Check for SPACE
             if (symbol == self.specials['SPACE']):
                 output = output + " "
                 NUMS = False
                 i += 6
                 continue
             
+            # Check for Capitalization
             if (symbol == self.specials['CAPS']):
                 CAPS = True
                 i += 6
                 continue
 
+            # Check for Numeric
             if (symbol == self.specials['NUMS']):
                 NUMS = True
                 i += 6
@@ -66,7 +75,7 @@ class Translator:
             
             if NUMS:
                 number = ord(self.symbolsBraille[common]) - ord('a') + 1
-                output = output + str((number) % 10)
+                output = output + str((number) % 10) # 1-9 and 0
                 i += 6
                 continue
             
@@ -77,19 +86,22 @@ class Translator:
             
             if (symbol[5] == 'O'):
                 if(symbol[4] == 'O'):
-                    output =  output + chr(ord(self.symbolsBraille[common]) + 20 - CAPS_ASCII_DIFF)
+                    output =  output + chr(ord(self.symbolsBraille[common]) + 20 - CAPS_ASCII_DIFF + (0 if (ord(self.symbolsBraille[common]) < 99) else 1)) # u-z except w
                 else:
                     output =  output + chr(ord(self.symbolsBraille[common]) + 13 - CAPS_ASCII_DIFF) # w or W
             else:
                 if (symbol[4] == 'O'):
-                    output =  output + chr(ord(self.symbolsBraille[common]) + 10 - CAPS_ASCII_DIFF)
+                    output =  output + chr(ord(self.symbolsBraille[common]) + 10 - CAPS_ASCII_DIFF) # k-t
                 else:
-                    output =  output + chr(ord(self.symbolsBraille[common]) - CAPS_ASCII_DIFF)
+                    output =  output + chr(ord(self.symbolsBraille[common]) - CAPS_ASCII_DIFF) # a-j
             
             CAPS = False
             i += 6
         
         return output
+    
+    # def translateToBraille(inputs):
+        
 
 def isBraille(input):
     '''
@@ -107,17 +119,17 @@ def isBraille(input):
             return False
     return True
 
-def run():
+def run(inputs):
     '''
     Check and convert into input that is valid for translation
     '''
     output = ''
-    # Check if an argument or input is given for translation
-    if (len(sys.argv) == 1):
-        return
+    # # Check if an argument or input is given for translation
+    # if (len(sys.argv) == 1):
+    #     return
     
-    # Add spaces for english words if required (braille input will have a single input)
-    inputs =  ' '.join(sys.argv[1:])
+    # # Add spaces for english words if required (braille input will have a single input)
+    # inputs =  ' '.join(sys.argv[1:])
     
     translator = Translator()
 
@@ -125,10 +137,10 @@ def run():
         translator.brailleKey()
         output = translator.translateToEnglish(inputs) # translate to English
     else:
-        # EnglishTranslator(inputs) # translate to Braille
-        pass
+        translator.englishKey()
+        # output = translator.translateToBraille(inputs) # translate to Braille
     
     print(output)
 
 if __name__ == "__main__":
-    run()
+    run('.....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO')
