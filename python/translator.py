@@ -77,7 +77,7 @@ def translateEnglish(english: str) -> str:
     return braille
 
 if __name__ == "__main__":
-    text = " ".join(sys.argv[1:]) #ensures spaces are shown in text
+    text = "".join(sys.argv[1:])
 
     if isBraille(text):
         print(translateBraille(text))
