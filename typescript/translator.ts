@@ -148,8 +148,6 @@ const translateToEnglish = (input: string) => {
 
 const input = process.argv.slice(2).join(" ");
 
-console.log(input);
-
 function translator(input: string): string {
   if (/[O.]/.test(input)) {
     return translateToEnglish(input);
