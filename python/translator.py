@@ -34,7 +34,7 @@ def translate_to_english(string):
         if braille not in braille_to_english:
             continue
         # checking if next character will be in caps, a num or a space
-        if braille_to_english[braille] == 'capital':
+        elif braille_to_english[braille] == 'capital':
             caps_flag = True
         elif braille_to_english[braille] == 'number':
             number_flag = True
@@ -48,5 +48,32 @@ def translate_to_english(string):
             else: translation += braille_to_english[braille]
             # reset flag
             caps_flag = False
+
+    return translation
+
+def translate_to_braille(string):
+    translation = ''
+
+    # flag to check if next characters are nums
+    number_flag = False
+
+    for char in string:
+        # invalid character
+        if char.lower() not in english_to_braille:
+            continue
+        # checking if character is in caps, a num or a space
+        elif char.isupper():
+            translation += english_to_braille['capital']
+            translation += english_to_braille[char.lower()]
+        elif char.isdigit():
+            if not number_flag:
+                number_flag = True
+                translation += english_to_braille['number']
+            translation += english_to_braille[char]
+        elif char == ' ':
+            translation += english_to_braille[' ']
+            # reset flag as number ended
+            number_flag = False
+        else: translation += english_to_braille[char]
 
     return translation
