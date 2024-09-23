@@ -122,21 +122,23 @@ const translateToEnglish = (input: string) => {
     const braille =
       input[i] + input[i + 1] + input[i + 2] + input[i + 3] + input[i + 4] + input[i + 5];
 
-    if (isCapital) {
-      isCapital = false;
-      output.push(alphabetToBrailleMap[braille].toUpperCase());
-    }
-    if (isNumberMode) {
-      output.push(numberToBrailleMap[braille]);
-    }
-    if (braille === ".....O") {
-      isCapital = true;
-    }
-    if (braille === ".O.OOO") {
-      isNumberMode = true;
-    }
-    if (braille !== ".....O" && braille !== ".O.OOO") {
-      output.push(alphabetToBrailleMap[braille]);
+    switch (true) {
+      case isCapital:
+        isCapital = false;
+        output.push(alphabetToBrailleMap[braille].toUpperCase());
+        break;
+      case isNumberMode:
+        output.push(numberToBrailleMap[braille]);
+        break;
+      case braille === brailleAlphabetMap["cap"]:
+        isCapital = true;
+        break;
+      case braille === brailleAlphabetMap["number"]:
+        isNumberMode = true;
+        break;
+      default:
+        const char = alphabetToBrailleMap[braille] || specialCharToBrailleMap[braille];
+        char && output.push(char);
     }
   }
   return output.join("");
