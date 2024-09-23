@@ -131,7 +131,7 @@ def bits_to_braille(bits):
 
     return braille
 
-def braille_encoder(arg):
+def braille_encoder(char, char_type):
 
     # Create the base pattern template for bits 1,2,3,4
     base_patterns = {
@@ -158,11 +158,21 @@ def braille_encoder(arg):
         "<":0b100110,
         ">":0b111111, # Should be ommited because > symbol has same brail combination as o which is a limitation as per instructions
         "(":0b100101,
-        ")":0b011010,
-        " ":0b000000
+        ")":0b011010
     }
 
-    letter = arg.upper()
+    if char == " ":
+        return bits_to_braille(0b000000)
+
+    if special_patterns.get(char, False):
+        return bits_to_braille(special_patterns.get(char))
+
+    if char_type == 3:
+        if int(char) == 0:
+            char = "10"
+        return bits_to_braille(base_patterns[int(char) - 1])
+
+    letter = char.upper()
     
     letter_pos = ord(letter) - ord('A')
 
@@ -184,6 +194,16 @@ def braille_encoder(arg):
         bit_pattern |= 0b100000
 
     return bits_to_braille(bit_pattern)
+
+def character_type_encoder(char):
+    char_ascii = ord(char)
+
+    if (char_ascii > 64) and (char_ascii < 91): 
+        return 1
+    elif (char_ascii > 47) and (char_ascii < 58): 
+        return 3
+    else:
+        return 2
 
 '''
 All logic functions regarding flow control for decoding logic
@@ -216,8 +236,13 @@ def translate_braille(args):
                 continue
             case _ : 
                 character = braille_to_bits(chunk, char_type)
-
-        char_type = 2 # All other characters
+        
+        if char_type != 3:
+            char_type = 2 # All other characters
+        
+        if str(character) == " " and char_type == 3:
+            char_type = 2
+        
         translated_text += str(character)
 
     return translated_text
@@ -226,16 +251,36 @@ def translate_braille(args):
 All logic functions regarding flow control for decoding logic
 '''
 
+def translate_english(args):
+    translated_text = ''
+
+    for char in args:
+        char_type = 2
+        logic_switch = character_type_encoder(char)
+
+        match logic_switch:
+            case 1 : # Capital character
+                translated_text += ".....O"
+                char_type = 1
+            case 3 : # Numbers
+                translated_text += ".O.OOO"
+                char_type = 3
+
+        translated_text += str(braille_encoder(char, char_type))
+
+    return translated_text
 
 '''
 All logic functions regarding flow control for entire program
 '''
 
 def encode_or_decode(args):
-    for char in args:
-        if char not in ('O', '.'):
-            return braille_encoder(args)
-    return translate_braille(args)
+    input_string = ' '.join(args)
 
-translated_output = encode_or_decode(args[0])
+    for char in input_string:
+        if char not in ('O', '.'):
+            return translate_english(input_string)
+    return translate_braille(input_string)
+
+translated_output = encode_or_decode(args)
 print(translated_output)
