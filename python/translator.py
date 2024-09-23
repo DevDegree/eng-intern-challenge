@@ -77,18 +77,15 @@ def translate_to_english(braille_str):
 
     return english
 
-
 def main():
     if len(sys.argv) < 2:
         print("Usage: python translator.py <input_string>")
         return
 
-    results = []
-    for input_str in sys.argv[1:]:
-        output = translate_to_english(input_str) if is_braille(input_str) else translate_to_braille(input_str)
-        results.append(output)
-    
-    print("".join(results))  # This can stay since you're concatenating outputs
+    input_str = " ".join(sys.argv[1:])
+    output = translate_to_english(input_str) if is_braille(input_str) else translate_to_braille(input_str)
+    print(output)  
+
 
 if __name__ == "__main__":
     main()
