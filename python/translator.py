@@ -14,50 +14,38 @@ BRAILLE_NUMBERS = {
     '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..'
 }
 
-BRAILLE_PUNCTUATION = {
-    '.': '..OO.O'
-}
-
-ENGLISH_ALPHABET = {v: k for k, v in {**BRAILLE_LETTERS, **BRAILLE_PUNCTUATION}.items()}
+ENGLISH_ALPHABET = {v: k for k, v in {**BRAILLE_LETTERS}.items()}
 
 BRAILLE_CAPITAL = '.....O'
 BRAILLE_NUMBER = '.O.OOO'
-BRAILLE_DECIMAL = '.O...O'
 
 def is_braille(input_str):
     """Check if the input string consists solely of Braille characters (O and .)."""
     return all(c in 'O.' for c in input_str)
 
 def translate_to_braille(text):
-    braille = []
+    braille = ""
     number_mode = False
 
     for char in text:
         if char.isdigit():
             if not number_mode:
-                braille.append(BRAILLE_NUMBER)
+                braille += BRAILLE_NUMBER  # Append number mode indicator
                 number_mode = True
-            braille.append(BRAILLE_NUMBERS.get(char))
-        elif char == '.':
-            braille.append(BRAILLE_DECIMAL)
-            number_mode = False  
-        elif char in BRAILLE_PUNCTUATION:
-            braille.append(BRAILLE_PUNCTUATION[char])
-            number_mode = False  
-        elif char == ' ':
-            braille.append('......')  
+            braille += BRAILLE_NUMBERS.get(char, '')
+        if char == ' ':
+            braille += BRAILLE_LETTERS[' ']  # Append space representation
             number_mode = False  
         else:
             if number_mode:
                 number_mode = False 
             if char.isupper():
-                braille.append(BRAILLE_CAPITAL)
-            braille.append(BRAILLE_LETTERS.get(char.lower(), ''))
-
-    return ''.join(braille)
+                braille += BRAILLE_CAPITAL  # Append capital indicator
+            braille += BRAILLE_LETTERS.get(char.lower(), '')
+    return braille
 
 def translate_to_english(braille_str):
-    english = []
+    english = ""
     is_capital = False
     is_number = False
 
@@ -69,13 +57,8 @@ def translate_to_english(braille_str):
         elif symbol == BRAILLE_NUMBER:
             is_number = True
             continue
-        elif symbol == BRAILLE_DECIMAL:
-            english.append('.')
-            is_capital = False
-            is_number = False
-            continue
-        elif symbol == '......':
-            english.append(' ')
+        elif symbol == '......':  # This represents a space in Braille
+            english += ' '  # Append space representation
             is_capital = False
             is_number = False
             continue
@@ -85,14 +68,15 @@ def translate_to_english(braille_str):
         if char:
             if is_number:
                 if char in 'abcdefghij':
-                    english.append(str(ord(char) - ord('a') + 1))
+                    english += str(ord(char) - ord('a') + 1)
                 else:
-                    english.append(char)
+                    english += char
             else:
-                english.append(char.upper() if is_capital else char)
-            is_capital = False
+                english += char.upper() if is_capital else char
+            is_capital = False  # Reset capital after processing the character
 
-    return ''.join(english)
+    return english
+
 
 def main():
     if len(sys.argv) < 2:
@@ -104,7 +88,7 @@ def main():
         output = translate_to_english(input_str) if is_braille(input_str) else translate_to_braille(input_str)
         results.append(output)
     
-    print("".join(results))
+    print("".join(results))  # This can stay since you're concatenating outputs
 
 if __name__ == "__main__":
     main()
