@@ -216,8 +216,8 @@ def translate_to_braille(english_text: str) -> str:
                 CAPITAL_FOLLOWS_BRAILLE + ENGLISH_TO_BRAILLE_CHARS[english_char.lower()]
             )
 
-        else:
-            if i == 0 or english_text[i - 1] not in ENGLISH_TO_BRAILLE_NUMS:
+        elif english_char in ENGLISH_TO_BRAILLE_NUMS:
+            if i > 0 and english_text[i - 1] not in ENGLISH_TO_BRAILLE_NUMS:
                 braille_text += NUMBER_FOLLOWS_BRAILLE
 
             braille_text += ENGLISH_TO_BRAILLE_NUMS[english_char]
