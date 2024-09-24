@@ -38,14 +38,9 @@ const brailleMap = {
   0: ".OOO..",
 };
 
-const brailleToEnglishMap = Object.entries(brailleMap).reduce(
-  (acc, [key, value]) => {
-    acc[value] = key;
-    return acc;
-  },
-  {}
+const reverseBrailleMap = Object.fromEntries(
+  Object.entries(brailleMap).map(([key, value]) => [value, key])
 );
-
 const capitalPrefix = ".....O";
 const numberPrefix = ".O.OOO";
 
@@ -60,19 +55,22 @@ function translateToBraille(text) {
   for (let char of text) {
     if (/[A-Z]/.test(char)) {
       output += capitalPrefix; // Add capital prefix
-      char = char.toLowerCase(); // Convert to lowercase for mapping
+      char = char.toLowerCase();
     }
 
-    if (/[0-9]/.test(char) && !isNumberMode) {
-      output += numberPrefix; // Enter number mode
-      isNumberMode = true; // Set number mode flag
+    if (/[0-9]/.test(char)) {
+      if (!isNumberMode) {
+        output += numberPrefix; // Enter number mode
+        isNumberMode = true;
+      }
+      char = String.fromCharCode(char.charCodeAt(0) + 48); // Convert to Braille equivalent
     }
 
-    if (char === " " && isNumberMode) {
+    if (char === " ") {
       isNumberMode = false; // Exit number mode on space
     }
 
-    output += brailleMap[char] || ""; // Convert character to Braille
+    output += brailleMap[char] || "";
   }
 
   return output;
@@ -88,47 +86,35 @@ function translateToEnglish(braille) {
 
     if (symbol === capitalPrefix) {
       isCapital = true;
-      i -= 6; // Move back to account for prefix
       continue;
     }
 
     if (symbol === numberPrefix) {
       isNumber = true;
-      i -= 6; // Move back to account for prefix
       continue;
     }
 
-    let translatedChar = brailleToEnglishMap[symbol] || "";
+    let char = reverseBrailleMap[symbol] || "";
+
     if (isCapital) {
-      translatedChar = translatedChar.toUpperCase();
-      isCapital = false; // Reset capital flag
+      char = char.toUpperCase();
+      isCapital = false; // Reset capital flag after one use
     }
 
     if (isNumber) {
-      // Translate number mode to number, 'a' to '1', 'b' to '2', etc.
-      translatedChar = (
-        translatedChar.charCodeAt(0) -
-        "a".charCodeAt(0) +
-        1
-      ).toString();
-      if (translatedChar === "10") translatedChar = "0"; // Special case for '0'
+      char = (char.charCodeAt(0) - 48).toString(); // Convert back from Braille number mode
+      if (char === "10") char = "0"; // Special handling for 0
     }
 
-    if (translatedChar === " ") {
-      isNumber = false; // Reset number mode on space
-    }
+    if (char === " ") isNumber = false; // Exit number mode on space
 
-    output += translatedChar;
+    output += char;
   }
 
   return output;
 }
 
-// Parse input arguments
 const input = process.argv.slice(2).join(" ").trim();
-
-if (isBraille(input)) {
-  console.log(translateToEnglish(input));
-} else {
-  console.log(translateToBraille(input));
-}
+console.log(
+  isBraille(input) ? translateToEnglish(input) : translateToBraille(input)
+);
