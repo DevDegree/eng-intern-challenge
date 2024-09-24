@@ -1,3 +1,5 @@
+import sys
+
 braille_alphabet = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
     'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..',
@@ -84,7 +86,7 @@ def braille_to_english(braille):
         i += 6
     return ''.join(result)
 
-input_string = input("Enter English or Braille ")
+input_string = sys.argv[1]
 
 if is_braille(input_string):
     print(braille_to_english(input_string))
