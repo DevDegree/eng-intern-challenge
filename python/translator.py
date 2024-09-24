@@ -91,8 +91,7 @@ def get_command_line_input() -> str:
         str: The command-line arguments combined into a single string with " " as the delimiter
     """
     if len(sys.argv) < 2:
-        print("At least one argument required")
-        sys.exit()
+        sys.exit("At least one argument required")
 
     return " ".join(sys.argv[1:])
 
@@ -240,8 +239,7 @@ def main() -> None:
         print(translate_to_braille(user_input))
 
     else:
-        print("Input is not english nor braille.")
-        sys.exit()
+        sys.exit("Input is not english nor braille.")
 
 
 if __name__ == "__main__":
