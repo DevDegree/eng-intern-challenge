@@ -89,7 +89,6 @@ def main():
         translated = translate_Braille_English(input_string)
     else:
         translated = translate_English_Braille(input_string)
-
     print(translated)
 
 if __name__ == "__main__":
