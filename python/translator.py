@@ -1,4 +1,4 @@
-import sys, re
+import sys
 
 CAP_FOLLOWS = ".....O"
 NUM_FOLLOWS = ".O.OOO"
