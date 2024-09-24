@@ -10,7 +10,7 @@ braille_dict = {
     'z': 'O..OOO',
     ' ': '......',
     'cap': '.....O',
-    'num': '.O.OOO',  
+    'num': '.O.OOO',
 }
 
 inverse_braille_dict = {v: k for k, v in braille_dict.items() if k not in ['cap', 'num']}
