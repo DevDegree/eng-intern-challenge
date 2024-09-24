@@ -63,7 +63,7 @@ VALID_ENGLISH_CHARS = set(
 )
 
 
-def swap_dict_keys_values(d: dict) -> dict:
+def swap_dict_keys_values(d):
     return {value: key for key, value in d.items()}
 
 
@@ -72,18 +72,18 @@ BRAILLE_TO_ENGLISH_CHARS = swap_dict_keys_values(ENGLISH_TO_BRAILLE_CHARS)
 BRAILLE_TO_ENGLISH_NUMS = swap_dict_keys_values(ENGLISH_TO_BRAILLE_NUMS)
 
 
-def get_command_line_input() -> str:
+def get_command_line_input():
     if len(sys.argv) < 2:
         sys.exit("At least one argument required")
 
     return " ".join(sys.argv[1:])
 
 
-def chunk_string_by_length(string: str, chunk_len: int) -> list[str]:
+def chunk_string_by_length(string, chunk_len):
     return [string[i : i + chunk_len] for i in range(0, len(string), chunk_len)]
 
 
-def is_braille(string: str) -> bool:
+def is_braille(string):
     if not string or len(string) % BRAILLE_CHAR_LEN != 0:
         return False
 
@@ -92,11 +92,11 @@ def is_braille(string: str) -> bool:
     return all(string_chunk in VALID_BRAILLE_CHARS for string_chunk in string_chunks)
 
 
-def is_english(string: str) -> bool:
+def is_english(string):
     return string and all(char in VALID_ENGLISH_CHARS for char in string)
 
 
-def translate_to_english(braille_text: str) -> str:
+def translate_to_english(braille_text):
     english_text = ""
 
     is_capital = False
@@ -130,7 +130,7 @@ def translate_to_english(braille_text: str) -> str:
     return english_text
 
 
-def translate_to_braille(english_text: str) -> str:
+def translate_to_braille(english_text):
     braille_text = ""
 
     for i, english_char in enumerate(english_text):
