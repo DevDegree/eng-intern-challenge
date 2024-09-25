@@ -3,7 +3,7 @@ from enum import Enum
 # List up all Braille
 class BrailleDot(Enum):
     RAISED = '0' # which represents the raised dot
-    NOT_RAISED = '1' # which represents the not raised dot
+    NOT_RAISED = '.' # which represents the not raised dot
 
 class Braille(Enum):
     # Alphabet
