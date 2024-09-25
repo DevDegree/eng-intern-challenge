@@ -118,4 +118,4 @@ if __name__ == "__main__":
     is_braille = check_braille("".join(args))
     SEPARATOR = " " if is_braille else char2braille[" "]
 
-    sys.stdout.write(f"{SEPARATOR}".join([parse_arg(arg, is_braille) for arg in args]))
+    print(f"{SEPARATOR}".join([parse_arg(arg, is_braille) for arg in args]))
