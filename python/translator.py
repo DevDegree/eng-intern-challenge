@@ -73,8 +73,6 @@ class Braille(Enum):
     @property
     def symbol(self):
         return self._symbol
-    
-print(Braille.THREE._braille)
 
 # Check if the string given to it is either Braille or English
 def isBraille(string):
