@@ -149,8 +149,8 @@ function parseString(tokens) {
                 state = State.NUMBER;
             } else {
                 bchar = tok2braille[tokens[i]];
-            }
-        } else if (tokens[i] === tokens[i].toUpperCase()) {
+            } 
+        } else if (/^[A-Z]$/.test(tokens[i])) {
             bchar = tok2braille[State.CAP] + tok2braille[tokens[i].toLowerCase()];
         } else if (tokens[i] === SPACE && state === State.NUMBER) {
             state = State.DEFAULT;
@@ -175,13 +175,15 @@ function parseArg(brIn, isBraille) {
     for (let i = 0; i < brIn.length - 1; i += 6) {
         tokens.push(brIn.slice(i, i + 6));
     }
+    if (tokens.length == 0) {
+      tokens.push(brIn);
+    }
 
     return isBraille ? parseBraille(tokens) : parseString(tokens.join(''));
 }
 
 function main(args) {
     const inputText = args.join(' ');
-
     if (!inputText) {
         console.log("No input supplied, exiting");
         process.exit(0);
@@ -190,6 +192,17 @@ function main(args) {
     const isBraille = checkBraille(inputText);
     const SEPARATOR = isBraille ? SPACE : CHAR_TO_BRAILLE[SPACE];
     const result = args.map(arg => parseArg(arg, isBraille)).join(SEPARATOR);
+
+    // for debugging
+    // if (!isBraille) {
+    //   let output = "";
+    //   result.split("").forEach((c, index) => {
+    //     if (index % 6 == 0 && index != 0)
+    //       output += "\n"
+    //     output += c;  
+    //   })
+    //   console.log(output);
+    // }
 
     console.log(result);
 }

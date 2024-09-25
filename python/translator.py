@@ -124,6 +124,8 @@ def parse_arg(br_in: str, is_braille):
     for i in range(0, len(br_in) - 1, 6):
         token = br_in[i : i + 6]
         tokens.append(token)
+    if not tokens:
+        tokens.append(br_in)
 
     if is_braille:
         out = parse_braille(tokens)
@@ -134,25 +136,15 @@ def parse_arg(br_in: str, is_braille):
 
 
 if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser(
-        description="Translate text to Braille or vice versa."
-    )
-    parser.add_argument("input", nargs="+", help="Input text or Braille to translate")
-
-    args = parser.parse_args()
-
-    input_text = " ".join(args.input)
-
-    if not input_text:
+    if len(sys.argv) < 2:
         print("No input supplied, exiting")
         sys.exit(0)
 
-    is_braille = check_braille(input_text)
-    SEPARATOR = SPACE if is_braille else char2braille[SPACE]
+    args = sys.argv[1:]
 
-    result = f"{SEPARATOR}".join([parse_arg(arg, is_braille) for arg in args.input])
+    is_braille = check_braille("".join(args))
+    SEPARATOR = SPACE if is_braille else char2braille[SPACE]
+    result = f"{SEPARATOR}".join([parse_arg(arg, is_braille) for arg in args])
 
     print(result)
 
