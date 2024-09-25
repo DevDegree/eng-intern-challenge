@@ -94,21 +94,19 @@ def check_braille(chrs):
     return all([c in [".", "O"] for c in chrs])
 
 
-def parse_arg(br_in: str):
+def parse_arg(br_in: str, is_braille):
     tokens = []
-    is_braille = True
 
     for i in range(0, len(br_in) - 1, 6):
         token = br_in[i : i + 6]
         tokens.append(token)
-        is_braille = check_braille(token)
 
     if is_braille:
         out = parse_braille(tokens)
     else:
         out = parse_string(reduce(lambda x, y: x + y, tokens))
 
-    sys.stdout.write(out)
+    return out
 
 
 if __name__ == "__main__":
@@ -116,4 +114,8 @@ if __name__ == "__main__":
         print("No input supplied, exiting")
         sys.exit(0)
 
-    sys.stdout.write(" ".join([parse_arg(arg) for arg in sys.argv[1:]]))
+    args = sys.argv[1:]
+    is_braille = check_braille("".join(args))
+    SEPARATOR = " " if is_braille else char2braille[" "]
+
+    sys.stdout.write(f"{SEPARATOR}".join([parse_arg(arg, is_braille) for arg in args]))
