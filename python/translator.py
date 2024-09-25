@@ -87,7 +87,7 @@ def is_braille(string):
     if not string or len(string) % BRAILLE_LENGTH != 0:
         return False
 
-    string_chunks = chunk_string_by_length(string, BRAILLE_LENGTH)
+    string_chunks = slice_str_length(string, BRAILLE_LENGTH)
 
     return all(string_chunk in VALID_BRAILLE_CHARS for string_chunk in string_chunks)
 
@@ -103,13 +103,13 @@ def translate_to_english(braille_text):
     is_capital = False
     is_num = False
 
-    braille_chars = chunk_string_by_length(braille_text, BRAILLE_LENGTH)
+    braille_chars = slice_str_length(braille_text, BRAILLE_LENGTH)
 
     for braille_char in braille_chars:
-        if braille_char == CAPITAL_FOLLOWS_BRAILLE:
+        if braille_char == BRAILLE_CAPS:
             is_capital = True
 
-        elif braille_char == NUMBER_FOLLOWS_BRAILLE:
+        elif braille_char == NUMBER_AFTER_BRAILLE:
             is_capital = False
             is_num = True
 
