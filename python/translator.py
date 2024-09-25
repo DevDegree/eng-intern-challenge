@@ -21,8 +21,6 @@ class MalformedInput(Exception):
     pass
 
 
-# NOTE: there is a collision for the symbol "o" and ">"
-# didnt realize this until too late otherwise I would have implemented
 def parse_braille(tokens):
     state = State.DEFAULT
     output = ""
@@ -31,33 +29,33 @@ def parse_braille(tokens):
         # decimal and numbers are parsed the same way
         if state in [State.NUMBER, State.DECIMAL] and tokens[i] in braille2num.keys():
             char = braille2num[tokens[i]]
-
-        # resolve collisions
-        # 1. ? vs. decimal
-        if tokens[i] == char2braille["?"]:
-            if i > 0 and braille2char.get(tokens[i - 1], MISSING) == ".":
-                char = "decimal"
-            else:
-                char = "?"
-        # 2. > vs. o
-        # assumption here is that > is used inbetween two numbers
-        elif tokens[i] == char2braille["o"]:
-            if tokens[i - 1] == " " and tokens[i + 1] in [State.NUMBER, State.DECIMAL]:
-                char = ">"
-            else:
-                char = "o"
-        else:
-            char = braille2char.get(tokens[i], MISSING)
-
-        if state == State.CAP:
+        elif state == State.CAP:
             char = char.upper()
             state = State.DEFAULT
+        else:
+            # resolve collisions
+            # 1. ? vs. decimal
+            if tokens[i] == char2braille["?"]:
+                if i > 0 and braille2char.get(tokens[i - 1], MISSING) == ".":
+                    char = "decimal"
+                else:
+                    char = "?"
+            # 2. > vs. o
+            elif tokens[i] == char2braille[">"]:
+                if tokens[i - 1] == " " and tokens[i + 1] in [
+                    State.NUMBER,
+                    State.DECIMAL,
+                ]:
+                    char = ">"
+                else:
+                    char = "o"
+            else:
+                char = braille2char.get(tokens[i], MISSING)
 
         # state transition
         if char in [State.CAP, State.NUMBER, State.DECIMAL]:
             state = char
             continue
-
         # handle space terminating number state
         elif char == char2braille[" "]:
             if state in (State.NUMBER, State.DECIMAL):
@@ -96,7 +94,7 @@ def check_braille(chrs):
     return all([c in [".", "O"] for c in chrs])
 
 
-def cli(br_in: str):
+def parse_arg(br_in: str):
     tokens = []
     is_braille = True
 
@@ -106,18 +104,16 @@ def cli(br_in: str):
         is_braille = check_braille(token)
 
     if is_braille:
-        sys.stdout.write(parse_braille(tokens))
+        out = parse_braille(tokens)
     else:
-        sys.stdout.write(parse_string(reduce(lambda x, y: x + y, tokens)))
+        out = parse_string(reduce(lambda x, y: x + y, tokens))
+
+    sys.stdout.write(out)
 
 
 if __name__ == "__main__":
-    from collections import Counter
-
     if len(sys.argv) < 2:
         print("No input supplied, exiting")
         sys.exit(0)
 
-    braille_in = " ".join(sys.argv[1:])
-    # braille_in = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
-    cli(braille_in)
+    sys.stdout.write(" ".join([parse_arg(arg) for arg in sys.argv[1:]]))
