@@ -44,7 +44,7 @@ CHAR_TO_BRAILLE = {
     "number": ".O.OOO",  # Number indicator
     "decimal": "..O.OO",  # Decimal point indicator (same as '?')
     " ": "......",  # Space
-    "*": "0.00..",  # Placeholder for missing character, random braille
+    "*": "O..O.O",  # Reserved char
 }
 
 
