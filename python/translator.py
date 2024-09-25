@@ -134,15 +134,27 @@ def parse_arg(br_in: str, is_braille):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Translate text to Braille or vice versa."
+    )
+    parser.add_argument("input", nargs="+", help="Input text or Braille to translate")
+
+    args = parser.parse_args()
+
+    input_text = " ".join(args.input)
+
+    if not input_text:
         print("No input supplied, exiting")
         sys.exit(0)
 
-    args = sys.argv[1:]
-    is_braille = check_braille("".join(args))
+    is_braille = check_braille(input_text)
     SEPARATOR = SPACE if is_braille else char2braille[SPACE]
 
-    print(f"{SEPARATOR}".join([parse_arg(arg, is_braille) for arg in args]))
+    result = f"{SEPARATOR}".join([parse_arg(arg, is_braille) for arg in args.input])
+
+    print(result)
 
     # str_tests = [
     #     ["hello world"],
