@@ -110,12 +110,13 @@ def parse_arg(br_in: str, is_braille):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("No input supplied, exiting")
-        sys.exit(0)
+    print("HELLWORLDDD?????")
+    # if len(sys.argv) < 2:
+    #     print("No input supplied, exiting")
+    #     sys.exit(0)
 
-    args = sys.argv[1:]
-    is_braille = check_braille("".join(args))
-    SEPARATOR = " " if is_braille else char2braille[" "]
+    # args = sys.argv[1:]
+    # is_braille = check_braille("".join(args))
+    # SEPARATOR = " " if is_braille else char2braille[" "]
 
-    print(f"{SEPARATOR}".join([parse_arg(arg, is_braille) for arg in args]))
+    # print(f"{SEPARATOR}".join([parse_arg(arg, is_braille) for arg in args]))
