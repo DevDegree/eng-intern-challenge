@@ -67,7 +67,25 @@ class Braille(Enum):
     SPACE         = (1, 1, 1, 1, 1, 1)
 
 # Check if the string given to it is either Braille or English
+def isBraille(string):
+    # If the length of the string is less than 6, it's not Braille. (i.e. "." or "A")
+    if len(string) < 6:
+        return False
+    
+    # If the string includes any alphabets, it's not Braille (i.e. "A" or "b")
+    if any(char.isalpha() for char in string):
+        return False
+    
+    # If the string includes any numbers, it's not Braille (i.e. "1" or ".2")
+    if any(char.isdigit() for char in string):
+        return False
+    
+    # If the string includes any special characters except for period, it's not Braille (i.e. "?" or ":!")
+    if any(char in [',', '?', '!', ':', ';', '-', '/', '<', '>', '(', ')', ' '] for char in string):
+        return False
+    
+    return True
 
-# Convert the string to Braille if it is English
+# Convert the string from English to Braille
 
-# Convert the string to English if it is Braille
+# Convert the string from Braille to English
