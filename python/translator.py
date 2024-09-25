@@ -15,3 +15,18 @@ capital_follows = '.....O'
 
 # Reverse mapping for Braille to English translation
 reverse_braille_alphabet = {v: k for k, v in braille_alphabet.items()}
+
+def is_braille(text):
+    """Check if the input is Braille (O and . characters)."""
+    return all(c in 'O.' for c in text)
+
+def english_to_braille(text):
+    """Convert English to Braille with capitalization."""
+    braille_text = []
+    for char in text:
+        if char.isupper():
+            braille_text.append(capital_follows)  # Add capitalization symbol
+            braille_text.append(braille_alphabet[char.lower()])
+        else:
+            braille_text.append(braille_alphabet[char])
+    return ''.join(braille_text)
