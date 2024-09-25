@@ -9,3 +9,9 @@ braille_alphabet = {
     'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO',
     'z': 'O..OOO', ' ': '......'
 }
+
+# Special symbol for capitalization
+capital_follows = '.....O'
+
+# Reverse mapping for Braille to English translation
+reverse_braille_alphabet = {v: k for k, v in braille_alphabet.items()}
