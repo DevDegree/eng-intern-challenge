@@ -73,6 +73,8 @@ class Braille(Enum):
     @property
     def symbol(self):
         return self._symbol
+    
+print(Braille.THREE._braille)
 
 # Check if the string given to it is either Braille or English
 def isBraille(string):
@@ -94,11 +96,55 @@ def isBraille(string):
     
     return True
 
-# Convert the string from English to Braille
+# Convert the string from English to Braille (i.e. "a" -> "0.....", "a12b" -> "0......0.0000.....0.0.........0.0...")
 def convertFromEnglishToBraille(string):
     result = ""
+    isPrevNumber = False # Use this to check if the previous character was a number
     
+    # Iterate through each character in the string
     for char in string:
-        print(char)
-
+        # Check which character is which in the Braille enum
+        for braille in Braille:
+            # If the character is found in the Braille enum
+            if char.lower() == braille.symbol:
+                # Check if the character is a capital letter. If so, add the CAPITAL_FOLLOWS to the result
+                if char.isupper():
+                    for dot in braille.CAPITAL_FOLLOWS._braille:
+                        if dot == 1:
+                            result += BrailleDot.NOT_RAISED.value # Add a dot
+                        else:
+                            result += BrailleDot.RAISED.value     # Add 0
+                    
+                # Check if the character is a number, If so add the NUMBER_FOLLOWS to the result
+                if char.isdigit():
+                    # If the previous character was not a number, add the NUMBER_FOLLOWS to the result
+                    if isPrevNumber == False:
+                        isPrevNumber = True
+                        for dot in braille.NUMBER_FOLLOWS._braille:
+                            if dot == 1:
+                                result += BrailleDot.NOT_RAISED.value # Add a dot
+                            else:
+                                result += BrailleDot.RAISED.value     # Add 0
+                else:
+                    isPrevNumber = False
+                
+                # Add the Braille character to the result
+                for dot in braille._braille:
+                    # Check if the previous character was a number. If so, add a space
+                    if isPrevNumber:
+                        for dot in braille.SPACE._braille:
+                            if dot == 1:
+                                result += BrailleDot.NOT_RAISED.value  # Add a dot
+                            else:
+                                result += BrailleDot.RAISED.value      # Add 0
+                    if dot == 1:
+                        result += BrailleDot.NOT_RAISED.value # Add a dot
+                    else:
+                        result += BrailleDot.RAISED.value     # Add 0
+                break
+    
+    return result
+    
 # Convert the string from Braille to English
+
+print(convertFromEnglishToBraille("c"))
