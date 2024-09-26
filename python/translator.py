@@ -174,24 +174,42 @@ def translate_english_to_braille(english_text: str) -> str:
 
     return ' '.join(braille_text)
 
+# Preprocess input (normalizing spaces and handling extra whitespace)
+def preprocess_input(text: str) -> str:
+    """
+    Preprocess the input text by trimming extra spaces and normalizing it.
+
+    Args:
+    - text (str): The input text to preprocess.
+
+    Returns:
+    - str: Normalized input.
+    """
+    return re.sub(r'\s+', ' ', text.strip())  # Remove extra spaces and normalize
+
+
 # Main function to process input
+import logging
+
+# Set up logging to file and console
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
+
 def main():
     """
     Main function that processes command-line input, determines the input type (Braille or English),
     and translates accordingly.
     """
     if len(sys.argv) < 2:
-        print(" No input received!")
+        logging.error("No input received!")
         sys.exit(1)
 
-    user_input = " ".join(sys.argv[1:])
-
+    user_input = preprocess_input(" ".join(sys.argv[1:]))
     if is_braille(user_input):
         print(translate_braille_to_english(user_input))
     elif is_english(user_input):
         print(translate_english_to_braille(user_input))
     else:
-        print("Input is not recognized.")
+        logging.error("Input is not supported!")
         sys.exit(1)
 
 if __name__ == "__main__":
