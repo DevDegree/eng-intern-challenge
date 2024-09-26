@@ -4,7 +4,7 @@
 #Variables for the input and the output, account for system input
 import sys
 
-StartingString = ''.join(sys.argv[1:])
+StartingString = sys.argv[1:]
 FinalTranslation = ""
 #Dictionaries to store values based on what is input
 EnglishToBraille = {
