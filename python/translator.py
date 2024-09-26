@@ -113,10 +113,10 @@ def translate_to_english(string):
             index = list(alphabet.values()).index(braille)
             result += list(alphabet.keys())[index]
         else:
-            handle_decode(braille)
+            handle_decode(braille, string)
         position += 6
 
-def handle_decode(braille):
+def handle_decode(braille, string):
     global decode, position, result
     if decode == "alpha":
         if braille == ".....O":
