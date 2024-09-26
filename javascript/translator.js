@@ -6,7 +6,8 @@ const engToBraille = {
     'p': 'OOO.O.', 'q': 'OOOOO.', 'r': 'O.OOO.', 's': '.OO.O.', 't': '.OOOO.',
     'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO',
     'z': 'O..OOO', ' ': '......', 
-    'capital': '..O...', 'number': '.O.OOO',
+    'capital': '.....O',    // Re-added
+    'number': '.O.OOO',     // Re-added
     '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
     '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..'
 };
@@ -17,8 +18,8 @@ const brailleToLetter = {
     'O...O.': 'k', 'O.O.O.': 'l', 'OO..O.': 'm', 'OO.OO.': 'n', 'O..OO.': 'o',
     'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't',
     'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y',
-    'O..OOO': 'z', '......': ' ', 
-    '..O...': 'capital', '.O.OOO': 'number'
+    'O..OOO': 'z', '......': ' ' 
+    // Do not include '.....O': 'capital' or '.O.OOO': 'number'
 };
 
 const brailleToDigit = {
@@ -30,7 +31,6 @@ const brailleToDigit = {
 function isBraille(input) {
     return /^[O.]+$/.test(input.trim());  // Regex to check if input contains only "O" and "."
 }
-
 
 // Eng to Braille translation
 function engToBrailleTranslator(input) {
@@ -60,7 +60,6 @@ function engToBrailleTranslator(input) {
     return braille;
 }
 
-
 // Braille to Eng translation
 function brailleToengTranslator(input) {
     let eng = '';
@@ -77,7 +76,7 @@ function brailleToengTranslator(input) {
 
     for (let symbol of brailleSymbols) {
         // Handle capital and number symbols
-        if (symbol === '..O...') {
+        if (symbol === '.....O') {
             capitalMode = true;
             continue;
         }
@@ -115,7 +114,6 @@ function brailleToengTranslator(input) {
 
     return eng;
 }
-
 
 // Main function to determine if input is Eng or Braille and translate accordingly
 function translate(input) {
