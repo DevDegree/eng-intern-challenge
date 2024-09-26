@@ -175,7 +175,7 @@ def translate_english_to_braille(english_text: str) -> str:
         else:
             braille_text.append(ENG_BRAILLE.get(char, handle_unsupported_char(char)))
 
-    return ' '.join(braille_text)
+    return ''.join(braille_text)
 
 # Preprocess input (normalizing spaces and handling extra whitespace)
 def preprocess_input(text: str) -> str:
