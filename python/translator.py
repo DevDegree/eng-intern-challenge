@@ -73,7 +73,7 @@ def is_braille(input_str: str) -> bool:
     return len(input_str) % 6 == 0 and all(char in "O." for char in input_str)
 
 
-def english_to_braille(input_str:str) -> str:
+def english_to_braille(input_str: str) -> str:
     """
     Translates english to braille.
 
@@ -99,7 +99,7 @@ def english_to_braille(input_str:str) -> str:
 
 def braille_to_english(input_str: str) -> str:
     """
-    Translate braille to english.
+    Translates braille to english.
     
     Args:
         input_str (str): The braille string to translate.
@@ -138,6 +138,12 @@ def braille_to_english(input_str: str) -> str:
 def main() -> None:
     """
     Main function that handles input and translation.
+
+    Args:
+        None
+    
+    Returns:
+        None
     """
     input_text = ' '.join(sys.argv[1:])
 
