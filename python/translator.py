@@ -161,17 +161,15 @@ def translate_english_to_braille(english_text: str) -> str:
     """
     braille_text = []
     for i, char in enumerate(english_text):
-        # Skip capitalization indicators
         if char.isupper():
-            braille_text.append(ENG_BRAILLE.get(char.lower(), handle_unsupported_char(char)))
-        
-        # Skip number indicators
+            # Add capitalization indicator and lowercase Braille equivalent
+            braille_text.append(CAPITAL_BRAILLE + ENG_BRAILLE.get(char.lower(), handle_unsupported_char(char)))
         elif char.isdigit():
+            if i == 0 or not english_text[i - 1].isdigit():
+                braille_text.append(NUMBER_BRAILLE)
             braille_text.append(ENG_BRAILLE_NUMS.get(char, handle_unsupported_char(char)))
-        
         elif char in ".,;?!'\"":  # Placeholder for punctuation
             braille_text.append(handle_unsupported_char(char))
-        
         else:
             braille_text.append(ENG_BRAILLE.get(char, handle_unsupported_char(char)))
 
