@@ -145,7 +145,8 @@ def convertFromEnglishToBraille(string):
     return result
     
 # Convert the string from Braille to English
-# def convertFromBrailleToEnglish(string):
+def convertFromBrailleToEnglish(string):
+    print("not implemented yet:", string)
 
 # Get the arguments from the command line
 args = sys.argv
@@ -155,4 +156,7 @@ originalString = ""
 if len(sys.argv) > 1:
     originalString = " ".join(args[1:])
 
-print(convertFromEnglishToBraille(originalString))
+if isBraille(originalString):
+    print(convertFromBrailleToEnglish(originalString))
+else:
+    print(convertFromEnglishToBraille(originalString))
