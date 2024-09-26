@@ -1,8 +1,3 @@
-// create a function to take in a string and determine if it is English or Braille
-// and run a function based on that
-
-// create a function that takes a Braille string and converts to English
-
 // declare the braille dictionary keys and values
 const brailleDictionary = {
   a: "O.....",
@@ -40,7 +35,7 @@ const brailleDictionary = {
   7: "OOOO..",
   8: "O.OO..",
   9: ".OO...",
-  O: ".OOO..",
+  0: ".OOO..",
   capital: ".....O",
   number: ".O.OOO",
   space: "......",
@@ -89,7 +84,7 @@ const numberDictionary = {
   "OOOO..": "7",
   "O.OO..": "8",
   ".OO...": "9",
-  ".OOO..": "O",
+  ".OOO..": "0",
 };
 
 // create Braille translation function
@@ -128,6 +123,7 @@ function toBraille(string) {
   return results.join("");
 }
 
+// create English translation function
 function toEnglish(string) {
   let newArray = [];
   let results = [];
@@ -151,10 +147,6 @@ function toEnglish(string) {
       isNumber = false;
       results.push(englishLetterDictionary[character]);
     }
-    // check for decimal character / is number and push "."
-    else if (isNumber && character === ".O...O") {
-      results.push(englishLetterDictionary["..OO.O"]);
-    }
     // check if number and push from number dictionary
     else if (isNumber) {
       results.push(numberDictionary[character]);
@@ -177,3 +169,23 @@ function toEnglish(string) {
   // return the array as a string
   return results.join("");
 }
+
+// create called function to determine input string language
+// and translate
+
+function translate(string) {
+  const regExp = /[A-NP-Za-z]/;
+  if (regExp.test(string)) {
+    return toBraille(string);
+  } else {
+    return toEnglish(string);
+  }
+}
+
+const input = process.argv.slice(2).join(" ");
+
+if (input) {
+  console.log(translate(input));
+}
+
+module.exports = translate;
