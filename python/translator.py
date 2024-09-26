@@ -1,3 +1,5 @@
+import sys
+
 #All alphabets mapped to Braille
 ENGLISH_TO_BRAILLE = {
     'a': 'O.....',
@@ -34,7 +36,7 @@ NUM_PREFIX = '..OOOO'
 #Prefix for capital letters
 CAP_PREFIX = '.....O'
 
-#Mapping for digits 
+#Mapping for digits using Braille 
 DIGIT_TO_BRAILLE = {
     '1': ENGLISH_TO_BRAILLE['a'],
     '2': ENGLISH_TO_BRAILLE['b'],
@@ -48,7 +50,7 @@ DIGIT_TO_BRAILLE = {
     '0': ENGLISH_TO_BRAILLE['j'],
 }
 
-#Mappings for letters and digits
+#Reverse mappings for letters and digits
 BRAILLE_TO_ENGLISH_LETTER = {v: k for k, v in ENGLISH_TO_BRAILLE.items()}
 BRAILLE_TO_ENGLISH_DIGIT = {v: k for k, v in DIGIT_TO_BRAILLE.items()}
 
@@ -58,118 +60,127 @@ PREFIXES = {
     NUM_PREFIX: 'NUMBER',    
 }
 
-def is_braille(input_str):   
+def is_braille(input_str):  
   
-    return all(c in {'O', '.'} for c in input_str)           
+    return all(c in {'O', '.'} for c in input_str)  
 
-def english_to_braille(text):
- 
+def english_to_braille(text): 
+   
     braille = []
     is_number = False
-    for char in text:
 
+    for char in text:
         if char.isupper():
             if is_number:
-                
-                braille.append(ENGLISH_TO_BRAILLE[' ']) 
+             
+                braille.append(ENGLISH_TO_BRAILLE[' '])  # Insert space to terminate number mode
                 is_number = False
+
             braille.append(CAP_PREFIX)
             braille.append(ENGLISH_TO_BRAILLE.get(char.lower(), '......'))
 
         elif char.isdigit():
 
-            if not is_number:   
-                braille.append(NUM_PREFIX) 
+            if not is_number:
+
+                braille.append(NUM_PREFIX)
                 is_number = True
-            braille.append(DIGIT_TO_BRAILLE.get(char, '......'))  
+            braille.append(DIGIT_TO_BRAILLE.get(char, '......'))
 
-        else:  
-
+        else:
 
             if is_number:
+
                 
-                braille.append(ENGLISH_TO_BRAILLE[' '])  
+                braille.append(ENGLISH_TO_BRAILLE[' ']) 
                 is_number = False
-            braille.append(ENGLISH_TO_BRAILLE.get(char, '......'))
-
-
+            braille.append(ENGLISH_TO_BRAILLE.get(char, '......'))  
     return ''.join(braille)
 
-
-
 def braille_to_english(braille_str):
-   
+    
+
     result = []
     i = 0
     is_number = False
     capitalize_next = False
 
     while i < len(braille_str):
-        
-        #Braille character is 6 characters long
+        #Each Braille character is 6 characters 
         braille_char = braille_str[i:i+6]
         if len(braille_char) < 6:
-           
+         
             break
 
         if braille_char in PREFIXES:
+
             if PREFIXES[braille_char] == 'CAPITAL':
                 capitalize_next = True
+
             elif PREFIXES[braille_char] == 'NUMBER':
+
                 is_number = True
+
             i += 6
             continue
 
         if braille_char == ENGLISH_TO_BRAILLE[' ']:  
             if is_number:
-                is_number = False
               
+                is_number = False
+               
             else:
+
+                
                 result.append(' ')
             i += 6
+
             continue
 
         if is_number:
+        
             if braille_char in BRAILLE_TO_ENGLISH_DIGIT:
                 result.append(BRAILLE_TO_ENGLISH_DIGIT[braille_char])
             else:
-                
+               
                 is_number = False
+               
                 char = BRAILLE_TO_ENGLISH_LETTER.get(braille_char, '?')  
 
                 if capitalize_next and char.isalpha():
                     char = char.upper()
-                    capitalize_next= False
+                    capitalize_next = False
 
                 result.append(char)
 
         else:
-
             char = BRAILLE_TO_ENGLISH_LETTER.get(braille_char, '?') 
+
             if char:
 
                 if capitalize_next and char.isalpha():
                     char = char.upper()
                     capitalize_next = False
                 result.append(char)
-
-            else:
                 
+            else:
+               
                 result.append('?')
         i += 6
 
     return ''.join(result)
 
-
-
-
 def main():
-
-    input_str = input("Enter the string to translate: ").strip()
-
+  
+    
+    #If input is provided via command-line arguments
+    if len(sys.argv) > 1:
+        input_str = ' '.join(sys.argv[1:])
+    else:
+        
+        input_str = input("Enter the string to translate: ").strip()
     if is_braille(input_str):
         translated = braille_to_english(input_str)
-
     else:
         translated = english_to_braille(input_str)
     print(translated)
