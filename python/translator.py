@@ -71,7 +71,7 @@ def handle_unsupported_char(char: str, to_braille: bool = True) -> str:
     """
     if to_braille:
         return "? (" + char + ")"
-    return "? (" + ' '.join(chunk_braille(char)[0]) + ")"  # Return braille chunk as unsupported text
+    return "? (" + ''.join(chunk_braille(char)[0]) + ")"  # Return braille chunk as unsupported text
 
 # Chunking Braille strings
 def chunk_braille(string: str, chunk_size: int = 6) -> list:
@@ -172,7 +172,7 @@ def translate_english_to_braille(english_text: str) -> str:
         else:
             braille_text.append(ENG_BRAILLE.get(char, handle_unsupported_char(char)))
 
-    return ' '.join(braille_text)
+    return ''.join(braille_text)
 
 # Preprocess input (normalizing spaces and handling extra whitespace)
 def preprocess_input(text: str) -> str:
