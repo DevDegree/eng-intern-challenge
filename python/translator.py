@@ -142,7 +142,7 @@ def braille_to_english(braille_str):
                     capitalize_next= False
 
                 result.append(char)
-                
+
         else:
 
             char = BRAILLE_TO_ENGLISH_LETTER.get(braille_char, '?') 
@@ -154,6 +154,7 @@ def braille_to_english(braille_str):
                 result.append(char)
 
             else:
+                
                 result.append('?')
         i += 6
 
