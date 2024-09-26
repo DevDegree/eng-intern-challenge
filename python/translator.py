@@ -7,7 +7,7 @@ braille_dict = {
     'Z': 'O..OOO',    ' ': '......',
     '.': '.O.O.O',    ',': '.O....',    '?': '.O..O.',    '!': '.O.OO.',    ':': '.O.O..',
     ';': '.OO...',    '-': '.O..O.',    '/': '.O.O..',    '<': '.O..OO',    '>': '.OO.O.',
-    '(': '.O.OO.',    ')': '.O.OO.',
+    '(': '.O.OO.',    ')': '.O.OO.',    '=': '.OO.OO',   '+': '.OOO..',   '*': '.OOO.O'
 }
 
 number_dict = {
@@ -28,10 +28,7 @@ def text_to_braille(text):
                 result += number_sign  # Prepend the number sign if switching to number mode
                 number_mode = True
             # Convert number to braille using letters A-J for 0-9
-            for key, value in number_dict.items():
-                if value == char:
-                    result += braille_dict[key]
-                    break
+            result += braille_dict[next(key for key, value in number_dict.items() if value == char)]
         elif char.isalpha():  # If it's a letter
             if number_mode:
                 number_mode = False  # Exit number mode if we're encountering a letter
@@ -65,9 +62,9 @@ def braille_to_text(braille):
                 result += number_dict[char]
             else:
                 if char == ' ':
-                    number_mode = False
+                    number_mode = False  # Reset number mode when encountering a space
                 if capitalize_next:
-                    result += char
+                    result += char.upper()
                     capitalize_next = False
                 else:
                     result += char.lower()
