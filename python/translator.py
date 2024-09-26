@@ -1,8 +1,9 @@
 from enum import Enum
+import sys
 
 # List up all Braille
 class BrailleDot(Enum):
-    RAISED = '0' # which represents the raised dot
+    RAISED     = 'O' # which represents the raised dot
     NOT_RAISED = '.' # which represents the not raised dot
 
 class Braille(Enum):
@@ -111,7 +112,7 @@ def convertFromEnglishToBraille(string):
                         if dot == 1:
                             result += BrailleDot.NOT_RAISED.value # Add a dot
                         else:
-                            result += BrailleDot.RAISED.value     # Add 0
+                            result += BrailleDot.RAISED.value     # Add O
                     
                 # Check if the character is a number, If so add the NUMBER_FOLLOWS to the result
                 if char.isdigit():
@@ -122,27 +123,36 @@ def convertFromEnglishToBraille(string):
                             if dot == 1:
                                 result += BrailleDot.NOT_RAISED.value # Add a dot
                             else:
-                                result += BrailleDot.RAISED.value     # Add 0
+                                result += BrailleDot.RAISED.value     # Add O
                 else:
                     isPrevNumber = False
                 
                 # Add the Braille character to the result
                 for dot in braille._braille:
-                    # Check if the previous character was a number. If so, add a space
-                    if isPrevNumber:
+                    # Check if the previous character was a number and the current character is not a number, add a space
+                    if isPrevNumber == True and char.isdigit() == False:
                         for dot in braille.SPACE._braille:
                             if dot == 1:
                                 result += BrailleDot.NOT_RAISED.value  # Add a dot
                             else:
-                                result += BrailleDot.RAISED.value      # Add 0
+                                result += BrailleDot.RAISED.value      # Add O
                     if dot == 1:
                         result += BrailleDot.NOT_RAISED.value # Add a dot
                     else:
-                        result += BrailleDot.RAISED.value     # Add 0
+                        result += BrailleDot.RAISED.value     # Add O
                 break
-    
+
     return result
     
 # Convert the string from Braille to English
+# def convertFromBrailleToEnglish(string):
 
-print(convertFromEnglishToBraille("c"))
+# Get the arguments from the command line
+args = sys.argv
+originalString = ""
+
+# Concat all the arguments into one string with a space in between
+if len(sys.argv) > 1:
+    originalString = " ".join(args[1:])
+
+print(convertFromEnglishToBraille(originalString))
