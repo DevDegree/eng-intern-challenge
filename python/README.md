@@ -1,6 +1,6 @@
 # Python Instructions
 
-The Python version used for this implementation is 3.8. Please ensure that your environment is set up with this version to run the translator correctly.
+The Python version used for this implementation is 3.12.5, but the code is compatible with Python 3.8
 
 # Additional Notes
 
