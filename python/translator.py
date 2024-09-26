@@ -53,9 +53,9 @@ braille_to_number = {v : k for k, v in number_to_braille.items()}
 
 BRAILLE_SYMBOL_SIZE = 6
 
-# brailleToText(braille) -> string
+# brailleToText(braille) -> str
 # converts a set of "." and "O" to valid braille
-def brailleToText(braille):
+def brailleToText(braille: str) -> str:
   braille_symbols = [
     braille[i:i+BRAILLE_SYMBOL_SIZE] 
     for i in range(0, len(braille), BRAILLE_SYMBOL_SIZE)
@@ -90,9 +90,9 @@ def brailleToText(braille):
 
   return result
 
-# textToBraille(text) -> string
+# textToBraille(str) -> str
 # converts alphanumeric text to braille
-def textToBraille(text):
+def textToBraille(text: str) -> str:
   result = ''
 
   num_lock = False
@@ -113,9 +113,9 @@ def textToBraille(text):
 
   return result
 
-# determineBraille(text) -> True/False
+# determineBraille(text) -> bool
 # return true if and only if text is valid braille
-def determineBraille(text):
+def determineBraille(text: str) -> bool:
   return all(char in {'.', 'O'} for char in text)
 
 def main():
