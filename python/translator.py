@@ -45,16 +45,19 @@ def english_to_braille(english):
 
    for char in english:
        if char.isupper():
-           #capital letter indicator
+           # add the capital letter indicator
            translated_sentence.append(english_braille['CAPITAL'])
-           #add the symbol for the actual letter in lower case
+           #then add the symbol for the actual letter in lower case
            translated_sentence.append(english_braille[char.lower()])
        elif char.isdigit():
-           # number letter indicator
+           # add number letter indicator to the list
            translated_sentence.append(english_braille['NUMBER'])
+           #then add the number to the list
            translated_sentence.append(english_braille[char])
        else:
+           #add any remaining symbols or spaces to the lists as they come
            translated_sentence.append(english_braille[char])
+    #join the characters together in the list to for a sentence/word
    return ''.join(translated_sentence)
 
 def braille_to_english(braille):
