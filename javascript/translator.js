@@ -1,8 +1,6 @@
 // create a function to take in a string and determine if it is English or Braille
 // and run a function based on that
 
-// create a function that takes an English string and converts to Braille
-
 // create a function that takes a Braille string and converts to English
 
 // declare the braille dictionary keys and values
@@ -93,3 +91,38 @@ const numberDictionary = {
   ".00...": "9",
   ".000..": "0",
 };
+
+// create Braille translation function
+function toBraille(string) {
+  let newArray = Array.from(string);
+  let results = [];
+  let prevIsNumber = false;
+
+  newArray.forEach((character) => {
+    // check if character is a number
+    if (character >= "0" && character <= "9") {
+      if (prevIsNumber) {
+        results.push(brailleDictionary[character]);
+      } else {
+        results.push(brailleDictionary["number"], brailleDictionary[character]);
+        prevIsNumber = true;
+      }
+    }
+    // check if character is a space and set prevIsNumber to false
+    else if (character === " ") {
+      prevIsNumber = false;
+      results.push(brailleDictionary["space"]);
+    }
+    // check if character is upper case and handle
+    else if (character.toUpperCase() === character) {
+      results.push(
+        brailleDictionary["capital"],
+        brailleDictionary[character.toLowerCase()]
+      );
+    }
+    // if no other conditions are met, regular letter
+    else {
+      results.push(brailleDictionary[character]);
+    }
+  });
+}
