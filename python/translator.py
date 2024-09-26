@@ -181,19 +181,17 @@ def main():
     and translates accordingly.
     """
     if len(sys.argv) < 2:
-        print("Error: No input received! Please provide text in either English or Braille.")
+        print(" No input received!")
         sys.exit(1)
 
     user_input = " ".join(sys.argv[1:])
 
     if is_braille(user_input):
-        print("Translating Braille to English:")
         print(translate_braille_to_english(user_input))
     elif is_english(user_input):
-        print("Translating English to Braille:")
         print(translate_english_to_braille(user_input))
     else:
-        print("Error: Input is not recognized as either English or Braille.")
+        print("Input is not recognized.")
         sys.exit(1)
 
 if __name__ == "__main__":
