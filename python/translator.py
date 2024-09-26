@@ -21,11 +21,6 @@ English_Digits = {
 Braille_Dict = {value: key for key, value in English_Dict.items()}
 Braille_Digits = {value: key for key, value in English_Digits.items()}
 
-# Check if there are any command-line arguments
-if (len(sys.argv) <= 1):
-    # If no input is given, print instructions and exit
-    print("No command-line arguments were given. Enter an input after the program.")
-    exit()
 
 # Function to translate English text to Braille
 def translateEnglishToBraille(input_str):
@@ -69,6 +64,15 @@ def translateBrailleToEnglish(input_str):
     for i in range(0, len(input_str), 6):
         char = input_str[i:i+6]  # Each Braille character is 6 characters long
 
+        # Handle Braille space pattern
+        if char == '......' and not isDigit:
+            outp.append(' ')
+            continue
+
+        if char not in Braille_Dict and char not in Braille_Digits:
+            print(f"Error: Undefined Braille pattern encountered - '{char}'")
+            return "Error: Undefined Braille pattern"
+        
         if isCapital:
             # Convert the Braille to uppercase English letter
             outp.append(Braille_Dict[char].upper())
@@ -91,23 +95,31 @@ def translateBrailleToEnglish(input_str):
             outp.append(Braille_Dict[char])
     return ''.join(outp)
 
-# Determine if the input is English or Braille based on the first argument
-if sys.argv[1].isalnum():
-    English = True  # If alphanumeric, assume it's English
-else:
-    English = False  # Otherwise, assume it's Braille
 
-# Gather the input string to be translated
-input_str = ""
+if __name__ == "__main__":
+    
+    # Check if there are any command-line arguments
+    if (len(sys.argv) <= 1):
+        # If no input is given, print instructions and exit
+        print("No command-line arguments were given. Enter an input after the program.")
+        exit()
+    # Determine if the input is English or Braille based on the first argument
+    if all(char in 'O.' for char in sys.argv[1]):
+        English = False  # If only . and O, assume it's Braille
+    else:
+        English = True  # Otherwise, assume it's English
 
-if English:
-    # Join all arguments as input string for English translation
-    input_str = ' '.join(sys.argv[1:])
-    outp = translateEnglishToBraille(input_str)
-else:
-    # Assume single argument for Braille input
-    input_str = sys.argv[1]
-    outp = translateBrailleToEnglish(input_str)
+    # Gather the input string to be translated
+    input_str = ""
 
-# Print the translated output
-print(outp)
+    if English:
+        # Join all arguments as input string for English translation
+        input_str = ' '.join(sys.argv[1:])
+        outp = translateEnglishToBraille(input_str)
+    else:
+        # Assume single argument for Braille input
+        input_str = sys.argv[1]
+        outp = translateBrailleToEnglish(input_str)
+
+    # Print the translated output
+    print(outp)
