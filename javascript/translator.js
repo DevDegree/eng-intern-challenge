@@ -28,44 +28,47 @@ const brailleToDigit = {
 
 // Detect whether input is Braille (contains only "O" and "." characters)
 function isBraille(input) {
-    return /^[O.\s]+$/.test(input.trim());  // Include whitespace in the regex
+    return /^[O.]+$/.test(input.trim());  // Regex to check if input contains only "O" and "."
 }
+
 
 // Eng to Braille translation
 function engToBrailleTranslator(input) {
-    let brailleSymbols = [];
+    let braille = '';
     let numberMode = false;
 
     for (let char of input) {
         // Handle capital letters
         if (/[A-Z]/.test(char)) {
-            brailleSymbols.push(engToBraille['capital']);  
+            braille += engToBraille['capital'];  // Add capital symbol
             char = char.toLowerCase();
         }
 
         // Handle numbers
         if (/[0-9]/.test(char)) {
             if (!numberMode) {
-                brailleSymbols.push(engToBraille['number']);  
+                braille += engToBraille['number'];  // Add number symbol once
                 numberMode = true;
             }
-            brailleSymbols.push(engToBraille[char]); 
+            braille += engToBraille[char];  // Append Braille number
         } else {
             numberMode = false; // Reset number mode for non-numeric
-            brailleSymbols.push(engToBraille[char] || '');  // Append Braille letter or space
+            braille += engToBraille[char] || '';  // Append Braille letter or space
         }
     }
 
-    return brailleSymbols.join(' ');
+    return braille;
 }
+
 
 // Braille to Eng translation
 function brailleToengTranslator(input) {
     let eng = '';
     let capitalMode = false;
     let numberMode = false;
-    
-    const brailleSymbols = input.trim().split(/\s+/);
+
+    // Remove any whitespace and split the input into 6-character Braille symbols
+    const brailleSymbols = input.match(/.{1,6}/g);
 
     if (!brailleSymbols) {
         console.error("Invalid Braille input.");
@@ -99,7 +102,7 @@ function brailleToengTranslator(input) {
 
         if (!char) {
             console.error(`Unrecognized Braille symbol: ${symbol}`);
-            continue; 
+            continue;  // Skip unrecognized symbols
         }
 
         if (capitalMode) {
@@ -112,6 +115,7 @@ function brailleToengTranslator(input) {
 
     return eng;
 }
+
 
 // Main function to determine if input is Eng or Braille and translate accordingly
 function translate(input) {
