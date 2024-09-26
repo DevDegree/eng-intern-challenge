@@ -1,6 +1,5 @@
 class Translator:
-    
-    def __init__(self, input):
+    def __init__(self, string):
         self.alphabet = {
             'a' : 'O.....',
             'b' : 'O.O...',
@@ -56,55 +55,55 @@ class Translator:
             '(' : 'O.O..O',
             ')' : '.O.OO.',
         }
-        self.alpha = list(alphabet.keys())
-        self.alpha_braille = list(alphabet.values())
-        self.nums = list(numbers.keys())
-        self.nums_braille = list(numbers.keys())
-        self.deci = list(decimals.keys())
-        self.deci_braille = list(decimals.values())
+        self.alpha = list(self.alphabet.keys())
+        self.alpha_braille = list(self.alphabet.values())
+        self.nums = list(self.numbers.keys())
+        self.nums_braille = list(self.numbers.values())
+        self.deci = list(self.decimals.keys())
+        self.deci_braille = list(self.decimals.values())
         self.decode = "alpha" #alpha, nums or deci
         self.x = 0
         self.result = ""
-        translate(input)
+        self.translate(string)
 
     def translate(self, string):
         if (any(c.isalpha() for c in string)):
-            translate_to_braille(string)
+            self.translate_to_braille(string)
         else:
-            translate_to_english(string)
+            self.translate_to_english(string)
 
 
     def translate_to_braille(self, string):
         for c in string:
             if (c == " "):
-                decode = "alpha"
-                result += alpha.get(c)
+                self.decode = "alpha"
+                self.result += self.alphabet.get(c)
             elif (c.isalpha()):
-                if (c.isUpper()):
-                    result += '.....O'
-                    c.lower()
-                    result += alphabet.get(c)
-            elif (c.isnumeric):
+                if (c.isupper()):
+                    self.result += '.....O'
+                    c = c.lower()
+                    self.result += self.alphabet.get(c)
+            elif (c.isnumeric()):
                 if (decode=="nums"):
-                    result += nums.get(c)
+                    self.result += self.nums.get(c)
                 else:
-                    result += ".O...O"
-                    decode = "nums"
-                    result += numbers.get(c)
+                    self.result += ".O...O"
+                    self.decode = "nums"
+                    self.result += self.numbers.get(c)
             else:
-                if (decode=="deci"):
-                    result += deci.get(c)
+                if (self.decode=="deci"):
+                    self.result += self.deci.get(c)
                 else:
-                    result += ".O.OOO"
-                    decode = "deci"
-                    result += decimals.get(c)
-        return result
+                    self.result += ".O.OOO"
+                    self.decode = "deci"
+                    self.result += self.decimals.get(c)
+        return self.result
 
     def translate_to_english(self, string):
         if (len(string) % 6 != 0):
             raise Exception("Invalid length")
         else:
-            while (x <= len(string)):
+            while (self.x <= len(string)):
                 braille = string[x:x+6]
                 if (braille==".O.OOO"):
                     decode = "nums"
@@ -124,7 +123,7 @@ class Translator:
             if (braille == ".....O"):
                 x+=6
                 position = alpha_braille.index(string[x:x+6])
-                result += alpha[position].toUpper()
+                result += alpha[position].upper()
             else:
                 position = alpha_braille.index(braille)
                 result += alpha[position]
@@ -134,4 +133,9 @@ class Translator:
         else:
             position = deci_braille.index(braille)
             result += deci[position]
-            
+
+if __name__==" __main__":
+    import sys
+    string = ' '.join(sys.argv[1:])
+    translator = Translator(string)
+    print(translator.result)
