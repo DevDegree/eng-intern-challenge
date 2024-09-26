@@ -94,6 +94,9 @@ def convert_string_to_braille(arguments):
 
     return output
 
+
+def isBraille(s):
+    return s in braille_to_string_dict or s in braille_to_operation_dict
 '''
 '''
 arguments = sys.argv[1:]
@@ -102,9 +105,13 @@ if len(arguments) == 0:
 #string to braille if len arguments > 1 (since braille is an uninterrupted stream of 'O' and '.'
 #string to braille if arguments[0] % 6 != 0, (since braille is always composed of 6 characters)
 
-if len(arguments) > 1 or len(arguments[0]) % 6 != 0:
-    output_string = convert_string_to_braille(arguments)
-else:
+argument = "".join(arguments)
+is_braille = all(isBraille(arg) for arg in arguments)
+    
+
+if is_braille:
     output_string = convert_braille_to_string(arguments)
+else:
+    output_string = convert_string_to_braille(arguments)
 
 print(output_string)
