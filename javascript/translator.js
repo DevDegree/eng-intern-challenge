@@ -5,91 +5,91 @@
 
 // declare the braille dictionary keys and values
 const brailleDictionary = {
-  a: "0.....",
-  b: "0.0...",
-  c: "00....",
-  d: "00.0..",
-  e: "0..0..",
-  f: "000...",
-  g: "0000..",
-  h: "0.00..",
-  i: ".00...",
-  j: ".000..",
-  k: "0...0.",
-  l: "0.0.0.",
-  m: "00..0.",
-  n: "00.00.",
-  o: "0..00.",
-  p: "000.0.",
-  q: "00000.",
-  r: "0.000.",
-  s: ".00.0.",
-  t: ".0000.",
-  u: "0...00",
-  v: "0.0.00",
-  w: ".000.0",
-  x: "00..00",
-  y: "00.000",
-  z: "0..000",
-  1: "0.....",
-  2: "0.0...",
-  3: "00....",
-  4: "00.0..",
-  5: "0..0..",
-  6: "000...",
-  7: "0000..",
-  8: "0.00..",
-  9: ".00...",
-  0: ".000..",
-  capital: ".....0",
-  number: ".0.000",
+  a: "O.....",
+  b: "O.O...",
+  c: "OO....",
+  d: "OO.O..",
+  e: "O..O..",
+  f: "OOO...",
+  g: "OOOO..",
+  h: "O.OO..",
+  i: ".OO...",
+  j: ".OOO..",
+  k: "O...O.",
+  l: "O.O.O.",
+  m: "OO..O.",
+  n: "OO.OO.",
+  o: "O..OO.",
+  p: "OOO.O.",
+  q: "OOOOO.",
+  r: "O.OOO.",
+  s: ".OO.O.",
+  t: ".OOOO.",
+  u: "O...OO",
+  v: "O.O.OO",
+  w: ".OOO.O",
+  x: "OO..OO",
+  y: "OO.OOO",
+  z: "O..OOO",
+  1: "O.....",
+  2: "O.O...",
+  3: "OO....",
+  4: "OO.O..",
+  5: "O..O..",
+  6: "OOO...",
+  7: "OOOO..",
+  8: "O.OO..",
+  9: ".OO...",
+  O: ".OOO..",
+  capital: ".....O",
+  number: ".O.OOO",
   space: "......",
 };
 
 // declare the english letters dictionary keys and values
 const englishLetterDictionary = {
-  "0.....": "a",
-  "0.0...": "b",
-  "00....": "c",
-  "00.0..": "d",
-  "0..0..": "e",
-  "000...": "f",
-  "0000..": "g",
-  "0.00..": "h",
-  ".00...": "i",
-  ".000..": "j",
-  "0...0.": "k",
-  "0.0.0.": "l",
-  "00..0.": "m",
-  "00.00.": "n",
-  "0..00.": "o",
-  "000.0.": "p",
-  "00000.": "q",
-  "0.000.": "r",
-  ".00.0.": "s",
-  ".0000.": "t",
-  "0...00": "u",
-  "0.0.00": "v",
-  ".000.0": "w",
-  "00..00": "x",
-  "00.000": "y",
-  "0..000": "z",
-  ".....0": "capital",
+  "O.....": "a",
+  "O.O...": "b",
+  "OO....": "c",
+  "OO.O..": "d",
+  "O..O..": "e",
+  "OOO...": "f",
+  "OOOO..": "g",
+  "O.OO..": "h",
+  ".OO...": "i",
+  ".OOO..": "j",
+  "O...O.": "k",
+  "O.O.O.": "l",
+  "OO..O.": "m",
+  "OO.OO.": "n",
+  "O..OO.": "o",
+  "OOO.O.": "p",
+  "OOOOO.": "q",
+  "O.OOO.": "r",
+  ".OO.O.": "s",
+  ".OOOO.": "t",
+  "O...OO": "u",
+  "O.O.OO": "v",
+  ".OOO.O": "w",
+  "OO..OO": "x",
+  "OO.OOO": "y",
+  "O..OOO": "z",
+  ".....O": "capital",
   "......": " ",
 };
 
 // declare the numbers dictionary
 const numberDictionary = {
-  "0.....": "1",
-  "0.0...": "2",
-  "00....": "3",
-  "00.0..": "4",
-  "0..0..": "5",
-  "000...": "6",
-  "0000..": "7",
-  "0.00..": "8",
-  ".00...": "9",
-  ".000..": "0",
+  "O.....": "1",
+  "O.O...": "2",
+  "OO....": "3",
+  "OO.O..": "4",
+  "O..O..": "5",
+  "OOO...": "6",
+  "OOOO..": "7",
+  "O.OO..": "8",
+  ".OO...": "9",
+  ".OOO..": "O",
 };
 
 // create Braille translation function
@@ -125,4 +125,55 @@ function toBraille(string) {
       results.push(brailleDictionary[character]);
     }
   });
+  return results.join("");
+}
+
+function toEnglish(string) {
+  let newArray = [];
+  let results = [];
+  let isNumber = false;
+  let nextCapital = false;
+
+  // white string has value, push next 6 characters to array as a string, and update string to remove those characters
+  while (string) {
+    newArray.push(string.slice(0, 6));
+    string = string.slice(6);
+  }
+
+  // loop through array
+  newArray.forEach((character) => {
+    // check if the Number to follow character is present and set isNumber to true if yes
+    if (character === ".O.OOO") {
+      isNumber = true;
+    }
+    // check if the character is a space, if yes, set isNumber to false and push space
+    else if (character === "......") {
+      isNumber = false;
+      results.push(englishLetterDictionary[character]);
+    }
+    // check for decimal character / is number and push "."
+    else if (isNumber && character === ".O...O") {
+      results.push(englishLetterDictionary["..OO.O"]);
+    }
+    // check if number and push from number dictionary
+    else if (isNumber) {
+      results.push(numberDictionary[character]);
+    }
+    // check if next character is capital is true, and push capital character, reset nextCapital back to false
+    else if (nextCapital === true) {
+      results.push(englishLetterDictionary[character].toUpperCase());
+      nextCapital = false;
+    }
+    // check if next character is to be a capital and set nextCapital to true;
+    else if (character === ".....O") {
+      nextCapital = true;
+    }
+    // if no other conditions are met, push regular character
+    else {
+      results.push(englishLetterDictionary[character]);
+    }
+  });
+
+  // return the array as a string
+  return results.join("");
 }
