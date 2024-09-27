@@ -20,6 +20,8 @@ numbers_braille = {
 }
 
 # Functions will be defined here
+def is_braille(input_str):
+    return all(c in 'O.' for c in input_str)
 
 def translate_braille_to_english(braille_text):
     result = []
@@ -75,8 +77,11 @@ def translate_english_to_braille(english_text):
     return ''.join(result)
 
 def main():
-    # Main execution logic will go here
-    pass  # Placeholder
+    input_text = sys.argv[1]
+    if is_braille(input_text):
+        print(translate_braille_to_english(input_text))
+    else:
+        print(translate_english_to_braille(input_text))
 
 if __name__ == '__main__':
     main()
