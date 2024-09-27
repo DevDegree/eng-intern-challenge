@@ -48,15 +48,17 @@ function brailleToEnglish(input) {
   let isNumber = false;
 
   brailleChars.forEach(brailleChar => { // loop through each Braille Character in the brailleChars array
-    if(brailleChar === brailleDictionary.indicators.capital) {
+    if(brailleChar === brailleDictionary.indicators.capital) { // checks the current char matches the capital indicator
       isCapital = true;
-    } else if (brailleChar === brailleDictionary.indicators.number) {
+    } else if (brailleChar === brailleDictionary.indicators.number) { // checks the current char matches the number indicator
       isNumber = true;
-    } else if(brailleChar === brailleDictionary.indicators.space) {
+    } else if (brailleChar === brailleDictionary.indicators.decimal) { // checks the current char matches the decimal indicator
+			result += '.';
+		} else if(brailleChar === brailleDictionary.indicators.space) { // checks the current char matches the space indicator
       result += ' ';
       isCapital = false;
-      isNumber = false;
-    } else {
+      isNumber = false; // space resets the number mode to false
+    } else { // if none of the conditions(indicator) above are met 
       if (isNumber) { // if the current brailleChar is a number, look for the maching Braille charactor in the numbers object
         const num = Object.keys(brailleDictionary.numbers).find(key => brailleDictionary.numbers[key] === brailleChar);
         if (num) { // if a match is found then add it to the result string
@@ -107,7 +109,7 @@ function englishToBraille(input) {
 			}
 			result += brailleDictionary.numbers[char]; 
 		} else if (char === '.') {
-			result += isNumber ? brailleDictionary.indicators.decimal : brailleDictionary.specialChar[char]; // checks if the period is period or decimal
+			result += isNumber ? brailleDictionary.indicators.decimal : brailleDictionary.specialChars[char]; // checks if the period is period or decimal
 		} else if (char === ' ') { // checks spacing
 			result += brailleDictionary.indicators["space"];
 			isNumber = false;
