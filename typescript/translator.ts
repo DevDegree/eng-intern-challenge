@@ -273,8 +273,9 @@ class Translator {
    * and prints the result to stdout
    *
    * @param {string[]} args command-line arguments
+   * @returns {string} translation of the input text
    */
-  public static translate(args: string[]) {
+  public static translate(args: string[]): string {
     const concatenatedArgs = args.join(" ");
 
     // test braille text constraints
