@@ -79,7 +79,7 @@ def englishToBraille(english):
     return ''.join(braille)
 
 def main():
-    given = sys.argv[1]
+    given = ' '.join(sys.argv[1:])
 
     if isBraille(given):
         print(brailleToEnglish(given))
