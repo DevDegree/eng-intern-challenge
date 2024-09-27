@@ -1,3 +1,4 @@
+// maps english letters/numbers to their braille counterparts
 const brailleLetters = {
     'a':'O.....', 'b':'O.O...', 'c':'OO....', 'd':'OO.O..',
     'e':'O..O..', 'f':'OOO...', 'g':'OOOO..', 'h':'O.OO..',
@@ -18,10 +19,12 @@ const brailleSpecial = {
     'capital':'.....O', 'number':'.O.OOO', 'space': '......',
 };
 
+// reverses our existing maps to allow for braille -> english translation
 const reversedBrailleLetters = Object.fromEntries(Object.entries(brailleLetters).map(([key, value]) => [value, key]));
 const reversedBrailleNumbers = Object.fromEntries(Object.entries(brailleNumbers).map(([key, value]) => [value, key]));
 const reversedBrailleSpecial = Object.fromEntries(Object.entries(brailleSpecial).map(([key, value]) => [value, key]));
 
+// determines if a given string is in english or braille
 function checkIfBraille(text) {
     if (text.includes('O') || text.includes('.')){
         return true;
@@ -29,6 +32,7 @@ function checkIfBraille(text) {
     return false;
 };
 
+// converts a string of braille to english
 function brailleToEnglish(text) {
     let translation = '';
     let isCapital = false;
@@ -47,6 +51,7 @@ function brailleToEnglish(text) {
         }
         if (brailleCharacter === brailleSpecial['space']) {
             translation += " ";
+            // reset number flag
             isNumber = false;
             continue;
         }
@@ -56,6 +61,7 @@ function brailleToEnglish(text) {
         }
         else if (isCapital) {
             translation += reversedBrailleLetters[brailleCharacter].toUpperCase();
+            // reset capital flag
             isCapital = false;
         }
         else {
@@ -85,6 +91,7 @@ function englishToBraille(text) {
             translation += brailleLetters[englishCharacter];
         }
         else {
+            // adds the number character to signify proceeding digits are numbers if it hasn't already been done so
             if (!isNumber) {
                 isNumber = true;
                 translation += brailleSpecial['number'];
@@ -97,6 +104,7 @@ function englishToBraille(text) {
 };
 
 const inputText = process.argv.slice(2).join(' ');
+// checks to make sure there is input provided
 if (inputText == '') {
     console.log('Error. No input provided');
 }
