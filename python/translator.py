@@ -1,3 +1,5 @@
+# William Li
+# william.li3@uwaterloo.ca
 import sys
 
 CAPITAL = ".....O"
@@ -95,8 +97,8 @@ def translateBrailleToEnglish(input: str) -> str:
     isCapital = False
     isNumber = False
     for symbol in braille:
-        # if isNumber is true and we reach a SPACE, then set isNumber to false
-        if isNumber and symbol == SPACE:
+        # if isNumber is true and we reach a value that isn't a number
+        if isNumber and symbol not in BRAILLE_TO_NUMBER:
             isNumber = False
 
         if symbol == CAPITAL:
