@@ -40,6 +40,7 @@ func brailleToEnglish(input string) string {
 	for i := 0; i < len(input); i += 6 {
 		brailleChar := input[i : i+6]
 
+		//special symbol checks
 		if brailleChar == capitalFollow {
 			isCapital = true
 			continue
@@ -119,6 +120,7 @@ func main() {
 
 	isBraille := true
 
+	//check if input is braille or not
 	if len(input)%6 != 0 {
 		fmt.Println(englishToBraille(input))
 		isBraille = false
