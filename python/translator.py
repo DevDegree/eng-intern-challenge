@@ -40,6 +40,7 @@ braille_to_english_dict = {
     '......': ' '
 }
 
+# O.....O.OOO.OO.OOOO.....OO.OO.......OOO.O.
 
 
 # Function 1: Translating from English --> Braille
@@ -152,11 +153,9 @@ def main():
     # If it only contains 'O' and '.', and has length divisible by 6, treat it as Braille
     if all(c in "O." for c in text) and (len(text) % 6) == 0:       
         print(braille_to_english(text))
-        print(braille_to_english(english_to_braille(braille_to_english(text))))
     # Otherwise, treat it as English
     else:   
         print(english_to_braille(text))
-        print(braille_to_english(english_to_braille(text)))
 
 if __name__ == "__main__":
     main()
