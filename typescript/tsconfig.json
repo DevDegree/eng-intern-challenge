@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "types": ["node"],
+    "types": ["jest", "node"],
     "moduleResolution": "node",
     "module": "commonjs",
     "target": "es6"
-  }
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules"]
 }
