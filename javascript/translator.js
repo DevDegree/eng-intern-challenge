@@ -1,13 +1,17 @@
 /* 
 Requirements -> Braille Alphabet: Letters a through z/ The ability to capitalize letters/ Numbers 0 through 9/ The ability to include spaces ie: multiple words
 
-Function 1. check if the input is either English or Braille (if it's English then translate it to Braille, if it's Braille then translate it to English)
-Function 2. translate Braille to English
-Function 3. translate English to Braille 
+Function 1. check if the input is either English or Braille "isBraille(input)" (if it's English then translate it to Braille, if it's Braille then translate it to English)
+Function 2. translate Braille to English "brailleToEnglish(input)"
+		- a. split the input into chunks of 6 characters.
+		- b. check if each char uses the capital indicator.
+    - c. check if each char uses the number mode with the number indicator
+    - d. check if there's any special characters and spacing.
+Function 3. translate English to Braille "englishToBraille(input)"
     - a. loop through each characters in the content
     - b. check if the first letter is capital or not (if yes, then ADD prefix Capital) AND next letter should be lowercase
-    - c. number = false
-
+    - c. check if it is number, space or decimals(specialCharacters)
+Read the input from the command line
 Print the output
 */
 
@@ -40,7 +44,7 @@ function isBraille(input) {
 }
 
 
-// Function to translate Braille to English
+// Function to translate from Braille to English
 function brailleToEnglish(input) {
   const brailleChars = input.match(/.{1,6}/g); // Split Braille string into chunks of 6 characters
   let result = ''; // output is a string
@@ -78,7 +82,7 @@ function brailleToEnglish(input) {
             result += specialChar;
           }
         }
-        isCapital = false; // reset the capital indicator to false for the next Braille Character
+        isCapital = false; // reset the capital indicator each braille character 
       }
    
     }
@@ -89,15 +93,14 @@ function brailleToEnglish(input) {
 }
 
 
-// Function to translate the input, English to Braille
+// Function to translate the input from English to Braille
 function englishToBraille(input) {
 	let result = ''; // result is string
 	let isNumber = false;
 
 	for (let char of input) { // iterates over characters of the input
 		if (char >= 'A' && char <= 'Z') { // checks if the first letter is capital
-		  result += brailleDictionary.indicators.capital;
-			result += brailleDictionary.alphabets[char.toLowerCase()]; 
+		  result += brailleDictionary.indicators.capital + brailleDictionary.alphabets[char.toLowerCase()]; 
 			isNumber = false;
 		} else if (char >= 'a' && char <= 'z') { // lower case
 			result += brailleDictionary.alphabets[char];
@@ -113,7 +116,7 @@ function englishToBraille(input) {
 		} else if (char === ' ') { // checks spacing
 			result += brailleDictionary.indicators["space"];
 			isNumber = false;
-		} else if (brailleDictionary.specialChars[char]) { // checks special charactoers
+		} else if (brailleDictionary.specialChars[char]) { // checks special characters
 			result += brailleDictionary.specialChars[char];
 			isNumber = false;
 		}
@@ -129,7 +132,7 @@ function translate(input) {
 	}
 }
 
-// Read input from command line arguments
+// Input from command line arguments
 const input = process.argv.slice(2).join(' ');
 
 // Output the translation
