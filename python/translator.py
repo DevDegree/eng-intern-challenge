@@ -23,27 +23,12 @@ for braille_char, english_char in braille_alphabet.items():
     else:
         english_alphabet[english_char] = braille_char
 
-# Determine if input string is Braille or English
-isBraille = True
-input_length = len(string_to_translate)
+is_english = True
 input_chars = set(string_to_translate)
 
-if len(args.input_string) > 1:
-    isBraille = False
-elif input_length % 6 != 0:
-    isBraille = False
-elif "." not in input_chars:
-    isBraille = False
-elif len(input_chars) > 2 or "O" not in input_chars:
-    isBraille = False
-else:
-    num_chars = input_length // 6
-    for i in range(num_chars):
-        j = i * 6
-        if string_to_translate[j: j + 6] not in braille_alphabet:
-            isBraille = False
-            break
-
+if "." in input_chars:
+    is_english = False
+            
 # Translate Braille to English
 def translate_to_english(text):
     translated_text = []
@@ -84,3 +69,31 @@ def translate_to_english(text):
             translated_text.append(english_char)
     
     return "".join(translated_text)
+
+# Translate English to Braille
+def translate_to_braille(text):
+    translated_text = []
+    for word in text:
+        is_number = False
+        for english_char in word:
+            if english_char.isupper():
+                translated_text.append(english_alphabet["cf"])
+                translated_text.append(english_alphabet[english_char.lower()])
+            elif english_char.isnumeric():
+                if not is_number:
+                    is_number = True
+                    translated_text.append(english_alphabet["nf"])
+                translated_text.append(english_alphabet[english_char])
+            else:
+                translated_text.append(english_alphabet[english_char])
+        translated_text.append(english_alphabet[" "])
+        is_number = False
+                
+    if translated_text:
+        translated_text.pop()
+    return "".join(translated_text)
+
+if is_english:
+    print(translate_to_braille(args.input_string))
+else:
+    print(translate_to_english(string_to_translate))
