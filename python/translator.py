@@ -1,5 +1,6 @@
 import sys
 
+# Several mappings to support braille to enlgish and vice versa.
 ENGLISH_TO_BRAILLE = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
     'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..',
@@ -53,6 +54,7 @@ def braille_to_english(braille: str) -> str:
         if(char == BRAILLE_SPECIAL['capital_follows']): is_captial = True
         elif(char == BRAILLE_SPECIAL['number_follows']): is_number = True
         else:
+            # definetely a character of some sort rather than a special character. read, then add it in.
             if is_number:
                 if(char == ENGLISH_TO_BRAILLE[' ']):
                     is_number = False
@@ -72,3 +74,6 @@ def main():
     
     if is_braille(to_translate): print(braille_to_english(to_translate))
     else: print(english_to_braille(to_translate))
+
+if __name__ == '__main__':
+    main()
