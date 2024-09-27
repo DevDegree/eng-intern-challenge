@@ -32,10 +32,13 @@ def english_to_braille(text: str) -> str:
     return "Braille translation not yet implemented."
 
 
-# TODO Detect whether the input is Braille or English.
+
 def is_braille(input_string: str) -> bool:
     """Detect if the input string is Braille"""
-    return False #stub
+    for char in input_string:
+        if char not in 'O. ':
+            return False
+    return True
 
 def main():
     if len(sys.argv) < 2:
@@ -44,8 +47,8 @@ def main():
     
     # Join all arguments (after script name) into a single string
     input_string = ' '.join(sys.argv[1:])
-    
-    # Decide whether the input is Braille or English
+
+    #Decide whether the input is Braille or English
     if is_braille(input_string):
         # Convert Braille to English
         result = braille_to_english(input_string)
