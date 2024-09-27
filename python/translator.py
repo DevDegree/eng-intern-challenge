@@ -1,6 +1,7 @@
 import sys
 
-
+# Return True if string is Braille ('O' and '.' only)
+# else Return False
 def isBraille(s):
     for c in s:
         if (c != 'O' and c != '.'):
@@ -8,13 +9,14 @@ def isBraille(s):
     return True
 
 
-
+# Translates input string from English to Braille
 def eToB(s):
     result = ""
     for c in s:
         result += eToBChar(c)
     return result
 
+# Translates english character to corresponding braille string
 def eToBChar(c):
     result = ""
     alphabet = {
@@ -58,10 +60,10 @@ def eToBChar(c):
             '8': "O.OO..",
             '9': ".OO...",
             }
-
+    numbers = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
     isInNum = False
 
-    if isinstance(c, int):
+    if c in numbers:
         if (not isInNum):
             isInNum = True
             result += ".O.OOO"
@@ -86,6 +88,38 @@ def eToBChar(c):
 
     
 
+
+# Translates braille string to english string
+def bToE(s):
+    result = ""
+    i = 0
+    num = False
+
+    while (i < len(s)):
+        c = s[i:i+6]
+        if c == ".O.OOO":
+            num = True
+            i += 6
+            continue
+
+        if num:
+            result += bToEChar(c, ".O.OOO")
+            i += 6
+        elif c == ".....O":
+            result += bToEChar(s[i+6:i+12],c)
+            i += 12
+        elif c == "......":
+            num = False
+            result += " "
+            i += 6
+        else:
+            result += bToEChar(c,"")
+            i += 6
+
+    return result
+        
+# Translates 6 character braille string to corresponding english character
+# modifier m specifies if Captialized or number
 def bToEChar(c, m):
     upperCase = {
         'O.....': 'A',
@@ -164,40 +198,6 @@ def bToEChar(c, m):
         return nums[c]
     else:
         return rest[c]
-    
-def bToE(s):
-    mods = {
-        ".....O": "Cap",
-        ".O.OOO": "Num"
-    }
-
-    result = ""
-    i = 0
-    num = False
-
-    while (i < len(s)):
-        c = s[i:i+6]
-        if c == ".O.OOO":
-            num = True
-            i += 6
-            continue
-
-        if num:
-            result += bToEChar(c, ".O.OOO")
-            i += 6
-        elif c == ".....O":
-            result += bToEChar(s[i+6:i+12],c)
-            i += 12
-        elif c == "......":
-            num = False
-            result += " "
-            i += 6
-        else:
-            result += bToEChar(c,"")
-            i += 6
-
-    return result
-        
 
 
 def main():
