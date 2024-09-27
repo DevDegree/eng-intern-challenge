@@ -75,6 +75,7 @@ func brailleToEnglish(input string) string {
 			}
 		}
 	}
+
 	return strings.TrimSpace(output)
 }
 
@@ -108,7 +109,8 @@ func main() {
 	var input string
 
 	if len(os.Args) < 2 {
-		// input = strings.TrimSpace(".O.OOOO.....O.O....O...OO.OO.......O......OO..OO")
+		// input = strings.TrimSpace(".O.OOOOOOOOOO.....O.O....O...OO.OO.......O......OO..OO")
+		// input = strings.TrimSpace(".O.OOOOOOOOO")
 		// input = strings.TrimSpace("")
 		fmt.Println("Please provide string to translate.")
 	} else {
