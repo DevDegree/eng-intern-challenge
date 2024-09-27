@@ -1,8 +1,23 @@
 import sys
 
+# English -> Braille (raised dots represented as O, unraised dots as .)
 english_to_braille_map = {
-    # TODO
+    'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
+    'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..',
+    'k': 'O...O.', 'l': 'O.O.O.', 'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.',
+    'p': 'OOO.O.', 'q': 'OOOOO.', 'r': 'O.OOO.', 's': '.OO.O.', 't': '.OOOO.',
+    'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO',
+    'z': 'O..OOO', ' ': '......',  # Space
+    '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
+    '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..',
+    '.': '..OO.O', ',': '..O...', '?': '..O.OO', '!': '..OOO.', ':': '..OO..',
+    ';': '..O.O.', '-': '....OO', '/': '.O..O.', '(': 'O.O..O', ')': '.O.OO.',
+    '<': '.OO..O', '>': 'O..OO.'
 }
+
+# Add capitalization and number markers
+capitalization_marker = '.....O'  # Prefix for capital letters
+number_marker = '.O.OOO'          # Prefix for numbers
 
 # TODO Automatically create the Braille to English map by reversing the above map.
 braille_to_english_map = {v: k for k, v in english_to_braille_map.items()}
@@ -43,4 +58,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
