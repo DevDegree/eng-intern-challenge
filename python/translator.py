@@ -1,4 +1,4 @@
-
+import sys
 lengthOfBinary = 6
 
 ##dictonary containing the letters and their coresponding braille
@@ -78,12 +78,13 @@ def englishToBraille(english):
                 braille.append(brailleDictNum[letter])
     return ''.join(braille)
 
-
-
-while True:
-    given = input()
+def main():
+    given = sys.argv[1]
 
     if isBraille(given):
         print(brailleToEnglish(given))
     else:
         print(englishToBraille(given))
+
+if __name__ == "__main__":
+    main()
