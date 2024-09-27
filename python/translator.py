@@ -1,3 +1,5 @@
+import sys
+
 CAPITAL_INDICATOR = ".....O"
 NUMBER_INDICATOR = ".O.OOO"
 SPACE = "......"
@@ -158,8 +160,6 @@ def english_to_braille(english):
 
     return "".join(translated_chars)
 
-
 if __name__ == "__main__":
-    import sys
     args = " ".join(sys.argv[1:])
     print(translator(args))
