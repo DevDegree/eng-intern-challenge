@@ -10,6 +10,9 @@ braille_to_english = {
     'O..OOO': 'z', '......': ' ', '.....O': 'CAP', '.O.OOO': 'NUM'
 }
 
+# Mapping English to Braille
+english_to_braille = {v: k for k, v in braille_to_english.items() if v not in ['CAP', 'NUM']}
+
 # Additional mappings for numbers
 numbers_braille = {
     '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
@@ -48,6 +51,26 @@ def translate_braille_to_english(braille_text):
                     capitalize = False
                 else:
                     result.append(letter)
+
+    return ''.join(result)
+
+def translate_english_to_braille(english_text):
+    result = []
+    is_number_sequence = False  # Track if we're in a number sequence
+
+    for char in english_text:
+        if char.isupper():
+            result.append('.....O')  # Capital sign
+            char = char.lower()
+
+        if char.isdigit():
+            if not is_number_sequence:  # Check if we are not already in a number sequence
+                result.append('.O.OOO')  # Number sign
+                is_number_sequence = True  # Now we are in a number sequence
+            result.append(numbers_braille[char])
+        else:
+            is_number_sequence = False  # Reset the flag for letters
+            result.append(english_to_braille.get(char, ''))
 
     return ''.join(result)
 
