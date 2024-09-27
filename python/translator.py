@@ -40,6 +40,47 @@ def translate_to_braille(text):
             braille_text.append(braille_alphabet[char.lower()])
     return ''.join(braille_text)
 
+def translate_to_english(braille):
+    """Translates Braille text to English."""
+    english_text = []
+    is_capital = False
+    is_number = False
+    i = 0
+    while i < len(braille):
+        symbol = braille[i:i + 6]
+        if symbol == capital_prefix:
+            is_capital = True
+            i += 6
+            continue
+        elif symbol == number_prefix:
+            # Start reading numbers until a space or end of string
+            i += 6  # Skip the number prefix
+            while i < len(braille):
+                num_symbol = braille[i:i + 6]
+                if num_symbol in braille_to_number:
+                    english_text.append(braille_to_number[num_symbol])
+                    i += 6
+                elif num_symbol == braille_alphabet[' ']:
+                    english_text.append(' ')  # Add space
+                    i += 6
+                    break
+                else:
+                    break
+            continue
+
+        if symbol in braille_to_english:
+            letter = braille_to_english[symbol]
+            if is_capital:
+                letter = letter.upper()
+                is_capital = False
+            english_text.append(letter)
+        else:
+            english_text.append('?')  # Handle unknown symbols
+
+        i += 6
+    return ''.join(english_text)
+
+
 # Reverse dictionaries to decode from Braille to English
 braille_to_english = {v: k for k, v in braille_alphabet.items()}
 braille_to_number = {v: k for k, v in braille_numbers.items()}
@@ -56,7 +97,7 @@ if __name__ == '__main__':
     input_text = sys.argv[1]
     if is_braille(input_text):
         # Translate Braille to English
-        print("Braille")
+        print(translate_to_english(input_text))
     else:
         # Translate English to Braille
         print(translate_to_braille(input_text))
