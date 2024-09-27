@@ -1,5 +1,5 @@
 import sys
-#brailletochar searches the braille dictionary and returns the correct character
+# brailletochar searches the braille dictionary and returns the correct character
 #   based on if it is a number, capital, or lowercase.
 def brailletochar(b6, cap, num):
     bdict = {
@@ -48,7 +48,7 @@ def brailletochar(b6, cap, num):
         return bdict[b6][1]
     else:
         return bdict[b6][0]
-
+# chartobraille returns the correct braille equivalent for the single character param
 def chartobraille(char):
     cdict = {
         "a": "O.....",
@@ -128,7 +128,8 @@ def chartobraille(char):
         ")": ".O.OO."
     } 
     return cdict[char]
-
+# brailletostring takes a braille string and translates it to a word string using
+#   brailletochar
 def brailletostring(braille):
     
     length = len(braille)
@@ -149,11 +150,14 @@ def brailletostring(braille):
             cap = False
         chari += 1
     return string
+
+# stringtobraille takes a english string and translates it to a braille string
+# character by character using chartobraille
 def stringtobraille(str):
     length= len(str)
     index = 0
     braille_string = ""
-    num = False #Number follows variable
+    num = False
     while(index < length):
         if(str[index].isdigit() and not(num)):
             braille_string += ".O.OOO"
