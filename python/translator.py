@@ -26,14 +26,12 @@ def translate_to_braille(text):
     braille_text = []
     is_space = False
     for char in text:
-        print(char)
         if char.isdigit():
             # Add number prefix and then the Braille for the number
             if is_space==False:
                 braille_text.append(number_prefix)
                 is_space = True
             braille_text.append(braille_numbers[char])
-            print(braille_text)
         elif char == ' ':
             # Handle spaces
             braille_text.append(braille_alphabet[' '])
@@ -44,8 +42,47 @@ def translate_to_braille(text):
                 braille_text.append(capital_prefix)
             # Append the Braille for the letter (lowercase or uppercase treated the same here)
             braille_text.append(braille_alphabet[char.lower()])
-            print(braille_text)
     return ''.join(braille_text)
+
+def translate_to_english(braille):
+    """Translates Braille text to English."""
+    english_text = []
+    is_capital = False
+    is_number = False
+    i = 0
+    while i < len(braille):
+        symbol = braille[i:i + 6]
+        if symbol == capital_prefix:
+            is_capital = True
+            i += 6
+            continue
+        elif symbol == number_prefix:
+            # Start reading numbers until a space or end of string
+            i += 6  # Skip the number prefix
+            while i < len(braille):
+                num_symbol = braille[i:i + 6]
+                if num_symbol in braille_to_number:
+                    english_text.append(braille_to_number[num_symbol])
+                    i += 6
+                elif num_symbol == braille_alphabet[' ']:
+                    english_text.append(' ')  # Add space
+                    i += 6
+                    break
+                else:
+                    break
+            continue
+
+        if symbol in braille_to_english:
+            letter = braille_to_english[symbol]
+            if is_capital:
+                letter = letter.upper()
+                is_capital = False
+            english_text.append(letter)
+        else:
+            english_text.append('?')  # Handle unknown symbols
+
+        i += 6
+    return ''.join(english_text)
 
 def is_braille(text):
     """Checks if the input is Braille (valid Braille symbols)."""
@@ -57,11 +94,9 @@ if __name__ == '__main__':
         sys.exit(1)
 
     input_text = sys.argv[1]
-    print(sys.argv[0]+" "+ input_text)
     if is_braille(input_text):
         # Translate Braille to English
-        print("Braille")
+        print(translate_to_english(input_text))
     else:
         # Translate English to Braille
-        print("English")
         print(translate_to_braille(input_text))
