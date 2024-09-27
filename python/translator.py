@@ -90,7 +90,7 @@ def is_braille(text):
     return all(c in 'O.' for c in text) and len(text) % 6 == 0
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2:
         print("Usage: python translator.py <text>")
         sys.exit(1)
 
