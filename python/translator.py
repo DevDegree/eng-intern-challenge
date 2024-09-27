@@ -174,6 +174,7 @@ def convertFromBrailleToEnglish(string):
                 break
 
     isNumber = False
+    isCapital = False
     # Get the symbol from the Braille character
     for braille in resultWithBraille:
         # If the character is a number and the braille is a space, stop to convert the braille to the number
@@ -188,6 +189,11 @@ def convertFromBrailleToEnglish(string):
                         break
         elif braille == Braille.NUMBER_FOLLOWS:
             isNumber = True
+        elif isCapital == True:
+            result += braille.symbol.upper()
+            isCapital = False
+        elif braille == Braille.CAPITAL_FOLLOWS:
+            isCapital = True
         else:
             result += braille.symbol
 
