@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "types": ["node"],
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "target": "es6"
+  }
+}
