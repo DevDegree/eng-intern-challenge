@@ -1,3 +1,5 @@
+import sys
+
 '''
 Victor Nguyen, Eng Intern Challenge Fall - Winter 2025
 
@@ -43,21 +45,8 @@ brailleDict = {
     "OO.OOO": "y",
     "O..OOO": "z",
     ".....O": "cap",  # Capital follows
-    ".O...O": "dec",  # Decimal follows
     ".O.OOO": "num",  # Number follows
-    "..OO.O": ".",
-    "..O...": ",",
-    "..O.OO": "?",
-    "..OOO.": "!",
-    "..OO..": ":",
-    "..O.O.": ";",
-    "....OO": "-",
-    ".O..O.": "/",
-    ".OO..O": "<",
-    "O..OO.": ">",
-    "O.O..O": "(",
-    ".O.OO.": ")",
-    "......": " "
+    "......": " "     # Space
 }
 
 numberDict = {
@@ -74,10 +63,13 @@ numberDict = {
 }
 
 def isBrailleInput(userInput: str):
+    userInput = userInput.upper()  # Convert input to uppercase
+    if (len(userInput) % 6) != 0:
+        return False
     for character in userInput:
         if character not in ["O", "."]:
             return False
-        return True
+    return True
     
 def translateBraille(braille: str):
     capitalFollows = False
@@ -91,24 +83,21 @@ def translateBraille(braille: str):
         brailleLetter += character
         count += 1 # increment counter
         
-        if (count == 6):
-            if (numberFollows): # number
-                if (brailleDict.get(brailleLetter) == " "): #check whether to end number follows
+        if count == 6:
+            if numberFollows: # number
+                if brailleDict.get(brailleLetter) == " ": #check whether to end number follows
                     numberFollows = False
                 else: # add number
                     engChar = numberDict.get(brailleLetter)
                     translation += engChar
             else: # not number
                 engChar = brailleDict.get(brailleLetter)
-                if (engChar == "cap"): # capitalize next letter
+                if engChar == "cap": # capitalize next letter
                     capitalFollows = True
-                elif (engChar == "dec"):
-                    translation += "."
-                    numberFollows = True
-                elif (engChar == "num"): # next symbols are a number
+                elif engChar == "num": # next symbols are a number
                     numberFollows = True
                 else:
-                    if (capitalFollows): # capitalize letter
+                    if capitalFollows: # capitalize letter
                         engChar = engChar.upper()
                         capitalFollows = False
                     translation += engChar
@@ -119,14 +108,43 @@ def translateBraille(braille: str):
 
     return translation
 
+def translateEnglish(english: str):
+    braille = ""
+    numberFollows = False
+
+    revBrailleDict = {v: k for k, v in brailleDict.items()}
+    revNumberDict = {v: k for k, v in numberDict.items()}
+
+    for character in english:
+        if character.isnumeric():
+            if not numberFollows:
+                braille += ".O.OOO" # num
+                numberFollows = True
+            brailleNum = revNumberDict.get(character)
+            braille += brailleNum
+        else:
+            if numberFollows: 
+                numberFollows = False
+            if character.isupper():
+                braille += ".....O"
+                character = character.lower()
+            braille += revBrailleDict.get(character)
+
+    return braille    
 
 
 def main():
-    userInput = input("Input a string: ")
+    if len(sys.argv) < 2:
+        print("Usage: translator.py <string>")
+        return
     
-    if (isBrailleInput(userInput)):
+    userInput = " ".join(sys.argv[1:])
+    
+    if isBrailleInput(userInput):
         print(translateBraille(userInput))
-
+    else:
+        print(translateEnglish(userInput))
+        
 
 if __name__ == "__main__":
     main()
