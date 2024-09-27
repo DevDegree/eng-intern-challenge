@@ -26,11 +26,33 @@ def braille_to_english(braille_text: str) -> str:
     """Convert Braille text to English."""
     return "English translation not yet implemented."
 
-# TODO Converts English text to Braille.
+
 def english_to_braille(text: str) -> str:
     """Convert English text to Braille."""
-    return "Braille translation not yet implemented."
+    
+    braille = [] # list to store the Braille result
+    is_number = False # Flag to keep track of when we are in a number sequence 
 
+    for char in text:
+        print(f"Processing character: '{char}'")        
+        # Handle capitalization
+        if char.isupper():
+            braille.append(capitalization_marker)
+            print(f"Capitalization marker added for {char}")
+            char = char.lower()
+        
+        if char.isdigit():
+            if not is_number:
+                braille.append(number_marker)
+                is_number = True
+                print(f"Number marker added for {char}")
+        
+        # Append the corresponding Braille character
+        braille_char = english_to_braille_map.get(char, '......') # '......' for unknown characters
+        braille.append(braille_char)
+        print(f"Braille for {char}: {braille_char}")
+
+    return ''.join(braille) # joint list into final Braille string
 
 
 def is_braille(input_string: str) -> bool:
@@ -47,6 +69,9 @@ def main():
     
     # Join all arguments (after script name) into a single string
     input_string = ' '.join(sys.argv[1:])
+    # print(english_to_braille("Abc 123"))
+    # print(english_to_braille("Hello world"))
+    # print(english_to_braille("42"))
 
     #Decide whether the input is Braille or English
     if is_braille(input_string):
