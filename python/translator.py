@@ -48,9 +48,9 @@ class Braille(Enum):
     ZERO  = ((1, 0, 0, 0, 1, 1), "0")
     
     # FOLLOWS
-    CAPITAL_FOLLOWS = ((1, 1, 1, 1, 1, 0), None)
-    DECIMAL_FOLLOWS = ((1, 0, 1, 1, 1, 0), None)
-    NUMBER_FOLLOWS  = ((1, 0, 1, 0, 0, 0), None)
+    CAPITAL_FOLLOWS = ((1, 1, 1, 1, 1, 0), "CAPITAL")
+    DECIMAL_FOLLOWS = ((1, 0, 1, 1, 1, 0), "DECIMAL")
+    NUMBER_FOLLOWS  = ((1, 0, 1, 0, 0, 0), "NUMBER")
     
     # Special Characters
     PERIOD        = ((1, 1, 0, 0, 1, 0), ".")
@@ -74,19 +74,27 @@ class Braille(Enum):
     @property
     def symbol(self):
         return self._symbol
+    
+class SameBrailleMap(Enum):
+    ONE   = "a"
+    TWO   = "b"
+    THREE = "c"
+    FOUR  = "d"
+    FIVE  = "e"
+    SIX   = "f"
+    SEVEN = "g"
+    EIGHT = "h"
+    NINE  = "i"
+    ZERO  = "j"
 
 # Check if the string given to it is either Braille or English
 def isBraille(string):
-    # If the length of the string is less than 6, it's not Braille. (i.e. "." or "A")
-    if len(string) < 6:
+    # If the length of the string is not a multiple of 6, it's not Braille.
+    if len(string) % 6 != 0:
         return False
     
-    # If the string includes any alphabets, it's not Braille (i.e. "A" or "b")
-    if any(char.isalpha() for char in string):
-        return False
-    
-    # If the string includes any numbers, it's not Braille (i.e. "1" or ".2")
-    if any(char.isdigit() for char in string):
+    # If the string includes any characters except for "O" and ".", it's not Braille (i.e. "A" or "a")
+    if any(char not in ["O", "."] for char in string):
         return False
     
     # If the string includes any special characters except for period, it's not Braille (i.e. "?" or ":!")
@@ -146,7 +154,44 @@ def convertFromEnglishToBraille(string):
     
 # Convert the string from Braille to English
 def convertFromBrailleToEnglish(string):
-    print("not implemented yet:", string)
+    resultWithBraille = []
+    result = ""
+
+    # Convert O to 0 and . to 1
+    string = string.replace("O", "0").replace(".", "1")
+
+    # Divide the string into 6 characters each
+    chunks = []
+    for i in range(0, len(string), 6):
+        chunks.append(string[i:i+6])
+
+    # Check which Braille character it is 
+    for chunk in chunks:
+        for braille in Braille:
+            chunkWithTuple = tuple(map(int, chunk))
+            if chunkWithTuple == braille._braille:
+                resultWithBraille.append(braille)
+                break
+
+    isNumber = False
+    # Get the symbol from the Braille character
+    for braille in resultWithBraille:
+        # If the character is a number and the braille is a space, stop to convert the braille to the number
+        if isNumber == True and braille == Braille.SPACE:
+            isNumber = False
+        # If the character is a number, convert the braille to the number
+        elif isNumber == True:
+            for sameBraille in SameBrailleMap:
+                if sameBraille.value == braille.symbol:
+                    if sameBraille.name in Braille.__members__:
+                        result += Braille[sameBraille.name].symbol
+                        break
+        elif braille == Braille.NUMBER_FOLLOWS:
+            isNumber = True
+        else:
+            result += braille.symbol
+
+    return result
 
 # Get the arguments from the command line
 args = sys.argv
