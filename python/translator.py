@@ -2,7 +2,7 @@ import argparse
 
 # Parse command line argument
 parser = argparse.ArgumentParser()
-parser.add_argument("input_string", nargs="*")
+input_arg = parser.add_argument("input_string", nargs="*")
 args = parser.parse_args()
 
 string_to_translate = "".join(args.input_string)
@@ -23,11 +23,27 @@ for braille_char, english_char in braille_alphabet.items():
     else:
         english_alphabet[english_char] = braille_char
 
+# Determine if input string is English or Braille
 is_english = True
 input_chars = set(string_to_translate)
+input_length = len(string_to_translate)
 
 if "." in input_chars:
     is_english = False
+
+# Check if input string is a valid English or Braille string
+if is_english:
+    if not string_to_translate.isalnum():
+        raise argparse.ArgumentError(input_arg, "Enter a valid English or Braille string")
+else:
+    if len(args.input_string) > 1 or input_length % 6 != 0:
+        raise argparse.ArgumentError(input_arg, "Enter a valid English or Braille string")
+    else:
+        num_chars = input_length // 6
+        for i in range(num_chars):
+            j = i * 6
+            if string_to_translate[j: j + 6] not in braille_alphabet:
+                raise argparse.ArgumentError(input_arg, "Enter a valid English or Braille string")
             
 # Translate Braille to English
 def translate_to_english(text):
