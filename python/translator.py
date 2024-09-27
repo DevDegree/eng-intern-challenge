@@ -129,7 +129,8 @@ def main():
         result = braille_to_english(input_string)
     else:
         result = english_to_braille(input_string)
-        print(result)
+    
+    print(result)
 
 if __name__ == "__main__":
     main()
