@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"os"
 	"strings"
 )
@@ -39,6 +39,19 @@ var englishToBrailleDict = map[string]string{
 }
 
 var brailleToEnglishDict = reverseMap(englishToBrailleDict)
+
+var numMap = map[string]string{
+	"1": "a",
+	"2": "b",
+	"3": "c",
+	"4": "d",
+	"5": "e",
+	"6": "f",
+	"7": "g",
+	"8": "h",
+	"9": "i",
+	"0": "j",
+}
 
 func reverseMap(dict map[string]string) map[string]string {
 	dictReversed := make(map[string]string)
@@ -111,17 +124,42 @@ func translateToEnglish(input string) string {
 	return word
 }
 
-func translateToBraille(input string) string { return "" }
+func translateToBraille(input string) string {
+	var result string
+	isNumberMode := false
+	for _, char := range input {
+		s := string(char)
+		if strings.Contains("0123456789", s) && !isNumberMode {
+			result += englishToBrailleDict["number"]
+			isNumberMode = true
+		}
+		if strings.Contains("ABCDEFGHIJKLMNOPQRSTUVWXYZ", s) {
+			result += englishToBrailleDict["capitalize"]
+			s = strings.ToLower(s)
+		}
+		if s == " " {
+			s = "space"
+			isNumberMode = false
+		}
+		if isNumberMode {
+			val, ok := numMap[s]
+			if ok {
+				s = val
+			}
+		}
+		result += englishToBrailleDict[s]
+	}
+	return result
+}
 
 func main() {
 	input := os.Args[1:]
 
 	if isBraille(input) {
-		englishChar := translateToEnglish(input[0])
-		log.Printf("Translation: %v", englishChar)
+		result := translateToEnglish(input[0])
+		fmt.Print(result)
 	} else {
-		brailleChar := translateToBraille(input[0])
-		log.Printf("Translation: %v", brailleChar)
+		result := translateToBraille(strings.Join(input, " "))
+		fmt.Print(result)
 	}
-
 }
