@@ -77,6 +77,7 @@ class BrailleTranslator:
                     capital = False
                 elif number:
                     char = self.REVERSE_BRAILLE_NUMBER_MAP[chunk]
+                    number = False
                 result.append(char)
             i += 6
 
