@@ -76,8 +76,8 @@ def brailleToEnglish(input:str) -> str:
                 translatedResult += BRAILLE_TO_NUMBER[currentBraille]
             else:
                 translatedResult += BRAILLE_TO_ENGLISH[currentBraille]
-                if BRAILLE_TO_ENGLISH[currentBraille] == ' ':
-                    numberFollows = False #Set numberFollows to false if space is seen
+            if BRAILLE_TO_ENGLISH[currentBraille] == ' ':
+                numberFollows = False  # Reset number flag after space
     return translatedResult
 
 
