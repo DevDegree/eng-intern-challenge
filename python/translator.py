@@ -12,13 +12,21 @@ def isBraille(s):
 # Translates input string from English to Braille
 def eToB(s):
     result = ""
+    isInNum = False
     for c in s:
-        result += eToBChar(c)
+        if c.isdigit():
+            if not isInNum:
+                result += ".O.OOO"
+                isInNum = True
+            result += eToBChar(c)
+        else:
+            if isInNum:
+                isInNum = False
+            result += eToBChar(c)
     return result
 
 # Translates english character to corresponding braille string
 def eToBChar(c):
-    result = ""
     alphabet = {
             'a': "O.....",
             'b': "O.O...",
@@ -60,29 +68,16 @@ def eToBChar(c):
             '8': "O.OO..",
             '9': ".OO...",
             }
-    numbers = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
-    isInNum = False
 
-    if c in numbers:
-        if (not isInNum):
-            isInNum = True
-            result += ".O.OOO"
-        result += nums[c]
-        return result
+    if c.isdigit():
+        return nums[c]
     
     elif c == ' ':
-        isInNum = False
-        result += alphabet[c]
-        return result
-        
-
+        return alphabet[c]
     elif c.isupper():
-        result += ".....O"
-        result += alphabet[c.lower()]
-        return result
+        return ".....O" + alphabet[c.lower()]
     else:
-        result += alphabet[c]
-        return result
+        return alphabet[c]
         
 
 
@@ -104,12 +99,13 @@ def bToE(s):
 
         if num:
             result += bToEChar(c, ".O.OOO")
+            num = False
             i += 6
         elif c == ".....O":
             result += bToEChar(s[i+6:i+12],c)
             i += 12
         elif c == "......":
-            num = False
+            # num = False
             result += " "
             i += 6
         else:
