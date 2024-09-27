@@ -28,6 +28,7 @@ class BrailleTranslator:
     # English to Braille.
     def translate_english_to_braille(self, input_str): 
         result = []
+        number = False
         for char in input_str:
 
             # If capital
@@ -36,10 +37,11 @@ class BrailleTranslator:
                 char = char.lower()
 
             # If digit
-            if char.isdigit():
-                result.append('.O.OOO')
+            if char.isdigit() and number == False:
+                result.append(self.BRAILLE_HASH_MAP['number'])
+                number = True
             
-            # Adds chunk based off of previous
+            # Adds chunk if character is in map
             if char in self.BRAILLE_HASH_MAP:
                 result.append(self.BRAILLE_HASH_MAP[char])
             elif char in self.BRAILLE_NUMBER_HASH_MAP:
@@ -77,7 +79,6 @@ class BrailleTranslator:
                     capital = False
                 elif number:
                     char = self.REVERSE_BRAILLE_NUMBER_MAP[chunk]
-                    number = False
                 result.append(char)
             i += 6
 
