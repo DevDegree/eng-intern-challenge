@@ -27,7 +27,7 @@ const brailleDictionary = {
 	"indicators": {
 		"capital": ".....O", "number": ".O.OOO", "decimal": ".O...O", "space": "......"
 	},
-	"specialChar": {
+	"specialChars": {
 		".": "..OO.O", ",": "..O...", "?": "..O.OO", "!": "..OOO.", ":": "..OO..",
 		";": "..O.O.", "-": "....OO", "/": ".O..O.", "<": ".OO..O", ">": "O..OO.",
 		"(": "O.O..O", ")": ".O.OO."
@@ -36,33 +36,55 @@ const brailleDictionary = {
 
 // Check if the input is Braille
 function isBraille(input) {
-	return input.length >= 6 && /^[0\.]+$/.test(input);
+	return input.length >= 6 && /^[O\.]+$/.test(input);
 }
 
 
-// Function to translate the input, Braille to English
+// Function to translate Braille to English
 function brailleToEnglish(input) {
-	let result = ''; // result is string
-	let isNumber = false; // indicator for number setting
-	let isCapital = false;  // indicator for capitalization
+  const brailleChars = input.match(/.{1,6}/g); // Split Braille string into chunks of 6 characters
+  let result = ''; // output is a string
+  let isCapital = false;
+  let isNumber = false;
 
-  const brailleChars = text.match(/.{1,6}/g); // Split the input into groups of 6 characters 
+  brailleChars.forEach(brailleChar => { // loop through each Braille Character in the brailleChars array
+    if(brailleChar === brailleDictionary.indicators.capital) {
+      isCapital = true;
+    } else if (brailleChar === brailleDictionary.indicators.number) {
+      isNumber = true;
+    } else if(brailleChar === brailleDictionary.indicators.space) {
+      result += ' ';
+      isCapital = false;
+      isNumber = false;
+    } else {
+      if (isNumber) { // if the current brailleChar is a number, look for the maching Braille charactor in the numbers object
+        const num = Object.keys(brailleDictionary.numbers).find(key => brailleDictionary.numbers[key] === brailleChar);
+        if (num) { // if a match is found then add it to the result string
+          result += num;
+        }
+      } else { // if the current brailleChar is an alphabet, look for the matching Braille char in the alphabets object
+        let isExist = false;
+        const alphabet = Object.keys(brailleDictionary.alphabets).find(key => brailleDictionary.alphabets[key] === brailleChar);
+        if (alphabet) { // if a match is found then add it to the result string
+          result += isCapital ? alphabet.toUpperCase() : alphabet; // checks if the matching char is capitalized or not
+          isExist = true;
+        }
 
-	for (let char of input) {
-		if (char === brailleDictionary.indicators.capital) {
-			isCapital = true;
-		}	else if (char === brailleDictionary.indicators.number) {
-			isCapital = true;
-		}	else if (char === brailleDictionary.indicators.decimal) {
-			result += ".";
-		} else {}
-	}
+        if (!isExist) { // if no alphabet was found then check for a match in the specialChars object.
+          const specialChar = Object.keys(brailleDictionary.specialChars).find(key => brailleDictionary.specialChars[key] === brailleChar);
+          if (specialChar) {
+            result += specialChar;
+          }
+        }
+        isCapital = false; // reset the capital indicator to false for the next Braille Character
+      }
+   
+    }
 
+  });
+  
+  return result;
 }
-
-
-
-
 
 
 // Function to translate the input, English to Braille
@@ -89,13 +111,14 @@ function englishToBraille(input) {
 		} else if (char === ' ') { // checks spacing
 			result += brailleDictionary.indicators["space"];
 			isNumber = false;
-		} else if (brailleDictionary.specialChar[char]) { // checks special charactoers
-			result += brailleDictionary.specialChar[char];
+		} else if (brailleDictionary.specialChars[char]) { // checks special charactoers
+			result += brailleDictionary.specialChars[char];
 			isNumber = false;
 		}
 	}
 	return result;
 }
+
 function translate(input) {
 	if (isBraille(input)) {
 		return brailleToEnglish(input);
@@ -104,7 +127,7 @@ function translate(input) {
 	}
 }
 
-// Reading input from command line arguments
+// Read input from command line arguments
 const input = process.argv.slice(2).join(' ');
 
 // Output the translation
