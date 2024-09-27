@@ -20,7 +20,6 @@ var numToBraile = map[rune]string{
 var capitalFollow = ".....O"
 var numFollow = ".O.OOO"
 
-// Translate from Braille to English
 func brailleToEnglish(input string) string {
 
 	var brailleToAlpha = map[string]rune{}
@@ -57,7 +56,6 @@ func brailleToEnglish(input string) string {
 			continue
 		}
 
-		// Translate Braille to either a letter or number
 		if isNumber {
 			if translatedNum, exists := brailleToNum[brailleChar]; exists {
 				output += string(translatedNum)
@@ -80,27 +78,27 @@ func brailleToEnglish(input string) string {
 	return strings.TrimSpace(output)
 }
 
-// Translate from English to Braille
 func englishToBraille(input string) string {
 	output := ""
 	isNumber := false
 
 	for _, char := range input {
 		if char >= 'A' && char <= 'Z' {
-			// Add the capital signal for uppercase letters
 			output += capitalFollow
-			char = char + 32 // Convert to lowercase
-			output += alphaToBraile[char]
+			char = char + 32 // convert to lowercase
 			isNumber = false
 		}
 		if char >= '0' && char <= '9' {
 			if !isNumber {
-				// Add number signal if we are starting a number sequence
 				output += numFollow
 				isNumber = true
 			}
 			output += numToBraile[char]
+		} else {
+			output += alphaToBraile[char]
+			isNumber = false
 		}
+
 	}
 	return strings.TrimSpace(output)
 }
@@ -110,31 +108,30 @@ func main() {
 	var input string
 
 	if len(os.Args) < 2 {
-		// Prompt user for input if there are less than 2 arguments
-		input = strings.TrimSpace(".O.OOOO.....O..........OO..........OO......O.OOOO.....O.....")
-		// uinput = strings.TrimSpace("?11AA1a1")
+		// input = strings.TrimSpace(".O.OOOO.....O.O....O...OO.OO.......O......OO..OO")
+		// input = strings.TrimSpace("")
+		fmt.Println("Please provide string to translate.")
 	} else {
-		// Use command-line arguments as input
 		input = strings.Join(os.Args[1:], " ")
 	}
 
-	// if len(os.Args) < 2 {
-	// 	fmt.Println("Please provide an input string to translate.")
-	// 	return
-	// }
-
-	// input := strings.Join(os.Args[1:], " ")
+	isBraille := true
 
 	if len(input)%6 != 0 {
 		fmt.Println(englishToBraille(input))
+		isBraille = false
 	} else {
 		for _, char := range input {
 			if char != 'O' && char != '.' {
+				isBraille = false
 				fmt.Println(englishToBraille(input))
 			}
 		}
+
 	}
 
-	fmt.Println(brailleToEnglish(input))
+	if isBraille {
+		fmt.Println(brailleToEnglish(input))
+	}
 
 }
