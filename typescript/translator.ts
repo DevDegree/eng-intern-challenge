@@ -284,6 +284,7 @@ class Translator {
     if (isBraille) {
       return Translator.toEnglish(concatenatedArgs);
     }
+
     return Translator.toBraille(concatenatedArgs);
   }
 }
