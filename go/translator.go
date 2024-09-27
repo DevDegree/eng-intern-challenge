@@ -112,7 +112,7 @@ func main() {
 	if len(os.Args) < 2 {
 		// testing, also prevent crashes
 		// input = strings.TrimSpace(".O.OOOOOOOOOO.....O.O....O...OO.OO.......O......OO..OO")
-		// input = strings.TrimSpace(".O.OOOOOOOOO")
+		input = strings.TrimSpace(".O.OOOaaaaaaOOOOOO")
 		// input = strings.TrimSpace("")
 	} else {
 		input = strings.Join(os.Args[1:], " ")
@@ -121,14 +121,14 @@ func main() {
 	isBraille := true
 
 	//check if input is braille or not
+
 	if len(input)%6 != 0 {
-		fmt.Println(englishToBraille(input))
 		isBraille = false
 	} else {
 		for _, char := range input {
 			if char != 'O' && char != '.' {
 				isBraille = false
-				fmt.Println(englishToBraille(input))
+				break
 			}
 		}
 
@@ -136,6 +136,8 @@ func main() {
 
 	if isBraille {
 		fmt.Println(brailleToEnglish(input))
+	} else {
+		fmt.Println(englishToBraille(input))
 	}
 
 }
