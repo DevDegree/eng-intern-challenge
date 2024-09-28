@@ -10,13 +10,15 @@ class Helper {
     let tempData = data;
 
     if (tempData.replace(/[.O]/g, "").length == 0) {
-      // Mean we have braille string
+      //   if after removing  "." and "O" we are left with nothing means we have Braille
       return this.convertBrailleToAlphabets(data);
     } else {
+      //we have alpha numberic string
       return this.convertAlphaToBraille(data);
     }
   }
 
+  //take in string and convert it to Braille
   convertAlphaToBraille(data) {
     let result = "";
     let num = false;
@@ -42,6 +44,7 @@ class Helper {
     return result;
   }
 
+  //take in Braille and convert it to String
   convertBrailleToAlphabets(data) {
     let tempData = "";
     let result = "";
