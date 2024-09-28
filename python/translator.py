@@ -69,16 +69,3 @@ def translate_english_to_braille(english_input):
             output.append('......')  # Space symbol
     return ''.join(output)
 
-# Command-line execution logic
-if __name__ == "__main__":
-    import sys
-    input_string = sys.argv[1]  # Get input from command-line
-    
-    # Determine if the input is Braille or English
-    if input_string.startswith("O") or input_string.startswith("."):
-        # Assuming Braille input
-        print(translate_braille_to_english(input_string))
-    else:
-        # Assuming English input
-        print(translate_english_to_braille(input_string))
-
