@@ -71,8 +71,10 @@ def convertToEnglish(brailleString):
     english = ''.join(englishOutput).replace('?', '')
     print(english)
 
+# Main input handling
 userInput = input("Enter text: ")
 
+# Check if input is Braille
 isBraille = all(char in 'O.' for char in userInput)
 
 if isBraille:
