@@ -55,17 +55,57 @@ export function translateBrailleToEnglish(braille: string): string {
 		}
 
 		if(isCapital){
-			english += alphabetReverseMap.get(brailleChar).toUpperCase() || "";
+			english += alphabetReverseMap.get(brailleChar).toUpperCase();
 			isCapital = false;
 			return;
 		}else if(isNumber){
-			english += numbersReverseMap.get(brailleChar) || "";
+			english += numbersReverseMap.get(brailleChar);
 			isNumber = false;
 			return;
 		}else{
-			english += alphabetReverseMap.get(brailleChar)|| "";
+			english += alphabetReverseMap.get(brailleChar);
 		}
 		
 	});
 	return english;
+}
+
+export function translateEnglishToBraille(english: string): string {
+	let braille = "";
+	let isNumber = false;
+	english.split("").forEach((char) => {
+		
+		if(/[A-Z]/.test(char)){
+			braille += brailleMap.get("capital");
+			braille += brailleMap.get(char.toLowerCase());
+			return;
+		}
+		if(/[a-z]/.test(char)){
+			braille += brailleMap.get(char);
+			return;
+		}
+		if(/[0-9]/.test(char)){
+			if(!isNumber){
+				braille += brailleMap.get("number");
+				isNumber = true
+			}
+			braille += brailleMap.get(char) ;
+			return;
+		}
+		if (char === ".O.OOO") {
+			braille =  brailleMap.get("number");
+			return;
+		}
+		if(char === "."){
+			braille += brailleMap.get("decimal");
+			return;
+		}
+		if(char === " "){
+			braille += brailleMap.get(" ");
+			return;
+		}
+		
+		braille += brailleMap.get(char);
+	});
+	return braille;
 }
