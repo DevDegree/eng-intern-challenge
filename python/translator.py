@@ -31,8 +31,11 @@ def convertToBraille(englishString):
                 number_mode = True
         else:
             number_mode = False
+
+        # Append the braille character corresponding to the current character
         brailleChar = english_to_braille.get(char, '......')  # Default to space if not found
         brailleOutput.append(brailleChar)
+
     braille = ''.join(brailleOutput)
     return braille
 
