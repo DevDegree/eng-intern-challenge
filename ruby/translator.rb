@@ -32,11 +32,15 @@ class BrailleTranslator
 
   class << self
     # Check input if it is Braille
+    # param input [String]
+    # return [Boolean]
     def braille?(input)
       input.length >= 6 && input.chars.all? { |char| ['O', '.'].include?(char) }
     end
 
     # Translates from Braille to English
+    # param input [String]
+    # return [String]
     def braille_to_english(input)
       braille_chars = input.scan(/.{1,6}/) # Splits Braille into chunks of 6
       result = ''
@@ -76,6 +80,8 @@ class BrailleTranslator
     end
 
     # Translates input from English to Braille
+    # param input [String]
+    # return [String]
     def english_to_braille(input)
       result = ''
       is_number = false
@@ -109,6 +115,8 @@ class BrailleTranslator
     end
 
     # Translates input from English to Braille or vice versa
+    # param input [String]
+    # return [String]
     def translate(input)
       if braille?(input)
         braille_to_english(input)
