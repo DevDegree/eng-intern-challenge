@@ -49,7 +49,6 @@ func brailleToEnglish(input string) string {
 	output := ""
 	isCapital := false
 	isNumber := false
-
 	// iterate over the braille input string 6 characters at a time
 	for i := 0; i < len(input); i += 6 {
 		brailleChar := input[i : i+6] // since each braille charcter is 6 characters long
