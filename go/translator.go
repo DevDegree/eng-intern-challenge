@@ -6,11 +6,13 @@ import (
 	"strings"
 )
 
-/*  braille mappings.
-	note that we need to store them seperately as 1 and a are the same symbols
-	this is important when we translate from braille to english
-	as then we have two keys that map to the same value: O..... = a but O..... = 1
-	this saves an extra check at the cost of two seperate map variable
+/*
+	braille mappings.
+
+note that we need to store them seperately as 1 and a are the same symbols
+this is important when we translate from braille to english
+as then we have two keys that map to the same value: O..... = a but O..... = 1
+this saves an extra check at the cost of two seperate map variable
 */
 var alphaToBraile = map[rune]string{
 	'a': "O.....", 'b': "O.O...", 'c': "OO....", 'd': "OO.O..", 'e': "O..O..", 'f': "OOO...", 'g': "OOOO..", 'h': "O.OO..", 'i': ".OO...", 'j': ".OOO..",
@@ -29,9 +31,9 @@ var numFollow = ".O.OOO"
 // function to translate braille to english characters
 func brailleToEnglish(input string) string {
 
-	/* 
-	init the opposite maps only if the input is braille
-	that way we can save time and space if input is only text
+	/*
+		init the opposite maps only if the input is braille
+		that way we can save time and space if input is only text
 	*/
 	var brailleToAlpha = map[string]rune{}
 	var brailleToNum = map[string]rune{}
@@ -47,7 +49,7 @@ func brailleToEnglish(input string) string {
 	output := ""
 	isCapital := false
 	isNumber := false
-	
+
 	// iterate over the braille input string 6 characters at a time
 	for i := 0; i < len(input); i += 6 {
 		brailleChar := input[i : i+6] // since each braille charcter is 6 characters long
@@ -65,12 +67,12 @@ func brailleToEnglish(input string) string {
 		if isNumber {
 			if translatedNum, exists := brailleToNum[brailleChar]; exists {
 				output += string(translatedNum)
-			} else { 
-				output += "?" 
+			} else {
+				output += "?"
 				/*
-				added error character output
-				since we are not inputting or outputing the "?" symbol we can use this as unknown symbol
-				we could also output just nothing but then user would be unaware of an error input
+					added error character output
+					since we are not inputting or outputing the "?" symbol we can use this as unknown symbol
+					we could also output just nothing but then user would be unaware of an error input
 				*/
 			}
 		} else {
@@ -124,13 +126,13 @@ func englishToBraille(input string) string {
 }
 
 /*
-	function to check if the input is braille or .
-	the logic is that is that if the input string is not a multiple of 6, it must be text
-	if it is a muliple of 6, we check if the charcters are braille characters or not
+function to check if the input is braille or .
+the logic is that is that if the input string is not a multiple of 6, it must be text
+if it is a muliple of 6, we check if the charcters are braille characters or not
 */
-bool isBraille(input String) {
-	if len(input) % 6 != 0 {
-		retrun false
+func isBraille(input string) bool {
+	if len(input)%6 != 0 {
+		return false
 	}
 
 	for _, char := range input {
