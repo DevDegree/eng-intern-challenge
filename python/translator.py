@@ -2,7 +2,7 @@
 # Braille Translator
 
 # Dictionary for English - Braille
-english_braille_alph = {
+alphabet = {
     # Lower-case letters
     "a": "O.....", "b": "O.O...", "c": "OO....", "d": "OO.O..",
     "e": "O..O..", "f": "OOO...", "g": "OOOO..", "h": "O.OO..", 
@@ -32,20 +32,55 @@ english_braille_alph = {
 #  read six chars at a time
 #  append to temp string
 
-input_word = input()
-
-#  check if input is braille or english
-if "." in input_word[:6] or "O" in input_word[:6]:
-    english_brail_translate(input_word)
-else:
-    brail_english_translate(input_word)
+input_word = input() # user input word
 
 
 # English to Braille
 def english_brail_translate(word):
-    print(word)
+    translated_word = "" # final translated word
+
+    for char in word: # iterate through each character in the word
+
+        # checks to see if char is a capital letter
+        if char.isupper() and char.isalpha():
+            translated_word += alphabet["capital follows"]
+            translated_word += alphabet[char.lower()]
+
+        # checks to see if char is a lowercase letter
+        elif char.isalpha():
+            translated_word += alphabet[char]
+
+        # checks to see if char is a number
+        elif char.isnumeric():
+
+            # if last char is a number, don't add "number follows"
+            if len(translated_word) == 0 or not translated_word[-1].isnumeric(): #not working **********
+                translated_word += alphabet["number follows"]
+                translated_word += alphabet[char]
+            else:
+                translated_word += alphabet[char]
+
+        # check if char is a space
+        elif char == " ":
+            translated_word += alphabet[char]
+
+        # last option is for char to be a decimal / space
+        else:
+            translated_word += alphabet["decimal follows"]
+            translated_word += alphabet[char]
+
+    print(translated_word)
+
 
 
 # Braille to English
 def brail_english_translate(word):
+    translated_word = "" # final translated word
     print(word)
+
+
+#  check if input is braille or english
+if "." in input_word[:6] or "O" in input_word[:6]:
+    brail_english_translate(input_word)
+else:
+    english_brail_translate(input_word)
