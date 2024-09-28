@@ -1,9 +1,5 @@
 import sys
 
-# Braille marker symbols
-capital_follows = '.....O'
-number_follows = '.O.OOO'
-
 # Braille to letters mapping
 braille_alpha = {
     'O.....': 'a',
@@ -31,8 +27,7 @@ braille_alpha = {
     '.OOO.O': 'w',
     'OO..OO': 'x',
     'OO.OOO': 'y',
-    'O..OOO': 'z',
-    '......': ' '
+    'O..OOO': 'z'
 }
 
 # Braille to numbers mapping
@@ -46,9 +41,13 @@ braille_num = {
     'OOOO..': '7',
     'O.OO..': '8',
     '.OO...': '9',
-    '.OOO..': '0',
-    '......': ' '
+    '.OOO..': '0'
 }
+
+# Braille special symbols
+capital_follows = '.....O'
+number_follows = '.O.OOO'
+space = '......'
 
 
 def is_braille(sequence):
@@ -76,11 +75,47 @@ def translate(sequence):
 
 def braille_to_english(sequence):
     """
+    Convert a Braille sequence to English text.
 
-    :param sequence:
-    :return:
+    :param sequence: A string representing the Braille sequence
+    :return: The translated English text
     """
-    return 'english'
+    translation = ''
+    length = len(sequence)
+    curr = 0
+
+    number_flag = False  # Indicates that following symbols are number
+    capital_flag = False  # Indicates that following letter is capitalized
+
+    while curr < length:
+        symbol = sequence[curr:curr + 6]
+
+        # Check for special symbols
+        if symbol == number_follows:
+            number_flag = True
+        elif symbol == capital_follows:
+            capital_flag = True
+        elif symbol == space:
+            translation += ' '
+            number_flag = False  # Reset number flag after space
+
+        # Process symbols as numbers
+        elif number_flag:
+            num = braille_num[symbol]
+            translation += num
+
+        # Process symbols as letters
+        else:
+            char = braille_alpha[symbol]
+            if capital_flag:
+                # Capitalize next letter and reset flag
+                char = char.upper()
+                capital_flag = False
+            translation += char
+
+        curr += 6
+
+    return translation
 
 
 def english_to_braille(sequence):
@@ -95,9 +130,3 @@ def english_to_braille(sequence):
 if __name__ == '__main__':
     input_sequence = ' '.join(sys.argv[1:])
     print(translate(input_sequence))
-
-
-
-
-
-
