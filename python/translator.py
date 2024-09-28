@@ -81,3 +81,4 @@ if __name__ == "__main__":
     else:
         # Assuming English input
         print(translate_english_to_braille(input_string))
+
