@@ -1,7 +1,7 @@
 /*
  *  Author: Kaleb Jubar
  *  Created: 28 Sep 2024, 2:49:59 PM
- *  Last update: 28 Sep 2024, 3:46:47 PM
+ *  Last update: 28 Sep 2024, 3:56:39 PM
  *  Copyright (c) 2024 Kaleb Jubar
  */
 
@@ -56,6 +56,7 @@ const englishToBraille = {
 
 // Braille-to-English object
 // build automatically from the English-to-Braille object so I don't have to write it out twice
+// TODO: figure out number handling
 const brailleToEnglish = {};
 for (const letter in englishToBraille) {
     const brailleChar = englishToBraille[letter];
@@ -95,6 +96,26 @@ function main() {
         true
     ) && input.length % 6 === 0;    // also check if length is divisible by 6, because we can't translate if it's not
     console.debug("In Braille?", inputInBraille);
+
+    // do translation
+    let output = "";
+    // TODO: determine if this can be easily done in one loop without an if
+    if (inputInBraille) {
+        // parse Braille string
+        for (let i = 0; i < input.length; i += 6) {
+            // TODO: implement Braille
+            output += brailleToEnglish[input.slice(i, i + 6)];
+        }
+    } else {
+        // parse English string
+        for (const char of input) {
+            // TODO: implement English
+            output += englishToBraille[char];
+        }
+    }
+
+    // print translated string
+    console.log(output);
 }
 
 main();
