@@ -1,5 +1,3 @@
-
-
 import collections
 # Braille mappings
 BRAILLE_MAP = {
@@ -14,6 +12,7 @@ BRAILLE_MAP = {
 }
 
 # 42a -> .O.OOOOO.O..O.O...O.....
+
 # Reverse map for Braille to English
 ENGLISH_MAP = collections.defaultdict(list)
 for k, v in BRAILLE_MAP.items():
@@ -45,8 +44,10 @@ def to_english(braille: str) -> str:
     i = 0
     is_capital = False
     is_number = False
+
     while i < len(braille):
         char = braille[i:i+6]
+
         if char == '.....O':  # Capitalize next letter
             is_capital = True
             i += 6
@@ -68,10 +69,13 @@ def to_english(braille: str) -> str:
                     letter = letter.upper()
                     is_capital = False
                 english += letter
+
         i += 6
+
         # Reset the number flag after a space
         if char == '......':
             is_number = False
+
     return english
 
 
@@ -80,14 +84,16 @@ def main():
     args = sys.argv[1:]
     if len(args) == 0:
         sys.exit(1)
+
     input_text = " ".join(args)
+
     if all(c in 'O.oO ' for c in input_text):
         # Likely Braille input
         output = to_english(input_text)
     else:
         # Likely English input
         output = to_braille(input_text)
-    return output
+    print(output)
 
 
 main()
