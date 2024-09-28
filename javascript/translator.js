@@ -1,7 +1,7 @@
 /*
  *  Author: Kaleb Jubar
  *  Created: 28 Sep 2024, 2:49:59 PM
- *  Last update: 28 Sep 2024, 3:56:39 PM
+ *  Last update: 28 Sep 2024, 4:09:02 PM
  *  Copyright (c) 2024 Kaleb Jubar
  */
 
@@ -78,6 +78,7 @@ function main() {
     }
 
     // assemble input string, as arguments are split on spaces
+    // could use .reduce() here but it makes the code harder to read and doesn't simplify anything
     let input = process.argv[2];
     for (let i = 3; i < process.argv.length; i++) {
         input += ` ${process.argv[i]}`;
@@ -85,15 +86,17 @@ function main() {
     console.debug("Input", input);
 
     // determine if input is in English or Braille
-    // we can use the reduce higher-order function on something that is not an array by using .call() to apply to any
+    // we can use .reduce() on something that is not an array by using .call() to apply to any
     // arbitrary "this" object that is iterable, including strings
-    // using reduce helps simplify a lot of this logic and eliminate loops and flags and such
+    // using .reduce() helps simplify a lot of this logic and eliminate loops and flags and such
+    // more worth it here than for parsing program input, IMO
     const inputInBraille = Array.prototype.reduce.call(
         input,
         (allBraille, curChar) => (
+            // check if char is one of O or .
             allBraille && (curChar === "O" || curChar === ".")
         ),
-        true
+        true    // start reducing with true so we can use &&
     ) && input.length % 6 === 0;    // also check if length is divisible by 6, because we can't translate if it's not
     console.debug("In Braille?", inputInBraille);
 
