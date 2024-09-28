@@ -8,7 +8,7 @@ def is_brail(text):
     return True
 
 def braille_to_text(argument):
-    braille_letters = {
+    text_letters = {
         'O.....': 'a',
         'O.O...': 'b',
         'OO....': 'c',
@@ -40,7 +40,7 @@ def braille_to_text(argument):
         '......': ' ',
     }
     
-    braille_numbers = {
+    text_nums = {
         'O.....': '1',
         'O.O...': '2',
         'OO....': '3',
@@ -59,7 +59,7 @@ def braille_to_text(argument):
     i = 0
     while i < len(argument):
         char = argument[i:i+6]
-        if braille_letters[char] == 'num_follows':
+        if text_letters[char] == 'num_follows':
             in_number_mode = True
             i += 6
             continue
@@ -69,15 +69,15 @@ def braille_to_text(argument):
                 text += ' '
                 i += 6
                 continue
-            text += braille_numbers[char]
+            text += text_nums[char]
             i += 6
             continue
-        if braille_letters[char] == 'cap_follows':
+        if text_letters[char] == 'cap_follows':
             i+=6
-            text += braille_letters[argument[i:i+6]].upper()
+            text += text_letters[argument[i:i+6]].upper()
             i += 6
             continue
-        text += braille_letters[char]
+        text += text_letters[char]
         i += 6
 
     return text
@@ -134,7 +134,6 @@ def text_to_braille(argument):
     braille_text = ''
     i = 0
     while i < len(argument):
-
         if argument[i] == ' ':
                 braille_text += braille[argument[i]]
                 i += 1
@@ -161,6 +160,5 @@ if is_brail(argument):
     result = braille_to_text(argument)
 else:
     result = text_to_braille(argument)
-
 print(result)
 
