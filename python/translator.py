@@ -85,13 +85,14 @@ def validate_braille_input(braille):
         raise ValueError("Invalid Braille input: Braille must be in groups of 6 characters.")
 
 def main():
-    # Check if an argument is provided
+    # Check if arguments are provided
     if len(sys.argv) < 2:
         print("Error: No input provided.")
         print("Usage: translator.py <string>")
         return
 
-    input_string = sys.argv[1]
+    # Combine all command-line arguments into one string
+    input_string = ' '.join(sys.argv[1:])
     
     # Detect if the input is Braille or English
     input_type = detect_input_type(input_string)
