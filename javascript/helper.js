@@ -22,21 +22,21 @@ class Helper {
     let num = false;
 
     for (let i = 0; i < data.length; i++) {
-      if (data.at(i) >= "A" && data.at(i) <= "Z") {
+      if (data.charAt(i) >= "A" && data.charAt(i) <= "Z") {
         result += this.numbers.get("C");
-        result += this.alphabets.get(data.at(i).toLowerCase());
-      } else if (data.at(i) >= "a" && data.at(i) <= "z") {
-        result += this.alphabets.get(data.at(i));
-      } else if (data.at(i) == " ") {
+        result += this.alphabets.get(data.charAt(i).toLowerCase());
+      } else if (data.charAt(i) >= "a" && data.charAt(i) <= "z") {
+        result += this.alphabets.get(data.charAt(i));
+      } else if (data.charAt(i) == " ") {
         num = false;
-        result += this.numbers.get(data.at(i));
-      } else if (data.at(i) >= 0 && data.at(i) <= 9) {
+        result += this.numbers.get(data.charAt(i));
+      } else if (data.charAt(i) >= 0 && data.charAt(i) <= 9) {
         if (!num) {
           num = true;
           result += this.numbers.get("N");
         }
 
-        result += this.numbers.get(data.at(i));
+        result += this.numbers.get(data.charAt(i));
       }
     }
     return result;
@@ -79,9 +79,9 @@ class Helper {
             }
           }
         }
-        tempData = data.at(i);
+        tempData = data.charAt(i);
       } else {
-        tempData += data.at(i);
+        tempData += data.charAt(i);
       }
     }
     return result;
