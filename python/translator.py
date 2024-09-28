@@ -22,18 +22,12 @@ alphabet = {
     "decimal follows": ".O...O",
     "number follows": ".O.OOO",
 
-    # symbols
+    # decimals
     ".": "..OO.O", ",": "..0...", "?": "..O.OO", "!": "..OOO.",
     ":": "..OO..", ";": "..O.O.", "-": "....OO", "/": ".O..O.",
     "<": ".OO..O", ">": "O..OO.", "(": "O.O..O", ")": ".O.OO.",
     " ": "......",
 }
-
-#  read six chars at a time
-#  append to temp string
-
-input_word = input() # user input word
-
 
 # English to Braille
 def english_brail_translate(word):
@@ -64,7 +58,7 @@ def english_brail_translate(word):
         elif char == " ":
             translated_word += alphabet[char]
 
-        # last option is for char to be a decimal / space
+        # last option is for char to be a decimal
         else:
             translated_word += alphabet["decimal follows"]
             translated_word += alphabet[char]
@@ -76,8 +70,57 @@ def english_brail_translate(word):
 # Braille to English
 def brail_english_translate(word):
     translated_word = "" # final translated word
-    print(word)
+    is_upper = False
+    is_number = False
+    is_decimal = False
 
+    # iterate over the word six chars at a time
+    for i in range(0, len(word), 6):
+        curr_digit = word[i: i+6]
+        
+        for char, braille in alphabet.items():
+            if braille == curr_digit:
+
+                # indicator for next char to be a decimal
+                if  char == "decimal follows":
+                    is_decimal = True 
+
+                # indicator for next char to be a number
+                elif char == "number follows":
+                    is_number = True
+
+                # indicator for next char to be uppercase
+                elif char == "capital follows":
+                    is_upper = True
+                
+                # turns letter to uppercase if last braille string indicated so
+                if is_upper:
+                    translated_word += char.upper()
+                    is_upper = False
+
+                elif is_number:
+                    if char.isnumeric():
+                        translated_word += char
+                    else:
+                        continue
+                elif is_decimal:
+                    if not char.isnumeric() and not char.isalpha():
+                        translated_word += char
+                        is_decimal = False
+                    else: 
+                        continue
+
+                elif char == " ":
+                    is_number = False
+                    translated_word += char
+
+                else:
+                    translated_word += char
+
+    print(translated_word)
+
+
+input_word = input() # user input word
 
 #  check if input is braille or english
 if "." in input_word[:6] or "O" in input_word[:6]:
