@@ -1,7 +1,7 @@
 /*
  *  Author: Kaleb Jubar
  *  Created: 28 Sep 2024, 2:49:59 PM
- *  Last update: 28 Sep 2024, 3:25:08 PM
+ *  Last update: 28 Sep 2024, 3:29:56 PM
  *  Copyright (c) 2024 Kaleb Jubar
  */
 
@@ -68,7 +68,6 @@ const englishToBraille = {
     ")": ".O.OO.",
     " ": "......",
 };
-console.log(englishToBraille);
 
 // Braille-to-English object
 // build automatically from the English-to-Braille object so I don't have to write it out twice
@@ -77,7 +76,6 @@ for (const letter in englishToBraille) {
     const brailleChar = englishToBraille[letter];
     brailleToEnglish[brailleChar] = letter;
 }
-console.log(brailleToEnglish);
 
 /**
  * Main function for the Braille translator.
@@ -98,8 +96,6 @@ function main() {
     for (let i = 3; i < process.argv.length; i++) {
         input += ` ${process.argv[i]}`;
     }
-
-    console.log("Input:", input);
 }
 
 main();
