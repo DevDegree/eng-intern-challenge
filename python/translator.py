@@ -1,5 +1,8 @@
 # Nargol Lotfizadeh
-# Braille Translator
+# Braille-English Translator
+# Technical Challenge for Eng Internship @ Shopify
+# Thank you for reading!
+
 
 import sys
 
@@ -33,7 +36,7 @@ braille_to_english_letter = {
     "O..OOO": "z",  # Braille dot pattern for 'z'
     '.....O': "capital follows",
     ".O.OOO": "number follows",
-    "......": " ",  # space
+    "......": " ",  # Space
 }
 
 braille_to_english_char = {
@@ -67,12 +70,11 @@ braille_to_english_char = {
     "..O.O.": ";",   # Semicolon
     "..OO..": ":",   # Colon
     "....OO": "-",   # Hyphen
-    ".O..O.": "/",   # slash
-    ".OO..O": "<",
-    "O..OO.": ">",
-    "O.O..O": "(",
-    ".O.OO.": ")"
-
+    ".O..O.": "/",   # Slash
+    ".OO..O": "<",   # Less than equal
+    "O..OO.": ">",   # Greater than equal
+    "O.O..O": "(",   # Left Parentheses
+    ".O.OO.": ")"    # Right Parentheses
 }
 
 # English to Braille dictionary for letters
@@ -103,7 +105,6 @@ english_to_braille_letter = {
     "x": "OO..OO",  # Braille dot pattern for 'x'
     "y": "OO.OOO",  # Braille dot pattern for 'y'
     "z": "O..OOO",  # Braille dot pattern for 'z'
-
 }
 
 # English to Braille dictionary for special characters and symbols
@@ -125,8 +126,7 @@ english_to_braille_char = {
     "8": "O.OO..",   # 8 (Braille letter 'h' in number context)
     "9": ".OO...",   # 9 (Braille letter 'i' in number context)
     "O": ".OOO..",   # O (Braille letter 'j' in number context)
-
-    " ": "......",   # space
+    " ": "......",   # Space
     ",": "..O...",   # Comma
     ".": "..OO.O",   # Period
     "'": ".O....",   # Apostrophe
@@ -142,96 +142,82 @@ english_to_braille_char = {
     ")": ".O.OO."    # Right parenthesis
 }
 
+# Get input from command-line arguments
 input_string = ""
 if len(sys.argv) > 1:
     input_string = ' '.join(sys.argv[1:])
-    # print(f"Received input: {input_string}")
+
+# Check if the input string is English
 
 
 def is_eng(input_string):
-    char = input_string[:7]
-    return all(char.isalnum() or char.isspace() for char in input_string)
+    return all(char.isalnum() or char.isspace() for char in input_string[:7])
+
+# Translate Braille input to English
 
 
 def translate_braille(input_string):
     ans_str = ""
-    cur_char = ""
     is_caps = False
     is_num = False
 
     for i in range(0, len(input_string), 6):
-        cur_char = input_string[i:i + 6]
+        curr = input_string[i:i + 6]
 
-        # print(braille_to_english_char.get(cur_char))
-        if braille_to_english_char.get(cur_char) == "capital follows":
+        if braille_to_english_char.get(curr) == "capital follows":
             is_caps = True
             continue
-        if braille_to_english_char.get(cur_char) == "number follows":
+        if braille_to_english_char.get(curr) == "number follows":
             is_num = True
             continue
-        if braille_to_english_char.get(cur_char) == " ":
+        if braille_to_english_char.get(curr) == " ":
             is_num = False
 
-        if (is_caps):
-            ans_str += braille_to_english_letter[cur_char].upper()
-        elif (is_num):
-            ans_str += braille_to_english_char[cur_char]
+        if is_caps:
+            ans_str += braille_to_english_letter.get(curr, "").upper()
+        elif is_num:
+            ans_str += braille_to_english_char.get(curr, "")
         else:
-            ans_str += braille_to_english_letter[cur_char]
+            ans_str += braille_to_english_letter.get(curr, "")
 
         is_caps = False
+
     print(ans_str)
     return ans_str
 
+# Translate English input to Braille
 
-# print(translate_braille(input_string))
 
 def translate_eng(input_string):
-    # print("BOOO")
     ans_str = ""
-    cur_char = ""
-    # is_caps = False
     is_num = False
-    # print(input_string)
-    for i in range(0, len(input_string)):
-        # ans_str += '/'
-        cur_char = input_string[i]
 
-        if cur_char == " ":
+    for curr in input_string:
+        if curr == " ":
             is_num = False
-            ans_str += english_to_braille_char.get(cur_char)
-            continue
-
-        elif cur_char.isdigit():
+            ans_str += english_to_braille_char.get(curr, "")
+        elif curr.isdigit():
             if not is_num:
                 is_num = True
-                ans_str += english_to_braille_char.get("number follows")
-
-            ans_str += english_to_braille_char.get(cur_char)
-            continue
-
-        elif cur_char.isupper():
-            ans_str += english_to_braille_char.get("capital follows")
-            # print(cur_char)
-            ans_str += english_to_braille_letter.get(cur_char.lower())
-            continue
-
-        elif cur_char.isalpha():
-            ans_str += english_to_braille_letter.get(cur_char.lower())
-            continue
-
+                ans_str += english_to_braille_char.get("number follows", "")
+            ans_str += english_to_braille_char.get(curr, "")
+        elif curr.isupper():
+            ans_str += english_to_braille_char.get("capital follows", "")
+            ans_str += english_to_braille_letter.get(curr.lower(), "")
+        elif curr.isalpha():
+            ans_str += english_to_braille_letter.get(curr.lower(), "")
         else:
-            ans_str += braille_to_english_char[cur_char]
+            ans_str += braille_to_english_char.get(curr, "")
 
     print(ans_str)
     return ans_str
 
+# Determine whether to translate Braille or English
 
-# print(translate_eng(input_string))
+
 
 def translate(input_string):
     if "." in input_string:
-        # print("lkfl")
         translate_braille(input_string)
     else:
         translate_eng(input_string)
