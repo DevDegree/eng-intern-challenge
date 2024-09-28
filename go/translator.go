@@ -53,6 +53,8 @@ var numMap = map[string]string{
 	"0": "j",
 }
 
+var reverseNumMap = reverseMap(numMap)
+
 func reverseMap(dict map[string]string) map[string]string {
 	dictReversed := make(map[string]string)
 	for key, value := range dict {
@@ -81,29 +83,9 @@ func translateToEnglish(input string) string {
 			isNextCapitalized = false
 		}
 		if isNextNumber {
-			switch englishChar {
-			case "a":
-				englishChar = "1"
-			case "b":
-				englishChar = "2"
-			case "c":
-				englishChar = "3"
-			case "d":
-				englishChar = "4"
-			case "e":
-				englishChar = "5"
-			case "f":
-				englishChar = "6"
-			case "g":
-				englishChar = "7"
-			case "h":
-				englishChar = "8"
-			case "i":
-				englishChar = "9"
-			case "j":
-				englishChar = "0"
-			default:
-				isNextNumber = false
+			result, ok := reverseNumMap[englishChar]
+			if ok {
+				englishChar = result
 			}
 		}
 		if englishChar == "capitalize" {
