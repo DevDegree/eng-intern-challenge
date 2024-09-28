@@ -1,3 +1,5 @@
+import sys
+
 braille_to_english = {
     'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd', 'O..O..': 'e',
     'OOO...': 'f', 'OOOO..': 'g', 'O.OO..': 'h', '.OO...': 'i', '.OOO..': 'j',
@@ -32,7 +34,7 @@ def convertToBraille(englishString):
         brailleChar = english_to_braille.get(char, '......')
         brailleOutput.append(brailleChar)
     braille = ''.join(brailleOutput)
-    print(braille)
+    return braille  # Return braille instead of printing
 
 def convertToEnglish(brailleString):
     englishOutput = []
@@ -69,15 +71,22 @@ def convertToEnglish(brailleString):
             englishOutput.append('?')
 
     english = ''.join(englishOutput).replace('?', '')
-    print(english)
+    return english  # Return English instead of printing
 
 # Main input handling
-userInput = input("Enter text: ")
+if __name__ == "__main__":
+    # Check if any arguments were provided
+    if len(sys.argv) > 1:
+        userInput = ' '.join(sys.argv[1:])  # Join arguments for spaces
+    else:
+        userInput = input("Enter text: ")
 
-# Check if input is Braille
-isBraille = all(char in 'O.' for char in userInput)
+    # Check if input is Braille
+    isBraille = all(char in 'O.' for char in userInput)
 
-if isBraille:
-    convertToEnglish(userInput)
-else:
-    convertToBraille(userInput)
+    if isBraille:
+        output = convertToEnglish(userInput)
+        print(output)
+    else:
+        output = convertToBraille(userInput)
+        print(output)
