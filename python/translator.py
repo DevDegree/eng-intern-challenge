@@ -1,15 +1,17 @@
 import sys
 
 class BrailleTranslator:
-    def __init__(self, input_text: str, is_braille_input: bool):
+    # Length of a Braille character
+    braille_input_length = 6  # Braille consists of 6 characters
+
+    def __init__(self, is_braille_input: bool = False):
         """
-        Initialize the BrailleTranslator with the input text and determine if it is Braille or English.
+        Initialize the BrailleTranslator with a flag indicating if the input is Braille or English.
 
         Args:
-            input_text (str): The text to be translated.
             is_braille_input (bool): A flag indicating if the input is Braille (True) or English (False).
         """
-        self.input_text = input_text
+        # self.input_text = input_text
         self.is_braille_input = is_braille_input
 
         # English -> Braille (raised dots represented as O, unraised dots as .)
@@ -48,48 +50,76 @@ class BrailleTranslator:
             '0': self.english_to_braille_map['j'],
         }
 
-        # Add capitalization and number markers
+        # Capitalization and number markers
         self.capitalization_marker = '.....O'  # Prefix for capital letters
         self.number_marker = '.O.OOO'          # Prefix for numbers
+        
+        # Initialize state attributes
+        self.is_capital = False # Flag to keep track if the next letter should be capitalized
+        self.is_number = False  # Flag to keep track of when in a number sequence 
+    
+    def reset_state(self):
+        """Reset the internal state for capitalization and number mode."""
+        self.is_capital = False
+        self.is_number = False
 
-    def translate(self) -> str:
-        """Translate the input text based on its type (English or Braille)."""
+    def toggle_capital(self):
+        """Toggle the capitalization state."""
+        self.is_capital = not self.is_capital
+
+    def set_number_mode(self):
+        """Enable number mode."""
+        self.is_number = True
+
+    def unset_number_mode(self):
+        """Disable number mode."""
+        self.is_number = False
+
+    def translate(self, input_text: str) -> str:
+        """
+        Translate the input text based on its type (English or Braille).
+        
+        Args:
+            input_text (str): The text to be translated.
+        
+        Returns:
+            str: The translated text.
+        """
         if self.is_braille_input:
-            return self.braille_to_english(self.input_text)
+            return self.braille_to_english(input_text)
         else:
-            return self.english_to_braille(self.input_text) 
+            return self.english_to_braille(input_text) 
 
     def braille_to_english(self, braille_text: str) -> str:
         """Convert Braille text to English."""
         english = []        # List to store the English result
-        is_capital = False  # Flag to keep track if the next letter should be capitalized
-        is_number = False   # Flag to keep track of when in a number sequence 
+        self.reset_state()  # Reset the state before starting translation
 
-        for i in range(0, len(braille_text), 6):
-            braille_char = braille_text[i:i+6] # get a chunk of 6 chars
+        for i in range(0, len(braille_text), self.braille_input_length):
+            braille_char = braille_text[i:i+self.braille_input_length] # get a chunk of 6 chars
 
             if braille_char == self.capitalization_marker:
-                is_capital = True
+                self.toggle_capital()
                 continue    #skip further processing for this interation
 
             if braille_char == self.number_marker:
-                is_number = True  # Enter number mode
+                self.set_number_mode()
                 continue
             
             english_char = self.braille_to_english_map.get(braille_char, ' ')
 
             # Convert letter to digit if in 'number mode'
-            if is_number:
+            if self.is_number:
                 english_char = self.letter_to_digit.get(english_char, english_char)
 
             # Apply capitalization if needed
-            if is_capital:
+            if self.is_capital:
                 english_char = english_char.upper()
-                is_capital = False
+                self.toggle_capital()
             
             # Reset 'number mode' when encountering a space in Braille
             if braille_char == '......':
-                is_number = False
+                self.unset_number_mode()
 
             english.append(english_char)
 
@@ -98,8 +128,8 @@ class BrailleTranslator:
 
     def english_to_braille(self, text: str) -> str:
         """Convert English text to Braille."""
-        braille = []        # list to store the Braille result
-        is_number = False   # Flag to keep track of when we are in a number sequence 
+        braille = []        # List to store the Braille result
+        self.reset_state()  # Reset the state before starting translation
 
         for char in text:    
             # Handle capitalization
@@ -109,9 +139,9 @@ class BrailleTranslator:
             
             # Handle digits
             if char.isdigit():
-                if not is_number:
+                if not self.is_number:
                     braille.append(self.number_marker)
-                    is_number = True
+                    self.set_number_mode()
                 # Use the digit_to_braille map to get the corresponding Braille pattern
                 braille_char = self.digit_to_braille.get(char, '......')
                 braille.append(braille_char)
@@ -119,7 +149,7 @@ class BrailleTranslator:
 
             # Reset 'number mode' after a space or non-digit character
             if char == ' ':
-                is_number = False 
+                self.unset_number_mode()
                 braille.append('......')
                 continue
             
@@ -143,15 +173,11 @@ def main():
     
     # Join all arguments (after script name) into a single string
     input_string = ' '.join(sys.argv[1:])
-
     is_braille_input = BrailleTranslator.is_braille(input_string)
 
-    translator = BrailleTranslator(input_string, is_braille_input)
-    if is_braille_input:
-        result = translator.braille_to_english(input_string)
-    else:
-        result = translator.english_to_braille(input_string)
-    
+    translator = BrailleTranslator(is_braille_input)
+    result = translator.translate(input_string)
+
     print(result)
 
 if __name__ == "__main__":
