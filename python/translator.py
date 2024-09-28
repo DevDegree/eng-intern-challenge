@@ -1,4 +1,5 @@
 import sys
+# writing out the English to Braille alphabet 
 braille_alphabet = {'a': "O.....", 'b':'O.O...', 'c':"OO....", 'd':"OO.O..", 'e':"O..O..",
             'f':'OOO...', 'g':'OOOO..', "h":"O.OO..", "i":".OO...",
             'j':'.OOO..', 'k':'O...O.', "l":"O.O.O.", "m":"OO..O.",
@@ -13,27 +14,26 @@ braille_numbers = { '1':"O.....", '2':"O.O...", '3':"OO....",
 
 braille_symbols = { " ":"......", "capital":".....O", "number":".O.OOO"}
 
-# braille to English translation 
-# braille_alphabet returns a tuple with the keys and the values 
-# assigning the names key and values to the respective elements 
+# now reversing the dictionary to get the English to Braille alphabet 
 english_alphabet = {value: key for key, value in braille_alphabet.items()}
 
 english_numbers = {value: key for key, value in braille_numbers.items()}
 
 english_symbols = {value: key for key, value in braille_symbols.items()}
 
+# writing a function that converts English to Braille
 # convert English to Braille 
 def convert_english_to_braille(s):
     braille = ""
     for index, c in enumerate(s): 
-        if c.isupper():
+        if c.isupper(): # upper case letters
             braille += braille_symbols["capital"]
             c = c.lower()
             braille += braille_alphabet[c]
         elif c in braille_alphabet:
             braille += braille_alphabet[c]
         elif c.isdigit():
-            # if c is the first thing in the string
+            # if digit is the first thing in the string
             if index == 0: 
                 braille += braille_symbols["number"] 
                 braille += braille_numbers[c]
@@ -46,17 +46,19 @@ def convert_english_to_braille(s):
             braille += braille_symbols[c]
     return braille
 
-# convert Braille to English
+# writing a function to split the braille characters by 6 
+# to be able to convert every braille character individually into English
 def split_string_by_six(s):
     return [s[i:i + 6] for i in range(0, len(s), 6)]
 
+# writing a function to convert Braille to English 
 def convert_braille_to_english(s):
-    list_braille = split_string_by_six(s)
+    list_braille = split_string_by_six(s) # first splitting into individual braille characters
     english = ""
     skip_next = False
     is_digit = False 
     for index, char in enumerate(list_braille):
-        if skip_next:
+        if skip_next: # if it is a digit will be taken care of next
             skip_next = False
             continue
         elif char in english_symbols:
@@ -76,11 +78,10 @@ def convert_braille_to_english(s):
 
 # creating a function that takes in a string and converts it
 # to Braille/English depending on the input 
-
 def translate(s):
     flag = 0 
     for char in s: 
-        if char == '.':
+        if char == '.': # if it has a . sympbol then it is braille 
             flag = 1
     if flag == 1:
         return convert_braille_to_english(s)
@@ -93,17 +94,9 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         input_string = " ".join(sys.argv[1:])  # Join all arguments into a single string
         print(translate(input_string))
-    else:
-        print("Usage: python translator.py <string_to_translate>")
     
-    # Get the input string from the command line argument
-    #input_string = sys.argv[1]
-
-    # Perform translation
-    #result = translate(input_string)
     
-    # Output the result
-    #print(result)
+    
 
 
 
