@@ -1,3 +1,5 @@
+import sys
+
 code_table_temp = {
     'a': '100000',
     'b': '110000',
@@ -155,7 +157,7 @@ def convert_to_english(text):
         
         
 
-text = input()
+text = ' '.join(sys.argv[1:])
 
 english = convert_to_english(text)
 
