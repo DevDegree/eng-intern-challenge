@@ -43,32 +43,29 @@ def brailleCalculator(letter, braille_to_ascii, letter_type):
     
 def asciiCalculator(letter, ascii_to_braille, letter_type):
 
-    if ord(letter) >= 65 and ord(letter) <= 90:
+    if letter >= 'A' and letter <= 'Z':
         return (ascii_to_braille['caps'] + ascii_to_braille[letter.lower()], TypeLetter.LETTER)
-    elif ord(letter) == 48:
+    elif letter == '0':
         if letter_type == TypeLetter.LETTER:
             return (ascii_to_braille['num'] + ascii_to_braille[chr(ord(letter) + 58)], TypeLetter.NUMBER)
         return ascii_to_braille[chr(ord(letter) + 58)], TypeLetter.NUMBER
-    elif ord(letter) > 48 and ord(letter) <= 57:
+    elif letter >= '1' and letter <= '9':
         if letter_type == TypeLetter.LETTER:
             return (ascii_to_braille['num'] + ascii_to_braille[chr(ord(letter) + 48)], TypeLetter.NUMBER)
         return ascii_to_braille[chr(ord(letter) + 48)], TypeLetter.NUMBER
 
     return (ascii_to_braille[letter], TypeLetter.LETTER)
 
-def mainFonction(word):
-
-    is_braille = True
+def checkTypeInput(word):
     if len(word) % 6 == 0:
         for i in word:
             if i != 'O' and i != '.':
-                is_braille = False
-                break
+                return False
     else:
-        is_braille = False
+        return False
+    return True
 
-    ascii_to_braille, braille_to_ascii = constructDictionnary()
-
+def translateWord(word, is_braille, ascii_to_braille, braille_to_ascii):
     letter_type = TypeLetter.LETTER
     answer = ""
     i = 0
@@ -81,6 +78,12 @@ def mainFonction(word):
             temp, letter_type =  asciiCalculator(word[i], ascii_to_braille, letter_type)
             answer += temp
             i += 1
+    return answer
+
+def mainFonction(word):
+    is_braille = checkTypeInput(word)
+    ascii_to_braille, braille_to_ascii = constructDictionnary()
+    answer = translateWord(word, is_braille, ascii_to_braille, braille_to_ascii)
     print(answer)
 
 if __name__ == '__main__':
