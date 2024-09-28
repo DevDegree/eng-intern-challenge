@@ -30,6 +30,35 @@ class BrailleTranslator:
         self.other_dict = self.braille_dict['other']
         self.inverse_letters_dict = {v: k for k, v in self.letters_dict.items()}
         self.inverse_numbers_dict = {v: k for k, v in self.numbers_dict.items()}
+
+    def detect_text(self, input_text):
+        """
+        Detects the input type (Braille or English) and translates accordingly.
+ 
+        Args:
+            input_text (str): The input string to translate.
+ 
+        Returns:
+            str: The translated string.
+        """
+        if all(c in 'O.' for c in input_text) and len(input_text) % 6 == 0:
+            return self.braille_to_english(input_text)
+        else:
+            return self.english_to_braille(input_text)
+
+    def read_braille_dictionary(self, file_path):
+        """
+        Loads the Braille dictionary from a JSON file.
+ 
+        Args:
+            file_path (str): The path to the Braille dictionary JSON file.
+ 
+        Returns:
+            dict: The loaded Braille dictionary.
+        """
+        with open(file_path, 'r') as file:
+            return json.load(file)
+        
  
     def english_to_braille(self, input):
         """
@@ -105,33 +134,6 @@ class BrailleTranslator:
             i += 6
         return ''.join(english_output)
  
-    def read_braille_dictionary(self, file_path):
-        """
-        Loads the Braille dictionary from a JSON file.
- 
-        Args:
-            file_path (str): The path to the Braille dictionary JSON file.
- 
-        Returns:
-            dict: The loaded Braille dictionary.
-        """
-        with open(file_path, 'r') as file:
-            return json.load(file)
- 
-    def detect_text(self, input_text):
-        """
-        Detects the input type (Braille or English) and translates accordingly.
- 
-        Args:
-            input_text (str): The input string to translate.
- 
-        Returns:
-            str: The translated string.
-        """
-        if all(c in 'O.' for c in input_text) and len(input_text) % 6 == 0:
-            return self.braille_to_english(input_text)
-        else:
-            return self.english_to_braille(input_text)
  
 def main():
     """
