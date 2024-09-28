@@ -15,7 +15,7 @@ NUMS_TO_BRAILLE_DICT = {
 }
 
 SYMBOLS_TO_BRAILLE_DICT = {
-    ' ': '......', 'capital_follows': '.....0', 'number_follows': '.O.OOO'
+    ' ': '......', 'capital_follows': '.....O', 'number_follows': '.O.OOO'
 }
 
 # Map braille to english characters
@@ -34,7 +34,7 @@ def convert_english_to_braille(text):
         # if the character is a number
         elif character.isdigit():
             # if the number is the first number in a sequence of numbers or the first character
-            if i == 0 or text[i - 1].isdigit():
+            if i == 0 or not text[i - 1].isdigit():
                 braille += SYMBOLS_TO_BRAILLE_DICT['number_follows']
                 braille += NUMS_TO_BRAILLE_DICT[character]
             # if the character isn't the first number
