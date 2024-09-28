@@ -82,12 +82,7 @@ def brToEng(text):
             if capital:
                 letter = letter.upper()
                 capital = False
-            if number:
-                if letter.isdigit():
-                    res.append(letter)
-                number = False
-            else:
-                res.append(letter)
+            res += letter
         i += 6
     return res
     
