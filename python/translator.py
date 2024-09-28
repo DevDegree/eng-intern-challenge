@@ -77,7 +77,7 @@ class BrailleTranslator:
 
     def translate(self, input_text: str) -> str:
         """
-        Translate the input text based on its type (English or Braille).
+        Translate the input text based on its type (English or Braille). Assumes that the input is valid English or Braille.
         
         Args:
             input_text (str): The text to be translated.
