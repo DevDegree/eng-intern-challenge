@@ -1,3 +1,4 @@
-import {findBrailleChar} from './types/braile';
+import { translateBrailleToEnglish } from './types/braile';
 
-console.log(findBrailleChar('a')); 
+const brailleString = '.....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO';
+console.log(translateBrailleToEnglish(brailleString));

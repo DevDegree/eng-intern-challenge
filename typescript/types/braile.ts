@@ -11,8 +11,61 @@ const brailleMap = new Map<string, string>([
 	[" ", "......"], [".", "..OO.O"], [",", "..O..."], ["?", "..O.OO"], ["!", "..OOO."], 
 	[":", "..OO.."], [";", "..O.O."], ["-", "....OO"], ["/", ".O..O."], ["<", ".OO..O"], 
 	[">", "O..OO."], ["(", "O.O..O"], [")", ".O.OO."]
-  ]);
+]);
 
-export function findBrailleChar(char: string): string | undefined {
-	return brailleMap.get(char);
+const alphabetReverseMap = new Map<string, string>();
+const numbersReverseMap = new Map<string, string>();
+const specialCharReverseMap = new Map<string, string>();
+
+brailleMap.forEach((value, key) => {
+	/[a-z]/.test(key) &&
+	alphabetReverseMap.set(value, key);
+});
+brailleMap.forEach((value, key) => {
+	/[0-9]/.test(key) &&
+	numbersReverseMap.set(value, key);
+});
+brailleMap.forEach((value, key) => {
+	!/[a-z0-9]/.test(key) &&
+	specialCharReverseMap.set(value, key);
+});
+
+export function translateBrailleToEnglish(braille: string): string {
+	let english = "";
+	let isNumber = false;
+	const brailleChars = braille.match(/.{1,6}/g) || [];
+  	let isCapital = false;
+
+	brailleChars.forEach((brailleChar) => {
+		if(brailleChar === brailleMap.get("capital")){
+			isCapital = true;
+			return;
+		}
+		if(brailleChar === brailleMap.get("number")){
+			isNumber = true;
+			return;
+		}
+		if(brailleChar === brailleMap.get("decimal")){
+			english += ".";
+			return;
+		}
+		if(brailleChar === brailleMap.get(" ")){
+			english += " ";
+			return;
+		}
+
+		if(isCapital){
+			english += alphabetReverseMap.get(brailleChar).toUpperCase() || "";
+			isCapital = false;
+			return;
+		}else if(isNumber){
+			english += numbersReverseMap.get(brailleChar) || "";
+			isNumber = false;
+			return;
+		}else{
+			english += alphabetReverseMap.get(brailleChar)|| "";
+		}
+		
+	});
+	return english;
 }
