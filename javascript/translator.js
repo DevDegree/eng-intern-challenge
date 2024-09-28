@@ -1,7 +1,7 @@
 /*
  *  Author: Kaleb Jubar
  *  Created: 28 Sep 2024, 2:49:59 PM
- *  Last update: 28 Sep 2024, 3:42:52 PM
+ *  Last update: 28 Sep 2024, 3:46:47 PM
  *  Copyright (c) 2024 Kaleb Jubar
  */
 
@@ -50,22 +50,7 @@ const englishToBraille = {
 
     // special indicators
     capital: ".....O",
-    decimal: ".O...O",
     number: ".O.OOO",
-
-    // special characters
-    ".": "..OO.O",
-    ",": "..O...",
-    "?": "..O.OO",
-    "!": "..OOO.",
-    ":": "..OO..",
-    ";": "..O.O.",
-    "-": "....OO",
-    "/": ".O..O.",
-    "<": ".OO..O",
-    ">": "O..OO.",
-    "(": "O.O..O",
-    ")": ".O.OO.",
     " ": "......",
 };
 
