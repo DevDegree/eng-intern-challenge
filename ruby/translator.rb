@@ -25,7 +25,6 @@ alphabet_map = {
   'x' => "OO..OO",
   'y' => "OO.OOO",
   'z' => "O..OOO",
-  ' ' => "......",
   '.' => "..OO.O",
   ',' => "..O...",
   '?' => "..O.OO",
@@ -38,8 +37,6 @@ alphabet_map = {
   '>' => "O..OO.",
   '(' => "O.O..O",
   ')' => ".O.OO.",
-  'capital_follows' => '.....O',
-  'number_follows' => '.O.OOO'
 }
 
 numbers_map = {
@@ -55,13 +52,13 @@ numbers_map = {
   'O' => ".OOO.."
 }
 
-space = '......'
-capital_follows = '.....O'
-number_follows = '.O.OOO'
+SPACE = '......'
+CAPITAL_FOLLOWS = '.....O'
+NUMBER_FOLLOWS = '.O.OOO'
 
 input_string = ARGV.join(' ')
 
-capitalize_on = false
+capslock_on = false
 number_mode = false
 
 ##### if braille #####
@@ -69,23 +66,23 @@ if input_string.count('^.O').zero? && (input_string.length % 6).zero?
 ## split input_string into chunks of 6
   chunks = input_string.scan(/.{1,6}/)
   output = chunks.map do |chunk|
-    if chunk == capital_follows
-      capitalize_on = true
+    if chunk == CAPITAL_FOLLOWS
+      capslock_on = true
       next
-    elsif chunk == number_follows
+    elsif chunk == NUMBER_FOLLOWS
       number_mode = true
       next
-    elsif capitalize_on
-      capitalize_on = false
+    elsif capslock_on
+      capslock_on = false
       alphabet_map.key(chunk).upcase
     elsif number_mode
-      if chunk == space # if symbol is space, then space and set number_mode to false
+      if chunk == SPACE
         number_mode = false
         ' '
       else # else convert to number using numbers map
         numbers_map.key(chunk)
       end
-    else # convert normally
+    else # convert alphabet
       alphabet_map.key(chunk)
     end
   end
@@ -99,21 +96,17 @@ else  ##### assume string #####
       if number_mode
         output += numbers_map[char]
       else
-        # 1. turn on number_mode
-        # 2. convert number_follows braille 
-        # 3. convert current number
         number_mode = true
-        output += number_follows
+        output += NUMBER_FOLLOWS
         output += numbers_map[char]
       end
     elsif char == ' '
-      number_mode = false if number_mode # exit out of number mode if it's on
-      output += space
+      number_mode = false
+      output += SPACE
     else # assuming current char is alphabet
-      output += char == char.upcase ? capital_follows : ''
+      output += char == char.upcase ? CAPITAL_FOLLOWS : ''
       output += alphabet_map[char.downcase]
     end
-
   end
 end
 
