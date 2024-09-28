@@ -31,10 +31,10 @@ def convertToBraille(englishString):
                 number_mode = True
         else:
             number_mode = False
-        brailleChar = english_to_braille.get(char, '......')
+        brailleChar = english_to_braille.get(char, '......')  # Default to space if not found
         brailleOutput.append(brailleChar)
     braille = ''.join(brailleOutput)
-    return braille  # Return braille instead of printing
+    return braille
 
 def convertToEnglish(brailleString):
     englishOutput = []
@@ -71,17 +71,14 @@ def convertToEnglish(brailleString):
             englishOutput.append('?')
 
     english = ''.join(englishOutput).replace('?', '')
-    return english  # Return English instead of printing
+    return english
 
-# Main input handling
 if __name__ == "__main__":
-    # Check if any arguments were provided
     if len(sys.argv) > 1:
-        userInput = ' '.join(sys.argv[1:])  # Join arguments for spaces
+        userInput = ' '.join(sys.argv[1:])
     else:
         userInput = input("Enter text: ")
 
-    # Check if input is Braille
     isBraille = all(char in 'O.' for char in userInput)
 
     if isBraille:
