@@ -1,128 +1,83 @@
-import sys
-class TrieNode:
-    def __init__(self):
-        self.children = {}
-        self.is_end_of_char = False
-        self.char = None
-
-class BrailleTrie:
-    def __init__(self):
-        self.root = TrieNode()
-        self.capital_follows = ".....O"
-        self.number_follows = ".O.OOO"
-        self.braille_space = '......'
-    
-    def insert(self, braille_str, char):
-        node = self.root
-        for symbol in braille_str:
-            if symbol not in node.children:
-                node.children[symbol] = TrieNode()
-            node = node.children[symbol]
-        node.is_end_of_char = True
-        node.char = char
-    
-    def search(self, braille_str):
-        node = self.root
-        for symbol in braille_str:
-            if symbol in node.children:
-                node = node.children[symbol]
-            else:
-                return None
-        return node.char if node.is_end_of_char else None
-
-
-# Initialize the Braille-to-English mapping using Trie
-braille_trie = BrailleTrie()
-
-# Insert mappings for Braille letters (a-z)
+# Define Braille alphabet to English mapping
 braille_to_english = {
     "O.....": "a", "O.O...": "b", "OO....": "c", "OO.O..": "d", "O..O..": "e",
     "OOO...": "f", "OOOO..": "g", "O.OO..": "h", ".OO...": "i", ".OOO..": "j",
     "O...O.": "k", "O.O.O.": "l", "OO..O.": "m", "OO.OO.": "n", "O..OO.": "o",
     "OOO.O.": "p", "OOOOO.": "q", "O.OOO.": "r", ".OO.O.": "s", ".OOOO.": "t",
-    "O...OO": "u", "O.O.OO": "v", ".OOO.O": "w", "OO..OO": "x", "OO.OOO": "y", "O..OOO": "z",
+    "O...OO": "u", "O.O.OO": "v", ".OOO.O": "w", "OO..OO": "x", "OO.OOO": "y", "O..OOO": "z"
 }
 
-# Insert all mappings into the Trie
-for braille, char in braille_to_english.items():
-    braille_trie.insert(braille, char)
-
-# Insert digits 0-9 using braille letters a-j for numbers
-for i, num in enumerate("0123456789"):
-    braille_trie.insert(braille_to_english[chr(ord('a') + i)], num)
-
-# Reverse dictionary for English-to-Braille
+# English to Braille mapping, reverse of above
 english_to_braille = {v: k for k, v in braille_to_english.items()}
 
-# Function to handle Braille to English translation using the optimized Trie approach
-def translate_braille_to_english_trie(braille_input):
+# Special symbols for capitalization and numbers
+capital_follows = ".....O"
+number_follows = ".O.OOO"
+
+def translate_braille_to_english(braille_input):
     output = []
     i = 0
     is_capital = False
     is_number = False
-
-    # Pre-process the input into chunks of 6 characters
-    braille_chunks = [braille_input[i:i+6] for i in range(0, len(braille_input), 6)]
-
-    for braille_char in braille_chunks:
-        # Check for capital or number follow prefixes
-        if braille_char == braille_trie.capital_follows:
+    
+    # Split input into chunks of 6
+    while i < len(braille_input):
+        # Handle capital or number flags
+        if braille_input[i:i+6] == capital_follows:
             is_capital = True
+            i += 6
             continue
-        elif braille_char == braille_trie.number_follows:
+        elif braille_input[i:i+6] == number_follows:
             is_number = True
-            continue
-        elif braille_char == braille_trie.braille_space:
-            output.append(' ')  # Handle space
+            i += 6
             continue
         
-        # Search for the corresponding English character in Trie
-        char = braille_trie.search(braille_char)
-        if char:
+        # Read the next 6 characters for a Braille symbol
+        braille_char = braille_input[i:i+6]
+        i += 6
+        
+        # Lookup translation
+        if braille_char in braille_to_english:
+            char = braille_to_english[braille_char]
             if is_number:
-                output.append(char)  # Numbers are treated as is
-                is_number = False  # Reset number mode
+                output.append(str(ord(char) - ord('a') + 1))  # Convert letters 'a' to 'j' to numbers
+                is_number = False  # Numbers continue till a space is encountered
             else:
                 if is_capital:
-                    output.append(char.upper())  # Capitalize the letter
-                    is_capital = False  # Reset capital mode
+                    output.append(char.upper())
+                    is_capital = False
                 else:
                     output.append(char)
-
+        else:
+            output.append(' ')  # Handle spaces
+    
     return ''.join(output)
 
-# Function to handle English to Braille translation
-def translate_english_to_braille_trie(english_input):
+def translate_english_to_braille(english_input):
     output = []
     for char in english_input:
         if char.isupper():
-            output.append(braille_trie.capital_follows)
+            output.append(capital_follows)
             char = char.lower()
         if char.isdigit():
-            output.append(braille_trie.number_follows)
-            output.append(english_to_braille[chr(ord('a') + int(char))])
+            output.append(number_follows)
+            # Map digit back to braille 'a' to 'j'
+            output.append(english_to_braille[chr(ord('a') + int(char) - 1)])
         elif char in english_to_braille:
             output.append(english_to_braille[char])
         elif char == ' ':
-            output.append(braille_trie.braille_space)  # Braille space
+            output.append('......')  # Space symbol
     return ''.join(output)
 
-def is_braille(text):
-    return all(char in '.O' for char in text)
-
-def main():
-    if len(sys.argv) != 2:
-        print("Usage: python translator.py <text_to_translate>")
-        sys.exit(1)
-
-    input_text = sys.argv[1]
-
-    if is_braille(input_text):
-        result = translate_braille_to_english_trie(input_text)
-    else:
-        result = translate_english_to_braille_trie(input_text)
-
-    print(result)
-
+# Command-line execution logic
 if __name__ == "__main__":
-    main()
+    import sys
+    input_string = sys.argv[1]  # Get input from command-line
+    
+    # Determine if the input is Braille or English
+    if input_string.startswith("O") or input_string.startswith("."):
+        # Assuming Braille input
+        print(translate_braille_to_english(input_string))
+    else:
+        # Assuming English input
+        print(translate_english_to_braille(input_string))
