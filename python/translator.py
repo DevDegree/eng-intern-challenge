@@ -53,6 +53,11 @@ def translate_to_english(braille):
             is_number_mode = True
             i += 6
             continue
+        if symbol == "......":  # Handle space in Braille
+            result.append(" ")
+            is_number_mode = False  # Reset number mode after space
+            i += 6
+            continue
         if is_number_mode and symbol in english_dict:
             result.append(str(english_dict[symbol]))
             i += 6
