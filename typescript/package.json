@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "translator.ts",
-  "type": "module",
   "scripts": {
     "test": "jest",
     "translate": "tsx translator.ts"
