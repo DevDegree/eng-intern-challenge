@@ -1,4 +1,3 @@
-# JavaScript Instructions
 # Braille Translator
 
 This project is a JavaScript-based command-line tool for translating text between English and Braille. The translator works both ways: it can translate English text into Braille, and Braille back into English.
