@@ -1,5 +1,3 @@
-const res = require("express/lib/response");
-
 class Helper {
   constructor(alp, num) {
     this.alphabets = alp;
