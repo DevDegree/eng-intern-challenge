@@ -84,7 +84,7 @@ def braille_to_english(sequence):
     length = len(sequence)
     curr = 0
 
-    number_flag = False  # Indicates that following symbols are number
+    number_flag = False  # Indicates that following symbols are numbers
     capital_flag = False  # Indicates that following letter is capitalized
 
     while curr < length:
@@ -118,13 +118,41 @@ def braille_to_english(sequence):
     return translation
 
 
-def english_to_braille(sequence):
+def english_to_braille(text):
     """
+    Convert English text to a Braille sequence.
 
-    :param sequence:
-    :return:
+    :param text: A string representing the English text
+    :return: The translated Braille sequence
     """
-    return 'braille'
+    translation = ''
+
+    # Invert Braille to English mappings
+    alpha_braille = {v: k for k, v in braille_alpha.items()}
+    num_braille = {v: k for k, v in braille_num.items()}
+
+    number_flag = False  # Indicates that sequence is already in numbers mode
+
+    for char in text:
+        if char.isspace():
+            translation += '......'
+            number_flag = False  # Disable numbers mode
+
+        # Convert letters to Braille
+        elif char.isalpha():
+            if char.isupper():
+                char = char.lower()
+                translation += capital_follows  # Add capital_follows symbol to sequence
+            translation += alpha_braille[char]
+
+        # Convert numbers to Braille
+        elif char.isnumeric():
+            if not number_flag:
+                number_flag = True
+                translation += number_follows  # Add number_follows symbol to sequence
+            translation += num_braille[char]
+
+    return translation
 
 
 if __name__ == '__main__':
