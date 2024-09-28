@@ -31,7 +31,7 @@ def number_follows(char):
     return char == number_follows_braille
 
 def is_space(char):
-    return char == "......"
+    return char == "......" or char == " "
 
 def translate_Braille_char_to_En(char, is_number):
     braille = braille_symbols
