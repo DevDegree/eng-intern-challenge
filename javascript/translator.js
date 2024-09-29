@@ -7,14 +7,14 @@ const englishTranslationObject = {
     "d": "OO.O..",
     "e": "O..O..",
     "f": "OOO...",
-    "g": "OOOO..", 
+    "g": "OOOO..",
     "h": "O.OO..",
     "i": ".OO...",
     "j": ".OOO..",
     "k": "O...O.",
     "l": "O.O.O.",
     "m": "OO..O.",
-    "n": "OO.OO.", 
+    "n": "OO.OO.",
     "o": "O..OO.",
     "p": "OOO.O.",
     "q": "OOOOO.",
@@ -76,28 +76,29 @@ const brailleTranslationObject = {
 // receive input via process.argv
 
 const stringToTranslate = process.argv[2];
-if(!stringToTranslate){
+if (!stringToTranslate) {
     console.log("Please provide string to translate");
     return;
 }
 let translatedString = "";
-// First translate from english to braile
-// for(let i = 0; i < stringToTranslate.length; i++){
-//     const currentLetter = stringToTranslate.charAt(i);
-//     const brailleEquivalent = englishTranslationObject[currentLetter];
-//     translatedString = translatedString + brailleEquivalent;
-// }
-
 // First translate from braile to english
-// Can't use the same loop as it each braille character is 6 digits long
+const stringSample = stringToTranslate.slice(0, 6);
+const isBraille = brailleTranslationObject[stringSample];
 let singleBrailleLetter = "";
-for(let i = 0; i < stringToTranslate.length; i++){
-    singleBrailleLetter = singleBrailleLetter + stringToTranslate.charAt(i);
-    if(singleBrailleLetter.length === 6){
-        const englishEquivalent = brailleTranslationObject[singleBrailleLetter];
-        translatedString = translatedString + englishEquivalent;
-        singleBrailleLetter = "";
+for (let i = 0; i < stringToTranslate.length; i++) {
+    if (isBraille) {
+        singleBrailleLetter = singleBrailleLetter + stringToTranslate.charAt(i);
+        if (singleBrailleLetter.length === 6) {
+            const englishEquivalent = brailleTranslationObject[singleBrailleLetter];
+            translatedString = translatedString + englishEquivalent;
+            singleBrailleLetter = "";
+        }
+        continue;
     }
-}
+    const currentLetter = stringToTranslate.charAt(i);
+    const brailleEquivalent = englishTranslationObject[currentLetter];
+    translatedString = translatedString + brailleEquivalent;
 
-console.log(translatedString)
+}
+// need a way to detect braille or english maybe check the first 6 letters?
+console.log(translatedString);
