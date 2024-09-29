@@ -71,7 +71,7 @@ $braille_eng_num = $eng_braille_num.invert
 $braille_special_sym = $eng_special_sym.invert
 $braille_special_char_to_eng = $eng_special_char_to_braille.invert
 
-
+input = ARGV.join(" ")
 def eng_or_braille(input)
  input = input.to_s if input.is_a?(Integer)
  if input.is_a?(Integer) || (!input.match(/^[O.]+$/) && input.match(/[a-zA-Z]/)) || input.match?(/\d/)
@@ -142,3 +142,4 @@ def braille_to_eng(braille_input)
 end
 
 
+eng_or_braille(input)
