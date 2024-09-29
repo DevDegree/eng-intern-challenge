@@ -120,6 +120,12 @@ function translateFromBraille(brailleText) {
 // Get the input from the command line arguments.
 const input = process.argv.slice(2).join(' ');
 
+// Check if input is provided
+if (!input) {
+    console.error("No input provided. Please enter a string to translate.");
+    process.exit(1);
+}
+
 // Determine whether to translate the input to Braille or from Braille based on the input.
 if (isBraille(input)) {
     console.log(translateFromBraille(input)); // Translate from Braille to English.
@@ -127,7 +133,6 @@ if (isBraille(input)) {
     console.log(translateToBraille(input)); // Translate English to Braille.
 }
 
-// Export the functions for testing
 module.exports = {
     translateToBraille,
     translateFromBraille,
