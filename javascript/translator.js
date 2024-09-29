@@ -9,7 +9,7 @@ const brailleDict = {
     'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO',
     'z': 'O..OOO', 'cap': '.....O', 'num': '.O.OOO', 'space': '......',
     '0': '.OOO..', '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..',
-    '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...'
+    '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': 'O...OO'
 };
 
 // Create a reverse mapping to translate Braille back to English characters.
@@ -47,7 +47,7 @@ function translateToBraille(text) {
             }
 
             // Check if the character is uppercase.
-            if (char === char.toUpperCase()) {
+            if (char === char.toUpperCase() && char !== ' ') {
                 // Add a capitalization marker for the next letter.
                 brailleOutput.push(brailleDict['cap']);
             }
@@ -59,7 +59,6 @@ function translateToBraille(text) {
     // Join the Braille symbols into a single string and return.
     return brailleOutput.join('');
 }
-
 
 // Function to translate Braille text back to English.
 function translateFromBraille(brailleText) {
@@ -105,7 +104,7 @@ function translateFromBraille(brailleText) {
         } 
         
         // Handle capitalization.
-        if (capitalizeNext) {
+        if (capitalizeNext && char) {
             englishOutput.push(char.toUpperCase()); // Capitalize the letter.
             capitalizeNext = false; // Reset the capitalization flag.
         } else {
@@ -120,21 +119,9 @@ function translateFromBraille(brailleText) {
 // Get the input from the command line arguments.
 const input = process.argv.slice(2).join(' ');
 
-// Check if input is provided
-if (!input) {
-    console.error("No input provided. Please enter a string to translate.");
-    process.exit(1);
-}
-
 // Determine whether to translate the input to Braille or from Braille based on the input.
 if (isBraille(input)) {
     console.log(translateFromBraille(input)); // Translate from Braille to English.
 } else {
     console.log(translateToBraille(input)); // Translate English to Braille.
 }
-
-module.exports = {
-    translateToBraille,
-    translateFromBraille,
-    isBraille
-};
