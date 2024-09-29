@@ -130,6 +130,7 @@ def brailleToEnglish(braille_table:dict, inputString:str):
     capitalFlag = ".....O"
     numberFlag = ".O.OOO"
     decimalFlag = ".O...O"
+    space = "......"
 
     translation = ""
     index = 0
@@ -147,11 +148,15 @@ def brailleToEnglish(braille_table:dict, inputString:str):
                     translation += ","
                     index += 1
                     continue
-
-                translation += braille_table["n" + groups[index]]  
-                index += 1
-                if index < len(groups) and groups[index - 1] == " ":
-                    break 
+                
+                elif groups[index] != space:
+                    translation += braille_table["n" + groups[index]]  
+                    index += 1
+                    continue
+                
+                elif groups[index] == space:
+                    translation += " "
+                    break
 
         elif groups[index] == decimalFlag:
             translation += braille_table[decimalFlag] # add a decimal
@@ -160,13 +165,17 @@ def brailleToEnglish(braille_table:dict, inputString:str):
                 translation += braille_table["n" + groups[index]]  
                 index += 1
                 if index < len(groups) and groups[index - 1] == " ":
-                    break  
+                    break 
+
+            index += 1
 
         else:
             # Normal character translation
             translation += braille_table[groups[index]]
+        
+        index += 1
 
-        index += 1  # Move to the next group
+          # Move to the next group
 
 
     return translation
@@ -178,22 +187,22 @@ def detectLang(str):
         
     return "Braille"
 
-def main():
-    englishBrailleTable, brailleEnglishTable = buildLookupTable()
+# def main():
+#     englishBrailleTable, brailleEnglishTable = buildLookupTable()
 
-    toTranslate = ""
-    for i in range(1, len(sys.argv)):
-        toTranslate += sys.argv[i]
+#     toTranslate = ""
+#     for i in range(1, len(sys.argv)):
+#         toTranslate += sys.argv[i]
 
-    res = ""
-    if detectLang(toTranslate) == "English":
-        res = englishToBraille(englishBrailleTable, toTranslate) 
-    else:
-        res = brailleToEnglish(brailleEnglishTable, toTranslate)
+#     res = ""
+#     if detectLang(toTranslate) == "English":
+#         res = englishToBraille(englishBrailleTable, toTranslate) 
+#     else:
+#         res = brailleToEnglish(brailleEnglishTable, toTranslate)
 
-    print(res)
+#     print(res)
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
          
