@@ -72,11 +72,11 @@ const brailleTranslationObject = {
     "O..OOO": "z",
     "......": " ",
     ".....O": "capital",
-    ".O.OOO": "number", //could get rid of?
+    ".O.OOO": "number",
     "..OO.O": "."
 };
 
-const numberTranslattionObject = {
+const numberTranslationObject = {
     "O.....": "1",
     "O.O...": "2",
     "OO....": "3",
@@ -88,14 +88,18 @@ const numberTranslattionObject = {
     ".OO...": "9",
     ".OOO..": "0",
 }
+
+// Edge cases what happens if user inputs english and braille?
+
+// Capture every input after file name in terminal
 const stringToTranslate = process.argv.slice(2).join(' ');
+// If no string is found, return an error message in Braille and English
+// Braille will come first in order to clarify users who are visually impaired
 if (!stringToTranslate) {
-    console.log("Please provide a string to translate\n.....OOOO.O.O.O.O.O..O..O......OO.O.O..O........OOO.O.O.OOO.O..OO.O.O.OO.OO...OO.O..O..O........O............OO.O..OOOO.O.OOO..OO...OO.OO.OOOO.........OOOO.O..OO........OOOO.O.OOO.O.....OO.OO..OO.O.O.O.O.O......OOOO.O..O..");
+    console.log(".....OOOO.O.O.O.O.O..O..O......OO.O.O..O........OOO.O.O.OOO.O..OO.O.O.OO.OO...OO.O..O..O........O............OO.O..OOOO.O.OOO..OO...OO.OO.OOOO.........OOOO.O..OO........OOOO.O.OOO.O.....OO.OO..OO.O.O.O.O.O......OOOO.O..O..\nPlease provide a string to translate");
     return;
 }
 
-
-// First translate from braile to english
 const stringSample = stringToTranslate.slice(0, 6);
 const isBraille = brailleTranslationObject[stringSample];
 
@@ -128,18 +132,16 @@ const convertEnglishToBraille = (string) => {
     return translatedString;
 }
 const convertBrailleToEnglish = (string) => {
-    // Check if it is a valid Braille input
+    // Check string is a valid Braille input, if not return error message in Braille and English
     if (string.length % 6 !== 0) {
         return "\n.....OOOO.O.O.O.O.O..O..O......OO.O.O..O........O..O..OO.OO..OOOO.O..O..O.OOO.......O...........O.O.OOO.....O.O.O..OO...OO.O.............OO.O...O.OOO.O......OO...O.O.O.O.O.O.O..O.........OO.O..OOOO.O.OOO..OO...OO.OO.OOOO..\nPlease enter a valid Braille string"
     }
     let translatedString = "";
-    // let singleBrailleLetter = "";
     let toggleCapitalLetter = false;
     let toggleNumberMode = false;
-    // i += 6
-    // 
+
     for (let i = 0; i < string.length; i += 6) {
-        // could count per six to make it faster
+        // Counting by 6 make the itteration faster since Braille strings are longer
         let singleBrailleLetter = string.slice(i, i + 6);
         if (singleBrailleLetter === englishTranslationObject[" "]) {
             toggleNumberMode = false;
@@ -154,7 +156,7 @@ const convertBrailleToEnglish = (string) => {
         }
         let englishEquivalent = brailleTranslationObject[singleBrailleLetter];
         toggleCapitalLetter && (englishEquivalent = englishEquivalent.toUpperCase());
-        toggleNumberMode && (englishEquivalent = numberTranslattionObject[singleBrailleLetter]);
+        toggleNumberMode && (englishEquivalent = numberTranslationObject[singleBrailleLetter]);
         translatedString = translatedString + englishEquivalent;
         toggleCapitalLetter = false;
     }
