@@ -1,6 +1,7 @@
 
 import sys
 
+# Braille dictionaries
 BRAILLE_ALPHABET = {
     'a': 'O.....',
     'b': 'O.O...',
@@ -108,11 +109,7 @@ def braille_to_english(braille):
     return ''.join(result)
 
 def main():
-    if len(sys.argv) != 2:
-        print("Usage: python translator.py <input_string>")
-        sys.exit(1)
-
-    input_string = sys.argv[1]
+    input_string = ' '.join(sys.argv[1:])
     input_type = detect_input_type(input_string)
 
     if input_type == "english":
@@ -120,7 +117,7 @@ def main():
     else:
         result = braille_to_english(input_string)
 
-    print(result)
+    print(result, end='')  # Remove newline at the end
 
 if __name__ == "__main__":
     main()
