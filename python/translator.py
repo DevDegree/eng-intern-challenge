@@ -13,6 +13,19 @@ table = {
     "h": "O.OO..",
     "i": ".OO...",
     "j": ".OOO..",
+    ".": "..OO.O",
+    ",": "..O...",
+    "?": "..O.OO",
+    "!": "..OOO.",
+    ":": "..OO..",
+    ";": "..O.O.",
+    "-": "....OO",
+    "/": ".O..O.",
+    "<": ".OO..O",
+    ">": "O..OO.",
+    "(": "O.O..O",
+    ")": ".O.OO.",
+    " ": "......",
 }
 
 # In the range of letters ["k", ..., "t"], the ith letter can be related to the ith letter in the range ["a", ..., "j"]:
@@ -23,14 +36,12 @@ for letter in rangeTenTwenty:
     table[letter] = "".join(base_braille)
 
 # Same concept for the letters ["u", ..., "v"] 
-rangeTwentyTwentyTwo = [chr(i) for i in range(ord('u'), ord('z') + 1)] # the two next letters after t 
+rangeTwentyTwentySix = [chr(i) for i in range(ord('u'), ord('z') + 1)] # the two next letters after t 
 offset = 10
 
-for letter in rangeTwentyTwentyTwo:
-    index = chr(ord(letter) - 10) 
-
-    if chr(ord(letter) - 10) == 'w':
-        table['w'] = ".OOO.O" # w is an exception to the rule we came up with
+for letter in rangeTwentyTwentySix:
+    if letter == 'w':
+        table[letter] = ".OOO.O" # w is an exception to the rule we came up with
         offset = 11 # the bases of the letters after w are then offset by 1 more 
         continue
 
@@ -39,7 +50,15 @@ for letter in rangeTwentyTwentyTwo:
     table[letter] = "".join(base_braille)
 
 
+# add the digits
+for digit in range(10):
+    if digit == 0:
+        table[str(digit)] = table["j"]
+        continue
 
-# and finally ["x", "y", "z"] follow the same rule
+    table[str(digit)] = table[chr(ord('a') + digit - 1)]
 
-print(table)
+# add capital letters
+capitalFlag = ".....O"
+for ascii in range(ord('a'), ord('z') + 1):
+    table[chr(ascii).upper()] = capitalFlag + table[chr(ascii)]
