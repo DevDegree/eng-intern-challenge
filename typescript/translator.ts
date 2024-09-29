@@ -190,6 +190,9 @@ function translateTEng(braille: Braille[]): string {
       
     } else if (deci) {
       englishStr += ".";
+      if (i + 1 < braille.length && braille_t_num[braille[i + 1]]) {
+        num = true; // set num flag if next digit
+      }
       deci = false;
     } else {
       englishStr += braille_t_eng[brailleSlice];
@@ -218,8 +221,11 @@ function translateTBraille(english: English): string {
     }
     // upper/lower case ;)
     else if (brailleLetter?.length > 0) {
-      lastNum = false;
 
+      if (symbol == "." && lastNum) {
+        brailleStr += (command_t_braille.DECI + brailleLetter)
+        continue;
+      }
       // upper case
       if (symbol == symbol.toUpperCase() && symbol != " ") {
         brailleStr += (command_t_braille.CAP + brailleLetter);
@@ -228,6 +234,8 @@ function translateTBraille(english: English): string {
       else {
         brailleStr += brailleLetter;
       }
+
+      lastNum = false;
     }
   }
 
