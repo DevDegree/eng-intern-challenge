@@ -32,6 +32,7 @@ alphabet = {
 # English to Braille
 def english_brail_translate(word):
     translated_word = "" # final translated word
+    is_number = False
 
     for char in word: # iterate through each character in the word
 
@@ -46,17 +47,16 @@ def english_brail_translate(word):
 
         # checks to see if char is a number
         elif char.isnumeric():
-
-            # if last char is a number, don't add "number follows"
-            if len(translated_word) == 0 or not translated_word[-1].isnumeric(): #not working **********
+            # add "number follows" only at the start of a number sequence
+            if not is_number:
                 translated_word += alphabet["number follows"]
-                translated_word += alphabet[char]
-            else:
-                translated_word += alphabet[char]
+                is_number = True
+            translated_word += alphabet[char]
 
         # check if char is a space
         elif char == " ":
             translated_word += alphabet[char]
+            is_number = False
 
         # last option is for char to be a decimal
         else:
@@ -94,28 +94,31 @@ def brail_english_translate(word):
                     is_upper = True
                 
                 # turns letter to uppercase if last braille string indicated so
-                if is_upper:
-                    translated_word += char.upper()
-                    is_upper = False
+                if char.isalpha():
+                    if is_upper:
+                        translated_word += char.upper()
+                        is_upper = False
+                    else:
+                        translated_word += char
 
+                # checks if the braille should be a number
                 elif is_number:
                     if char.isnumeric():
                         translated_word += char
-                    else:
-                        continue
+                    break
+
+                # checks for decimals
                 elif is_decimal:
-                    if not char.isnumeric() and not char.isalpha():
+                    if not char.isalpha() and not char.isnumeric():
                         translated_word += char
-                        is_decimal = False
-                    else: 
-                        continue
+                    is_decimal = False
+                    break
 
+                # reset `is_number` when a space is encountered
                 elif char == " ":
-                    is_number = False
                     translated_word += char
-
-                else:
-                    translated_word += char
+                    is_number = False 
+                    break
 
     print(translated_word)
 
