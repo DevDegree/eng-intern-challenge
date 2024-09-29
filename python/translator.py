@@ -127,11 +127,8 @@ def translate(stringo):
             else:
                 final = final + letters[i]
                 
-
         return(final)
-
-    return(final)
-
+        
 if __name__ == "__main__":
     text = " ".join(sys.argv[1:])
     result = translate(text)
