@@ -3,12 +3,12 @@ import sys
 # Braille mappings
 BRAILLE_TO_ENGLISH = {
         '......': ' ',
-    'O.....': 'A', 'O.O...': 'B', 'OO....': 'C', 'OO.O..': 'D', 'O..O..': 'E',
-    'OOO...': 'F', 'OOOO..': 'G', 'O.OO..': 'H', '.OO...': 'I', '.OOO..': 'J',
-    'O...O.': 'K', 'O.O.O.': 'L', 'OO..O.': 'M', 'OO.OO.': 'N', 'O..OO.': 'O',
-    'OOO.O.': 'P', 'OOOOO.': 'Q', 'O.OOO.': 'R', '.OO.O.': 'S', '.OOOO.': 'T',
-    'O...OO': 'U', 'O.O.OO': 'V', '.OOO.O': 'W', 'OO..OO': 'X', 'OO.OOO': 'Y',
-    'O..OOO': 'Z',
+    'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd', 'O..O..': 'e',
+    'OOO...': 'f', 'OOOO..': 'g', 'O.OO..': 'h', '.OO...': 'i', '.OOO..': 'j',
+    'O...O.': 'k', 'O.O.O.': 'l', 'OO..O.': 'm', 'OO.OO.': 'n', 'O..OO.': 'o',
+    'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't',
+    'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y',
+    'O..OOO': 'z',
     '.....O': 'CAPITAL',
     '.O.OOO': 'NUMBER',
 }
@@ -59,7 +59,7 @@ def english_to_braille(english):
             if not number_mode:
                 result.append(ENGLISH_TO_BRAILLE['NUMBER'])
                 number_mode = True
-            result.append(ENGLISH_TO_BRAILLE['JABCDEFGHI'[int(char)]])
+            result.append(ENGLISH_TO_BRAILLE['jabcdefghi'[int(char)]])
         elif char.isspace():
             result.append(ENGLISH_TO_BRAILLE[' '])
             number_mode = False
@@ -71,7 +71,7 @@ def english_to_braille(english):
                 result.append(ENGLISH_TO_BRAILLE['CAPITAL'])
                 char = char.lower()
             
-            result.append(ENGLISH_TO_BRAILLE.get(char.upper(), ''))
+            result.append(ENGLISH_TO_BRAILLE.get(char, ''))
 
     return ''.join(result)
 
