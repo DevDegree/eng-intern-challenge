@@ -39,8 +39,6 @@ def translate_to_braille(text):
             if not is_number:
                 braille.append(NUMBER_INDICATOR)
                 is_number = True
-            print(char)
-            print(BRAILLE_NUMBER_DICT[char])
             braille.append(BRAILLE_NUMBER_DICT[char])
         else:
             is_number = False
@@ -103,4 +101,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
