@@ -1,8 +1,5 @@
 import sys
 
-# Gather arguments from command line (not getting script name)
-args = sys.argv[1:] 
-
 # Create dictionary for the Braille Alphabet
 eng_to_braille_map = {
     'a' : 'O.....',
@@ -63,8 +60,8 @@ def check_input(input):
     else:
         translation = ''
         for value in input:
-            translation += text_to_braille(value)
-        print(translation) 
+            translation += text_to_braille(value) + '......'
+        print(translation[0:len(translation) - 6]) 
 
 # Translates Braille input and outputs English string
 def braille_to_text(braille):
@@ -102,8 +99,10 @@ def text_to_braille(text):
     b_result = []
     # check if there are multiple numbers in a row
     num_flag = False 
-
+   
     for char in text: 
+
+        textlist = list(char)
         if char.isdigit():
             if not num_flag:
                 b_result.append(eng_to_braille_map['number'])
@@ -113,17 +112,17 @@ def text_to_braille(text):
             # switch num_flag back if it is true
             if num_flag:
                 num_flag = False
-                b_result.append(eng_to_braille_map[' '])
+                b_result.append(eng_to_braille_map['......'])
             if char.isupper():    
                 b_result.append(eng_to_braille_map['capital'] + eng_to_braille_map[char.lower()])
-                print(char + 'upper')
             elif char.islower():
                 b_result.append(eng_to_braille_map[char])
-                print(char + 'lower')
             #get characters that are symbols (. , > < / etc)   
             else:
-                b_result.append(eng_to_braille_map.get(char, ''))
-                print(char + 'else')        
+                b_result.append(eng_to_braille_map.get(char, '......'))      
     return ''.join(b_result)
 
-check_input(args)
+# Gather arguments from command line (not getting script name)
+if __name__ == "__main__":
+    args = sys.argv[1:]
+    check_input(args)
