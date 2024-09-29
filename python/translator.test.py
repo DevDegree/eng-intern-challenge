@@ -2,7 +2,9 @@ import unittest
 import subprocess
 
 class TestTranslator(unittest.TestCase):
+
     def test_output(self):
+        print(unittest,subprocess)
         # Command to run translator.py script
         command = ["python3", "translator.py", "Abc", "123", "xYz"]
         
