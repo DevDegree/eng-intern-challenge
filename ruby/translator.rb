@@ -142,4 +142,3 @@ def braille_to_eng(braille_input)
 end
 
 
-eng_or_braille(".....OO.....")
