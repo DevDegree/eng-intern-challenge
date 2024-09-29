@@ -59,7 +59,6 @@ class TestTranslator(unittest.TestCase):
 
         expected_output = "< a !"
 
-
         self.assertEqual(result.stdout.strip(), expected_output)
 
 

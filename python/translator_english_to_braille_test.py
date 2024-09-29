@@ -59,7 +59,6 @@ class TestTranslator(unittest.TestCase):
 
         expected_output =   ".OO..O" + "......" + "O....." + "......" + "..OOO."
 
-
         self.assertEqual(result.stdout.strip(), expected_output)
 
 if __name__ == '__main__':
