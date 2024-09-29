@@ -48,7 +48,7 @@ char_to_braille_mapping = {
 
     # Special indicators
     "capital follows": ".....O",  # Capital follows indicator
-    "decima follows": ".O...O",  # Decimal follows indicator
+    "decimal follows": ".0...0",  # Decimal follows indicator
     "number follows": ".O.OOO"    # Number follows indicator
 }
 
@@ -68,30 +68,48 @@ digit_to_braille_mapping = {
 def english_to_braille(text):
     braille = ""
     is_number = False
+    is_decimal = False
 
-    for char in text:
+    for i, char in enumerate(text):
         if char.isupper():
             # Add the capital follows indicator and convert to lowercase
-            braille += char_to_braille_mapping["Capital follows"]
+            braille += char_to_braille_mapping["capital follows"]
             char = char.lower()
-        
+
         if char.isdigit():
             if not is_number:
                 # Add number follows indicator at the start of numbers
-                braille += char_to_braille_mapping["Number follows"]
+                braille += char_to_braille_mapping["number follows"]
                 is_number = True
+
+            # If we're in decimal mode, add the decimal follows indicator
+            if is_decimal:
+                braille += char_to_braille_mapping["decimal follows"]
+                is_decimal = False
+
             braille += digit_to_braille_mapping[char]
+        
+        elif char == '.':
+            # If a decimal point is found, set the decimal mode flag
+            is_decimal = True
+        
         else:
+            # Exit number mode when a non-digit character is encountered
             if is_number:
-                # Exit number mode when a non-digit is encountered
                 is_number = False
-            if char in char_to_braille_mapping:
+
+            # Handle space explicitly
+            if char == " ":
+                braille += char_to_braille_mapping[" "]
+            # Add the Braille equivalent for other characters if they exist in the mapping
+            elif char in char_to_braille_mapping:
                 braille += char_to_braille_mapping[char]
 
     return braille
 
+
 def main():
-    input_text = ' '.join(sys.argv[1:])  
+    input_text = ' '.join(sys.argv[1:])
 
     english_to_braille_output = english_to_braille(input_text)
     print(english_to_braille_output)
