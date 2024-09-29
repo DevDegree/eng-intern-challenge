@@ -9,8 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "jest": "^29.7.0",
+    "braille-translator": "^2.0.1",
     "node": "^22.9.0"
   },
-  "keywords": []
+  "keywords": [],
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
 }
