@@ -122,7 +122,7 @@ def main():
     else:
         output = translator.translate_english_to_braille(inputs)
     
-    print(''.join(output))
+    sys.stdout.write(''.join(output))
         
 
 if __name__ == "__main__":
