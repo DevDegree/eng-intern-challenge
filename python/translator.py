@@ -114,7 +114,7 @@ def translate_braille_to_english(phrase):
         'OOOO..': '7',
         'O.OO..': '8',
         '.OO...': '9',
-        '.OOO..': 'O',
+        '.OOO..': '0',
         }
 
     phrase_length = len(phrase)
@@ -167,3 +167,5 @@ def main():
         return translate_braille_to_english(user_input)
 
 sys.stdout.write(main())
+OO
+'.OOO..': '0',
