@@ -1,11 +1,11 @@
 /*
  *  Author: Kaleb Jubar
  *  Created: 28 Sep 2024, 2:49:59 PM
- *  Last update: 29 Sep 2024, 12:13:11 PM
+ *  Last update: 29 Sep 2024, 12:16:26 PM
  *  Copyright (c) 2024 Kaleb Jubar
  */
 
-// English-to-Braille object
+// English-to-Braille dictionary object
 const englishToBraille = {
     // letters
     a: "O.....",
@@ -53,8 +53,8 @@ const englishToBraille = {
     " ": "......",
 };
 
-// Braille-to-English object
-// build automatically from the English-to-Braille object so I don't have to write it out twice
+// Braille-to-English dictionary object
+// build automatically from the English-to-Braille dictionary so I don't have to write it out twice
 // TODO: figure out number handling
 const brailleToEnglish = {};
 for (const letter in englishToBraille) {
@@ -173,4 +173,5 @@ function main() {
     console.log(output);
 }
 
+// invoke main
 main();
