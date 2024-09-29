@@ -96,7 +96,7 @@ def englishToBraille(table:dict, inputString:str):
             for j in range(index+1, len(inputArray)):
                 if inputArray[j] == " ":
                     translation += table[" "]
-                    index = j + 1 # we will translate the char right after the space
+                    index = j  # we will translate the char right after the space
                     break
                 else:
                     if (inputArray[j] == ","):
@@ -192,7 +192,10 @@ def main():
 
     toTranslate = ""
     for i in range(1, len(sys.argv)):
-        toTranslate += sys.argv[i]
+        if i == (len(sys.argv) - 1):
+            toTranslate += sys.argv[i]
+        else:
+            toTranslate += sys.argv[i] + " "
 
     res = ""
     if detectLang(toTranslate) == "English":
