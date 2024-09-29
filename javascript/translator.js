@@ -68,7 +68,7 @@ const translateToEnglish = (braille) => {
   let capitalizeNext = false;
   let numberMode = false;
   const brailleSymbolsArray = Object.keys(brailleSymbols);
-
+  const brailleSymbolsArrayWithoutNumbers = brailleSymbolsArray.slice(10);
   const symbols = braille
     .trim()
     .split(/(.{6})/)
@@ -89,9 +89,9 @@ const translateToEnglish = (braille) => {
         );
         result += char;
       } else {
-        let char = brailleSymbolsArray
-          .slice(10)
-          .find((key) => brailleSymbols[key] === symbol);
+        let char = brailleSymbolsArrayWithoutNumbers.find(
+          (key) => brailleSymbols[key] === symbol
+        );
         result += capitalizeNext && char ? char.toUpperCase() : char;
       }
       capitalizeNext = false;
