@@ -88,44 +88,62 @@ const numberTranslattionObject = {
     ".OO...": "9",
     ".OOO..": "0",
 }
-// Need to create a seperate object for numbers
-// Need to handle numbers
-
-// Only thing left is to translate numbers into braille
 
 const stringToTranslate = process.argv.slice(2).join(' ');
 if (!stringToTranslate) {
     console.log("Please provide string to translate");
     return;
 }
-let translatedString = "";
+
+
 // First translate from braile to english
 const stringSample = stringToTranslate.slice(0, 6);
 const isBraille = brailleTranslationObject[stringSample];
-let singleBrailleLetter = "";
 
 const checkUpperCase = (letter) => {
-    if(letter !== letter.toLowerCase()){
+    if (letter !== letter.toLowerCase()) {
         return ".....O" + englishTranslationObject[letter.toLowerCase()];
     }
     return englishTranslationObject[letter]
 }
-// 1-> .O.OOO O.....
-let toggleCapitalLetter = false;
-let toggleNumberMode = false;
-for (let i = 0; i < stringToTranslate.length; i++) {
-    if (isBraille) {
-        singleBrailleLetter = singleBrailleLetter + stringToTranslate.charAt(i);
+
+const convertEnglishToBraille = (string) => {
+    let translatedString = "";
+    let toggleNumberMode = false;
+    for (let i = 0; i < string.length; i++) {
+        const currentLetter = string.charAt(i);
+        if (currentLetter === " ") {
+            toggleNumberMode = false;
+            translatedString = translatedString + englishTranslationObject[currentLetter];
+            continue;
+        }
+        if (!isNaN(currentLetter) && toggleNumberMode === false) {
+            translatedString = translatedString + englishTranslationObject["number"] + englishTranslationObject[currentLetter];
+            toggleNumberMode = true;
+            continue;
+        }
+        const brailleEquivalent = toggleNumberMode ? englishTranslationObject[currentLetter] : checkUpperCase(currentLetter);
+        translatedString = translatedString + brailleEquivalent;
+    }
+    return translatedString;
+}
+const convertBrailleToEnglish = (string) => {
+    let translatedString = "";
+    let singleBrailleLetter = "";
+    let toggleCapitalLetter = false;
+    let toggleNumberMode = false;
+    for (let i = 0; i < string.length; i++) {
+        singleBrailleLetter = singleBrailleLetter + string.charAt(i);
         if (singleBrailleLetter.length === 6) {
-            if(singleBrailleLetter === "......"){
+            if (singleBrailleLetter === "......") {
                 toggleNumberMode = false;
             }
-            if(singleBrailleLetter === ".O.OOO"){
+            if (singleBrailleLetter === ".O.OOO") {
                 toggleNumberMode = true;
                 singleBrailleLetter = ""
                 continue;
             }
-            if(singleBrailleLetter === ".....O"){
+            if (singleBrailleLetter === ".....O") {
                 toggleCapitalLetter = true;
                 singleBrailleLetter = "";
                 continue;
@@ -139,21 +157,9 @@ for (let i = 0; i < stringToTranslate.length; i++) {
         }
         continue;
     }
-    const currentLetter = stringToTranslate.charAt(i);
-    if(currentLetter === " "){
-        toggleNumberMode = false;
-        // console.log("line 145", currentLetter)
-        translatedString = translatedString + englishTranslationObject[currentLetter];
-        continue;
-    }
-    if(!isNaN(currentLetter) && toggleNumberMode === false){
-        // console.log("line 150:", currentLetter)
-        translatedString = translatedString + englishTranslationObject["number"] + englishTranslationObject[currentLetter]; 
-        toggleNumberMode = true;
-        continue;
-    }
-    const brailleEquivalent = toggleNumberMode ? englishTranslationObject[currentLetter] : checkUpperCase(currentLetter);
-    translatedString = translatedString + brailleEquivalent;
+    return translatedString;
 }
 
-console.log(translatedString);
+
+const finalTranslation = isBraille ? convertBrailleToEnglish(stringToTranslate) : convertEnglishToBraille(stringToTranslate);
+console.log(finalTranslation);
