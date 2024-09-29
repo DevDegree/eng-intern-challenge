@@ -1,5 +1,3 @@
-// Create english object
-// Create braille object
 const englishTranslationObject = {
     "a": "O.....",
     "b": "O.O...",
@@ -91,18 +89,6 @@ const numberTranslationObject = {
 
 // Edge cases what happens if user inputs english and braille?
 
-// Capture every input after file name in terminal
-const stringToTranslate = process.argv.slice(2).join(' ');
-// If no string is found, return an error message in Braille and English
-// Braille will come first in order to clarify users who are visually impaired
-if (!stringToTranslate) {
-    console.log(".....OOOO.O.O.O.O.O..O..O......OO.O.O..O........OOO.O.O.OOO.O..OO.O.O.OO.OO...OO.O..O..O........O............OO.O..OOOO.O.OOO..OO...OO.OO.OOOO.........OOOO.O..OO........OOOO.O.OOO.O.....OO.OO..OO.O.O.O.O.O......OOOO.O..O..\nPlease provide a string to translate");
-    return;
-}
-
-const stringSample = stringToTranslate.slice(0, 6);
-const isBraille = brailleTranslationObject[stringSample];
-
 // This will convert the letter to uppercase if needed
 const checkUpperCase = (letter) => {
     if (letter !== letter.toLowerCase()) {
@@ -163,6 +149,17 @@ const convertBrailleToEnglish = (string) => {
     return translatedString;
 }
 
+// Capture every input after file name in terminal
+const stringToTranslate = process.argv.slice(2).join(' ');
+// If no string is found, return an error message in Braille and English
+// Braille will come first in order to clarify users who are visually impaired
+if (!stringToTranslate) {
+    console.log(".....OOOO.O.O.O.O.O..O..O......OO.O.O..O........OOO.O.O.OOO.O..OO.O.O.OO.OO...OO.O..O..O........O............OO.O..OOOO.O.OOO..OO...OO.OO.OOOO.........OOOO.O..OO........OOOO.O.OOO.O.....OO.OO..OO.O.O.O.O.O......OOOO.O..O..\nPlease provide a string to translate");
+    return;
+}
+
+const stringSample = stringToTranslate.slice(0, 6);
+const isBraille = brailleTranslationObject[stringSample];
 
 const finalTranslation = isBraille ? convertBrailleToEnglish(stringToTranslate) : convertEnglishToBraille(stringToTranslate);
 console.log(finalTranslation);
