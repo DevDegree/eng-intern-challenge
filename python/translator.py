@@ -42,7 +42,7 @@ class Translator:
     def is_braille(self, s):
         return len(s) % 6 == 0 and all(c in ['O', '.'] for c in s)
     
-    def translate_english_to_braille(self, sentence: str) -> list[str]:
+    def translate_english_to_braille(self, sentence):
         temp = []
         is_first_digit = True
         englify = False
@@ -70,7 +70,7 @@ class Translator:
                  
                  
     
-    def translate_braille_to_english(self, sentence: str) -> list[str]:
+    def translate_braille_to_english(self, sentence):
         temp = []
         x = 0
         capitalize = False
