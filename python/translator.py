@@ -43,11 +43,14 @@ def check_braille(str):
 # Translates input (braille) string and outputs english string 
 def translate_to_braille(str):
     output_str = []
+    outputting_number = False # Realized I need this for multi-digit numbers
 
     for char in str:
         # If it's a number, add the number prefix & the number
         if char.isdigit():
-            output_str.append("O.OOOO") 
+            if not outputting_number : #If it's the first digit of the number, add the prefix
+                output_str.append("O.OOOO") 
+                outputting_number = True
             output_str.append(english_to_braille[char])
         # If it's a letter, check if it's upper or lower case and add the prefix (or don't)
         elif char.isalpha():
@@ -56,9 +59,11 @@ def translate_to_braille(str):
                 output_str.append(english_to_braille[char.lower()])
             else:
                 output_str.append(english_to_braille[char])
+            outputting_number = False  # Since it's a letter, disable this
         # If it's a space, add the braille-space char representation
         elif char == ' ':
             output_str.append("......")
+            outputting_number = False  # Since it's a letter, disable this
 
     return ''.join(output_str)
 
