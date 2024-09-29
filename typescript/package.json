@@ -1,7 +1,7 @@
 {
   "name": "typescript",
   "version": "1.0.0",
-  "description": "",
+  "description": "English to Braille Translator",
   "main": "translator.ts",
   "scripts": {
     "test": "jest"
