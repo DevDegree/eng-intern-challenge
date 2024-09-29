@@ -1,7 +1,7 @@
 /*
  *  Author: Kaleb Jubar
  *  Created: 28 Sep 2024, 2:49:59 PM
- *  Last update: 28 Sep 2024, 4:09:02 PM
+ *  Last update: 29 Sep 2024, 11:53:53 AM
  *  Copyright (c) 2024 Kaleb Jubar
  */
 
@@ -105,15 +105,46 @@ function main() {
     // TODO: determine if this can be easily done in one loop without an if
     if (inputInBraille) {
         // parse Braille string
+        let parseNum = false, parseCapital = false;
         for (let i = 0; i < input.length; i += 6) {
-            // TODO: implement Braille
-            output += brailleToEnglish[input.slice(i, i + 6)];
+            const char = brailleToEnglish[input.slice(i, i + 6)];
+
+            // reset flags on space
+            if (char === " ") {
+                parseNum = false;
+                parseCapital = false;
+                output += char;
+            }
+            // set flags
+            else if (char === "capital") {
+                parseCapital = true;
+            }
+            else if (char === "number") {
+                parseNum = true;
+            }
+            // parse normal character
+            else {
+                // capital set
+                if (parseCapital) {
+                    output += char.toUpperCase();
+                    parseCapital = false;   // flag only applies to next letter
+                }
+                // number set
+                else if (parseNum) {
+                    // TODO: handle numbers, Braille goes from 1-9 then 0 but ASCII is 0-9
+                    output += char;
+                }
+                // no flag, just append character
+                else {
+                    output += char;
+                }
+            }
         }
     } else {
         // parse English string
         for (const char of input) {
             // TODO: implement English
-            output += englishToBraille[char];
+            output += `${englishToBraille[char]} `;
         }
     }
 
