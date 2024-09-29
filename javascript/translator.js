@@ -129,7 +129,7 @@ const convertEnglishToBraille = (string) => {
 }
 const convertBrailleToEnglish = (string) => {
     // Check if it is a valid Braille input
-    if(string.length % 6 !== 0){
+    if (string.length % 6 !== 0) {
         return "\n.....OOOO.O.O.O.O.O..O..O......OO.O.O..O........O..O..OO.OO..OOOO.O..O..O.OOO.......O...........O.O.OOO.....O.O.O..OO...OO.O.............OO.O...O.OOO.O......OO...O.O.O.O.O.O.O..O.........OO.O..OOOO.O.OOO..OO...OO.OO.OOOO..\nPlease enter a valid Braille string"
     }
     let translatedString = "";
@@ -138,32 +138,25 @@ const convertBrailleToEnglish = (string) => {
     let toggleNumberMode = false;
     // i += 6
     // 
-    for (let i = 0; i < string.length; i+= 6) {
+    for (let i = 0; i < string.length; i += 6) {
         // could count per six to make it faster
         let singleBrailleLetter = string.slice(i, i + 6);
-        // singleBrailleLetter = singleBrailleLetter + string.charAt(i);
-        if (singleBrailleLetter.length === 6) {
-            if (singleBrailleLetter === englishTranslationObject[" "]) {
-                toggleNumberMode = false;
-            }
-            if (singleBrailleLetter === englishTranslationObject["number"]) {
-                toggleNumberMode = true;
-                singleBrailleLetter = ""
-                continue;
-            }
-            if (singleBrailleLetter === englishTranslationObject["capital"]) {
-                toggleCapitalLetter = true;
-                singleBrailleLetter = "";
-                continue;
-            }
-            let englishEquivalent = brailleTranslationObject[singleBrailleLetter];
-            toggleCapitalLetter && (englishEquivalent = englishEquivalent.toUpperCase());
-            toggleNumberMode && (englishEquivalent = numberTranslattionObject[singleBrailleLetter]);
-            translatedString = translatedString + englishEquivalent;
-            singleBrailleLetter = "";
-            toggleCapitalLetter = false;
+        if (singleBrailleLetter === englishTranslationObject[" "]) {
+            toggleNumberMode = false;
         }
-        continue;
+        if (singleBrailleLetter === englishTranslationObject["number"]) {
+            toggleNumberMode = true;
+            continue;
+        }
+        if (singleBrailleLetter === englishTranslationObject["capital"]) {
+            toggleCapitalLetter = true;
+            continue;
+        }
+        let englishEquivalent = brailleTranslationObject[singleBrailleLetter];
+        toggleCapitalLetter && (englishEquivalent = englishEquivalent.toUpperCase());
+        toggleNumberMode && (englishEquivalent = numberTranslattionObject[singleBrailleLetter]);
+        translatedString = translatedString + englishEquivalent;
+        toggleCapitalLetter = false;
     }
     return translatedString;
 }
