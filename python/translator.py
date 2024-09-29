@@ -1,4 +1,4 @@
-# Braille Translator - Python Implementation
+import sys
 
 # Braille alphabet mapping (raised dots as O, empty dots as .)
 braille_dict = {
@@ -29,7 +29,6 @@ def translate_to_braille(text):
 def translate_to_english(braille_text):
     """Translate Braille to English."""
     english_output = ''
-    # Split the input braille into chunks of 6 to represent each Braille character
     for i in range(0, len(braille_text), 6):
         braille_char = braille_text[i:i+6]
         if braille_char in reverse_braille_dict:
@@ -43,9 +42,10 @@ def braille_translator(input_string):
     else:
         return translate_to_braille(input_string)
 
-# Example usage:
-print(braille_translator("Hello world"))  # Translates to Braille
-print(braille_translator("O.....O.O..."))  # Translates to English
-
-
-
+if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        print("Usage: python translator.py <input_string>")
+    else:
+        input_string = sys.argv[1]
+        result = braille_translator(input_string)
+        print(result)
