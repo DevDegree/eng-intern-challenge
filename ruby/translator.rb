@@ -44,8 +44,8 @@ NUMBER_TO_BRAILLE = {
 BRAILLE_TO_ALPHABET = ALPHABET_TO_BRAILLE.invert.freeze
 BRAILLE_TO_NUMBER = NUMBER_TO_BRAILLE.invert.freeze
 
-CAPITAL_FOLLOWS = '.....O'
-NUMBER_FOLLOWS = '.O.OOO'
+CAPITAL_FOLLOWS = '.....O'.freeze
+NUMBER_FOLLOWS = '.O.OOO'.freeze
 
 input_string = ARGV.join(' ')
 is_braille = input_string.count('^.O').zero? && (input_string.length % 6).zero?
