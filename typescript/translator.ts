@@ -23,7 +23,7 @@ interface Braille_t_Command {
 }
 
 const braille_t_eng: Braille_t_Eng = {
-  // "..0.. and so on": "eng letter"
+  // "..O.. and so on": "eng letter"
   "O.....": "a",
   "O.O...": "b",
   "OO....": "c",
@@ -55,7 +55,7 @@ const braille_t_eng: Braille_t_Eng = {
 }
 
 const eng_t_braille: Eng_t_Braille = {
-  // "eng letter": "..0.. and so on"
+  // "eng letter": "..O.. and so on"
   "a": "O.....",
   "b": "O.O...",
   "c": "OO....",
@@ -132,14 +132,14 @@ function checkBraille(str: string): false|string[] {
   const brailleSlice: string[] = []
 
   for (let i = 0; i < str.length; i++) {
-    if (str[i] != "O" || str[i] != ".") {
+    if (str[i] != "O" && str[i] != ".") {
       return false;
     }
 
-    if ((i % 6 == 0) && (i + 6 < str.length)) {
+    if ((i % 6 == 0) && (i + 6 <= str.length)) {
       const sample = str.slice(i, i + 6)
       // braille_t_num not included as they're also in eng
-      if (!eng_t_braille[sample] || ! braille_t_command[sample]) {
+      if (!braille_t_eng[sample] && !braille_t_command[sample]) {
         return false;
       }
       brailleSlice.push(sample);
@@ -155,7 +155,9 @@ function translateTEng(braille: Braille[]): string {
   let cap = false;
   let num = false;
   let deci = false;
-  for (const brailleSlice in  braille) {
+  for (let i = 0; i < braille.length; i++) {
+    const brailleSlice = braille[i];
+
     const command = braille_t_command[brailleSlice] || "";
     if (command?.length > 0) {
       if (command == "CAP") {
@@ -179,7 +181,13 @@ function translateTEng(braille: Braille[]): string {
       cap = false;
     } else if (num) {
       englishStr += braille_t_num[brailleSlice];
-      num = false;
+
+      if (i + 1 < braille.length && braille_t_num[braille[i + 1]]) {
+        num = true; // retain num flag for next digit
+      } else {
+        num = false;
+      }
+      
     } else if (deci) {
       englishStr += ".";
       deci = false;
