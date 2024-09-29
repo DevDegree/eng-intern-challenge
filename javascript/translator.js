@@ -87,8 +87,6 @@ const numberTranslationObject = {
     ".OOO..": "0",
 }
 
-// Edge cases what happens if user inputs english and braille?
-
 // This will convert the letter to uppercase if needed
 const checkUpperCase = (letter) => {
     if (letter !== letter.toLowerCase()) {
@@ -102,18 +100,18 @@ const convertEnglishToBraille = (string) => {
     let toggleNumberMode = false;
     for (let i = 0; i < string.length; i++) {
         const currentLetter = string.charAt(i);
-        if (currentLetter === brailleTranslationObject["......"]) {
+        if (currentLetter === " ") {
             toggleNumberMode = false;
-            translatedString = translatedString + englishTranslationObject[currentLetter];
+            translatedString += englishTranslationObject[currentLetter];
             continue;
         }
         if (!isNaN(currentLetter) && toggleNumberMode === false) {
-            translatedString = translatedString + englishTranslationObject["number"] + englishTranslationObject[currentLetter];
+            translatedString += englishTranslationObject["number"] + englishTranslationObject[currentLetter];
             toggleNumberMode = true;
             continue;
         }
         const brailleEquivalent = toggleNumberMode ? englishTranslationObject[currentLetter] : checkUpperCase(currentLetter);
-        translatedString = translatedString + brailleEquivalent;
+        translatedString += brailleEquivalent;
     }
     return translatedString;
 }
@@ -129,21 +127,21 @@ const convertBrailleToEnglish = (string) => {
     for (let i = 0; i < string.length; i += 6) {
         // Counting by 6 make the itteration faster since Braille strings are longer
         let singleBrailleLetter = string.slice(i, i + 6);
-        if (singleBrailleLetter === englishTranslationObject[" "]) {
+        if (singleBrailleLetter === "......") {
             toggleNumberMode = false;
         }
-        if (singleBrailleLetter === englishTranslationObject["number"]) {
+        if (singleBrailleLetter === ".O.OOO") {
             toggleNumberMode = true;
             continue;
         }
-        if (singleBrailleLetter === englishTranslationObject["capital"]) {
+        if (singleBrailleLetter === ".....O") {
             toggleCapitalLetter = true;
             continue;
         }
         let englishEquivalent = brailleTranslationObject[singleBrailleLetter];
         toggleCapitalLetter && (englishEquivalent = englishEquivalent.toUpperCase());
         toggleNumberMode && (englishEquivalent = numberTranslationObject[singleBrailleLetter]);
-        translatedString = translatedString + englishEquivalent;
+        translatedString += englishEquivalent;
         toggleCapitalLetter = false;
     }
     return translatedString;
