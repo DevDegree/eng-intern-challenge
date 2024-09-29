@@ -1,5 +1,6 @@
 import sys
 
+# Maps: English -> Braille
 ALPHABET_TO_BRAILLE_DICT = {
   'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..', 'f': 'OOO...',
   'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..', 'k': 'O...O.', 'l': 'O.O.O.',
@@ -17,17 +18,28 @@ SPECIAL_TO_BRAILLE_DICT = {
   ' ': '......'
 }
 
-BRAILLE_CAPITAL_NEXT = '.....O'
-BRAILLE_DECIMAL_NEXT = '.O...O'
-BRAILLE_NUMBER_NEXT  = '.O.OOO'
-
+# Maps: Braille -> English
 BRAILLE_TO_ALPHABET_DICT = {v: k for k, v in ALPHABET_TO_BRAILLE_DICT.items()}
 BRAILLE_TO_NUMBER_DICT = {v: k for k, v in NUMBER_TO_BRAILLE_DICT.items()}
 BRAILLE_TO_SPECIAL_DICT = {v: k for k, v in SPECIAL_TO_BRAILLE_DICT.items()}
 
+# Braille modifier constants
+BRAILLE_CAPITAL_NEXT = '.....O'
+BRAILLE_DECIMAL_NEXT = '.O...O'
+BRAILLE_NUMBER_NEXT  = '.O.OOO'
+
 CHARS_PER_BRAILLE_CELL = 6
 
 def text_is_braille(text: str) -> bool:
+  """
+  Check if the given text is Braille or English
+  
+  Args:
+    text (str): Text to be checked
+
+  Returns:
+    bool: True if the text is Braille, False if English
+  """
   for char in text:
     if char not in {'O', '.'}:
       return False
@@ -35,24 +47,53 @@ def text_is_braille(text: str) -> bool:
   return len(text) % CHARS_PER_BRAILLE_CELL == 0
 
 def split_braille_into_cells(braille_text: str) -> list:
+  """
+  Splits braille_text string into length 6 Braille cells
+  
+  Args:
+    braille_text (str): Braille text to be split into cells
+
+  Returns:
+    list: List of valid Braille cells
+  """
   braille_cells = []
 
-  for i in range(len(braille_text) / CHARS_PER_BRAILLE_CELL):
+  for i in range(int(len(braille_text) / CHARS_PER_BRAILLE_CELL)):
     braille_cell = braille_text[(i * CHARS_PER_BRAILLE_CELL):((i + 1) * CHARS_PER_BRAILLE_CELL)]
     braille_cells.append(braille_cell)
 
   return braille_cells
 
-def is_decimal_ahead(target_string: str, begin_index: int) -> bool:
-  for char in target_string[begin_index:]:
+def is_decimal_ahead(english_text: str, begin_index: int) -> bool:
+  """
+  Checks if the numeric value of the english_text starting at begin_index is
+  a decimal or non-decimal number
+
+  Args:
+    english_text (str): english text to be scanned
+    begin_index (int): index to start scanning english_text
+
+  Returns:
+    bool: True if the number is a decimal, False if not
+  """
+  for char in english_text[begin_index:]:
     if char == '.':
       return True
     elif char == ' ':
       return False
   return False
 
-def braille_to_english(INPUT_TEXT: str) -> str:
-  INPUT_BRAILLE_CELLS = split_braille_into_cells(INPUT_TEXT)
+def braille_to_english(input_text: str) -> str:
+  """
+  Translates Braille text into corresponding English text
+
+  Args:
+    input_text (str): input Braille text
+
+  Returns:
+    str: output English text
+  """
+  INPUT_BRAILLE_CELLS = split_braille_into_cells(input_text)
   current_cell_index = 0
   mode = 'default'
   translated_text = ''
@@ -90,13 +131,22 @@ def braille_to_english(INPUT_TEXT: str) -> str:
   
   return translated_text
 
-def english_to_braille(INPUT_TEXT: str) -> str:
+def english_to_braille(input_text: str) -> str:
+  """
+  Translates English text into corresponding Braille text
+
+  Args:
+    input_text (str): input English text
+
+  Returns:
+    str: output Braille text
+  """
   current_char_index = 0
   mode = 'default'
   translated_text = ''
 
-  while current_char_index < len(INPUT_TEXT):
-    current_char = INPUT_TEXT[current_char_index]
+  while current_char_index < len(input_text):
+    current_char = input_text[current_char_index]
     if mode == 'default':
       if current_char.isalpha():
         if current_char.isupper():
@@ -105,7 +155,7 @@ def english_to_braille(INPUT_TEXT: str) -> str:
       elif current_char == ' ':
         translated_text += SPECIAL_TO_BRAILLE_DICT[' ']
       elif current_char.isnumeric():
-        is_decimal = is_decimal_ahead(INPUT_TEXT, current_char_index)
+        is_decimal = is_decimal_ahead(input_text, current_char_index)
         translated_text += BRAILLE_DECIMAL_NEXT if is_decimal else BRAILLE_NUMBER_NEXT
         mode = 'decimal' if is_decimal else 'number'
         continue
