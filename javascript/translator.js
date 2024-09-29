@@ -82,9 +82,22 @@ if(!stringToTranslate){
 }
 let translatedString = "";
 // First translate from english to braile
+// for(let i = 0; i < stringToTranslate.length; i++){
+//     const currentLetter = stringToTranslate.charAt(i);
+//     const brailleEquivalent = englishTranslationObject[currentLetter];
+//     translatedString = translatedString + brailleEquivalent;
+// }
+
+// First translate from braile to english
+// Can't use the same loop as it each braille character is 6 digits long
+let singleBrailleLetter = "";
 for(let i = 0; i < stringToTranslate.length; i++){
-    const currentLetter = stringToTranslate.charAt(i);
-    const brailleEquivalent = englishTranslationObject[currentLetter];
-    translatedString = translatedString + brailleEquivalent;
+    singleBrailleLetter = singleBrailleLetter + stringToTranslate.charAt(i);
+    if(singleBrailleLetter.length === 6){
+        const englishEquivalent = brailleTranslationObject[singleBrailleLetter];
+        translatedString = translatedString + englishEquivalent;
+        singleBrailleLetter = "";
+    }
 }
+
 console.log(translatedString)
