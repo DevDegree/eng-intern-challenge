@@ -1,7 +1,7 @@
 /*
  *  Author: Kaleb Jubar
  *  Created: 28 Sep 2024, 2:49:59 PM
- *  Last update: 29 Sep 2024, 11:53:53 AM
+ *  Last update: 29 Sep 2024, 12:08:55 PM
  *  Copyright (c) 2024 Kaleb Jubar
  */
 
@@ -142,9 +142,32 @@ function main() {
         }
     } else {
         // parse English string
+        let numFlagAdded = false;
         for (const char of input) {
-            // TODO: implement English
-            output += `${englishToBraille[char]} `;
+            // reset number flag on space
+            if (char === " ") {
+                numFlagAdded = false;
+                output += englishToBraille[char];
+            }
+            // char is a number, handle number parsing
+            else if (!Number.isNaN(+char)) {
+                // add number flag to output if it hasn't been already
+                if (!numFlagAdded) {
+                    output += englishToBraille.number
+                    numFlagAdded = true;
+                }
+
+                output += englishToBraille[char];
+            }
+            // char is a capital letter
+            else if (char === char.toUpperCase()) {
+                output += englishToBraille.capital;
+                output += englishToBraille[char.toLowerCase()];
+            }
+            // char is a lowercase letter
+            else {
+                output += englishToBraille[char];
+            }
         }
     }
 
