@@ -39,7 +39,7 @@ const englishTranslationObject = {
     "0": ".OOO..",
     " ": "......",
     "capital": ".....O",
-    "number": ".O.OOO", //could get rid of;
+    "number": ".O.OOO",
     ".": "..OO.O"
 };
 
@@ -88,7 +88,6 @@ const numberTranslattionObject = {
     ".OO...": "9",
     ".OOO..": "0",
 }
-
 const stringToTranslate = process.argv.slice(2).join(' ');
 if (!stringToTranslate) {
     console.log("Please provide string to translate");
@@ -100,6 +99,7 @@ if (!stringToTranslate) {
 const stringSample = stringToTranslate.slice(0, 6);
 const isBraille = brailleTranslationObject[stringSample];
 
+// This will convert the letter to uppercase if needed
 const checkUpperCase = (letter) => {
     if (letter !== letter.toLowerCase()) {
         return ".....O" + englishTranslationObject[letter.toLowerCase()];
@@ -128,22 +128,28 @@ const convertEnglishToBraille = (string) => {
     return translatedString;
 }
 const convertBrailleToEnglish = (string) => {
+    // Check if it is a valid Braille input
+    if(string % 6 !== 0){
+        return "\n.....OOOO.O.O.O.O.O..O..O......OO.O.O..O........O..O..OO.OO..OOOO.O..O..O.OOO.......O...........O.O.OOO.....O.O.O..OO...OO.O.............OO.O...O.OOO.O......OO...O.O.O.O.O.O.O..O.........OO.O..OOOO.O.OOO..OO...OO.OO.OOOO..\nPlease enter a valid Braille string"
+    }
     let translatedString = "";
     let singleBrailleLetter = "";
     let toggleCapitalLetter = false;
     let toggleNumberMode = false;
     for (let i = 0; i < string.length; i++) {
+        // could count per six to make it faster
+        
         singleBrailleLetter = singleBrailleLetter + string.charAt(i);
         if (singleBrailleLetter.length === 6) {
-            if (singleBrailleLetter === "......") {
+            if (singleBrailleLetter === englishTranslationObject[" "]) {
                 toggleNumberMode = false;
             }
-            if (singleBrailleLetter === ".O.OOO") {
+            if (singleBrailleLetter === englishTranslationObject["number"]) {
                 toggleNumberMode = true;
                 singleBrailleLetter = ""
                 continue;
             }
-            if (singleBrailleLetter === ".....O") {
+            if (singleBrailleLetter === englishTranslationObject["capital"]) {
                 toggleCapitalLetter = true;
                 singleBrailleLetter = "";
                 continue;
