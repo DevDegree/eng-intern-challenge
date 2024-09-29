@@ -1,107 +1,105 @@
-// Run the code: node translator.js "your input"
-
-// create a object map
-const brailleDict = {
-    'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
-    'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..',
-    'k': 'O...O.', 'l': 'O.O.O.', 'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.',
-    'p': 'OOO.O.', 'q': 'OOOOO.', 'r': 'O.OOO.', 's': '.OO.O.', 't': '.OOOO.',
-    'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO',
-    'z': 'O..OOO', 'cap': '.....O', 'num': '.O.OOO', 'space': '......',
-    '0': '.OOO..', '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..',
-    '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': 'O...OO'
+const brailleToEnglishMap = {
+    "O.....": "a", "O.O...": "b", "OO....": "c", "OO.O..": "d", "O..O..": "e",
+    "OOO...": "f", "OOOO..": "g", "O.OO..": "h", ".OO...": "i", ".OOO..": "j",
+    "O...O.": "k", "O.O.O.": "l", "OO..O.": "m", "OO.OO.": "n", "O..OO.": "o",
+    "OOO.O.": "p", "OOOOO.": "q", "O.OOO.": "r", ".OO.O.": "s", ".OOOO.": "t",
+    "O...OO": "u", "O.O.OO": "v", ".OOO.O": "w", "OO..OO": "x", "OO.OOO": "y", 
+    "O..OOO": "z",
+    ".....O": "capital follows", 
+    ".O.OOO": "number follows",  
+    "......": " "               
 };
-// reverse dictionary to translate Braille back to English letters.
-const brailleToEnglishDict = Object.fromEntries(
-    Object.entries(brailleDict).map(([char, braille]) => [braille, char])
-);
 
-// checks if the input string is in Braille.
-function isBraille(input) {
-    return /^[O.]+$/.test(input.trim());
-}
-// translates English text to Braille.
-function translateToBraille(text) {
-    let brailleOutput = [];
-    let numberMode = false;
+const englishToBrailleMap = {
+    "a": "O.....", "b": "O.O...", "c": "OO....", "d": "OO.O..", "e": "O..O..",
+    "f": "OOO...", "g": "OOOO..", "h": "O.OO..", "i": ".OO...", "j": ".OOO..",
+    "k": "O...O.", "l": "O.O.O.", "m": "OO..O.", "n": "OO.OO.", "o": "O..OO.",
+    "p": "OOO.O.", "q": "OOOOO.", "r": "O.OOO.", "s": ".OO.O.", "t": ".OOOO.",
+    "u": "O...OO", "v": "O.O.OO", "w": ".OOO.O", "x": "OO..OO", "y": "OO.OOO",
+    "z": "O..OOO",
+    "1": "O.....", "2": "O.O...", "3": "OO....", "4": "OO.O..", "5": "O..O..",
+    "6": "OOO...", "7": "OOOO..", "8": "O.OO..", "9": ".OO...", "0": ".OOO..",
+    " ": "......"
+};
 
-    for (let char of text) {
-        if (char === ' ') {
-            brailleOutput.push(brailleDict['space']);
-        } else if (/\d/.test(char)) {
-            if (!numberMode) {
-                brailleOutput.push(brailleDict['num']);
-                numberMode = true;
-            }
-            brailleOutput.push(brailleDict[char]);
+
+const translateToEnglish = (brailleString) => {
+    let result = "";
+    let isCapital = false;
+    let isNumber = false;
+
+    for (let i = 0; i < brailleString.length; i += 6) {
+        const word = brailleString.slice(i, i + 6);
+        if (brailleToEnglishMap[word] === "capital follows") {
+            isCapital = true;
+            isNumber = false; 
+        } else if (brailleToEnglishMap[word] === "number follows") {
+            isNumber = true;  
+        } else if (word === "......") {
+            result += " ";
+            isNumber = false;  
         } else {
-            if (!brailleDict[char.toLowerCase()]) {
-                console.warn(`Warning: Character "${char}" is not supported.`);
-                continue;
+            let char = brailleToEnglishMap[word];
+            if (char === undefined) continue;  
+            if (isCapital) {
+                char = char.toUpperCase();
+                isCapital = false;
+            }
+            if (isNumber) {
+                // Convert letters a-j to corresponding numbers 1-9, 0
+                if (char >= 'a' && char <= 'j') {
+                    char = String.fromCharCode(char.charCodeAt(0) - 'a'.charCodeAt(0) + '1'.charCodeAt(0));
+                }
             }
 
-            if (char === char.toUpperCase() && char !== ' ') {
-                brailleOutput.push(brailleDict['cap']);
-            }
-            brailleOutput.push(brailleDict[char.toLowerCase()]);
-            numberMode = false;
+            result += char;
         }
     }
-    return brailleOutput.join('');
-}
-// translates Braille text back to English.
-function translateFromBraille(brailleText) {
-    let englishOutput = [];
-    let numberMode = false;
-    let capitalizeNext = false;
 
-    for (let i = 0; i < brailleText.length; i += 6) {
-        let symbol = brailleText.slice(i, i + 6);
+    return result;
+};
 
-        if (symbol === brailleDict['num']) {
-            numberMode = true;
-            continue;
+
+
+const translateToBraille = (englishString) => {
+    let result = [];
+    let isNumber = false;
+
+    for (let char of englishString) {
+        // Handle uppercase letters 
+        if (/[A-Z]/.test(char)) {
+            result.push(".....O"); 
+            char = char.toLowerCase(); 
         }
-
-        if (symbol === brailleDict['cap']) {
-            capitalizeNext = true;
-            continue;
-        }
-
-        if (symbol === brailleDict['space']) {
-            englishOutput.push(' ');
-            numberMode = false;
-            continue;
-        }
-
-        let char = brailleToEnglishDict[symbol];
-
-        if (numberMode) {
-            if (char >= 'a' && char <= 'j') {
-                let number = (char.charCodeAt(0) - 'a'.charCodeAt(0) + 1).toString();
-                englishOutput.push(number);
-            } else if (char === 'j') {
-                englishOutput.push('0');
+        // Handle numbers 
+        else if (/[0-9]/.test(char)) {
+            if (!isNumber) {
+                result.push(".O.OOO"); 
+                isNumber = true;
             }
+            result.push(englishToBrailleMap[char]); // Direct mapping for numbers
             continue;
-        }
-
-        if (capitalizeNext && char) {
-            englishOutput.push(char.toUpperCase());
-            capitalizeNext = false;
         } else {
-            englishOutput.push(char);
+            isNumber = false;
+        }
+        // Handle spaces 
+        if (char === " ") {
+            result.push("......"); 
+        } else {
+            result.push(englishToBrailleMap[char]);
         }
     }
-    return englishOutput.join('');
-}
 
-// Get the input from the command line arguments.
-const input = process.argv.slice(2).join(' ');
+    return result.join("");
+};
 
-// Decide whether to translate the input to Braille or from Braille based on its format.
-if (isBraille(input)) {
-    console.log(translateFromBraille(input));
-} else {
-    console.log(translateToBraille(input));
-}
+const detectAndTranslate = (inputString) => {
+    if (inputString.includes("O") || inputString.includes(".")) {
+        return translateToEnglish(inputString);
+    } else {
+        return translateToBraille(inputString);
+    }
+};
+
+const inputString = process.argv.slice(2).join(" ");
+console.log(detectAndTranslate(inputString));
