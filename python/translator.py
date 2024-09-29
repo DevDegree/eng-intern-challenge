@@ -61,35 +61,43 @@ for digit in range(10):
     table[str(digit)] = table[chr(ord('a') + digit - 1)]
 
 # add capital letters
-capitalFlag = ".....O" # when met, only next letter is capital
-for ascii in range(ord('a'), ord('z') + 1):
-    table[chr(ascii).upper()] = capitalFlag + table[chr(ascii)]
+# when met, only next letter is capital
+# for ascii in range(ord('a'), ord('z') + 1):
+#     table[chr(ascii).upper()] = capitalFlag + table[chr(ascii)]
 
 # a function to translate English input to Braille
-def englishToBraille(str:input):
+def englishToBraille(inputString:str):
+    capitalFlag = ".....O"
+    numberFlag = ".O.OOO"
+    decimalFlag = ".O...O"
     # parse input char by char 
     # for each char, translate i
     translation = ""
-    inputArray = list(input)
+    inputArray = list(inputString)
     index = 0
 
     while index < len(inputArray):
         character = inputArray[index]
         # check if number
-        if (ord(character) >= 48 and ord(character) <= 57):
+        if '0' <= character <= '9':
             # we have a digit
             translation += numberFlag + table[str(character)]
             # we keep going until we see a space 
-            for j in range(index, len(inputArray)):
+            for j in range(index+1, len(inputArray)):
                 if inputArray[j] == " ":
                     translation += table[" "]
+                    index = j + 1 # we will translate the char right after the space
                     break
                 else:
-                    translation += table[inputArray[j]]
+                    if (inputArray[j] == ","):
+                        translation += decimalFlag # + table[inputArray[j]] # do we add the regular decimal even after the flag, or only the flag
+                    else:
+                        translation += table[inputArray[j]]
+                    index = j # index has got to keep up
 
-        elif (ord(character) >= 65 and ord(character) <= 90):
+        elif 'A' <= character <= 'Z':
             # we have an uppercase letter
-            translation += capitalFlag + table[str(character)]
+            translation += capitalFlag + table[str(character).lower()]
 
         else:
             # we have a special character or a lowercase letter 
