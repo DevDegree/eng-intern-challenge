@@ -16,6 +16,9 @@ ENGLISH_TO_BRAILLE_NUMBERS = {
     '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..',
 }
 
-BRAILLE_TO_ENGLISH_MISC = {v: k for k, v in ENGLISH_TO_BRAILLE_MISC.items()}
-BRAILLE_TO_ENGLISH_LETTERS = {v: k for k, v in ENGLISH_TO_BRAILLE_LETTERS.items()}
-BRAILLE_TO_ENGLISH_NUMBERS = {v: k for k, v in ENGLISH_TO_BRAILLE_NUMBERS.items()}
+def invert_dictionary(dictionary):
+    return {v: k for k, v in dictionary.items()}
+
+BRAILLE_TO_ENGLISH_MISC = invert_dictionary(ENGLISH_TO_BRAILLE_MISC)
+BRAILLE_TO_ENGLISH_LETTERS = invert_dictionary(ENGLISH_TO_BRAILLE_LETTERS)
+BRAILLE_TO_ENGLISH_NUMBERS = invert_dictionary(ENGLISH_TO_BRAILLE_NUMBERS)
