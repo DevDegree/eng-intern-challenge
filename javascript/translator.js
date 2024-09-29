@@ -29,43 +29,32 @@ function englishToBraille(input) {
 
     for (let char of input) {
         if (/[A-Z]/.test(char)) {
-            // Capital letter
-            brailleOutput += capitalFollows + ' ' + brailleMap[char.toLowerCase()] + ' ';
-            isNumber = false; // Reset number flag
+            brailleOutput += capitalFollows + brailleMap[char.toLowerCase()]; // No space here
         } else if (/[0-9]/.test(char)) {
-            // Number follows before each digit
-            brailleOutput += numberFollows + ' ' + brailleMap[char] + ' ';
-            isNumber = true;  // Stay in number mode until non-number encountered
+            brailleOutput += numberFollows + brailleMap[char]; // No space here
         } else if (char === '.') {
-            // Decimal point
-            brailleOutput += decimalFollows + ' ';
-            isNumber = false; // Reset number flag
+            brailleOutput += decimalFollows; // No space here
         } else {
-            // Regular character
-            brailleOutput += brailleMap[char.toLowerCase()] + ' ';
-            isNumber = false; // Reset number flag
+            brailleOutput += brailleMap[char.toLowerCase()]; // No space here
         }
     }
 
-    return brailleOutput.trim();
+    return brailleOutput; // No need to trim, as spaces are managed
 }
 
 // Function to translate Braille to English considering follows
 function brailleToEnglish(input) {
-    let brailleArray = input.split(' ');
+    const brailleArray = input.match(/.{1,6}/g); // Split input into chunks of 6 characters (Braille cell)
     let englishOutput = '';
     let isCapital = false;
     let isNumber = false;
 
     for (let braille of brailleArray) {
         if (braille === capitalFollows) {
-            // Handle capital follows
             isCapital = true;
         } else if (braille === numberFollows) {
-            // Handle number follows
             isNumber = true;
         } else if (braille === decimalFollows) {
-            // Handle decimal point
             englishOutput += '.';
             isNumber = false;
         } else {
@@ -77,7 +66,6 @@ function brailleToEnglish(input) {
                 }
                 if (isNumber) {
                     if (/[a-j]/.test(char)) {
-                        // Convert a-j to 1-0 (Braille number representation)
                         char = (char.charCodeAt(0) - 96).toString(); // 'a' -> '1', 'b' -> '2', etc.
                     }
                     isNumber = false;  // Reset number flag after processing
@@ -90,33 +78,20 @@ function brailleToEnglish(input) {
     return englishOutput;
 }
 
-// Set up readline interface for command-line input
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
+// Main function to handle command-line input
+function main() {
+    const input = process.argv.slice(2).join(' ');
 
-// Function to start the app
-function startApp() {
-    rl.question('Choose translation mode (1: English to Braille, 2: Braille to English): ', (mode) => {
-        if (mode === '1') {
-            rl.question('Enter English text to translate to Braille: ', (input) => {
-                const braille = englishToBraille(input);
-                console.log('Braille translation:', braille);
-                rl.close();
-            });
-        } else if (mode === '2') {
-            rl.question('Enter Braille text to translate to English (use spaces between Braille characters): ', (input) => {
-                const english = brailleToEnglish(input);
-                console.log('English translation:', english);
-                rl.close();
-            });
-        } else {
-            console.log('Invalid option. Please choose 1 or 2.');
-            startApp();  // Restart if invalid input
-        }
-    });
+    // Check if input is Braille (contains 'O' and '.' characters)
+    const isBraille = /^[O.o]+$/.test(input);
+    
+    if (isBraille) {
+        // Translate from Braille to English
+        console.log(brailleToEnglish(input));
+    } else {
+        // Translate from English to Braille
+        console.log(englishToBraille(input));
+    }
 }
 
-// Start the app
-startApp();
+main();
