@@ -143,17 +143,24 @@ def brailleToEnglish(braille_table:dict, inputString:str):
             # If number flag is found
             index += 1
             while index < len(groups):
-                translation += braille_table["n" + groups[index]]  # Use "?" for unrecognized Braille
+                if (groups[index] == decimalFlag):
+                    translation += ","
+                    index += 1
+                    continue
+
+                translation += braille_table["n" + groups[index]]  
                 index += 1
                 if index < len(groups) and groups[index - 1] == " ":
-                    break  # Stop if we hit a space
+                    break 
 
         elif groups[index] == decimalFlag:
-            # If decimal flag is found, treat next group as a decimal
+            translation += braille_table[decimalFlag] # add a decimal
             index += 1
-            if index < len(groups):
-                translation += braille_table[groups[index]]
-                index += 1  # Move past the number after the flag
+            while index < len(groups):
+                translation += braille_table["n" + groups[index]]  
+                index += 1
+                if index < len(groups) and groups[index - 1] == " ":
+                    break  
 
         else:
             # Normal character translation
