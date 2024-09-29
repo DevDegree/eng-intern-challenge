@@ -88,6 +88,10 @@ class Translator:
             "z": "O..OOO",
             " ": "......",
             "CAP": ".....O",
+            "NUMFOLLOWS":
+        }
+
+        english2BrailleNumerical = {
             "0": ".OOO..",
             "1": "O.....",
             "2": "O.O...",
@@ -105,6 +109,8 @@ class Translator:
                 if char.isUpper():
                     yield english2BrailleDictionary["CAP"]
                     yield english2BrailleDictionary[char.lower]
+                elif char.isdigit():
+
                 else:
                     yield english2BrailleDictionary[char]
 
@@ -152,8 +158,14 @@ class Translator:
             ".OO...": "9"
         }
 
-        def convert()
-            for 
+        def convert():
+            i = 0
+            while i < len(self.sourceText) :
+                char = self.sourceText[i:i+6] # getting the six braille characters
+                if char == ".....O":
+                    nextChar = self.sourceText[i + 6: i + 12] # this assumes the braille is valid
+                    yield braille2EnglishDictionary[].upper() # the capitalization character
+
     
 def main(argc: int, argv: List[int]):
     if argc != 2:
