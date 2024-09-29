@@ -132,11 +132,11 @@ def translate_to_braille(str):
             outputting_number = False  # Since it's a letter, disable this
             continue
         #For the ambiguous edge case:
-        if char == ">":
+        elif char == ">":
             output_str.append(ambiguous_dict[char])
             continue
-
-        output_str.append(english_to_braille[char])
+        else:
+            output_str.append(english_to_braille[char])
 
     return ''.join(output_str)
 
@@ -144,13 +144,14 @@ def main():
     #Check for empty string - edge case
     if len(sys.argv) < 2:
         return
-    input_str = sys.argv[1]    
+    
+    input_str = ' '.join(sys.argv[1:])
 
     #If it's braille, translate to english & vice-versa
     if check_braille(input_str):
-        print(translate_to_english(input_str))
+        sys.stdout.write(translate_to_english(input_str))
     else:
-        print(translate_to_braille(input_str))
+        sys.stdout.write(translate_to_braille(input_str))
 
 if __name__ == "__main__":
     main()
