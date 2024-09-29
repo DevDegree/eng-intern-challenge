@@ -75,7 +75,7 @@ const brailleTranslationObject = {
     ".O.OOO": "number",
     ".O...O": "."
 };
-
+// Need to create a seperate object for numbers
 // Need to handle numbers and capital letter
 // Tackle capital letters first
 const stringToTranslate = process.argv.slice(2).join(' ');
@@ -89,7 +89,6 @@ const stringSample = stringToTranslate.slice(0, 6);
 const isBraille = brailleTranslationObject[stringSample];
 let singleBrailleLetter = "";
 
-// How to track capital letters first from english to braille
 const checkUpperCase = (letter) => {
     if(letter !== letter.toLowerCase()){
         return ".....O" + englishTranslationObject[letter.toLowerCase()];
@@ -97,13 +96,21 @@ const checkUpperCase = (letter) => {
     return englishTranslationObject[letter]
 }
 // H -> .....O O.OO..
+let toggleCapitalLetter = false;
 for (let i = 0; i < stringToTranslate.length; i++) {
     if (isBraille) {
         singleBrailleLetter = singleBrailleLetter + stringToTranslate.charAt(i);
         if (singleBrailleLetter.length === 6) {
-            const englishEquivalent = brailleTranslationObject[singleBrailleLetter];
+            if(singleBrailleLetter === ".....O"){
+                toggleCapitalLetter = true;
+                singleBrailleLetter = "";
+                continue;
+            }
+            let englishEquivalent = brailleTranslationObject[singleBrailleLetter];
+            toggleCapitalLetter && (englishEquivalent = englishEquivalent.toUpperCase());
             translatedString = translatedString + englishEquivalent;
             singleBrailleLetter = "";
+            toggleCapitalLetter = false;
         }
         continue;
     }
