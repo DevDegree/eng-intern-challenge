@@ -51,7 +51,6 @@ class TestTranslator(unittest.TestCase):
 
 
     def test_special_characters(self):
-
         test = ".OO..O" + "......" + "O....." + "......" + "..OOO."
         command = ["python3", "translator.py", test]
 
