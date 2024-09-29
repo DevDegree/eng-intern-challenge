@@ -1,12 +1,11 @@
 /*
  *  Author: Kaleb Jubar
  *  Created: 28 Sep 2024, 2:49:59 PM
- *  Last update: 29 Sep 2024, 12:08:55 PM
+ *  Last update: 29 Sep 2024, 12:13:11 PM
  *  Copyright (c) 2024 Kaleb Jubar
  */
 
 // English-to-Braille object
-// TODO: figure out if it's better to index on ASCII number or character
 const englishToBraille = {
     // letters
     a: "O.....",
@@ -102,7 +101,6 @@ function main() {
 
     // do translation
     let output = "";
-    // TODO: determine if this can be easily done in one loop without an if
     if (inputInBraille) {
         // parse Braille string
         let parseNum = false, parseCapital = false;
