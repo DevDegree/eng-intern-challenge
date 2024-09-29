@@ -192,6 +192,7 @@ function translateTEng(braille: Braille[]): string {
 
 function translateTBraille(english: English): string {
   let brailleStr = "";
+  let lastNum = false;
 
   for (const symbol of english) {
     const brailleNum = num_t_braille[symbol];
@@ -200,17 +201,24 @@ function translateTBraille(english: English): string {
 
     // Number case
     if (brailleNum?.length > 0) {
-      brailleStr += (command_t_braille.NUM + brailleNum) 
+      if (lastNum) {
+        brailleStr += brailleNum
+      } else {
+        brailleStr += command_t_braille.NUM + brailleNum;
+      }
+      lastNum = true;
     }
     // upper/lower case ;)
     else if (brailleLetter?.length > 0) {
+      lastNum = false;
+
       // upper case
       if (symbol == symbol.toUpperCase() && symbol != " ") {
-        brailleStr += (command_t_braille.CAP + brailleLetter)
+        brailleStr += (command_t_braille.CAP + brailleLetter);
       }
       // lower case
       else {
-        brailleStr += brailleLetter
+        brailleStr += brailleLetter;
       }
     }
   }
@@ -226,7 +234,7 @@ function work() {
   }
 
   const translationStr = argsArr.slice(2).join(" ");
-  console.log(translationStr);
+  // console.log(translationStr);
 
   if (translationStr?.length <= 0) {
     console.log("Translation str length error");
