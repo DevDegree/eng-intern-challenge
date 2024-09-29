@@ -19,5 +19,5 @@ node translator.js "Hello World"
 ## For English to Braille:
 
 ```bash
-node translator.js "O..... O.O... ...... O..O.. OOO..."
+node translator.js ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."
 ```
