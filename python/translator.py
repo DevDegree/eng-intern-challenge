@@ -11,6 +11,9 @@ braille_dict = {
     '(': 'O.O..O', ')': '.O.OO.', ' ': '......'
 }
 
+# Reverse lookup for Braille to text mapping
+reverse_braille_dict = dict((value, key) for key, value in braille_dict.items())
+
 def translate(input_string):
     '''
     Translate between normal text and Braille based on input
