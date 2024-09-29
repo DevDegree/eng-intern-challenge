@@ -54,11 +54,9 @@ def buildLookupTable():
 
 
     # add the digits
-    numberFlag = ".O.OOO" # when met, everything that follows is a number UNTIL space pattern
-    decimalFlag = ".O...O" # signifies a fractional part coming up; continues until space is met. 
     for digit in range(10):
         if digit == 0:
-            table[str(digit)] = "n" + table["j"]
+            table[str(digit)] = "n" + table["j"] # 'n' will be used to differentiate digits from letters
             continue
 
         table[str(digit)] = "n" + table[chr(ord('a') + digit - 1)] 
@@ -136,8 +134,6 @@ def brailleToEnglish(braille_table:dict, inputString:str):
     translation = ""
     index = 0
 
-    print(groups)
-
     while index < len(groups):
         if groups[index] == capitalFlag:
             translation += braille_table[groups[index] + groups[index+1]]
@@ -178,14 +174,17 @@ def detectLang(str):
 def main():
     englishBrailleTable, brailleEnglishTable = buildLookupTable()
 
-    toTranslate = sys.argv[0]
+    toTranslate = ""
+    for i in range(1, len(sys.argv)):
+        toTranslate += sys.argv[i]
+
     res = ""
     if detectLang(toTranslate) == "English":
         res = englishToBraille(englishBrailleTable, toTranslate) 
     else:
         res = brailleToEnglish(brailleEnglishTable, toTranslate)
 
-    return res 
+    print(res)
 
 
 if __name__ == "__main__":
