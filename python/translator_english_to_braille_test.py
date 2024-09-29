@@ -44,12 +44,21 @@ class TestTranslator(unittest.TestCase):
 
 
     def test_single_letter_and_decimal(self):
-        # Command to run translator.py script with "A" and "1.2" as input
         command = ["python3", "translator.py", "A", "1.2"]
 
         result = subprocess.run(command, capture_output=True, text=True)
         
-        expected_output = ".....O" + "O....." + "......" + ".O.OOO" + "O....." + ".0...0" + "O.O..."
+        expected_output = ".....O" + "O....." + "......" + ".O.OOO" + "O....." + ".O...O" + "O.O..."
+
+        self.assertEqual(result.stdout.strip(), expected_output)
+
+    def test_special_characters(self):
+        command = ["python3", "translator.py", "<", "a", "!"]
+
+        result = subprocess.run(command, capture_output=True, text=True)
+
+        expected_output =   ".OO..O" + "......" + "O....." + "......" + "..OOO."
+
 
         self.assertEqual(result.stdout.strip(), expected_output)
 
