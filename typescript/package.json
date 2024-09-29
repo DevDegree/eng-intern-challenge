@@ -4,7 +4,8 @@
   "description": "English to Braille Translator",
   "main": "translator.ts",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dev": "ts-node translator.ts"
   },
   "keywords": [],
   "author": "",
