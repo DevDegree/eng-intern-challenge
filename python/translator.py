@@ -51,6 +51,8 @@ for letter in rangeTwentyTwentySix:
 
 
 # add the digits
+numberFlag = ".O.OOO" # when met, everything that follows is a number UNTIL space pattern
+decimalFlag = ".O...O" # signifies a fractional part coming up; continues until space is met. 
 for digit in range(10):
     if digit == 0:
         table[str(digit)] = table["j"]
@@ -59,6 +61,8 @@ for digit in range(10):
     table[str(digit)] = table[chr(ord('a') + digit - 1)]
 
 # add capital letters
-capitalFlag = ".....O"
+capitalFlag = ".....O" # when met, only next letter is capital
 for ascii in range(ord('a'), ord('z') + 1):
     table[chr(ascii).upper()] = capitalFlag + table[chr(ascii)]
+
+
