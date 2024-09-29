@@ -90,7 +90,7 @@ const numberTranslattionObject = {
 }
 const stringToTranslate = process.argv.slice(2).join(' ');
 if (!stringToTranslate) {
-    console.log("Please provide string to translate\n.....OOOO.O.O.O.O.O..O..O......OO.O.O..O........OOO.O.O.OOO.O..OO.O.O.OO.OO...OO.O..O..O.........OO.O..OOOO.O.OOO..OO...OO.OO.OOOO.........OOOO.O..OO........OOOO.O.OOO.O.....OO.OO..OO.O.O.O.O.O......OOOO.O..O..");
+    console.log("Please provide a string to translate\n.....OOOO.O.O.O.O.O..O..O......OO.O.O..O........OOO.O.O.OOO.O..OO.O.O.OO.OO...OO.O..O..O........O............OO.O..OOOO.O.OOO..OO...OO.OO.OOOO.........OOOO.O..OO........OOOO.O.OOO.O.....OO.OO..OO.O.O.O.O.O......OOOO.O..O..");
     return;
 }
 
@@ -133,13 +133,15 @@ const convertBrailleToEnglish = (string) => {
         return "\n.....OOOO.O.O.O.O.O..O..O......OO.O.O..O........O..O..OO.OO..OOOO.O..O..O.OOO.......O...........O.O.OOO.....O.O.O..OO...OO.O.............OO.O...O.OOO.O......OO...O.O.O.O.O.O.O..O.........OO.O..OOOO.O.OOO..OO...OO.OO.OOOO..\nPlease enter a valid Braille string"
     }
     let translatedString = "";
-    let singleBrailleLetter = "";
+    // let singleBrailleLetter = "";
     let toggleCapitalLetter = false;
     let toggleNumberMode = false;
-    for (let i = 0; i < string.length; i++) {
+    // i += 6
+    // 
+    for (let i = 0; i < string.length; i+= 6) {
         // could count per six to make it faster
-        
-        singleBrailleLetter = singleBrailleLetter + string.charAt(i);
+        let singleBrailleLetter = string.slice(i, i + 6);
+        // singleBrailleLetter = singleBrailleLetter + string.charAt(i);
         if (singleBrailleLetter.length === 6) {
             if (singleBrailleLetter === englishTranslationObject[" "]) {
                 toggleNumberMode = false;
