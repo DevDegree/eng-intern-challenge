@@ -90,7 +90,7 @@ const numberTranslattionObject = {
 }
 const stringToTranslate = process.argv.slice(2).join(' ');
 if (!stringToTranslate) {
-    console.log("Please provide string to translate");
+    console.log("Please provide string to translate\n.....OOOO.O.O.O.O.O..O..O......OO.O.O..O........OOO.O.O.OOO.O..OO.O.O.OO.OO...OO.O..O..O.........OO.O..OOOO.O.OOO..OO...OO.OO.OOOO.........OOOO.O..OO........OOOO.O.OOO.O.....OO.OO..OO.O.O.O.O.O......OOOO.O..O..");
     return;
 }
 
@@ -112,7 +112,7 @@ const convertEnglishToBraille = (string) => {
     let toggleNumberMode = false;
     for (let i = 0; i < string.length; i++) {
         const currentLetter = string.charAt(i);
-        if (currentLetter === " ") {
+        if (currentLetter === brailleTranslationObject["......"]) {
             toggleNumberMode = false;
             translatedString = translatedString + englishTranslationObject[currentLetter];
             continue;
@@ -129,7 +129,7 @@ const convertEnglishToBraille = (string) => {
 }
 const convertBrailleToEnglish = (string) => {
     // Check if it is a valid Braille input
-    if(string % 6 !== 0){
+    if(string.length % 6 !== 0){
         return "\n.....OOOO.O.O.O.O.O..O..O......OO.O.O..O........O..O..OO.OO..OOOO.O..O..O.OOO.......O...........O.O.OOO.....O.O.O..OO...OO.O.............OO.O...O.OOO.O......OO...O.O.O.O.O.O.O..O.........OO.O..OOOO.O.OOO..OO...OO.OO.OOOO..\nPlease enter a valid Braille string"
     }
     let translatedString = "";
