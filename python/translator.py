@@ -1,5 +1,11 @@
 import sys
 
+"""
+Note: The Braille mapping for 'o' and '>' is the same, so a way to differentiate between them is needed.
+I was thinking of adding a special indicator, for example, a "special character follows" in Braille,
+similar to "capital follows" or "decimal follows." 
+"""
+
 # Braille mapping dictionaries
 char_to_braille_mapping = {
     # Letters
@@ -43,12 +49,13 @@ char_to_braille_mapping = {
     "-": "....OO",  # Hyphen
     "/": ".O..O.",  # Slash
     "<": ".OO..O",  # Less than
+    # ">": "O..OO.",  # Greater than
     "(": "O.O..O",  # Open parenthesis
     ")": ".O.OO.",  # Close parenthesis
 
     # Special indicators
     "capital follows": ".....O",  # Capital follows indicator
-    "decimal follows": ".0...0",  # Decimal follows indicator
+    "decimal follows": ".O...O",  # Decimal follows indicator
     "number follows": ".O.OOO"    # Number follows indicator
 }
 
@@ -107,12 +114,67 @@ def english_to_braille(text):
 
     return braille
 
+def braille_to_english(braille_text):
+    # Inverse mapping of char_to_braille_mapping
+    braille_to_char_mapping = {value: key for key, value in char_to_braille_mapping.items()}
+    braille_to_digit_mapping = {value: key for key, value in digit_to_braille_mapping.items()}
+
+    # Split the braille text into chunks of 6 characters
+    braille_chunks = [braille_text[i:i+6] for i in range(0, len(braille_text), 6)]
+
+    english = ""
+    is_number = False
+    capitalize_next = False
+
+    for chunk in braille_chunks:
+        if chunk == char_to_braille_mapping["number follows"]:
+            # Set number mode
+            is_number = True
+            continue
+        
+        if chunk == char_to_braille_mapping["capital follows"]:
+            # Capitalize the next character
+            capitalize_next = True
+            continue
+        
+        if chunk == char_to_braille_mapping[" "]:
+            # Handle space explicitly
+            english += " "
+            is_number = False  # Exit number mode after space
+            continue
+
+        if is_number:
+            if chunk in braille_to_digit_mapping:
+                english += braille_to_digit_mapping[chunk]
+            elif chunk == char_to_braille_mapping["decimal follows"]:
+                english += "."
+            else:
+                is_number = False  # Exit number mode if non-number character is found
+                if chunk in braille_to_char_mapping:
+                    char = braille_to_char_mapping[chunk]
+                    english += char.upper() if capitalize_next else char
+                    capitalize_next = False
+        else:
+            if chunk in braille_to_char_mapping:
+                char = braille_to_char_mapping[chunk]
+                # Handle capitalization
+                if capitalize_next:
+                    char = char.upper()
+                    capitalize_next = False
+                english += char
+
+    return english
+
 
 def main():
     input_text = ' '.join(sys.argv[1:])
-
-    english_to_braille_output = english_to_braille(input_text)
-    print(english_to_braille_output)
+    
+    if all(char in 'O.' for char in input_text) and len(input_text) % 6 == 0:
+        output = braille_to_english(input_text)
+    else:
+        output = english_to_braille(input_text)
+    
+    print(output)
 
 if __name__ == "__main__":
-    main()  # Call the main function when the script is run
+    main()
