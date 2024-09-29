@@ -97,7 +97,7 @@ def braille_to_english(braille):
 
 # Main function
 def main():
-    input_str = sys.argv[1]
+    input_str = ' '.join(sys.argv[1:])
 
     if is_braille(input_str):
         print(braille_to_english(input_str))
