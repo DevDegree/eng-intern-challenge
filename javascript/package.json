@@ -11,5 +11,6 @@
   "dependencies": {
     "jest": "^29.7.0",
     "node": "^22.9.0"
-  }
+  },
+  "keywords": []
 }
