@@ -40,7 +40,7 @@ const englishTranslationObject = {
     " ": "......",
     "capital": ".....O",
     "number": ".O.OOO",
-    ".": ".O...O"
+    ".": "..OO.O"
 };
 
 const brailleTranslationObject = {
@@ -73,11 +73,26 @@ const brailleTranslationObject = {
     "......": " ",
     ".....O": "capital",
     ".O.OOO": "number",
-    ".O...O": "."
+    "..OO.O": "."
 };
+
+const numberTranslattionObject = {
+    "O.....": "1",
+    "O.O...": "2",
+    "OO....": "3",
+    "OO.O..": "4",
+    "O..O..": "5",
+    "OOO...": "6",
+    "OOOO..": "7",
+    "O.OO..": "8",
+    ".OO...": "9",
+    ".OOO..": "0",
+}
 // Need to create a seperate object for numbers
-// Need to handle numbers and capital letter
-// Tackle capital letters first
+// Need to handle numbers
+
+// Only thing left is to translate numbers into braille
+
 const stringToTranslate = process.argv.slice(2).join(' ');
 if (!stringToTranslate) {
     console.log("Please provide string to translate");
@@ -95,12 +110,21 @@ const checkUpperCase = (letter) => {
     }
     return englishTranslationObject[letter]
 }
-// H -> .....O O.OO..
+// 1-> .O.OOO O.....
 let toggleCapitalLetter = false;
+let toggleNumberMode = false;
 for (let i = 0; i < stringToTranslate.length; i++) {
     if (isBraille) {
         singleBrailleLetter = singleBrailleLetter + stringToTranslate.charAt(i);
         if (singleBrailleLetter.length === 6) {
+            if(singleBrailleLetter === "......"){
+                toggleNumberMode = false;
+            }
+            if(singleBrailleLetter === ".O.OOO"){
+                toggleNumberMode = true;
+                singleBrailleLetter = ""
+                continue;
+            }
             if(singleBrailleLetter === ".....O"){
                 toggleCapitalLetter = true;
                 singleBrailleLetter = "";
@@ -108,6 +132,7 @@ for (let i = 0; i < stringToTranslate.length; i++) {
             }
             let englishEquivalent = brailleTranslationObject[singleBrailleLetter];
             toggleCapitalLetter && (englishEquivalent = englishEquivalent.toUpperCase());
+            toggleNumberMode && (englishEquivalent = numberTranslattionObject[singleBrailleLetter]);
             translatedString = translatedString + englishEquivalent;
             singleBrailleLetter = "";
             toggleCapitalLetter = false;
