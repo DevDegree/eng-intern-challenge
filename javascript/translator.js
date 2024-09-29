@@ -39,7 +39,8 @@ const englishTranslationObject = {
     "0": ".OOO..",
     " ": "......",
     "capital": ".....O",
-    "number": ".O.OOO"
+    "number": ".O.OOO",
+    ".": ".O...O"
 };
 
 const brailleTranslationObject = {
@@ -71,11 +72,13 @@ const brailleTranslationObject = {
     "O..OOO": "z",
     "......": " ",
     ".....O": "capital",
-    ".O.OOO": "number"
+    ".O.OOO": "number",
+    ".O...O": "."
 };
-// receive input via process.argv
 
-const stringToTranslate = process.argv[2];
+// Need to handle numbers and capital letter
+// Tackle capital letters first
+const stringToTranslate = process.argv.slice(2).join(' ');
 if (!stringToTranslate) {
     console.log("Please provide string to translate");
     return;
@@ -98,7 +101,6 @@ for (let i = 0; i < stringToTranslate.length; i++) {
     const currentLetter = stringToTranslate.charAt(i);
     const brailleEquivalent = englishTranslationObject[currentLetter];
     translatedString = translatedString + brailleEquivalent;
-
 }
 // need a way to detect braille or english maybe check the first 6 letters?
 console.log(translatedString);
