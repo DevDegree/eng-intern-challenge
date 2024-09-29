@@ -48,6 +48,7 @@ def to_braille(input_string):
             if char.isupper():
                 result.append(upper_indicator)
                 result.append(braille_letters[char.lower()])
+                number_mode = False  # Reset number mode after an uppercase letter
             elif char.isdigit():
                 if not number_mode:
                     result.append(number_indicator)
