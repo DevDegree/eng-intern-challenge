@@ -54,14 +54,15 @@ class BrailleTranslator:
     
     def eng_to_bra(self):
         translated = ""
-        
+        number = False
         for char in self.text:    
-            if char.isdigit():
+            if char.isdigit() and not number:
+                number = True
                 translated = translated +ENGLISH_TO_BRAILLE['number']
-                
             elif char.isupper():
                 translated = translated +ENGLISH_TO_BRAILLE['capital']
-
+            elif char == " " and number:
+                number = False
             translated = translated + ENGLISH_TO_BRAILLE[char.lower()]
         return translated
     
@@ -76,20 +77,26 @@ class BrailleTranslator:
         for i in bra_char:
             if i == ENGLISH_TO_BRAILLE['number']:
                 is_digit = True
+            elif is_digit and i == ENGLISH_TO_BRAILLE[' ']:
+                is_digit = False
+                translated = translated + BRAILLE_TO_ENGLISH[i]
             elif is_digit:
                 translated = translated +BRAILLE_DIGITS[i]
-                is_digit = False
             elif i == ENGLISH_TO_BRAILLE['capital']:
                 is_capital = True
             elif is_capital:
-                translated = translated + BRAILLE_DIGITS[i].upper()
+                translated = translated + BRAILLE_TO_ENGLISH[i].upper()
                 is_capital = False
+            
+            else:
+                translated = translated + BRAILLE_TO_ENGLISH[i]
             
         return translated
 
 if __name__ == '__main__':
     
-    text = ''.join(sys.argv[1:])
+    text = ' '.join(sys.argv[1:])
+    #text = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
     translator = BrailleTranslator(text)
     result = translator.translate()
     print(result)
