@@ -187,22 +187,22 @@ def detectLang(str):
         
     return "Braille"
 
-# def main():
-#     englishBrailleTable, brailleEnglishTable = buildLookupTable()
+def main():
+    englishBrailleTable, brailleEnglishTable = buildLookupTable()
 
-#     toTranslate = ""
-#     for i in range(1, len(sys.argv)):
-#         toTranslate += sys.argv[i]
+    toTranslate = ""
+    for i in range(1, len(sys.argv)):
+        toTranslate += sys.argv[i]
 
-#     res = ""
-#     if detectLang(toTranslate) == "English":
-#         res = englishToBraille(englishBrailleTable, toTranslate) 
-#     else:
-#         res = brailleToEnglish(brailleEnglishTable, toTranslate)
+    res = ""
+    if detectLang(toTranslate) == "English":
+        res = englishToBraille(englishBrailleTable, toTranslate) 
+    else:
+        res = brailleToEnglish(brailleEnglishTable, toTranslate)
 
-#     print(res)
+    print(res)
 
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
          
