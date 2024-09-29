@@ -72,9 +72,19 @@ const brailleTranslationObject = {
     "......": " ",
     ".....O": "capital",
     ".O.OOO": "number"
-  };
+};
+// receive input via process.argv
 
-for(let key in englishTranslationObject){
-    brailleTranslationObject[englishTranslationObject[key]] = key
+const stringToTranslate = process.argv[2];
+if(!stringToTranslate){
+    console.log("Please provide string to translate");
+    return;
 }
-console.log(brailleTranslationObject)
+let translatedString = "";
+// First translate from english to braile
+for(let i = 0; i < stringToTranslate.length; i++){
+    const currentLetter = stringToTranslate.charAt(i);
+    const brailleEquivalent = englishTranslationObject[currentLetter];
+    translatedString = translatedString + brailleEquivalent;
+}
+console.log(translatedString)
