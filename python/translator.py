@@ -9,7 +9,7 @@ BRAILLE_TO_ENGLISH = {
     'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y',
     'O..OOO': 'z', 
     '......': ' ', 
-    '.....O': 'capital follows', '.O.OOO': 'number follows', '.O...O': 'decimal follows'
+    '.....O': 'capital follows', '.O.OOO': 'number follows'
 }
 
 # Reverse mapping
@@ -19,14 +19,6 @@ NUMBER_MAP = {
     'a': '1', 'b': '2', 'c': '3', 'd': '4', 'e': '5',
     'f': '6', 'g': '7', 'h': '8', 'i': '9', 'j': '0'
 }
-
-BRAILLE_DECIMAL = {
-    '..OO.O':'.', '..O...': ',', '..O.OO': '?', '..OOO.': '!', '..OO..': ':', '..O.O.': ';',
-    '....OO': '-', '.O..O.': '/', '.OO..O': '<', 'O..OO.': '>', 'O.O..O': '(', ".O.OO.": ')'
-}
-
-# reverse mapping
-ENGLISH_DECIMAL = {v: k for k, v in BRAILLE_DECIMAL.items()}
 
 def braille_to_english(braille):
     '''
@@ -42,7 +34,6 @@ def braille_to_english(braille):
     result = []
     capitalize_next = False # Flag to capitalize next letter
     number_mode = False # Flag to indicate number mode
-    decimal_mode = False # Flag to indicate decimal mode
     i = 0
 
     while i < len(braille):
@@ -51,10 +42,6 @@ def braille_to_english(braille):
             capitalize_next = True
         elif char == ENGLISH_TO_BRAILLE['number follows']: # Check if the character is a flag to indicate number next letter
             number_mode = True
-        elif char == ENGLISH_TO_BRAILLE['decimal follows']: # Check if the character is a flag to indicate decimal mode
-            decimal_mode = True
-        elif char in BRAILLE_DECIMAL and decimal_mode:
-            result.append(BRAILLE_DECIMAL[char])
         elif char in BRAILLE_TO_ENGLISH:
             letter = BRAILLE_TO_ENGLISH[char]
             if number_mode and letter in NUMBER_MAP:
@@ -63,8 +50,6 @@ def braille_to_english(braille):
                 if capitalize_next:
                     letter = letter.upper()
                     capitalize_next = False
-                if decimal_mode:
-                    decimal_mode = False
                 result.append(letter)
                 number_mode = False
         i += 6
@@ -83,7 +68,6 @@ def english_to_braille(english):
 
     result = []
     number_mode = False # Flag to indicate number mode
-    decimal_mode = False # Flag to indicate decimal mode
     
     for char in english:
         if char.isupper():
@@ -97,17 +81,7 @@ def english_to_braille(english):
         else:
             number_mode = False
 
-        if char in ENGLISH_DECIMAL:
-            result.append(ENGLISH_TO_BRAILLE['decimal follows'])
-            decimal_mode = True
-        else:
-            decimal_mode = False
-
-        
-        if not decimal_mode:
-            result.append(ENGLISH_TO_BRAILLE[char])
-        else:
-            result.append(ENGLISH_DECIMAL[char])
+        result.append(ENGLISH_TO_BRAILLE[char])
     return ''.join(result)
 
 def is_braille(text):
