@@ -168,33 +168,25 @@ def brailleToEnglish(braille_table:dict, inputString:str):
 
     return translation
 
-def main():
-    # Build the translation tables
-    english_braille_table, braille_english_table = buildLookupTable()
-
-    # Command-line interface
-    print("Welcome to the Braille Translator!")
-    print("Choose an option:")
-    print("1. Translate English to Braille")
-    print("2. Translate Braille to English")
-    print("3. Exit")
-
-    while True:
-        choice = input("Enter your choice (1/2/3): ")
+def detectLang(str):
+    for char in str:
+        if char != "O" and char != ".":
+            return "English"
         
-        if choice == "1":
-            english_input = input("Enter the English text to translate to Braille: ")
-            braille_output = englishToBraille(english_braille_table, english_input)
-            print(f"Braille output: {braille_output}\n")
-        elif choice == "2":
-            braille_input = input("Enter the Braille text to translate to English (use dots and spaces): ")
-            english_output = brailleToEnglish(braille_english_table, braille_input)
-            print(f"English output: {english_output}\n")
-        elif choice == "3":
-            print("Exiting the Braille Translator. Goodbye!")
-            break
-        else:
-            print("Invalid choice. Please try again.")
+    return "Braille"
+
+def main():
+    englishBrailleTable, brailleEnglishTable = buildLookupTable()
+
+    toTranslate = sys.argv[0]
+    res = ""
+    if detectLang(toTranslate) == "English":
+        res = englishToBraille(englishBrailleTable, toTranslate) 
+    else:
+        res = brailleToEnglish(brailleEnglishTable, toTranslate)
+
+    return res 
+
 
 if __name__ == "__main__":
     main()
