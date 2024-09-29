@@ -55,15 +55,21 @@ numberFlag = ".O.OOO" # when met, everything that follows is a number UNTIL spac
 decimalFlag = ".O...O" # signifies a fractional part coming up; continues until space is met. 
 for digit in range(10):
     if digit == 0:
-        table[str(digit)] = table["j"]
+        table[str(digit)] = "n" + table["j"]
         continue
 
-    table[str(digit)] = table[chr(ord('a') + digit - 1)]
+    table[str(digit)] = "n" + table[chr(ord('a') + digit - 1)] 
 
 # add capital letters
+capitalFlag = ".....O"
 # when met, only next letter is capital
-# for ascii in range(ord('a'), ord('z') + 1):
-#     table[chr(ascii).upper()] = capitalFlag + table[chr(ascii)]
+for ascii in range(ord('a'), ord('z') + 1):
+    table[chr(ascii).upper()] = capitalFlag + table[chr(ascii)]
+
+# Reverse table into a Braille to English table
+braille_table = {}
+for key, braille in table.items():
+    braille_table[braille] = key
 
 # a function to translate English input to Braille
 def englishToBraille(inputString:str):
@@ -81,7 +87,7 @@ def englishToBraille(inputString:str):
         # check if number
         if '0' <= character <= '9':
             # we have a digit
-            translation += numberFlag + table[str(character)]
+            translation += numberFlag + table[str(character)][1:] # gotta remove the 'n' prefix
             # we keep going until we see a space 
             for j in range(index+1, len(inputArray)):
                 if inputArray[j] == " ":
@@ -92,7 +98,7 @@ def englishToBraille(inputString:str):
                     if (inputArray[j] == ","):
                         translation += decimalFlag # + table[inputArray[j]] # do we add the regular decimal even after the flag, or only the flag
                     else:
-                        translation += table[inputArray[j]]
+                        translation += table[inputArray[j]][1:]
                     index = j # index has got to keep up
 
         elif 'A' <= character <= 'Z':
@@ -107,6 +113,57 @@ def englishToBraille(inputString:str):
 
     return translation
 
+
+def brailleToEnglish(inputString:str):
+    pass
+    # parse 6 characters at a time
+    inputArray = list(inputString)
+    if len(inputArray) % 6 != 0:
+        return "Invalid Braille"
+    
+    groups = ["".join(inputArray[i: i + 6]) for i in range(0, len(inputArray), 6)] # split into groups, 6 charss at a time
+    
+    capitalFlag = ".....O"
+    numberFlag = ".O.OOO"
+    decimalFlag = ".O...O"
+
+    translation = ""
+    index = 0
+
+    print(groups)
+
+    while index < len(groups):
+        if groups[index] == capitalFlag:
+            translation += braille_table[groups[index] + groups[index+1]]
+            index += 1  # skip the letter after the flag
+
+        elif groups[index] == numberFlag:
+            # If number flag is found
+            index += 1
+            while index < len(groups):
+                translation += braille_table.get("n" + groups[index], "?")  # Use "?" for unrecognized Braille
+                index += 1
+                if index < len(groups) and groups[index - 1] == " ":
+                    break  # Stop if we hit a space
+
+        elif groups[index] == decimalFlag:
+            # If decimal flag is found, treat next group as a decimal
+            index += 1
+            if index < len(groups):
+                translation += braille_table.get(groups[index], "?")
+                index += 1  # Move past the number after the flag
+
+        else:
+            # Normal character translation
+            translation += braille_table.get(groups[index], "?")
+
+        index += 1  # Move to the next group
+
+
+    return translation
+
+
+        
 
 
 
