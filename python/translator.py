@@ -28,6 +28,7 @@ BRAILLE_CAPITAL_NEXT = '.....O'
 BRAILLE_DECIMAL_NEXT = '.O...O'
 BRAILLE_NUMBER_NEXT  = '.O.OOO'
 
+# Other constant(s)
 CHARS_PER_BRAILLE_CELL = 6
 
 def text_is_braille(text: str) -> bool:
@@ -45,6 +46,7 @@ def text_is_braille(text: str) -> bool:
       return False
 
   return len(text) % CHARS_PER_BRAILLE_CELL == 0
+
 
 def split_braille_into_cells(braille_text: str) -> list:
   """
@@ -64,6 +66,7 @@ def split_braille_into_cells(braille_text: str) -> list:
 
   return braille_cells
 
+
 def is_decimal_ahead(english_text: str, begin_index: int) -> bool:
   """
   Checks if the numeric value of the english_text starting at begin_index is
@@ -82,6 +85,7 @@ def is_decimal_ahead(english_text: str, begin_index: int) -> bool:
     elif char == ' ':
       return False
   return False
+
 
 def braille_to_english(input_text: str) -> str:
   """
@@ -131,6 +135,7 @@ def braille_to_english(input_text: str) -> str:
   
   return translated_text
 
+
 def english_to_braille(input_text: str) -> str:
   """
   Translates English text into corresponding Braille text
@@ -176,6 +181,7 @@ def english_to_braille(input_text: str) -> str:
     current_char_index += 1
 
   return translated_text
+
 
 def main():
   INPUT_TEXT = ' '.join(sys.argv[1:])
