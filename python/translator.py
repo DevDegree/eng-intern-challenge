@@ -36,8 +36,25 @@ def check_braille(str):
         if char not in 'O.': return False # Check if only 'O' or '.'
     if len(str) % 6 != 0: return False # Check if divisible by 6
     return True
+
 # Translates input (English) string and outputs braille string
-# Define eng to braille translate fn here >>
+def translate_to_english(str):
+    output_str = []
+    is_capital = False
+
+    for i in range(0, len(str)):
+        braille_char = output_str[i:i+6]
+        eng_char = braille_to_english[braille_char]
+        # If we read "cap" from the dict, be sure to capitalize the next letter    
+        if eng_char == "cap": 
+            is_capital = True
+        if is_capital: 
+            eng_char = eng_char.upper()
+            is_capital = False
+        output_str.append(eng_char)
+        i += 6
+    
+    return ''.join(output_str)
 
 
 # Translates input (braille) string and outputs english string 
@@ -67,11 +84,16 @@ def translate_to_braille(str):
 
     return ''.join(output_str)
 
-    
-# Implement translate to Braille later I'm lazy lol
-
 def main():
-    print("Hey, this is printing to the command line!") #Test
+    # input_str = sys.argv[1]
+    #If it's braille, translate to english & vice-versa
+
+    #TEST INPUT STRING
+    input_str = "42"
+    if check_braille(input_str):
+        print(translate_to_english(input_str))
+    else:
+        print(translate_to_braille(input_str))
 
 if __name__ == "__main__":
     main()
