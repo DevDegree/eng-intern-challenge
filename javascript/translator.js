@@ -39,7 +39,7 @@ const englishTranslationObject = {
     "0": ".OOO..",
     " ": "......",
     "capital": ".....O",
-    "number": ".O.OOO",
+    "number": ".O.OOO", //could get rid of;
     ".": "..OO.O"
 };
 
@@ -72,7 +72,7 @@ const brailleTranslationObject = {
     "O..OOO": "z",
     "......": " ",
     ".....O": "capital",
-    ".O.OOO": "number",
+    ".O.OOO": "number", //could get rid of?
     "..OO.O": "."
 };
 
@@ -140,7 +140,15 @@ for (let i = 0; i < stringToTranslate.length; i++) {
         continue;
     }
     const currentLetter = stringToTranslate.charAt(i);
-    const brailleEquivalent = checkUpperCase(currentLetter);
+    if(!isNaN(currentLetter) && toggleNumberMode === false){
+        console.log("toggled")
+        translatedString = translatedString + englishTranslationObject.number; 
+        toggleNumberMode = true;
+    }
+    if(currentLetter === " "){
+        toggleNumberMode = false;
+    }
+    const brailleEquivalent = toggleNumberMode ? englishTranslationObject[currentLetter] : checkUpperCase(currentLetter);
     translatedString = translatedString + brailleEquivalent;
 }
 
