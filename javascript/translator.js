@@ -1,3 +1,5 @@
+//Preferably, these would be moved into their own file
+
 const englishTranslationObject = {
     "a": "O.....",
     "b": "O.O...",
