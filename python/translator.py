@@ -8,7 +8,7 @@ alphabet = {
     "a": "O.....", "b": "O.O...", "c": "OO....", "d": "OO.O..",
     "e": "O..O..", "f": "OOO...", "g": "OOOO..", "h": "O.OO..", 
     "i": ".OO...", "j": ".OOO..", "k": "O...O.", "l": "O.O.O.",
-    "m": "OO..O.", "n": "00.00.", "o": "O..OO.", "p": "OOO.O.",
+    "m": "OO..O.", "n": "OO.OO.", "o": "O..OO.", "p": "OOO.O.",
     "q": "OOOOO.", "r": "O.OOO.", "s": ".OO.O.", "t": ".OOOO.",
     "u": "O...OO", "v": "O.O.OO", "w": ".OOO.O", "x": "OO..OO",
     "y": "OO.OOO", "z": "O..OOO",
@@ -24,7 +24,7 @@ alphabet = {
     "number follows": ".O.OOO",
 
     # Decimals
-    ".": "..OO.O", ",": "..0...", "?": "..O.OO", "!": "..OOO.",
+    ".": "..OO.O", ",": "..O...", "?": "..O.OO", "!": "..OOO.",
     ":": "..OO..", ";": "..O.O.", "-": "....OO", "/": ".O..O.",
     "<": ".OO..O", ">": "O..OO.", "(": "O.O..O", ")": ".O.OO.",
     " ": "......",
@@ -39,11 +39,17 @@ def english_brail_translate(word):
 
         # Checks to see if char is a capital letter
         if char.isupper() and char.isalpha():
+            if is_number: 
+                translated_word += alphabet[" "]
+                is_number = False
             translated_word += alphabet["capital follows"]
             translated_word += alphabet[char.lower()]
 
         # Checks to see if char is a lowercase letter
         elif char.isalpha():
+            if is_number: 
+                translated_word += alphabet[" "]
+                is_number = False
             translated_word += alphabet[char]
 
         # Checks to see if char is a number
@@ -56,11 +62,14 @@ def english_brail_translate(word):
 
         # Check if char is a space
         elif char == " ":
+            if is_number: 
+                is_number = False
             translated_word += alphabet[char]
-            is_number = False
 
         # Last option is for char to be a decimal
         else:
+            if is_number:
+                is_number = False
             translated_word += alphabet["decimal follows"]
             translated_word += alphabet[char]
 
@@ -122,12 +131,17 @@ def brail_english_translate(word):
                     break
 
     print(translated_word)
+    
 
+def main():
 
-input_word = input() # User input word
+    input_word = input() # User input word
 
-#  Check if input is braille or english
-if "." in input_word[:6] or "O" in input_word[:6]:
-    brail_english_translate(input_word)
-else:
-    english_brail_translate(input_word)
+    #  Check if input is braille or english
+    if "." in input_word[:6] or "O" in input_word[:6]:
+        brail_english_translate(input_word)
+    else:
+        english_brail_translate(input_word)
+
+if __name__ == "__main__":
+    main()
