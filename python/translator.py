@@ -65,4 +65,42 @@ capitalFlag = ".....O" # when met, only next letter is capital
 for ascii in range(ord('a'), ord('z') + 1):
     table[chr(ascii).upper()] = capitalFlag + table[chr(ascii)]
 
+# a function to translate English input to Braille
+def englishToBraille(str:input):
+    # parse input char by char 
+    # for each char, translate i
+    translation = ""
+    inputArray = list(input)
+    index = 0
 
+    while index < len(inputArray):
+        character = inputArray[index]
+        # check if number
+        if (ord(character) >= 48 and ord(character) <= 57):
+            # we have a digit
+            translation += numberFlag + table[str(character)]
+            # we keep going until we see a space 
+            for j in range(index, len(inputArray)):
+                if inputArray[j] == " ":
+                    translation += table[" "]
+                    break
+                else:
+                    translation += table[inputArray[j]]
+
+        elif (ord(character) >= 65 and ord(character) <= 90):
+            # we have an uppercase letter
+            translation += capitalFlag + table[str(character)]
+
+        else:
+            # we have a special character or a lowercase letter 
+            translation += table[str(character)]
+
+        index += 1
+
+    return translation
+
+
+
+
+        # check if special char 
+         
