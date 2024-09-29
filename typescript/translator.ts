@@ -126,3 +126,4 @@ const args = process.argv.slice(2).join(" ");
 if (!args) {
     throw new Error("Please provide a string to translate.");
 }
+console.log(runTranslation(args));
