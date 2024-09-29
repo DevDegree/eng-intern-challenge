@@ -140,13 +140,17 @@ for (let i = 0; i < stringToTranslate.length; i++) {
         continue;
     }
     const currentLetter = stringToTranslate.charAt(i);
-    if(!isNaN(currentLetter) && toggleNumberMode === false){
-        console.log("toggled")
-        translatedString = translatedString + englishTranslationObject.number; 
-        toggleNumberMode = true;
-    }
     if(currentLetter === " "){
         toggleNumberMode = false;
+        // console.log("line 145", currentLetter)
+        translatedString = translatedString + englishTranslationObject[currentLetter];
+        continue;
+    }
+    if(!isNaN(currentLetter) && toggleNumberMode === false){
+        // console.log("line 150:", currentLetter)
+        translatedString = translatedString + englishTranslationObject["number"] + englishTranslationObject[currentLetter]; 
+        toggleNumberMode = true;
+        continue;
     }
     const brailleEquivalent = toggleNumberMode ? englishTranslationObject[currentLetter] : checkUpperCase(currentLetter);
     translatedString = translatedString + brailleEquivalent;
