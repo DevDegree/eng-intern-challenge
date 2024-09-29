@@ -40,6 +40,12 @@ function translateToBraille(text) {
             // Add the corresponding Braille representation for the digit.
             brailleOutput.push(brailleDict[char]);
         } else {
+            // Check for unsupported characters
+            if (!brailleDict[char.toLowerCase()]) {
+                console.warn(`Warning: Character "${char}" is not supported for translation.`);
+                continue; // Skip unsupported characters
+            }
+
             // Check if the character is uppercase.
             if (char === char.toUpperCase()) {
                 // Add a capitalization marker for the next letter.
@@ -53,6 +59,7 @@ function translateToBraille(text) {
     // Join the Braille symbols into a single string and return.
     return brailleOutput.join('');
 }
+
 
 // Function to translate Braille text back to English.
 function translateFromBraille(brailleText) {
@@ -119,3 +126,10 @@ if (isBraille(input)) {
 } else {
     console.log(translateToBraille(input)); // Translate English to Braille.
 }
+
+// Export the functions for testing
+module.exports = {
+    translateToBraille,
+    translateFromBraille,
+    isBraille
+};
