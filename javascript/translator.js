@@ -88,6 +88,15 @@ let translatedString = "";
 const stringSample = stringToTranslate.slice(0, 6);
 const isBraille = brailleTranslationObject[stringSample];
 let singleBrailleLetter = "";
+
+// How to track capital letters first from english to braille
+const checkUpperCase = (letter) => {
+    if(letter !== letter.toLowerCase()){
+        return ".....O" + englishTranslationObject[letter.toLowerCase()];
+    }
+    return englishTranslationObject[letter]
+}
+// H -> .....O O.OO..
 for (let i = 0; i < stringToTranslate.length; i++) {
     if (isBraille) {
         singleBrailleLetter = singleBrailleLetter + stringToTranslate.charAt(i);
@@ -99,8 +108,8 @@ for (let i = 0; i < stringToTranslate.length; i++) {
         continue;
     }
     const currentLetter = stringToTranslate.charAt(i);
-    const brailleEquivalent = englishTranslationObject[currentLetter];
+    const brailleEquivalent = checkUpperCase(currentLetter);
     translatedString = translatedString + brailleEquivalent;
 }
-// need a way to detect braille or english maybe check the first 6 letters?
+
 console.log(translatedString);
