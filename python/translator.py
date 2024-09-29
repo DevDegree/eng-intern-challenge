@@ -47,24 +47,24 @@ def translate_english_to_braille(phrase):
         'NUM': '.O.OOO',
         }
 
-    braille_translation = []
+    braille_translation = [] # Save translated chars to list for efficiency
     num_mode = False
 
     for char in phrase:
         if char.isnumeric():
-            if num_mode:
+            if num_mode: # If num mode on append character as is
                 braille_translation.append(english_chars_to_braille[char])
             else:
-                num_mode = True
+                num_mode = True # If curr char is numeric, turn on num mode, append Number follows char and numeric char
                 braille_translation.extend([english_chars_to_braille['NUM'
                         ], english_chars_to_braille[char]])
         else:
             if num_mode:
-                num_mode = False
+                num_mode = False 
 
             if char.isupper():
                 braille_translation.extend([english_chars_to_braille['CAP'
-                        ], english_chars_to_braille[char.lower()]])
+                        ], english_chars_to_braille[char.lower()]]) # If char is uppercase, append Capital follows char and char symbol
             else:
                 braille_translation.append(english_chars_to_braille[char])
 
@@ -118,33 +118,33 @@ def translate_braille_to_english(phrase):
         }
 
     phrase_length = len(phrase)
-    english_translation = []
+    english_translation = [] # Save translated chars to list for efficiency
     num_mode = False
     cap_mode = False
 
-    for index in range(6, phrase_length + 1, 6):
-        char = phrase[index - 6:index]
+    for index in range(6, phrase_length + 1, 6): # Multiples of 6 because braille chars are each 6 strings
+        char = phrase[index - 6:index] 
 
-        if num_mode:
-            if char in braille_to_english_numbers:
+        if num_mode: # If currently in number mode
+            if char in braille_to_english_numbers: # Check if current char is braille number
                 english_translation.append(braille_to_english_numbers[char])
             else:
-                num_mode = False
+                num_mode = False # If current char not braille number, turn off num mode and append translation
                 english_translation.append(braille_to_english_letters_mods[char])
             continue
 
         if char in braille_to_english_letters_mods:
             if braille_to_english_letters_mods[char] == 'CAP':
-                cap_mode = True
+                cap_mode = True # Set cap mode True if Capital letter follows char found
                 continue
 
             if braille_to_english_letters_mods[char] == 'NUM':
-                num_mode = True
+                num_mode = True # Set num mode True if Number follows char found
                 continue
 
             if cap_mode:
-                english_translation.append(braille_to_english_letters_mods[char].upper())
-                cap_mode = False
+                english_translation.append(braille_to_english_letters_mods[char].upper()) # Set translation to upper case if in Capital letter mode
+                cap_mode = False # End capital letter mode
                 continue
 
             english_translation.append(braille_to_english_letters_mods[char])
@@ -153,6 +153,9 @@ def translate_braille_to_english(phrase):
 
 
 def non_braille_chars_present(phrase):
+    """
+    Return False if all characters in phrase are 'O' or '.' indicated phrase isn't braille, else return True
+    """
     for char in phrase:
         if char != 'O' and char != '.':
             return True
@@ -160,8 +163,8 @@ def non_braille_chars_present(phrase):
 
 
 def main():
-    if len(sys.argv) >= 2:
-        user_input = " ".join(sys.argv[1:])
+    if len(sys.argv) >= 2: # Check if sys input arguments aren't empty
+        user_input = " ".join(sys.argv[1:]) # Join input arguments with space delimiter
         if non_braille_chars_present(user_input):
             return translate_english_to_braille(user_input)
         return translate_braille_to_english(user_input)
