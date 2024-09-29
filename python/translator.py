@@ -1,5 +1,6 @@
 # Shopify Eng Intern W25 Challenge
 # Braille Translator
+# Yasmeen Elkheir
 
 # Dictionary for English - Braille
 alphabet = {
@@ -22,7 +23,7 @@ alphabet = {
     "decimal follows": ".O...O",
     "number follows": ".O.OOO",
 
-    # decimals
+    # Decimals
     ".": "..OO.O", ",": "..0...", "?": "..O.OO", "!": "..OOO.",
     ":": "..OO..", ";": "..O.O.", "-": "....OO", "/": ".O..O.",
     "<": ".OO..O", ">": "O..OO.", "(": "O.O..O", ")": ".O.OO.",
@@ -31,34 +32,34 @@ alphabet = {
 
 # English to Braille
 def english_brail_translate(word):
-    translated_word = "" # final translated word
+    translated_word = "" # To store final translated word
     is_number = False
 
-    for char in word: # iterate through each character in the word
+    for char in word: # Iterate through each character in the word
 
-        # checks to see if char is a capital letter
+        # Checks to see if char is a capital letter
         if char.isupper() and char.isalpha():
             translated_word += alphabet["capital follows"]
             translated_word += alphabet[char.lower()]
 
-        # checks to see if char is a lowercase letter
+        # Checks to see if char is a lowercase letter
         elif char.isalpha():
             translated_word += alphabet[char]
 
-        # checks to see if char is a number
+        # Checks to see if char is a number
         elif char.isnumeric():
-            # add "number follows" only at the start of a number sequence
+            # Add "number follows" only at the start of a number sequence
             if not is_number:
                 translated_word += alphabet["number follows"]
                 is_number = True
             translated_word += alphabet[char]
 
-        # check if char is a space
+        # Check if char is a space
         elif char == " ":
             translated_word += alphabet[char]
             is_number = False
 
-        # last option is for char to be a decimal
+        # Last option is for char to be a decimal
         else:
             translated_word += alphabet["decimal follows"]
             translated_word += alphabet[char]
@@ -69,31 +70,31 @@ def english_brail_translate(word):
 
 # Braille to English
 def brail_english_translate(word):
-    translated_word = "" # final translated word
+    translated_word = "" # Final translated word
     is_upper = False
     is_number = False
     is_decimal = False
 
-    # iterate over the word six chars at a time
+    # Iterate over the word six chars at a time
     for i in range(0, len(word), 6):
         curr_digit = word[i: i+6]
         
         for char, braille in alphabet.items():
             if braille == curr_digit:
 
-                # indicator for next char to be a decimal
+                # Indicator for next char to be a decimal
                 if  char == "decimal follows":
                     is_decimal = True 
 
-                # indicator for next char to be a number
+                # Indicator for next char to be a number
                 elif char == "number follows":
                     is_number = True
 
-                # indicator for next char to be uppercase
+                # Indicator for next char to be uppercase
                 elif char == "capital follows":
                     is_upper = True
                 
-                # turns letter to uppercase if last braille string indicated so
+                # Turns letter to uppercase if last braille string indicated so
                 if char.isalpha():
                     if is_upper:
                         translated_word += char.upper()
@@ -101,20 +102,20 @@ def brail_english_translate(word):
                     else:
                         translated_word += char
 
-                # checks if the braille should be a number
+                # Checks if the braille should be a number
                 elif is_number:
                     if char.isnumeric():
                         translated_word += char
                     break
 
-                # checks for decimals
+                # Checks for decimals
                 elif is_decimal:
                     if not char.isalpha() and not char.isnumeric():
                         translated_word += char
                     is_decimal = False
                     break
 
-                # reset `is_number` when a space is encountered
+                # Reset `is_number` when a space is encountered
                 elif char == " ":
                     translated_word += char
                     is_number = False 
@@ -123,9 +124,9 @@ def brail_english_translate(word):
     print(translated_word)
 
 
-input_word = input() # user input word
+input_word = input() # User input word
 
-#  check if input is braille or english
+#  Check if input is braille or english
 if "." in input_word[:6] or "O" in input_word[:6]:
     brail_english_translate(input_word)
 else:
