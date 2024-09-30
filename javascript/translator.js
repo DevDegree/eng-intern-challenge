@@ -1,122 +1,123 @@
-const BRAILLE_MAPPING = {
-  'a': 'O.....',
-  'b': 'O.O...',
-  'c': 'OO....',
-  'd': 'OO.O..',
-  'e': 'O..O..',
-  'f': 'OOO...',
-  'g': 'OOOO..',
-  'h': 'O.OO..',
-  'i': '.OO...',
-  'j': '.OOO..',
-  'k': 'O...O.',
-  'l': 'O.O.O.',
-  'm': 'OO..O.',
-  'n': 'OO.OO.',
-  'o': 'O..OO.',
-  'p': 'OOO.O.',
-  'q': 'OOOOO.',
-  'r': 'O.OOO.',
-  's': '.OO.O.',
-  't': '.OOOO.',
-  'u': 'O...OO',
-  'v': 'O.O.OO',
-  'w': '.OOO.O',
-  'x': 'OO..OO',
-  'y': 'OO.OOO',
-  'z': 'O..OOO',
-  'capital': '.....O',
-  'number': '.O.OOO',
-  ' ': '......' // Space character
-};
+class Translator {
+  static BRAILLE_MAPPING = {
+    'a': 'O.....',
+    'b': 'O.O...',
+    'c': 'OO....',
+    'd': 'OO.O..',
+    'e': 'O..O..',
+    'f': 'OOO...',
+    'g': 'OOOO..',
+    'h': 'O.OO..',
+    'i': '.OO...',
+    'j': '.OOO..',
+    'k': 'O...O.',
+    'l': 'O.O.O.',
+    'm': 'OO..O.',
+    'n': 'OO.OO.',
+    'o': 'O..OO.',
+    'p': 'OOO.O.',
+    'q': 'OOOOO.',
+    'r': 'O.OOO.',
+    's': '.OO.O.',
+    't': '.OOOO.',
+    'u': 'O...OO',
+    'v': 'O.O.OO',
+    'w': '.OOO.O',
+    'x': 'OO..OO',
+    'y': 'OO.OOO',
+    'z': 'O..OOO',
+    'capital': '.....O',
+    'number': '.O.OOO',
+    ' ': '......' // Space character
+  };
 
-const NUMBER_MAPPING = {
-  '1': 'O.....',
-  '2': 'O.O...',
-  '3': 'OO....',
-  '4': 'OO.O..',
-  '5': 'O..O..',
-  '6': 'OOO...',
-  '7': 'OOOO..',
-  '8': 'O.OO..',
-  '9': '.OO...',
-  '0': '.OOO..'
-};
+  static NUMBER_MAPPING = {
+    '1': 'O.....',
+    '2': 'O.O...',
+    '3': 'OO....',
+    '4': 'OO.O..',
+    '5': 'O..O..',
+    '6': 'OOO...',
+    '7': 'OOOO..',
+    '8': 'O.OO..',
+    '9': '.OO...',
+    '0': '.OOO..'
+  };
 
-const brailleToEnglish = (input) => {
-  let result = '';
-  let capitalizeNext = false;
-  let numberMode = false;
+  static brailleToEnglish(input) {
+    let result = '';
+    let capitalizeNext = false;
+    let numberMode = false;
 
-  for (let i = 0; i < input.length; i += 6) {
-    const brailleChar = input.slice(i, i + 6);
+    for (let i = 0; i < input.length; i += 6) {
+      const brailleChar = input.slice(i, i + 6);
 
-    if (brailleChar === BRAILLE_MAPPING['capital']) {
-      capitalizeNext = true;
-    } else if (brailleChar === BRAILLE_MAPPING['number']) {
-      numberMode = true;
-    } else if (brailleChar === BRAILLE_MAPPING[' ']) {
-      result += ' ';
-      numberMode = false;
-    } else {
-      let char;
-
-      if (numberMode) {
-        char = Object.keys(NUMBER_MAPPING).find(key => NUMBER_MAPPING[key] === brailleChar);
-      } else {
-        char = Object.keys(BRAILLE_MAPPING).find(key => BRAILLE_MAPPING[key] === brailleChar);
-      }
-
-      if (char) {
-        result += capitalizeNext ? char.toUpperCase() : char;
-      }
-
-      capitalizeNext = false;
-    }
-  }
-
-  return result;
-};
-
-const englishToBraille = (input) => {
-  let result = '';
-  let numberMode = false;
-
-  for (let char of input) {
-    if (/[a-zA-Z]/.test(char)) { // Regex to check if inputted character is an alphabetic letter
-      if (char === char.toUpperCase()) {
-        result += BRAILLE_MAPPING['capital'];
-      }
-      result += BRAILLE_MAPPING[char.toLowerCase()];
-      numberMode = false;
-    } else if (/[0-9]/.test(char)) { // If inputted character is a number
-      if (!numberMode) {
-        result += BRAILLE_MAPPING['number'];
+      if (brailleChar === this.BRAILLE_MAPPING['capital']) {
+        capitalizeNext = true;
+      } else if (brailleChar === this.BRAILLE_MAPPING['number']) {
         numberMode = true;
+      } else if (brailleChar === this.BRAILLE_MAPPING[' ']) {
+        result += ' ';
+        numberMode = false;
+      } else {
+        let char;
+
+        if (numberMode) {
+          char = Object.keys(this.NUMBER_MAPPING).find(key => this.NUMBER_MAPPING[key] === brailleChar);
+        } else {
+          char = Object.keys(this.BRAILLE_MAPPING).find(key => this.BRAILLE_MAPPING[key] === brailleChar);
+        }
+
+        if (char) {
+          result += capitalizeNext ? char.toUpperCase() : char;
+        }
+
+        capitalizeNext = false;
       }
-      result += NUMBER_MAPPING[char];
-    } else if (char === ' ') { // If the inputted character is a space
-      result += BRAILLE_MAPPING[' '];
-      numberMode = false;
     }
+
+    return result;
   }
 
-  return result;
-};
+  static englishToBraille(input) {
+    let result = '';
+    let numberMode = false;
 
-const translate = (input) => {
-  if (/^[O.]+$/.test(input)) { // Regex to check if input is Braille
-    return brailleToEnglish(input);
+    for (let char of input) {
+      if (/[a-zA-Z]/.test(char)) { // Regex to check if inputted character is an alphabetic letter
+        if (char === char.toUpperCase()) {
+          result += this.BRAILLE_MAPPING['capital'];
+        }
+        result += this.BRAILLE_MAPPING[char.toLowerCase()];
+        numberMode = false;
+
+      } else if (/[0-9]/.test(char)) { // If inputted character is a number
+        if (!numberMode) {
+          result += this.BRAILLE_MAPPING['number'];
+          numberMode = true;
+        }
+        result += this.NUMBER_MAPPING[char];
+
+      } else if (char === ' ') { // If inputted character is a space
+        result += this.BRAILLE_MAPPING[' '];
+        numberMode = false;
+      }
+    }
+
+    return result;
   }
-  else {
-    return englishToBraille(input);
+
+  static translate(input) {
+    // Regex to check if input is Braille
+    return /^[O.]+$/.test(input) ? this.brailleToEnglish(input) : this.englishToBraille(input);
   }
-};
+}
 
 // Calling the main program
-const input = process.argv.slice(2).join(' ');
+const input = process.argv.slice(2).join(' '); // Takes terminal/command-line inputs
+
 if (input) {
-  process.stdout.write(translate(input));
+  process.stdout.write(Translator.translate(input));
 } else {
-  process.stderr.write(""); // Error out to match test cases
+  process.stderr.write(""); // Error out to blank, as per test case
 }
