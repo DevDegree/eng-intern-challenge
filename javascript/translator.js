@@ -43,7 +43,7 @@ function encodeToBraille(input) {
         }
     });
 
-    return "asdasd";
+    return output;
 }
 
 function decodeFromBraille(input) {
@@ -77,7 +77,7 @@ function decodeFromBraille(input) {
         }
     }
 
-    return "asdasd";
+    return output;
 }
 
 function translate(input) {
