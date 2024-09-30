@@ -122,7 +122,8 @@ def main():
         print("Usage: python translator.py <string>")
         return
 
-    input_string = sys.argv[1]
+    # Join all command-line arguments into a single input string
+    input_string = ' '.join(sys.argv[1:])
 
     if is_braille(input_string):
         print(braille_to_english_translator(input_string))
