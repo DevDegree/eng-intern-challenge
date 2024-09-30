@@ -14,27 +14,13 @@ from typing import List, Dict
 
 class Translator:
     """
-    This class will translate source text from Braille to English 
-    and vice versa all that needs to be done is to instaniate the class
-    and call the translate method passing in the source text as a parameter
-    to translate
+    A class to translate text between Braille and English, handling capitalization and numbers.
 
     Attributes:
-        _english2Braille Dict[str, str]: Private method that is a 
-        Dictionary containing the mappings of english characters to the 
-        corresponding Braille characters without numbers
-
-        _english2BrailleNumeric Dict[str, str]: Private method that is a  
-        Dictionary containing the mappings of english numbers to the corresponding
-        Braille numbers
-
-        _braille2English Dict[str, str]: Private method that is a 
-        Dictionary containing the mappings of Braille characters read from top 
-        left to right line by line to the corresponding english characters without numbers
-
-         _braille2EnglishNumeric Dict[str, str]: Private method that is a 
-        Dictionary containing the mappings of Braille numbers read from top 
-        left to right line by line to the corresponding english numbers
+        _english2Braille (Dict[str, str]): Maps English characters (a-z, space, CAP, NUMFOLLOWS) to Braille.
+        _english2BrailleNumeric (Dict[str, str]): Maps English digits (0-9) to Braille.
+        _braille2English (Dict[str, str]): Maps Braille characters to English.
+        _braille2EnglishNumeric (Dict[str, str]): Maps Braille digits to English.
 
     Methods:
          translate(): Determines if the source text is Braille or English and translates it accordingly.
@@ -57,13 +43,13 @@ class Translator:
         """I don't technically need this dict since all keys are unique in 
           english2braille but it makes it easier to generate _braille2EnglishNumeric
         """
-        self._english2BrailleNumeric{
+        self._english2BrailleNumeric = {
             "0": ".OOO..", "1": "O.....", "2": "O.O...", "3": "OO....", "4": "OO.O..",
             "5": "O..O..", "6": "OOO...", "7": "OOOO..", "8": "O.OO..", "9": ".OO...",
         }
 
         self._braille2English: Dict[str, str] = {v: k for k, v in self._english2Braille.items()}
-        self._braille2EnglishNumeric =  {v: k for k, v in self._english2BrailleNumeric.items()}
+        self._braille2EnglishNumeric: Dict[str, str]  =  {v: k for k, v in self._english2BrailleNumeric.items()}
 
 
     def translate(self, sourceText: str) -> str:
@@ -212,7 +198,7 @@ class Translator:
         return ''.join(convert())
 
 
-def main(argc: int, argv: List[int]):
+def main(argc: int, argv: List[int]) -> None:
     """
     Main function to handle command line arguments and initiate translation.
 
@@ -237,5 +223,4 @@ def main(argc: int, argv: List[int]):
 
 
 if __name__ == "__main__":
-    argv = sys.argv # this is in a variable so i dont call sys.argv twice
-    main(len(argv), argv)
+    main(len(sys.argv), sys.argv)
