@@ -44,7 +44,38 @@ const NUMBER_MAPPING = {
 };
 
 const brailleToEnglish = (input) => {
-  return "brailleToEnglish";
+  let result = '';
+  let capitalizeNext = false;
+  let numberMode = false;
+
+  for (let i = 0; i < input.length; i += 6) {
+    const brailleChar = input.slice(i, i + 6);
+
+    if (brailleChar === BRAILLE_MAPPING['capital']) {
+      capitalizeNext = true;
+    } else if (brailleChar === BRAILLE_MAPPING['number']) {
+      numberMode = true;
+    } else if (brailleChar === BRAILLE_MAPPING[' ']) {
+      result += ' ';
+      numberMode = false;
+    } else {
+      let char;
+
+      if (numberMode) {
+        char = Object.keys(NUMBER_MAPPING).find(key => NUMBER_MAPPING[key] === brailleChar);
+      } else {
+        char = Object.keys(BRAILLE_MAPPING).find(key => BRAILLE_MAPPING[key] === brailleChar);
+      }
+
+      if (char) {
+        result += capitalizeNext ? char.toUpperCase() : char;
+      }
+
+      capitalizeNext = false;
+    }
+  }
+
+  return result;
 };
 
 const englishToBraille = (input) => {
