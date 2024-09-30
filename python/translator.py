@@ -33,3 +33,59 @@ braille_alphabet = {
     '#': '.0.000',          
 }
 
+
+def translate_to_braille(text):
+    # Translate English to Braille
+    result = []
+    for char in text:
+        if char.isupper():
+            result.append(braille_alphabet['capital'])  
+            char = char.lower()
+        if char.isdigit():
+            result.append(braille_alphabet['number'])  
+            result.append(braille_alphabet[char])      
+        else:
+            result.append(braille_alphabet.get(char, '......'))  
+    return ''.join(result)
+
+def translate_to_english(braille):
+    # Translate Braille to English
+    result = []
+    i = 0
+    capitalize_next = False
+    number_mode = False
+    while i < len(braille):
+        symbol = braille[i:i+6]  # Get the 6-character Braille symbol
+        if symbol == braille_alphabet['capital']:
+            capitalize_next = True
+        elif symbol == braille_alphabet['number']:
+            number_mode = True
+        else:
+            for letter, braille_code in braille_alphabet.items():
+                if braille_code == symbol:
+                    if number_mode:
+                        result.append(letter)  
+                    elif capitalize_next:
+                        result.append(letter.upper())  
+                        capitalize_next = False
+                    else:
+                        result.append(letter)
+                    number_mode = False
+                    break
+        i += 6
+    return ''.join(result)
+
+def main():
+    
+    import sys
+    input_text = sys.argv[1]
+   
+    if all(c in '0.' for c in input_text):  
+        print(translate_to_english(input_text))
+    else:  
+        print(translate_to_braille(input_text))
+
+if __name__ == "__main__":
+    main()
+
+
