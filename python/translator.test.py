@@ -8,10 +8,10 @@ class TestTranslator(unittest.TestCase):
         
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
+        print(result)
         
         # Expected output without the newline at the end
         expected_output = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
-        
         # Strip any leading/trailing whitespace from the output and compare
         self.assertEqual(result.stdout.strip(), expected_output)
 
