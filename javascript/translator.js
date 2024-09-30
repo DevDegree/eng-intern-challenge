@@ -141,7 +141,7 @@ function translate(input) {
       return brailleToEnglish(input);
     } else {
       // Otherwise, it's English
-      console.log(englishToEnglish[input]);
+      console.log(englishToBraille[input]);
       return englishToBraille(input);
     }
   }
