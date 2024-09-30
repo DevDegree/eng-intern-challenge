@@ -48,7 +48,7 @@ class Translator:
             return self._English2Braille() 
 
         i = 0
-        while self.sourceText[i] != "." and i < 6:
+        while i < 6 and self.sourceText[i] != ".":
             i += 1
         # this check checks to ensure that the chosen text is english 
 
@@ -106,24 +106,32 @@ class Translator:
         }
 
         def convert():
-            prevCharNums = "" # i maintain this prev char for the numbers
-            # it essentially checks if the previous char was a number
-            # if it was i shouldnt add a num follows but wait for a space
-            # if it wasnt a number then i can comfortably place a NUM FOLLOWS braille
-            for char in self.sourceText:
+            i = 0 
+            while i < len(self.sourceText):
+                char = self.sourceText[i]
                 if char.isupper():
                     yield english2BrailleDictionary["CAP"]
                     yield english2BrailleDictionary[char.lower()]
                 elif char.isdigit():
-                    if not prevCharNums.isdigit:
-                        yield english2BrailleDictionary["NUMFOLLOWS"]
-                        yield english2BrailleNumerical[char]
-                    else:
-                        yield english2BrailleNumerical[char]
-                    prevCharNums = char
+                    yield english2BrailleDictionary["NUMFOLLOWS"]
+                    """
+                    Variable change from char to instead self.sourceText[i]
+                    this was done to make the code shorter and have the loop 
+                    update the variable in the condition easier
+                    additionallly the checks are to ensure the next char is also a digit
+                    however if it does not terminate with a space the braille2english will not 
+                    work properly as in the case of 12A 
+                    """
+                    while i < len(self.sourceText) and self.sourceText[i].isdigit(): 
+                        yield english2BrailleNumerical[self.sourceText[i]]
+                        i += 1
+
+                    if i < len(self.sourceText):
+                        yield english2BrailleDictionary[self.sourceText[i]]
+
                 else:
                     yield english2BrailleDictionary[char]
-
+                i += 1
         return ''.join(convert()) 
 
     def _Braille2English(self):
