@@ -48,7 +48,29 @@ const brailleToEnglish = (input) => {
 };
 
 const englishToBraille = (input) => {
-  return "englishToBraille";
+  let result = '';
+  let numberMode = false;
+
+  for (let char of input) {
+    if (/[a-zA-Z]/.test(char)) { // Regex to check if inputted character is an alphabetic letter
+      if (char === char.toUpperCase()) {
+        result += BRAILLE_MAPPING['capital'];
+      }
+      result += BRAILLE_MAPPING[char.toLowerCase()];
+      numberMode = false;
+    } else if (/[0-9]/.test(char)) { // If inputted character is a number
+      if (!numberMode) {
+        result += BRAILLE_MAPPING['number'];
+        numberMode = true;
+      }
+      result += NUMBER_MAPPING[char];
+    } else if (char === ' ') { // If the inputted character is a space
+      result += BRAILLE_MAPPING[' '];
+      numberMode = false;
+    }
+  }
+
+  return result;
 };
 
 const translate = (input) => {
