@@ -99,89 +99,90 @@ function isBraille(input) {
 // console.log(process.argv);
 
 // get the args
-const args = process.argv.slice(2);
+// and connect seperate args with spaces
+// since that seems to be what the test case is expecting
+const args = process.argv.slice(2).join(' ');
 
 function convert_args_to_braille() {
     let str_result = '';
-    for (arg of args) {
-        // keep track of number runs
-        let wasLastADigit = false;
-        for(c of arg) {
-            let lowerchar = c.toLowerCase();
 
-            if(isDigit(c) && !wasLastADigit) {
-                wasLastADigit = true;
-                str_result += braille_lut['NUMBER'];
-            } else if(c === ' ') {
-                // end the digit run
-                // to allow another number cmd
-                wasLastADigit = false;
-            }
+    // keep track of number runs
+    let wasLastADigit = false;
+    for(c of args) {
+        let lowerchar = c.toLowerCase();
 
-            // if lowerchar and char are diff
-            // then char is uppercase
-            if(lowerchar!==c) {
-                str_result+=braille_lut['CAPITAL'];
-            }
-
-            str_result += get_braille(lowerchar)
+        if(isDigit(c) && !wasLastADigit) {
+            wasLastADigit = true;
+            str_result += braille_lut['NUMBER'];
+        } else if(c === ' ') {
+            // end the digit run
+            // to allow another number cmd
+            wasLastADigit = false;
         }
-    
+
+        // if lowerchar and char are diff
+        // then char is uppercase
+        if(lowerchar!==c) {
+            str_result+=braille_lut['CAPITAL'];
+        }
+
+        str_result += get_braille(lowerchar)
     }
     return str_result;
 }
 
 function convert_args_to_english() {
     let str_result = '';
-    for (arg of args) {
-        let nextIsNumber = false;
-        let nextIsCapital = false;
-        // iterate over the braille string in chunks
-        for (let i = 0; i < arg.length; i += 6) {
-            const section = arg.slice(i, i + 6);
-            
-            let c = get_char(section);
 
-            // parse number command
-            if(c==='NUMBER') {
-                // console.log('number')
-                nextIsNumber = true;
-                continue;
-            } 
-            if(c === 'CAPITAL') {
-                nextIsCapital = true;
-                continue;
-            }
-            
-            if(nextIsNumber) {
-                let num = numbers_lut[section];
-                if(num != undefined) {
-                    // append the num to our result
-                    // if it was a valid number result
-                    str_result += num;
-                    continue;
-                } else {
-                    // any number not in range of numbers
-                    // will end the number token stream
-                    nextIsNumber = false;
-                }
-            }
+    // track command characters
+    let nextIsNumber = false;
+    let nextIsCapital = false;
+    // iterate over the braille string in chunks
+    for (let i = 0; i < args.length; i += 6) {
+        const section = args.slice(i, i + 6);
+        
+        let c = get_char(section);
 
-            if(nextIsCapital) {
-                c = c.toUpperCase();
-                nextIsCapital = false;
-            }
-
-            str_result += c;
+        // parse number command
+        if(c==='NUMBER') {
+            // console.log('number')
+            nextIsNumber = true;
+            continue;
+        } 
+        if(c === 'CAPITAL') {
+            nextIsCapital = true;
+            continue;
         }
+        
+        if(nextIsNumber) {
+            let num = numbers_lut[section];
+            if(num != undefined) {
+                // append the num to our result
+                // if it was a valid number result
+                str_result += num;
+                continue;
+            } else {
+                // any number not in range of numbers
+                // will end the number token stream
+                nextIsNumber = false;
+            }
+        }
+
+        if(nextIsCapital) {
+            c = c.toUpperCase();
+            nextIsCapital = false;
+        }
+
+        str_result += c;
     }
+
     return str_result;
 }
 
 // check if the input is in english or braille
 // does not handle trailing or prefixed space characters
 // or other characters dirtying the input
-let is_braille = isBraille(args.join(''));
+let is_braille = isBraille(args);
 
 
 let translated = is_braille ? convert_args_to_english() : convert_args_to_braille();
