@@ -3,7 +3,6 @@ from constants import *
 
 import sys
 
-
 def validate_english_char(char: str, next_is_number: bool) -> None:
     """
     Validates an English character based on the given conditions.
@@ -21,7 +20,6 @@ def validate_english_char(char: str, next_is_number: bool) -> None:
     elif next_is_number and not (char.isnumeric() or char in NUMBER_TERMINATING_CHARS):
         # Non-numeric, non-terminating character immediately following a number character
         raise ValueError(INVALID_CHAR_SEQ_MSG)
-
 
 def english_to_braille(text: str) -> str:
     """
@@ -57,7 +55,6 @@ def english_to_braille(text: str) -> str:
 
     return "".join(braille_chars)
 
-
 def validate_braille_char(char: str, prev_char: str, is_last: bool, next_is_capital: bool, next_is_number: bool) -> None:
     """
     Validates a Braille character based on the given conditions.
@@ -89,7 +86,6 @@ def validate_braille_char(char: str, prev_char: str, is_last: bool, next_is_capi
     elif prev_char == BRAILLE_NUMBER_MODIFIER and english_char in NUMBER_TERMINATING_CHARS:
         # Number character immediately followed by a number-terminating character
         raise ValueError(INVALID_CHAR_SEQ_MSG)
-
 
 def braille_to_english(text: str) -> str:
     """
@@ -128,7 +124,6 @@ def braille_to_english(text: str) -> str:
 
     return "".join(english_chars)
 
-
 def detect_language(text: str) -> str:
     """
     Detects the language of the given text.
@@ -141,7 +136,6 @@ def detect_language(text: str) -> str:
     """
     # Braille text has a length that is a multiple of 6 and contains a '.' character
     return BRAILLE if (len(text) % 6 == 0 and "." in text) else ENGLISH
-
 
 def process_args(args: List[str]) -> str:
     """
@@ -158,7 +152,6 @@ def process_args(args: List[str]) -> str:
     
     return " ".join(args)
 
-
 def main():
     args = sys.argv[1:]
 
@@ -167,7 +160,6 @@ def main():
         print(braille_to_english(input_text))
     else:
         print(english_to_braille(input_text))
-
 
 if __name__ == "__main__":
     main()
