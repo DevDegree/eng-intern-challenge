@@ -1,7 +1,8 @@
 import sys
 
+# Criteria
 # The input is Braille if and only if:
-# 1. The number of unique characters is either 1 or 2
+# 1. The number of unique characters (including spaces) is either 1 or 2
 # 2. All characters are either a "." or a "O"
 # Otherwise, the input is assumed to be English.
 
@@ -71,19 +72,6 @@ logical = {'capital':'.....O',
             'decimal':'.O...O',
             'number':'.O.OOO'}
 
-special = {'.':'..OO.O',
-            ',':'..O...',
-            '?':'..O.OO',
-            '!':'..OOO.',
-            ':':'..OO..',
-            ';':'..O.O.',
-            '-':'....OO',
-            '/':'.O..O.',
-            '<':'.OO..O',
-            '>':'O..OO.',
-            '(':'O.O..O',
-            ')':'.O.OO.',
-            ' ':'......'}
 
 # Core translation logic
 output = []
@@ -101,7 +89,7 @@ if to_braille:
 
             # case: '.' is the last character, and is thus guaranteed to not be decimal.
             if i + 1 >= len(input):
-                output.append(special[c])
+                output.append('..OO.O')
 
             # case: '.' is not the last character and we are already in number mode but not yet decimal mode.
 
@@ -110,14 +98,14 @@ if to_braille:
                     output.append(logical['decimal'])
                     mode = 'decimal'
                 else:
-                    output.append(special[c])
+                    output.append('..OO.O')
                     mode = 'letters'
 
             # case: '.' is not the last character and we are already in decimal mode. Decimal mode must end here as we cannot have two decimal points.
 
             elif mode == 'decimal':
                 mode = 'letters'
-                output.append(special[c])
+                output.append('..OO.O')
 
             # case: '.' is not the last character and we are still in letters mode
             else:
@@ -126,7 +114,7 @@ if to_braille:
                     output.append(logical['decimal'])
                     mode = 'decimal'
                 else:
-                    output.append(special[c])     
+                    output.append('..OO.O')     
  
         elif c in letters:
             if mode != 'letters':
@@ -139,10 +127,10 @@ if to_braille:
             output.append(logical['capital'])
             output.append(letters[c.lower()])
 
-        elif c in special:
+        elif c == ' ':
             if mode != 'letters':
                 mode = 'letters'
-            output.append(special[c])
+            output.append('......')
 
         elif c in numbers:
             if mode == 'letters':
@@ -157,7 +145,6 @@ else:
     numbers = {v: k for k, v in numbers.items()}
     letters = {v: k for k, v in letters.items()}
     logical = {v: k for k, v in logical.items()}
-    special = {v: k for k, v in special.items()}
 
     # In the Braille to English direction, there are three possible modes: letters, number, capital
     mode = 'letters'
@@ -168,8 +155,8 @@ else:
         if mode == 'letters':
             if token in letters:
                 output.append(letters[token])
-            elif token in special:
-                output.append(special[token])
+            elif token == '......':
+                output.append(' ')
             elif token in logical:
                 mode = logical[token] #this should only change to capital or number because decimal always occurs during number mode
 
