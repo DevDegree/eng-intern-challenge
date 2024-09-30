@@ -44,15 +44,15 @@ const NUMBER_MAPPING = {
 };
 
 const brailleToEnglish = (input) => {
-
+  return "brailleToEnglish";
 };
 
 const englishToBraille = (input) => {
-
+  return "englishToBraille";
 };
 
 const translate = (input) => {
-  if ("input is Braille") {
+  if (/^[O.]+$/.test(input)) { // Regex to check if input is Braille
     return brailleToEnglish(input);
   }
   else {
