@@ -50,7 +50,7 @@ def englishTranslate(argument):
                 brailleTranslate(argument)
                 return
             else:
-                if numPres and ch ==".O...O":
+                if numPres and ch ==".O...O":      # if decimal follows character, add the the decimal point
                     output+="."   
                 else:             
                     lett,num = brailleDict[ch]
@@ -88,7 +88,7 @@ def brailleTranslate(argument):
                 else:
                     output+=numbersDict[ch]
             else:
-                if ch.isalpha():
+                if ch.isalpha():                      
                     if ch!=ch.lower():
                         output+=".....O"
                         output+=englishLettersDict[ch.lower()]
@@ -97,9 +97,9 @@ def brailleTranslate(argument):
                 else:
                     output+=englishLettersDict[ch]
         
-        output+="......"
+        output+="......"    # the arguments passed will not include the spaces as string characters. Since the words are split into an array, add the space character after processing each word
     
-    output = output[:-6]
+    output = output[:-6]  #removes the last space character added after the last word processed
 
     print(output)
 
@@ -117,6 +117,4 @@ if __name__ == "__main__":
             englishTranslate(argument)
         else:
             brailleTranslate(argument)
-    else:
-        print("No Arguments")
 
