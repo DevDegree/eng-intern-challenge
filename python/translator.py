@@ -37,17 +37,20 @@ braille_alphabet = {
 def translate_to_braille(text):
     # Translate English to Braille
     result = []
-    print(text)
+    flag_digit = False
     for char in text:
         if char.isupper():
             result.append(braille_alphabet['capital'])  
             char = char.lower()
         if char.isdigit():
-            result.append(braille_alphabet['number'])  
+            if flag_digit == False:
+                result.append(braille_alphabet['number'])  
+                flag_digit = True
             result.append(braille_alphabet[char])      
         else:
+            flag_digit = False
             result.append(braille_alphabet.get(char, '......'))  
-        print(char, result)
+        
     return ''.join(result)
 
 def translate_to_english(braille):
@@ -90,7 +93,7 @@ def main():
     # Join the input text into a single string
     input_text = ' '.join(input_text)
     
-    print("Input text:", input_text)  # Print the input text
+    # print("Input text:", input_text)  # Print the input text
     
     if all(c in 'O.' for c in input_text):  
         print(translate_to_english(input_text))
