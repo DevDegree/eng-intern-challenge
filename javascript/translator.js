@@ -86,4 +86,6 @@ function translate(msg) {
              ans = ans + curCode;
         }
     }
+
+    return ans;
 }
