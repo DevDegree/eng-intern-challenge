@@ -1,8 +1,8 @@
 //CONSTANTS
 
-// Key-value pair where the 6 char braile string is the key to the letter value
+// Key-value pair where the 6 char braille string is the key to the letter value
 // Must check for special chars (capital, decimal before). This is  a lot quicker than regex
-const BRAILE_TO_LETTER = {
+const BRAILLE_TO_LETTER = {
     "O.....": "a",
     "O.O...": "b",
     "OO....": "c",
@@ -32,7 +32,7 @@ const BRAILE_TO_LETTER = {
 };
 
 //Treat numbers as char so it can be appended to string easily
-const BRAILE_TO_NUMBER = {
+const BRAILLE_TO_NUMBER = {
     "O.....": "1",
     "O.O...": "2",
     "OO....": "3",
@@ -45,55 +45,55 @@ const BRAILE_TO_NUMBER = {
     ".OOO..": "0",
 };
 
-const BRAILE_SPACE = "......";
-const BRAILE_CAPITAL = ".....O";
-const BRAILE_NUMBER = ".O.OOO";
+const BRAILLE_SPACE = "......";
+const BRAILLE_CAPITAL = ".....O";
+const BRAILLE_NUMBER = ".O.OOO";
 const NONE = ""; //Used for char follows checking
 
 //FUNCTIONS
 /**
- * Returns the braile value of a given character
+ * Returns the braille value of a given character
  * @param {Object} dict The letter/number dictionary to check for the char
  * @param {string} char The desired character
  */
-function charToBraile(dict, char) {
+function charToBraille(dict, char) {
     return Object.keys(dict).find((key) => dict[key] === char);
 }
 
-function charsToBraile(input) {
-    const braileNumVals = Object.values(BRAILE_TO_NUMBER);
-    const braileLetterVals = Object.values(BRAILE_TO_LETTER);
+function charsToBraille(input) {
+    const brailleNumVals = Object.values(BRAILLE_TO_NUMBER);
+    const brailleLetterVals = Object.values(BRAILLE_TO_LETTER);
 
     let output = "";
     let nextCharType = NONE;
     for (let currentChar of input) {
         if (currentChar === " ") {
-            output += BRAILE_SPACE;
-            if (nextCharType === BRAILE_NUMBER) nextCharType = NONE;
+            output += BRAILLE_SPACE;
+            if (nextCharType === BRAILLE_NUMBER) nextCharType = NONE;
         } else if (
-            braileNumVals.includes(currentChar) &&
-            nextCharType !== BRAILE_NUMBER
+            brailleNumVals.includes(currentChar) &&
+            nextCharType !== BRAILLE_NUMBER
         ) {
             //Number follow character
-            output += BRAILE_NUMBER + charToBraile(BRAILE_TO_NUMBER, currentChar);
-            nextCharType = BRAILE_NUMBER;
+            output += BRAILLE_NUMBER + charToBraille(BRAILLE_TO_NUMBER, currentChar);
+            nextCharType = BRAILLE_NUMBER;
         } else if (
-            braileNumVals.includes(currentChar) &&
-            nextCharType === BRAILE_NUMBER
+            brailleNumVals.includes(currentChar) &&
+            nextCharType === BRAILLE_NUMBER
         ) {
-            //A character which follows a number braile character
-            output += charToBraile(BRAILE_TO_NUMBER, currentChar);
+            //A character which follows a number braille character
+            output += charToBraille(BRAILLE_TO_NUMBER, currentChar);
         } else if (
             currentChar.toUpperCase() === currentChar &&
-            braileLetterVals.includes(currentChar.toLowerCase())
+            brailleLetterVals.includes(currentChar.toLowerCase())
         ) {
             //Uppercase
             output +=
-                BRAILE_CAPITAL +
-                charToBraile(BRAILE_TO_LETTER, currentChar.toLowerCase());
-        } else if (braileLetterVals.includes(currentChar.toLowerCase())) {
+                BRAILLE_CAPITAL +
+                charToBraille(BRAILLE_TO_LETTER, currentChar.toLowerCase());
+        } else if (brailleLetterVals.includes(currentChar.toLowerCase())) {
             //Lowercase
-            output += charToBraile(BRAILE_TO_LETTER, currentChar.toLowerCase());
+            output += charToBraille(BRAILLE_TO_LETTER, currentChar.toLowerCase());
         } else {
             //Character doesn't exist
             console.error("Character doesn't exist");
@@ -103,40 +103,40 @@ function charsToBraile(input) {
     return output;
 }
 
-function braileToChars(input) {
+function brailleToChars(input) {
     if (input.length % 6 !== 0) {
-        console.error("Invalid number of characters for braile string");
+        console.error("Invalid number of characters for braille string");
         process.exit(1);
     }
 
     let output = "";
     let nextCharType = NONE;
     for (let i = 0; i < input.length; i += 6) {
-        const braileSlice = input.slice(i, i + 6);
+        const brailleSlice = input.slice(i, i + 6);
         switch (
-            braileSlice //Deal with special characters
+            brailleSlice //Deal with special characters
         ) {
-            case BRAILE_SPACE:
+            case BRAILLE_SPACE:
                 output += " ";
-                if (nextCharType === BRAILE_NUMBER) nextCharType = NONE; //Number follows, all following symbols until next space
+                if (nextCharType === BRAILLE_NUMBER) nextCharType = NONE; //Number follows, all following symbols until next space
                 break;
-            case BRAILE_CAPITAL:
-                nextCharType = BRAILE_CAPITAL;
-                //output += BRAILE_TO_LETTER(braileSlice).toUpperCase();
+            case BRAILLE_CAPITAL:
+                nextCharType = BRAILLE_CAPITAL;
+                //output += BRAILLE_TO_LETTER(brailleSlice).toUpperCase();
                 break;
-            case BRAILE_NUMBER:
-                nextCharType = BRAILE_NUMBER;
-                //output += BRAILE_TO_NUMBER(braileSlice);
+            case BRAILLE_NUMBER:
+                nextCharType = BRAILLE_NUMBER;
+                //output += BRAILLE_TO_NUMBER(brailleSlice);
                 break;
             default: //normal characters
-                if (nextCharType === BRAILE_CAPITAL) {
-                    output += BRAILE_TO_LETTER[braileSlice].toUpperCase();
+                if (nextCharType === BRAILLE_CAPITAL) {
+                    output += BRAILLE_TO_LETTER[brailleSlice].toUpperCase();
                     nextCharType = NONE;
-                } else if (nextCharType === BRAILE_NUMBER) {
-                    output += BRAILE_TO_NUMBER[braileSlice];
+                } else if (nextCharType === BRAILLE_NUMBER) {
+                    output += BRAILLE_TO_NUMBER[brailleSlice];
                 } else {
                     //lower case
-                    output += BRAILE_TO_LETTER[braileSlice];
+                    output += BRAILLE_TO_LETTER[brailleSlice];
                 }
                 break;
         }
@@ -158,16 +158,16 @@ function main() {
         }
     }
 
-    //If string only contains O and . -> it is braile
-    const regexBraile = /^[O.]+$/;
+    //If string only contains O and . -> it is braille
+    const regexBraille = /^[O.]+$/;
 
     let output = "";
-    if (regexBraile.test(input)) {
-        //Braile
-        output = braileToChars(input);
+    if (regexBraille.test(input)) {
+        //Braille
+        output = brailleToChars(input);
     } else {
         //English
-        output = charsToBraile(input);
+        output = charsToBraille(input);
     }
     console.log(output);
 }
