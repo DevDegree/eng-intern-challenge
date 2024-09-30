@@ -72,8 +72,6 @@ for (const [key, value] of Object.entries(braille_lut)) {
     }
 }
 
-// console.log(numbers_lut);
-
 // a couple helpers
 
 // Fetch the braille value from lut with a fallback to empty str
@@ -81,7 +79,6 @@ const get_braille = (char) => braille_lut[char] || '';
 
 // Fetch the eng char value from lut with a fallback to empty str
 const get_char = (char) => english_lut[char] || '';
-const get_num = (char) => numbers_lut[char] || '';
 
 // check if char is am ascii digit
 function isDigit(char) {
@@ -99,9 +96,10 @@ function isBraille(input) {
     return true;
 }
 
+// console.log(process.argv);
+
 // get the args
 const args = process.argv.slice(2);
-// console.log('Arguments:', args);
 
 function convert_args_to_braille() {
     let str_result = '';
@@ -110,7 +108,6 @@ function convert_args_to_braille() {
         let wasLastADigit = false;
         for(c of arg) {
             let lowerchar = c.toLowerCase();
-            // console.log(lowerchar);
 
             if(isDigit(c) && !wasLastADigit) {
                 wasLastADigit = true;
@@ -144,29 +141,30 @@ function convert_args_to_english() {
             const section = arg.slice(i, i + 6);
             
             let c = get_char(section);
-            
-            // console.log(c, ' ', section);
 
             // parse number command
             if(c==='NUMBER') {
-                console.log('number')
+                // console.log('number')
                 nextIsNumber = true;
                 continue;
-            } else if(nextIsNumber && c !== ' ') {
-                let num = get_num(section);
-
-                console.log('num ', section);
-
-                str_result += num;
-                continue;
-                
-            } else {
-                nextIsNumber = false;
-            }
-
-            if(c == 'CAPITAL') {
+            } 
+            if(c === 'CAPITAL') {
                 nextIsCapital = true;
                 continue;
+            }
+            
+            if(nextIsNumber) {
+                let num = numbers_lut[section];
+                if(num != undefined) {
+                    // append the num to our result
+                    // if it was a valid number result
+                    str_result += num;
+                    continue;
+                } else {
+                    // any number not in range of numbers
+                    // will end the number token stream
+                    nextIsNumber = false;
+                }
             }
 
             if(nextIsCapital) {
@@ -189,4 +187,4 @@ let is_braille = isBraille(args.join(''));
 let translated = is_braille ? convert_args_to_english() : convert_args_to_braille();
 
 //output answer
-console.log(translated);
+process.stdout.write(translated);
