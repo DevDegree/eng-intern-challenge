@@ -13,8 +13,16 @@ from typing import List
 
 # A class based approach will make this easier to do
 class Translator:
-    """
-    This class is the way that translation will occur Bidirectionally
+    """This class will translate source text from Braille to English 
+    and vice versa all that needs to be done is to instaniate the class
+    and call the translate method passing in the source text as a parameter
+    to translate
+
+    Attributes:
+        _type_: _description_
+
+    Methods:
+        _type_: _description_
     """
 
     # A raised dot is represented as O and . is a lowered dot
@@ -30,7 +38,7 @@ class Translator:
     # it is a multiple of 6. 
     # it has ONLY . or O in it
 
-    def __init__(self, sourceText):
+    def __init__(self, sourceText: string):
         # according to the requirements i must include the entire English alphabet
         # the abiulity to capitalize letters
         # add spaces and the numbers 0 through 9 
@@ -38,7 +46,6 @@ class Translator:
         # therefore if ANY text given to me has the . it is braille
         # and this can be determined just by looking at the first 6 characters
         # since ALL braille characters of that form have a . 
-        self.sourceText = sourceText
         self._english2Braille = {
             "a": "O.....",  "b": "O.O...", "c": "OO....", "d": "OO.O..", "e": "O..O..", "f": "OOO...",
             "g": "OOOO..", "h": "O.OO..", "i": ".OO...", "j": ".OOO..", "k": "O...O.", "l": "O.O.O.",
@@ -55,7 +62,7 @@ class Translator:
         self._braille2English = {v: k for k, v in self._english2Braille.items()}
         self._braille2EnglishNumeric =  {v: k for k, v in self.english2BrailleNumeric.items()}
 
-    def translate(self):
+    def translate(self, sourceText):
         # this will check if the first 6 characters have a . in them otherwise it will
         # assume it is english 
         if len(self.sourceText) < 6:
@@ -74,7 +81,7 @@ class Translator:
             return self._English2Braille() # if i didnt encounter a . it must be english
          
 
-    def _English2Braille(self):
+    def _English2Braille(self, sourceText):
         
         def convert():
             i = 0 
@@ -105,7 +112,7 @@ class Translator:
                 i += 1
         return ''.join(convert()) 
 
-    def _Braille2English(self):
+    def _Braille2English(self, sourceText):
 
         def convert():
             i = 0
