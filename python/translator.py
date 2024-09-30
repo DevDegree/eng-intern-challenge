@@ -9,7 +9,7 @@ line and outputs the corresponding
 Braille or English text
 """
 import sys
-from typing import List. Dict
+from typing import List, Dict
 
 
 class Translator:
