@@ -37,23 +37,19 @@ char_to_braille = {
     "8": "O.OO..",
     "9": ".OO...",
     "0": ".OOO..",
-    ".": "..OO.O",
-    ",": "..O...",
-    "?": "..O.OO",
-    "!": "..OOO.",
-    ":": "..OO..",
-    ";": "..O.O.",
-    "-": "....OO",
-    "/": ".O..O.",
-    "<": ".OO..O",
-    ">": "O..OO.",
-    "(": "O.O..O",
-    ")": ".O.OO.",
     " ": "......",
     "cap_follows": ".....O",
-    "decimal_follows": ".O...O",
     "number_follows": ".O.OOO",
 }
+
+braille_to_char_letters_space_follows = {}
+braille_to_char_numbers = {}
+
+for char, braille in char_to_braille.items():
+    if char.isnumeric():
+        braille_to_char_numbers[braille] = char
+    else:
+        braille_to_char_letters_space_follows[braille] = char
 
 
 def identify_lang(input_str: str) -> bool:
@@ -66,7 +62,7 @@ def identify_lang(input_str: str) -> bool:
         bool: True if the input is identified as English, False if Braille.
     """
 
-    return False
+    return not set(input_str).issubset({"O", "."})
 
 
 def convert_english_to_braille(input_str: str) -> str:
@@ -79,7 +75,19 @@ def convert_english_to_braille(input_str: str) -> str:
         str: The corresponding Braille translation in string format.
     """
 
-    return ""
+    braille_str = ""
+    prevNumeric = False
+
+    for i in input_str:
+        if i.isupper():
+            braille_str += char_to_braille["cap_follows"]
+        elif i.isnumeric():
+            if not prevNumeric:
+                braille_str += char_to_braille["number_follows"]
+            prevNumeric = True
+
+        braille_str += char_to_braille[i.lower()]
+    return braille_str
 
 
 def convert_braille_to_english(input_str: str) -> str:
@@ -92,7 +100,35 @@ def convert_braille_to_english(input_str: str) -> str:
         str: The corresponding English translation of the Braille input.
     """
 
-    return ""
+    english_str = ""
+    capitalFollows = False
+    numberFollows = True
+
+    for i in range(0, len(input_str), 6):
+        six_char_block = input_str[i : i + 6]
+        if braille_to_char_letters_space_follows[six_char_block] == "cap_follows":
+            capitalFollows = True
+            numberFollows = False
+            continue
+        elif braille_to_char_letters_space_follows[six_char_block] == "number_follows":
+            numberFollows = True
+            capitalFollows = False
+            continue
+        elif braille_to_char_letters_space_follows[six_char_block] == " ":
+            numberFollows = False
+            capitalFollows = False
+            english_str += braille_to_char_letters_space_follows[six_char_block]
+            continue
+
+        if numberFollows:
+            english_str += braille_to_char_numbers[six_char_block]
+        elif capitalFollows:
+            english_str += braille_to_char_letters_space_follows[six_char_block].upper()
+            capitalFollows = False
+        else:
+            english_str += braille_to_char_letters_space_follows[six_char_block]
+
+    return english_str
 
 
 def convert(input_str: str) -> str:
