@@ -1,7 +1,16 @@
+from enum import Enum
+import argparse
+
 class EnglishToBrailleTranslator:
+    class _BrailleSpecialSymbols(Enum):
+        NUMBER_FOLLOWS = 1
+        CAPITAL_FOLLOWS = 2
+        DECIMAL_FOLLOWS = 3
+        BLANK_SYMBOL = 4
+
     def __init__(self):
-        # English to Braille dictionary for letters and punctuation
-        self.english_to_braille_letters_and_punctuations = {
+        # English to Braille dictionary for letters, numbers and punctuation
+        self.english_to_braille_dictionary = {
             # Letters
             "A": "O.....", "B": "O.O...", "C": "OO....", "D": "OO.O..", "E": "O..O..",
             "F": "OOO...", "G": "OOOO..", "H": "O.OO..", "I": ".OO...", "J": ".OOO..",
@@ -23,12 +32,48 @@ class EnglishToBrailleTranslator:
 
         # English to Braille dictionary for special symbols
         self.english_to_braille_special_symbols = {
-            "NF": ".O.OOO",  # Number follows indicator
-            "CF": ".....O",  # Capital follows indicator
-            "DF": ".O...O"  # Decimal follows indicator
+            self._BrailleSpecialSymbols.NUMBER_FOLLOWS: ".O.OOO",  # NF: Number follows indicator
+            self._BrailleSpecialSymbols.CAPITAL_FOLLOWS: ".....O",  # CF: Capital follows indicator
+            self._BrailleSpecialSymbols.DECIMAL_FOLLOWS: ".O...O",  # DF: Decimal follows indicator
+            self._BrailleSpecialSymbols.BLANK_SYMBOL: "",
         }
 
 
+    def translate(self, input_text: str) -> str:
+        translated_output_text_list = []
+        # The special_symbol_holder variable is used to make sure that the special
+        # braille symbols are used only once per character
+        special_symbol_holder = self._BrailleSpecialSymbols.BLANK_SYMBOL
+
+        for char in input_text:
+            if char.isalpha():
+                if char.isupper() and special_symbol_holder != self._BrailleSpecialSymbols.CAPITAL_FOLLOWS:
+                    special_symbol_holder = self._BrailleSpecialSymbols.CAPITAL_FOLLOWS
+                    translated_output_text_list.append(
+                            self.english_to_braille_special_symbols[special_symbol_holder]
+                        )
+
+                translated_output_text_list.append(
+                    self.english_to_braille_dictionary[char.upper()]
+                )
+
+
+            elif char.isdigit():
+                if special_symbol_holder != self._BrailleSpecialSymbols.NUMBER_FOLLOWS:
+                    special_symbol_holder = self._BrailleSpecialSymbols.NUMBER_FOLLOWS
+                    translated_output_text_list.append(
+                        self.english_to_braille_special_symbols[special_symbol_holder]
+                    )
+
+                translated_output_text_list.append(self.english_to_braille_dictionary[char])
+
+            else:
+                try:
+                    translated_output_text_list.append(self.english_to_braille_dictionary[char])
+                except KeyError:
+                    raise ValueError(f"Unsupported character '{char}' for translation from English to Braille.")
+
+        return "".join(translated_output_text_list)
 
 
 class BrailleToEnglishTranslator:
@@ -59,5 +104,28 @@ class BrailleToEnglishTranslator:
         }
 
 
+class Translator:
+    def __init__(self):
+        self.english_to_braille = EnglishToBrailleTranslator()
+
+    def run(self):
+        # Use argparse to get the input from the command line
+        parser = argparse.ArgumentParser(description='Translate English to Braille or Braille to English.')
+        parser.add_argument('text', nargs='+', help='The text to be translated, either English or Braille.')
+
+        # Parse the command line arguments
+        args = parser.parse_args()
+        input_text = ' '.join(args.text).strip()  # Concatenate the words to form the full text
+
+        # Translate from English to Braille
+        result = self.english_to_braille.translate(input_text)
+        print(f"{result}")
+
+
 if __name__=='__main__':
-    pass
+    translator = Translator()
+    try:
+        translator.run()
+    except ValueError as e:
+        print(f"ERROR: {e}")
+        exit(1)
