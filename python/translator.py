@@ -116,9 +116,16 @@ def english_to_braille_translator(english_text):
     return ' '.join(result).strip()  
 
 def main():
-    input_string = input("Enter a string to translate: ")
+    if len(sys.argv) < 2:
+        print("Usage: python translator.py <string>")
+        return
+
+    input_string = sys.argv[1]
 
     if is_braille(input_string):
         print(braille_to_english_translator(input_string))
     else:
         print(english_to_braille_translator(input_string))
+
+if __name__ == "__main__":
+    main()
