@@ -43,11 +43,11 @@ def english_to_braille(text: str) -> str:
         if char.isnumeric():
             if not next_is_number:
                 # Append the braille number character before the first digit of a number
-                braille_chars.append(BRAILLE_NUMBER_MODIFIER)
+                braille_chars.append(NUMBER_FOLLOWS)
                 next_is_number = True
             char = NUMBERS_TO_LETTERS[char]
         elif char.isupper():
-            braille_chars.append(BRAILLE_CAPITAL_MODIFIER)
+            braille_chars.append(CAPITAL_FOLLOWS)
             # Convert the character to lowercase for braille mapping
             char = char.lower()
 
@@ -83,7 +83,7 @@ def validate_braille_char(char: str, prev_char: str, is_last: bool, next_is_capi
     elif next_is_number and english_char not in LETTERS_TO_NUMBERS and not english_char in NUMBER_TERMINATING_CHARS:
         # Non-numeric, non-terminating character where a numeric or number-terminating character is expected
         raise ValueError(INVALID_CHAR_SEQ_MSG)
-    elif prev_char == BRAILLE_NUMBER_MODIFIER and english_char in NUMBER_TERMINATING_CHARS:
+    elif prev_char == NUMBER_FOLLOWS and english_char in NUMBER_TERMINATING_CHARS:
         # Number character immediately followed by a number-terminating character
         raise ValueError(INVALID_CHAR_SEQ_MSG)
 
@@ -106,9 +106,9 @@ def braille_to_english(text: str) -> str:
         validate_braille_char(braille_char, text[i-6:i] if i > 0 else "", i + 6 == len(text), next_is_capital, next_is_number)
 
         english_char = BRAILLE_TO_ENGLISH[braille_char]
-        if braille_char == BRAILLE_CAPITAL_MODIFIER:
+        if braille_char == CAPITAL_FOLLOWS:
             next_is_capital = True
-        elif braille_char == BRAILLE_NUMBER_MODIFIER:
+        elif braille_char == NUMBER_FOLLOWS:
             next_is_number = True
         else:
             if next_is_capital:

@@ -48,14 +48,14 @@ class TestTranslator(unittest.TestCase):
             "OOOOOOOOOOO.",
             ".O...O",
             "O.O.O",
-            BRAILLE_CAPITAL_MODIFIER,
-            BRAILLE_NUMBER_MODIFIER,
-            BRAILLE_NUMBER_MODIFIER + BRAILLE_CAPITAL_MODIFIER + ENGLISH_TO_BRAILLE["k"],
-            BRAILLE_CAPITAL_MODIFIER + BRAILLE_NUMBER_MODIFIER + ENGLISH_TO_BRAILLE["a"],
-            BRAILLE_CAPITAL_MODIFIER + " ",
-            BRAILLE_NUMBER_MODIFIER + ENGLISH_TO_BRAILLE["k"],
-            BRAILLE_NUMBER_MODIFIER + ENGLISH_TO_BRAILLE[" "],
-            BRAILLE_CAPITAL_MODIFIER + ENGLISH_TO_BRAILLE[" "],
+            CAPITAL_FOLLOWS,
+            NUMBER_FOLLOWS,
+            NUMBER_FOLLOWS + CAPITAL_FOLLOWS + ENGLISH_TO_BRAILLE["k"],
+            CAPITAL_FOLLOWS + NUMBER_FOLLOWS + ENGLISH_TO_BRAILLE["a"],
+            CAPITAL_FOLLOWS + " ",
+            NUMBER_FOLLOWS + ENGLISH_TO_BRAILLE["k"],
+            NUMBER_FOLLOWS + ENGLISH_TO_BRAILLE[" "],
+            CAPITAL_FOLLOWS + ENGLISH_TO_BRAILLE[" "],
         ]
 
         for invalid_input in invalid_inputs:
