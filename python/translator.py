@@ -1,8 +1,6 @@
 from enum import Enum
 import argparse
-
-
-from enum import Enum
+import re
 
 class BrailleSpecialSymbols(Enum):
     """
@@ -61,6 +59,20 @@ class EnglishToBrailleTranslator:
             BrailleSpecialSymbols.BLANK_SYMBOL: "",
         }
 
+    def _is_decimal(self, word: str) -> bool:
+        """
+        Check if the given word is a decimal number.
+
+        Args:
+            word (str): The word to be checked.
+
+        Returns:
+            bool: True if the word is a decimal number, False otherwise.
+        """
+
+        decimal_pattern = re.compile(r'^-?\d*\.\d+$')
+        return bool(decimal_pattern.match(word))
+
     def translate(self, input_text: str) -> str:
         """
         Translate the given English text to Braille.
@@ -76,32 +88,57 @@ class EnglishToBrailleTranslator:
         # braille symbols are used only once per character
         special_symbol_holder = BrailleSpecialSymbols.BLANK_SYMBOL
 
-        for char in input_text:
-            if char.isalpha():
-                if char.isupper() and special_symbol_holder != BrailleSpecialSymbols.CAPITAL_FOLLOWS:
-                    special_symbol_holder = BrailleSpecialSymbols.CAPITAL_FOLLOWS
+        for word in input_text.split():
+            if self._is_decimal(word):
+                translated_output_text_list.append(
+                    self.english_to_braille_special_symbols[BrailleSpecialSymbols.DECIMAL_FOLLOWS]
+                )
+
+                for char in word:
                     translated_output_text_list.append(
-                        self.english_to_braille_special_symbols[special_symbol_holder]
+                        self.english_to_braille_dictionary[char]
                     )
 
                 translated_output_text_list.append(
-                    self.english_to_braille_dictionary[char.upper()]
+                    self.english_to_braille_dictionary[" "]
                 )
 
-            elif char.isdigit():
-                if special_symbol_holder != BrailleSpecialSymbols.NUMBER_FOLLOWS:
-                    special_symbol_holder = BrailleSpecialSymbols.NUMBER_FOLLOWS
-                    translated_output_text_list.append(
-                        self.english_to_braille_special_symbols[special_symbol_holder]
-                    )
-
-                translated_output_text_list.append(self.english_to_braille_dictionary[char])
+                continue
 
             else:
-                try:
-                    translated_output_text_list.append(self.english_to_braille_dictionary[char])
-                except KeyError:
-                    raise ValueError(f"Unsupported English character '{char}' for translation from English to Braille.")
+                for char in word:
+                    if char.isalpha():
+                        if char.isupper() and special_symbol_holder != BrailleSpecialSymbols.CAPITAL_FOLLOWS:
+                            special_symbol_holder = BrailleSpecialSymbols.CAPITAL_FOLLOWS
+                            translated_output_text_list.append(
+                                self.english_to_braille_special_symbols[special_symbol_holder]
+                            )
+
+                        translated_output_text_list.append(
+                            self.english_to_braille_dictionary[char.upper()]
+                        )
+
+                    elif char.isdigit():
+                        if special_symbol_holder != BrailleSpecialSymbols.NUMBER_FOLLOWS:
+                            special_symbol_holder = BrailleSpecialSymbols.NUMBER_FOLLOWS
+                            translated_output_text_list.append(
+                                self.english_to_braille_special_symbols[special_symbol_holder]
+                            )
+
+                        translated_output_text_list.append(self.english_to_braille_dictionary[char])
+
+                    else:
+                        try:
+                            translated_output_text_list.append(self.english_to_braille_dictionary[char])
+                        except KeyError:
+                            raise ValueError(f"Unsupported English character '{char}' for translation from English to Braille.")
+
+            translated_output_text_list.append(
+                self.english_to_braille_dictionary[" "]
+            )
+
+        # An extra last space is added in the loop, so we remove it here.
+        translated_output_text_list.pop()
 
         return "".join(translated_output_text_list)
 
