@@ -137,9 +137,11 @@ function brailleToEnglish(braille) {
 function translate(input) {
     if (/^[O.]+$/.test(input)) {
       // If the input contains only Os and dots, it's Braille
+      console.log(brailleToEnglish[input]);
       return brailleToEnglish(input);
     } else {
       // Otherwise, it's English
+      console.log(englishToEnglish[input]);
       return englishToBraille(input);
     }
   }
