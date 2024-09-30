@@ -1,13 +1,15 @@
 from enum import Enum
 import argparse
 
-class EnglishToBrailleTranslator:
-    class _BrailleSpecialSymbols(Enum):
-        NUMBER_FOLLOWS = 1
-        CAPITAL_FOLLOWS = 2
-        DECIMAL_FOLLOWS = 3
-        BLANK_SYMBOL = 4
 
+class BrailleSpecialSymbols(Enum):
+    NUMBER_FOLLOWS = 1
+    CAPITAL_FOLLOWS = 2
+    DECIMAL_FOLLOWS = 3
+    BLANK_SYMBOL = 4
+
+
+class EnglishToBrailleTranslator:
     def __init__(self):
         # English to Braille dictionary for letters, numbers and punctuation
         self.english_to_braille_dictionary = {
@@ -32,23 +34,22 @@ class EnglishToBrailleTranslator:
 
         # English to Braille dictionary for special symbols
         self.english_to_braille_special_symbols = {
-            self._BrailleSpecialSymbols.NUMBER_FOLLOWS: ".O.OOO",  # NF: Number follows indicator
-            self._BrailleSpecialSymbols.CAPITAL_FOLLOWS: ".....O",  # CF: Capital follows indicator
-            self._BrailleSpecialSymbols.DECIMAL_FOLLOWS: ".O...O",  # DF: Decimal follows indicator
-            self._BrailleSpecialSymbols.BLANK_SYMBOL: "",
+            BrailleSpecialSymbols.NUMBER_FOLLOWS: ".O.OOO",  # NF: Number follows indicator
+            BrailleSpecialSymbols.CAPITAL_FOLLOWS: ".....O",  # CF: Capital follows indicator
+            BrailleSpecialSymbols.DECIMAL_FOLLOWS: ".O...O",  # DF: Decimal follows indicator
+            BrailleSpecialSymbols.BLANK_SYMBOL: "",
         }
-
 
     def translate(self, input_text: str) -> str:
         translated_output_text_list = []
         # The special_symbol_holder variable is used to make sure that the special
         # braille symbols are used only once per character
-        special_symbol_holder = self._BrailleSpecialSymbols.BLANK_SYMBOL
+        special_symbol_holder = BrailleSpecialSymbols.BLANK_SYMBOL
 
         for char in input_text:
             if char.isalpha():
-                if char.isupper() and special_symbol_holder != self._BrailleSpecialSymbols.CAPITAL_FOLLOWS:
-                    special_symbol_holder = self._BrailleSpecialSymbols.CAPITAL_FOLLOWS
+                if char.isupper() and special_symbol_holder != BrailleSpecialSymbols.CAPITAL_FOLLOWS:
+                    special_symbol_holder = BrailleSpecialSymbols.CAPITAL_FOLLOWS
                     translated_output_text_list.append(
                             self.english_to_braille_special_symbols[special_symbol_holder]
                         )
@@ -59,8 +60,8 @@ class EnglishToBrailleTranslator:
 
 
             elif char.isdigit():
-                if special_symbol_holder != self._BrailleSpecialSymbols.NUMBER_FOLLOWS:
-                    special_symbol_holder = self._BrailleSpecialSymbols.NUMBER_FOLLOWS
+                if special_symbol_holder != BrailleSpecialSymbols.NUMBER_FOLLOWS:
+                    special_symbol_holder = BrailleSpecialSymbols.NUMBER_FOLLOWS
                     translated_output_text_list.append(
                         self.english_to_braille_special_symbols[special_symbol_holder]
                     )
@@ -71,7 +72,7 @@ class EnglishToBrailleTranslator:
                 try:
                     translated_output_text_list.append(self.english_to_braille_dictionary[char])
                 except KeyError:
-                    raise ValueError(f"Unsupported character '{char}' for translation from English to Braille.")
+                    raise ValueError(f"Unsupported English character '{char}' for translation from English to Braille.")
 
         return "".join(translated_output_text_list)
 
@@ -79,22 +80,19 @@ class EnglishToBrailleTranslator:
 class BrailleToEnglishTranslator:
     def __init__(self):
         # Braille to English dictionary
-        self.braille_to_english_letters_and_punctuations = {
+        self.braille_to_english_letters_and_space = {
             "O.....": "A", "O.O...": "B", "OO....": "C", "OO.O..": "D", "O..O..": "E",
             "OOO...": "F", "OOOO..": "G", "O.OO..": "H", ".OO...": "I", ".OOO..": "J",
             "O...O.": "K", "O.O.O.": "L", "OO..O.": "M", "OO.OO.": "N", "O..OO.": "O",
             "OOO.O.": "P", "OOOOO.": "Q", "O.OOO.": "R", ".OO.O.": "S", ".OOOO.": "T",
             "O...OO": "U", "O.O.OO": "V", ".OOO.O": "W", "OO..OO": "X", "OO.OOO": "Y",
-            "O..OOO": "Z",
-
-            # Punctuation
-            "..OO.O": ".", "..O...": ",", "..O.OO": "?", "..OOO.": "!", "..OO..": ":",
-            "..O.O.": ";", "....OO": "-", ".O..O.": "/", ".OO..O": "<", "O..OO.": ">",
-            "O.O..O": "(", ".O.OO.": ")", "......": " "
+            "O..OOO": "Z", "......": " ",
         }
 
-        self.braille_to_english_special_symbols = {
-            ".O.OOO": "NF", ".....O": "CF", ".O...O": "DF"
+        self.braille_to_english_punctuations = {
+            "..OO.O": ".", "..O...": ",", "..O.OO": "?", "..OOO.": "!", "..OO..": ":",
+            "..O.O.": ";", "....OO": "-", ".O..O.": "/", ".OO..O": "<", "O..OO.": ">",
+            "O.O..O": "(", ".O.OO.": ")",
         }
 
         self.braille_to_english_numbers = {
@@ -103,29 +101,70 @@ class BrailleToEnglishTranslator:
             ".OOO..": "0"
         }
 
+        self.braille_to_english_special_symbols = {
+            ".O.OOO": BrailleSpecialSymbols.NUMBER_FOLLOWS,
+            ".....O": BrailleSpecialSymbols.CAPITAL_FOLLOWS,
+            ".O...O": BrailleSpecialSymbols.DECIMAL_FOLLOWS,
+            "": BrailleSpecialSymbols.BLANK_SYMBOL
+        }
+
+    def translate(self, input_text: str) -> str:
+        translated_output_text_list = []
+        capital_symbol_just_activated = False
+        dictionary_to_use_for_translation = {}
+
+
+        for i in range(0, len(input_text), 6):
+            braille_char = input_text[i:i+6]
+
+            if braille_char in self.braille_to_english_special_symbols:
+                if self.braille_to_english_special_symbols[braille_char] == BrailleSpecialSymbols.NUMBER_FOLLOWS:
+                    dictionary_to_use_for_translation = self.braille_to_english_numbers
+
+                elif self.braille_to_english_special_symbols[braille_char] == BrailleSpecialSymbols.CAPITAL_FOLLOWS:
+                    dictionary_to_use_for_translation = self.braille_to_english_letters_and_space
+                    capital_symbol_just_activated = True
+
+                continue
+
+            try:
+                english_char = dictionary_to_use_for_translation[braille_char] if capital_symbol_just_activated else dictionary_to_use_for_translation[braille_char].lower()
+                translated_output_text_list.append(english_char)
+                capital_symbol_just_activated = False
+            except:
+                raise ValueError(f"Unsupported Braille character '{braille_char}' for translation from Braille to English.")
+
+        return "".join(translated_output_text_list)
+
 
 class Translator:
     def __init__(self):
         self.english_to_braille = EnglishToBrailleTranslator()
+        self.braille_to_english = BrailleToEnglishTranslator()
 
-    def run(self):
-        # Use argparse to get the input from the command line
-        parser = argparse.ArgumentParser(description='Translate English to Braille or Braille to English.')
-        parser.add_argument('text', nargs='+', help='The text to be translated, either English or Braille.')
-
-        # Parse the command line arguments
-        args = parser.parse_args()
-        input_text = ' '.join(args.text).strip()  # Concatenate the words to form the full text
-
+    def translate(self, input_text: str) -> str:
         # Translate from English to Braille
-        result = self.english_to_braille.translate(input_text)
-        print(f"{result}")
+        if not self._is_braille(input_text):
+            return self.english_to_braille.translate(input_text)
+
+        return self.braille_to_english.translate(input_text)
+
+
+    def _is_braille(self, text):
+        # Check if the input is Braille (contains only 'O' and '.' characters)
+        return all(char in ('O', '.') for char in text)
 
 
 if __name__=='__main__':
+    # Parse the command line arguments
+    parser = argparse.ArgumentParser(description='Translate English to Braille or Braille to English.')
+    parser.add_argument('text', nargs='+', help='The text to be translated, either English or Braille.')
+    args = parser.parse_args()
+    input_text = ' '.join(args.text).strip()  # Concatenate the words to form the full text
+
     translator = Translator()
     try:
-        translator.run()
+        print(f"{translator.translate(input_text)}")
     except ValueError as e:
         print(f"ERROR: {e}")
         exit(1)
