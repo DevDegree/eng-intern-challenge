@@ -177,6 +177,8 @@ function convert_args_to_english() {
             } else {
                 c = '>';
             }
+        } else if(get_char(section) === 'DECIMAL') {
+            c = '.';
         }
         
         // then parse all other character types
