@@ -2,7 +2,7 @@
 import sys 
 import argparse
 import typing
-# inputs = []
+
 
 alphabet = {
 	'a':'0.....',
@@ -45,28 +45,97 @@ numbers = {
 	'0':'.000..',
 }
 
-capital = ('CAPITAL','.....0')
-space = (' ', '......')
+capital = '.....0'
+space = '......'
+num_follows = '.0.000'
 
 def braille_to_english(input_string: str) -> str:
-	continue
+	translation = []
+	flag = False
+	num = False
 
-def english_to_braille():
-	continue
+	for i in range(0,len(input_string),6):
+		char = input_string[i:i+6]
+
+		if char == capital:
+			flag = True
+			continue
+
+		if char == num_follows:
+			num = True
+			continue
+
+		if char == space:
+			num = False
+			translation.append(' ')
+			continue
+
+		if num:
+			number = numbers.get(char)
+			translation.append(number)
+			continue
+
+		letter = alphabet.get(char)
+
+		if flag:
+			letter = letter.upper()
+			translation.append(letter)
+
+	return ''.join(translation)
+
+def english_to_braille(input_string: str) -> str:
+	translation = []
+	for char in input_string:
+
+		if char.isupper():
+			translation.append(capital)
+			translation.append(alphabet[char])
+			continue
+
+		if char.isnumeric():
+			translation.append(num_follows)
+			translation.append(number[char])
+			continue
+
+		if char == ' ':
+			translation.append(space)
+			continue
+
+		letter = translation.append(alphabet[char])
+
+	return ''.join(translation)
+
+def english_or_braille(input_string: str) -> str:
+	if input_string[0].isalnum():
+		return 'english'
+	else:
+		return 'braille'
+
 def translate(args):
-	continue
+	list_of_words = args
+	language = english_or_braille(list_of_words)
+	res = []
+
+	if language == 'english':
+		for word in list_of_words: 
+			translation = english_to_braille(word)
+			res.append(translation)
+			res.append(space)
+
+	print(''.join(res))
+			
 
 if __name__=='__main__':
-	args = parse_args()
+	args = sys.argv[1:]
 
-	for arg in args:
-		if isinstance(arg,str):
-			# inputs.append(arg)
-		continue
-	# elif isinstance(arg, list) and all(isinstance(item,str) for item in arg):
-	# 	inputs.extend(arg)
-	else:
-		raise Error('wrong type of input')
+	# for arg in args:
+	# 	if isinstance(arg,str):
+	# 		# inputs.append(arg)
+	# 	continue
+	# # elif isinstance(arg, list) and all(isinstance(item,str) for item in arg):
+	# # 	inputs.extend(arg)
+	# else:
+	# 	raise Error('wrong type of input')
 	translate(args)
 
 ## if captial follows, only next element is capital
