@@ -85,6 +85,13 @@ function isDigit(char) {
     return char >= '0' && char <= '9'; // Checks if the character is within the ASCII range for digits
 }
 
+// check if char is an ascii alphabetical (upper or lowercase letter)
+function isAsciiAlphabetical(char) {
+    const code = char.charCodeAt(0);
+    return (code >= 65 && code <= 90) || (code >= 97 && code <= 122);
+}
+
+
 // iterate all characters and check for non o or .
 // to determine if it is a non braille string
 function isBraille(input) {
@@ -137,23 +144,42 @@ function convert_args_to_english() {
     // track command characters
     let nextIsNumber = false;
     let nextIsCapital = false;
+
+    // keep track of if previous digits were alphabetical
+    // and default to true for first character
+    // this handles the > and o character ambiguity
+    let alphabetContext = true;
+
     // iterate over the braille string in chunks
     for (let i = 0; i < args.length; i += 6) {
         const section = args.slice(i, i + 6);
         
         let c = get_char(section);
 
+        // handle special cases
+
         // parse number command
         if(c==='NUMBER') {
             // console.log('number')
             nextIsNumber = true;
+            alphabetContext = false;
             continue;
         } 
         if(c === 'CAPITAL') {
             nextIsCapital = true;
+            alphabetContext = true;
             continue;
         }
+        // handle the overlay of o and >
+        if(section === braille_lut['o']) {
+            if(alphabetContext) {
+                c = 'o';
+            } else {
+                c = '>';
+            }
+        }
         
+        // then parse all other character types
         if(nextIsNumber) {
             let num = numbers_lut[section];
             if(num != undefined) {
@@ -174,6 +200,11 @@ function convert_args_to_english() {
         }
 
         str_result += c;
+
+        // save alphabetical character type context for next decoding
+        // if current character is alphabetical, or previous was and current is space
+        // then the next character can work in the alphabetical context
+        alphabetContext = isAsciiAlphabetical(c) || (c === ' ' && alphabetContext);
     }
 
     return str_result;
