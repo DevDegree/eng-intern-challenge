@@ -14,6 +14,9 @@ braille_dict = {
 # Reverse mapping to go from Braille to English
 reverse_braille_dict = {v: k for k, v in braille_dict.items()}
 
+# Braille capital sign for raised dots indicating capital letters
+capital_sign = '.....O'
+
 def is_braille(input_string):
     """Determine if the input string is Braille based on dot pattern."""
     return all(c in 'O.' for c in input_string)
@@ -21,18 +24,31 @@ def is_braille(input_string):
 def translate_to_braille(text):
     """Translate English text to Braille."""
     braille_output = ''
-    for char in text.lower():
-        if char in braille_dict:
-            braille_output += braille_dict[char]
+    for char in text:
+        if char.isupper():
+            # Add the capital sign before uppercase letters
+            braille_output += capital_sign + braille_dict[char.lower()]
+        elif char in braille_dict:
+            braille_output += braille_dict[char.lower()]
     return braille_output
 
 def translate_to_english(braille_text):
     """Translate Braille to English."""
     english_output = ''
-    for i in range(0, len(braille_text), 6):
-        braille_char = braille_text[i:i+6]
-        if braille_char in reverse_braille_dict:
-            english_output += reverse_braille_dict[braille_char]
+    i = 0
+    while i < len(braille_text):
+        # Check for the capital sign
+        if braille_text[i:i+6] == capital_sign:
+            i += 6  # Skip the capital sign
+            # Get the next Braille character and capitalize it
+            braille_char = braille_text[i:i+6]
+            if braille_char in reverse_braille_dict:
+                english_output += reverse_braille_dict[braille_char].upper()
+        else:
+            braille_char = braille_text[i:i+6]
+            if braille_char in reverse_braille_dict:
+                english_output += reverse_braille_dict[braille_char]
+        i += 6
     return english_output
 
 def braille_translator(input_string):
