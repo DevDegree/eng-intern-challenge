@@ -1,5 +1,5 @@
 import sys
-
+ 
 # Braille & English mappings
 braille_to_english = {
     'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd', 'O..O..': 'e',
