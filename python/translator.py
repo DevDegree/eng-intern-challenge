@@ -1,42 +1,43 @@
-# Braille mappings (0 = raised dot, . = no dot)
+# Braille mappings (O = raised dot, . = no dot)
 braille_alphabet = {
     # Letters
-    'a': '0.....', 'b': '0.0...', 'c': '00....', 'd': '00.0..', 'e': '0..0..', 
-    'f': '000...', 'g': '0000..', 'h': '0.00..', 'i': '.00...', 'j': '.000..', 
-    'k': '0...0.', 'l': '0.0.0.', 'm': '00..0.', 'n': '00.00.', 'o': '0..00.',
-    'p': '000.0.', 'q': '00000.', 'r': '0.000.', 's': '.00.0.', 't': '.0000.',
-    'u': '0...00', 'v': '0.0.00', 'w': '.000.0', 'x': '00..00', 'y': '00.000',
-    'z': '0..000',
+    'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..', 
+    'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..', 
+    'k': 'O...O.', 'l': 'O.O.O.', 'm': 'OO..O.', 'n': 'OO.OO.', 'o': 'O..OO.',
+    'p': 'OOO.O.', 'q': 'OOOOO.', 'r': 'O.OOO.', 's': '.OO.O.', 't': '.OOOO.',
+    'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO',
+    'z': 'O..OOO',
     
     # Numbers 
-    '1': '0.....', '2': '0.0...', '3': '00....', '4': '00.0..', '5': '0..0..',
-    '6': '000...', '7': '0000..', '8': '0.00..', '9': '.00...', '0': '.000..',
+    '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
+    '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', 'O': '.OOO..',
 
     # Special symbols
-    'capital': '.....0',    
-    'number': '.0.000',    
+    'capital': '.....O',    
+    'number': '.O.OOO',    
     ' ': '......',        
 
     # Punctuation
-    '.': '.0..00',         
-    ',': '.0....',         
-    ';': '.00...',         
-    ':': '.00.0.',
-    '?': '.00.00',        
-    '!': '.0.00.', 
-    '(': '00.00.', 
-    ')': '00.00.',         
-    "'": '.....0',          
-    '-': '......0',
-    '/': '0..00.',        
-    '@': '000.0.',         
-    '#': '.0.000',          
+    '.': '.O..OO',         
+    ',': '.O....',         
+    ';': '.OO...',         
+    ':': '.OO.O.',
+    '?': '.OO.OO',        
+    '!': '.O.OO.', 
+    '(': 'OO.OO.', 
+    ')': 'OO.OO.',         
+    "'": '.....O',          
+    '-': '......O',
+    '/': 'O..OO.',        
+    '@': 'OOO.O.',         
+    '#': '.O.OOO',          
 }
 
 
 def translate_to_braille(text):
     # Translate English to Braille
     result = []
+    print(text)
     for char in text:
         if char.isupper():
             result.append(braille_alphabet['capital'])  
@@ -46,6 +47,7 @@ def translate_to_braille(text):
             result.append(braille_alphabet[char])      
         else:
             result.append(braille_alphabet.get(char, '......'))  
+        print(char, result)
     return ''.join(result)
 
 def translate_to_english(braille):
@@ -78,9 +80,19 @@ def translate_to_english(braille):
 def main():
     
     import sys
-    input_text = sys.argv[1]
-   
-    if all(c in '0.' for c in input_text):  
+    n = len(sys.argv)
+    input_text = []
+    
+    # Collect input text from command line arguments
+    for i in range(1, n):
+        input_text.append(sys.argv[i])  # Get the actual command-line arguments
+    
+    # Join the input text into a single string
+    input_text = ' '.join(input_text)
+    
+    print("Input text:", input_text)  # Print the input text
+    
+    if all(c in 'O.' for c in input_text):  
         print(translate_to_english(input_text))
     else:  
         print(translate_to_braille(input_text))
