@@ -89,7 +89,7 @@ class Translator:
         letters the following loop looks for that . to determine if it is Braille 
         """
         i = 0
-        while i < 6 and self.sourceText[i] != ".":
+        while i < len(self.sourceText) and i < 6 and self.sourceText[i] != ".":
             i += 1
         
 
