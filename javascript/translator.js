@@ -1,7 +1,7 @@
 /*
  *  Author: Kaleb Jubar
  *  Created: 28 Sep 2024, 2:49:59 PM
- *  Last update: 29 Sep 2024, 12:16:26 PM
+ *  Last update: 30 Sep 2024, 10:57:15 AM
  *  Copyright (c) 2024 Kaleb Jubar
  */
 
@@ -54,9 +54,25 @@ const englishToBraille = {
 };
 
 // Braille-to-English dictionary object
-// build automatically from the English-to-Braille dictionary so I don't have to write it out twice
-// TODO: figure out number handling
-const brailleToEnglish = {};
+// build most of this automatically from the English-to-Braille dictionary so I don't have to write it out twice
+// except numbers - there's not really an easy mathwise/algorithm conversion from Braille to numbers
+// Braille numbers match 1-9, then 0, to a-j, so it's non-trivial to do a conversion on ASCII code
+// because ASCII goes 0-9, so I can't just subtract 49 ("a"=97, "0"=48) to convert the parsed English character
+// JS objects are very very flexible so I'll just take advantage of that instead
+const brailleToEnglish = {
+    numbers: {
+        "O.....": 1,
+        "O.O...": 2,
+        "OO....": 3,
+        "OO.O..": 4,
+        "O..O..": 5,
+        "OOO...": 6,
+        "OOOO..": 7,
+        "O.OO..": 8,
+        ".OO...": 9,
+        ".OOO..": 0,
+    },
+};
 for (const letter in englishToBraille) {
     const brailleChar = englishToBraille[letter];
     brailleToEnglish[brailleChar] = letter;
@@ -82,7 +98,7 @@ function main() {
     for (let i = 3; i < process.argv.length; i++) {
         input += ` ${process.argv[i]}`;
     }
-    console.debug("Input", input);
+    // console.debug("Input", input);
 
     // determine if input is in English or Braille
     // we can use .reduce() on something that is not an array by using .call() to apply to any
@@ -97,7 +113,7 @@ function main() {
         ),
         true    // start reducing with true so we can use &&
     ) && input.length % 6 === 0;    // also check if length is divisible by 6, because we can't translate if it's not
-    console.debug("In Braille?", inputInBraille);
+    // console.debug("In Braille?", inputInBraille);
 
     // do translation
     let output = "";
@@ -105,7 +121,8 @@ function main() {
         // parse Braille string
         let parseNum = false, parseCapital = false;
         for (let i = 0; i < input.length; i += 6) {
-            const char = brailleToEnglish[input.slice(i, i + 6)];
+            const brailleChar = input.slice(i, i + 6);
+            const char = brailleToEnglish[brailleChar];
 
             // reset flags on space
             if (char === " ") {
@@ -129,8 +146,7 @@ function main() {
                 }
                 // number set
                 else if (parseNum) {
-                    // TODO: handle numbers, Braille goes from 1-9 then 0 but ASCII is 0-9
-                    output += char;
+                    output += brailleToEnglish.numbers[brailleChar];
                 }
                 // no flag, just append character
                 else {
