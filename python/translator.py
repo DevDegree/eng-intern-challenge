@@ -26,6 +26,8 @@ def is_braille(input_string):
     # Ensure input only contains O, ., or space, and the length is a multiple of 6
     braille_chars = input_string.replace(' ', '')
     return all(c in ['O', '.'] for c in braille_chars) and len(braille_chars) % 6 == 0
+def strip_spaces(string):
+    return string.replace(" ", "")
 
 def braille_to_english_translator(braille_text):
     words = braille_text.split(' ')
@@ -55,12 +57,12 @@ def braille_to_english_translator(braille_text):
                 # Regular letter or space
                 result.append(braille_to_english.get(braille_char, ' '))
 
-        # result.append(' ')  # Add a space between words
+        result.append(' ')  # Add a space between words
 
         # After a word ends, reset number indicator
         is_number = False
 
-    return ''.join(result).strip()
+    return strip_spaces(''.join(result).strip())
 
 def english_to_braille_translator(english_text):
     result = []
@@ -78,7 +80,7 @@ def english_to_braille_translator(english_text):
             result.append(english_to_braille[char.lower()])
         elif char == ' ':
             number_mode = False  # Reset number mode on space
-            # result.append('......')  # Space
+            result.append('......')  # Space
         elif char in english_to_braille:
             number_mode = False  # number mode Off when switching to letters or other chars
             result.append(english_to_braille[char])
@@ -113,7 +115,7 @@ def english_to_braille_translator(english_text):
                 continue
 
 
-    return ' '.join(result).strip()  
+    return strip_spaces(' '.join(result).strip())
 
 def main():
     if len(sys.argv) < 2:
