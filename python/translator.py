@@ -59,9 +59,6 @@ def braille_translator(input_string):
         return translate_to_braille(input_string)
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print("Usage: python translator.py <input_string>")
-    else:
-        input_string = sys.argv[1]
-        result = braille_translator(input_string)
-        print(result)
+    input_string = sys.argv[1]
+    result = braille_translator(input_string)
+    print(result)
