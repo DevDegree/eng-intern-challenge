@@ -145,12 +145,15 @@ def translate(to_be_trans):
     :param to_be_trans: Phrase to be translated (either in English or Braille representation). Must be a string.
     :return: translated phrase as a string
     """
-    if is_braille(to_be_trans):
-        translated = trans_braille_to_eng(to_be_trans)
-    else:
-        translated = trans_eng_to_braille(to_be_trans)
-    
-    return translated
+    try:
+        if is_braille(to_be_trans):
+            translated = trans_braille_to_eng(to_be_trans)
+        else:
+            translated = trans_eng_to_braille(to_be_trans)
+        
+        return translated
+    except KeyError as e:
+        raise ValueError(f"Unrecognized input character or pattern. Please review acceptable input at https://en.wikipedia.org/wiki/Braille")
 
 def main():
     if len(sys.argv) < 2:
