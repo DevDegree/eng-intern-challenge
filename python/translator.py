@@ -192,16 +192,17 @@ class Translator:
                 elif char == ".O.OOO":
                     # this means evertyhign after is a num until i hit a space character
                     i += 6 # incrementing to see the next braille numbers
-                    while char != "......" and i < len(self.sourceText): # i keep going until my braille is a space or i reach the end of the string
-                        char = self.sourceText[i:i + 6]
-                        yield Braille2EnglishNumerical[char] 
+                    while i < len(self.sourceText) and self.sourceText[i:i + 6] != "......": # i keep going until my braille is a space or i reach the end of the string
+                        yield Braille2EnglishNumerical[self.sourceText[i:i + 6]] 
                         i += 6
-                    yield " " # yielding a space since my increment stopped at one and the next increment will move past it
+
+                    if i < len(self.sourceText):
+                        yield " " # yielding a space since my increment stopped at one and the next increment will move past it
                 else:
                     yield braille2EnglishDictionary[char] # yielding the normal character
                 
                 i += 6 # incrementing to the next character once the loop ends
-    
+        return ''.join(convert())
 def main(argc: int, argv: List[int]):
     if argc < 2:
         print("IMPROPER USAGE! Correct Usage: python translator.py [source_text]")
