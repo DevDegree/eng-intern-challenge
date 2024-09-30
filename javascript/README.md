@@ -8,6 +8,4 @@ I ended up refactoring this to a more Object-Oriented Programming (OOP) approach
 
 In this particular case, the functional programming approach was actually compiling slightly faster than the OOP because of its relative simplicity and constant objects (mappings). The OOP would probably make more sense in larger codebases, or if Translator was to be extended to some other functionality somewhere else.
 
-In retrospect, TypeScript or Ruby may be a good alternative for future cases like this.
-
 Thank you for providing the opportunity to complete this challenge! I had fun building this project and learning about Braille!
