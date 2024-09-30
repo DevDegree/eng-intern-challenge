@@ -90,11 +90,11 @@ def braille_to_text(braille):
     return ''.join(text)
 
 def main():
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2:
         print("Usage: python translator.py '<text or braille>'")
         return
 
-    input_str = sys.argv[1]
+    input_str = ' '.join(sys.argv[1:])
 
     # Determine if input is Braille or text
     if all(c in 'O.' for c in input_str) and len(input_str) % 6 == 0:
