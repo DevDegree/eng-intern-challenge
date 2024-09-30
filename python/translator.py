@@ -1,11 +1,12 @@
 """
 Author Usaid Malik 
+Contact: linkedin.com/in/usaidhmalik github.com/UsaidMalik
 Date: 09/29/2024
 
 This is a program that 
 takes arguments from the command
 line and outputs the corresponding
-Braille or English test
+Braille or English text
 """
 import sys
 from typing import List. Dict
