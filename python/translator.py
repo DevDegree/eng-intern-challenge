@@ -40,8 +40,7 @@ eng_to_braille = {
   ")": ".O.OO.",
   " ": "......",
   "num": ".O.OOO",
-  "cap": ".....O",
-  "decimal": ".O...O"
+  "cap": ".....O"
 }
 
 # Dictionary mapping English digits and associated characters to Braille code
@@ -57,7 +56,8 @@ eng_to_braille_digits = {
     "9": ".OO...",
     "0": ".OOO..",
     ">": "O..OO.",
-    "<": ".OO..O"
+    "<": ".OO..O",
+    ".": ".O...O"
 }
 
 # Reverse dictionaries for Braille to English translation
@@ -78,12 +78,9 @@ def trans_eng_to_braille(to_be_trans):
         if num_mode and to_be_trans[i]==" ":
             num_mode = False
         cap_mode = False
-        dec_mode = False
         if to_be_trans[i].isdigit() and not num_mode:
             translated.append(eng_to_braille["num"])
             num_mode = True
-        elif to_be_trans[i] == "." and to_be_trans[i+1].isdigit():
-            dec_mode = True
         elif to_be_trans[i].isupper():
             cap_mode = True
 
@@ -92,8 +89,6 @@ def trans_eng_to_braille(to_be_trans):
         elif cap_mode:
             translated.append(eng_to_braille["cap"])
             translated.append(eng_to_braille[to_be_trans[i].lower()])
-        elif dec_mode:
-            translated.append(eng_to_braille["decimal"])
         else:
             translated.append(eng_to_braille[to_be_trans[i]])
         
@@ -141,7 +136,7 @@ def is_braille(to_be_trans):
     :param to_be_trans: Phrase to be translated (either in English or Braille representation). Must be a string.
     :return" True if phrase is in Braille. False if phrase is in English
     """
-    return all(char in ['O','.'] for char in to_be_trans)
+    return (all(char in ['O','.'] for char in to_be_trans)) and (len(to_be_trans) >= 6)
 
 def translate(to_be_trans):
     """
