@@ -24,6 +24,7 @@ test_translation .O.OOOOO.O..O.O... 42
 test_translation 42 .O.OOOOO.O..O.O...
 test_translation .....OO.....O.O...OO...........O.OOOO.....O.O...OO.... "Abc 123"
 test_translation "Abc 123" .....OO.....O.O...OO...........O.OOOO.....O.O...OO....
+test_translation "Abc 123 xYz" .....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO
 
 #Testing for every possible letter
 test_translation "abcdefghijklmnopqrstuvwxyz" "O.....O.O...OO....OO.O..O..O..OOO...OOOO..O.OO...OO....OOO..O...O.O.O.O.OO..O.OO.OO.O..OO.OOO.O.OOOOO.O.OOO..OO.O..OOOO.O...OOO.O.OO.OOO.OOO..OOOO.OOOO..OOO"
