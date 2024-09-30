@@ -48,8 +48,9 @@ class Translator:
             return self._English2Braille() 
 
         i = 0
-        while sourceText[i] != "." and i < 6:
+        while self.sourceText[i] != "." and i < 6:
             i += 1
+        # this check checks to ensure that the chosen text is english 
 
         if i < 6:
             # if I is les than 6 then it is Braille since it means i encountered a .
@@ -88,7 +89,7 @@ class Translator:
             "z": "O..OOO",
             " ": "......",
             "CAP": ".....O",
-            "NUMFOLLOWS":".O.OOO"
+            "NUMFOLLOWS":".O.OOO",
         }
 
         english2BrailleNumerical = {
@@ -101,7 +102,7 @@ class Translator:
             "6": "OOO...",
             "7": "OOOO..",
             "8": "O.OO..",
-            "9": ".OO...".
+            "9": ".OO...",
         }
 
         def convert():
@@ -110,11 +111,11 @@ class Translator:
             # if it was i shouldnt add a num follows but wait for a space
             # if it wasnt a number then i can comfortably place a NUM FOLLOWS braille
             for char in self.sourceText:
-                if char.isUpper():
+                if char.isupper():
                     yield english2BrailleDictionary["CAP"]
-                    yield english2BrailleDictionary[char.lower]
+                    yield english2BrailleDictionary[char.lower()]
                 elif char.isdigit():
-                    if not prevChar.isdigit:
+                    if not prevCharNums.isdigit:
                         yield english2BrailleDictionary["NUMFOLLOWS"]
                         yield english2BrailleNumerical[char]
                     else:
@@ -169,7 +170,7 @@ class Translator:
             "OOO...": "6",
             "OOOO..": "7",
             "O.OO..": "8",
-            ".OO...": "9"
+            ".OO...": "9",
         }
 
         def convert():
@@ -194,11 +195,13 @@ class Translator:
                 i += 6 # incrementing to the next character once the loop ends
     
 def main(argc: int, argv: List[int]):
-    if argc != 2:
-        # returning anything that isnt 2 because more arguments shouldnt be given unnecesarily either
+    if argc < 2:
         print("IMPROPER USAGE! Correct Usage: python translator.py [source_text]")
         return
-    sourceText = argv[2] # getting the source text at the second index
+    sourceText = " ".join(argv[1:]) # getting the source text passed in an joining via a space
+    translator = Translator(sourceText)
+    translatedText = translator.translate()
+    print(translatedText)
 
 if __name__ == "__main__":
     argv = sys.argv # this is in a variable so i dont call sys.argv twice
