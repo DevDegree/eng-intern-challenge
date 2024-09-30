@@ -88,7 +88,7 @@ class Translator:
             "z": "O..OOO",
             " ": "......",
             "CAP": ".....O",
-            "NUMFOLLOWS":
+            "NUMFOLLOWS":".O.OOO"
         }
 
         english2BrailleNumerical = {
@@ -101,16 +101,25 @@ class Translator:
             "6": "OOO...",
             "7": "OOOO..",
             "8": "O.OO..",
-            "9": ".OO..."
+            "9": ".OO...".
         }
 
         def convert():
+            prevCharNums = "" # i maintain this prev char for the numbers
+            # it essentially checks if the previous char was a number
+            # if it was i shouldnt add a num follows but wait for a space
+            # if it wasnt a number then i can comfortably place a NUM FOLLOWS braille
             for char in self.sourceText:
                 if char.isUpper():
                     yield english2BrailleDictionary["CAP"]
                     yield english2BrailleDictionary[char.lower]
                 elif char.isdigit():
-
+                    if not prevChar.isdigit:
+                        yield english2BrailleDictionary["NUMFOLLOWS"]
+                        yield english2BrailleNumerical[char]
+                    else:
+                        yield english2BrailleNumerical[char]
+                    prevCharNums = char
                 else:
                     yield english2BrailleDictionary[char]
 
@@ -145,7 +154,12 @@ class Translator:
             "OO.OOO": "y",
             "O..OOO": "z",
             "......": " ",
-            ".....O": "CAP",
+            ".....O": "CAP", # i technically don't need these two below but it is good symettry
+            ".O.OOO":"NUMFOLLOWS", 
+
+        }
+
+        Braille2EnglishNumerical = {
             ".OOO..": "0",
             "O.....": "1",
             "O.O...": "2",
