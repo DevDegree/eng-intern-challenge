@@ -53,19 +53,20 @@ def english_to_braille(txt):
 	numeric_flag = False
 
 	# 'decimal follows' flag?
-	# ambiguous in the spec
+	# a bit ambiguous in the spec
 
 	# according to actual braille language -- 
-	# if something like 0.50 -- just add the decimal point in between
-	# if .50 -- numeric mode flag -> decimal point -> numbers
+	# if something like 0.50 -- numeric flag -> 0 -> decimal flag -> decimal point -> 5 -> 0
+	# if                 .50 -- numeric flag -> decimal flag -> decimal point -> 5 -> 0
 
 	# according to spec -- 
 	# 'When a Braille number follows symbol is read, assume all following symbols are numbers until the next space symbol.'
 		# ^ probably means not to worry about it
 		# if we assume only true for braille to english, converting the same thing back-and-forth would be messed up
-		# i'll leave it unimplemented for now 
+		# i'll therefore leave it unimplemented 
 
-	for char in txt:
+	for i in range(len(txt)):
+		char = txt[i]
 		if (char.isdigit()):
 			if (numeric_flag == False):
 				numeric_flag = True
@@ -78,7 +79,7 @@ def english_to_braille(txt):
 			txt_in_braille += letters[char]
 		elif (char.isupper()):
 			txt_in_braille += flags['capital'] + letters[char.lower()]
-		elif (char in list(symbols.keys())):
+		elif (char in symbols.keys()):
 			txt_in_braille += symbols[char]
 		else:
 			sys.exit('Invalid character in input')
