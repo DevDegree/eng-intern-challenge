@@ -9,6 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "braille-translator": "^2.0.1"
+  },
+  "devDependencies": {
     "jest": "^29.7.0"
   }
 }
