@@ -55,7 +55,7 @@ def braille_to_english_translator(braille_text):
                 # Regular letter or space
                 result.append(braille_to_english.get(braille_char, ' '))
 
-        result.append(' ')  # Add a space between words
+        # result.append(' ')  # Add a space between words
 
         # After a word ends, reset number indicator
         is_number = False
@@ -78,7 +78,7 @@ def english_to_braille_translator(english_text):
             result.append(english_to_braille[char.lower()])
         elif char == ' ':
             number_mode = False  # Reset number mode on space
-            result.append('......')  # Space
+            # result.append('......')  # Space
         elif char in english_to_braille:
             number_mode = False  # number mode Off when switching to letters or other chars
             result.append(english_to_braille[char])
