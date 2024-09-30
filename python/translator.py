@@ -114,11 +114,11 @@ class Translator:
                 char = englishText[i] 
                 
                 if char.isupper():
-                    yield english2BrailleDictionary["CAP"]  # inserting capitalization marker and getting the character
-                    yield english2BrailleDictionary[char.lower()] 
+                    yield self._english2Braille["CAP"]  # inserting capitalization marker and getting the character
+                    yield self._english2Braille[char.lower()] 
                 
                 elif char.isdigit():
-                    yield english2BrailleDictionary["NUMFOLLOWS"]  # Yield the Braille number indicator
+                    yield self._english2Braille["NUMFOLLOWS"]  # Yield the Braille number indicator
 
                     """
                     Handling consecutive digits by continuing the loop until a non-digit character is found.
@@ -132,17 +132,17 @@ class Translator:
                     is assumed by the technical specifications to not be encounted.
                     """
                     while i < len(englishText) and englishText[i].isdigit():
-                        yield english2BrailleNumerical[englishText[i]]  
+                        yield self._english2BrailleNumeric[englishText[i]]  
                         i += 1 
 
                     """Only add the next character that ended the sequence
                      (presumably a space for proper execution)
                      if i am not at the end of the string"""
                     if i < len(englishText):
-                        yield english2BrailleDictionary[englishText[i]]
+                        yield self._english2Braille[englishText[i]]
                 
                 else:
-                    yield english2BrailleDictionary[char] 
+                    yield self._english2Braille[char] 
                 
                 i += 1  # Move to the next character in the sourceText
 
@@ -172,7 +172,7 @@ class Translator:
                     i += 6 
                     # this assumes the braille is valid and the next character is a letter
                     char = brailleText[i: i + 6] 
-                    yield braille2EnglishDictionary[char].upper()
+                    yield self._braille2English[char].upper()
 
                 # Handle Braille numeric marker
                 elif char == ".O.OOO":
@@ -185,13 +185,13 @@ class Translator:
                     valid braille until a space braille character is encountered
                     """                    
                     while i < len(brailleText) and brailleText[i:i + 6] != "......": 
-                        yield Braille2EnglishNumerical[brailleText[i:i + 6]] 
+                        yield self._braille2EnglishNumeric[brailleText[i:i + 6]] 
                         i += 6
 
                     if i < len(brailleText):
                         yield " " # yielding a space since my increment stopped at a space assuming valid braille, otherwise would be skipped
                 else:
-                    yield braille2EnglishDictionary[char] 
+                    yield self._braille2English[char] 
                 
                 i += 6
                 
