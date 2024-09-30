@@ -62,7 +62,7 @@ def identify_lang(input_str: str) -> bool:
         bool: True if the input is identified as English, False if Braille.
     """
 
-    return not set(input_str).issubset({"O", "."})
+    return not (set(input_str).issubset({"O", "."}) and len(input_str) % 6 == 0)
 
 
 def convert_english_to_braille(input_str: str) -> str:
