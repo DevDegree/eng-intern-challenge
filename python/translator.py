@@ -118,15 +118,14 @@ def translateToBraille(text):
 
 # POST: updates status based on six string, returns whether status was set
 def setStatus(six, status):
-    match six:
-        case Status.BRAILLE_CAPITAL:
-            status.is_capital = True
-            return True
-        case Status.BRAILLE_NUMBER:
-            status.is_number = True
-            return True
-        case _:
-            return False  
+    if (six == Status.BRAILLE_CAPITAL):
+        status.is_capital = True
+        return True
+    elif (six == Status.BRAILLE_NUMBER):
+        status.is_number = True
+        return True
+    else:
+        return False 
 
 # PRE: six must be a valid Braille symbol
 # POST: returns number or letter based on six character Braille string
