@@ -39,6 +39,21 @@ class Translator:
         # and this can be determined just by looking at the first 6 characters
         # since ALL braille characters of that form have a . 
         self.sourceText = sourceText
+        self._english2Braille = {
+            "a": "O.....",  "b": "O.O...", "c": "OO....", "d": "OO.O..", "e": "O..O..", "f": "OOO...",
+            "g": "OOOO..", "h": "O.OO..", "i": ".OO...", "j": ".OOO..", "k": "O...O.", "l": "O.O.O.",
+            "m": "OO..O.", "n": "OO.OO.", "o": "O..OO.", "p": "OOO.O.", "q": "OOOOO.", "r": "O.OOO.", 
+            "s": ".OO.O.", "t": ".OOOO.", "u": "O...OO", "v": "O.O.OO", "w": ".OOO.O", "x": "OO..OO",
+            "y": "OO.OOO", "z": "O..OOO", " ": "......", "CAP": ".....O", "NUMFOLLOWS":".O.OOO", }
+
+         # I don't technically need this dict since all keys are unique in english2braille but it makes it easier to generate braille2english numerical
+        self._english2BrailleNumeric{
+            "0": ".OOO..", "1": "O.....", "2": "O.O...", "3": "OO....", "4": "OO.O..",
+            "5": "O..O..", "6": "OOO...", "7": "OOOO..", "8": "O.OO..", "9": ".OO...",
+        }
+
+        self._braille2English = {v: k for k, v in self._english2Braille.items()}
+        self._braille2EnglishNumeric =  {v: k for k, v in self.english2BrailleNumeric.items()}
 
     def translate(self):
         # this will check if the first 6 characters have a . in them otherwise it will
@@ -60,51 +75,7 @@ class Translator:
          
 
     def _English2Braille(self):
-        english2BrailleDictionary = {
-            "a": "O.....",
-            "b": "O.O...",
-            "c": "OO....",
-            "d": "OO.O..",
-            "e": "O..O..",
-            "f": "OOO...",
-            "g": "OOOO..",
-            "h": "O.OO..",
-            "i": ".OO...",
-            "j": ".OOO..",
-            "k": "O...O.",
-            "l": "O.O.O.",
-            "m": "OO..O.",
-            "n": "OO.OO.",
-            "o": "O..OO.",
-            "p": "OOO.O.",
-            "q": "OOOOO.",
-            "r": "O.OOO.",
-            "s": ".OO.O.",
-            "t": ".OOOO.",
-            "u": "O...OO",
-            "v": "O.O.OO",
-            "w": ".OOO.O",
-            "x": "OO..OO",
-            "y": "OO.OOO",
-            "z": "O..OOO",
-            " ": "......",
-            "CAP": ".....O",
-            "NUMFOLLOWS":".O.OOO",
-        }
-
-        english2BrailleNumerical = {
-            "0": ".OOO..",
-            "1": "O.....",
-            "2": "O.O...",
-            "3": "OO....",
-            "4": "OO.O..",
-            "5": "O..O..",
-            "6": "OOO...",
-            "7": "OOOO..",
-            "8": "O.OO..",
-            "9": ".OO...",
-        }
-
+        
         def convert():
             i = 0 
             while i < len(self.sourceText):
@@ -135,51 +106,6 @@ class Translator:
         return ''.join(convert()) 
 
     def _Braille2English(self):
-        braille2EnglishDictionary = {
-            "O.....": "a",
-            "O.O...": "b",
-            "OO....": "c",
-            "OO.O..": "d",
-            "O..O..": "e",
-            "OOO...": "f",
-            "OOOO..": "g",
-            "O.OO..": "h",
-            ".OO...": "i",
-            ".OOO..": "j",
-            "O...O.": "k",
-            "O.O.O.": "l",
-            "OO..O.": "m",
-            "OO.OO.": "n",
-            "O..OO.": "o",
-            "OOO.O.": "p",
-            "OOOOO.": "q",
-            "O.OOO.": "r",
-            ".OO.O.": "s",
-            ".OOOO.": "t",
-            "O...OO": "u",
-            "O.O.OO": "v",
-            ".OOO.O": "w",
-            "OO..OO": "x",
-            "OO.OOO": "y",
-            "O..OOO": "z",
-            "......": " ",
-            ".....O": "CAP", # i technically don't need these two below but it is good symettry
-            ".O.OOO":"NUMFOLLOWS", 
-
-        }
-
-        Braille2EnglishNumerical = {
-            ".OOO..": "0",
-            "O.....": "1",
-            "O.O...": "2",
-            "OO....": "3",
-            "OO.O..": "4",
-            "O..O..": "5",
-            "OOO...": "6",
-            "OOOO..": "7",
-            "O.OO..": "8",
-            ".OO...": "9",
-        }
 
         def convert():
             i = 0
