@@ -1,4 +1,4 @@
-from typing import Dict, Frozenset
+from typing import Dict, FrozenSet
 
 # Language constants
 ENGLISH : str = "english"
@@ -15,9 +15,9 @@ INVALID_INPUT_MSG    : str = "Invalid input.\nOnly alphanumeric characters and s
 INVALID_CHAR_SEQ_MSG : str = "Invalid character sequence.\nNumerical characters must be followed by a space or another numerical character.\nCapital characters must be followed by an alphabetical character.\nBraille sequences cannot end with a capital or number modifier."
 
 # Character sets
-PERMITTED_NON_ALPHANUMERIC_CHARS : Frozenset[str] = frozenset([" "])
-PERMITTED_MODIFIERS              : Frozenset[str] = frozenset([CAPITAL, NUMBER])
-NUMBER_TERMINATING_CHARS         : Frozenset[str] = frozenset([" "])
+PERMITTED_NON_ALPHANUMERIC_CHARS : FrozenSet[str] = frozenset([" "])
+PERMITTED_MODIFIERS              : FrozenSet[str] = frozenset([CAPITAL, NUMBER])
+NUMBER_TERMINATING_CHARS         : FrozenSet[str] = frozenset([" "])
 
 # Translation dictionaries
 ENGLISH_TO_BRAILLE : Dict[str, str] = {

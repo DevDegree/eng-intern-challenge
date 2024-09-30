@@ -80,7 +80,7 @@ def validate_braille_char(char: str, prev_char: str, is_last: bool, next_is_capi
     if is_last and english_char in PERMITTED_MODIFIERS:
         # Capital or number character as the last character
         raise ValueError(INVALID_CHAR_SEQ_MSG)
-    elif next_is_capital and english_char in PERMITTED_NON_ALPHANUMERIC_CHARS:
+    elif next_is_capital and (english_char in PERMITTED_NON_ALPHANUMERIC_CHARS or english_char in PERMITTED_MODIFIERS):
         # Non-alphanumeric character after a capital character
         raise ValueError(INVALID_CHAR_SEQ_MSG)
     elif next_is_number and english_char not in LETTERS_TO_NUMBERS and not english_char in NUMBER_TERMINATING_CHARS:
