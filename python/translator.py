@@ -86,14 +86,10 @@ def main():
     n = len(sys.argv)
     input_text = []
     
-    # Collect input text from command line arguments
     for i in range(1, n):
-        input_text.append(sys.argv[i])  # Get the actual command-line arguments
+        input_text.append(sys.argv[i])  
     
-    # Join the input text into a single string
     input_text = ' '.join(input_text)
-    
-    # print("Input text:", input_text)  # Print the input text
     
     if all(c in 'O.' for c in input_text):  
         print(translate_to_english(input_text))
