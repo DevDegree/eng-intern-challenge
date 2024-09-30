@@ -1,5 +1,6 @@
 import sys
 
+# Dictionary to map English characters to Braille patterns.
 ENG_TO_BRAILLE_LETTERS = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..',
     'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..',
@@ -9,29 +10,37 @@ ENG_TO_BRAILLE_LETTERS = {
     'z': 'O..OOO',
 }
 
+# Dictionary to map numbers to Braille patterns.
 ENG_TO_BRAILLE_NUMBERS = {
     '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
     '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..',
 }
 
+# Dictionary to map special characters to Braille patterns.
 ENG_TO_BRAILLE_SPECIALS = {
     '.': '..OO.O', ',': '..O...', ';': '..OO..', '!': '..O.O.', '?': '..OO.O',
     '-': '....O.', "'": '....OO', '(': '...O..', ')': '...OO.', ' ': '......',
 }
 
+# Prefixes used in Braille for capitalization and numbers.
 BRAILLE_CAPITALS = '.....O'
 BRAILLE_NUMBERS = '.O.OOO'
 
+# Dictionary to map Braille patterns to English characters, numbers, and special characters.
 BRAILLE_TO_ENG_LETTERS = {value: key for key, value in ENG_TO_BRAILLE_LETTERS.items()}
 BRAILLE_TO_ENG_NUMBERS = {value: key for key, value in ENG_TO_BRAILLE_NUMBERS.items()}
 BRAILLE_TO_ENG_SPECIALS = {value: key for key, value in ENG_TO_BRAILLE_SPECIALS.items()}
 
+# Function to determine if the input text is in Braille or English.
+# If it's Braille, convert it to English. Otherwise, convert it to Braille.
 def convert_to_braille_or_english(input_text):
     if all(char in 'O.' for char in input_text):
         return braille_to_english(input_text)
     else:
         return english_to_braille(input_text)
 
+# Function to convert Braille text to English.
+# Handles capitalization and number prefixes.
 def braille_to_english(braille_text):
     english_text = ''
     i = 0
@@ -69,6 +78,8 @@ def braille_to_english(braille_text):
 
     return english_text
 
+# Function to convert English text to Braille.
+# Handles capitalization and number prefixes.
 def english_to_braille(english_text):
     braille_output = ''
     number_flag = False
@@ -92,6 +103,7 @@ def english_to_braille(english_text):
 
     return braille_output
 
+# Main function to handle command-line input and call the conversion function.
 def main():
     if len(sys.argv) < 2:
         print("ERROR: invalid number of arguments")
@@ -101,5 +113,6 @@ def main():
     output_text = convert_to_braille_or_english(input_text)
     print(output_text)
 
+# Entry point for command-line execution.
 if __name__ == '__main__':
     main()
