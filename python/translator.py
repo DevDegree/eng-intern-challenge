@@ -28,6 +28,15 @@ flags = {
 	'capital': '.....O', 'decimal': '.O...O', 'number': '.O.OOO'
 }
 
+inverted_letters = {v: k for k, v in letters.items()}
+
+inverted_numbers = {v: k for k, v in numbers.items()}
+
+inverted_symbols = {v: k for k, v in symbols.items()}
+
+inverted_flags = {v: k for k, v in flags.items()}
+
+
 # if braille -- 
 	# (string length mod 6) == 0
 	# string will only contain "." or "O"
@@ -75,10 +84,36 @@ def english_to_braille(txt):
 			sys.exit('Invalid character in input')
 
 	return txt_in_braille
-		
 
+def braille_to_english(txt):
+	txt_in_english = ""
+	numeric_flag = False
+	capital_flag = False
+
+	for i in range(0, len(txt), 6):
+		# guaranteed to be within bounds
+		char = txt[i:i+6]
+		if (char == flags['capital']):
+			capital_flag = True
+		elif (char == flags['number']):
+			numeric_flag = True
+		elif (char in inverted_letters):
+			if (numeric_flag == True):
+				txt_in_english += inverted_numbers[char]
+			elif (capital_flag == True):
+				txt_in_english += (inverted_letters[char]).upper()
+				capital_flag = False
+			else:
+				txt_in_english += inverted_letters[char]
+		elif (char in inverted_symbols):
+			txt_in_english += inverted_symbols[char]
+			numeric_flag = False
+		else:
+			sys.exit('Invalid character in input')
 		
-		
+	
+	return txt_in_english
+			
 
 def main():
 	input_arr = sys.argv[1:]
@@ -86,7 +121,7 @@ def main():
 		sys.exit('Invalid input')
 	input_str = ' '.join(input_arr)
 	if (is_braille(input_str)):
-		print("Not implemented yet")
+		print(braille_to_english(input_str))
 	else:
 		print(english_to_braille(input_str))
 
