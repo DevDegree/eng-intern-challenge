@@ -66,7 +66,6 @@ CAPITAL = ".....O"
 DECIMAL = ".O...O"
 NUMBER = ".O.OOO"
 
-
 BRAILLE_TO_ENGLISH = {
     group: {braille: english for english, braille in mappings.items()}
     for group, mappings in ENGLISH_TO_BRAILLE.items()
@@ -83,7 +82,6 @@ BRAILLE_ALPHABET = (
 def english_to_braille(english: str) -> str:
     ans: List[str] = []
     prev_c = None
-
     is_numeral = False
 
     for c in english:
