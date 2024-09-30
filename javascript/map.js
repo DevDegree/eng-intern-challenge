@@ -28,9 +28,15 @@ const alphabet = {
   'Z': "O..OOO",
 }
 
-const numbers = Object.values(alphabet).slice(0, 10);
+const numbers = Object.values(alphabet).slice(0, 9);
+numbers.unshift(alphabet["J"]) // 0 value is the same as J
+const markers = {
+  capital: ".....O",
+  number: ".O.OOO"
+}
 
 module.exports = {
   alphabet,
-  numbers
+  numbers,
+  markers
 }
