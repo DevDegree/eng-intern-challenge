@@ -1,4 +1,4 @@
-const { exec } = require("child_process");
+const { exec } = require('child_process');
 
 describe('translator.js script', () => {
     it('should output correct answer to the console', (done) => {
