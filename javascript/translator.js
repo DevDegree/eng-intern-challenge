@@ -42,3 +42,28 @@ const NUMBER_MAPPING = {
   '9': '.OO...',
   '0': '.OOO..'
 };
+
+const brailleToEnglish = (input) => {
+
+};
+
+const englishToBraille = (input) => {
+
+};
+
+const translate = (input) => {
+  if ("input is Braille") {
+    return brailleToEnglish(input);
+  }
+  else {
+    return englishToBraille(input);
+  }
+};
+
+// Calling the main program
+const input = process.argv.slice(2).join(' ');
+if (input) {
+  process.stdout.write(translate(input));
+} else {
+  process.stderr.write(""); // Error out to match test cases
+}
