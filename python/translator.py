@@ -174,12 +174,24 @@ class Translator:
 
         def convert():
             i = 0
-            while i < len(self.sourceText) :
+            while i < len(self.sourceText):
                 char = self.sourceText[i:i+6] # getting the six braille characters
                 if char == ".....O":
-                    nextChar = self.sourceText[i + 6: i + 12] # this assumes the braille is valid
-                    yield braille2EnglishDictionary[].upper() # the capitalization character
-
+                    i += 6 # incrementing i to get to the next character
+                    nextChar = self.sourceText[i: i + 6] # this assumes the braille is valid
+                    yield braille2EnglishDictionary[nextChar].upper() # the capitalized character that was found
+                elif char == ".O.OOO":
+                    # this means evertyhign after is a num until i hit a space character
+                    i += 6 # incrementing to see the next braille numbers
+                    while char != "......" and i < len(self.sourceText): # i keep going until my braille is a space or i reach the end of the string
+                        char = self.sourceText[i:i + 6]
+                        yield Braille2EnglishNumerical[char] 
+                        i += 6
+                    yield " " # yielding a space since my increment stopped at one and the next increment will move past it
+                else:
+                    yield braille2EnglishDictionary[char] # yielding the normal character
+                
+                i += 6 # incrementing to the next character once the loop ends
     
 def main(argc: int, argv: List[int]):
     if argc != 2:
