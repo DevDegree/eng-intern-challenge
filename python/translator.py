@@ -16,6 +16,7 @@ reverse_braille_dict = {v: k for k, v in braille_dict.items()}
 
 # Braille capital sign for raised dots indicating capital letters
 capital_sign = '.....O'
+number_sign = '.O.OOO'  # Braille number sign to indicate numbers
 
 def is_braille(input_string):
     """Determine if the input string is Braille based on dot pattern."""
@@ -24,31 +25,50 @@ def is_braille(input_string):
 def translate_to_braille(text):
     """Translate English text to Braille."""
     braille_output = ''
+    is_number = False
     for char in text:
         if char.isupper():
             # Add the capital sign before uppercase letters
             braille_output += capital_sign + braille_dict[char.lower()]
+        elif char.isdigit():
+            if not is_number:  # Add number sign before first digit
+                braille_output += number_sign
+                is_number = True
+            braille_output += braille_dict[char]
+        elif char == ' ':
+            is_number = False  # Reset number flag on space
+            braille_output += braille_dict[' ']
         elif char in braille_dict:
-            braille_output += braille_dict[char.lower()]
+            is_number = False
+            braille_output += braille_dict[char]
     return braille_output
 
 def translate_to_english(braille_text):
     """Translate Braille to English."""
     english_output = ''
     i = 0
+    is_capital = False
+    is_number = False
     while i < len(braille_text):
         # Check for the capital sign
         if braille_text[i:i+6] == capital_sign:
+            is_capital = True
             i += 6  # Skip the capital sign
-            # Get the next Braille character and capitalize it
-            braille_char = braille_text[i:i+6]
-            if braille_char in reverse_braille_dict:
-                english_output += reverse_braille_dict[braille_char].upper()
+        elif braille_text[i:i+6] == number_sign:
+            is_number = True
+            i += 6  # Skip the number sign
         else:
             braille_char = braille_text[i:i+6]
             if braille_char in reverse_braille_dict:
-                english_output += reverse_braille_dict[braille_char]
-        i += 6
+                char = reverse_braille_dict[braille_char]
+                if is_capital:
+                    char = char.upper()
+                    is_capital = False
+                if is_number:
+                    # Reset number state after one translation
+                    is_number = False
+                english_output += char
+            i += 6
     return english_output
 
 def braille_translator(input_string):
@@ -59,6 +79,10 @@ def braille_translator(input_string):
         return translate_to_braille(input_string)
 
 if __name__ == '__main__':
-    input_string = sys.argv[1]
-    result = braille_translator(input_string)
-    print(result)
+    if len(sys.argv) < 2:
+        print("Usage: python translator.py <input_string>")
+    else:
+        # Join all arguments into a single string to handle multi-word input
+        input_string = ' '.join(sys.argv[1:])
+        result = braille_translator(input_string)
+        print(result)
