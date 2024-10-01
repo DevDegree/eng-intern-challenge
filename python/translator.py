@@ -28,6 +28,18 @@ alphabet_to_braille = {
     'x': 'OO..OO',
     'y': 'OO.OOO',
     'z': 'O..OOO',
+    '.': '..OO.O',
+    ',': '..O...',
+    '?': '..O.OO',
+    '!': '..OOO.',
+    ':': '..OO..',
+    ';': '..O.O.',
+    '-': '....OO',
+    '/': '.O..O.',
+    '<': '.OO..O',
+    '>': 'O..OO.',
+    '(': 'O.O..O',
+    ')': '.O.OO.',
 }
 
 special_dict = {
@@ -80,17 +92,20 @@ def braille_to_english(str):
     :return: A string containing the translated English text.
     """
 
-    length = len(str)
     english_out = ""
     is_number = False  # True if the next character is a number
+    is_capital = False  # True if the next character is a capital letter
     for i in range(0, len(str), 6):
         braille_char = str[i:i + 6]
-        if braille_char == str['space']:
+        if braille_char == special_dict['space']:
             english_out += ' '
             is_number = False
-        elif braille_char == str['capital']:
-            i += 6
-            braille_char = str[i:i + 6]
+            continue
+        if braille_char == special_dict['capital']:
+            is_capital = True
+            continue
+        if is_capital:
+            is_capital = False
             english_out += braille_to_alphabet.get(braille_char, '?').upper()
         elif braille_char == special_dict['number']:
             is_number = True
@@ -100,6 +115,8 @@ def braille_to_english(str):
             else:
                 english_out += braille_to_alphabet.get(braille_char, '?')
     return english_out
+
+
 
 
 def english_to_braille(str):
@@ -136,6 +153,10 @@ def english_to_braille(str):
 
 def main():
     """Reads terminal input and returns its translation"""
+    # Raise error if length of input less than 2
+    if len(sys.argv) < 2:
+        print('Error: Nothing to translate')
+        sys.exit(1)
 
     input_str = ' '.join(sys.argv[1:])
     if is_braille(input_str):
