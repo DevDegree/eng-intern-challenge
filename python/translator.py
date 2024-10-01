@@ -96,6 +96,7 @@ def translateToEnglish(input_string):
                 output_string += reversed_braille_nums[braille_chunk]
             elif capital_follows_flag:
                 output_string += reversed_braille_dict[braille_chunk].upper()
+                capital_follows_flag = False
             else:
                 output_string += reversed_braille_dict[braille_chunk]
 
