@@ -37,16 +37,16 @@ special_dict = {
 }
 
 number_to_braille = {
-    "0": ".OOO..",
-    "1": "O.....",
-    "2": "O.O...",
-    "3": "OO....",
-    "4": "OO.O..",
-    "5": "O..O..",
-    "6": "OOO...",
-    "7": "OOOO..",
-    "8": "O.OO..",
-    "9": ".OO...",
+    '0': '.OOO..',
+    '1': 'O.....',
+    '2': 'O.O...',
+    '3': 'OO....',
+    '4': 'OO.O..',
+    '5': 'O..O..',
+    '6': 'OOO...',
+    '7': 'OOOO..',
+    '8': 'O.OO..',
+    '9': '.OO...',
 }
 
 braille_to_alphabet = {v: k for k, v in alphabet_to_braille.items()}
@@ -82,7 +82,7 @@ def braille_to_english(str):
 
     length = len(str)
     english_out = ""
-    is_number = False
+    is_number = False #True if the next character is a number
     for i in range(0, len(str), 6):
         braille_char = str[i:i + 6]
         if braille_char == str['space']:
@@ -111,6 +111,31 @@ def english_to_braille(str):
     :return: A string containing the translated English text.
     """
 
+    braille_out = ''
+    was_number = False #if previous charachter was a number
+    for char in str:
+        if char==' ':
+            braille_out += special_dict['space']
+            was_number = False
+            continue
+
+        if char.isdigit():
+            if not was_number:
+                braille_out += special_dict['number']
+                was_number = True
+            braille_out += number_to_braille[char]
+            continue
+
+        if char.isupper():
+            braille_out += alphabet_to_braille['capital']
+            char = char.lower()
+
+        braille_out += alphabet_to_braille[char]
+        was_number = False
+
+    return braille_out
+
+
 
 def main():
     # Raise error if lenght of input less than 2
@@ -126,6 +151,6 @@ def main():
         print(english_to_braille(input_str))
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
 
