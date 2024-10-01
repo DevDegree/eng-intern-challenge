@@ -32,8 +32,8 @@ alphabet_to_braille = {
 
 special_dict = {
     'number': '.O.OOO',
-    'space' : '......',
-    'capital' : '.....O'
+    'space': '......',
+    'capital': '.....O'
 }
 
 number_to_braille = {
@@ -51,6 +51,7 @@ number_to_braille = {
 
 braille_to_alphabet = {v: k for k, v in alphabet_to_braille.items()}
 braille_to_number = {v: k for k, v in number_to_braille.items()}
+
 
 def is_braille(str):
     """
@@ -71,7 +72,6 @@ def is_braille(str):
     return all(c in {'O', '.'} for c in str)
 
 
-
 def braille_to_english(str):
     """
     Convert a Braille string to English text.
@@ -82,7 +82,7 @@ def braille_to_english(str):
 
     length = len(str)
     english_out = ""
-    is_number = False #True if the next character is a number
+    is_number = False  # True if the next character is a number
     for i in range(0, len(str), 6):
         braille_char = str[i:i + 6]
         if braille_char == str['space']:
@@ -102,7 +102,6 @@ def braille_to_english(str):
     return english_out
 
 
-
 def english_to_braille(str):
     """
     Convert a Braille string to English text.
@@ -112,9 +111,9 @@ def english_to_braille(str):
     """
 
     braille_out = ''
-    was_number = False #if previous charachter was a number
+    was_number = False  # if previous charachter was a number
     for char in str:
-        if char==' ':
+        if char == ' ':
             braille_out += special_dict['space']
             was_number = False
             continue
@@ -129,21 +128,19 @@ def english_to_braille(str):
         if char.isupper():
             braille_out += special_dict['capital']
             char = char.lower()
-            braille_out += alphabet_to_braille[char]
-            was_number = False
+        braille_out += alphabet_to_braille[char]
+        was_number = False
 
     return braille_out
 
 
-
 def main():
-    # Raise error if lenght of input less than 2
+    # Raise error if length of input less than 2
     if len(sys.argv) < 2:
         print('Error: Not sufficient argument to translate')
         sys.exit(1)
 
-    input_str = sys.argv[1]
-
+    input_str = ' '.join(sys.argv[1:])
     if is_braille(input_str):
         print(braille_to_english(input_str))
     else:
@@ -152,4 +149,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
