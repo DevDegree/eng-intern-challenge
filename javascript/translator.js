@@ -52,7 +52,6 @@ const englishToBraille = Object.entries(brailleToEnglish).reduce(
     },
     {}
 );
-
 const numbersToBraille = Object.entries(brailleToNumbers).reduce(
     (acc, [key, value]) => {
         acc[value] = key;
@@ -70,6 +69,8 @@ function translateToEnglish(braille) {
     let brailleArray = braille.match(/[.O]{1,6}/g) || [];
 
     let englishArray = brailleArray.reduce((acc, brailleChar) => {
+        if (brailleChar === englishToBraille[" "]) nextNum = false;
+
         if (brailleChar === englishToBraille.CAP) nextCaps = true;
         else if (brailleChar === englishToBraille.NUM) nextNum = true;
         else {
@@ -84,30 +85,31 @@ function translateToEnglish(braille) {
                     nextCaps = false;
                 }
 
-                if (out === " ") nextNum = false;
+                if (out === " ") {
+                    nextNum = false;
+                }
             }
+
             acc.push(out);
         }
-
         return acc;
     }, []);
-
     return englishArray.join("");
 }
 
 function translateToBraille(english) {
-    let isNum = false;
+    let numToggled = false;
 
     let brailleArray = english.split("").reduce((acc, char) => {
-        if (char.match(/[0-9]/)) isNum = true;
-
-        if (!isNum) {
-            if (char.match(/[A-Z]/)) acc.push(englishToBraille.CAP);
-
-            acc.push(englishToBraille[char.toLowerCase()]);
-        } else {
+        if (char.match(/[0-9]/)) {
+            if (!numToggled) acc.push(englishToBraille.NUM);
+            numToggled = true;
             acc.push(numbersToBraille[char]);
+        } else {
+            if (char.match(/[A-Z]/)) acc.push(englishToBraille.CAP);
+            acc.push(englishToBraille[char.toLowerCase()]);
         }
+
 
         return acc;
     }, []);
@@ -115,19 +117,14 @@ function translateToBraille(english) {
     return brailleArray.join("");
 }
 
-// If the first arg isn't purely .s and/or Os, or it is but isn't at least 6 characters (denoting a valid braille character), then it should be english
-if (args[0].match(/[^.O]/) || args[0].length % 6 !== 0) {
+if (args[0].match(/[^.O]/) || args[0].length % 6 !== 0 || args[1]) {
     args.forEach((arg) => {
         const translatedArg = translateToBraille(arg);
         translationArray.push(translatedArg);
     });
-    translatedString = translationArray.join(englishToBraille[' ']);
+    translatedString = translationArray.join(englishToBraille[" "]);
 } else {
-    args.forEach((arg) => {
-        const translatedArg = translateToEnglish(arg);
-        translationArray.push(translatedArg);
-    });
-    translatedString = translationArray.join('');
+    translatedString = translateToEnglish(args[0]);
 }
 
 console.log(translatedString);
