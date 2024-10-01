@@ -127,11 +127,10 @@ def english_to_braille(str):
             continue
 
         if char.isupper():
-            braille_out += alphabet_to_braille['capital']
+            braille_out += special_dict['capital']
             char = char.lower()
-
-        braille_out += alphabet_to_braille[char]
-        was_number = False
+            braille_out += alphabet_to_braille[char]
+            was_number = False
 
     return braille_out
 
