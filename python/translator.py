@@ -135,10 +135,7 @@ def english_to_braille(str):
 
 
 def main():
-    # Raise error if length of input less than 2
-    if len(sys.argv) < 2:
-        print('Error: Not sufficient argument to translate')
-        sys.exit(1)
+    """Reads terminal input and returns its translation"""
 
     input_str = ' '.join(sys.argv[1:])
     if is_braille(input_str):
