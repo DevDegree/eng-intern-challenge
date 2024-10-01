@@ -2,16 +2,18 @@ import sys
 import re
 
 # Store the given input from the command line (cast to string just in case)
-#input = str(sys.argv[1])
+input = ""
+for string in sys.argv[1:]:
+    input += str(string) + " "
+input = input.strip()
 
-input = "Hello world"
-
+# Output variable to hold our final translation
 output = ""
 
-isNum = False;
-
 # If we are translating from Engish to Braille
-if re.search('[a-zA-Z0-9]', input):
+if re.search('(?![oO])[a-zA-Z0-9]', input):
+
+    isNum = False;
 
     # Go through every character
     for char in input:
@@ -23,10 +25,10 @@ if re.search('[a-zA-Z0-9]', input):
             output += "......"
 
             # If we have been dealing with numbers thus far
-            if (isNum == True):
+            if (isNum):
 
                 # Set the flag back to False
-                isNum == False
+                isNum = False
         
         # If the character is a period
         elif (char == '.'):
@@ -40,6 +42,7 @@ if re.search('[a-zA-Z0-9]', input):
             # Set as '.'
             output += "..OO.O"
         
+        # Check other special characters
         elif (char == ','):
 
             output += "..O..."
@@ -93,7 +96,7 @@ if re.search('[a-zA-Z0-9]', input):
             # Set flag as True
             isNum = True;
         
-        
+        # If we are working with letters
         if (not isNum):
 
             # If the character we are on is capitalized
@@ -102,7 +105,7 @@ if re.search('[a-zA-Z0-9]', input):
                 # Set as 'capital follows'
                 output += ".....O"
 
-            # Start Checking the letters
+            # Start checking the letters
             if (char.lower() == 'a'):
 
                 output += "O....."
@@ -207,8 +210,10 @@ if re.search('[a-zA-Z0-9]', input):
 
                 output += "O..OOO"
         
+        # If we are working with numbers
         else:
 
+            # Start checking the letters
             if (char == '1'):
                 
                 output += "O....."
@@ -248,6 +253,438 @@ if re.search('[a-zA-Z0-9]', input):
             elif (char == '0'):
 
                 output += ".OOO.."
+
+# If we're translating from Braille to English
+else:
+    
+    isCaptial = False
+    isNum = False
+
+    currentCharNum = 0
+    
+    for i in range(int(len(input) / 2)):
+
+        substring = input[currentCharNum:currentCharNum+6]
+
+        # If we reach 'number follows'
+        if (substring == ".O.OOO"):
+
+            # Set that flag to True
+            isNum = True
+        
+        # If we reach the 'capital follows'
+        elif (substring == ".....O"):
+
+            # Set that flag to True
+            isCaptial = True
+        
+        # If we have a space
+        elif (substring == "......"):
+
+            # If we've been dealing with numbers
+            if (isNum):
+
+                # Set the flag back to False
+                isNum = False
+
+            # Add a space
+            output += " "
+        
+        # If we have a period/decimal
+        elif (substring == '.O...O'):
+            
+            # Add a period/decimal
+            output += "."
+                
+        # If we are working with letters
+        if (not isNum):
+            
+            # Start checking the letters
+            if (substring == "O....."):
+                
+                if isCaptial:
+
+                    output += "A"
+                    isCaptial = False
+                
+                else:
+
+                    output += "a"
+
+            elif (substring == "O.O..."):
+
+                if isCaptial:
+
+                    output += "B"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "b"
+            
+            elif (substring == "OO...."):
+
+                if isCaptial:
+
+                    output += "C"
+                    isCaptial = False
+                
+                else:
+                    
+                    output += "c"
+
+            elif (substring == "OO.O.."):
+
+                if isCaptial:
+
+                    output += "D"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "d"
+
+            elif (substring == "O..O.."):
+
+                if isCaptial:
+
+                    output += "E"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "e"
+
+            elif (substring == "OOO..."):
+
+                if isCaptial:
+
+                    output += "F"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "f"
+
+            elif (substring == "OOOO.."):
+
+                if isCaptial:
+
+                    output += "G"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "g"
+
+            elif (substring == "O.OO.."):
+
+                if isCaptial:
+
+                    output += "H"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "h"
+
+            elif (substring == ".OO..."):
+
+                if isCaptial:
+
+                    output += "I"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "i"
+
+            elif (substring == ".OOO.."):
+
+                if isCaptial:
+
+                    output += "J"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "j"
+
+            elif (substring == "O...O."):
+
+                if isCaptial:
+
+                    output += "K"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "k"
+
+            elif (substring == "O.O.O."):
+
+                if isCaptial:
+
+                    output += "L"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "l"
+
+            elif (substring == "OO..O."):
+
+                if isCaptial:
+
+                    output += "M"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "m"
+
+            elif (substring == "OO.OO."):
+
+                if isCaptial:
+
+                    output += "N"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "n"
+
+            elif (substring == "O..OO."):
+
+                if isCaptial:
+
+                    output += "O"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "o"
+
+            elif (substring == "OOO.O."):
+
+                if isCaptial:
+
+                    output += "P"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "p"
+
+            elif (substring == "OOOOO."):
+
+                if isCaptial:
+
+                    output += "Q"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "q"
+
+            elif (substring == "O.OOO."):
+
+                if isCaptial:
+
+                    output += "R"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "r"
+
+            elif (substring == ".OO.O."):
+
+                if isCaptial:
+
+                    output += "S"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "s"
+
+            elif (substring == ".OOOO."):
+
+                if isCaptial:
+
+                    output += "T"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "t"
+
+            elif (substring == "O...OO"):
+
+                if isCaptial:
+
+                    output += "U"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "u"
+
+            elif (substring == "O.O.OO"):
+
+                if isCaptial:
+
+                    output += "V"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "v"
+
+            elif (substring == ".OOO.O"):
+
+                if isCaptial:
+
+                    output += "W"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "w"
+
+            elif (substring == "OO..OO"):
+
+                if isCaptial:
+
+                    output += "X"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "x"
+
+            elif (substring == "OO.OOO"):
+
+                if isCaptial:
+
+                    output += "Y"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "y"
+
+            elif (substring == "O..OOO"):
+
+                if isCaptial:
+
+                    output += "Z"
+                    isCaptial = False
+
+                else:
+                    
+                    output += "z"
+            
+
+            # If we have a comma
+            elif (substring == "..O..."):
+
+                output += ","
+            
+            # If we have a question mark
+            elif (substring == "..O.OO"):
+
+                output += "?"
+
+            # If we have an exclamation mark
+            elif (substring == "..OOO."):
+
+                output += "!"
+
+            # If we have a colon
+            elif (substring == "..OO.."):
+
+                output += ":"
+
+            # If we have a semicolon
+            elif (substring == "..O.O."):
+
+                output += ";"
+
+            # If we have a dash
+            elif (substring == "....OO"):
+
+                output += "-"
+            
+            # If we have a forward slash
+            elif (substring == ".O..O."):
+
+                output += "/"
+
+            # If we have a greater than/less than
+            elif (substring == ".OO..O"):
+
+                output += "<"
+
+            elif (substring == "O..OO."):
+
+                output += ">"
+
+            # If we have a round bracket
+            elif (substring == "O.O..O"):
+
+                output += "("
+
+            elif (substring == ".O.OO."):
+
+                output += ")"
+
+        # If we are working with numbers
+        else:
+
+            if (substring == "O....."):
+            
+                output += "1"
+
+            elif (substring == "O.O..."):
+                    
+                output += "2"
+            
+            elif (substring == "OO...."):
+                    
+                output += "3"
+
+            elif (substring == "OO.O.."):
+                    
+                output += "4"
+
+            elif (substring == "O..O.."):
+                    
+                output += "5"
+
+            elif (substring == "OOO..."):
+                    
+                output += "6"
+
+            elif (substring == "OOOO.."):
+                    
+                output += "7"
+
+            elif (substring == "O.OO.."):
+                    
+                output += "8"
+
+            elif (substring == ".OO..."):
+                    
+                output += "9"
+
+            elif (substring == ".OOO.."):
+                    
+                output += "0"
+            
+
+        currentCharNum += 6
 
 
 print(output)
