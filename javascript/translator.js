@@ -1,4 +1,4 @@
-var input = "Hello world";
+var input = ".O.OOOOO.O..O.O...";
 
 const glossary = {
     "A": "O.....", // A
@@ -89,12 +89,14 @@ function isLetter(str) {
     return str.length === 1 && str.match(/[a-z]/i);
 }
 
+function getKeyByValue(object, value) {
+    return Object.keys(object).filter(key => object[key] === value);
+  }
+
 function engToBraille(word){
     var translation = "";
     for (let i = 0; i < word.length; i++) {
         currChar = word.charAt(i);
-        console.log(currChar);
-        console.log(isNumeric(currChar))
         if(currChar == currChar.toUpperCase() && isLetter(currChar)){
             translation = translation.concat(glossary["capFollows"]);
         }
@@ -108,8 +110,36 @@ function engToBraille(word){
     }
     return translation;
 }
-console.log(engToBraille(input))
 
-function brailleToEng(){
+function brailleToEng(word){
+    var translation  = "";
 
+    for (let i = 0; i < word.length; i = i + 6) {
+        prevBrailleString = word.substring(i, i - 6)
+        currBrailleString = word.substring(i, i + 6)
+
+        console.log(prevBrailleString);
+
+        console.log(currBrailleString);
+        console.log(getKeyByValue(glossary, currBrailleString));
+
+        if(prevBrailleString === glossary["capFollows"]){
+            translation = translation.concat(getKeyByValue(glossary, currBrailleString)[1]);
+        }
+        else {
+            translation = translation.concat(getKeyByValue(glossary, currBrailleString)[2]);
+        }
+
+        if(prevBrailleString === glossary["numFollows"] && prevBrailleString.length > 2){
+            translation = translation.concat(getKeyByValue(glossary, currBrailleString)[0]);
+        }
+
+        if(prevBrailleString === glossary["decFollows"]){
+            translation = translation.concat(getKeyByValue(glossary, currBrailleString)[0]);
+        }
+
+    }
+    return translation;
 }
+
+console.log(brailleToEng(input))
