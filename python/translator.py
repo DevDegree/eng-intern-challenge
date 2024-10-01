@@ -88,11 +88,10 @@ def main():
 
     if is_braille(input_text):
         result = braille_to_english(input_text)
-        print("\nBraille to English Translation:")
     else:
         result = english_to_braille(input_text)
-        print("\nEnglish to Braille Translation:")
-    
+
+    # Directly print the result without additional text
     print(result)
 
 # Run the main function when the script is executed
