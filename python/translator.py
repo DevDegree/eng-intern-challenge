@@ -65,7 +65,7 @@ braille_to_alphabet = {v: k for k, v in alphabet_to_braille.items()}
 braille_to_number = {v: k for k, v in number_to_braille.items()}
 
 
-def is_braille(str):
+def is_braille(in_str):
     """
     Determines whether a given string represents Braille or English text.
 
@@ -73,30 +73,30 @@ def is_braille(str):
     and whether its length is a multiple of 6, a common characteristic of Braille
     encoded as a series of six-dot cells.
 
-    :param str: The string to be checked.
+    :param in_str: The string to be checked.
     :return: True if the input is likely Braille, False otherwise.
     """
     # Early exit for empty strings or strings of lengths not multiple of 6
-    if not str or len(str) % 6 != 0:
+    if not in_str or len(in_str) % 6 != 0:
         return False
 
     # Check if all characters in the string are either '.' or 'O'
-    return all(c in {'O', '.'} for c in str)
+    return all(c in {'O', '.'} for c in in_str)
 
 
-def braille_to_english(str):
+def braille_to_english(in_str):
     """
     Convert a Braille string to English text.
 
-    :param str: A string representing the Braille input, where each character is represented by a 6-digit Braille code.
+    :param in_str: A string representing the Braille input, where each character is represented by a 6-digit Braille code.
     :return: A string containing the translated English text.
     """
 
     english_out = ""
     is_number = False  # True if the next character is a number
     is_capital = False  # True if the next character is a capital letter
-    for i in range(0, len(str), 6):
-        braille_char = str[i:i + 6]
+    for i in range(0, len(in_str), 6):
+        braille_char = in_str[i:i + 6]
         if braille_char == special_dict['space']:
             english_out += ' '
             is_number = False
@@ -117,19 +117,17 @@ def braille_to_english(str):
     return english_out
 
 
-
-
-def english_to_braille(str):
+def english_to_braille(in_str):
     """
     Convert a Braille string to English text.
 
-    :param str: A string representing the Braille input, where each character is represented by a 6-digit Braille code.
+    :param in_str: A string representing the Braille input, where each character is represented by a 6-digit Braille code.
     :return: A string containing the translated English text.
     """
 
     braille_out = ''
-    was_number = False  # if previous charachter was a number
-    for char in str:
+    was_number = False  # if previous character was a number
+    for char in in_str:
         if char == ' ':
             braille_out += special_dict['space']
             was_number = False
@@ -153,6 +151,7 @@ def english_to_braille(str):
 
 def main():
     """Reads terminal input and returns its translation"""
+
     # Raise error if length of input less than 2
     if len(sys.argv) < 2:
         print('Error: Nothing to translate')
