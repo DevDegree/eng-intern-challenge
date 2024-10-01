@@ -1,4 +1,3 @@
-
 import sys
 
 # Braille dictionary
@@ -74,10 +73,9 @@ def english_to_braille(s):
         output.append(braille_map[c])
     return "".join(output)
 
-input_string = sys.argv[1]
-
+input_string = ' '.join(sys.argv[1:])
+    
 if check_braille(input_string):
     print(braille_to_english(input_string))
 else:
     print(english_to_braille(input_string))
-    
