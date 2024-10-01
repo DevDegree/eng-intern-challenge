@@ -60,7 +60,6 @@ const numbersToBraille = Object.entries(brailleToNumbers).reduce(
     {}
 );
 
-let translationArray = [];
 let translatedString;
 
 function translateToEnglish(braille) {
@@ -69,31 +68,28 @@ function translateToEnglish(braille) {
     let brailleArray = braille.match(/[.O]{1,6}/g) || [];
 
     let englishArray = brailleArray.reduce((acc, brailleChar) => {
-        if (brailleChar === englishToBraille[" "]) nextNum = false;
-
         if (brailleChar === englishToBraille.CAP) nextCaps = true;
         else if (brailleChar === englishToBraille.NUM) nextNum = true;
         else {
             let out;
-            if (nextNum) {
-                out = brailleToNumbers[brailleChar];
-            } else {
+            if (brailleChar === englishToBraille[" "]) nextNum = false;
+
+            if (!nextNum) {
                 out = brailleToEnglish[brailleChar];
 
                 if (nextCaps) {
                     out = out.toUpperCase();
                     nextCaps = false;
                 }
-
-                if (out === " ") {
-                    nextNum = false;
-                }
+            } else {
+                out = brailleToNumbers[brailleChar];
             }
 
             acc.push(out);
         }
         return acc;
     }, []);
+
     return englishArray.join("");
 }
 
@@ -102,14 +98,15 @@ function translateToBraille(english) {
 
     let brailleArray = english.split("").reduce((acc, char) => {
         if (char.match(/[0-9]/)) {
-            if (!numToggled) acc.push(englishToBraille.NUM);
-            numToggled = true;
+            if (!numToggled) {
+                acc.push(englishToBraille.NUM);
+                numToggled = true;
+            }
             acc.push(numbersToBraille[char]);
         } else {
             if (char.match(/[A-Z]/)) acc.push(englishToBraille.CAP);
             acc.push(englishToBraille[char.toLowerCase()]);
         }
-
 
         return acc;
     }, []);
@@ -118,6 +115,7 @@ function translateToBraille(english) {
 }
 
 if (args[0].match(/[^.O]/) || args[0].length % 6 !== 0 || args[1]) {
+    let translationArray = [];
     args.forEach((arg) => {
         const translatedArg = translateToBraille(arg);
         translationArray.push(translatedArg);
