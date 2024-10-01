@@ -5,49 +5,55 @@ import typing
 
 
 alphabet = {
-	'a':'0.....',
-	'b':'0.0...',
-	'c':'00....',
-	'd':'00.0..',
-	'e':'0..0..',
-	'f':'000...',
-	'g':'0000..',
-	'h':'0.00..',
-	'i':'.00...',
-	'j':'.000..',
-	'k':'0...0.',
-	'l':'0.0.0.',
-	'm':'00..0.',
-	'n':'00.00.',
-	'o':'0..00.',
-	'p':'000.0.',
-	'q':'00000.',
-	'r':'0.000.',
-	's':'.00.0.',
-	't':'.0000.',
-	'u':'0...00',
-	'v':'0.0.00',
-	'w':'.000.0',
-	'x':'00..00',
-	'y':'00.000',
-	'z':'0..000',
+	'a':'O.....',
+	'b':'O.O...',
+	'c':'OO....',
+	'd':'OO.O..',
+	'e':'O..O..',
+	'f':'OOO...',
+	'g':'OOOO..',
+	'h':'O.OO..',
+	'i':'.OO...',
+	'j':'.OOO..',
+	'k':'O...O.',
+	'l':'O.O.O.',
+	'm':'OO..O.',
+	'n':'OO.OO.',
+	'o':'O..OO.',
+	'p':'OOO.O.',
+	'q':'OOOOO.',
+	'r':'O.OOO.',
+	's':'.OO.O.',
+	't':'.OOOO.',
+	'u':'O...OO',
+	'v':'O.O.OO',
+	'w':'.OOO.O',
+	'x':'OO..OO',
+	'y':'OO.OOO',
+	'z':'O..OOO',
 }
 numbers = {
-	'1':'0.....',
-	'2':'0.0...',
-	'3':'00....',
-	'4':'00.0..',
-	'5':'0..0..',
-	'6':'000...',
-	'7':'0000..',
-	'8':'0.00..',
-	'9':'.00...',
-	'0':'.000..',
+	'1':'O.....',
+	'2':'O.O...',
+	'3':'OO....',
+	'4':'OO.O..',
+	'5':'O..O..',
+	'6':'OOO...',
+	'7':'OOOO..',
+	'8':'O.OO..',
+	'9':'.OO...',
+	'0':'.OOO..',
 }
 
-capital = '.....0'
+capital = '.....O'
 space = '......'
-num_follows = '.0.000'
+num_follows = '.O.OOO'
+
+def get_key_from_value(d, value):
+	for k, v in d.items():
+		if v == value:
+			return k
+	return None
 
 def braille_to_english(input_string: str) -> str:
 	translation = []
@@ -56,7 +62,6 @@ def braille_to_english(input_string: str) -> str:
 
 	for i in range(0,len(input_string),6):
 		char = input_string[i:i+6]
-
 		if char == capital:
 			flag = True
 			continue
@@ -71,33 +76,41 @@ def braille_to_english(input_string: str) -> str:
 			continue
 
 		if num:
-			number = numbers.get(char)
+			number = get_key_from_value(numbers, char)
 			translation.append(number)
 			continue
 
-		letter = alphabet.get(char)
+		letter = get_key_from_value(alphabet, char)
 
 		if flag:
 			letter = letter.upper()
-			translation.append(letter)
+			flag = False
+		translation.append(letter)
 
 	return ''.join(translation)
 
 def english_to_braille(input_string: str) -> str:
 	translation = []
+	flag = False
 	for char in input_string:
 
 		if char.isupper():
 			translation.append(capital)
-			translation.append(alphabet[char])
+			translation.append(alphabet[char.lower()])
 			continue
 
-		if char.isnumeric():
+		if char.isnumeric() and not flag:
+			flag = True
 			translation.append(num_follows)
-			translation.append(number[char])
+			translation.append(numbers[char])
+			continue
+
+		if char.isnumeric() and flag:
+			translation.append(numbers[char])
 			continue
 
 		if char == ' ':
+			flag = False
 			translation.append(space)
 			continue
 
@@ -112,30 +125,24 @@ def english_or_braille(input_string: str) -> str:
 		return 'braille'
 
 def translate(args):
-	list_of_words = args
-	language = english_or_braille(list_of_words)
+	words = args
+	language = english_or_braille(words)
 	res = []
 
 	if language == 'english':
-		for word in list_of_words: 
+		for word in words:
 			translation = english_to_braille(word)
 			res.append(translation)
-			res.append(space)
 
-	print(''.join(res))
+	if language == 'braille':
+		for word in words:
+			res.append(braille_to_english(word))
+
+	print(space.join(res))
 			
 
 if __name__=='__main__':
 	args = sys.argv[1:]
-
-	# for arg in args:
-	# 	if isinstance(arg,str):
-	# 		# inputs.append(arg)
-	# 	continue
-	# # elif isinstance(arg, list) and all(isinstance(item,str) for item in arg):
-	# # 	inputs.extend(arg)
-	# else:
-	# 	raise Error('wrong type of input')
 	translate(args)
 
 ## if captial follows, only next element is capital
