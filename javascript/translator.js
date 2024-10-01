@@ -7,22 +7,9 @@ function translator() {
         'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't',
         'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y',
         'O..OOO': 'z',
-        '.O.OOOO.....': '0', '.O.OOOO.....': '1', '.O.OOOO.O...': '2', '.O.OOOO....': '3',
-        '.O.OOOO.O..': '4', '.O.OOOO..O..': '5', '.O.OOOOO....': '6', '.O.OOOOOO...': '7',
-        '.O.OOOO.OO..': '8', '.O.OOO.OO...': '9',
-        '..O...': ',',
-        '..OO..': '.',
-        '..O.O.': '?',
-        '..OO.O': '!',
-        '..OO.': ':',
-        '..O..': ';',
-        '..OO..': '-',
-        '.O..O.': '/',
-        '.O.O..': '<',
-        '.O.O.O': '>',
-        '.O.O..': '(',
-        '.O..O.': ')',
-        '.O.OOO': 'number', '.....O': 'capital', '......': ' ',
+        '..O...': ',', '..OO..': '.', '..O.O.': '?', '..OO.O': '!', '..OO.': ':',
+        '..O..': ';', '..OO..': '-', '.O..O.': '/', '.O.O..': '<', '.O.O.O': '>',
+        '.O.O..': '(', '.O..O.': ')', '.O.OOO': 'number', '.....O': 'capital', '......': ' ',
     };
 
     const englishToBraille = {};
@@ -35,7 +22,7 @@ function translator() {
     function detectAndTranslate(input) {
         const isBraille = /^[O.]+$/.test(input) && input.length % 6 === 0;
         const isEnglish = /^[a-zA-Z0-9 ,.?!:;\-/<>()]+$/.test(input);
-        
+
         if (isBraille) {
             return translateBrailleToEnglish(input)
         } else if (isEnglish) {
@@ -50,6 +37,7 @@ function translator() {
         const arrOfBraille = [];
         const output = [];
         let capitalNext = false;
+        let isNumberMode = false;
 
         // split input into Braille unit
         for (let i = 0; i < input.length; i += 6) {
@@ -63,11 +51,19 @@ function translator() {
             if (englishChar === undefined) {
                 return `Error: Unknown Braille character ${arrOfBraille[j]}`
             }
-            if(englishChar === 'capital') {
+            if (englishChar === 'capital') {
                 capitalNext = true;
+            } else if (englishChar === 'number') {
+                isNumberMode = true;
             } else {
-                output.push(capitalNext ? englishChar.toUpperCase() : englishChar);
-                capitalNext = false;
+                if (isNumberMode) {
+                    const number = 'jabcdefghi'.indexOf(englishChar);
+                    output.push(number === -1 ? englishChar : number.toString())
+                } else {
+                    output.push(capitalNext ? englishChar.toUpperCase() : englishChar);
+                    capitalNext = false;
+                }
+                if (englishChar === ' ') isNumberMode = false;
             }
         }
         return output.join('');
@@ -75,17 +71,22 @@ function translator() {
 
     function translateEnglishToBraille(input) {
         let output = '';
+        let isNumberMode = false;
 
         for (let char of input) {
-            if (char === char.toUpperCase() && char !== ' ' && isNaN(char) && char.match(/[a-z]/i)) {
-                output += englishToBraille['capital'];
-                char = char.toLowerCase();
-            }
-
-            if (englishToBraille[char]) {
-                output += englishToBraille[char]
+            if (char >= '0' && char <= '9') {
+                if (!isNumberMode) {
+                    output += englishToBraille['number']
+                    isNumberMode = true;
+                }
+                output += englishToBraille['jabcdefghi'[char]];
             } else {
-                return `Error: unknown character ${char}`
+                if (char === ' ') isNumberMode = false;
+                if (char === char.toUpperCase() && char !== ' ' && isNaN(char) && char.match(/[a-z]/i)) {
+                    output += englishToBraille['capital'];
+                    char = char.toLowerCase();
+                }
+                output += englishToBraille[char] || ''
             }
         }
         return output;
