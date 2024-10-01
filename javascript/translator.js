@@ -1,3 +1,10 @@
+const CONFIG = {
+    VALID_ENGLISH_REGEX: /^[a-zA-Z0-9 ,.?!:;\-/<>()]+$/,
+    VALID_BRAILLE_REGEX: /^[O.]+$/,
+    NUMBER_CHARS: 'jabcdefghi',
+};
+
+
 function translator() {
     const brailleToEnglish = {
         'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd', 'O..O..': 'e',
@@ -26,15 +33,12 @@ function translator() {
             return 'Error: Input can not be empty or whitespace.'
         }
 
-        const VALID_ENGLISH_REGEX = /^[a-zA-Z0-9 ,.?!:;\-/<>()]+$/;
-        const VALID_BRAILLE_REGEX = /^[O.]+$/;
-
-        if (VALID_BRAILLE_REGEX.test(trimedInput)) {
+        if (CONFIG.VALID_BRAILLE_REGEX.test(trimedInput)) {
             if (trimedInput.length % 6 !== 0) {
                 return 'Error: Invalid Braille input. Each Braille character should be 6 dots.'
             }
             return translateBrailleToEnglish(trimedInput)
-        } else if (VALID_ENGLISH_REGEX.test(trimedInput)) {
+        } else if (CONFIG.VALID_ENGLISH_REGEX.test(trimedInput)) {
             return translateEnglishToBraille(trimedInput)
         } else {
             return 'Error: Invalid input format.'
@@ -45,7 +49,7 @@ function translator() {
     function translateBrailleToEnglish(input) {
         const arrOfBraille = [];
         const output = [];
-        let capitalNext = false;
+        let isCapitalNext = false;
         let isNumberMode = false;
 
         // split input into Braille unit
@@ -61,16 +65,16 @@ function translator() {
                 return `Error: Unknown Braille character ${arrOfBraille[j]}`
             }
             if (englishChar === 'capital') {
-                capitalNext = true;
+                isCapitalNext = true;
             } else if (englishChar === 'number') {
                 isNumberMode = true;
             } else {
                 if (isNumberMode) {
-                    const number = 'jabcdefghi'.indexOf(englishChar);
+                    const number = CONFIG.NUMBER_CHARS.indexOf(englishChar);
                     output.push(number === -1 ? englishChar : number.toString())
                 } else {
-                    output.push(capitalNext ? englishChar.toUpperCase() : englishChar);
-                    capitalNext = false;
+                    output.push(isCapitalNext ? englishChar.toUpperCase() : englishChar);
+                    isCapitalNext = false;
                 }
                 if (englishChar === ' ') isNumberMode = false;
             }
@@ -88,7 +92,7 @@ function translator() {
                     output += englishToBraille['number']
                     isNumberMode = true;
                 }
-                output += englishToBraille['jabcdefghi'[char]];
+                output += englishToBraille[CONFIG.NUMBER_CHARS[char]];
             } else {
                 if (char === ' ') isNumberMode = false;
                 if (char === char.toUpperCase() && char !== ' ' && isNaN(char) && char.match(/[a-z]/i)) {
