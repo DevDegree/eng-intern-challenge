@@ -1,5 +1,4 @@
 function translator() {
-    // Create mapping between Braille and English characters
     const brailleToEnglish = {
         'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd', 'O..O..': 'e',
         'OOO...': 'f', 'OOOO..': 'g', 'O.OO..': 'h', '.OO...': 'i', '.OOO..': 'j',
@@ -17,16 +16,26 @@ function translator() {
         englishToBraille[englishChar] = brailleChar;
     }
 
-    // implement a function to detect input format
-    // detect the braille input
     function detectAndTranslate(input) {
-        const isBraille = /^[O.]+$/.test(input) && input.length % 6 === 0;
-        const isEnglish = /^[a-zA-Z0-9 ,.?!:;\-/<>()]+$/.test(input);
+        if (!input || typeof input !== 'string') {
+            return 'Input should be a non-empty string.'
+        }
 
-        if (isBraille) {
-            return translateBrailleToEnglish(input)
-        } else if (isEnglish) {
-            return translateEnglishToBraille(input)
+        const trimedInput = input.trim();
+        if (trimedInput.length === 0) {
+            return 'Error: Input can not be empty or whitespace.'
+        }
+
+        const VALID_ENGLISH_REGEX = /^[a-zA-Z0-9 ,.?!:;\-/<>()]+$/;
+        const VALID_BRAILLE_REGEX = /^[O.]+$/;
+
+        if (VALID_BRAILLE_REGEX.test(trimedInput)) {
+            if (trimedInput.length % 6 !== 0) {
+                return 'Error: Invalid Braille input. Each Braille character should be 6 dots.'
+            }
+            return translateBrailleToEnglish(trimedInput)
+        } else if (VALID_ENGLISH_REGEX.test(trimedInput)) {
+            return translateEnglishToBraille(trimedInput)
         } else {
             return 'Error: Invalid input format.'
         }
