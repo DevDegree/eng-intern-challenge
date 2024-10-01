@@ -24,25 +24,45 @@ function translator() {
     }
 
     function detectAndTranslate(input) {
-        if (!input || typeof input !== 'string') {
-            return 'Input should be a non-empty string.'
-        }
-
-        const trimedInput = input.trim();
-        if (trimedInput.length === 0) {
-            return 'Error: Input can not be empty or whitespace.'
-        }
-
-        if (CONFIG.VALID_BRAILLE_REGEX.test(trimedInput)) {
-            if (trimedInput.length % 6 !== 0) {
-                return 'Error: Invalid Braille input. Each Braille character should be 6 dots.'
+        try {
+            if (!input || typeof input !== 'string') {
+                throw new TranslationError('Input must not be an empty string.', 'INVALID_INPUT')
             }
-            return translateBrailleToEnglish(trimedInput)
-        } else if (CONFIG.VALID_ENGLISH_REGEX.test(trimedInput)) {
-            return translateEnglishToBraille(trimedInput)
-        } else {
-            return 'Error: Invalid input format.'
+
+            const trimedInput = input.trim();
+            if (trimedInput.length === 0) {
+                throw new TranslationError('Input can not be empty or whitespace.', 'EMPTY_INPUT')
+            }
+
+            if (CONFIG.VALID_BRAILLE_REGEX.test(trimedInput)) {
+                if (trimedInput.length % 6 !== 0) {
+                    throw new TranslationError('Invalid Braille input. Each Braille character should be 6 dots.', 'INVALID_BRAILLE_LENGTH')
+                }
+                return translateBrailleToEnglish(trimedInput)
+            } else if (CONFIG.VALID_ENGLISH_REGEX.test(trimedInput)) {
+                return translateEnglishToBraille(trimedInput)
+            } else {
+                throw new TranslationError('Invalid input format.')
+            }
+        } catch (error) {
+            if (error instanceof TranslationError) {
+                return {
+                    success: false,
+                    error: {
+                        message: error.message,
+                        code: error.code,
+                    }
+                }
+            }
+            return {
+                success: false,
+                error: {
+                    message: 'Unexpected error.',
+                    code: 'UNKNOWN_ERROR',
+                }
+            }
         }
+
 
     }
 
@@ -62,7 +82,7 @@ function translator() {
         for (let j = 0; j < arrOfBraille.length; j++) {
             const englishChar = brailleToEnglish[arrOfBraille[j]];
             if (englishChar === undefined) {
-                return `Error: Unknown Braille character ${arrOfBraille[j]}`
+                throw new TranslationError(`Unknown Braille character ${arrOfBraille[j]}`, 'UNKNOWN_BRAILLE_CHAR')
             }
             if (englishChar === 'capital') {
                 isCapitalNext = true;
@@ -108,13 +128,29 @@ function translator() {
     const args = process.argv.slice(2);
 
     if (args.length === 0) {
-        console.log('Please provide a string to translate');
+        console.log('Usage: node translator.js <text to translate>');
+        console.log('Example: node translator.js "Hello World"');
         process.exit(1)
     }
 
     const userInput = args.join(' ');
-    const output = detectAndTranslate(userInput);
-    console.log(output);
+    const result = detectAndTranslate(userInput);
+    if (result.success === false) {
+        console.error('Translation Error:')
+        console.error(` Message: ${result.error.message}`)
+        console.error(` Code: ${result.error.code}`)
+    } else {
+        console.log(output);
+    }
 }
 
 translator();
+
+
+class TranslationError extends Error {
+    constructor(message, code) {
+        super(message);
+        this.name = 'TranslationError';
+        this.code = code;
+    }
+}
