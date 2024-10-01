@@ -142,7 +142,8 @@ def main():
     init_braille_to_english()
 
     # get input from command line
-    input_string = sys.argv[1]
+    input_string = "".join(sys.argv[1:])
+
 
     # check if input is braille
     if is_braille(input_string):
