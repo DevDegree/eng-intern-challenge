@@ -33,10 +33,18 @@ function isCapital(char) {
   }
 }
 
+function invertObject(obj) {
+  return Object.entries(obj).reduce((acc, [key, val]) => {
+    acc[val] = key;
+    return acc;
+  }, {})
+}
+
 module.exports = {
   isBraille,
   isChar,
   isNumber,
   isSpace,
-  isCapital
+  isCapital,
+  invertObject
 }

@@ -1,4 +1,4 @@
-const { isBraille, isCapital, isChar, isNumber, isSpace } = require("./utils")
+const { isBraille, isCapital, isChar, isNumber, isSpace, invertObject } = require("./utils")
 
 describe("utils", () => {
   it("should check if string is braille", () => {
@@ -20,5 +20,20 @@ describe("utils", () => {
   it("should check if char is space", () => {
     expect(isSpace(" ")).toBe(true);
     expect(isSpace("a")).toBe(false);
+  })
+  it("should invert an switch keys and values for an object", () => {
+    const obj = {
+      A: 1,
+      B: 2,
+      C: 3,
+      D: 4
+    }
+    const expected = {
+      "1": "A",
+      "2": "B",
+      "3": "C",
+      "4": "D"
+    }
+    expect(invertObject(obj)).toEqual(expected)
   })
 })

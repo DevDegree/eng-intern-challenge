@@ -1,5 +1,5 @@
 const { alphabet, numbers, markers } = require("./map");
-const { isBraille, isNumber, isCapital, isSpace } = require("./utils")
+const { isBraille, isNumber, isCapital, isSpace, invertObject } = require("./utils")
 
 const input = process.argv.slice(2).join(" ");
 
@@ -9,7 +9,40 @@ if (isBraille(input)) {
   const braille = Array.from({ length: Math.ceil(input.length / 6) }, (_, i) => {
     return input.slice(i * 6, 6 + i * 6);
   });
-  
+  const brailleAlphabet = invertObject(alphabet);
+  const brailleMarkers = invertObject(markers);
+  let addingNumbers = false;
+  let capital = false;
+  for (let char of braille) {
+    if (char in brailleMarkers) {
+      // found a marker
+      let marker = brailleMarkers[char];
+      if (marker === "capital") {
+        // capital marker
+        capital = true;
+      } else {
+        // number marker
+        addingNumbers = true;
+      }
+    } else {
+      // letter, number or space
+      // handle space
+      if (char === "......") {
+        addingNumbers = false;
+        output += " ";
+      } else if (addingNumbers) {
+        let num = numbers.findIndex((val) => val === char);
+        output += num;
+      } else {
+        if (capital) {
+          output += brailleAlphabet[char];
+          capital = false;
+        } else {
+          output += brailleAlphabet[char].toLowerCase();
+        }
+      }
+    }
+  }
 } else {
   // convert to braille
   let addingNumbers = false;
