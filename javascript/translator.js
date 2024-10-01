@@ -1,67 +1,115 @@
+var input = "Hello world";
+
 const glossary = {
-    "65": "o.....", // A
-    "66": "o.o...", // B
-    "67": "oo....", // C
-    "68": "oo.o..", // D
-    "69": "o..o..", // E
-    "70": "ooo...", // F
-    "71": "oooo..", // G
-    "72": "o.oo..", // H
-    "73": ".oo...", // I
-    "74": ".ooo..", // J
-    "75": "o...o.", // K
-    "76": "o.o.o.", // L
-    "77": "oo..o.", // M
-    "78": "oo.oo.", // N
-    "79": "o..oo.", // O
-    "80": "ooo.o.", // P
-    "81": "ooooo.", // Q
-    "82": "o.ooo.", // R
-    "83": ".oo.o.", // S
-    "84": ".oooo.", // T
-    "85": "o...oo", // U
-    "86": "o.o.oo", // V
-    "87": ".ooo.o", // W
-    "88": "oo..oo", // X
-    "89": "oo.ooo", // Y
-    "90": "o..ooo", // Z
-    "97": "o.....", // a
-    "98": "o.o...", // b
-    "99": "oo....", // c
-    "100": "oo.o..", // d
-    "101": "o..o..", // e
-    "102": "ooo...", // f
-    "103": "oooo..", // g
-    "104": "o.oo..", // h
-    "105": ".oo...", // i
-    "106": ".ooo..", // j
-    "107": "o...o.", // k
-    "108": "o.o.o.", // l
-    "109": "oo..o.", // m
-    "110": "oo.oo.", // n
-    "111": "o..oo.", // o
-    "112": "ooo.o.", // p
-    "113": "ooooo.", // q
-    "114": "o.ooo.", // r
-    "115": ".oo.o.", // s
-    "116": ".oooo.", // t
-    "117": "o...oo", // u
-    "118": "o.o.oo", // v
-    "119": ".ooo.o", // w
-    "120": "oo..oo", // x
-    "121": "oo.ooo", // y
-    "122": "o..ooo", // z
-    "46": "..oo.o", // .
-    "44": "..o...", // ,
-    "63": "..o.oo", // ?
-    "33": "..ooo.", // !
-    "58": "..oo..", // :
-    "59": "..o.o.", // ;
-    "45": "....oo", // -
-    "47": ".o..o.", // /
-    "60": ".oo..o", // <
-    "62": "o..oo.", // >
-    "40": "o.o..o", // (
-    "41": ".o.oo.", // )
-    "32": "......", // space
+    "A": "O.....", // A
+    "B": "O.O...", // B
+    "C": "OO....", // C
+    "D": "OO.O..", // D
+    "E": "O..O..", // E
+    "F": "OOO...", // F
+    "G": "OOOO..", // G
+    "H": "O.OO..", // H
+    "I": ".OO...", // I
+    "J": ".OOO..", // J
+    "K": "O...O.", // K
+    "L": "O.O.O.", // L
+    "M": "OO..O.", // M
+    "N": "OO.OO.", // N
+    "O": "O..OO.", // O
+    "P": "OOO.O.", // P
+    "Q": "OOOOO.", // Q
+    "R": "O.OOO.", // R
+    "S": ".OO.O.", // S
+    "T": ".OOOO.", // T
+    "U": "O...OO", // U
+    "V": "O.O.OO", // V
+    "W": ".OOO.O", // W
+    "X": "OO..OO", // X
+    "Y": "OO.OOO", // Y
+    "Z": "O..OOO", // Z
+    "a": "O.....", // a
+    "b": "O.O...", // b
+    "c": "OO....", // c
+    "d": "OO.O..", // d
+    "e": "O..O..", // e
+    "f": "OOO...", // f
+    "g": "OOOO..", // g
+    "h": "O.OO..", // h
+    "i": ".OO...", // i
+    "j": ".OOO..", // j
+    "k": "O...O.", // k
+    "l": "O.O.O.", // l
+    "m": "OO..O.", // m
+    "n": "OO.OO.", // n
+    "o": "O..OO.", // o
+    "p": "OOO.O.", // p
+    "q": "OOOOO.", // q
+    "r": "O.OOO.", // r
+    "s": ".OO.O.", // s
+    "t": ".OOOO.", // t
+    "u": "O...OO", // u
+    "v": "O.O.OO", // v
+    "w": ".OOO.O", // w
+    "x": "OO..OO", // x
+    "y": "OO.OOO", // y
+    "z": "O..OOO", // z
+    "1": "O.....", // 1
+    "2": "O.O...", // 2
+    "3": "OO....", // 3
+    "4": "OO.O..", // 4
+    "5": "O..O..", // 5
+    "6": "OOO...", // 6
+    "7": "OOOO..", // 7
+    "8": "O.OO..", // 8
+    "9": ".OO...", // 9
+    "0": ".OOO..", // 0 
+    "capFollows": ".....O",
+    "decFollows": ".O...O",
+    "numFollows": ".O.OOO",
+    ".": "..OO.O", // .
+    ",": "..O...", // ,
+    "?": "..O.OO", // ?
+    "!": "..OOO.", // !
+    ":": "..OO..", // :
+    ";": "..O.O.", // ;
+    "-": "....OO", // -
+    "/": ".O..O.", // /
+    "<": ".OO..O", // <
+    ">": "O..OO.", // >
+    "(": "O.O..O", // (
+    ")": ".O.OO.", // )
+    " ": "......", // space
+}
+
+function isNumeric(str){
+    return /^\d+$/.test(str);
+}
+
+function isLetter(str) {
+    return str.length === 1 && str.match(/[a-z]/i);
+}
+
+function engToBraille(word){
+    var translation = "";
+    for (let i = 0; i < word.length; i++) {
+        currChar = word.charAt(i);
+        console.log(currChar);
+        console.log(isNumeric(currChar))
+        if(currChar == currChar.toUpperCase() && isLetter(currChar)){
+            translation = translation.concat(glossary["capFollows"]);
+        }
+        if(isNumeric(currChar) && (word.charAt(i - 1) === " " || word.charAt(i - 1) === "" )){
+            translation = translation.concat(glossary["numFollows"]);
+        }
+        if(currChar === "." && isNumeric(word.charAt(i + 1)) || isNumeric(word.charAt(i - 1))){
+            translation = translation.concat(glossary["decFollows"]);
+        }
+        translation = translation.concat(glossary[currChar]);
+    }
+    return translation;
+}
+console.log(engToBraille(input))
+
+function brailleToEng(){
+
 }
