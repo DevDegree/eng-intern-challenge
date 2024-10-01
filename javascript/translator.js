@@ -49,6 +49,7 @@ function translator() {
     function translateBrailleToEnglish(input) {
         const arrOfBraille = [];
         const output = [];
+        let capitalNext = false;
 
         // split input into Braille unit
         for (let i = 0; i < input.length; i += 6) {
@@ -62,7 +63,12 @@ function translator() {
             if (englishChar === undefined) {
                 return `Error: Unknown Braille character ${arrOfBraille[j]}`
             }
-            output.push(englishChar)
+            if(englishChar === 'capital') {
+                capitalNext = true;
+            } else {
+                output.push(capitalNext ? englishChar.toUpperCase() : englishChar);
+                capitalNext = false;
+            }
         }
         return output.join('');
     }
