@@ -93,13 +93,15 @@ def main():
     for i, input_string in enumerate(sys.argv[1:], start=1):
         if is_braille(input_string):
             translated_text = translate_braille_to_english(input_string)
+            translated_texts.append(translated_text)
+            if i < len(sys.argv) - 1:
+                translated_texts.append(" ")
         else:
             translated_text = translate_english_to_braille(input_string)
-        
-        translated_texts.append(translated_text)
+            translated_texts.append(translated_text)
 
-        if i < len(sys.argv) - 1:
-            translated_texts.append("......")
+            if i < len(sys.argv) - 1:
+                translated_texts.append("......")
 
     result_string = "".join(translated_texts)
     print(result_string)
