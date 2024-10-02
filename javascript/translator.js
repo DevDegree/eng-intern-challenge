@@ -2,11 +2,12 @@ const CONFIG = {
     VALID_ENGLISH_REGEX: /^[a-zA-Z0-9 ,.?!:;\-/<>()]+$/,
     VALID_BRAILLE_REGEX: /^[O.]+$/,
     NUMBER_CHARS: 'jabcdefghi',
+    BRAILLE_CHAR_LENGTH: 6,
 };
 
 
 function translator() {
-    const brailleToEnglish = {
+    const brailleToEnglishMap = {
         'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd', 'O..O..': 'e',
         'OOO...': 'f', 'OOOO..': 'g', 'O.OO..': 'h', '.OO...': 'i', '.OOO..': 'j',
         'O...O.': 'k', 'O.O.O.': 'l', 'OO..O.': 'm', 'OO.OO.': 'n', 'O..OO.': 'o',
@@ -18,9 +19,9 @@ function translator() {
         '.O.O..': '(', '.O..O.': ')', '.O.OOO': 'number', '.....O': 'capital', '......': ' ',
     };
 
-    const englishToBraille = {};
-    for (const [brailleChar, englishChar] of Object.entries(brailleToEnglish)) {
-        englishToBraille[englishChar] = brailleChar;
+    const englishToBrailleMap = {};
+    for (const [brailleChar, englishChar] of Object.entries(brailleToEnglishMap)) {
+        englishToBrailleMap[englishChar] = brailleChar;
     }
 
     function detectAndTranslate(input) {
@@ -29,20 +30,20 @@ function translator() {
                 throw new TranslationError('Input must not be an empty string.', 'INVALID_INPUT')
             }
 
-            const trimedInput = input.trim();
-            if (trimedInput.length === 0) {
+            const trimmedInput = input.trim();
+            if (trimmedInput.length === 0) {
                 throw new TranslationError('Input can not be empty or whitespace.', 'EMPTY_INPUT')
             }
 
-            if (CONFIG.VALID_BRAILLE_REGEX.test(trimedInput)) {
-                if (trimedInput.length % 6 !== 0) {
+            if (CONFIG.VALID_BRAILLE_REGEX.test(trimmedInput)) {
+                if (trimmedInput.length % BRAILLE_CHAR_LENGTH !== 0) {
                     throw new TranslationError('Invalid Braille input. Each Braille character should be 6 dots.', 'INVALID_BRAILLE_LENGTH')
                 }
-                return translateBrailleToEnglish(trimedInput)
-            } else if (CONFIG.VALID_ENGLISH_REGEX.test(trimedInput)) {
-                return translateEnglishToBraille(trimedInput)
+                return translateBrailleToEnglish(trimmedInput)
+            } else if (CONFIG.VALID_ENGLISH_REGEX.test(trimmedInput)) {
+                return translateEnglishToBraille(trimmedInput)
             } else {
-                throw new TranslationError('Invalid input format.')
+                throw new TranslationError('Invalid input format.', 'INVALID_FORMAT')
             }
         } catch (error) {
             if (error instanceof TranslationError) {
@@ -66,21 +67,21 @@ function translator() {
 
     }
 
-    function translateBrailleToEnglish(input) {
-        const arrOfBraille = [];
-        const output = [];
+    function translateBrailleToEnglish(brailleText) {
+        const brailleChars = [];
+        const translatedChars = [];
         let isCapitalNext = false;
         let isNumberMode = false;
 
         // split input into Braille unit
-        for (let i = 0; i < input.length; i += 6) {
-            const brailleUnit = input.slice(i, i + 6);
-            arrOfBraille.push(brailleUnit);
+        for (let i = 0; i < brailleText.length; i += BRAILLE_CHAR_LENGTH) {
+            const brailleChar = brailleText.slice(i, i + BRAILLE_CHAR_LENGTH);
+            brailleChars.push(brailleChar);
         }
 
         // translate braille units into english
-        for (let j = 0; j < arrOfBraille.length; j++) {
-            const englishChar = brailleToEnglish[arrOfBraille[j]];
+        for (const brailleChar of brailleChars) {
+            const englishChar = brailleToEnglishMap[brailleChar];
             if (englishChar === undefined) {
                 throw new TranslationError(`Unknown Braille character ${arrOfBraille[j]}`, 'UNKNOWN_BRAILLE_CHAR')
             }
@@ -90,57 +91,57 @@ function translator() {
                 isNumberMode = true;
             } else {
                 if (isNumberMode) {
-                    const number = CONFIG.NUMBER_CHARS.indexOf(englishChar);
-                    output.push(number === -1 ? englishChar : number.toString())
+                    const numberIndex = CONFIG.NUMBER_CHARS.indexOf(englishChar);
+                    translatedChars.push(numberIndex === -1 ? englishChar : numberIndex.toString())
                 } else {
-                    output.push(isCapitalNext ? englishChar.toUpperCase() : englishChar);
+                    translatedChars.push(isCapitalNext ? englishChar.toUpperCase() : englishChar);
                     isCapitalNext = false;
                 }
                 if (englishChar === ' ') isNumberMode = false;
             }
         }
-        return output.join('');
+        return { success: true, result: translatedChars.join('') }
     }
 
-    function translateEnglishToBraille(input) {
-        let output = '';
+    function translateEnglishToBraille(englishText) {
+        let brailleOutput = '';
         let isNumberMode = false;
 
-        for (let char of input) {
+        for (const char of englishText) {
             if (char >= '0' && char <= '9') {
                 if (!isNumberMode) {
-                    output += englishToBraille['number']
+                    brailleOutput += englishToBrailleMap['number']
                     isNumberMode = true;
                 }
-                output += englishToBraille[CONFIG.NUMBER_CHARS[char]];
+                brailleOutput += englishToBrailleMap[CONFIG.NUMBER_CHARS[char]];
             } else {
                 if (char === ' ') isNumberMode = false;
                 if (char === char.toUpperCase() && char !== ' ' && isNaN(char) && char.match(/[a-z]/i)) {
-                    output += englishToBraille['capital'];
-                    char = char.toLowerCase();
+                    brailleOutput += englishToBrailleMap['capital'];
                 }
-                output += englishToBraille[char] || ''
+                const lowerChar = char.toLowerCase();
+                brailleOutput += englishToBrailleMap[lowerChar] || ''
             }
         }
-        return output;
+        return { success: true, result: brailleOutput };
     }
 
-    const args = process.argv.slice(2);
+    const commandLineArgs = process.argv.slice(2);
 
-    if (args.length === 0) {
+    if (commandLineArgs.length === 0) {
         console.log('Usage: node translator.js <text to translate>');
         console.log('Example: node translator.js "Hello World"');
         process.exit(1)
     }
 
-    const userInput = args.join(' ');
-    const result = detectAndTranslate(userInput);
-    if (result.success === false) {
+    const userInput = commandLineArgs.join(' ');
+    const translationResult = detectAndTranslate(userInput);
+    if (translationResult.success === false) {
         console.error('Translation Error:')
-        console.error(` Message: ${result.error.message}`)
-        console.error(` Code: ${result.error.code}`)
+        console.error(` Message: ${translationResult.error.message}`)
+        console.error(` Code: ${translationResult.error.code}`)
     } else {
-        console.log(output);
+        console.log(translationResult.result);
     }
 }
 
