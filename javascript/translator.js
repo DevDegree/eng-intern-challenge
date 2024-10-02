@@ -81,7 +81,6 @@ const englishToBraille = {
   0: ".ooo..",
   " ": "......",
   Capital: ".....o",
-  Decimal: ".o...o",
   Number: ".o.ooo",
 };
 
@@ -96,25 +95,30 @@ const translateEnglishToBraille = (englishStr) => {
   for (let i = 0; i < englishStr.length; i++) {
     if (englishStr[i] === " ") {
       brailleStr += englishToBraille[" "];
-      isNumber = false;
-    } else if (!isNaN(englishStr[i])) {
+      isNumber = false; //Set number flag to false when there is a space. (Technical Requirment)
+    } 
+    
+    else if (!isNaN(englishStr[i])) {
       if (!isNumber) {
         brailleStr += englishToBraille["Number"];
         isNumber = true;
       }
       brailleStr += englishToBraille[englishStr[i]];
-    } else if (
-      englishStr[i] === englishStr[i].toUpperCase() &&
-      englishStr[i] !== englishStr.toLowerCase()
+    } 
+    
+    else if (
+      englishStr[i] === englishStr[i].toUpperCase()
     ) {
       brailleStr += englishToBraille["Capital"];
       brailleStr += englishToBraille[englishStr[i].toLowerCase()];
       isCapital = true;
-    } else if (englishStr[i] === ".") {
-      brailleStr += englishToBraille["Decimal"];
-    } else brailleStr += englishToBraille[englishStr[i]];
+    } 
+    
+    else brailleStr += englishToBraille[englishStr[i]];
+
   }
-  return brailleStr;
+
+  return brailleStr.toUpperCase();
 };
 
 const translateBrailleToEnglish = (brailleStr) => {
@@ -123,35 +127,45 @@ const translateBrailleToEnglish = (brailleStr) => {
   let isCapital = false;
 
   for (let i = 0; i < brailleStr.length; i += 6) {
-    const slicedBraille = brailleStr.slice(i, i + 6);
+    const slicedBraille = brailleStr.slice(i, i + 6); //Divide string into groups of 6 
 
     if (slicedBraille === numberFollows) {
       isNumber = true;
-    } else if (slicedBraille === capitalFollows) {
+    } 
+    
+    else if (slicedBraille === capitalFollows) {
       isCapital = true;
-    } else if (slicedBraille === brailleToEnglish["......"]) {
+    } 
+
+    else if (slicedBraille === brailleToEnglish["......"]) {
       englishStr += " ";
       isNumber = false;
-    } else {
+    } 
+    
+    else {
       if (isNumber) {
         englishStr += brailleNumbersToEnglish[slicedBraille];
-      } else if (isCapital) {
+      } 
+      
+      else if (isCapital) {
         englishStr += brailleToEnglish[slicedBraille].toUpperCase();
         isCapital = false;
-      } else {
-        englishStr += brailleToEnglish[slicedBraille];
-      }
+      } 
+      
+      else englishStr += brailleToEnglish[slicedBraille];
+
     }
   }
 
   return englishStr;
 };
 
+// Determine if input string is in Braille or English
 const isBraille = (inputStr) => {
   return inputStr.length % 6 === 0 && /^[o.]+$/.test(inputStr);
 };
 
-const translate = (inputStr) => {
+const translateInput = (inputStr) => {
   return isBraille(inputStr)
     ? translateBrailleToEnglish(inputStr)
     : translateEnglishToBraille(inputStr);
@@ -159,4 +173,4 @@ const translate = (inputStr) => {
 
 const args = process.argv.slice(2);
 const inputStr = args.join(" ");
-console.log(translate(inputStr));
+console.log(translateInput(inputStr));
