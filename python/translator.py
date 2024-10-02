@@ -81,6 +81,8 @@ def to_braille(input: list) -> str:
 
       if is_letter(c) and (not prev_was_letter):
         # was numbers and now writing letters
+
+        # ASSUMPTION: english text will always put a space after a number
         #translated.append(ENG_TO_BRAILLE[" "])
         prev_was_letter = True
       elif (not is_letter(c)) and prev_was_letter:
