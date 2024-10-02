@@ -61,7 +61,11 @@ def braille_to_english(braille):
 
 # Detect Language input and choose correct translation function
 def main():
-    
+    if len(sys.argv) > 1:
+        input_text = " ".join(sys.argv[1:])
+        is_braille = all(c in ['O', '.'] for c in input_text)  # Check if input is Braille
+        # Translate accordingly
+        print(braille_to_english(input_text) if is_braille else english_to_braille(input_text))
 
 # Run main function
 if __name__ == "__main__":
