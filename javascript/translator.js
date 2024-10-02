@@ -1,56 +1,8 @@
-const CONFIG = {
-    VALID_ENGLISH_REGEX: /^[a-zA-Z0-9 ,.?!:;\-/<>()]+$/,
-    VALID_BRAILLE_REGEX: /^[O.]+$/,
-    NUMBER_CHARS: 'jabcdefghi',
-    BRAILLE_CHAR_LENGTH: 6,
-    NUMBER_MIN: '0',
-    NUMBER_MAX: '9',
-};
-
-class TranslationError extends Error {
-    constructor(message, code) {
-        super(message);
-        this.name = 'TranslationError';
-        this.code = code;
-    }
-}
-
-const punctuationMapping = {
-    ',': '..O...',
-    '.': '..OO..',
-    '?': '..O.O.',
-    '!': '..OO.O',
-    ':': '..OO..',
-    ';': '..O..',
-    '-': '..OO..',
-    '(': '.O.O..',
-    ')': '.O..O.',
-    ' ': '......',
-    '/': '.O..O.',
-    '<': '.O.O..',
-    '>': '.O.O.O',
-};
-
+import { CONFIG } from './config.js';
+import { TranslationError } from './errors.js';
+import { punctuationMapping, brailleToEnglishMap, englishToBrailleMap } from './mappings.js';
 
 function translator() {
-    const brailleToEnglishMap = {
-        'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd', 'O..O..': 'e',
-        'OOO...': 'f', 'OOOO..': 'g', 'O.OO..': 'h', '.OO...': 'i', '.OOO..': 'j',
-        'O...O.': 'k', 'O.O.O.': 'l', 'OO..O.': 'm', 'OO.OO.': 'n', 'O..OO.': 'o',
-        'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't',
-        'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y',
-        'O..OOO': 'z',
-        '.O.OOO': 'number', '.....O': 'capital', '......': ' ',
-    };
-
-    const englishToBrailleMap = {};
-    for (const [brailleChar, englishChar] of Object.entries(brailleToEnglishMap)) {
-        englishToBrailleMap[englishChar] = brailleChar;
-    }
-
-    for (let i = 0; i <= 9; i++) {
-        englishToBrailleMap[i.toString()] = englishToBrailleMap[CONFIG.NUMBER_CHARS[i]];
-    }
 
     /**
      * Detects the input type and translates accordingly.
