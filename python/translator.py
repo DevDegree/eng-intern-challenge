@@ -18,6 +18,7 @@ def main():
     Exits with a status code of 1 if no input is provided or if invalid
     characters are found in the user input.
     """
+    # Define the valid elements for Braille input
     elements = ["O", "."]
     braille_to_english_dict = make_dictionary(elements)
 
@@ -27,20 +28,20 @@ def main():
         sys.exit(1)
 
     # Combine all command-line arguments into a single string
-    user_input = ' '.join(sys.argv[1:])
-    
-    # Check if user input is valid Braille by seeing if any character is not from the elements list
+    user_input = ' '.join(sys.argv[1:]).strip()  # Added strip() to clean extra spaces
+
+    # Check if the input is valid Braille or English
+    is_braille = all(char in elements or char.isspace() for char in user_input)
+
     # Apply the strategy pattern for translation
-    if any(char not in elements for char in user_input):
-        strategy = EnglishToBrailleStrategy(user_input, braille_to_english_dict)
-    else:
+    if is_braille:
         strategy = BrailleToEnglishStrategy(user_input, braille_to_english_dict)
-    
+    else:
+        strategy = EnglishToBrailleStrategy(user_input, braille_to_english_dict)
+
+    # Translate and output the result
     result = strategy.translate()
-    
-    # Output the result
     print(result)
-    
 
 if __name__ == "__main__":
     main()
