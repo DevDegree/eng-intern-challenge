@@ -15,6 +15,22 @@ class TranslationError extends Error {
     }
 }
 
+const punctuationMapping = {
+    ',': '..O...',
+    '.': '..OO..',
+    '?': '..O.O.',
+    '!': '..OO.O',
+    ':': '..OO..',
+    ';': '..O..',
+    '-': '..OO..',
+    '(': '.O.O..',
+    ')': '.O..O.',
+    ' ': '......',
+    '/': '.O..O.',
+    '<': '.O.O..',
+    '>': '.O.O.O',
+};
+
 
 function translator() {
     const brailleToEnglishMap = {
@@ -24,14 +40,16 @@ function translator() {
         'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't',
         'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y',
         'O..OOO': 'z',
-        '..O...': ',', '..OO..': '.', '..O.O.': '?', '..OO.O': '!', '..OO.': ':',
-        '..O..': ';', '..OO..': '-', '.O..O.': '/', '.O.O..': '<', '.O.O.O': '>',
-        '.O.O..': '(', '.O..O.': ')', '.O.OOO': 'number', '.....O': 'capital', '......': ' ',
+        '.O.OOO': 'number', '.....O': 'capital', '......': ' ',
     };
 
     const englishToBrailleMap = {};
     for (const [brailleChar, englishChar] of Object.entries(brailleToEnglishMap)) {
         englishToBrailleMap[englishChar] = brailleChar;
+    }
+
+    for (let i = 0; i <= 9; i++) {
+        englishToBrailleMap[i.toString()] = englishToBrailleMap[CONFIG.NUMBER_CHARS[i]];
     }
 
     /**
@@ -51,6 +69,10 @@ function translator() {
                 throw new TranslationError('Input can not be empty or whitespace.', 'EMPTY_INPUT')
             }
 
+            if (!CONFIG.VALID_ENGLISH_REGEX.test(trimmedInput) && !CONFIG.VALID_BRAILLE_REGEX.test(trimmedInput)) {
+                throw new TranslationError('Invalid input format.', 'INVALID_FORMAT');
+            }
+
             if (CONFIG.VALID_BRAILLE_REGEX.test(trimmedInput)) {
                 if (trimmedInput.length % CONFIG.BRAILLE_CHAR_LENGTH !== 0) {
                     throw new TranslationError('Invalid Braille input. Each Braille character should be 6 dots.', 'INVALID_BRAILLE_LENGTH')
@@ -58,8 +80,6 @@ function translator() {
                 return translateBrailleToEnglish(trimmedInput)
             } else if (CONFIG.VALID_ENGLISH_REGEX.test(trimmedInput)) {
                 return translateEnglishToBraille(trimmedInput)
-            } else {
-                throw new TranslationError('Invalid input format.', 'INVALID_FORMAT')
             }
         } catch (error) {
             if (error instanceof TranslationError) {
@@ -74,13 +94,11 @@ function translator() {
             return {
                 success: false,
                 error: {
-                    message: 'Unexpected error.',
+                    message: 'Unexpected error.' + error.message,
                     code: 'UNKNOWN_ERROR',
                 }
             }
         }
-
-
     }
 
     /**
@@ -91,34 +109,35 @@ function translator() {
     function translateBrailleToEnglish(brailleText) {
         const brailleChars = [];
         const translatedChars = [];
-        let isCapitalNext = false;
         let isNumberMode = false;
+        let isCapital = false;
 
-        // Split input into Braille unit
         for (let i = 0; i < brailleText.length; i += CONFIG.BRAILLE_CHAR_LENGTH) {
             const brailleChar = brailleText.slice(i, i + CONFIG.BRAILLE_CHAR_LENGTH);
             brailleChars.push(brailleChar);
         }
 
-        // Translate braille units into english
         for (const brailleChar of brailleChars) {
             const englishChar = brailleToEnglishMap[brailleChar];
-            if (englishChar === undefined) {
-                throw new TranslationError(`Unknown Braille character ${brailleChar}`, 'UNKNOWN_BRAILLE_CHAR')
-            }
             if (englishChar === 'capital') {
-                isCapitalNext = true;
+                isCapital = true;
             } else if (englishChar === 'number') {
                 isNumberMode = true;
             } else {
-                const translatedChar = handleNumberMode(englishChar, isNumberMode, isCapitalNext)
+                let translatedChar = handleNumberMode(englishChar, isNumberMode);
+                if (isCapital) {
+                    translatedChar = translatedChar.toUpperCase();
+                    isCapital = false;
+                }
                 translatedChars.push(translatedChar);
-                isCapitalNext = false;
-                if (englishChar === ' ') isNumberMode = false;
+                if (englishChar === ' ') {
+                    isNumberMode = false;
+                }
             }
         }
-        return { success: true, result: translatedChars.join('') }
+        return { success: true, result: translatedChars.join('') };
     }
+
 
     /**
      * Translates English text to Braille.
@@ -130,24 +149,29 @@ function translator() {
         let brailleOutput = '';
         let isNumberMode = false;
 
-        for (const char of englishText) {
+        for (let i = 0; i < englishText.length; i++) {
+            const char = englishText[i];
             if (char >= CONFIG.NUMBER_MIN && char <= CONFIG.NUMBER_MAX) {
                 if (!isNumberMode) {
-                    brailleOutput += englishToBrailleMap['number']
+                    brailleOutput += englishToBrailleMap['number'];
                     isNumberMode = true;
                 }
-                brailleOutput += englishToBrailleMap[CONFIG.NUMBER_CHARS[char]];
+                brailleOutput += englishToBrailleMap[char];
+            } else if (char === ' ') {
+                isNumberMode = false;
+                brailleOutput += englishToBrailleMap[' '];
+            } else if (char === char.toUpperCase() && char.match(/[A-Z]/)) {
+                brailleOutput += englishToBrailleMap['capital'];
+                brailleOutput += englishToBrailleMap[char.toLowerCase()];
+                isNumberMode = false;
             } else {
-                if (char === ' ') isNumberMode = false;
-                if (char === char.toUpperCase() && char !== ' ' && isNaN(char) && char.match(/[a-z]/i)) {
-                    brailleOutput += englishToBrailleMap['capital'];
-                }
-                const lowerChar = char.toLowerCase();
-                brailleOutput += englishToBrailleMap[lowerChar] || ''
+                brailleOutput += punctuationMapping[char] || englishToBrailleMap[char.toLowerCase()] || '';
+                isNumberMode = false;
             }
         }
         return { success: true, result: brailleOutput };
     }
+
 
     /**
      * Handles number mode translation for both Braille to English and English to Braille.
@@ -157,13 +181,12 @@ function translator() {
      * @returns {string} The translated character.
      */
 
-    function handleNumberMode(char, isNumberMode, isCapital = false) {
+    function handleNumberMode(char, isNumberMode) {
         if (isNumberMode) {
             const numberIndex = CONFIG.NUMBER_CHARS.indexOf(char);
-            return numberIndex === -1 ? char : numberIndex.toString()
-        } else {
-            return isCapital ? char.toUpperCase() : char;
+            return numberIndex === -1 ? char : numberIndex.toString();
         }
+        return char;
     }
 
     const commandLineArgs = process.argv.slice(2);
@@ -180,6 +203,7 @@ function translator() {
         console.error('Translation Error:')
         console.error(` Message: ${translationResult.error.message}`)
         console.error(` Code: ${translationResult.error.code}`)
+        process.exit(1);
     } else {
         console.log(translationResult.result);
     }
