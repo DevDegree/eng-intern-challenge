@@ -3,14 +3,41 @@ from strategy import Strategy
 # Concrete strategy for Braille to English translation
 class BrailleToEnglishStrategy(Strategy):
     def __init__(self, input=None, dictionary=None):
+        """
+        Initialize the BrailleToEnglishStrategy with input and dictionary.
+
+        Args:
+            input (str): The Braille input string to be translated.
+            dictionary (dict): A mapping of Braille chunks to their English representations.
+        """
         self.input = input
         self.dictionary = dictionary  # Directly assign the Braille dictionary
     
     def translate(self):
+        """
+        Translate the Braille input string into English.
+
+        The method processes the Braille input in chunks of six characters.
+        It checks each chunk against the provided Braille dictionary and 
+        translates it to the corresponding English character(s). It handles 
+        special cases for numbers, decimal points, and capitalization.
+
+        Raises:
+            SystemExit: If the input length is not a multiple of 6 or if any 
+            Braille chunk is not found in the dictionary.
+
+        Returns:
+            str: The translated English representation of the Braille input.
+        """
         # Initialize an empty list to store the English representation
         english_output = []
         is_number_mode = False  # Flag to indicate number mode
         capitalize_next = False  # Flag to capitalize the next character
+
+        # Validate length of input
+        if len(self.input) % 6 != 0:
+            print("Error: Braille text cannot be split into 6 character chunks.")
+            exit(1)
 
         # Iterate over the Braille input string in chunks of 6 characters
         for i in range(0, len(self.input), 6):
@@ -46,8 +73,9 @@ class BrailleToEnglishStrategy(Strategy):
                         english_output.append(translated)
 
             else:
-                # If the chunk is not valid, append a placeholder (e.g., "?")
-                english_output.append("?")  # Indicate an invalid Braille chunk
+                # If the chunk is not valid, print an error message and exit
+                print(f"Error: Braille chunk '{braille_chunk}' not found in dictionary.")
+                exit(1)
         
         # Join all English representations into a single string
         return ''.join(english_output)

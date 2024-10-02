@@ -2,6 +2,20 @@ import itertools
 import string
 
 def make_dictionary(elements):
+    """
+    Creates a dictionary that maps Braille combinations to their corresponding
+    English characters based on predefined indices.
+
+    Args:
+        elements (list): A list of characters that represent the Braille elements,
+                         e.g., ["O", "."].
+
+    Returns:
+        dict: A dictionary mapping Braille strings (6-character combinations) 
+              to their corresponding English characters (letters, digits, and 
+              additional characters).
+    """
+    
     braille_combinations = list(itertools.product(elements, repeat=6))
     braille_combinations = [''.join(combination) for combination in braille_combinations]
     
