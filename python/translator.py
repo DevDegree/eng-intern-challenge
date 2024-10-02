@@ -125,7 +125,7 @@ def alphabets(user_input, merge_dict, change):
 
         final_output = ''.join(output)
         #print(output)
-        print(final_output)
+        return final_output
     else:
 
         #Exract the values of braille letters in a list
@@ -168,11 +168,15 @@ def alphabets(user_input, merge_dict, change):
       
             braille_output.append(found_item)
 
-        print(''.join(braille_output))
+        return ''.join(braille_output)
 
 # Example usage
-user_input = input(": ")
-alphabets(user_input.strip(), merge_dict, change)
+import sys
+
+# Example usage
+if len(sys.argv) > 1:
+    user_input = ' '.join(sys.argv[1:])  # Combine all arguments into a single string
+    print(alphabets(user_input.strip(), merge_dict, change))
 
         
 
