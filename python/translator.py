@@ -1,8 +1,4 @@
-
-import sys 
-import argparse
-import typing
-
+import sys
 
 alphabet = {
 	'a':'O.....',
@@ -49,21 +45,18 @@ capital = '.....O'
 space = '......'
 num_follows = '.O.OOO'
 
-def get_key_from_value(d, value):
-	for k, v in d.items():
-		if v == value:
-			return k
-	return None
+reverse_alphabet = {v: k for k, v in alphabet.items()}
+reverse_numbers = {v: k for k, v in numbers.items()}
 
 def braille_to_english(input_string: str) -> str:
 	translation = []
-	flag = False
-	num = False
+	capital_flag = False
+	num_flag = False
 
 	for i in range(0,len(input_string),6):
 		char = input_string[i:i+6]
 		if char == capital:
-			flag = True
+			capital_flag = True
 			continue
 
 		if char == num_follows:
@@ -71,80 +64,66 @@ def braille_to_english(input_string: str) -> str:
 			continue
 
 		if char == space:
-			num = False
+			num_flag = False
 			translation.append(' ')
 			continue
 
-		if num:
-			number = get_key_from_value(numbers, char)
+		if num_flag:
+			number = reverse_numbers.get(char,'')
 			translation.append(number)
 			continue
 
-		letter = get_key_from_value(alphabet, char)
+		letter = reverse_alphabet.get(char,'')
 
-		if flag:
+		if capital_flag:
 			letter = letter.upper()
-			flag = False
+			capital_flag = False
 		translation.append(letter)
 
 	return ''.join(translation)
 
 def english_to_braille(input_string: str) -> str:
 	translation = []
-	flag = False
+	num_flag = False
 	for char in input_string:
 
 		if char.isupper():
 			translation.append(capital)
-			translation.append(alphabet[char.lower()])
+			translation.append(alphabet.get(char.lower(),''))
 			continue
 
-		if char.isnumeric() and not flag:
-			flag = True
-			translation.append(num_follows)
-			translation.append(numbers[char])
-			continue
-
-		if char.isnumeric() and flag:
-			translation.append(numbers[char])
+		if char.isnumeric():
+			if not num_flag:
+				num_flag = True
+				translation.append(num_follows)
+			translation.append(numbers.get(char,''))
 			continue
 
 		if char == ' ':
-			flag = False
+			num_flag = False
 			translation.append(space)
 			continue
 
-		letter = translation.append(alphabet[char])
+		letter = translation.append(alphabet.get(char,''))
 
 	return ''.join(translation)
 
 def english_or_braille(input_string: str) -> str:
-	if input_string[0].isalnum():
-		return 'english'
-	else:
+	braille_chars = {'.', 'O'}
+	if all(char in braille_chars for char in input_string):
 		return 'braille'
+	else:
+		return 'english'
 
 def translate(args):
-	words = args
-	language = english_or_braille(words)
-	res = []
-
+	language = english_or_braille(''.join(args))
 	if language == 'english':
-		for word in words:
-			translation = english_to_braille(word)
-			res.append(translation)
+		translations = [english_to_braille(word) for word in args]
+	else:
+		translations = [braille_to_english(word) for word in args]
 
-	if language == 'braille':
-		for word in words:
-			res.append(braille_to_english(word))
-
-	print(space.join(res))
+	print(space.join(translations))
 			
-
 if __name__=='__main__':
 	args = sys.argv[1:]
 	translate(args)
-
-## if captial follows, only next element is capital
-## if number follows, symbol is read as number until spaces
-## if space, exit while loop of numbers if exists otherwise, just add space
