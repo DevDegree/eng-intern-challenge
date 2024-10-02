@@ -3,7 +3,17 @@ const CONFIG = {
     VALID_BRAILLE_REGEX: /^[O.]+$/,
     NUMBER_CHARS: 'jabcdefghi',
     BRAILLE_CHAR_LENGTH: 6,
+    NUMBER_MIN: '0',
+    NUMBER_MAX: '9',
 };
+
+class TranslationError extends Error {
+    constructor(message, code) {
+        super(message);
+        this.name = 'TranslationError';
+        this.code = code;
+    }
+}
 
 
 function translator() {
@@ -24,6 +34,12 @@ function translator() {
         englishToBrailleMap[englishChar] = brailleChar;
     }
 
+    /**
+     * Detects the input type and translates accordingly.
+     * @param {string} input - The text to be translated.
+     * @returns {Object} An object containing the translation result or error information.
+     */
+
     function detectAndTranslate(input) {
         try {
             if (!input || typeof input !== 'string') {
@@ -36,7 +52,7 @@ function translator() {
             }
 
             if (CONFIG.VALID_BRAILLE_REGEX.test(trimmedInput)) {
-                if (trimmedInput.length % BRAILLE_CHAR_LENGTH !== 0) {
+                if (trimmedInput.length % CONFIG.BRAILLE_CHAR_LENGTH !== 0) {
                     throw new TranslationError('Invalid Braille input. Each Braille character should be 6 dots.', 'INVALID_BRAILLE_LENGTH')
                 }
                 return translateBrailleToEnglish(trimmedInput)
@@ -67,48 +83,55 @@ function translator() {
 
     }
 
+    /**
+     * Translates Braille text to English.
+     * @param {string} brailleText - The Braille text to be translated.
+     * @returns {Object} An object containing the translation result.
+     */
     function translateBrailleToEnglish(brailleText) {
         const brailleChars = [];
         const translatedChars = [];
         let isCapitalNext = false;
         let isNumberMode = false;
 
-        // split input into Braille unit
-        for (let i = 0; i < brailleText.length; i += BRAILLE_CHAR_LENGTH) {
-            const brailleChar = brailleText.slice(i, i + BRAILLE_CHAR_LENGTH);
+        // Split input into Braille unit
+        for (let i = 0; i < brailleText.length; i += CONFIG.BRAILLE_CHAR_LENGTH) {
+            const brailleChar = brailleText.slice(i, i + CONFIG.BRAILLE_CHAR_LENGTH);
             brailleChars.push(brailleChar);
         }
 
-        // translate braille units into english
+        // Translate braille units into english
         for (const brailleChar of brailleChars) {
             const englishChar = brailleToEnglishMap[brailleChar];
             if (englishChar === undefined) {
-                throw new TranslationError(`Unknown Braille character ${arrOfBraille[j]}`, 'UNKNOWN_BRAILLE_CHAR')
+                throw new TranslationError(`Unknown Braille character ${brailleChar}`, 'UNKNOWN_BRAILLE_CHAR')
             }
             if (englishChar === 'capital') {
                 isCapitalNext = true;
             } else if (englishChar === 'number') {
                 isNumberMode = true;
             } else {
-                if (isNumberMode) {
-                    const numberIndex = CONFIG.NUMBER_CHARS.indexOf(englishChar);
-                    translatedChars.push(numberIndex === -1 ? englishChar : numberIndex.toString())
-                } else {
-                    translatedChars.push(isCapitalNext ? englishChar.toUpperCase() : englishChar);
-                    isCapitalNext = false;
-                }
+                const translatedChar = handleNumberMode(englishChar, isNumberMode, isCapitalNext)
+                translatedChars.push(translatedChar);
+                isCapitalNext = false;
                 if (englishChar === ' ') isNumberMode = false;
             }
         }
         return { success: true, result: translatedChars.join('') }
     }
 
+    /**
+     * Translates English text to Braille.
+     * @param {string} englishText - The English text to be translated.
+     * @returns {Object} An object containing the translation result.
+     */
+
     function translateEnglishToBraille(englishText) {
         let brailleOutput = '';
         let isNumberMode = false;
 
         for (const char of englishText) {
-            if (char >= '0' && char <= '9') {
+            if (char >= CONFIG.NUMBER_MIN && char <= CONFIG.NUMBER_MAX) {
                 if (!isNumberMode) {
                     brailleOutput += englishToBrailleMap['number']
                     isNumberMode = true;
@@ -124,6 +147,23 @@ function translator() {
             }
         }
         return { success: true, result: brailleOutput };
+    }
+
+    /**
+     * Handles number mode translation for both Braille to English and English to Braille.
+     * @param {string} char - The character to be translated.
+     * @param {boolean} isNumberMode - Whether number mode is active.
+     * @param {boolean} isCapital - Whether the character should be capitalized.
+     * @returns {string} The translated character.
+     */
+
+    function handleNumberMode(char, isNumberMode, isCapital = false) {
+        if (isNumberMode) {
+            const numberIndex = CONFIG.NUMBER_CHARS.indexOf(char);
+            return numberIndex === -1 ? char : numberIndex.toString()
+        } else {
+            return isCapital ? char.toUpperCase() : char;
+        }
     }
 
     const commandLineArgs = process.argv.slice(2);
@@ -148,10 +188,3 @@ function translator() {
 translator();
 
 
-class TranslationError extends Error {
-    constructor(message, code) {
-        super(message);
-        this.name = 'TranslationError';
-        this.code = code;
-    }
-}
