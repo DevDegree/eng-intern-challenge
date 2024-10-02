@@ -1,4 +1,5 @@
 import { CONFIG } from './config.js';
+
 export const punctuationMapping = {
     ',': '..O...', '.': '..OO..', '?': '..O.O.', '!': '..OO.O',
     ':': '..OO..', ';': '..O..', '-': '..OO..', '(': '.O.O..',
