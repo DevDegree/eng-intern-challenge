@@ -88,45 +88,32 @@ const englishToBraille = {
 const capitalFollows = ".....o";
 const numberFollows = ".o.ooo";
 
-
 const translateEnglishToBraille = (englishStr) => {
   let brailleStr = "";
   let isCapital = false;
   let isNumber = false;
 
   for (let i = 0; i < englishStr.length; i++) {
-
-    // checking for space
     if (englishStr[i] === " ") {
       brailleStr += englishToBraille[" "];
       isNumber = false;
-    }
-
-    // checking for number
-    else if (!isNaN(englishStr[i])) {
+    } else if (!isNaN(englishStr[i])) {
       if (!isNumber) {
         brailleStr += englishToBraille["Number"];
         isNumber = true;
       }
       brailleStr += englishToBraille[englishStr[i]];
-    }
-
-    // checking for capitals
-    else if (
+    } else if (
       englishStr[i] === englishStr[i].toUpperCase() &&
       englishStr[i] !== englishStr.toLowerCase()
     ) {
       brailleStr += englishToBraille["Capital"];
       brailleStr += englishToBraille[englishStr[i].toLowerCase()];
       isCapital = true;
-    }
-
-    // checking for decimals
-    else if (englishStr[i] === ".") {
+    } else if (englishStr[i] === ".") {
       brailleStr += englishToBraille["Decimal"];
     } else brailleStr += englishToBraille[englishStr[i]];
   }
-
   return brailleStr;
 };
 
@@ -136,14 +123,14 @@ const translateBrailleToEnglish = (brailleStr) => {
   let isCapital = false;
 
   for (let i = 0; i < brailleStr.length; i += 6) {
-    let slicedBraille = brailleStr.slice(i, i + 6);
+    const slicedBraille = brailleStr.slice(i, i + 6);
 
     if (slicedBraille === numberFollows) {
       isNumber = true;
     } else if (slicedBraille === capitalFollows) {
       isCapital = true;
     } else if (slicedBraille === brailleToEnglish["......"]) {
-        englishStr += " "
+      englishStr += " ";
       isNumber = false;
     } else {
       if (isNumber) {
@@ -159,4 +146,17 @@ const translateBrailleToEnglish = (brailleStr) => {
 
   return englishStr;
 };
- 
+
+const isBraille = (inputStr) => {
+  return inputStr.length % 6 === 0 && /^[o.]+$/.test(inputStr);
+};
+
+const translate = (inputStr) => {
+  return isBraille(inputStr)
+    ? translateBrailleToEnglish(inputStr)
+    : translateEnglishToBraille(inputStr);
+};
+
+const args = process.argv.slice(2);
+const inputStr = args.join(" ");
+console.log(translate(inputStr));
