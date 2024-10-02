@@ -28,17 +28,17 @@ def main():
         sys.exit(1)
 
     # Combine all command-line arguments into a single string
-    user_input = ' '.join(sys.argv[1:]).strip()  # Added strip() to clean extra spaces
-
+    user_input = ' '.join(sys.argv[1:])
+    
     # Check if the input is valid Braille or English
-    is_braille = all(char in elements or char.isspace() for char in user_input)
-
+    is_not_braille = any(char not in elements for char in user_input)
+    
     # Apply the strategy pattern for translation
-    if is_braille:
-        strategy = BrailleToEnglishStrategy(user_input, braille_to_english_dict)
-    else:
+    if is_not_braille:
         strategy = EnglishToBrailleStrategy(user_input, braille_to_english_dict)
-
+    else:
+        strategy = BrailleToEnglishStrategy(user_input, braille_to_english_dict)
+        
     # Translate and output the result
     result = strategy.translate()
     print(result)
