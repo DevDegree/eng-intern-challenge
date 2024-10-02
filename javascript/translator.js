@@ -27,7 +27,8 @@ const brailleAlpha = {
   x: "OO..OO",
   y: "OO.OOO",
   z: "O..OOO",
-  1: "O.....",
+  // Numbers - same as letter a-j
+  1: "O.....", 
   2: "O.O...",
   3: "OO....",
   4: "OO.O..",
@@ -37,31 +38,33 @@ const brailleAlpha = {
   8: "O.OO..",
   9: ".OO...",
   0: ".OOO..",
-  ".": "..00.0",
-  ",": "..0...",
   // Punctuation marks
-  ".": "..00.0",
-  ",": "..0...",
-  "?": "..0.00",
-  "!": "..000.",
-  ":": "..00..",
-  ";": "..0.0.",
-  "-": "....00",
-  "/": ".0..0.",
-  "<": ".00..0",
-  ">": "0..00.",
-  "(": "0.0..0",
-  ")": ".0.00.",
+  ".": "..OO.O",
+  ",": "..O...",
+  "?": "..O.OO",
+  "!": "..OOO.",
+  ":": "..OO..",
+  ";": "..O.O.",
+  "-": "....OO",
+  "/": ".O..O.",
+  "<": ".OO..O",
+  ">": "O..OO.",
+  "(": "O.O..O",
+  ")": ".O.OO.",
   " ": "......", // space
 };
 
 // Instructional symbols
-const capFollows = ".....0";
-const decimalFollows = ".0...0";
-const numberFollows = ".0.000";
+const capFollows = ".....O";
+const decimalFollows = ".O...O";
+const numberFollows = ".O.OOO";
 
 // English <> Braille
-// const englishAlpha =
+const englishAlpha = Object.fromEntries(
+    Object.entries(brailleAlpha).map(
+        ([key, value]) => [value, key]
+    )
+);
 
 // Main section
 
@@ -76,14 +79,14 @@ function translateToBraille(text) {
     // Check if the character is an uppercase letter
     if (/[A-Z]/.test(char)) {
       // add the cap follows indicator to the result
-      resultBraille += brailleAlpha[char.toLowerCase()];
+      resultBraille += capFollows + brailleAlpha[char.toLowerCase()]; // Include capitalization
       isNumber = false;
     }
 
     // Convert lowercase letters
     else if (/[a-z]/.test(char)) {
       // Handle lowercase letters
-      braille += brailleAlpha[char];
+      resultBraille += brailleAlpha[char];
       isNumber = false;
     }
 
@@ -110,21 +113,92 @@ function translateToBraille(text) {
         resultBraille += brailleAlpha[char];
       }
       isNumber = false;
-    } 
-    
+    }
+
     // Convert other characters in the alphabet
     else if (brailleAlpha[char]) {
       // Handle punctuation marks and other characters
-      resultBraille += brailleAlpha[char]; 
-      isNumber = false; 
+      resultBraille += brailleAlpha[char];
+      isNumber = false;
     }
 
     // Other unexpected characters
     else {
-console.error(`Unexpected character: '${char}'`);
-isNumber = false;
+      console.error(`Unexpected character: '${char}'`);
+      isNumber = false;
     }
-    return resultBraille;
-}
+  }
+  return resultBraille;
 }
 
+
+// Convert Braille to English
+function translateToEnglish(text) {
+  let resultEnglish = "";
+  let isNumber = false;
+
+  // Split the braille string - 6 as one character
+  const brailleChars = text.split(/.{1,6}/g) || [];
+
+
+  for (let char of brailleChars) {
+      // Check if the character is an uppercase letter
+      if (char === capFollows) {
+        // Skip the capitalization indicator and continue to next iteration
+        isNumber = false;
+        continue;
+      }
+
+      // Check if the character is a number
+      else if (char == numberFollows) {
+        isNumber = true;
+        continue;
+      }
+
+      // Check if we have a decimal point
+      else if (char === decimalFollows) {
+        resultEnglish += "."; // Add decimal point to the result
+        // isNumber = true;
+        continue;
+      }
+
+      // Convert other existing characters in the Braille alphbet
+      else if (englishAlpha[char]) {
+        // get the corresponding character
+        const convertedChar = englishAlpha[char];
+
+        // check if the character should be treated as a number
+        if (isNumber && /\d/.test(convertedChar)) {
+          resultEnglish += convertedChar;
+        } 
+        // for cases where the string contains both number and letters
+        else if (isNumber && /[a-z]/.test(convertedChar)) {
+          resultEnglish += convertedChar;
+        }
+
+      // Convert other existing characters accordingly
+      else {
+        resultEnglish += convertedChar;
+      }
+      isNumber = false;
+  }
+      else {
+        console.error(`Unexpected Braille character: '${char}'`);
+        isNumber = false;
+      }
+    }
+
+    return resultEnglish;
+  }
+
+
+// Test
+// Braille to English
+const engText = "Hello!"
+const brailleResult = translateToBraille(engText);
+console.log(brailleResult);
+
+// English to Braille
+const brailleText = ".....O.OO..O..O..O.O.O.O.O.O.O..OO...OOO."
+const englishResult = translateToEnglish(brailleText);
+console.log(englishResult)
