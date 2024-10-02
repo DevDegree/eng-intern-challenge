@@ -1,7 +1,7 @@
-from strategy import Strategy
+from strategy import TranslationStrategy
 
 # Concrete strategy for Braille to English translation
-class BrailleToEnglishStrategy(Strategy):
+class BrailleToEnglishStrategy(TranslationStrategy):
     def __init__(self, input=None, dictionary=None):
         """
         Initialize the BrailleToEnglishStrategy with input and dictionary.

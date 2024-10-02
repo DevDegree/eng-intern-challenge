@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 # Base strategy class for translation strategies
-class Strategy(ABC):
+class TranslationStrategy(ABC):
     """
     Abstract base class for translation strategies.
 

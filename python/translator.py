@@ -1,6 +1,6 @@
 from dictionary import make_dictionary
 from strategies.BrailleToEnglishStrategy import BrailleToEnglishStrategy
-from strategies.EnglishtoBrailleStrategy import EnglishtoBrailleStrategy
+from strategies.EnglishToBrailleStrategy import EnglishToBrailleStrategy
 import sys
 
 def main():
@@ -32,7 +32,7 @@ def main():
     # Check if user input is valid Braille by seeing if any character is not from the elements list
     # Apply the strategy pattern for translation
     if any(char not in elements for char in user_input):
-        strategy = EnglishtoBrailleStrategy(user_input, braille_to_english_dict)
+        strategy = EnglishToBrailleStrategy(user_input, braille_to_english_dict)
     else:
         strategy = BrailleToEnglishStrategy(user_input, braille_to_english_dict)
     
