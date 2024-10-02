@@ -12,7 +12,12 @@ braille_alphabet = {
     '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..',
     ' ': '......', 'cap': '.....O', 'num': '.O.OOO'
 }
-# Reverse translation
+# Reverse translation Braille to English
+english_alphabet = {v: k for k, v in braille_alphabet.items()}
 
+# Function for Eng to Braille
+def
 
-# Function to process translation
+# Function for Braille to Eng
+
+# Detect Language input and choose correct translation function
