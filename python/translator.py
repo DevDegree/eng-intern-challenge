@@ -81,8 +81,7 @@ def to_braille(input: list) -> str:
 
       if is_letter(c) and (not prev_was_letter):
         # was numbers and now writing letters
-        # add a space
-        translated.append(ENG_TO_BRAILLE[" "])
+        #translated.append(ENG_TO_BRAILLE[" "])
         prev_was_letter = True
       elif (not is_letter(c)) and prev_was_letter:
         prev_was_letter = False
