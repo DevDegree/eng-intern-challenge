@@ -15,7 +15,7 @@ braille_alphabet = {
 # Reverse translation Braille to English
 english_alphabet = {v: k for k, v in braille_alphabet.items()}
 
-# Function for Eng to Braille
+# English to Braille
 def english_to_braille(text):
     """Translate English to Braille."""
     braille = []
@@ -25,41 +25,59 @@ def english_to_braille(text):
         if char.isupper():  # Handle uppercase letters
             braille.extend([braille_alphabet['cap'], braille_alphabet[char.lower()]])
         elif char.isdigit():  # Handle numbers with number indicator
-            braille.append(braille_alphabet['num'] if not number_mode else braille_alphabet[char])
-            number_mode = True
+            if not number_mode:
+                braille.append(braille_alphabet['num'])
+                number_mode = True
+            braille.append(braille_alphabet[char])
         else:  # Handle letters and spaces
             braille.append(braille_alphabet.get(char, '......'))
-            number_mode = False
+            number_mode = False  # Reset number mode after non-digit characters
 
     return ''.join(braille)
 
-# Function for Braille to Eng
+# Braille to English
 def braille_to_english(braille):
+    """Translate Braille to English."""
     english = []
     number_mode = False
     capitalize_next = False
 
     for i in range(0, len(braille), 6):  # Process 6-character chunks
         char = braille[i:i+6]
+
         if char == braille_alphabet['cap']:  # Capital letter indicator
             capitalize_next = True
         elif char == braille_alphabet['num']:  # Number indicator
             number_mode = True
+        elif char == braille_alphabet[' ']:  # Space
+            english.append(' ')
+            number_mode = False  # Reset number mode after space
         else:
             letter = english_alphabet.get(char, '')  # Map Braille to English
-            letter = letter.upper() if capitalize_next else letter
-            capitalize_next = False
-
-            if number_mode and letter.isdigit():
+            
+            # Handle capitalization
+            if capitalize_next:
+                letter = letter.upper()
+                capitalize_next = False
+            
+            # Handle number mode
+            if number_mode:
+                if letter.isdigit():
+                    english.append(letter)
+                else:
+                    # If it's not a digit, reset number mode
+                    number_mode = False
+                    english.append(letter)
+            else:
                 english.append(letter)
-            elif not number_mode:
-                english.append(letter)
 
-            number_mode = False
+            # Reset number mode after letters or spaces
+            if not letter.isdigit() and letter != '':
+                number_mode = False
 
     return ''.join(english)
 
-# Detect Language input and choose correct translation function
+# Main function for input detection and processing
 def main():
     if len(sys.argv) > 1:
         input_text = " ".join(sys.argv[1:])
@@ -67,6 +85,6 @@ def main():
         # Translate accordingly
         print(braille_to_english(input_text) if is_braille else english_to_braille(input_text))
 
-# Run main function
+# Execute main function
 if __name__ == "__main__":
-    main() 
+    main()
