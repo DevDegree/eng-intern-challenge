@@ -34,9 +34,34 @@ def english_to_braille(text):
     return ''.join(braille)
 
 # Function for Braille to Eng
+def braille_to_english(braille):
+    english = []
+    number_mode = False
+    capitalize_next = False
+
+    for i in range(0, len(braille), 6):  # Process 6-character chunks
+        char = braille[i:i+6]
+        if char == braille_alphabet['cap']:  # Capital letter indicator
+            capitalize_next = True
+        elif char == braille_alphabet['num']:  # Number indicator
+            number_mode = True
+        else:
+            letter = english_alphabet.get(char, '')  # Map Braille to English
+            letter = letter.upper() if capitalize_next else letter
+            capitalize_next = False
+
+            if number_mode and letter.isdigit():
+                english.append(letter)
+            elif not number_mode:
+                english.append(letter)
+
+            number_mode = False
+
+    return ''.join(english)
 
 # Detect Language input and choose correct translation function
 def main():
+    
 
 # Run main function
 if __name__ == "__main__":
