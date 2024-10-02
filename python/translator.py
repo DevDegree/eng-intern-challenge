@@ -55,7 +55,7 @@ def input_lang(input: list) -> str:
   '''
   for s in input:
     for c in s:
-      if c != 'O' or c != '.':
+      if c != 'O' and c != '.':
         return "ENGLISH"
   return "BRAILLE"
 
@@ -83,10 +83,12 @@ def to_braille(input: list) -> str:
         # was numbers and now writing letters
         # add a space
         translated.append(ENG_TO_BRAILLE[" "])
+        prev_was_letter = True
       elif (not is_letter(c)) and prev_was_letter:
         prev_was_letter = False
         translated.append(ENG_TO_BRAILLE['number follows'])
         # ASSUMPTION: NO DECIMALS
+
       translated.append(ENG_TO_BRAILLE[c])
     # after each word, add a space
     translated.append(ENG_TO_BRAILLE[' '])
@@ -96,9 +98,9 @@ def to_braille(input: list) -> str:
 def to_eng(input: list) -> str:
   # braille should just be list of length 1
   # check edge case where it's empty
-  if len(list) == 0:
+  if len(input) == 0:
     return ""
-  input = list[0]
+  input = input[0]
 
   translated = []
   working_dict = BRAILLE_TO_ENG
@@ -116,8 +118,9 @@ def to_eng(input: list) -> str:
     elif working_dict[c] == ' ':
       # if we get a space, we're now working with letters either way
       working_dict = BRAILLE_TO_ENG
-    elif working_dict[c] == 'capital_follows':
+    elif working_dict[c] == 'capital follows':
       next_capital = True
+      continue
     
     if next_capital:
       translated.append(working_dict[c].upper())
