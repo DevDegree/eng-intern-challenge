@@ -96,6 +96,7 @@ def translate():
     Translated_Sentence=English_Braille_Translate(input_ls)
   return Translated_Sentence  
 
+#main run
 if __name__ == '__main__':
   ans=translate()
-  print(ans)
+  print(ans)   
