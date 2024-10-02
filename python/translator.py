@@ -67,18 +67,16 @@ def translate_to_english(braille):
 # Main function to handle input and decide which translation to perform
 def main():
     import sys
+    # Check if the user provided exactly one argument
     if len(sys.argv) != 2:
         print("Usage: python translator.py <text or braille>")
         return
 
     input_text = sys.argv[1]
-    
+
     # Determine if the input is Braille or English based on the presence of '0' or '.'
     if '0' in input_text or '.' in input_text:
         print(translate_to_english(input_text))  # Translate Braille to English
     else:
         print(translate_to_braille(input_text))  # Translate English to Braille
 
-# Run the main function when the script is executed
-if __name__ == '__main__':
-    main()
