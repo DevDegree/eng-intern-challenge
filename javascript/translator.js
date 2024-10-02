@@ -1,5 +1,6 @@
-// Braille
+// Braille <> English
 const brailleAlpha = {
+  // lowercase alphabets
   a: "O.....",
   b: "O.O...",
   c: "OO....",
@@ -54,7 +55,76 @@ const brailleAlpha = {
   " ": "......", // space
 };
 
-// instructional symbols
-const capFollows =  ".....0";
+// Instructional symbols
+const capFollows = ".....0";
 const decimalFollows = ".0...0";
 const numberFollows = ".0.000";
+
+// English <> Braille
+// const englishAlpha =
+
+// Main section
+
+// Translate English to Braille
+function translateToBraille(text) {
+  let resultBraille = "";
+  let isNumber = false; // prepare for number translation
+
+  for (let index = 0; index < text.length; index++) {
+    const char = text[index];
+
+    // Check if the character is an uppercase letter
+    if (/[A-Z]/.test(char)) {
+      // add the cap follows indicator to the result
+      resultBraille += brailleAlpha[char.toLowerCase()];
+      isNumber = false;
+    }
+
+    // Convert lowercase letters
+    else if (/[a-z]/.test(char)) {
+      // Handle lowercase letters
+      braille += brailleAlpha[char];
+      isNumber = false;
+    }
+
+    // Check if the charater is a number
+    else if (/\d/.test(char)) {
+      if (isNumber === false) {
+        // add the indicator
+        resultBraille += numberFollows;
+        isNumber = true;
+      }
+      resultBraille += brailleAlpha[char];
+    }
+
+    // Convert decimals - differentiate from period
+    else if (char === ".") {
+      const prevChar = text[index - 1];
+      const nextChar = text[index + 1];
+
+      // decimal point appears between two digits
+      if (/\d/.test(prevChar) && /\d/.test(nextChar)) {
+        resultBraille += decimalFollows; // add indicator
+      } else {
+        // period (punctuation mark)
+        resultBraille += brailleAlpha[char];
+      }
+      isNumber = false;
+    } 
+    
+    // Convert other characters in the alphabet
+    else if (brailleAlpha[char]) {
+      // Handle punctuation marks and other characters
+      resultBraille += brailleAlpha[char]; 
+      isNumber = false; 
+    }
+
+    // Other unexpected characters
+    else {
+console.error(`Unexpected character: '${char}'`);
+isNumber = false;
+    }
+    return resultBraille;
+}
+}
+
