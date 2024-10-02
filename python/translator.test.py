@@ -8,6 +8,7 @@ class TestTranslator(unittest.TestCase):
         
         # Run the command and capture output
         result = subprocess.run(command, capture_output=True, text=True)
+
         
         # Expected output without the newline at the end
         expected_output = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
@@ -17,3 +18,4 @@ class TestTranslator(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+    
