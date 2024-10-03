@@ -1,5 +1,5 @@
 // Mapping English to Braille
-const englishToBraille: { [key: string]: string } = {
+var englishToBraille = {
     'a': 'O.....',
     'b': 'O.O...',
     'c': 'OO....',
@@ -38,65 +38,67 @@ const englishToBraille: { [key: string]: string } = {
     '8': 'O.OO..',
     '9': '.OO...',
     'CAPITAL': '..O...',
-    'NUMBER': '.O.OOO',
+    'NUMBER': '.O.OOO'
 };
-
 // Mapping Braille to English
-const brailleToEnglish: { [key: string]: string } = Object.fromEntries(
-    Object.entries(englishToBraille).map(([key, value]) => [value, key])
-);
-
+var brailleToEnglish = Object.fromEntries(Object.entries(englishToBraille).map(function (_a) {
+    var key = _a[0], value = _a[1];
+    return [value, key];
+}));
 // Check if the input is Braille
-function isBraille(text: string): boolean {
+function isBraille(text) {
     return text.length % 6 === 0 && /^[O.]+$/.test(text); // Input should only consist of O and .
 }
-
 // Translator function to convert between English and Braille
-function translate(text: string): string {
-    let numberMode = false;
-    let capitalizeNext = false;
-    let result = '';
-
+function translate(text) {
+    var numberMode = false;
+    var capitalizeNext = false;
+    var result = '';
     if (isBraille(text)) {
-        for (let i = 0; i < text.length; i += 6) {
-            const brailleChar = text.substring(i, i + 6);
-            const char = brailleToEnglish[brailleChar];
-
+        // Braille to English conversion
+        for (var i = 0; i < text.length; i += 6) {
+            var brailleChar = text.substring(i, i + 6);
+            var char = brailleToEnglish[brailleChar];
             if (char === 'NUMBER') {
                 numberMode = true;
-            } else if (char === 'CAPITAL') {
+            }
+            else if (char === 'CAPITAL') {
                 capitalizeNext = true;
-            } else if (numberMode && char >= 'a' && char <= 'j') {
+            }
+            else if (numberMode && char >= 'a' && char <= 'j') {
                 // Handle numbers (Braille numbers use 'a' to 'j')
                 result += (char.charCodeAt(0) - 'a'.charCodeAt(0) + 1) % 10;
                 numberMode = false;
-            } else {
+            }
+            else {
                 result += capitalizeNext ? char.toUpperCase() : char;
                 capitalizeNext = false;
             }
         }
-    } else {
+    }
+    else {
         // English to Braille conversion
-        for (const char of text) {
+        for (var _i = 0, text_1 = text; _i < text_1.length; _i++) {
+            var char = text_1[_i];
             if (char >= 'A' && char <= 'Z') {
                 result += englishToBraille['CAPITAL'] + englishToBraille[char.toLowerCase()];
-            } else if (char >= '0' && char <= '9') {
+            }
+            else if (char >= '0' && char <= '9') {
                 result += englishToBraille['NUMBER'] + englishToBraille[char];
-            } else {
+            }
+            else {
                 result += englishToBraille[char] || '';
             }
         }
     }
-
     return result;
 }
-
-const args = process.argv.slice(2);
+// Get input from command-line arguments
+var args = process.argv.slice(2);
 if (args.length !== 1) {
     console.error('Usage: translator <text>');
     process.exit(1);
 }
-
-const input = args[0];
-const translatedText = translate(input);
+var input = args[0];
+var translatedText = translate(input);
 console.log(translatedText);
