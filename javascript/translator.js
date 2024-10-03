@@ -27,7 +27,6 @@ function convertToBraille(input) {
     let isNumber = false;
 
     for (let char of input) {
-        console.log(char);
         if (char === ' ') {
             result += brailleSpecialCharsMapping['space'];
             isNumber = false;
