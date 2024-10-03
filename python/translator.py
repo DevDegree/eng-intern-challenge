@@ -38,8 +38,7 @@ def engToBraille(engStr):
             numFlag = True
             brailleStr.append(brailleDict['number']) # if a digit is found and a number flag isn't raised already, add the number symbol to the output string
         elif char.isalpha() and numFlag:
-            numFlag = False
-            brailleStr.append('......') # if a number is ending and a alphabet is found, add a space symbol to the output string
+            numFlag = False # disable the number flag if an alphabet is found
         
         if char.isupper():
             brailleStr.append(brailleDict['capital']) # if a capital letter is found add the capital symbol to the output string
