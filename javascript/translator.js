@@ -74,3 +74,45 @@ const brailleFollowsMap = {
     '.O...O': 'decimal',
     '.O.OOO': 'number'
 }
+
+
+/* 
+convertToEnglish is a function that converts the braille sentence to 
+english recieved through the command line 
+*/
+function convertToEnglish (braille){
+    if (braille.length % 6 !== 0){
+        return "Cannot be translated. Invalid braille text. ";
+    }
+
+    let isCapital = false;
+    let isNumber = false;
+    let result = '';
+
+    for (let i = 0; i < braille.length; i+=6){
+
+        if (brailleFollowsMap[braille.slice (i, (i+6))] === 'capital'){
+            isCapital = true;
+            continue;
+        } else if (brailleFollowsMap[braille.slice (i, (i+6))] === 'number'){
+            isNumber = true;
+            continue;
+        } else if(brailleEnglishMap[braille.slice (i, (i+6))] === ' '){
+            result += ' ';
+            isNumber = false;
+            continue;
+        }
+
+        if(isCapital){
+            result += brailleEnglishMap[braille.slice (i, (i+6))].toUpperCase();
+            isCapital = false;
+        }else if (isNumber){
+            result += brailleNumbersMap[braille.slice (i, (i+6))];   
+        }else{
+            result += brailleEnglishMap[braille.slice (i, (i+6))];
+        }
+    }
+
+    return result;
+}
+
