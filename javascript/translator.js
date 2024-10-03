@@ -9,8 +9,6 @@ rl.question(``, str => {
   rl.close();
 });
 
-//var input = ".....O.OOO.O.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..";
-
 const glossary = {
     "A": "O.....", // A
     "B": "O.O...", // B
@@ -203,5 +201,3 @@ function brailleToEng(word){
     }
     return translation;
 }
-
-//console.log(brailleToEng(input))
