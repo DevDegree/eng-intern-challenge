@@ -115,4 +115,33 @@ function convertToEnglish (braille){
 
     return result;
 }
+/* 
+convertToBraille is a function that converts the english sentence to 
+braille recieved through the command line 
+*/
+function convertToBraille(english){
+    let result = '';
+    let isNumber = false;
+
+    for (let i = 0; i < english.length; i++){
+        if (english[i] === " "){
+            isNumber = false;
+            result += Object.keys(brailleEnglishMap).find(key => brailleEnglishMap[key] === ' ');
+        } else if (/[A-Z]/.test(english[i])){
+            result += Object.keys(brailleFollowsMap).find(key => brailleFollowsMap[key]=== 'capital');
+            result += Object.keys(brailleEnglishMap).find(key => brailleEnglishMap[key]=== english[i].toLowerCase());
+        } else if (!isNaN(english[i])){
+            if(!isNumber){
+                isNumber = true;
+                result += Object.keys(brailleFollowsMap).find(key => brailleFollowsMap[key]=== 'number');
+            }
+            result += Object.keys(brailleNumbersMap).find(key => brailleNumbersMap[key] === english[i]);
+        } else {
+            result += Object.keys(brailleEnglishMap).find(key => brailleEnglishMap[key]=== english[i]);
+        }
+    }
+    return result;
+}
+
+
 
