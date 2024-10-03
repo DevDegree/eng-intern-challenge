@@ -33,4 +33,26 @@ def translate_to_braille(text):
     return ''.join(result) #Join the list of Braille characters into a single string
     
 # Function to translate Braille to English
-def    
+def translate_to_english(braille):
+    result = []
+    is_capital = False
+    is_number_mode = False # Flag to indicate if we are in number mode
+    for i in range(0, len(braille), 6):
+        braille_char = braille[i:i+6]
+        if braille_char == '.....0': # Capital letter indicator
+            is_capital = True
+        elif braille_char == '.O.OOO': # Number indicator
+            is_number_mode = True 
+        elif braille_char == '......': # Space
+            result.append(' ') # Add a space to the result
+            is_number_mode = False
+        else:
+            translated_char = braille_to_english.get(braille_char, '')
+            if is_capital:
+                translated_char = translated_char.upper()
+                is_capital = False #Only capitalize the next letter
+            if is_number_mode and translated_char.isdigit():
+                translated_char = str(int(translated_char)) #Ensure it's a number
+            result.append(translated_char)
+    return ''.join(result) #Join the list of English characters into a single string    
+        
