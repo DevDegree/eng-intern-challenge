@@ -2,59 +2,56 @@ import sys
 
 def translator(word):
     englishToBrailleAlpha = {
-    'A': 'O.....',
-    'B': 'O.O...',
-    'C': 'OO....',
-    'D': 'OO.O..',
-    'E': 'O..O..',
-    'F': 'OOO...',
-    'G': 'OOOO..',
-    'H': 'O.OO..',
-    'I': '.OO...',
-    'J': '.OOO..',
-    'K': 'O...O.',
-    'L': 'O.O.O.',
-    'M': 'OO..O.',
-    'N': 'OO.OO.',
-    'O': 'O..OO.',
-    'P': 'OOO.O.',
-    'Q': 'OOOOO.',
-    'R': 'O.OOO.',
-    'S': '.OO.O.',
-    'T': '.OOOO.',
-    'U': 'O...OO',
-    'V': 'O.O.OO',
-    'W': '.OOO.O',
-    'X': 'OO..OO',
-    'Y': 'OO.OOO',
-    'Z': 'O..OOO',
-    ',': '..O...',
-    ';': '..OO..',
-    ':': '...O..',
-    '.': '...OO.',
-    '?': '..O.O.',
-    '!': '..OOO.',
-    '-': '....O.',
-    '/': '.O.O..',
-    '(': 'O.O..O',
-    ')': '.O.OO.',
-    'capital follows': '.....O',
-    'decimal follows': '.O...O',
-    'number follows': '.O.OOO',
-    ' ': '......'
+        'A': 'O.....',
+        'B': 'O.O...',
+        'C': 'OO....',
+        'D': 'OO.O..',
+        'E': 'O..O..',
+        'F': 'OOO...',
+        'G': 'OOOO..',
+        'H': 'O.OO..',
+        'I': '.OO...',
+        'J': '.OOO..',
+        'K': 'O...O.',
+        'L': 'O.O.O.',
+        'M': 'OO..O.',
+        'N': 'OO.OO.',
+        'O': 'O..OO.',
+        'P': 'OOO.O.',
+        'Q': 'OOOOO.',
+        'R': 'O.OOO.',
+        'S': '.OO.O.',
+        'T': '.OOOO.',
+        'U': 'O...OO',
+        'V': 'O.O.OO',
+        'W': '.OOO.O',
+        'X': 'OO..OO',
+        'Y': 'OO.OOO',
+        'Z': 'O..OOO',
+        ',': '..O...',
+        ';': '..OO..',
+        ':': '...O..',
+        '.': '...OO.',
+        '?': '..O.O.',
+        '!': '..OOO.',
+        '-': '....O.',
+        '/': '.O.O..',
+        '(': 'O.O..O',
+        ')': '.O.OO.',
+        ' ': '......'
     }
     
     englishToBrailleNumeric = {
-    '1': 'O.....',
-    '2': 'O.O...',
-    '3': 'OO....',
-    '4': 'OO.O..',
-    '5': 'O..O..',
-    '6': 'OOO...',
-    '7': 'OOOO..',
-    '8': 'O.OO..',
-    '9': '.OO...',
-    '0': '.OOO..',
+        '1': 'O.....',
+        '2': 'O.O...',
+        '3': 'OO....',
+        '4': 'OO.O..',
+        '5': 'O..O..',
+        '6': 'OOO...',
+        '7': 'OOOO..',
+        '8': 'O.OO..',
+        '9': '.OO...',
+        '0': '.OOO..',
     }
 
     brailleToEnglishAlpha = {v:k for k,v in englishToBrailleAlpha.items()}
@@ -78,9 +75,8 @@ def toBraille(english, englishToBrailleAlphaNumeric):
     brailleString = ""
     numberFlag = False
     for letter in english:
-        if numberFlag and (not letter.isnumeric()):
+        if numberFlag and (not letter.isnumeric()): #if numberFlag true and not a number
             numberFlag = False
-            brailleString += "......" # add space
 
         if (not numberFlag) and letter.isupper():
             brailleString += ".....O" # add capital follows
@@ -103,17 +99,17 @@ def toEnglish(braille, brailleToEnglishAlpha, brailleToEnglishNumeric):
         brailleString += group
         count += 1
         if count == 6:
-            if brailleString == "......": # space
+            if brailleString == "......": # Space
                 englishString += brailleToEnglishAlpha[brailleString]
                 capitalFollows = False
                 brailleHaveNumbers = False
-            elif brailleString == '.....O': # capital follows
+            elif brailleString == '.....O': # Capital follows
                 capitalFollows = True
             elif brailleHaveNumbers:
                 englishString += brailleToEnglishNumeric[brailleString]
-            elif brailleString == ".O.OOO": # number follows
+            elif brailleString == ".O.OOO": # Number follows
                 brailleHaveNumbers = True
-            else: # not number follows, not capital, not space
+            else: # Not number follows, not capital, not space
                 if capitalFollows:
                     englishString += brailleToEnglishAlpha[brailleString].upper()
                     capitalFollows = False
@@ -125,7 +121,4 @@ def toEnglish(braille, brailleToEnglishAlpha, brailleToEnglishNumeric):
 
 args = sys.argv
 args.pop(0)
-for i, word in enumerate(args):
-    if not i == 0:
-        print("......", end = '')
-    print(translator(word), end = '')
+print(translator(' '.join(args)))
