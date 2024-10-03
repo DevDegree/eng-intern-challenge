@@ -4,11 +4,11 @@ result = "";
 braille = true;
 
 // Checking conversion direction
-if (argv[2].length % 6 != 0) {
+if (args[2].length % 6 != 0) {
     braille = false;
 } else {
-    for (let i = 0; i < argv[2].length; i++) {
-        if (argv[2].charAt(i) != "." && argv[2].charAt(i) != "O") {
+    for (let i = 0; i < args[2].length; i++) {
+        if (args[2].charAt(i) != "." && args[2].charAt(i) != "O") {
             braille = false;
             break;
         }
@@ -93,12 +93,12 @@ capital = false;
 number = false;
 
 // Conversion implementation
-for (let i = 2; i < argv.length; i++) {
+for (let i = 2; i < args.length; i++) {
     // Braille -> English
     if (braille) {
-        for (let j = 0; j < argv[i].length; j += 6) {
+        for (let j = 0; j < args[i].length; j += 6) {
 
-            let temp = twoWayMap.get(argv[i].substring(j, j+6));
+            let temp = twoWayMap.get(args[i].substring(j, j+6));
 
             // Capital Case
             if (capital) {
@@ -131,18 +131,18 @@ for (let i = 2; i < argv.length; i++) {
 
     // English -> Braille
     } else {
-        for (let j = 0; j < argv[i].length; j++) {
-            let temp = twoWayMap.revGet(argv[i].charAt(j));
+        for (let j = 0; j < args[i].length; j++) {
+            let temp = twoWayMap.revGet(args[i].charAt(j));
 
             // Capital Case
-            if (temp == undefined && twoWayMap.revGet(argv[i].charAt(j).toLowerCase()) != undefined) {
+            if (temp == undefined && twoWayMap.revGet(args[i].charAt(j).toLowerCase()) != undefined) {
                 result += twoWayMap.revGet("capital");
-                result += twoWayMap.revGet(argv[i].charAt(j).toLowerCase());
+                result += twoWayMap.revGet(args[i].charAt(j).toLowerCase());
 
             }
 
             // Number Case
-            else if (number || (temp == undefined && numberMap.revGet(argv[i].charAt(j)) != undefined)) {
+            else if (number || (temp == undefined && numberMap.revGet(args[i].charAt(j)) != undefined)) {
                 if (!number) {
                     result += twoWayMap.revGet("number");
                     number = true;
@@ -151,7 +151,7 @@ for (let i = 2; i < argv.length; i++) {
                     number = false;
                     result += temp;
                 } else {
-                    result += twoWayMap.revGet(numberMap.revGet(argv[i].charAt(j)));
+                    result += twoWayMap.revGet(numberMap.revGet(args[i].charAt(j)));
                 }
             }
 
