@@ -1,12 +1,5 @@
 import sys
 
-# user input from execution
-inpStr = sys.argv[1:]
-inpStr = " ".join(inpStr)
-
-# output string
-output = ""
-
 # letters
 convert = {
     "a":"O.....",
@@ -71,7 +64,8 @@ def brailleToChar(string, num):
     return retVal[0]
 
 # if input is braille
-if set(inpStr) == {"O", "."}:
+def brailleToEng(inpStr):
+    output = ""
     i = 0
     while i < len(inpStr):
         # read 6 chars at a time
@@ -86,17 +80,22 @@ if set(inpStr) == {"O", "."}:
             output += " "
         # if number, read next set of values and add to output until end of input or next space
         elif string == actions["num"]:
+            i += 6
+            string = inpStr[i:i+6]
             while string != actions["space"] and i < len(inpStr) - 6:
+                output += brailleToChar(string, 1)
                 i += 6
                 string = inpStr[i:i+6]
-                output += brailleToChar(string, 1)
+            i -= 6
         # lowercase letters
         else:
             output += brailleToChar(string, 0)
         i += 6
+    return output
 
 # input is english
-else:
+def engToBraille(inpStr):
+    output = ""
     i = 0
     while i < len(inpStr):
         # if space, insert into output
@@ -117,5 +116,21 @@ else:
             output += actions["cap"]
             output += convert[inpStr[i].lower()]
         i += 1
+    return output
 
-print(output)
+def main():
+    # user input from execution
+    inpStr = sys.argv[1:]
+    inpStr = " ".join(inpStr)
+
+    # check if input is braille or english
+    if set(inpStr) == {"O", "."}:
+        output = brailleToEng(inpStr)
+    else:
+        output = engToBraille(inpStr)
+
+    # output string
+    print(output)
+
+if __name__ == "__main__":
+    main()
