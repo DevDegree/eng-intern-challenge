@@ -123,5 +123,5 @@ def main(input_string):
 if __name__ == "__main__":
     import sys
     # Accept input from command-line argument
-    input_string = input()
+    input_string = sys.argv[1]
     main(input_string)
