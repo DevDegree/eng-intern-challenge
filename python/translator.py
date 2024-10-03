@@ -122,3 +122,5 @@ def toEnglish(braille, brailleToEnglishAlpha, brailleToEnglishNumeric):
 args = sys.argv
 args.pop(0)
 print(translator(' '.join(args)))
+
+# submissionEND
