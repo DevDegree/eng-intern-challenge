@@ -170,6 +170,7 @@ function brailleToEng(word){
         }
         else if (currBrailleString !== glossary["capFollows"] &&
                     currBrailleString !== glossary["numFollows"] &&
+                    currBrailleString !== glossary["decFollows"] &&
                     currBrailleString !== glossary[" "] &&
                     !numflag){
             //console.log("prev: "+ prevBrailleString);
@@ -194,8 +195,8 @@ function brailleToEng(word){
             numflag = false;
         }
  
-        if(currBrailleString === glossary["decFollows"]){
-            //translation = translation.concat(getKeyByValue(glossary, currBrailleString)[0]);
+        if(currBrailleString === glossary["decFollows"] && numflag){
+            translation = translation.concat(getKeyByValue(glossary, nextBrailleString));
         }
         
 
