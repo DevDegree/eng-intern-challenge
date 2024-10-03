@@ -1,3 +1,5 @@
+from sys import argv
+
 modifiers_dict = {
     "upper": ".....O",
     "decimal": ".O...O",
@@ -55,3 +57,26 @@ char_dict = {
     "(": "O.O..O",
     ")": ".O.OO.",
 }
+
+translation = ""
+isNumber = False
+
+for i, word in enumerate(argv[1:]):
+    if i > 0:
+        translation += modifiers_dict["space"]
+
+    isNumber = False
+    for char in word:
+        if char.isupper():
+            translation += modifiers_dict["upper"]
+        elif char.islower():
+            pass
+        elif char.isnumeric() and not isNumber:
+            isNumber = True
+            translation += modifiers_dict["number"]
+        elif char == ".":
+            translation += modifiers_dict["decimal"]
+
+        translation += char_dict.get(char.lower(), "")
+
+print(translation, end="")
