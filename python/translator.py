@@ -109,7 +109,7 @@ def english_to_braille(text):
 def main():
     """Main function to handle input and decide translation direction."""
     input_text = ' '.join(sys.argv[1:])
-
+    # print(f"Input text: {input_text}")
     if isBraille(input_text):
         print(braille_to_english(input_text))
     else:
