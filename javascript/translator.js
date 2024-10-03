@@ -143,5 +143,19 @@ function convertToBraille(english){
     return result;
 }
 
+/* 
+Processing the sentence received through the command line
+and process it based on if the sentence needs to be converted to braille 
+or to english
+*/
+const sentence = process.argv.slice(2).join(' ');
+
+if(sentence.startsWith("..")||sentence.startsWith(".O")||sentence.startsWith("O.")||sentence.startsWith("OO")){
+    console.log(convertToEnglish(sentence));
+    process.exit(0);
+} else {
+    console.log(convertToBraille(sentence));
+    process.exit(0);
+}
 
 
