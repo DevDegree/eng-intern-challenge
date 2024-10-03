@@ -1,9 +1,9 @@
 import sys
 
 # Define constants for special Braille characters
-CAPITAL_FOLLOWS = '.....0'
-NUMBER_FOLLOWS = '.0.000'
-DECIMAL_FOLLOWS = '.0...0'
+CAPITAL_FOLLOWS = '.....O'
+NUMBER_FOLLOWS = '.O.OOO'
+DECIMAL_FOLLOWS = '.O...O'
 SPACE = '......'
 
 # Define Braille to English mappings for Braille letters, numbers, and symbols 
