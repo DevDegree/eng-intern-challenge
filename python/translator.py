@@ -1,3 +1,9 @@
+"""
+Created by Belal Abu-Thuraia
+b.abuthuraia@gmail.com
+4388694801
+GitHub: BabuTheGreat
+"""
 import sys
 # Create a dictionary to map out each letter translation
 braille_map = {
@@ -57,38 +63,56 @@ def is_braille(text):
     if any(i not in 'O.' for i in text) or len(text) % 6 != 0:
         return False
     return True
+
+# Main function to run translation logic
 def translator(text):
+
+    #Creating a list to seperate each letter or 6 character string
     letters = []
+
+    #Main if else to determine language to translate
     if is_braille(text):
+        #Setting support variables
         capital = False
         number = False
+
+        #Iterating through given input
         for i in range(0, len(text), 6):
+            #Special case if capital letter follows and if number follows (next elif)
             if text[i:i+6] == ".....O":
                 capital = True
                 continue
             elif text[i:i+6] == ".O.OOO":
                 number = True
                 continue
+            #Setting number back to false once we see a space
             elif text[i:i+6] == "......":
                 number = False
             elif text[i:i+6] not in letters_map:
                 return None
-              
+            
+            #If captital string was prior, then capitalize current letter 
             if capital:
                 letters.append(letters_map[text[i:i+6]].upper())
                 capital = False
+            #If number was to follow, then retrieve from numbers dictionary 
             elif number:
                 letters.append(numbers_map[text[i:i+6]])
             else:
                 letters.append(letters_map[text[i:i+6]])
-    else:
 
+    #If given input is in english
+    else:
+        #Setting support variables. First number is only false after we see our first number. It is set back to true once we see a space character
         first_number = True
+        #Going through words
         for i in text:
+            #Add special braille string for capitals
             if i.isupper():
                 letters.append(".....O")
                 letters.append(letters_map[i.lower()])
                 continue
+            #Add special braille string for upcoming numbers
             elif i.isdigit():
                 if first_number:
                     letters.append(".O.OOO")
@@ -104,15 +128,16 @@ def translator(text):
     return "".join(letters)
 
 def main():
+
     if len(sys.argv) < 2:
         print("Usage: python translator.py <text to translate>")
         return 1
-
-    text = ""  # Initialize an empty string
+    # Append each argument into one string
+    text = "" 
     for arg in sys.argv[1:]:
-        text += arg + " "  # Append each argument with a space
+        text += arg + " " 
 
-    braille_text = translator(text.strip())  # Remove trailing space
+    braille_text = translator(text.strip()) 
     print(braille_text)
 
 if __name__ == "__main__":
