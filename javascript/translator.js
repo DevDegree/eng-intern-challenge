@@ -94,9 +94,5 @@ const brailleAlphabets = {
     console.log(translate(input));
   }
   
-  // Example usage with provided Braille input:
-  const inputBrailleToEng = ".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..";
-  const inputEngtoBraille = "Hello world";
-  console.log(translate(inputBrailleToEng)); // Should return 'Hello world'
-  console.log(translate(inputEngtoBraille)); // Should return '.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..'
+ 
   
