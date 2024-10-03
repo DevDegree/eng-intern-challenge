@@ -58,25 +58,62 @@ char_dict = {
     ")": ".O.OO.",
 }
 
-translation = ""
-isNumber = False
+input_str = "".join(argv[1:])
+# checks if the input str only contains 1s and 0s
+if len(set(input_str)) <= 2:
+    # split the string by 6 characters each
+    input_list = [input_str[i : i + 6] for i in range(0, len(input_str), 6)]
+    capital = False
+    number = False
 
-for i, word in enumerate(argv[1:]):
-    if i > 0:
-        translation += modifiers_dict["space"]
+    translation = ""
+    for braille in input_list:
+        if braille in modifiers_dict.values():
+            if braille == modifiers_dict["upper"]:
+                capital = True
+            elif braille == modifiers_dict["number"]:
+                number = True
+            elif braille == modifiers_dict["space"]:
+                translation += " "
+                number = False  # reset number flag after space
+            continue
 
+        for char, braille_code in char_dict.items():
+            if braille == braille_code:
+                if number and char.isnumeric():
+                    translation += char
+                elif number and not char.isnumeric():
+                    continue
+                elif capital:
+                    translation += char.upper()
+                    capital = False
+                else:
+                    translation += char
+                break
+        else:
+            translation += "?"  # unknown character placeholder
+
+    print(translation)
+else:
+    translation = ""
     isNumber = False
-    for char in word:
-        if char.isupper():
-            translation += modifiers_dict["upper"]
-        elif char.islower():
-            pass
-        elif char.isnumeric() and not isNumber:
-            isNumber = True
-            translation += modifiers_dict["number"]
-        elif char == ".":
-            translation += modifiers_dict["decimal"]
 
-        translation += char_dict.get(char.lower(), "")
+    for i, word in enumerate(argv[1:]):
+        if i > 0:
+            translation += modifiers_dict["space"]
 
-print(translation, end="")
+        isNumber = False
+        for char in word:
+            if char.isupper():
+                translation += modifiers_dict["upper"]
+            elif char.islower():
+                pass
+            elif char.isnumeric() and not isNumber:
+                isNumber = True
+                translation += modifiers_dict["number"]
+            elif char == ".":
+                translation += modifiers_dict["decimal"]
+
+            translation += char_dict.get(char.lower(), "")
+
+    print(translation, end="")
