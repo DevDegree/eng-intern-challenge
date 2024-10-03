@@ -1,4 +1,15 @@
-var input = ".O.OOOOO.O..O.O...";
+
+const readline = require('node:readline');
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+rl.question(``, str => {
+    console.log(isBrailleOrEnglish(str));
+  rl.close();
+});
+
+//var input = ".....O.OOO.O.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..";
 
 const glossary = {
     "A": "O.....", // A
@@ -105,6 +116,16 @@ function findNumber(str){
     return str.replace(/[^0-9]+/g, '');
 }
 
+function isBrailleOrEnglish(str){
+    if (/^[.O]+$/.test(str)){
+        return brailleToEng(str)
+    }
+    else {
+        return engToBraille(str)
+
+    }
+}
+
 function getKeyByValue(object, value) {
     return Object.keys(object).filter(key => object[key] === value);
   }
@@ -138,21 +159,23 @@ function brailleToEng(word){
 
         var numflag;
 
-        console.log(currBrailleString);
-        console.log(getKeyByValue(glossary, currBrailleString));
+        //console.log(currBrailleString);
+        //console.log(getKeyByValue(glossary, currBrailleString));
 
-        if(currBrailleString === glossary["capFollows"]){
-            console.log("prev: "+ prevBrailleString);
-            console.log("next: "+ nextBrailleString);
-            translation = translation.concat(findUppercase(getKeyByValue(glossary, nextBrailleString).join('')));
+        if(prevBrailleString === glossary["capFollows"]){
+            //console.log("prev: "+ prevBrailleString);
+            //console.log("next: "+ nextBrailleString);
+
+            translation = translation.concat(findUppercase(getKeyByValue(glossary, currBrailleString).join('')));
         }
-        else if (currBrailleString !== glossary["capFollows"] && 
+        else if (currBrailleString !== glossary["capFollows"] &&
                     currBrailleString !== glossary["numFollows"] &&
                     currBrailleString !== glossary[" "] &&
                     !numflag){
-            console.log("prev: "+ prevBrailleString);
-            console.log("next: "+ nextBrailleString);
-            translation = translation.concat(findLowercase(getKeyByValue(glossary, nextBrailleString).join('')));
+            //console.log("prev: "+ prevBrailleString);
+            //console.log("next: "+ nextBrailleString);
+
+            translation = translation.concat(findLowercase(getKeyByValue(glossary, currBrailleString).join('')));
         }
 
         else if(currBrailleString === glossary[" "]){
@@ -163,7 +186,7 @@ function brailleToEng(word){
                 numflag = true;
         }
         if(numflag){
-            console.log((getKeyByValue(glossary, nextNextBrailleString).join('')))
+            //console.log((getKeyByValue(glossary, nextNextBrailleString).join('')))
             translation = translation.concat(findNumber(getKeyByValue(glossary, nextBrailleString).join('')));
         }
 
@@ -180,4 +203,4 @@ function brailleToEng(word){
     return translation;
 }
 
-console.log(brailleToEng(input))
+//console.log(brailleToEng(input))
