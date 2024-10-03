@@ -27,6 +27,7 @@ function convertToBraille(input) {
     let isNumber = false;
 
     for (let char of input) {
+        console.log(char);
         if (char === ' ') {
             result += brailleSpecialCharsMapping['space'];
             isNumber = false;
@@ -96,5 +97,5 @@ function translateInput(input) {
 }
 
 // System process starts here
-const input = process.argv[2];  // Input from the command line
+const input = process.argv.slice(2).join(' ');  // Input from the command line
 console.log(translateInput(input));
