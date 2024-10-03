@@ -4,8 +4,8 @@ import string as st
 SPACE = "......"
 CAPITAL_INDICATOR = ".....O"
 DIGIT_INDICATOR = ".O.OOO"
-braille_letters = ["O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..", ".OO...", ".OOO..", "O...O.", "O.O.O.", "OO..O.", "OO.OO.", "O..OO.", "OOO.O.", "OOOOO.", "O.OOO.", ".OO.O.", ".OOOO.", "O...OO", "O.O.OO", ".OOO.O", "OO..OO", "OO.OOO", "O..OOO"] # a-z
-braille_numbers = [".OOO..", "O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..", ".OO..."] # 0-9
+BRAILLE_LETTERS = ["O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..", ".OO...", ".OOO..", "O...O.", "O.O.O.", "OO..O.", "OO.OO.", "O..OO.", "OOO.O.", "OOOOO.", "O.OOO.", ".OO.O.", ".OOOO.", "O...OO", "O.O.OO", ".OOO.O", "OO..OO", "OO.OOO", "O..OOO"] # a-z
+BRAILLE_NUMBERS = [".OOO..", "O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..", ".OO..."] # 0-9
 
 def convert_to_braille(english_text):
     number_mode = False
@@ -17,41 +17,40 @@ def convert_to_braille(english_text):
             if c.isupper():
                 print(CAPITAL_INDICATOR, end = "")
                 c = c.lower()
-            print(braille_letters[st.ascii_lowercase.index(c)], end = "")
+            print(BRAILLE_LETTERS[st.ascii_lowercase.index(c)], end = "")
             number_mode = False
         elif c.isdigit():
             if not number_mode:
                 print(DIGIT_INDICATOR, end="")
                 number_mode = True
-            print(braille_numbers[int(c)], end = "")
+            print(BRAILLE_NUMBERS[int(c)], end = "")
 
 def is_braille(s):
     valid_chars = {'O', '.'}
     return len(s) % 6 == 0 and all(c in valid_chars for c in s)
-  
+
 def convert_to_english(braille_text):
     braille_chars = [braille_text[i:i+6] for i in range(0, len(braille_text), 6)]
     number_mode = False
     capital_mode = False
-    
     for b in braille_chars:
-        if number_mode:
-            print(braille_numbers.index(b))
-            capital_mode = False
-        elif capital_mode:
-            print(st.ascii_uppercase[braille_letters.index(b)].upper(), end="")
-            capital_mode = False 
-        elif b == SPACE:
-            print(" ", end="")
-            number_mode = False
-            capital_mode = False
-        elif b == CAPITAL_INDICATOR:
+        if b == CAPITAL_INDICATOR:
             capital_mode = True
         elif b == DIGIT_INDICATOR:
             number_mode = True
             capital_mode = False
+        elif b == SPACE:
+            print(" ", end="")
+            number_mode = False
+            capital_mode = False
+        elif number_mode:
+            print(BRAILLE_NUMBERS.index(str(b)), end="")
+            capital_mode = False
+        elif capital_mode:
+            print(st.ascii_uppercase[BRAILLE_LETTERS.index(b)].upper(), end="")
+            capital_mode = False 
         else :
-            print(st.ascii_lowercase[braille_letters.index(b)], end="")
+            print(st.ascii_lowercase[BRAILLE_LETTERS.index(b)], end="")
             number_mode = False
             capital_mode = False
 
