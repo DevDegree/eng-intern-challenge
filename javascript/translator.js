@@ -55,7 +55,6 @@ const twoWayMap = new TwoWayMap({
     ".OOO.O" : "w",
     "OO..OO" : "x",
     "OO.OOO" : "y",
-    "O..OOO" : "z",
     ".....O" : "capital",
     ".O...O" : "decimal",
     ".O.OOO" : "number",
@@ -73,6 +72,7 @@ const twoWayMap = new TwoWayMap({
     ".O.OO." : ")",
     "......" : " ",
     "O..OO." : "o",
+    "O..OOO" : "z",
 });
 
 // Letter to number conversion
