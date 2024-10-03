@@ -73,10 +73,11 @@ def main():
     if len(sys.argv) < 2:
         sys.exit(1)
     input = ' '.join(sys.argv[1:])
-    if is_braille(input.replace(' ', '')):
-        convert_to_english(input.replace(' ', ''))
-    elif is_alphanumeric(input): 
+   
+    if is_alphanumeric(input): 
         convert_to_braille(input)
+    elif is_braille(input.replace(' ', '')):
+        convert_to_english(input.replace(' ', ''))
     print()
     return
 
