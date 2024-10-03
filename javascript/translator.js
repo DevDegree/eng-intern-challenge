@@ -1,4 +1,4 @@
-const { argv } = require('node:process');
+const args = process.argv;
 
 result = "";
 braille = true;
