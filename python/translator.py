@@ -30,7 +30,30 @@ def is_braille(s):
     return len(s) % 6 == 0 and all(c in valid_chars for c in s)
   
 def convert_to_english(braille_text):
-    return
+    braille_chars = [braille_text[i:i+6] for i in range(0, len(braille_text), 6)]
+    number_mode = False
+    capital_mode = False
+    
+    for b in braille_chars:
+        if number_mode:
+            print(braille_numbers.index(b))
+            capital_mode = False
+        elif capital_mode:
+            print(st.ascii_uppercase[braille_letters.index(b)].upper(), end="")
+            capital_mode = False 
+        elif b == SPACE:
+            print(" ", end="")
+            number_mode = False
+            capital_mode = False
+        elif b == CAPITAL_INDICATOR:
+            capital_mode = True
+        elif b == DIGIT_INDICATOR:
+            number_mode = True
+            capital_mode = False
+        else :
+            print(st.ascii_lowercase[braille_letters.index(b)], end="")
+            number_mode = False
+            capital_mode = False
 
 def main():
     if len(sys.argv) < 2:
