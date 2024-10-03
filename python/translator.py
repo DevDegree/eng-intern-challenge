@@ -25,18 +25,18 @@ def english_to_braille(english_text):
     number_mode = False # flag to see if the char is a number
 
     for char in english_text: 
-        if char.isdigit(): # check if char is a number
+        if char.isdigit(): 
             if not number_mode: # check if it is the first number
-                number_mode = True # activate number mode
-                result.append(braille_map['number']) # add braille symbol for number 
-            result.append(braille_map[alpha_map[char]]) # convert number to letter 
-        elif char.isalpha(): # check if char is a letter
+                number_mode = True
+                result.append(braille_map['number'])  
+            result.append(braille_map[alpha_map[char]])  
+        elif char.isalpha():
             if number_mode: 
-                number_mode = False # deactivate number mode
-            if char.isupper(): # check if char is a capital letter
-                result.append(braille_map['capital']) # add braille symbol for capital letter
-            result.append(braille_map[char.lower()]) # convert char to lowercase 
-        elif char == ' ': # check if char is a space
+                number_mode = False 
+            if char.isupper():
+                result.append(braille_map['capital']) 
+            result.append(braille_map[char.lower()]) 
+        elif char == ' ':
             result.append(braille_map[' ']) 
         else:
             result.append(braille_map[char])
@@ -47,24 +47,24 @@ def english_to_braille(english_text):
 
 def braille_to_english(braille_text):
     result = [] 
-    number_mode = False # flag to see if the char is a number
+    number_mode = False 
     i = 0 # starting index of the first braille symbol
     while i < len(braille_text):
         symbol = braille_text[i:i+6] # retrieve the current braille symbol
         i += 6 # shift to the next braille symbol
-        if symbol == braille_map['number']: # check if the braille symbol is number
-            number_mode = True # activate number mode
+        if symbol == braille_map['number']: 
+            number_mode = True
 
-        elif symbol == braille_map['capital']: # check if the braille symbol is capital
+        elif symbol == braille_map['capital']: 
             result.append(english_map[braille_text[i:i+6]].upper()) # capialize english letter
-            i += 6 # shift to the next braille symbol
+            i += 6 
         else:
             char = english_map[symbol]
-            if number_mode and char in number_map: # check if the braille symbol is a number
+            if number_mode and char in number_map: 
                 result.append(number_map[char]) 
             else:
                 result.append(char) 
-                number_mode = False # deactivate number mode
+                number_mode = False 
     return ''.join(result)
 
 # function to translate braille to english and vice versa
