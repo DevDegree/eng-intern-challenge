@@ -1,4 +1,5 @@
 import sys
+import string as st
 
 SPACE = "......"
 CAPITAL_INDICATOR = ".....O"
@@ -24,7 +25,6 @@ def convert_to_braille(english_text):
                 number_mode = True
             print(braille_numbers[int(c)], end = "")
 
-      
 def is_braille(s):
     valid_chars = {'O', '.'}
     return len(s) % 6 == 0 and all(c in valid_chars for c in s)
