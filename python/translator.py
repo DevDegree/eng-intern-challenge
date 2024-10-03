@@ -14,4 +14,5 @@ english_to_braille = {
 }
 
 # Reverse the dictionary to map Braille to English
+braille_to_english = {v: k for k, v in english_to_braille}
             char = char.lower() #
