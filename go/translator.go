@@ -84,38 +84,29 @@ var engMap = map[string]string{
 }
 
 func main() {
-	args := os.Args[1:]
-	if len(args) == 0 {
+	msg := os.Args[1:]
+	if len(msg) == 0 {
 		panic("No argument provided!")
 	}
-	var msg string
-	var eng bool
-	if isEnglish(args) {
+
+	var result string
+	var err error
+	if isEnglish(msg) {
 		var builder strings.Builder
-		for i := 0; i < len(args)-1; i++ {
-			builder.WriteString(args[i] + " ")
+		for i := 0; i < len(msg)-1; i++ {
+			builder.WriteString(msg[i] + " ")
 		}
-		builder.WriteString(args[len(args)-1])
-		msg = builder.String()
-		eng = true
+		builder.WriteString(msg[len(msg)-1])
+		result, err = engToBraille(builder.String())
 	} else {
-		msg = args[0]
-	}
-	if eng {
-		out, err := engToBraille(msg)
-		if err != nil {
-			panic(err)
-		}
-		msg = out
-	} else {
-		out, err := brailleToEng(msg)
-		if err != nil {
-			panic(err)
-		}
-		msg = out
+		result, err = brailleToEng(msg[0])
 	}
 
-	println(msg)
+	if err != nil {
+		panic(err)
+	}
+
+	println(result)
 }
 
 // Convert from English to Braille code
@@ -129,22 +120,17 @@ func engToBraille(msg string) (string, error) {
 		}
 		braille, ok := brailleMap[string(c)]
 		if !ok {
-			return braille, errors.New("invalid character")
+			return braille, errors.New("invalid character" + string(c))
 		}
-		if c >= 'a' && c <= 'z' {
-			builder.WriteString(braille)
-		} else if c >= '0' && c <= '9' {
+		if c >= '0' && c <= '9' {
 			if !isNum {
 				builder.WriteString(brailleMap["num"])
 				isNum = true
 			}
-			builder.WriteString(braille)
 		} else if c == ' ' {
 			isNum = false
-			builder.WriteString(braille)
-		} else {
-			builder.WriteString(braille)
 		}
+		builder.WriteString(braille)
 	}
 	return builder.String(), nil
 }
@@ -160,6 +146,7 @@ func brailleToEng(msg string) (string, error) {
 		if !ok {
 			return eng, errors.New("invalid braille code")
 		}
+
 		if eng == "cap" {
 			isCap = true
 		} else if eng == "num" {
@@ -185,7 +172,7 @@ func brailleToEng(msg string) (string, error) {
 	return builder.String(), nil
 }
 
-// Check if the input is English or not. Our English
+// Check if the input is English or not
 func isEnglish(args []string) bool {
 	if len(args) > 1 || len(args[0])%6 != 0 {
 		return true
