@@ -1,6 +1,6 @@
 import sys
 
-# user input
+# user input from execution
 inpStr = sys.argv[1:]
 inpStr = " ".join(inpStr)
 
