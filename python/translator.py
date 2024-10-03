@@ -143,7 +143,6 @@ if __name__ == "__main__":
   
     #check if it is braille or english
     if (all(char in "O." for char in inputstr)):
-        print
         output = convert_to_english(inputstr)
     else:
         output = convert_to_braille(inputstr)
