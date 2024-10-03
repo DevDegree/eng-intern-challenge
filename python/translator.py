@@ -10,11 +10,11 @@ english_to_braille = {
     'z': 'O..OOO', ' ': '......',
     'cap': '.....O', 'num': '.O.OOO',
     '0': '.OOO..', '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', 
-    '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...''
+    '5': 'O..O..', '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...'
 }
 
 # Reverse the dictionary to map Braille to English
-braille_to_english = {v: k for k, v in english_to_braille}
+braille_to_english = {v: k for k, v in english_to_braille.items()}
 
 # Function to translate English to Braille
 def translate_to_braille(text):
@@ -54,5 +54,17 @@ def translate_to_english(braille):
             if is_number_mode and translated_char.isdigit():
                 translated_char = str(int(translated_char)) #Ensure it's a number
             result.append(translated_char)
-    return ''.join(result) #Join the list of English characters into a single string    
+    return ''.join(result) #Join the list of English characters into a single string
+    
+# Main function to handle user input
+def main():
+    input_text = ' '.join(sys.argv[1:]) # Collect the arguments passed into the script
+    if all(c in '0. ' for c in input_text):
+        #Assume it's Braille if it only contains 0, . and '.'
+        print(translate_to_english(input_text))
+    else:
+        #Otherwise assume it's English
+        print(translate_to_braille(input_text))
         
+if __name__ == '__main__':
+    main()
