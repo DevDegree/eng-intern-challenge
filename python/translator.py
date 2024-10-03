@@ -4,16 +4,13 @@ import sys
     Braille Translator
 """
 
-# braille to english non numeric dictionary
-br_to_en_nonnumeric = {
+# braille to english alpha dictionary
+br_to_en_alpha = {
     'O.....': 'a', 'O.O...': 'b', 'OO....': 'c', 'OO.O..': 'd', 'O..O..': 'e', 'OOO...': 'f', 
     'OOOO..': 'g', 'O.OO..': 'h', '.OO...': 'i', '.OOO..': 'j', 'O...O.': 'k', 'O.O.O.': 'l', 
     'OO..O.': 'm', 'OO.OO.': 'n', 'O..OO.': 'o', 'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', 
     '.OO.O.': 's', '.OOOO.': 't', 'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 
-    'OO.OOO': 'y', 'O..OOO': 'z',
-    '......': ' ', '..OO.O': '.', '..O...': ',', '..O.OO': '?', '..OOO.': '!', 
-    '..OO..': ':', '..O.O.': ';', '....OO': '-', '.O..O.': '/', '.OO..O': '<', 
-    'O..OO.': '>', 'O.O..O': '(', '.O.OO.': ')'
+    'OO.OOO': 'y', 'O..OOO': 'z', '......': ' '
 }
 
 # braille to english numeric dictionary
@@ -23,7 +20,7 @@ br_to_en_numeric = {
 }
 
 # english to braille dictionary
-en_to_br = {v: k for k, v in br_to_en_nonnumeric.items()}
+en_to_br = {v: k for k, v in br_to_en_alpha.items()}
 en_to_br.update({v: k for k, v in br_to_en_numeric.items()})
 en_to_br.update({
     'cap': '.....O',
@@ -74,17 +71,18 @@ def braille_to_en(input_str):
                 english += br_to_en_numeric[char]
         else:
             if cap_flag:
-                english += br_to_en_nonnumeric[char].upper()
+                english += br_to_en_alpha[char].upper()
                 cap_flag = False
             else:
-                english += br_to_en_nonnumeric[char]
+                english += br_to_en_alpha[char]
     return english
 
 # main translator function
 def main(arg):
     input_str = ' '.join(arg)
     output = ''
-    
+
+    # assumption: all strings are valid English strings, not all strings are valid Braille strings
     # assume all strings are braille until invalid character is found
     try:
         output = braille_to_en(input_str)
