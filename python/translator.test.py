@@ -13,6 +13,7 @@ class TestTranslator(unittest.TestCase):
         expected_output = ".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO"
         
         # Strip any leading/trailing whitespace from the output and compare
+        print("res=", result.stdout.strip())
         self.assertEqual(result.stdout.strip(), expected_output)
 
 if __name__ == '__main__':
