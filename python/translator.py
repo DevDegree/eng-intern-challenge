@@ -15,4 +15,22 @@ english_to_braille = {
 
 # Reverse the dictionary to map Braille to English
 braille_to_english = {v: k for k, v in english_to_braille}
-            char = char.lower() #
+
+# Function to translate English to Braille
+def translate_to_braille(text):
+    result =  []
+    is_number_mode = False
+    for char in text:
+        if char.isupper():
+            result.append(english_to_braille['cap'])
+            char = char.lower() #Convert to lower case for Braille translation
+        if char.isdigit() and not is_number_mode:
+            result.append(english_to_braille['num']) #Turn on number mode
+            is_number_mode = True
+        elif char == ' ': #Turn off number mode
+            is_number_mode = False # Reset number mode after a space
+        result.append(english_to_braille[char])
+    return ''.join(result) #Join the list of Braille characters into a single string
+    
+# Function to translate Braille to English
+def    
