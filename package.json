@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "jest-cli": "^29.7.0"
+  }
+}
