@@ -1,14 +1,14 @@
-const args = process.argv;
+const argv = process.argv;
 
 result = "";
 braille = true;
 
 // Checking conversion direction
-if (args[2].length % 6 != 0) {
+if (argv[2].length % 6 != 0) {
     braille = false;
 } else {
-    for (let i = 0; i < args[2].length; i++) {
-        if (args[2].charAt(i) != "." && args[2].charAt(i) != "O") {
+    for (let i = 0; i < argv[2].length; i++) {
+        if (argv[2].charAt(i) != "." && argv[2].charAt(i) != "O") {
             braille = false;
             break;
         }
@@ -55,6 +55,7 @@ const twoWayMap = new TwoWayMap({
     ".OOO.O" : "w",
     "OO..OO" : "x",
     "OO.OOO" : "y",
+    "O..OOO" : "z",
     ".....O" : "capital",
     ".O...O" : "decimal",
     ".O.OOO" : "number",
@@ -72,7 +73,6 @@ const twoWayMap = new TwoWayMap({
     ".O.OO." : ")",
     "......" : " ",
     "O..OO." : "o",
-    "O..OOO" : "z",
 });
 
 // Letter to number conversion
@@ -93,12 +93,12 @@ capital = false;
 number = false;
 
 // Conversion implementation
-for (let i = 2; i < args.length; i++) {
+for (let i = 2; i < argv.length; i++) {
     // Braille -> English
     if (braille) {
-        for (let j = 0; j < args[i].length; j += 6) {
+        for (let j = 0; j < argv[i].length; j += 6) {
 
-            let temp = twoWayMap.get(args[i].substring(j, j+6));
+            let temp = twoWayMap.get(argv[i].substring(j, j+6));
 
             // Capital Case
             if (capital) {
@@ -131,28 +131,24 @@ for (let i = 2; i < args.length; i++) {
 
     // English -> Braille
     } else {
-        for (let j = 0; j < args[i].length; j++) {
-            let temp = twoWayMap.revGet(args[i].charAt(j));
+        number = false;
+        for (let j = 0; j < argv[i].length; j++) {
+            let temp = twoWayMap.revGet(argv[i].charAt(j));
 
             // Capital Case
-            if (temp == undefined && twoWayMap.revGet(args[i].charAt(j).toLowerCase()) != undefined) {
+            if (temp == undefined && twoWayMap.revGet(argv[i].charAt(j).toLowerCase()) != undefined) {
                 result += twoWayMap.revGet("capital");
-                result += twoWayMap.revGet(args[i].charAt(j).toLowerCase());
+                result += twoWayMap.revGet(argv[i].charAt(j).toLowerCase());
 
             }
 
             // Number Case
-            else if (number || (temp == undefined && numberMap.revGet(args[i].charAt(j)) != undefined)) {
+            else if (number || (temp == undefined && numberMap.revGet(argv[i].charAt(j)) != undefined)) {
                 if (!number) {
                     result += twoWayMap.revGet("number");
                     number = true;
-                }
-                if (temp == " ") {
-                    number = false;
-                    result += temp;
-                } else {
-                    result += twoWayMap.revGet(numberMap.revGet(args[i].charAt(j)));
-                }
+                } 
+                result += twoWayMap.revGet(numberMap.revGet(argv[i].charAt(j)));
             }
 
             // Regular Conversion
@@ -160,7 +156,11 @@ for (let i = 2; i < args.length; i++) {
                 result += temp;
             }
         }
+        if (i != argv.length - 1) { 
+            result += "......";
+        }
     }
 }
+
 
 console.log(result);
