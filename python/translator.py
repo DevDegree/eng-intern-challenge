@@ -50,8 +50,9 @@ def braille_to_text(braille_string):
     # Break the Braille string into chunks of 6 characters (Braille cells)
     for i in range(0, len(braille_string), 6):
         braille_char = braille_string[i:i+6]
-        
+
         if braille_char == braille_capital:
+            number_mode = False
             capital_mode = True
             continue
         elif braille_char == braille_number:
@@ -64,8 +65,9 @@ def braille_to_text(braille_string):
                 if braille_char == value:
                     english_result.append(key)
                     break
-            number_mode = False
+
         else:
+            number_mode = False
             char = braille_to_english.get(braille_char, "")
             if capital_mode:
                 char = char.upper()
@@ -75,23 +77,30 @@ def braille_to_text(braille_string):
     return "".join(english_result)
 
 
+
 def text_to_braille(english_string):
     """
     Convert English to Braille.
     Handle capitalization and numbers as well.
     """
     braille_result = []
+    numberMode = False
+    
     for char in english_string:
         if char.isupper():
+            numberMode = False
             # Add Braille capitalization symbol
             braille_result.append(braille_capital)
             char = char.lower()
 
         if char.isdigit():
             # Add Braille number symbol and convert the number
-            braille_result.append(braille_number)
+            if not(numberMode):
+                braille_result.append(braille_number)
+                numberMode = True
             braille_result.append(numbers[char])
         else:
+            numberMode = False
             # Convert English character to Braille
             braille_result.append(english_to_braille.get(char, "......"))
 
@@ -114,7 +123,5 @@ def main(input_string):
 if __name__ == "__main__":
     import sys
     # Accept input from command-line argument
-    input_string = sys.argv[1]
+    input_string = input()
     main(input_string)
-
-
