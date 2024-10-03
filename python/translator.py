@@ -7,7 +7,23 @@ braille_letters = ["O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "
 braille_numbers = [".OOO..", "O.....", "O.O...", "OO....", "OO.O..", "O..O..", "OOO...", "OOOO..", "O.OO..", ".OO..."] # 0-9
 
 def convertToBraille(english_text):
-    return
+    number_mode = False
+    for c in english_text:
+        if c.isspace():
+            print(SPACE, end = "")
+            number_mode = False
+        elif c.isalpha():
+            if c.isupper():
+                print(CAPITAL_INDICATOR, end = "")
+                c = c.lower()
+            print(braille_letters[st.ascii_lowercase.index(c)], end = "")
+            number_mode = False
+        elif c.isdigit():
+            if not number_mode:
+                print(DIGIT_INDICATOR, end="")
+                number_mode = True
+            print(braille_numbers[int(c)], end = "")
+
       
 def is_braille_input(s):
     return
