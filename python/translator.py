@@ -82,68 +82,13 @@ def braille_tokenizer(string):
 
     if token:
         token_list.append(token)
-    return token_list
-
-#'capital': '.....0', 'decimal': '.0...0', 'number': '.0.000', 
+    return token_list 
 
 def isBraille(string) :
     for i in string:
         if i != 'O' and i != '.':
             return False
     return True
-
-# def translator(string):
-#     translated = []
-#     isCap = False
-#     isNum = False
-
-#     if isBraille(string): # braille
-#         # read from list
-#         token_list = braille_tokenizer(string)
-#         # check if its a number, decimal or capital
-#         for i in range(len(token_list)):
-#             if token_list[i] == '.O.OOO': # then NUMBER
-#                 # check the trans
-#                 isNum = True
-#                 continue
-#             elif token_list[i] == '.O...O': # then DECIMAL
-#                 continue
-#             elif token_list[i] == '.....O': # then CAPITAL
-#                 isCap = True
-#                 continue
-#             elif token_list[i] in braille_letter_dict and not isNum: # then LETTER
-#                     translationToken = braille_letter_dict[token_list[i]]
-#                     # check
-#                     if isCap:
-#                         translated.append(translationToken.upper())
-#                         isCap = False
-#                     else: 
-#                         translated.append(translationToken)
-#             elif isNum :
-#                 translationToken = braille_number_dict[token_list[i]] 
-#                 translated.append(translationToken)
-
-#         # print translation
-#         print(''.join(translated))
-#     else: # english
-#         for char in string:
-#             # check if capital
-#             if char.isupper():
-#                 translated.append('.....O') # capital
-#                 isCap = True
-#             elif char.isdigit() :
-#                 if not isNum:
-#                     translated.append('.O.OOO') 
-#                     isNum = True
-
-#             if char.lower() in braille_letter_dict: 
-#                     translated.append(braille_letter_dict[char.lower()])
-#             elif isNum and char in braille_number_dict:
-#                 translated.append(braille_number_dict[char])
-#             else:
-#                 translated.append('') # if char not found then append empty string
-
-#         print(''.join(translated))
 
 def translator(string):
     translated = []
@@ -187,11 +132,6 @@ def translator(string):
             elif char == ' ':  # Space
                 translated.append('......')
         print(''.join(translated))
-
-
-# if __name__ == "__main__":  # Main guard
-#         argument = sys.argv[1]
-#         translator(argument)
 
 if __name__ == "__main__":  # Main guard
         # Join all arguments provided (from 1 onwards) into a single string
