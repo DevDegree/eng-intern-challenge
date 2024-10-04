@@ -145,7 +145,7 @@ def translator(string):
 
         print("Translation:", ''.join(translated))
 
-if __name__ == "__main__":
-    # Get input from command line
-    input_string = input("Enter text to translate (Braille or English): ")
-    translator(input_string)
+if __name__ == "__main__":  # Main guard
+        argument = sys.argv[1]
+        print("You provided:", argument)
+        translator(argument)
