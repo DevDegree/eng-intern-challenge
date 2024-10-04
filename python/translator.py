@@ -9,7 +9,7 @@ braille_to_english = {
     'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y', 'O..OOO': 'z',
     '......': ' ', # space
     # Capital and number follow symbols
-    '.O.....': 'capital follows', '.O.OOO': 'number follows',
+    '.....O': 'capital follows', '.O.OOO': 'number follows',
 }
 
 braille_to_numbers = {
@@ -19,22 +19,25 @@ braille_to_numbers = {
 }
 
 english_to_braille = {v: k for k, v in braille_to_english.items()}
+numbers_to_braille = {v: k for k, v in braille_to_numbers.items()}
 
 def check_input(input_string):
     return all(c in 'O.' for c in input_string) and len(input_string) % 6 == 0
 
 def translate(input_string):
-    # Braille to English
+    # Braille to English translation
     if check_input(input_string):
         result = []
         index = 0
         is_number = False
         while index < len(input_string):
             char = input_string[index:index+6]
-            if char == '.O.....':
+            if char == '.....O':
                 index += 6
-                next_char = input_string[index:index+6]
-                result.append(braille_to_english[next_char].upper())
+                if index < len(input_string): 
+                    next_char = input_string[index:index+6]
+                    translated_char = braille_to_english.get(next_char, '').upper()
+                    result.append(translated_char)
             elif char == '.O.OOO':
                 is_number = True
             else:
@@ -51,7 +54,23 @@ def translate(input_string):
             index += 6
         return ''.join(result)
     else:
-        return input_string
+        # English to Braille translation
+        result = []
+        is_number_mode = False
+        for char in input_string:
+            if char.isupper():
+                result.append(english_to_braille['capital follows'])
+                result.append(english_to_braille[char.lower()])
+            elif char.isdigit():
+                if not is_number_mode:
+                    result.append(english_to_braille['number follows'])
+                    is_number_mode = True
+                result.append(numbers_to_braille[char])
+            else:
+                if char == ' ':
+                    is_number_mode = False
+                result.append(english_to_braille.get(char, '......'))
+        return ''.join(result)
 
 
 if __name__ == '__main__':
