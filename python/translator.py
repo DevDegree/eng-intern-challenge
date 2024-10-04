@@ -104,5 +104,5 @@ def translate(input_string):
 if __name__ == "__main__":
     import sys
     # Read the input string from command line arguments
-    input_string = sys.argv[1]
-    print(translate(input_string), end='')
+    input_text = ' '.join(sys.argv[1:])
+    print(translate(input_text))
