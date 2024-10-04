@@ -14,3 +14,8 @@ braille_to_english = {
     'O.....': '1', 'O.O...': '2', 'OO....': '3', 'OO.O..': '4', 'O..O..': '5',
     'OOO...': '6', 'OOOO..': '7', 'O.OO..': '8', '.OO...': '9', '.OOO..': '0'
 }
+
+english_to_braille = {v: k for k, v in braille_to_english.items()}
+
+def check_input(input_string):
+    return all(c in 'O.' for c in input_string) and len(input_string) % 6 == 0
