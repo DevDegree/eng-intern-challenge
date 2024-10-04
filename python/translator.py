@@ -92,58 +92,102 @@ def isBraille(string) :
             return False
     return True
 
+# def translator(string):
+#     translated = []
+#     isCap = False
+#     isNum = False
+
+#     if isBraille(string): # braille
+#         # read from list
+#         token_list = braille_tokenizer(string)
+#         # check if its a number, decimal or capital
+#         for i in range(len(token_list)):
+#             if token_list[i] == '.O.OOO': # then NUMBER
+#                 # check the trans
+#                 isNum = True
+#                 continue
+#             elif token_list[i] == '.O...O': # then DECIMAL
+#                 continue
+#             elif token_list[i] == '.....O': # then CAPITAL
+#                 isCap = True
+#                 continue
+#             elif token_list[i] in braille_letter_dict and not isNum: # then LETTER
+#                     translationToken = braille_letter_dict[token_list[i]]
+#                     # check
+#                     if isCap:
+#                         translated.append(translationToken.upper())
+#                         isCap = False
+#                     else: 
+#                         translated.append(translationToken)
+#             elif isNum :
+#                 translationToken = braille_number_dict[token_list[i]] 
+#                 translated.append(translationToken)
+
+#         # print translation
+#         print(''.join(translated))
+#     else: # english
+#         for char in string:
+#             # check if capital
+#             if char.isupper():
+#                 translated.append('.....O') # capital
+#                 isCap = True
+#             elif char.isdigit() :
+#                 if not isNum:
+#                     translated.append('.O.OOO') 
+#                     isNum = True
+
+#             if char.lower() in braille_letter_dict: 
+#                     translated.append(braille_letter_dict[char.lower()])
+#             elif isNum and char in braille_number_dict:
+#                 translated.append(braille_number_dict[char])
+#             else:
+#                 translated.append('') # if char not found then append empty string
+
+#         print(''.join(translated))
+
 def translator(string):
     translated = []
     isCap = False
     isNum = False
 
-    if isBraille(string): # braille
-        # read from list
+    if isBraille(string):  # Braille to English
         token_list = braille_tokenizer(string)
-        # check if its a number, decimal or capital
+
         for i in range(len(token_list)):
-            if token_list[i] == '.O.OOO': # then NUMBER
-                # check the trans
+            if token_list[i] == '.O.OOO':  # Number sign
                 isNum = True
                 continue
-            elif token_list[i] == '.O...O': # then DECIMAL
-                continue
-            elif token_list[i] == '.....O': # then CAPITAL
+            elif token_list[i] == '.....O':  # Capital letter sign
                 isCap = True
                 continue
-            elif token_list[i] in braille_letter_dict and not isNum: # then LETTER
-                    translationToken = braille_letter_dict[token_list[i]]
-                    # check
-                    if isCap:
-                        translated.append(translationToken.upper())
-                        isCap = False
-                    else: 
-                        translated.append(translationToken)
-            elif isNum :
-                translationToken = braille_number_dict[token_list[i]] 
+            elif token_list[i] in braille_letter_dict:  # Letters
+                translationToken = braille_letter_dict[token_list[i]]
+                if isCap:
+                    translated.append(translationToken.upper())
+                    isCap = False
+                else:
+                    translated.append(translationToken)
+                isNum = False
+            elif isNum and token_list[i] in braille_number_dict:  # Numbers
+                translationToken = braille_number_dict[token_list[i]]
                 translated.append(translationToken)
+        print("Translation:", ''.join(translated))
 
-        # print translation
-        print(''.join(translated))
-    else: # english
+    else:  # English to Braille
         for char in string:
-            # check if capital
             if char.isupper():
-                translated.append('.....O') # capital
-                isCap = True
-            elif char.isdigit() :
+                translated.append('.....O')  # Capital letter indicator
+            if char.lower() in braille_letter_dict:
+                translated.append(braille_letter_dict[char.lower()])
+            elif char.isdigit():  # Numbers
                 if not isNum:
-                    translated.append('.O.OOO') 
+                    translated.append('.O.OOO')  # Number sign
                     isNum = True
-
-            if char.lower() in braille_letter_dict: 
-                    translated.append(braille_letter_dict[char.lower()])
-            elif isNum and char in braille_number_dict:
                 translated.append(braille_number_dict[char])
-            else:
-                translated.append('') # if char not found then append empty string
+            elif char == ' ':  # Space
+                translated.append('......')
+        print("Translation:", ''.join(translated))
 
-        print(''.join(translated))
 
 if __name__ == "__main__":  # Main guard
         argument = sys.argv[1]
