@@ -1,6 +1,5 @@
 import sys
 
-
 # define a dictionary that maps each letter of the alphabet to its corresponding Braille character
 braille_dict_alpha = {
     'a': 'O.....', 'b': 'O.O...', 'c': 'OO....', 'd': 'OO.O..', 'e': 'O..O..', 'f': 'OOO...', 'g': 'OOOO..', 'h': 'O.OO..', 'i': '.OO...', 'j': '.OOO..',
@@ -16,7 +15,16 @@ braille_dict_num = {
 braille_dict_alpha_reverse = {value: key for key, value in braille_dict_alpha.items()}
 braille_dict_num_reverse = {value: key for key, value in braille_dict_num.items()}
 
-#function that will check user input
+#helper function
+def is_number_braille(substring):
+    return substring == braille_dict_alpha['number']
+
+def is_capital_braille(substring):
+    return substring == braille_dict_alpha['capital']
+
+def is_space_braille(substring):
+    return substring == braille_dict_alpha[' ']
+
 def if_braille_format(user_input):
   if len(user_input) % 6 != 0:
     return False
@@ -24,6 +32,8 @@ def if_braille_format(user_input):
     return False
   else:
     return True
+
+
 
 def convert_to_braille(user_input):
   converted_text = ""
@@ -34,7 +44,6 @@ def convert_to_braille(user_input):
       converted_text += braille_dict_alpha['capital']
       
     if character.isdigit():
-      
       if not is_num:
          converted_text += braille_dict_alpha['number']
          is_num = True
@@ -43,46 +52,43 @@ def convert_to_braille(user_input):
     
     if character == braille_dict_alpha_reverse['......']:
       is_num = False
+      
     converted_text += braille_dict_alpha[character.lower()]
-    
   return converted_text
   
 def convert_to_text(user_input):
-  
-  is_num = False
-  is_capital = False
-  
-  converted_text = ""
-  
-  #split string into 6-character substrings
-  substrings = [user_input[i:i+6] for i in range(0, len(user_input), 6)]
-  
-  #iterate through the substrings and convert each substring to its corresponding letter
-  for substring in substrings:   
-    if substring == braille_dict_alpha['number']:
-      is_num = True
-      continue
-    else:
-      if substring == braille_dict_alpha[' ']:
-        converted_text += braille_dict_alpha_reverse[substring]
-        is_num = False
-      if is_num:
-        converted_text += braille_dict_num_reverse[substring]
-        continue
-      if substring in braille_dict_alpha_reverse:
-        if substring == braille_dict_alpha['capital']:
-          is_capital = True
-          continue
-        if is_capital:
-          converted_text += braille_dict_alpha_reverse[substring].capitalize()
-          is_capital = False
+    is_num = False
+    is_capital = False
+    converted_text = ""
+
+    # Split string into 6-character substrings
+    substrings = [user_input[i:i+6] for i in range(0, len(user_input), 6)]
+
+    # Iterate through the substrings and convert each substring to its corresponding letter
+    for substring in substrings:
+        if is_number_braille(substring):
+            is_num = True
+            continue
+        elif is_space_braille(substring):
+            converted_text += braille_dict_alpha_reverse[substring]
+            is_num = False
+        elif is_num:
+            converted_text += braille_dict_num_reverse[substring]
+            continue
+        elif is_capital_braille(substring):
+            is_capital = True
+            continue
+        elif substring in braille_dict_alpha_reverse:
+            if is_capital:
+                converted_text += braille_dict_alpha_reverse[substring].capitalize()
+                is_capital = False
+            else:
+                converted_text += braille_dict_alpha_reverse[substring]
         else:
-          converted_text += braille_dict_alpha_reverse[substring]
-      else:
-        convert_to_braille(user_input)
-        break
-    
-  return converted_text
+            convert_to_braille(user_input)
+            break
+
+    return converted_text
 
 
 if __name__ == "__main__":
@@ -94,5 +100,4 @@ if __name__ == "__main__":
       print(convert_to_text(user_input))
     else:
       print(convert_to_braille(user_input))
-    
     
