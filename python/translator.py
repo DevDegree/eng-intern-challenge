@@ -171,7 +171,7 @@ def translator(string):
             elif isNum and token_list[i] in braille_number_dict:  # Numbers
                 translationToken = braille_number_dict[token_list[i]]
                 translated.append(translationToken)
-        print("Translation:", ''.join(translated))
+        print(''.join(translated))
 
     else:  # English to Braille
         for char in string:
@@ -186,9 +186,14 @@ def translator(string):
                 translated.append(braille_number_dict[char])
             elif char == ' ':  # Space
                 translated.append('......')
-        print("Translation:", ''.join(translated))
+        print(''.join(translated))
 
+
+# if __name__ == "__main__":  # Main guard
+#         argument = sys.argv[1]
+#         translator(argument)
 
 if __name__ == "__main__":  # Main guard
-        argument = sys.argv[1]
-        translator(argument)
+        # Join all arguments provided (from 1 onwards) into a single string
+        arguments = ' '.join(sys.argv[1:])
+        translator(arguments)
