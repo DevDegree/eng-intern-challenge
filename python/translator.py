@@ -105,13 +105,15 @@ def englishToBraille(str1):
 
 # Have a main function that will run commands for us
 def main():
-    str1 = ' '.join(sys.argv[1:])
+    str1 = ' '.join(sys.argv[1:]).strip()
     translated_string = ''
     # determine if our input str1 is from the braille alphabet or the english alphabet
     if all(c in ('O', '.') for c in str1):
         translated_string = brailleToEnglish(str1)
     else:
         translated_string = englishToBraille(str1)
+
+    print(translated_string)
 
     return translated_string
 
