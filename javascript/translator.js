@@ -204,4 +204,12 @@ function brailleToEng(word){
     return translation;
 }
 
-console.log(isBrailleOrEnglish(process.argv[2]))
+var thirdArguementInputArr = new Array();
+
+if(process.argv.length > 3){
+    for(i = 2; i < process.argv.length; i++){
+        thirdArguementInputArr.push(process.argv[i])
+    }
+}
+
+console.log(isBrailleOrEnglish(thirdArguementInputArr.join(" ")));
