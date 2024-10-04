@@ -158,7 +158,7 @@ class Translator():
  
 def main():
     if len(sys.argv) > 1:
-        text = sys.argv[1]
+        text = ' '.join(sys.argv[1:])
         #print(text)
     else:
         print("Need argument usage: python translator.py <text>", file=sys.stderr)
