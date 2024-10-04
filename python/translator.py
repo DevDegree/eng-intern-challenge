@@ -25,6 +25,9 @@ class BrailleTranslator:
           '.OOO..': ('j', '0'),
           
           # Letters only
+          # Note: 'O..OO.' will always return letter 'o' as per challenge requirements.
+          # The challenge doesn't specify handling '>' (which has the same braile pattern as 'o',
+          # so we're interpreting this pattern solely as the letter 'o'.
           'O...O.': 'k', 'O.O.O.': 'l', 'OO..O.': 'm', 'OO.OO.': 'n', 'O..OO.': 'o',
           'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't',
           'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y',
@@ -33,12 +36,14 @@ class BrailleTranslator:
           # Special symbols
           '.....O': 'capital follows',
           '.O.OOO': 'number follows',
-          '......': 'space',
+          '......': ' ',
           
           # Punctuation
           '..OO.O': '.', '..O...': ',', '..O.OO': '?', '..OOO.': '!',
           '..OO..': ':', '..O.O.': ';', '....OO': '-', '.O..O.': '/',
-          '.OO..O': '<', 'O..OO.': '>', 'O.O..O': '(', '.O.OO.': ')'
+          '.OO..O': '<', 'O.O..O': '(', '.O.OO.': ')'
+
+          
         }
         return braille_to_english_dict
 
@@ -72,7 +77,7 @@ class BrailleTranslator:
         return english_to_braille_dict
 
 
-    def string_to_translate(self, input_str):
+    def translate(self, input_str):
         
         """
         Determines whether the input string is English or Braille. 
@@ -82,27 +87,50 @@ class BrailleTranslator:
       
             chunk = input_str[i:i+6]
             if chunk not in self.braille_to_english_dict.keys():
-                return "English"
-            
-        return "Braille"
+                print("Type is English:")
+                return self.translate_english(input_str)
+        print("Type is Braille")    
+        result = self.translate_braille(input_str)
+        return result
           
     
 
-    def translate_braille():
+    def translate_braille(self, input_str):
         """
-        Pattern match every 6 symbols. If capital or first number; prefix with relevant 6 symbols
-        otherwise 6 symbols for letter, number, space or punctuation.
+        Translates a Braille string to English, handling capital letters, numbers, lowercase letters, punctuation and spaces.
         """
-        return 
+        result = []
+        number_follows = False
+        capital_follows = False
+        for i in range(0, len(input_str), 6):
+            chunk = input_str[i:i+6]
+            if chunk == '.....O' :
+                capital_follows = True
+                continue
+            elif chunk == '.O.OOO':
+                number_follows = True
+                continue
+            
+            char = self.braille_to_english_dict[chunk]
+            if capital_follows:
+                char = char[0].upper()
+                capital_follows = False
+            if type(char) == tuple:
+                if number_follows:
+                    char = char[1]
+                else:
+                    char = char[0]
+            result.append(char)
+        return ''.join(result)
 
 
-    def translate_english():
+    def translate_english(self, input_str):
         """
         pattern match every letter, number, space and other symbols to the braille configuration.
         include prefix for capital letters and first number. 
         """
-        return 
 
+        pass
 
 if __name__ == "__main__":
     # Test code
@@ -112,9 +140,9 @@ if __name__ == "__main__":
     print("\nTesting english_to_braille_dict:")
     print(f"'a' translates to: {brailletranslator.english_to_braille_dict['a']}")
     print("Testing string_to_translate with braille string")
-    print(brailletranslator.string_to_translate(".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."))
+    print(brailletranslator.translate(".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."))
     print("Testing string_to_translate with english string")
-    print(brailletranslator.string_to_translate("Hello World!"))
+    print(brailletranslator.translate("Hello World!"))
 
 
 
