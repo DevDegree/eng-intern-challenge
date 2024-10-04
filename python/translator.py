@@ -33,28 +33,31 @@ def if_braille_format(user_input):
   else:
     return True
 
-
-
 def convert_to_braille(user_input):
-  converted_text = ""
-  is_num = False
-  # iterate through the user input and convert each letter to its corresponding Braille character
-  for character in user_input:
-    if character.isupper():
-      converted_text += braille_dict_alpha['capital']
-      
-    if character.isdigit():
-      if not is_num:
-         converted_text += braille_dict_alpha['number']
-         is_num = True
-      converted_text += braille_dict_num[character]
-      continue
-    
-    if character == braille_dict_alpha_reverse['......']:
-      is_num = False
-      
-    converted_text += braille_dict_alpha[character.lower()]
-  return converted_text
+    converted_text = ""
+    is_num = False
+    # Iterate through the user input and convert each letter to its corresponding Braille character
+    for character in user_input:
+        # Handle uppercase characters
+        if character.isupper():
+            converted_text += braille_dict_alpha['capital']
+
+        # Handle digits
+        if character.isdigit():
+            if not is_num:
+                converted_text += braille_dict_alpha['number']
+                is_num = True
+            converted_text += braille_dict_num[character]
+            continue
+
+        # Reset number flag if a space is encountered
+        if character == ' ':
+            is_num = False
+
+        # Convert lowercase letters to Braille
+        converted_text += braille_dict_alpha[character.lower()]
+
+    return converted_text
   
 def convert_to_text(user_input):
     is_num = False
