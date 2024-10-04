@@ -93,6 +93,7 @@ def brailleTranslator(inputs):
     res = []
     # Label type of input
     translateToEng = False
+    toBraille = False
     for inp in inputs:
         # If the input is Braille, we translate it to English
         if isBraille(inp):
@@ -114,7 +115,6 @@ if __name__ == '__main__':
     if not inputs:
         print('Please offer inputs!')
         sys.exit(0)
-    
     res = brailleTranslator(inputs)
     print(res)
         
