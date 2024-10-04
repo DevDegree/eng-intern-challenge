@@ -143,9 +143,8 @@ def translator(string):
             else:
                 translated.append('') # if char not found then append empty string
 
-        print("Translation:", ''.join(translated))
+        return ''.join(translated)
 
 if __name__ == "__main__":  # Main guard
         argument = sys.argv[1]
-        print("You provided:", argument)
         translator(argument)
