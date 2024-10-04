@@ -124,7 +124,7 @@ def translator(string):
                 translated.append(translationToken)
 
         # print translation
-        print("Translation:", ''.join(translated))
+        print(''.join(translated))
     else: # english
         for char in string:
             # check if capital
