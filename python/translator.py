@@ -1,4 +1,5 @@
 # Author: Christina N
+import sys
 
 braille_letter_dict = {
 
@@ -144,8 +145,7 @@ def translator(string):
 
         print("Translation:", ''.join(translated))
 
-# translator('Hello world')  # Example English input
-# translator('.....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..')
-# translator('42')
-# translator('Abc 123')
-# translator('.....OO.....O.O...OO...........O.OOOO.....O.O...OO....')
+if __name__ == "__main__":
+    # Get input from command line
+    input_string = input("Enter text to translate (Braille or English): ")
+    translator(input_string)
