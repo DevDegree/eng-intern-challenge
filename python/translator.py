@@ -1,86 +1,71 @@
 import sys
 
 def translator(arguments):
-    result = ""
-    for argument in arguments:
-        result += translate_single_argument(argument) + ""  # Add space between arguments
-    return result.strip()  # Remove trailing space
+    input_string = " ".join(arguments)
+    if set(input_string).issubset(set("O.")):
+        return braille_to_text(input_string)
+    else:
+        return text_to_braille(input_string)
 
-def translate_single_argument(argument):
+def braille_to_text(braille):
     result = ""
     is_number_mode = False
     capitalize_next = False
+    i = 0
+    while i < len(braille):
+        braille_char = braille[i:i+6]
+        eng_char = brailleToEng(braille_char)
+        
+        if eng_char == "CAPITAL":
+            capitalize_next = True
+        elif eng_char == "NUMBER":
+            is_number_mode = True
+        elif eng_char == " ":
+            is_number_mode = False
+            result += eng_char
+        else:
+            if capitalize_next:
+                result += eng_char.upper()
+                capitalize_next = False
+            elif is_number_mode:
+                result += str("1234567890"["abcdefghij".index(eng_char.lower())])
+            else:
+                result += eng_char.lower()
+        i += 6
+    return result
 
-    if argument[0] == "O" or argument[0] == ".":  # Braille to English
-        for i in range(0, len(argument), 6):
-            braille_char = argument[i:i+6]
-            eng_char = brailleToEng(braille_char)
-            
-            if eng_char == "CAPITAL":
-                capitalize_next = True
-            elif eng_char == "NUMBER":
+def text_to_braille(text):
+    result = ""
+    is_number_mode = False
+    for char in text:
+        if char.isupper():
+            result += engToBraille("CAPITAL")
+            result += engToBraille(char.lower())
+        elif char.isdigit():
+            if not is_number_mode:
+                result += engToBraille("NUMBER")
                 is_number_mode = True
-            elif eng_char == " ":
-                is_number_mode = False  # Reset number mode after a space
-                result += eng_char
-            else:
-                if capitalize_next:
-                    result += eng_char.upper()
-                    capitalize_next = False
-                elif is_number_mode:
-                    if eng_char.isdigit():  # Only allow digits in number mode
-                        result += eng_char
-                    else:
-                        # If a non-digit is found, exit number mode
-                        is_number_mode = False
-                        result += eng_char.lower()
-                else:
-                    result += eng_char.lower()
-    else:  # English to Braille
-        for eng_char in argument:
-            if eng_char.isupper():
-                result += engToBraille("CAPITAL")
-                result += engToBraille(eng_char.upper())
-            elif eng_char.isdigit():
-                if not is_number_mode:
-                    result += engToBraille("NUMBER")
-                    is_number_mode = True
-                result += engToBraille(eng_char)
-            else:
-                if eng_char == " ":
-                    is_number_mode = False
-                result += engToBraille(eng_char)
-    
+            result += engToBraille("abcdefghij"["1234567890".index(char)])
+        else:
+            if char == " ":
+                is_number_mode = False
+            result += engToBraille(char.lower())
     return result
 
 def engToBraille(string):
     switcher = {
-        "A": "O.....", "B": "O.O...", "C": "OO....", "D": "OO.O..", "E": "O..O..",
-        "F": "OOO...", "G": "OOOO..", "H": "O.OO..", "I": ".OO...", "J": ".OOO..",
-        "K": "O...O.", "L": "O.O.O.", "M": "OO..O.", "N": "OO.OO.", "O": "O..OO.",
-        "P": "OOO.O.", "Q": "OOOOO.", "R": "O.OOO.", "S": ".OO.O.", "T": ".OOOO.",
-        "U": "O...OO", "V": "O.O.OO", "W": ".OOO.O", "X": "OO..OO", "Y": "OO.OOO",
-        "Z": "O..OOO",
-        "1": ".O....", "2": ".OO...", "3": ".O.O..", "4": ".O.OO.", "5": ".O..O.",
-        "6": ".OOO..", "7": ".OOOO.", "8": ".O.OOO", "9": ".OO.O.", "0": ".OO.OO",
-        "CAPITAL": ".....O", "NUMBER": "...O..", " ": "......",
-        ".": "....OO", ",": "...OO.", "!": "...OOO", "?": "...O.O"
+        "a": "O.....", "b": "O.O...", "c": "OO....", "d": "OO.O..", "e": "O..O..",
+        "f": "OOO...", "g": "OOOO..", "h": "O.OO..", "i": ".OO...", "j": ".OOO..",
+        "k": "O...O.", "l": "O.O.O.", "m": "OO..O.", "n": "OO.OO.", "o": "O..OO.",
+        "p": "OOO.O.", "q": "OOOOO.", "r": "O.OOO.", "s": ".OO.O.", "t": ".OOOO.",
+        "u": "O...OO", "v": "O.O.OO", "w": ".OOO.O", "x": "OO..OO", "y": "OO.OOO",
+        "z": "O..OOO",
+        "CAPITAL": ".....O", "NUMBER": ".O.OOO", " ": "......"
     }
     return switcher.get(string, "")
 
 def brailleToEng(string):
-    switcher = {
-        "O.....": "A", "O.O...": "B", "OO....": "C", "OO.O..": "D", "O..O..": "E",
-        "OOO...": "F", "OOOO..": "G", "O.OO..": "H", ".OO...": "I", ".OOO..": "J",
-        "O...O.": "K", "O.O.O.": "L", "OO..O.": "M", "OO.OO.": "N", "O..OO.": "O",
-        "OOO.O.": "P", "OOOOO.": "Q", "O.OOO.": "R", ".OO.O.": "S", ".OOOO.": "T",
-        "O...OO": "U", "O.O.OO": "V", ".OOO.O": "W", "OO..OO": "X", "OO.OOO": "Y",
-        "O..OOO": "Z",
-        ".O....": "1", ".OO...": "2", ".O.O..": "3", ".O.OO.": "4", ".O..O.": "5",
-        ".OOO..": "6", ".OOOO.": "7", ".O.OOO": "8", ".OO.O.": "9", ".OO.OO": "0",
-        ".....O": "CAPITAL", "...O..": "NUMBER", "......": " ",
-        "....OO": ".", "...OO.": ",", "...OOO": "!", "...O.O": "?"
-    }
+    switcher = {v: k for k, v in engToBraille.items()}
     return switcher.get(string, "")
 
 if __name__ == "__main__":
