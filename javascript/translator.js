@@ -1,3 +1,12 @@
+/***
+* Huu Thang Tran
+* Mail: thanghuu.work@gmail.com
+* Date: 3rd Octorber
+* translator.js :A script for translating English text to Braille and vice versa.
+*       this script handles translation mappings, input processing, and output formatting.
+***/
+
+
 //============Object to hold key-value pair for the E-B translation===============
 
 
@@ -90,8 +99,6 @@ function isInt(char) {
     return /^\d$/.test(char)
 }
 
-
-
 const translateEngToBraille = function(string) {
     // Variable
     let result = '' // The return result
@@ -122,6 +129,7 @@ const translateEngToBraille = function(string) {
             else  result += engToBraille[string[i]]; // Add the Braille for the lowercase character
         } 
     }
+
     return result
 }
 
@@ -161,14 +169,12 @@ const translateBrailleToEng = function(string) {
             } else result += brailleToEng[segment][0]
     }
 
-
-
     return result
 }
 
 //============CommandLineArgument===============
 // Get the input string from user
 let input = process.argv.slice(2).join(' ')
-// if input doesn't contain any . it is not Braille
+// If input doesn't contain any . it is not Braille
 if (!input.includes('.')) console.log(translateEngToBraille(input)) 
 else console.log(translateBrailleToEng(input))
