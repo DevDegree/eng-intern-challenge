@@ -1,34 +1,42 @@
 import sys
 
-argument = sys.argv[1]
+def translator(arguments):
+    result = ""
+    for argument in arguments:
+        result += translate_single_argument(argument) + ""  # Add space between arguments
+    return result.strip()  # Remove trailing space
 
-def translator(argument):
+def translate_single_argument(argument):
     result = ""
     is_number_mode = False
     capitalize_next = False
 
-    if argument[0] == "O" or argument[0] == ".":
-        # Braille to English
+    if argument[0] == "O" or argument[0] == ".":  # Braille to English
         for i in range(0, len(argument), 6):
             braille_char = argument[i:i+6]
             eng_char = brailleToEng(braille_char)
+            
             if eng_char == "CAPITAL":
                 capitalize_next = True
             elif eng_char == "NUMBER":
                 is_number_mode = True
             elif eng_char == " ":
-                is_number_mode = False
+                is_number_mode = False  # Reset number mode after a space
                 result += eng_char
             else:
                 if capitalize_next:
                     result += eng_char.upper()
                     capitalize_next = False
-                elif is_number_mode and eng_char.isdigit():
-                    result += eng_char
+                elif is_number_mode:
+                    if eng_char.isdigit():  # Only allow digits in number mode
+                        result += eng_char
+                    else:
+                        # If a non-digit is found, exit number mode
+                        is_number_mode = False
+                        result += eng_char.lower()
                 else:
                     result += eng_char.lower()
-    else:
-        # English to Braille
+    else:  # English to Braille
         for eng_char in argument:
             if eng_char.isupper():
                 result += engToBraille("CAPITAL")
@@ -42,6 +50,7 @@ def translator(argument):
                 if eng_char == " ":
                     is_number_mode = False
                 result += engToBraille(eng_char)
+    
     return result
 
 def engToBraille(string):
@@ -57,7 +66,7 @@ def engToBraille(string):
         "CAPITAL": ".....O", "NUMBER": "...O..", " ": "......",
         ".": "....OO", ",": "...OO.", "!": "...OOO", "?": "...O.O"
     }
-    return switcher.get(string, "?")
+    return switcher.get(string, "")
 
 def brailleToEng(string):
     switcher = {
@@ -72,6 +81,8 @@ def brailleToEng(string):
         ".....O": "CAPITAL", "...O..": "NUMBER", "......": " ",
         "....OO": ".", "...OO.": ",", "...OOO": "!", "...O.O": "?"
     }
-    return switcher.get(string, "?")
+    return switcher.get(string, "")
 
-print(translator(argument))
+if __name__ == "__main__":
+    arguments = sys.argv[1:]
+    print(translator(arguments))
