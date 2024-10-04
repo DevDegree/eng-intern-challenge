@@ -72,11 +72,21 @@ class BrailleTranslator:
         return english_to_braille_dict
 
 
-    def string_to_translate():
+    def string_to_translate(self, input_str):
+        
         """
-        If string contains symbol or space that is not 'O' or '.' then english, else it is braille.
+        Determines whether the input string is English or Braille. 
+        If 6 character string does not match a known Braille pattern, the input_str is English
         """
-        return
+        for i in range(0, len(input_str),6):
+      
+            chunk = input_str[i:i+6]
+            if chunk not in self.braille_to_english_dict.keys():
+                return "English"
+            
+        return "Braille"
+          
+    
 
     def translate_braille():
         """
@@ -101,6 +111,10 @@ if __name__ == "__main__":
     print(f"'O.....' translates to: {brailletranslator.braille_to_english_dict['O.....']}")
     print("\nTesting english_to_braille_dict:")
     print(f"'a' translates to: {brailletranslator.english_to_braille_dict['a']}")
+    print("Testing string_to_translate with braille string")
+    print(brailletranslator.string_to_translate(".....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O.."))
+    print("Testing string_to_translate with english string")
+    print(brailletranslator.string_to_translate("Hello World!"))
 
 
 
