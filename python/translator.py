@@ -44,7 +44,7 @@ def to_braille(text):
     return ''.join(result)
 
 def to_english(braille):
-    result = []
+    result=[]
     i = 0
     is_capital = False
     is_number = False
