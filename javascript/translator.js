@@ -81,7 +81,7 @@ const engToBraille = { // only a-zA-Z0-9\s
     '0': ".OOO..",
     "cap_follow": ".....O",
     "number_follow": ".O.OOO",
-    ' ': "......"
+    "space": "......"
 };
 
 //============Function===============
@@ -101,21 +101,26 @@ const translateEngToBraille = function(string) {
         
         //Check if the current character is number
         if (isInt(string[i])) {
-            if(!isNumber) { // Faster process, dont need to add Number_follow everytime
+            if(!isNumberTag) { // Faster process, dont need to add Number_follow everytime
                 result += engToBraille["number_follow"]
-                isNumber = true
+                isNumberTag = true
             }
             result += engToBraille[string[i]]
         }
         
-        else{ // If the current is not a number literal
+        else { // If the current is not a number literal
             isNumberTag = false //reset the opening tag
             
             // If the next character not lower => then it can only be space and lower
-            if (string[i] !== string[i].toLowerCase()) result += engToBraille["cap_follow"] + engToBraille[string[i].toLowerCase()] // Char tag follow with the lower case char
-            
+            if (string[i] !== string[i].toLowerCase())  result += engToBraille["cap_follow"] + engToBraille[string[i].toLowerCase()] // Char tag follow with the lower case char
+                
             // It can only be space and lower
-            else result += engToBraille[string[i]]        } 
+            else if (string[i] === ' ')  {
+                result += engToBraille["space"] // Handle spaces
+            }
+                
+            else  result += engToBraille[string[i]]; // Add the Braille for the lowercase character
+        } 
     }
     return result
 }
@@ -152,6 +157,7 @@ const translateBrailleToEng = function(string) {
             else if (isCapTag) { // If it is capitallize then insert char at index [0] in the k-v object and capital it
                 result += brailleToEng[segment][0].toUpperCase(); //Append
                 isCapTag = false; // Reset cap tag
+
             } else result += brailleToEng[segment][0]
     }
 
@@ -162,7 +168,7 @@ const translateBrailleToEng = function(string) {
 
 //============CommandLineArgument===============
 // Get the input string from user
-let input = process.argv.slice(2).join('')
+let input = process.argv.slice(2).join(' ')
 // if input doesn't contain any . it is not Braille
 if (!input.includes('.')) console.log(translateEngToBraille(input)) 
 else console.log(translateBrailleToEng(input))
