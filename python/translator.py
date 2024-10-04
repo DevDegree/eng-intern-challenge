@@ -149,13 +149,3 @@ def translator(string):
 # translator('42')
 # translator('Abc 123')
 # translator('.....OO.....O.O...OO...........O.OOOO.....O.O...OO....')
-
-def main():
-    # Get input from command line arguments
-    input_strings = sys.argv[1:]  # Ignore the first argument which is the script name
-    for input_string in input_strings:
-        output = translator(input_string)  # Call the translator function
-        print(output)  # Print the output
-
-if __name__ == '__main__':
-    main()
