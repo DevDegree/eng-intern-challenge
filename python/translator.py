@@ -23,15 +23,13 @@ braille_to_english_dict = {v: k for k, v in english_to_braile_dict.items()}
 braille_to_numbers_dict = {v: k for k, v in numbers_to_braille_dict.items()}
 
 def parse_input():
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 2:
         print("Usage: python translator.py <mode> <text>")
         sys.exit(1)
     
-    # Either "english" or "braille"
-    mode = sys.argv[1].lower()
     # Concatenate all arguments as input text
-    text = ' '.join(sys.argv[2:]) 
-    return mode, text
+    text = ' '.join(sys.argv[1:]) 
+    return text
 
 def english_to_braille(text):
     result = []
@@ -83,8 +81,17 @@ def braille_to_english(braille_text):
     
     return ''.join(result)
 
+def check_input(text):
+    if all(char in ['.', 'O'] for char in text) and len(text) % 6 == 0:
+    # Check if the length of the string is divisible by 6
+        return 'braille'
+
+    return 'english'
+
 def main():
-    mode, text = parse_input()
+    text = parse_input()
+
+    mode = check_input(text)
 
     if mode == 'english':
         print(english_to_braille(text))
