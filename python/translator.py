@@ -1,6 +1,3 @@
-
-
-import string
 #Approach:
 #Two functions to create the braille-english dictionaries
 #One function to determine if braille or english
@@ -23,12 +20,8 @@ class BrailleTranslator:
           'O.....': ('a', '1'), 'O.O...': ('b', '2'), 'OO....': ('c', '3'), 
           'OO.O..': ('d', '4'), 'O..O..': ('e', '5'), 'OOO...': ('f', '6'), 
           'OOOO..': ('g', '7'), 'O.OO..': ('h', '8'), '.OO...': ('i', '9'), 
-          '.OOO..': ('j', '0'),
-          
+          '.OOO..': ('j', '0'),     
           # Letters only
-          # Note: 'O..OO.' will always return letter 'o' as per challenge requirements.
-          # The challenge doesn't specify handling '>' (which has the same braile pattern as 'o',
-          # so we're interpreting this pattern solely as the letter 'o'.
           # Note: 'O..OO.' will always return letter 'o' as per challenge requirements.
           # The challenge doesn't specify handling '>' (which has the same braile pattern as 'o',
           # so we're interpreting this pattern solely as the letter 'o'.
@@ -36,22 +29,15 @@ class BrailleTranslator:
           'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't',
           'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y',
           'O..OOO': 'z',
-          
           # Special symbols
           '.....O': 'capital follows',
           '.O.OOO': 'number follows',
           '......': ' ',
           '......': ' ',
-          
           # Punctuation
           '..OO.O': '.', '..O...': ',', '..O.OO': '?', '..OOO.': '!',
           '..OO..': ':', '..O.O.': ';', '....OO': '-', '.O..O.': '/',
-          '.OO..O': '<', 'O.O..O': '(', '.O.OO.': ')'
-
-          
-          '.OO..O': '<', 'O.O..O': '(', '.O.OO.': ')'
-
-          
+          '.OO..O': '<', 'O.O..O': '(', '.O.OO.': ')',
         }
         return braille_to_english_dict
 
@@ -67,16 +53,14 @@ class BrailleTranslator:
           'p': 'OOO.O.', 'q': 'OOOOO.', 'r': 'O.OOO.', 's': '.OO.O.', 't': '.OOOO.',
           'u': 'O...OO', 'v': 'O.O.OO', 'w': '.OOO.O', 'x': 'OO..OO', 'y': 'OO.OOO',
           'z': 'O..OOO',
-
           # Numbers
           '1': 'O.....', '2': 'O.O...', '3': 'OO....', '4': 'OO.O..', '5': 'O..O..',
           '6': 'OOO...', '7': 'OOOO..', '8': 'O.OO..', '9': '.OO...', '0': '.OOO..',
-
           # Special symbols
           'capital': '.....O',  # 'capital follows' indicator
           'number': '.O.OOO',   # 'number follows' indicator
+          'decimal': '.O.OO.',
           ' ': '......',        # space
-
           # Punctuation
           '.': '..OO.O', ',': '..O...', '?': '..O.OO', '!': '..OOO.',
           ':': '..OO..', ';': '..O.O.', '-': '....OO', '/': '.O..O.',
@@ -84,8 +68,6 @@ class BrailleTranslator:
         }
         return english_to_braille_dict
 
-
-    def translate(self, input_str):
     def translate(self, input_str):
         
         """
@@ -93,18 +75,15 @@ class BrailleTranslator:
         If 6 character string does not match a known Braille pattern, the input_str is English
         """
         for i in range(0, len(input_str),6):
-      
             chunk = input_str[i:i+6]
             if chunk not in self.braille_to_english_dict.keys():
                 print("Type is English:")
                 return self.translate_english(input_str)
         print("Type is Braille")    
         result = self.translate_braille(input_str)
-        return ''.join(result)
-          
+        return ''.join(result)     
     
 
-    def translate_braille(self, input_str):
     def translate_braille(self, input_str):
         """
         Translates a Braille string to English, handling capital letters, numbers, lowercase letters, punctuation and spaces.
