@@ -1,5 +1,6 @@
 
 
+import string
 #Approach:
 #Two functions to create the braille-english dictionaries
 #One function to determine if braille or english
@@ -28,6 +29,9 @@ class BrailleTranslator:
           # Note: 'O..OO.' will always return letter 'o' as per challenge requirements.
           # The challenge doesn't specify handling '>' (which has the same braile pattern as 'o',
           # so we're interpreting this pattern solely as the letter 'o'.
+          # Note: 'O..OO.' will always return letter 'o' as per challenge requirements.
+          # The challenge doesn't specify handling '>' (which has the same braile pattern as 'o',
+          # so we're interpreting this pattern solely as the letter 'o'.
           'O...O.': 'k', 'O.O.O.': 'l', 'OO..O.': 'm', 'OO.OO.': 'n', 'O..OO.': 'o',
           'OOO.O.': 'p', 'OOOOO.': 'q', 'O.OOO.': 'r', '.OO.O.': 's', '.OOOO.': 't',
           'O...OO': 'u', 'O.O.OO': 'v', '.OOO.O': 'w', 'OO..OO': 'x', 'OO.OOO': 'y',
@@ -37,10 +41,14 @@ class BrailleTranslator:
           '.....O': 'capital follows',
           '.O.OOO': 'number follows',
           '......': ' ',
+          '......': ' ',
           
           # Punctuation
           '..OO.O': '.', '..O...': ',', '..O.OO': '?', '..OOO.': '!',
           '..OO..': ':', '..O.O.': ';', '....OO': '-', '.O..O.': '/',
+          '.OO..O': '<', 'O.O..O': '(', '.O.OO.': ')'
+
+          
           '.OO..O': '<', 'O.O..O': '(', '.O.OO.': ')'
 
           
@@ -78,6 +86,7 @@ class BrailleTranslator:
 
 
     def translate(self, input_str):
+    def translate(self, input_str):
         
         """
         Determines whether the input string is English or Braille. 
@@ -91,10 +100,11 @@ class BrailleTranslator:
                 return self.translate_english(input_str)
         print("Type is Braille")    
         result = self.translate_braille(input_str)
-        return result
+        return ''.join(result)
           
     
 
+    def translate_braille(self, input_str):
     def translate_braille(self, input_str):
         """
         Translates a Braille string to English, handling capital letters, numbers, lowercase letters, punctuation and spaces.
@@ -126,11 +136,33 @@ class BrailleTranslator:
 
     def translate_english(self, input_str):
         """
-        pattern match every letter, number, space and other symbols to the braille configuration.
-        include prefix for capital letters and first number. 
+        Translates English to Braille, handling letters, numbers and symbols.
+        Includes prefix for captial letters and the first number appearing after a space.
         """
+        result = []
+        cap_prefix_req = False
+        num_prefix_req = True
+        for char in input_str:
+            if char.isupper():
+                cap_prefix_req = True
+                result.append(self.english_to_braille_dict['capital'])
+                continue
+            elif char.isnumeric():
+                if num_prefix_req:
+                    result.append(self.english_to_braille_dict['number'])
+                    num_prefix_req = False
+                result.append(self.english_to_braille_dict[char])
+                continue
+            elif char == ' ':
+                num_prefix_req = True
+            
+            if cap_prefix_req:
+                result.append(self.english_to_braille_dict[char.lower()])
+                cap_prefix_req = False
+            result.append(self.english_to_braille_dict[char])
+                
 
-        pass
+        return ''.join(result)
 
 if __name__ == "__main__":
     # Test code
