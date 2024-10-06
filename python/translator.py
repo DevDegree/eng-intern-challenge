@@ -178,12 +178,15 @@ class BrailleTranslator:
 
         return ''.join(result)
 
-if __name__ == "__main__":
+def main():
     translator = BrailleTranslator()
     output = translator.translate("Abc 123 xYz")
     print(output)
-    output_2 = translator.translate(".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO")
-    print(output_2)
+
+if __name__ == "__main__":
+    main()
+#     output_2 = translator.translate(".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO")
+#     print(output_2)
 
         
 # if __name__ == "__main__":
