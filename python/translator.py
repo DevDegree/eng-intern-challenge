@@ -1,7 +1,3 @@
-#Approach:
-#Two functions to create the braille-english dictionaries
-#One function to determine if braille or english
-#Two functions to translate
 class BrailleTranslator:
     def __init__(self):
         """
@@ -70,15 +66,27 @@ class BrailleTranslator:
     def translate(self, input_str):
         
         """
-        Determines whether the input string is English or Braille. 
-        If 6 character string does not match a known Braille pattern, the input_str is English
+        Translates between English and Braille. Automatically detects the input string type. 
+        If any 6-character chunk doesn't match a known Braille pattern, the entire output
+        is treated as English. 
         """
+        braille_str = True
+        # Check each 6-character chunk
         for i in range(0, len(input_str),6):
             chunk = input_str[i:i+6]
+            #If chunk is not in Braille dictionary, it is not Braille
             if chunk not in self.braille_to_english_dict.keys():
-                return self.translate_english(input_str)
-        result = self.translate_braille(input_str)
+                braille_str = False
+                break
+
+        # Translate based on input type
+        if braille_str:
+            result = self.translate_braille(input_str)
+        else:
+            result = self.translate_english(input_str)
+        
         return result 
+
     
 
 
@@ -96,10 +104,6 @@ class BrailleTranslator:
             chunk = input_str[i:i+6]
             char = self.braille_to_english_dict.get(chunk)
 
-
-            if char is None: # Invalid chunk encountered
-                continue  
-            
             # Handle special indicators
             if chunk == '.....O' : # Capital follows indicator
                 capital_follows = True
@@ -178,134 +182,23 @@ class BrailleTranslator:
 
         return ''.join(result)
 
-def main():
-    translator = BrailleTranslator()
-    output = translator.translate("Abc 123 xYz")
-    print(output)
 
 if __name__ == "__main__":
-    main()
-#     output_2 = translator.translate(".....OO.....O.O...OO...........O.OOOO.....O.O...OO..........OO..OO.....OOO.OOOO..OOO")
-#     print(output_2)
+    import sys
+    
+    # Check if command line arguments are provided
+    if len(sys.argv) < 2:
+        print("Error: arguments are missing!")
+        sys.exit(1)
+    
+    # Combine command-line arguments into a single string
+    input_str = " ".join(sys.argv[1:]).strip()
 
-        
-# if __name__ == "__main__":
-#     brailletranslator = BrailleTranslator()
+    # Create an instance of BrailleTranslator class
+    translator = BrailleTranslator()
 
-#     # Test 1: braille_to_english_dict
-#     test_input = "O....."
-#     expected_output = ('a', '1')
-#     result = brailletranslator.braille_to_english_dict[test_input]
-#     print("Testing braille_to_english_dict:")
-#     print(f"Input (Braille): {test_input}")
-#     print(f"Expected Output: {expected_output}")
-#     print(f"Actual Output: {result}")
-#     print(f"Test {'passed' if result == expected_output else 'failed'}")
-#     print()
+    # Translate input string
+    result = translator.translate(input_str)
 
-#     # Test 2: english_to_braille_dict
-#     test_input = "a"
-#     expected_output = "O....."
-#     result = brailletranslator.english_to_braille_dict[test_input]
-#     print("Testing english_to_braille_dict:")
-#     print(f"Input (English): {test_input}")
-#     print(f"Expected Output: {expected_output}")
-#     print(f"Actual Output: {result}")
-#     print(f"Test {'passed' if result == expected_output else 'failed'}")
-#     print()
-
-#     # Test 3: translate with Braille string
-#     test_input = ".....OO.OO..O..O..O.O.O.O.O.O.O..OO............O.OOO.OO..OO.O.OOO.O.O.O.OO.O....OOO."
-#     expected_output = "Hello World!"
-#     result = brailletranslator.translate(test_input)
-#     print("Testing translate with Braille string:")
-#     print(f"Input (Braille): {test_input}")
-#     print(f"Expected Output: {expected_output}")
-#     print(f"Actual Output: {result}")
-#     print(f"Test {'passed' if result == expected_output else 'failed'}")
-#     print()
-
-#     # Test 4: translate with English string
-#     test_input = "Hello World!"
-#     expected_output = ".....OO.OO..O..O..O.O.O.O.O.O.O..OO............O.OOO.OO..OO.O.OOO.O.O.O.OO.O....OOO."
-#     result = brailletranslator.translate(test_input)
-#     print("Testing translate with English string:")
-#     print(f"Input (English): {test_input}")
-#     print(f"Expected Output: {expected_output}")
-#     print(f"Actual Output: {result}")
-#     print(f"Test {'passed' if result == expected_output else 'failed'}")
-#     print()
-
-#     # Test 5: 'o' vs '>' distinction
-#     test_input = "O..OO..OO..OO..OO."
-#     expected_output = "o<>"
-#     result = brailletranslator.translate_braille(test_input)
-#     print("Testing 'o' vs '>' distinction:")
-#     print(f"Input (Braille): {test_input}")
-#     print(f"Expected Output: {expected_output}")
-#     print(f"Actual Output: {result}")
-#     print(f"Test {'passed' if result == expected_output else 'failed'}")
-
-
-#     # Test 6: Decimal number translation
-#     test_input = ".O.OOOOO.....O.OO.OO...."  # Braille for "3.14"
-#     expected_output = "3.3"
-#     result = brailletranslator.translate_braille(test_input)
-#     print("Testing decimal number translation:")
-#     print(f"Input (Braille): {test_input}")
-#     print(f"Expected Output: {expected_output}")
-#     print(f"Actual Output: {result}")
-#     print(f"Test {'passed' if result == expected_output else 'failed'}")
-
-#     # Test 7: Period at end of sentence
-#     test_input = "pi."
-#     expected_output = "OOO.O..OO.....OO.O"
-#     result = brailletranslator.translate_english(test_input)
-#     print("Testing simple sentence with period:")
-#     print(f"Input (English): {test_input}")
-#     print(f"Expected Output: {expected_output}")
-#     print(f"Actual Output: {result}")
-#     print(f"Test {'passed' if result == expected_output else 'failed'}")
-
-#     # Test 2: Sentence with decimal number and period
-#     test_input = "3.3."
-#     expected_output = ".O.OOOOO.....O.OO...OO.OOO......OO.O"
-#     result = brailletranslator.translate_english(test_input)
-#     print("\nTesting sentence with decimal number and period:")
-#     print(f"Input (English): {test_input}")
-#     print(f"Expected Output: {expected_output}")
-#     print(f"Actual Output: {result}")
-#     print(f"Test {'passed' if result == expected_output else 'failed'}")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # Print to console
+    print(result)
