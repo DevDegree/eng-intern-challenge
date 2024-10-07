@@ -65,7 +65,7 @@ def braille_to_english(braille: str) -> str:
     SPACE           = "......"
     CAPITAL_FOLLOWS = ".....O"  
     NUMBER_FOLLOWS  = ".O.OOO"
-    
+
     braille_chars = [braille[i:i+6] for i in range(0, len(braille), 6)]
     translation = []
     i = 0
@@ -73,7 +73,7 @@ def braille_to_english(braille: str) -> str:
         if braille_chars[i] == CAPITAL_FOLLOWS:
             i+=1
             translation.append(braille_to_alpha[braille_chars[i]].upper())  
-       
+
         elif braille_chars[i] == NUMBER_FOLLOWS:
             i+=1
             while i < len(braille_chars) and braille_chars[i] != SPACE:
@@ -84,7 +84,7 @@ def braille_to_english(braille: str) -> str:
         else:
             translation.append(braille_to_alpha[braille_chars[i]])
         i+=1
-    
+
     return ''.join(translation)    
 
 def english_to_braille(english: str) -> str:
@@ -101,23 +101,23 @@ def english_to_braille(english: str) -> str:
 
     english_chars = list(english)
     translation = []
-    for index, i in enumerate(english_chars)
-    	
+    for index, i in enumerate(english_chars):
+
         if i.isnumeric():
             if index == 0 or not english_chars[index-1].isnumeric():
                 translation.append(NUMBER_FOLLOWS) 
             braille = alpha_to_braille[num_to_alpha(i)]
             translation.append(braille)
-       
+
         elif i.isupper():
             translation.append(CAPITAL_FOLLOWS)
             braille = alpha_to_braille[i.lower()]
             translation.append(braille)
-        
+
         else:
             braille = alpha_to_braille[i]
             translation.append(braille)
-    
+
     return ''.join(translation)
 
 def translate_input(input: str):
@@ -152,4 +152,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
