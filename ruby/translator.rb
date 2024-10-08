@@ -1,6 +1,13 @@
+=begin
+ - When a Braille `capital follows` symbol is read, 
+ assume only the next symbol should be capitalized. 
+  - When a Braille `number follows` symbol is read, 
+  assume all following symbols are numbers until the next `space` symbol.
+=end
+
 argument = ARGV
 
-TRANSLATION = [
+LETTERS = [
   ['O.....', 'a'],
   ['O.O...', 'b'],
   ['OO....', 'c'],
@@ -29,9 +36,26 @@ TRANSLATION = [
   ['O..OOO', 'z'],
   ['......', ' '],
 ]
+
+NUMBERS = [
+  ['O.....', '1'],
+  ['O.O...', '2'],
+  ['OO....', '3'],
+  ['OO.O..', '4'],
+  ['O..O..', '5'],
+  ['OOO...', '6'],
+  ['OOOO..', '7'],
+  ['O.OO..', '8'],
+  ['.OO...', '9'],
+  ['.OOO..', '0'],
+]
   
-BRAILLE_ENG = TRANSLATION.to_h
-ENG_BRAILLE = TRANSLATION.map { |arr| arr.reverse }.to_h
+BRAILLE_ENG = LETTERS.to_h
+ENG_BRAILLE = LETTERS.map { |arr| arr.reverse }.to_h
+
+BRAILLE_ENG_NUMBERS = NUMBERS.to_h
+ENG_BRAILLE_NUMBERS = NUMBERS.map { |arr| arr.reverse }.to_h
+
 
 def braille_to_eng(input)
   braille_chars = []
@@ -43,9 +67,6 @@ def braille_to_eng(input)
     index += 6
   end
 
-  capital_follows = 0
-  number_follows = 0
-
   eng_chars = braille_chars.map do |char|
     BRAILLE_ENG[char]
   end
@@ -54,11 +75,28 @@ def braille_to_eng(input)
 end
 
 def eng_to_braille(input)
+  capital_follows = '.....O'
+  number_follows = '.O.OOO'
+  number_on = true
+
   translated_words = []
   input.each do |word|
-    translated_word = "" 
+    translated_word = ""
     word.each_char do |char|
-      translated_word << ENG_BRAILLE[char]
+      if ('0'..'9').include?(char)
+        translated_word << number_follows if number_on
+        translated_word << ENG_BRAILLE_NUMBERS[char]
+        number_on = false
+      elsif char == ' '
+        number_on = true
+        translated_word << ENG_BRAILLE[char]
+
+      elsif char == char.upcase
+        translated_word << capital_follows
+        translated_word << ENG_BRAILLE[char.downcase]
+      else
+        translated_word << ENG_BRAILLE[char]
+      end
     end
     translated_words << translated_word
   end
