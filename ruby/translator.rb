@@ -7,6 +7,7 @@
 
 argument = ARGV
 
+# Translation Setup
 LETTERS = [
   ['O.....', 'a'],
   ['O.O...', 'b'],
@@ -35,6 +36,8 @@ LETTERS = [
   ['OO.OOO', 'y'],
   ['O..OOO', 'z'],
   ['......', ' '],
+  ['.....O', 'capital follows'],
+  ['.O.OOO', 'number follows'],
 ]
 
 NUMBERS = [
@@ -57,6 +60,7 @@ BRAILLE_ENG_NUMBERS = NUMBERS.to_h
 ENG_BRAILLE_NUMBERS = NUMBERS.map { |arr| arr.reverse }.to_h
 
 
+# Braille to English
 def braille_to_eng(input)
   braille_chars = []
   index = 0
@@ -67,13 +71,36 @@ def braille_to_eng(input)
     index += 6
   end
 
+  capital_follows = false
+  number_follows = false
+
   eng_chars = braille_chars.map do |char|
-    BRAILLE_ENG[char]
+    if char == '.....O'
+      capital_follows = true
+      next
+    elsif char == '.O.OOO'
+      number_follows = true
+      next
+    end
+
+    if char == '......'
+      number_follows = false
+    end
+
+    if number_follows
+      BRAILLE_ENG_NUMBERS[char]
+    elsif capital_follows
+      capital_follows = false
+      BRAILLE_ENG[char].upcase
+    else
+      BRAILLE_ENG[char]
+    end
   end
 
   puts eng_chars.join
 end
 
+# English to Braille
 def eng_to_braille(input)
   capital_follows = '.....O'
   number_follows = '.O.OOO'
