@@ -1,6 +1,6 @@
 import sys
 
-
+# maps english alphanumeric numbers and special characters to braille
 e2b = {
     'a': 'O.....',
     'b': 'O.O...',
@@ -43,6 +43,7 @@ e2b = {
     '0': '.OOO..',
 }
 
+#maps braille to english alphabet a-z as well as special characters
 b2e = {
 '.....O': 'capital',
 '..OOOO': 'number',
@@ -74,6 +75,7 @@ b2e = {
 'OO.OOO': 'y',
 'O..OOO': 'z',
 }
+#maps braille numbers to number
 num2e = {
     'O.....': '1',
     'O.O...': '2',
@@ -88,7 +90,7 @@ num2e = {
 }
 
 
-
+#translates braille to english
 def B2E(input):
     result = ""
     number = False
@@ -105,19 +107,19 @@ def B2E(input):
         elif code == e2b['number']:
             number = True
             continue
-
-        if number:
+        elif code == e2b[' ']:
+            number = False
+            result += " "
+        elif number:
             result += num2e.get(code)
         elif capital:
             result += b2e.get(code).upper()
             capital = False
-        elif code == e2b[' ']:
-            number = False
-            result += " "
         else:
             result += b2e.get(code)
     return result
 
+#translates english to braille
 def E2B(input):
     result = ""
     number = False
@@ -137,9 +139,10 @@ def E2B(input):
             result += e2b.get(c)
     return result
 
+#checks if input is braille
 def is_braille(s):
     valid_chars = {'O', '.'}
-    if len(s.replace(' ', '')) %6 == 0:
+    if len(s) %6 == 0:
         for c in s:
             if c not in valid_chars:
                 return False
@@ -150,10 +153,10 @@ def is_braille(s):
 
 if __name__ == '__main__':
     input_str = ' '.join(sys.argv[1:])
-
+    
     if is_braille(input_str):
         # Input is Braille, translate to English
-        translated = B2E(input_str.replace(" ", ""))
+        translated = B2E(input_str)
     else:
         # Input is English, translate to Braille
         translated = E2B(input_str)
