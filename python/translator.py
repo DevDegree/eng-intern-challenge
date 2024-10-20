@@ -1,7 +1,17 @@
+"""
+This file provides a translation system between English text and Braille.
+
+Usage:
+- Input a string in either English or Braille.
+- The program detects whether the input is in Braille or English, and translates it accordingly.
+
+Dependencies:
+- sys: Used for handling command-line input.
+"""
+
 import sys
 
 BRAILLE_CHAR_LEN = 6
-
 
 # Maps Braille characters to english/numbers
 braille_to_english_map = {
@@ -41,21 +51,25 @@ def braille_to_english(text: str) -> str:
     number_mode = False
 
     for i in range(0, len(text), BRAILLE_CHAR_LEN):
-        braille_char = text[i:i+BRAILLE_CHAR_LEN]
+        braille_char = text[i:i+BRAILLE_CHAR_LEN] # Interpret 6 characters at a time
 
+        # Caps Lock
         if braille_char == english_to_braille_map["capital"]:
             capital_mode = True
             continue
+        # Nums Lock
         elif braille_char == english_to_braille_map["number"]:
             number_mode = True
             continue
         
+        # Translate number
         if number_mode:
-            if braille_char == english_to_braille_map[" "]:
+            if braille_char == english_to_braille_map[" "]: # Disable number_mode on space
                 number_mode = False
                 english_translation += " "
             else:
                 english_translation += braille_to_numbers_map[braille_char]
+        # Translate letter
         else:
             if capital_mode:
                 english_translation += braille_to_english_map[braille_char].upper()
@@ -65,25 +79,26 @@ def braille_to_english(text: str) -> str:
         
     return english_translation
 
-            
+# Function that takes english input and returns its translated braille representation 
 def english_to_braille(text: str) -> str:
     braille_translation = ""
     number_mode = False
-    
+       
     for char in text:
         if char.isnumeric():
             if not number_mode:
-                braille_translation += english_to_braille_map["number"]
+                braille_translation += english_to_braille_map["number"] # Add Number Follows in Braille
                 number_mode = True
         elif char.isupper():
-            braille_translation += english_to_braille_map["capital"]
+            braille_translation += english_to_braille_map["capital"] # Add Capital Follows in Braille
         elif char == " ":
-            number_mode = False
+            number_mode = False # Disable number_mode on space
             
         braille_translation += english_to_braille_map[char.lower()]
-    
+           
     return braille_translation
 
+# Function that takes either braille or text and translates it
 def braille_translator(text: str) -> str:
     if is_braille(text):
         return braille_to_english(text)
@@ -96,4 +111,4 @@ if __name__ == "__main__":
         translated_text = braille_translator(input_text)
         print(translated_text)
     else:
-        print("Please provide a string to translate.")
+        print("Invalid input, enter a string to translate")
