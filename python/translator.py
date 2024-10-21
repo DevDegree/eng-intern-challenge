@@ -52,6 +52,10 @@ def braille_to_english(text: str) -> str:
 
     for i in range(0, len(text), BRAILLE_CHAR_LEN):
         braille_char = text[i:i+BRAILLE_CHAR_LEN] # Interpret 6 characters at a time
+        
+        # Account for non translatable character in input
+        if braille_char not in braille_to_english_map and braille_char not in braille_to_numbers_map:
+            raise ValueError(f"Invalid braille character in input: {braille_char}")
 
         # Caps Lock
         if braille_char == english_to_braille_map["capital"]:
@@ -85,6 +89,10 @@ def english_to_braille(text: str) -> str:
     number_mode = False
        
     for char in text:
+        # Account for non translatable character in input
+        if char.lower() not in english_to_braille_map:
+            raise ValueError(f"Invalid character in input: {char}")
+        
         if char.isnumeric():
             if not number_mode:
                 braille_translation += english_to_braille_map["number"] # Add Number Follows in Braille
@@ -107,7 +115,7 @@ def braille_translator(text: str) -> str:
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        input_text = " ".join(sys.argv[1:])  
+        input_text = " ".join(sys.argv[1:]) 
         translated_text = braille_translator(input_text)
         print(translated_text)
     else:
