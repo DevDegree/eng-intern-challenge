@@ -8,15 +8,15 @@ ALPHABET_ARRAY = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
 #Array containing the numbers 0-9
 NUMBER_ARRAY = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
 #Array containing the Braille letters for corresponding english alphabets and special characters
-BRAILLE_ARRAY = [ '0.....', '0.0...', '00....', '00.0..', '0..0..', '000...', '0000..','0.00..','.00...','.000..','0...0.','0.0.0.',
-                 '00..0.','00.00.','0..00.','000.0.','00000.','0.000.','.00.0.','.0000.','0...00','0.0.00','.000.0','00..00',
-                 '00.000','0..000','..00.0', '..0...', '..0.00', '..000.', '..00..', '..0.0.', '....00','.0..0.','.00..0', '0..00.','0.0..0', '.0.00.']
+BRAILLE_ARRAY = [ 'O.....', 'O.O...', 'OO....', 'OO.O..', 'O..O..', 'OOO...', 'OOOO..','O.OO..','.OO...','.OOO..','O...O.','O.O.O.',
+                 'OO..O.','OO.OO.','O..OO.','OOO.O.','OOOOO.','O.OOO.','.OO.O.','.OOOO.','O...OO','O.O.OO','.OOO.O','OO..OO',
+                 'OO.OOO','O..OOO','..OO.O', '..O...', '..O.OO', '..OOO.', '..OO..', '..O.O.', '....OO','.O..O.','.OO..O', 'O..OO.','O.O..O', '.O.OO.']
 #Array containing the Braille letters for corresponding numbers 0-9
-BRAILLE_NUM_ARRAY = ['0.....', '0.0...', '00....', '00.0..', '0..0..', '000...', '0000..','0.00..','.00...', '.000..']
+BRAILLE_NUM_ARRAY = ['O.....', 'O.O...', 'OO....', 'OO.O..', 'O..O..', 'OOO...', 'OOOO..','O.OO..','.OO...', '.OOO..']
 
-CAPITAL_LETTER_BRAILLE = '.....0' # Braille code for Capital Letter
-DECIMAL_LETTER = '.0...0' # Braille code for Decimal char
-NUMBER_FOLLOWS = '.0.000' # Braille code for number 
+CAPITAL_LETTER_BRAILLE = '.....O' # Braille code for Capital Letter
+DECIMAL_LETTER = '.O...O' # Braille code for Decimal char
+NUMBER_FOLLOWS = '.O.OOO' # Braille code for number 
 SPACE_LETTER = '......' # Braille code for space letterr
 
 
@@ -74,7 +74,7 @@ def convert_braille_to_english(brailleText):
 if __name__ == "__main__" :
 
     inputString = " ".join(sys.argv[1:])
-    if inputString.__contains__('0.'):
+    if inputString.__contains__('O.'):
         print(convert_braille_to_english(inputString))
     else:
         print(convert_english_to_braille(inputString))
